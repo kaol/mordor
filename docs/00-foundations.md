@@ -1,6 +1,6 @@
 # Mordor — Bialgebraic & Dialgebraic Axioms Framework
 
-**Version 3.1 · The Two Crossing, Closed**
+**Version 3.2 · The Three Crossing, Closed**
 
 Mordor is a formal system for reasoning about least (μ) and greatest (ν) fixed points of a signature functor, organized as three layers: **bialgebraic axioms** (algebra + coalgebra over one carrier), **dialgebraic axioms** (algebra and coalgebra fused into single maps), and a calculus of **bounds and interaction rules** governing how μ- and ν-axioms mix without collapse.
 

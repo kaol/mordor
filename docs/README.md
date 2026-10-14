@@ -30,8 +30,10 @@ One file per exploration round. Version tags are the framework versions in which
 | 18 | v2.9 | [`rounds/18-v2.9.md`](rounds/18-v2.9.md) | The one crossing — the E₃ one-crossing census, the pentagon restored, the unary conflict |
 | 19 | v3.0 | [`rounds/19-v3.0.md`](rounds/19-v3.0.md) | The two crossing — class enumeration, interface certificates, the first two full censuses |
 | 20 | v3.1 | [`rounds/20-v3.1.md`](rounds/20-v3.1.md) | **The two-crossing census completed — the Two-Crossing Theorem** |
+| 21 | v3.2 | [`rounds/21-v3.2.md`](rounds/21-v3.2.md) | **The three-crossing census — E₃ closed: Theorem C, CL holds on E₃** |
 
 ## Machine experiment material
 
 - [`../experiments/README.md`](../experiments/README.md) — the census/solver stack, validation anchors, reproduction instructions.
 - [`../data/e3-two-crossing-census.json`](../data/e3-two-crossing-census.json) — the complete 21-class census results.
+- [`../data/e3-three-crossing-census.json`](../data/e3-three-crossing-census.json) — the complete 49-class three-crossing census results.

@@ -1,0 +1,47 @@
+{
+  "program": "mordor",
+  "family": "E3 two-crossing classes (rounds 19-20)",
+  "framework_version": "3.1",
+  "theorem": "No two-crossing commuting polar pair on E3 is realizable.",
+  "conventions": {
+    "class_label": "ra.rb as digits; ra[k], rb[k] = target column of source column k; polar maps = routing + per-column M5 maps (35 monotone triples)",
+    "structure": "functional shape of ra: STAR ra=[0,0,0], CHN ra=[0,0,1], SGL ra=[0,0,2], ID ra=[0,1,2], TR ra=[0,2,1]",
+    "kill_modes": "all survivors die in pure propagation (full-grid AC-3); sat/capped/maxNodes/unary/dfs are 0 for every class"
+  },
+  "totals": {
+    "commuting_pairs_censused": 108256289,
+    "exact_refutations": 456850,
+    "satisfiable": 0,
+    "capped": 0,
+    "max_search_nodes": 0
+  },
+  "classes": [
+    {"cls": "000.000", "structure": "STAR", "ra": [0,0,0], "rb": [0,0,0], "comm": 4137753,  "survivors": 42104,  "round": 19},
+    {"cls": "000.001", "structure": "STAR", "ra": [0,0,0], "rb": [0,0,1], "comm": 2403303,  "survivors": 34143,  "round": "20a"},
+    {"cls": "000.002", "structure": "STAR", "ra": [0,0,0], "rb": [0,0,2], "comm": 4717955,  "survivors": 13060,  "round": "20b"},
+    {"cls": "000.011", "structure": "STAR", "ra": [0,0,0], "rb": [0,1,1], "comm": 5859905,  "survivors": 3814,   "round": "20b"},
+    {"cls": "000.012", "structure": "STAR", "ra": [0,0,0], "rb": [0,1,2], "comm": 9669401,  "survivors": 1900,   "round": "20b"},
+    {"cls": "000.021", "structure": "STAR", "ra": [0,0,0], "rb": [0,2,1], "comm": 2774687,  "survivors": 15478,  "round": "20a"},
+    {"cls": "001.001", "structure": "CHN",  "ra": [0,0,1], "rb": [0,0,1], "comm": 3056151,  "survivors": 14085,  "round": "20b"},
+    {"cls": "001.002", "structure": "CHN",  "ra": [0,0,1], "rb": [0,0,2], "comm": 3191356,  "survivors": 7234,   "round": "20b"},
+    {"cls": "001.010", "structure": "CHN",  "ra": [0,0,1], "rb": [0,1,0], "comm": 2521936,  "survivors": 3814,   "round": "20a"},
+    {"cls": "001.011", "structure": "CHN",  "ra": [0,0,1], "rb": [0,1,1], "comm": 4313810,  "survivors": 4935,   "round": "20b"},
+    {"cls": "001.012", "structure": "CHN",  "ra": [0,0,1], "rb": [0,1,2], "comm": 9122401,  "survivors": 1900,   "round": "20b"},
+    {"cls": "001.020", "structure": "CHN",  "ra": [0,0,1], "rb": [0,2,0], "comm": 1667216,  "survivors": 9299,   "round": "20a"},
+    {"cls": "001.021", "structure": "CHN",  "ra": [0,0,1], "rb": [0,2,1], "comm": 2654872,  "survivors": 12555,  "round": "20b"},
+    {"cls": "001.022", "structure": "CHN",  "ra": [0,0,1], "rb": [0,2,2], "comm": 4056360,  "survivors": 7540,   "round": "20b"},
+    {"cls": "002.010", "structure": "SGL",  "ra": [0,0,2], "rb": [0,1,0], "comm": 9361547,  "survivors": 1575,   "round": "20b"},
+    {"cls": "002.011", "structure": "SGL",  "ra": [0,0,2], "rb": [0,1,1], "comm": 7548098,  "survivors": 1575,   "round": "20b"},
+    {"cls": "002.021", "structure": "SGL",  "ra": [0,0,2], "rb": [0,2,1], "comm": 2597250,  "survivors": 9271,   "round": "20a"},
+    {"cls": "002.102", "structure": "SGL",  "ra": [0,0,2], "rb": [1,0,2], "comm": 4578444,  "survivors": 219167, "round": "20b"},
+    {"cls": "002.112", "structure": "SGL",  "ra": [0,0,2], "rb": [1,1,2], "comm": 7480512,  "survivors": 21379,  "round": "20b"},
+    {"cls": "012.021", "structure": "ID",   "ra": [0,1,2], "rb": [0,2,1], "comm": 10870821, "survivors": 9271,   "round": "20b"},
+    {"cls": "021.021", "structure": "TR",   "ra": [0,2,1], "rb": [0,2,1], "comm": 5672511,  "survivors": 23751,  "round": 19}
+  ],
+  "per_round_refutations": {"19": 65855, "20a": 71005, "20b": 319990},
+  "notes": [
+    "Counts are in routing representation: pairs with bound-only crossed columns appear in several classes (harmless for refutation; canonical enumeration still covers all 192 routing pairs).",
+    "Equal survivor counts across distinct classes (001.010=000.011=3814, 002.021=012.021=9271, 002.010=002.011=1575, 001.012=000.012=1900) are equivariance/pair-swap consistency checks, not redundancies.",
+    "Round 19 censused 000.000 and 021.021; round 20a censused 001.020, 000.001, 000.021, 002.021, 001.010; round 20b censused the remaining 14 classes, each a single full-range pass."
+  ]
+}

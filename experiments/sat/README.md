@@ -12,5 +12,19 @@ Requirements: Python ≥ 3.10, `pip install python-sat z3-solver`. Optional: `dr
 | `theory_z3.py H poset TIMEOUT [nocomm] [chain]` | The universal theory T_H^≤ of §30.5 | H=2: unsat; H=2 nocomm: sat (4 elements); H=3 chain: unsat; larger H: timeout |
 | `ladder_z3.py` | The Ladder Construction (§22.3) over the theory of bounded chains with an escape map | 9 × PROVED; without the escape axiom only the gfp exclusion fails |
 
+
+Round 23 (`docs/rounds/23-v3.4.md`):
+
+| Script | What it does | Expected result |
+|---|---|---|
+| `cut_onedim.py` | single row/column infeasibility of the cut | 2,134 of 4,519 instances |
+| `cut_mus.py` | minimal contradictory cell sets | sizes 1–34; 3,307 of 4,451 non-local |
+| `abstract_pairs.py` | semi-commuting abstract pairs without a principal cut | exist (six-element lattice), also with cross-fix |
+| `small_lattices.py` | all lattices ≤ 8 elements, every down-set | 299 lattices, 4,809 instances, 0 counterexamples |
+| `hunt.py pi4\|b5\|c3cubed SECONDS` | Cut Lemma on Π₄, B₅ class representatives, C₃³ samples | 0 counterexamples |
+| `cut_theory_z3.py H TIMEOUT [chain] [poset]` | universal cut theory C_H | C₁, C₂ unsat; C₃ timeout |
+| `seam_search.py` | seam-relaxed near-violators on D_k, E_k | SAT (degenerate dump solutions) |
+| `seam_equivariant.py` | the same with translation-equivariance and locality | UNSAT for k = 4..8, seams 1 and 2 |
+
 Every satisfying assignment returned by the SAT layer is decoded and re-derived by brute-force fixed-point
 computation before it is reported; an unsat answer is only as trustworthy as the solver unless DRAT-checked.

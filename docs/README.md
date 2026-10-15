@@ -32,6 +32,7 @@ One file per exploration round. Version tags are the framework versions in which
 | 20 | v3.1 | [`rounds/20-v3.1.md`](rounds/20-v3.1.md) | **The two-crossing census completed — the Two-Crossing Theorem** |
 | 21 | v3.2 | [`rounds/21-v3.2.md`](rounds/21-v3.2.md) | **The three-crossing census — E₃ closed: Theorem C, CL holds on E₃** |
 | 22 | v3.3 | [`rounds/22-v3.3.md`](rounds/22-v3.3.md) | **The Cut — direct SAT decision (E₄, E₅, B₄), semi-commutation on chains, the Cut Lemma, errata** |
+| 23 | v3.4 | [`rounds/23-v3.4.md`](rounds/23-v3.4.md) | The Cut under the microscope — reachability (the gap is joins), contradiction shape, evidence to all lattices ≤ 8 elements, no uniform sideways escape on D_ω/E_ω |
 
 ## Machine experiment material
 

@@ -12,7 +12,7 @@ The SAT layer (`experiments/sat/`) decides those statements per lattice but prod
 the measure: exact counts over every F (census), or estimates under the uniform law on F (mcmc) where no census fits.
 
 Per F, `observe` computes a, b, m = μ(a), n = ν(b), φ = a∘b, ψ = b∘a, the closure R(F) (least down-set containing ⊥,
-closed under a and b⁻¹), and a closed set of features:
+closed under a and b⁻¹), the κ-orbit r_k of the transposed Cut Lemma (§32.6), and a closed set of features:
 
 | feature | meaning | research use |
 |---|---|---|
@@ -20,6 +20,7 @@ closed under a and b⁻¹), and a closed set of features:
 | `ncf` | number of common fixed points | I2 (§14), as data |
 | `ndef`, `sig` | number of defects φ(x) ≠ ψ(x); signature (rel(φ(x),x), rel(ψ(x),x), rel(φ(x),ψ(x))) ∈ {=,<,>,∥}³ | the L-straddle (§19.5) beyond chains |
 | `rstages`, `rfirst` (+ `_polar`) | number of growth stages of R(F); first stage R_k that is not an ideal | the join gap of the Cut Lemma (§31.1): is R(F) built through ideals? |
+| `kstages`, `laxfirst` (+ `_polar`), `orbit_lax` witnesses | κ-orbit r_{k+1} = r_k ∨ a(r_k) ∨ ⋁{y : b(y) ≤ r_k} run beside R_k; first k with ⋁R_k < r_k | orbit laxity of the transposed Cut Lemma (§32.6): 0 on top-closed L (L ∖ {⊤} a tree), proved; elsewhere the measured rate |
 | `fibres` (census, opt-in) | exact fibre sizes ∣π⁻¹(a,b)∣ and the image size | the leaf-data measure on the base; generalizes "223 derived pairs on C4" |
 | `trips` | violations of proved theorems | L1 tripwires (§4) |
 | `viols` (cl, semi, cut) | CL, semi-CL, Cut Lemma violated by this F | conjectures; nonzero = discovery, witnesses kept |
@@ -33,7 +34,7 @@ closed under a and b⁻¹), and a closed set of features:
 | `Lat.n_bifunctions` | exact census total by DP (state = rows of elements with an unprocessed upper cover); `None` if too wide | no |
 | `Plan.colors` | greedy coloring of the cover graph of L×L (cells); per class: lower/upper neighbour cells, padded with constant ⊥/⊤ cells | no |
 | `Plan.cnt`, `Plan.ilist` | for each interval [u, v]: its size and its elements | no |
-| `Hist` schema | the closed feature vocabulary above; `SCHEMA = 1` versions it | no |
+| `Hist` schema | the closed feature vocabulary above; `SCHEMA = 2` versions it (2 added the κ-orbit fields and tripwires) | no |
 
 **Arrow condition holds.** The census is `leaf ∘ level_{n−1} ∘ … ∘ level_j`, where `level_k` assigns the row of the
 k-th element of the linear extension subject to row ≥ rows of its lower covers. The schedule and the constraint
@@ -68,7 +69,8 @@ It is kept only to show examples, and its *count* is in the monoid.
   product of size ≤ 63, exact in float32 (TF32 off). There is no residue arithmetic, so eat-the-fibre's 2^24 bound
   is not needed.
 - **L1, tripwires (theorems of the log, checked on every F).** I1 m ≤ n (§13), L1 a(n) = n and L2 b(m) = m (§13),
-  fusion Fix(a∘b) = Fix(a) ∩ Fix(b) (§14.1), I2 m = n ⟺ exactly one common fixed point (§14.1). Any nonzero count
+  fusion Fix(a∘b) = Fix(a) ∩ Fix(b) (§14.1), I2 m = n ⟺ exactly one common fixed point (§14.1), the lax square
+  ⋁R_k ≤ r_k (§32.6.2), and the principal-cut proposition μκ = ⊤ (§30.4, §32.6.1; a theorem on finite lattices). Any nonzero count
   is an engine bug (or a wrong proof) and is reported loudly with witnesses.
 - **L2, engine contract.**
   - `Plan.selftest` compares `observe` with `reference.observe_one` on random monotone F at every start. The reference
@@ -76,6 +78,8 @@ It is kept only to show examples, and its *count* is in the monoid.
   - Tests: census totals = DP counts; the log's anchors (C3: 175 / 137 commuting / 20 with m ≠ n / 27 pairs;
     C4: 24,696 / 12,450 / 7,280 / 6,440 polar / 223 pairs; B2: 28,224 / 15,984 commuting); census ≡ reference loop
     over all 28,224 F of B2; MCMC ≈ census on C4 (χ²); checkpoint resumption for both drivers.
+- `orbit_lax` keeps up to 20 example F with a strict orbit step. These are witnesses of a *measured* event, not violations:
+  they are expected on every lattice that is not top-closed (§32.6.3).
 - **L3, interpretive.** MCMC rates are estimates under the stationary law only once the chains have mixed. `mixing`
   reports, per joint bit, the rate in the ⊥-started vs the ⊤-started half of the chains (overdispersed starts) with
   a z-score. The z-score is optimistic, because samples within a chain are autocorrelated. Job 5 (N5 MCMC) is there

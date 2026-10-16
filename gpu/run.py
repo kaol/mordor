@@ -61,7 +61,8 @@ def summary(r):
     c = r['count']; v = r['viols']; t = r['trips']
     pct = lambda bit: 100.0 * sum(n for k, n in r['joint'].items() if k[engine.JOINT_BITS.index(bit)] == '1') / max(c, 1)
     s = (f"{r['lattice']}: {c:,} F; commuting {pct('comm'):.2f}%, m≠n {100 - pct('meqn'):.2f}%, polar {pct('polar'):.2f}%; "
-         f"violators cl={v['cl']} semi={v['semi']} cut={v['cut']}; tripwires {sum(t.values())}; t={r['t']}s")
+         f"violators cl={v['cl']} semi={v['semi']} cut={v['cut']}; orbit-lax {sum(r['laxfirst'][1:]):,}; "
+         f"tripwires {sum(t.values())}; t={r['t']}s")
     if 'fibres' in r: s += f"; realizable pairs {r['fibres']['image']:,}"
     if 'mixing' in r and r['mixing']: s += "; mixing |z|max=" + str(max(abs(m['z']) for m in r['mixing'].values()))
     return s

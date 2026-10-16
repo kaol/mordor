@@ -99,3 +99,17 @@ def test_census_small_memory_budget(monkeypatch, spec, mem):
 
 def test_plan_census_only():
     engine.Plan(lattices.N5(), DEV, census=True, mcmc=False)                 # self-test builds what it needs
+
+
+def test_orbit_lax_top_closed_and_witnesses():
+    """§32.6: ⋁R_k = r_k for every F on a top-closed lattice (tree ⊕ ⊤); on B2 ⊕ ⊤ (L5_3) strict orbits exist, and every
+    orbit_lax witness is confirmed by the reference."""
+    for spec in ('C4', 'B2'):
+        assert sum(engine.census(lattices.parse(spec), DEV, log=quiet)['laxfirst'][1:]) == 0
+    L = next(L for L in lattices.all_lattices(5) if L.name == 'L5_3')
+    r = engine.mcmc(L, DEV, chains=2048, sweeps=120, burn=20, thin=10, seed=5, log=quiet)
+    W = r['witnesses'].get('orbit_lax', [])
+    assert sum(r['laxfirst'][1:]) > 0 and W
+    for f in W:
+        o = reference.observe_one(L, np.array(f).reshape(L.n, L.n))
+        assert o['laxfirst'] >= 0 and not o['trip_lax']

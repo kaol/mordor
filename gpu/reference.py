@@ -28,12 +28,19 @@ def observe_one(L, F):
     fa = [a[x] == x for x in rng]; fb = [b[x] == x for x in rng]
     down = lambda S: {z for z in rng if any(L.leq[z, s] for s in S)}
     ideal = lambda S: any(down({z}) == S for z in S)
-    R = down({L.bot}); stages = 0; first_bad = -1; k = 0
-    while True:
-        if first_bad < 0 and not ideal(R): first_bad = k
+    J = lambda S: next(z for z in rng if all(L.leq[s, z] for s in S) and all(L.leq[z, w] for w in rng if all(L.leq[s, w] for s in S)))
+    R = down({L.bot}); stages = 0; first_bad = -1
+    r = L.bot; kst = 0; lax = -1; tlax = False
+    for it in range(2 * n + 2):
+        if first_bad < 0 and not ideal(R): first_bad = stages
+        sR = J(R)
+        tlax |= not L.leq[sR, r]
+        if lax < 0 and sR != r: lax = it
+        r2 = J({r, a[r]} | {y for y in rng if L.leq[b[y], r]})
         R2 = down(R | {a[x] for x in R} | {y for y in rng if b[y] in R})
-        if R2 == R: break
-        R = R2; stages += 1; k += 1
+        grew, rg = R2 != R, r2 != r
+        stages += grew; kst += rg; R, r = R2, r2
+        if not (grew or rg): break
     defects = [x for x in rng if phi[x] != psi[x]]
     return dict(
         a=a, b=b, m=m, n=nn,
@@ -45,7 +52,9 @@ def observe_one(L, F):
         ncf=sum(fa[x] and fb[x] for x in rng),
         ndef=len(defects),
         sig=sorted(16 * rel(L, phi[x], x) + 4 * rel(L, psi[x], x) + rel(L, phi[x], psi[x]) for x in defects),
-        rstages=stages, rfull=(len(R) == n), rfirst_nonideal=first_bad,
+        rstages=stages, rfull=(len(R) == n), rfirst_nonideal=first_bad, kstages=kst, laxfirst=lax,
+        trip_lax=tlax, trip_pcut=r != L.top,
         trip_i1=not L.leq[m, nn], trip_l1=a[nn] != nn, trip_l2=b[m] != m,
         trip_fusion=any((phi[x] == x) != (fa[x] and fb[x]) for x in rng),
+        trip_i2=(m == nn) != (sum(fa[x] and fb[x] for x in rng) == 1),
     )

@@ -18,12 +18,12 @@ import numpy as np
 import torch
 import reference
 
-SCHEMA = 1
+SCHEMA = 2
 MEM = int(os.environ.get('MORDOR_MEM', '1024') or 1024) << 20
 GROUP = int(os.environ.get('MORDOR_GROUP', '256') or 256)
 WITNESS_MAX = 20
 JOINT_BITS = ('comm', 'semi_ba_le_ab', 'semi_ab_le_ba', 'polar', 'meqn')          # joint key = Σ bit_i << i
-TRIPS = ('trip_i1', 'trip_l1', 'trip_l2', 'trip_fusion', 'trip_i2')                # theorems: must stay 0
+TRIPS = ('trip_i1', 'trip_l1', 'trip_l2', 'trip_fusion', 'trip_i2', 'trip_lax', 'trip_pcut')   # theorems: must stay 0
 VIOLS = ('cl', 'semi', 'cut')                                                     # conjectures: 0 so far
 
 
@@ -110,7 +110,7 @@ class Plan:
         for i in range(k):
             ref = reference.observe_one(self.L, Fc[i])
             for key in ('m', 'n', 'comm', 'semi_ba_le_ab', 'semi_ab_le_ba', 'polar', 'meqn', 'ncf', 'ndef',
-                        'rstages', 'rfull', 'rfirst_nonideal') + TRIPS[:4]:
+                        'rstages', 'rfull', 'rfirst_nonideal', 'kstages', 'laxfirst') + TRIPS:
                 assert int(got[key][i]) == int(ref[key]), f"selftest on {self.dev}: {key} differs at sample {i}"
             assert got['a'][i].tolist() == ref['a'] and got['b'][i].tolist() == ref['b'], "selftest: derived pair differs"
             sig = sorted(got['sig'][i][got['defect'][i]].tolist())
@@ -147,18 +147,34 @@ def observe(P, F):
                polar=(a[:, P.bot] == P.bot) & (b[:, P.bot] == P.bot) & (a[:, P.top] == P.top) & (b[:, P.top] == P.top),
                meqn=m == nn, ncf=(fa & fb).sum(1), ndef=defect.sum(1),
                sig=16 * P.rel[phi, ar] + 4 * P.rel[psi, ar] + P.rel[phi, psi])
-    # R(F): R_0 = ↓⊥, R_{k+1} = ↓(R_k ∪ a(R_k) ∪ b⁻¹(R_k)); stage k counted when the set grows
+    # R(F): R_0 = ↓⊥, R_{k+1} = ↓(R_k ∪ a(R_k) ∪ b⁻¹(R_k)); stage k counted when the set grows.
+    # Alongside, the ideal-closure orbit r_0 = ⊥, r_{k+1} = r_k ∨ κ(r_k), κ(d) = a(d) ∨ ⋁{y : b(y) ≤ d}: the
+    # transposed (κ-algebra) side of the Cut Lemma (§32.6). ⋁R_k ≤ r_k always (lax square); `laxfirst` is the
+    # first iteration where it is strict; r_final = ⊤ is the principal-cut proposition (§30.4).
+    def sup(mask):                                                                 # (B, n) bool → ⋁ selected, (B,)
+        v = torch.full((B,), P.bot, dtype=torch.long, device=P.dev)
+        for x in range(n): v = torch.where(mask[:, x], P.join[v, x], v)
+        return v
     S = torch.zeros(B, n, dtype=torch.bool, device=P.dev); S[:, P.bot] = True
     stages = torch.zeros(B, dtype=torch.long, device=P.dev); first = torch.full((B,), -1, dtype=torch.long, device=P.dev)
+    r = torch.full((B,), P.bot, dtype=torch.long, device=P.dev); kst = torch.zeros(B, dtype=torch.long, device=P.dev)
+    lax = torch.full((B,), -1, dtype=torch.long, device=P.dev); tlax = torch.zeros(B, dtype=torch.bool, device=P.dev)
     hit = a[:, :, None] == ar                                                      # (B, x, z): a(x) = z
-    for _ in range(n + 1):
+    for it in range(2 * n + 2):
         ideal = ((S[:, None, :] == P.down[None]).all(2) & S).any(1)                # S = ↓z for some z ∈ S
         first = torch.where((first < 0) & ~ideal, stages, first)
+        sS = sup(S)
+        tlax |= ~P.leq[sS, r]
+        lax = torch.where((lax < 0) & (sS != r), torch.full_like(lax, it), lax)
+        kap = P.join[a.gather(1, r[:, None])[:, 0], sup(P.leq[b, r[:, None]])]
+        r2 = P.join[r, kap]
         T = S | (hit & S[:, :, None]).any(1) | S.gather(1, b)
         T = (T.to(torch.float32) @ P.leqTf) > 0                                    # down-closure
         grew = (T != S).any(1); stages += grew; S = T
-        if not bool(grew.any()): break                                             # every R(F) reached (checked above)
-    out.update(rstages=stages, rfull=S.all(1), rfirst_nonideal=first)
+        rg = r2 != r; kst += rg; r = r2
+        if not bool(grew.any() | rg.any()): break                                  # both orbits stable (checked above)
+    out.update(rstages=stages, rfull=S.all(1), rfirst_nonideal=first, kstages=kst, laxfirst=lax, orbit_lax=lax >= 0,
+               trip_lax=tlax, trip_pcut=r != P.top)
     out.update(trip_i1=~P.leq[m, nn], trip_l1=a.gather(1, nn[:, None])[:, 0] != nn,
                trip_l2=b.gather(1, m[:, None])[:, 0] != m, trip_fusion=((phi == ar) != (fa & fb)).any(1))
     out['trip_i2'] = out['meqn'] != (out['ncf'] == 1)                              # §14: m = n ⟺ one common fixed point
@@ -174,6 +190,7 @@ class Hist:
         z = lambda k: np.zeros(k, dtype=np.int64)
         self.d = dict(count=z(1), joint=z(1 << len(JOINT_BITS)), ncf=z(n + 1), ndef=z(n + 1), sig=z(64),
                       rstages=z(n + 2), rfirst=z(n + 3), rstages_polar=z(n + 2), rfirst_polar=z(n + 3),
+                      kstages=z(n + 2), laxfirst=z(2 * n + 4), laxfirst_polar=z(2 * n + 4),
                       trips=z(len(TRIPS)), viols=z(len(VIOLS)))
         self.witness = collections.defaultdict(list)
 
@@ -189,9 +206,12 @@ class Hist:
         pol = f['polar']
         d['rstages_polar'] += bc(f['rstages'][pol], self.n + 2)
         d['rfirst_polar'] += bc(f['rfirst_nonideal'][pol] + 1, self.n + 3)
+        d['kstages'] += bc(f['kstages'], self.n + 2)
+        d['laxfirst'] += bc(f['laxfirst'] + 1, 2 * self.n + 4)
+        d['laxfirst_polar'] += bc(f['laxfirst'][pol] + 1, 2 * self.n + 4)
         d['trips'] += np.array([int(f[k].sum()) for k in TRIPS], dtype=np.int64)
         v = np.array([int(f[k].sum()) for k in VIOLS], dtype=np.int64); d['viols'] += v
-        for k in TRIPS + VIOLS:
+        for k in TRIPS + VIOLS + ('orbit_lax',):                                   # orbit_lax: examples only (§32.6)
             if int(f[k].sum()) and len(self.witness[k]) < WITNESS_MAX:
                 for i in f[k].nonzero()[:, 0][:WITNESS_MAX - len(self.witness[k])].tolist():
                     self.witness[k].append(F[i].tolist())

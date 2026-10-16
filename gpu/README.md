@@ -9,7 +9,8 @@ Per F it records:
 - commutation and both one-sided semi-commutations,
 - polarity, whether μν = νμ, the common fixed points,
 - the defects of a∘b vs b∘a,
-- the stages of the Cut Lemma closure R(F),
+- the stages of the Cut Lemma closure R(F), and of its transposed ideal orbit r_k, with the first stage where ⋁R_k < r_k
+  (orbit laxity, round 24 §32.6),
 - optionally the exact fibre sizes over each pair (a, b).
 
 Theorems of the log are checked on every F (tripwires). Conjectures (CL, semi-CL, Cut Lemma) are counted; any
@@ -65,7 +66,9 @@ The 6-element lattices range from 3.7·10¹⁰ to 1.2·10¹⁴ bifunctions (M4 =
 therefore `auto`: census where the estimate is ≤ `MORDOR_MAX_F`, mcmc otherwise.
 
 Send back `results.jsonl` and `batch.log`. Each run logs a one-line summary: rates, violator counts, tripwire
-count, and F/s. A line with `!!!` means a nonzero violator or tripwire count. Its witnesses are in the JSON.
+count, orbit-lax count, and F/s. A line with `!!!` means a nonzero violator or tripwire count. Its witnesses are in the JSON.
+Orbit-lax F are not errors: they are expected on lattices where L ∖ {⊤} is not a tree (B2 ⊕ 1: 1,360,132 of 22,969,892), and
+0 on the others (C5, N5, M3, …). Example F are in the JSON under `witnesses.orbit_lax`. Results carry `schema: 2`.
 
 | env | default | meaning |
 |---|---|---|

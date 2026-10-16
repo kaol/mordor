@@ -29,6 +29,7 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
 | `docs/rounds/` | The research log, one file per exploration round (rounds 2–23, versions v1.3 → v3.4) |
 | `docs/README.md` | Index to the research log with one-line summaries |
 | `experiments/` | The machine-experiment stack: exact realizability CSP solver, E₃ census pipeline, validation harness |
+| `gpu/` | GPU census of the projection F ↦ (a, b): exact enumeration and heat-bath MCMC with tripwires (PyTorch, ROCm/CUDA/CPU); see `gpu/README.md` |
 | `experiments/sat/` | Round 22: direct SAT encoding (CaDiCaL via PySAT), DRAT certification, semi-commutation and Cut Lemma sweeps, z3 theories |
 | `data/` | Machine-experiment results (JSON) |
 

@@ -14,6 +14,7 @@ import sys, os, json, time, argparse
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import lattices
 import engine
+import torch
 
 # (mode, spec, params, why)
 BATCH = [
@@ -81,6 +82,7 @@ def run_one(mode, L, p, out, dev, log):
         r = engine.census(L, dev, ck=ck, fibres=p.get('fibres', False), log=log)
     else:
         r = engine.mcmc(L, dev, p['chains'], p['sweeps'], p['burn'], p['thin'], p.get('seed', 1), ck=ck, log=log)
+    if dev.type == 'cuda': torch.cuda.empty_cache()                               # free cached blocks between runs
     with open(out, 'a') as fh: fh.write(json.dumps(r) + '\n')
     log("  " + summary(r))
     if sum(r['viols'].values()) or sum(r['trips'].values()):

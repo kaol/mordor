@@ -14,6 +14,7 @@ Arithmetic is integer gathers and comparisons; the one float matmul (down-closur
 n ≤ 63, exact in float32. Plan.selftest compares observe with reference.observe_one before any run.
 Env: MORDOR_MEM (MiB per working set, default 1024), MORDOR_GROUP (census prefix jobs per checkpoint, default 256)."""
 import os, time, json, pickle, hashlib, collections
+os.environ.setdefault('PYTORCH_CUDA_ALLOC_CONF', 'expandable_segments:True')      # before torch: less fragmentation
 import numpy as np
 import torch
 import reference
@@ -272,13 +273,18 @@ def estimate_count(P, paths=8192, seed=0):
     """Knuth's estimator of the census size: random root-to-leaf descents choosing a uniform admissible row at each
     level; the product of branching numbers is an unbiased estimate of the number of leaves. → (mean, std. error)."""
     g = torch.Generator(device=P.dev); g.manual_seed(seed)
-    Rw = torch.zeros(paths, 0, dtype=torch.int32, device=P.dev)
-    w = torch.ones(paths, dtype=torch.float64, device=P.dev)
-    for k in range(P.n):
-        ok = census_mask(P, Rw, k)                                                  # ≥ 1 admissible row: constant-⊤
-        w *= ok.sum(1).to(torch.float64)
-        r = torch.multinomial(ok.to(torch.float32), 1, generator=g)[:, 0]
-        Rw = torch.cat([Rw, r[:, None].to(torch.int32)], 1)
+    M = P.Mon.shape[0]; chunk = max(1, min(paths, MEM // (24 * M)))                # ≈ 24 bytes per (path, row)
+    ws = []
+    for c0 in range(0, paths, chunk):
+        Rw = torch.zeros(min(chunk, paths - c0), 0, dtype=torch.int32, device=P.dev)
+        w = torch.ones(Rw.shape[0], dtype=torch.float64, device=P.dev)
+        for k in range(P.n):
+            ok = census_mask(P, Rw, k)                                              # ≥ 1 admissible row: constant-⊤
+            w *= ok.sum(1).to(torch.float64)
+            r = torch.multinomial(ok.to(torch.float32), 1, generator=g)[:, 0]; del ok
+            Rw = torch.cat([Rw, r[:, None].to(torch.int32)], 1)
+        ws.append(w)
+    w = torch.cat(ws)
     return float(w.mean()), float(w.std() / paths ** 0.5)
 
 
@@ -304,12 +310,14 @@ def census_prefixes(P, target=2000):
 def census(L, dev, ck=None, fibres=False, log=print):
     P = Plan(L, dev, census=True, mcmc=True)
     M, n = P.Mon.shape[0], P.n
-    # Budgets (bytes per item, all ≤ MEM per working set): the level mask and its temporaries (2·M bools per parent),
+    # Budgets (bytes per item, all ≤ MEM per working set): the level mask and its temporaries per parent: the mask
+    # and one gathered row of `rowle` (2·M bools) plus the row count ok.sum(1), which promotes bool to int64 and on
+    # HIP materializes the cast (8·M bytes; uncounted before, a 3.9 GiB allocation on L6_6 at MORDOR_MEM=1024),
     # the children of one expansion (nonzero: 2 int64, gather + cat: 2·(n+1) int32 ⇒ ≈ 8n + 24 per child), and
     # observe (≈ 24 words per cell of F). A parent batch whose children exceed `cap` is split by the cumulative
     # child count before expanding, so the stack holds views of parent tensors, never more than one child batch
     # per level.
-    nb = max(1, MEM // (2 * M + 4 * n))                                             # parents per level batch
+    nb = max(1, MEM // (10 * M + 4 * n))                                            # parents per level batch
     cap = max(M, MEM // (8 * n + 24))                                               # children per expansion
     leaf = max(1, MEM // (n * n * 8 * 24))                                          # F per observe batch
     j, pre = census_prefixes(P)

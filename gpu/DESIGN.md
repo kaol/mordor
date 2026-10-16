@@ -95,7 +95,7 @@ It is kept only to show examples, and its *count* is in the monoid.
   in 15.6 s, ≈ 2·10⁶ F/s; `observe` alone ≈ 2.6·10⁶ F/s. The early exit of the R(F) loop (stop when no F in the
   batch grows) was worth 24×. MCMC: ≈ 5·10⁴ chain-sweeps/s on B4 and 7·10⁴ on E4. On the GPU, throughput is
   bandwidth-bound and the first run prints F/s; C6 (5.5·10¹⁰ F) is the first census where the GPU matters.
-- `MORDOR_MEM` (MiB) bounds every working set: level masks (≈ 2·|Mon| bytes per parent), the children of one
+- `MORDOR_MEM` (MiB) bounds every working set: level masks (≈ 10·|Mon| bytes per parent: mask, gathered row, and the int64 row count that HIP materializes), the children of one
   expansion (≈ 8n + 24 bytes per child) and observe batches. A parent batch whose admissible-row count exceeds the
   child budget is split by the cumulative count *before* `nonzero`, so the stack holds views of parent tensors and
   at most one child batch per level. Earlier versions budgeted only the mask: on M4 (|Mon| = 1430) one parent batch

@@ -10,7 +10,7 @@
   },
   "totals": {
     "commuting_pairs_censused": 108256289,
-    "exact_refutations": 456850,
+    "exact_refutations": 457850,
     "satisfiable": 0,
     "capped": 0,
     "max_search_nodes": 0
@@ -38,7 +38,7 @@
     {"cls": "012.021", "structure": "ID",   "ra": [0,1,2], "rb": [0,2,1], "comm": 10870821, "survivors": 9271,   "round": "20b"},
     {"cls": "021.021", "structure": "TR",   "ra": [0,2,1], "rb": [0,2,1], "comm": 5672511,  "survivors": 23751,  "round": 19}
   ],
-  "per_round_refutations": {"19": 65855, "20a": 71005, "20b": 319990},
+  "per_round_refutations": {"19": 65855, "20a": 72005, "20b": 319990},
   "notes": [
     "Counts are in routing representation: pairs with bound-only crossed columns appear in several classes (harmless for refutation; canonical enumeration still covers all 192 routing pairs).",
     "Equal survivor counts across distinct classes (001.010=000.011=3814, 002.021=012.021=9271, 002.010=002.011=1575, 001.012=000.012=1900) are equivariance/pair-swap consistency checks, not redundancies.",

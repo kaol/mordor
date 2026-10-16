@@ -31,9 +31,14 @@ One file per exploration round. Version tags are the framework versions in which
 | 19 | v3.0 | [`rounds/19-v3.0.md`](rounds/19-v3.0.md) | The two crossing — class enumeration, interface certificates, the first two full censuses |
 | 20 | v3.1 | [`rounds/20-v3.1.md`](rounds/20-v3.1.md) | **The two-crossing census completed — the Two-Crossing Theorem** |
 | 21 | v3.2 | [`rounds/21-v3.2.md`](rounds/21-v3.2.md) | **The three-crossing census — E₃ closed: Theorem C, CL holds on E₃** |
+| 22 | v3.3 | [`rounds/22-v3.3.md`](rounds/22-v3.3.md) | **The Cut — direct SAT decision (E₄, E₅, B₄), semi-commutation on chains, the Cut Lemma, errata** |
+| 23 | v3.4 | [`rounds/23-v3.4.md`](rounds/23-v3.4.md) | The Cut under the microscope — reachability (the gap is joins), contradiction shape, evidence to all lattices ≤ 8 elements, no uniform sideways escape on D_ω/E_ω |
+| 24 | v3.5 | [`rounds/24-v3.5.md`](rounds/24-v3.5.md) | The dialgebraic layer, read thin: transposition (D1/D2 via adjoints), the failure zone is the unit of G* ⊣ G, D5 is the Duality Theorem, the Cut Lemma as a dialgebra L → 𝒪(L) whose orbit is tight exactly on trees |
 
 ## Machine experiment material
 
 - [`../experiments/README.md`](../experiments/README.md) — the census/solver stack, validation anchors, reproduction instructions.
 - [`../data/e3-two-crossing-census.json`](../data/e3-two-crossing-census.json) — the complete 21-class census results.
+- [`../experiments/sat/`](../experiments/sat/) — round 22: SAT encoding, DRAT certification, semi-commutation and Cut Lemma sweeps, z3 theories.
+- [`../experiments/dialgebra/`](../experiments/dialgebra/) — round 24: dialgebra censuses in the thin model, the Cut Lemma transposition, orbit laxity.
 - [`../data/e3-three-crossing-census.json`](../data/e3-three-crossing-census.json) — the complete 49-class three-crossing census results.

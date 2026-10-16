@@ -91,7 +91,17 @@ It is kept only to show examples, and its *count* is in the monoid.
   in 15.6 s, ≈ 2·10⁶ F/s; `observe` alone ≈ 2.6·10⁶ F/s. The early exit of the R(F) loop (stop when no F in the
   batch grows) was worth 24×. MCMC: ≈ 5·10⁴ chain-sweeps/s on B4 and 7·10⁴ on E4. On the GPU, throughput is
   bandwidth-bound and the first run prints F/s; C6 (5.5·10¹⁰ F) is the first census where the GPU matters.
-- `MORDOR_MEM` (MiB) bounds one working set: census level masks B×|Mon| and observe batches B×n²×(≈24 words).
+- `MORDOR_MEM` (MiB) bounds every working set: level masks (≈ 2·|Mon| bytes per parent), the children of one
+  expansion (≈ 8n + 24 bytes per child) and observe batches. A parent batch whose admissible-row count exceeds the
+  child budget is split by the cumulative count *before* `nonzero`, so the stack holds views of parent tensors and
+  at most one child batch per level. Earlier versions budgeted only the mask: on M4 (|Mon| = 1430) one parent batch
+  expanded into ≈ 5·10⁸ children, a 7.8 GiB allocation. `test_census_small_memory_budget` runs every split path.
+- **Size before cost.** `estimate_count` is Knuth's estimator: random descents choosing a uniform admissible row per
+  level; the product of branching numbers is unbiased for the number of leaves. It is printed at the start of every
+  census and drives `auto` jobs (`MORDOR_MAX_F`). Checked against exact totals: C5 0.92, N5 1.02, M3 1.04, C6 1.56
+  (within its standard error), M4 0.98. For L = ⊥ ⊕ (k-antichain) ⊕ ⊤, the exact total is
+  Σ_{r₀ ≤ s} |[r₀, s]|^k over intervals of Mon(L) (zeta transform over the ⊤ row): 28,224 for M2, 129,157,925 for M3
+  (= the census), 133,623,571,885,248 for M4.
 
 ## 6. Structural axioms (working set): choices and traces
 

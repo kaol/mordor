@@ -8,7 +8,8 @@
   python3 run.py batch 3 7                     # only jobs 3 and 7
 
 Each finished run appends one JSON line to results.jsonl (--out); checkpoints live in checkpoints/. Send back
-results.jsonl and batch.log. Env: DEVICE (cuda|cpu|...), MORDOR_MEM, MORDOR_GROUP (see engine.py)."""
+results.jsonl and batch.log. Env: DEVICE (cuda|cpu|...), MORDOR_MEM, MORDOR_GROUP (see engine.py),
+MORDOR_MAX_F (default 1e11: 'auto' jobs run a census only when the Knuth estimate of its size is below this)."""
 import sys, os, json, time, argparse
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import lattices
@@ -21,7 +22,8 @@ BATCH = [
     ('census', 'N5', {'fibres': True}, "pentagon, 31,022,611 bifunctions: exact law of commutation / defects / R(F) stages"),
     ('census', 'M3', {'fibres': True}, "diamond, 129,157,925 bifunctions"),
     ('mcmc', 'N5', {'chains': 32768, 'sweeps': 3000, 'burn': 1000, 'thin': 20}, "sampler validation against the N5 census"),
-    ('census', 'all6', {}, "every 6-element lattice (15); C6 alone has 55,197,331,332 bifunctions"),
+    ('auto', 'all6', {'chains': 32768, 'sweeps': 4000, 'burn': 1000, 'thin': 10},
+     "every 6-element lattice (15): census where the Knuth estimate is ≤ MORDOR_MAX_F (C6: 5.5e10), else mcmc (M4: 1.3e14)"),
     ('mcmc', 'B3', {'chains': 65536, 'sweeps': 4000, 'burn': 1000, 'thin': 10}, "uniform law on B3"),
     ('mcmc', 'E2', {'chains': 65536, 'sweeps': 4000, 'burn': 1000, 'thin': 10}, "Theorem B lattice, uniform law"),
     ('mcmc', 'D4', {'chains': 65536, 'sweeps': 4000, 'burn': 1000, 'thin': 10}, "height-3 column lattice"),
@@ -44,7 +46,15 @@ def done(out):
     return res
 
 
-def key(mode, L, p): return (mode, L.name, p.get('chains'), p.get('sweeps'))
+MAX_F = float(os.environ.get('MORDOR_MAX_F', '1e11') or 1e11)
+
+
+def key(mode, L, p): return (mode, L.name, None, None) if mode == 'census' else (mode, L.name, p.get('chains'), p.get('sweeps'))
+
+
+def is_done(res, mode, L, p):
+    if mode == 'auto': return key('census', L, p) in res or key('mcmc', L, p) in res
+    return key(mode, L, p) in res
 
 
 def summary(r):
@@ -59,6 +69,11 @@ def summary(r):
 
 def run_one(mode, L, p, out, dev, log):
     os.makedirs(os.path.join(HERE, 'checkpoints'), exist_ok=True)
+    if mode == 'auto':
+        sz = engine.census_size(L, dev)
+        mode = 'census' if sz is not None and sz[0] <= MAX_F else 'mcmc'
+        log(f"  {L.name}: census size ≈ {sz[0]:.3g} ± {sz[1]:.2g}" if sz else f"  {L.name}: census refused (too large)")
+        log(f"  → {mode} (MORDOR_MAX_F = {MAX_F:.3g})")
     tag = L.name + ('' if mode == 'census' else f"_c{p['chains']}_s{p['sweeps']}_seed{p.get('seed', 1)}")
     ck = os.path.join(HERE, 'checkpoints', f"{mode}_{tag}{'_fib' if p.get('fibres') else ''}.pkl")
     if mode == 'census':
@@ -91,7 +106,7 @@ def main():
         sel = [int(x) for x in a.rest]; res = done(a.out)
         for i, (mode, spec, p, why) in enumerate(BATCH, 1):
             Ls = lattices.parse(spec); Ls = Ls if isinstance(Ls, list) else [Ls]
-            fin = sum(key(mode, L, p) in res for L in Ls)
+            fin = sum(is_done(res, mode, L, p) for L in Ls)
             size = ""
             if mode == 'census' and len(Ls) == 1 and Ls[0].n <= 5:
                 c = Ls[0].count_bifunctions(max_states=200_000)
@@ -102,7 +117,7 @@ def main():
             if sel and i not in sel: continue
             Ls = lattices.parse(spec); Ls = Ls if isinstance(Ls, list) else [Ls]
             for L in Ls:
-                if key(mode, L, p) in done(a.out): continue
+                if is_done(done(a.out), mode, L, p): continue
                 log(f"\n=== job {i}: {mode} {L.name} ({time.strftime('%H:%M:%S')}) ===")
                 run_one(mode, L, p, a.out, dev, log)
         return

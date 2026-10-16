@@ -30,8 +30,11 @@ The W6600 is RDNA 2 (gfx1032), which the ROCm wheels do not list. The override m
 which is the usual working setup for Navi 23 cards. If you see "invalid device function", the override is not set
 in that shell. `DEVICE=cpu` runs everything on the CPU, if needed.
 
-The card has 8 GB. `MORDOR_MEM` (MiB, default 1024) bounds one working set. 2048–3072 is reasonable on the W6600.
-Lower it if you hit HIP out-of-memory errors.
+The card has 8 GB, and the desktop (X11) needs some of it. `MORDOR_MEM` (MiB, default 1024) bounds every working
+set. That covers the level masks, the children of one expansion and the observe batches, so peak device memory stays
+around that value plus a few hundred MiB of tables. On a CUDA/ROCm device the progress lines report the peak.
+1024 leaves plenty for X11. Raise it only if the peak stays well below what you can spare.
+`export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` reduces fragmentation on long runs.
 
 ## Validate
 
@@ -57,6 +60,10 @@ Lattice specs: `C5` (chain), `M3` (diamond), `N5`, `B3` (Boolean), `E2` / `D3` (
 (partitions), products such as `C3xC3`, and families `all6` / `all<=5` (every lattice of that size). A census
 refuses lattices with more than 9 elements. Use mcmc there.
 
+Every census first prints a Knuth estimate of its size and, once it is running, the hours left at the measured rate.
+The 6-element lattices range from 3.7·10¹⁰ to 1.2·10¹⁴ bifunctions (M4 = L6_0: exactly 133,623,571,885,248). Job 6 is
+therefore `auto`: census where the estimate is ≤ `MORDOR_MAX_F`, mcmc otherwise.
+
 Send back `results.jsonl` and `batch.log`. Each run logs a one-line summary: rates, violator counts, tripwire
 count, and F/s. A line with `!!!` means a nonzero violator or tripwire count. Its witnesses are in the JSON.
 
@@ -65,6 +72,7 @@ count, and F/s. A line with `!!!` means a nonzero violator or tripwire count. It
 | `DEVICE` | auto | `cuda` (also ROCm), `cpu`, `cuda:1`, … |
 | `MORDOR_MEM` | 1024 | MiB per working set |
 | `MORDOR_GROUP` | 256 | census prefix jobs per checkpoint |
+| `MORDOR_MAX_F` | 1e11 | `auto` jobs run a census only if its estimated size is below this; otherwise mcmc |
 
 ## Files
 

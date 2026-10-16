@@ -42,7 +42,7 @@ def test_observe_matches_reference(spec):
 def test_census_equals_reference_loop_B2():
     """Every F on B2 through the reference implementation; the census joint histogram must agree exactly."""
     L = lattices.B(2); P = engine.Plan(L, DEV)
-    Rw = torch.zeros(1, 0, dtype=torch.long, device=DEV)
+    Rw = torch.zeros(1, 0, dtype=torch.int32, device=DEV)
     for k in range(L.n): Rw = engine.census_level(P, Rw, k)
     F = engine.leaves_to_F(P, Rw).cpu().numpy()
     assert len(F) == 28224 and len({f.tobytes() for f in F}) == 28224
@@ -85,3 +85,13 @@ def test_mcmc_checkpoint_resume(tmp_path):
     b = engine.mcmc(L, DEV, chains=256, sweeps=60, burn=10, thin=5, seed=3, ck=ck, log=quiet)   # resumed at the end
     for r in (a, b): r.pop('t'); r.pop('device')
     assert a == b
+
+
+@pytest.mark.parametrize('spec,mem', [('C4', 8 << 10), ('B2', 4 << 10)])
+def test_census_small_memory_budget(monkeypatch, spec, mem):
+    """With a small MORDOR_MEM every split path (parent batches, child-count splits, leaf chunks) runs; result unchanged."""
+    ref = engine.census(lattices.parse(spec), DEV, log=quiet)
+    monkeypatch.setattr(engine, 'MEM', mem)
+    small = engine.census(lattices.parse(spec), DEV, log=quiet)
+    for r in (ref, small): r.pop('t'); r.pop('device')
+    assert ref == small

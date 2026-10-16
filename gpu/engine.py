@@ -233,13 +233,39 @@ class Fibres:
 
 
 # ---------------------------------------------------------------- census (exact)
-def census_level(P, Rw, k):
-    """Parents Rw (B, k): Mon-row indices of order[0..k-1] → children (B', k+1)."""
-    x = P.order[k]
+def census_mask(P, Rw, k):
+    """Parents Rw (B, k) int32: Mon-row indices of order[0..k-1] → (B, M) bool: admissible rows for order[k]."""
     ok = torch.ones(Rw.shape[0], P.Mon.shape[0], dtype=torch.bool, device=P.dev)
-    for z in P.L.lower[x]: ok &= P.rowle[Rw[:, P.pos[z]]]
+    for z in P.L.lower[P.order[k]]: ok &= P.rowle[Rw[:, P.pos[z]]]
+    return ok
+
+
+def census_level(P, Rw, k, ok=None):
+    """Parents Rw (B, k) → children (B', k+1) int32."""
+    ok = census_mask(P, Rw, k) if ok is None else ok
     pi, ri = ok.nonzero(as_tuple=True)
-    return torch.cat([Rw[pi], ri[:, None]], 1)
+    return torch.cat([Rw[pi], ri[:, None].to(Rw.dtype)], 1)
+
+
+def estimate_count(P, paths=8192, seed=0):
+    """Knuth's estimator of the census size: random root-to-leaf descents choosing a uniform admissible row at each
+    level; the product of branching numbers is an unbiased estimate of the number of leaves. → (mean, std. error)."""
+    g = torch.Generator(device=P.dev); g.manual_seed(seed)
+    Rw = torch.zeros(paths, 0, dtype=torch.int32, device=P.dev)
+    w = torch.ones(paths, dtype=torch.float64, device=P.dev)
+    for k in range(P.n):
+        ok = census_mask(P, Rw, k)                                                  # ≥ 1 admissible row: constant-⊤
+        w *= ok.sum(1).to(torch.float64)
+        r = torch.multinomial(ok.to(torch.float32), 1, generator=g)[:, 0]
+        Rw = torch.cat([Rw, r[:, None].to(torch.int32)], 1)
+    return float(w.mean()), float(w.std() / paths ** 0.5)
+
+
+def census_size(L, dev, paths=8192):
+    """(estimate, std. error) of the census size of L, or None if a census of L is refused outright."""
+    try: P = Plan(L, dev, census=True, mcmc=True)
+    except SystemExit: return None
+    return estimate_count(P, paths)
 
 
 def leaves_to_F(P, Rw):
@@ -248,7 +274,7 @@ def leaves_to_F(P, Rw):
 
 def census_prefixes(P, target=2000):
     """Deterministic prefix jobs: expand levels until there are ≥ target partial assignments (or n−1 levels)."""
-    Rw = torch.zeros(1, 0, dtype=torch.long, device=P.dev); k = 0
+    Rw = torch.zeros(1, 0, dtype=torch.int32, device=P.dev); k = 0
     while k < P.n - 1 and Rw.shape[0] < target:
         Rw = census_level(P, Rw, k); k += 1
     return k, Rw
@@ -257,7 +283,13 @@ def census_prefixes(P, target=2000):
 def census(L, dev, ck=None, fibres=False, log=print):
     P = Plan(L, dev, census=True, mcmc=True)
     M, n = P.Mon.shape[0], P.n
-    nb = max(1, MEM // (M * 2 + 8 * n))                                             # parents per level batch (bool mask)
+    # Budgets (bytes per item, all ≤ MEM per working set): the level mask and its temporaries (2·M bools per parent),
+    # the children of one expansion (nonzero: 2 int64, gather + cat: 2·(n+1) int32 ⇒ ≈ 8n + 24 per child), and
+    # observe (≈ 24 words per cell of F). A parent batch whose children exceed `cap` is split by the cumulative
+    # child count before expanding, so the stack holds views of parent tensors, never more than one child batch
+    # per level.
+    nb = max(1, MEM // (2 * M + 4 * n))                                             # parents per level batch
+    cap = max(M, MEM // (8 * n + 24))                                               # children per expansion
     leaf = max(1, MEM // (n * n * 8 * 24))                                          # F per observe batch
     j, pre = census_prefixes(P)
     state = dict(lattice=L.name, lid=lattice_id(L), schema=SCHEMA, j=j, njobs=pre.shape[0], done=0,
@@ -268,9 +300,10 @@ def census(L, dev, ck=None, fibres=False, log=print):
             "checkpoint belongs to another lattice/schema"
         if fibres and old['fibres'] is None: raise SystemExit("checkpoint was written without --fibres")
         state = old
-    log(f"  census {L.name}: n={n}, |Mon|={M}, height {P.h}, {pre.shape[0]} prefix jobs at depth {j}, "
-        f"resuming at {state['done']}; device {describe(dev)}; mem {MEM >> 20} MiB")
-    t0 = last = time.time()
+    est, se = estimate_count(P)
+    log(f"  census {L.name}: n={n}, |Mon|={M}, height {P.h}, ≈{est:.3g} ± {se:.2g} bifunctions (Knuth estimate), "
+        f"{pre.shape[0]} prefix jobs at depth {j}, resuming at {state['done']}; device {describe(dev)}; mem {MEM >> 20} MiB")
+    t0 = last = time.time(); cnt0 = int(state['hist'].d['count'][0])
     def save():
         if ck:
             with open(ck + '.tmp', 'wb') as fh: pickle.dump(state, fh)
@@ -288,14 +321,24 @@ def census(L, dev, ck=None, fibres=False, log=print):
                 continue
             if Rw.shape[0] > nb:
                 stack += [(k, Rw[s:s + nb]) for s in range(0, Rw.shape[0], nb)][::-1]; continue
-            ch = census_level(P, Rw, k)
+            ok = census_mask(P, Rw, k)
+            cnt = ok.sum(1)
+            if Rw.shape[0] > 1 and int(cnt.sum()) > cap:                           # split parents by child count
+                cut = torch.searchsorted(torch.cumsum(cnt, 0), torch.arange(cap, int(cnt.sum()), cap, device=P.dev))
+                edges = [0] + sorted(set(min(max(int(c), 1), Rw.shape[0] - 1) for c in cut.tolist())) + [Rw.shape[0]]
+                stack += [(k, Rw[a:b]) for a, b in zip(edges, edges[1:]) if b > a][::-1]
+                del ok; continue
+            ch = census_level(P, Rw, k, ok); del ok
             if ch.shape[0]: stack.append((k + 1, ch))
         state['hist'].merge(H)
         if fibres: state['fibres'].c.update(Fb.c)
         state['done'] = g1; save()
         if time.time() - last > 30 or g1 == pre.shape[0]:
             el = time.time() - t0; cnt = int(state['hist'].d['count'][0])
-            log(f"  {g1}/{pre.shape[0]} prefix jobs, {cnt:,} bifunctions, {el:.0f}s ({cnt / max(el, 1e-9):,.0f}/s this run)")
+            mem = (f", peak device memory {torch.cuda.max_memory_allocated(dev) >> 20} MiB" if dev.type == 'cuda' else "")
+            rate = (cnt - cnt0) / max(el, 1e-9)
+            eta = f", ≈{(est - cnt) / rate / 3600:.1f} h left at this rate" if rate > 0 and est > cnt else ""
+            log(f"  {g1}/{pre.shape[0]} prefix jobs, {cnt:,} bifunctions, {el:.0f}s ({rate:,.0f}/s this run){mem}{eta}")
             last = time.time()
     res = dict(schema=SCHEMA, mode='census', lattice=L.name, lid=state['lid'], n=n, height=P.h, mon=M,
                t=round(time.time() - t0, 1), device=describe(dev), **state['hist'].json())

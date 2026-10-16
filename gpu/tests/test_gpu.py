@@ -95,3 +95,7 @@ def test_census_small_memory_budget(monkeypatch, spec, mem):
     small = engine.census(lattices.parse(spec), DEV, log=quiet)
     for r in (ref, small): r.pop('t'); r.pop('device')
     assert ref == small
+
+
+def test_plan_census_only():
+    engine.Plan(lattices.N5(), DEV, census=True, mcmc=False)                 # self-test builds what it needs

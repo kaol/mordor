@@ -100,6 +100,7 @@ class Plan:
 
     def selftest(self, k=64):
         """L2 contract: observe on device ≡ reference.observe_one, on random monotone F (heat bath from both ends)."""
+        if not hasattr(self, 'colors'): self._mcmc_tables()                         # samples come from the heat bath
         g = torch.Generator(device=self.dev); g.manual_seed(12345)
         Fs = mcmc_init(self, k)
         for _ in range(3): Fs = sweep(self, Fs, g)

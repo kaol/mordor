@@ -26,7 +26,7 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/CutHeight4.lean` | §34.3g | *generated* by `experiments/sat/cut_lean.py`: the Cut Lemma in bounded posets with no 6-chain, by `bv_decide` on a drat-trim-verified core (100 clauses, 17 terms, under WLOG) |
 | `Mordor/Height4.lean` | §34.3g | **semi-CL and CL on every complete lattice of edge-height ≤ 4** (E_ω included); `cutCells_of_poset`. Trust: `bv_decide` (`Lean.ofReduceBool`) |
 | `Mordor/CutHeight5.lean` | §34.3h | *generated*: the Cut Lemma in bounded posets with no 7-chain (832 clauses, 86 terms, under WLOG) |
-| `Mordor/Height5.lean` | §34.3h | **semi-CL and CL on every complete lattice of edge-height ≤ 5**. Trust: `bv_decide` |
+| `Mordor/Height5.lean` | §34.3h | **semi-CL and CL on every complete lattice of edge-height ≤ 5**; locality: the same per F on any complete lattice when ⟨⊥, ⊤⟩_F has no 7-chain (`semi_local5`). Trust: `bv_decide` |
 | `Mordor/Restrict.lean` | §15.1, §24.1, §30.5 | embedding lemma; polar reduction; interval violators transport to L; the Escape Lemma |
 | `Mordor/Sharpness.lean` | §22.2–§22.5 | Ladder Lemma (records of a well-order), ladder and co-ladder constructions, Infinitude Lemma, **Sharpness**: a complete chain satisfies CL iff it is finite |
 | `Mordor/Retract.lean` | §23.1 | the Retract Theorem for any retraction pair ι, σ (σ∘ι = id) between complete lattices |

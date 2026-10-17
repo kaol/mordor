@@ -9,7 +9,7 @@ lake exe cache get     # prebuilt Mathlib (needs lakecache.blob.core.windows.net
 lake build             # builds the needed part of Mathlib from source, then Mordor
 ```
 
-Every theorem compiles without `sorry`. `#print axioms` on the 26 headline theorems lists only `propext`,
+Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theorems lists only `propext`,
 `Quot.sound` and `Classical.choice` (docs/rounds/26-v3.7.md, §34).
 
 | file | log | content |
@@ -21,5 +21,8 @@ Every theorem compiles without `sorry`. `#print axioms` on the 26 headline theor
 | `Mordor/Duality.lean` | §22.1 | the Duality Theorem: Fᵈ on αᵒᵈ, aᵈ = h∘b∘h⁻¹, mᵈ = h n; transfer of m = n and of commutation |
 | `Mordor/Orbit.lean` | §32.6 | the lax square ⋁Θ⁺D ≤ κ⁺(⋁D), ⋁R_k ≤ r_k, and ⋁R_k = r_k on top-closed lattices |
 | `Mordor/NoRoom.lean` | §16.2 | the Corner Lemma at (m, n); CL on complete lattices whose middle elements are atom-and-coatom (M_κ for every κ) |
+| `Mordor/Sharpness.lean` | §22.2–§22.5 | Ladder Lemma (records of a well-order), ladder and co-ladder constructions, Infinitude Lemma, **Sharpness**: a complete chain satisfies CL iff it is finite |
+| `Mordor/Retract.lean` | §23.1 | the Retract Theorem for any retraction pair ι, σ (σ∘ι = id) between complete lattices |
+| `Mordor/TheoremA.lean` | §23.2 | **Theorem A**: a complete lattice containing an infinite chain fails CL; CL lattices are chain-finite |
 | `Mordor/Dialgebra.lean` | §32.2–§32.4 | transposition (D1/D2 via adjoints), the failure-zone theorem and its dual, D5 by order reversal |
 | `Mordor/CutDuality.lean` | §33.3 | Φ ⊣ c∘Ψ∘c and the k + j law, for any preorder and arbitrary maps a, b |

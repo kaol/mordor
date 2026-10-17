@@ -7,3 +7,6 @@ import Mordor.Reach
 import Mordor.Orbit
 import Mordor.Duality
 import Mordor.NoRoom
+import Mordor.Sharpness
+import Mordor.Retract
+import Mordor.TheoremA

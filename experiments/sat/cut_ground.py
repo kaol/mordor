@@ -8,10 +8,12 @@ Ground instances over a finite set of F-terms built from ⊥, ⊤ (soundness: ev
 axiom, so UNSAT is a proof). The order is a Boolean matrix le(s,t); reflexivity and bounds are added eagerly,
 transitivity lazily (violations of the current model become clauses); the height bound is a rank function
 r : terms → {0..H}, strictly increasing along <. After each transitively closed model, new terms F(x,y) are added
-for model pairs x ∈ D, y ∉ D (shallowest first). Ends with UNSAT (a proof) or at the term cap (inconclusive).
+for model pairs x ∈ D, y ∉ D: shallowest first (§34.3g), or with room='fit' the tightest first, i.e. the candidate
+whose value has the fewest places left in the model (§34.3h). wlog=True adds F(⊥,⊤) ∉ D (order duality, Lean
+`cut_of_wlog`). Ends with UNSAT (a proof) or at the term cap (inconclusive).
 
-  python3 cut_ground.py 3        # expected: UNSAT (the Lean proof Height3.lean uses 7 F-terms)
-  python3 cut_ground.py 4 400"""
+  python3 cut_ground.py 4        # UNSAT with 19 terms (default: wlog, room='fit', one term per round)
+  python3 cut_ground.py 5 3000   # UNSAT with 128 terms in about 20 s"""
 import sys, itertools, time
 import numpy as np
 from pysat.solvers import Cadical153
@@ -76,6 +78,12 @@ class Ground:
         (A) i ∈ D, i ≤ δ ⇒ i = ⊥   ([i, ⊤] would be an F-stable cut of smaller height);
         (B) i ∉ D, δ ≤ i ⇒ i = ⊤   ([⊥, i] likewise)."""
         if not self.ih or i in self.diag or (i, i) in self.F: return
+        dg = self.add_term((i, i), self.depth[i] + 1); self.diag.add(dg)
+        self.S.add_clause([-self.d(i), -self.le(i, dg), self.le(i, 0)])
+        self.S.add_clause([self.d(i), -self.le(dg, i), self.le(1, i)])
+
+    def add_diag(self, i):
+        """δ = F(i, i) with the height-induction clauses (A), (B) of add_ih."""
         dg = self.add_term((i, i), self.depth[i] + 1); self.diag.add(dg)
         self.S.add_clause([-self.d(i), -self.le(i, dg), self.le(i, 0)])
         self.S.add_clause([self.d(i), -self.le(dg, i), self.le(1, i)])
@@ -147,7 +155,10 @@ class Ground:
         lo = (L[s_][:, X] & L[t_][:, Y]).T.astype(np.float32)                    # cand × m
         hi = (L[X][:, s_] & L[Y][:, t_]).astype(np.float32)
         nab = (~L[a_]).astype(np.float32); nbe = (~L[:, a_].T).astype(np.float32)  # m × n: a ≰ z, z ≰ b
-        ok = ((lo @ nab) == 0) & ((hi @ nbe) == 0) & ~L[:, X].T & ~L[Y]          # cand × n
+        ok = ((lo @ nab) == 0) & ((hi @ nbe) == 0)
+        dg = X == Y                                                              # diagonal: height induction
+        Dm = np.array([self.d(i) in M for i in range(n)])
+        ok &= np.where(dg[:, None], np.where(Dm[X][:, None], ~L[X], ~L[:, X].T), ~L[:, X].T & ~L[Y])  # cand × n
         S = L & ~L.T; up = np.zeros(n, int); dn = np.zeros(n, int)               # longest chains below / above
         order = np.argsort(S.sum(0), kind='stable')
         for q in order:
@@ -166,11 +177,15 @@ class Ground:
         if self.room == 'fit':
             cand = [(0, x, y) for x in range(n) for y in range(n)
                     if D[x] and not D[y] and (x, y) not in self.F and x not in self.diag and y not in self.diag]
+            if self.ih:                                                # F(x,x) for x ≠ ⊥, ⊤ (height induction)
+                cand += [(0, x, x) for x in range(2, n) if (x, x) not in self.F and x not in self.diag
+                         and not self.L[x, 0] and not self.L[1, x]]
             if not cand: return 0
             fs = self.fit(M, cand)
             cand = sorted(((int(fs[i]), self.depth[x] + self.depth[y], x, y) for i, (_, x, y) in enumerate(cand)))
             for _, _, x, y in cand[:cap]:
-                self.add_ih(self.add_term((x, y), max(self.depth[x], self.depth[y]) + 1))
+                if x == y: self.add_diag(x)
+                else: self.add_term((x, y), max(self.depth[x], self.depth[y]) + 1)
             return len(cand[:cap])
         if self.room:                                                  # model rank (from the rank variables)
             rk = [sum(1 for k in range(1, self.H + 1) if self.g_.get((i, k)) in M) for i in range(n)]
@@ -211,7 +226,7 @@ def run(H, maxterms=300, per_round=40, nowitness=True, ih=False, lazy_rank=False
 if __name__ == '__main__':
     H = int(sys.argv[1]) if len(sys.argv) > 1 else 3
     cap = int(sys.argv[2]) if len(sys.argv) > 2 else 300
-    run(H, cap)
+    run(H, cap, per_round=1, wlog=True, room='fit')
 
 
 def write_dimacs(G, path):

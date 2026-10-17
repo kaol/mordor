@@ -34,7 +34,9 @@ computation before it is reported; an unsat answer is only as trustworthy as the
 - `cut_ground.py H [maxterms]`: model-guided ground refutation of `C_H^≤` (poset version) with lazy transitivity and
   a rank encoding of the height bound. UNSAT is a proof. Options of `run`: `wlog=True` (unit F(⊥,⊤) ∉ D, sound by
   order duality, Lean `cut_of_wlog`), `room='fit'` (tightness-guided term selection, §34.3h), `stream=path` (clauses
-  to disk instead of memory), `lazy_ih=True` (height-induction clauses on violation). With
+  to disk instead of memory), `lazy_ih=True` (height-induction clauses on violation) and `ih=True` (with `room='fit'`:
+  diagonal candidates F(x,x) carrying the height-induction clauses). Neither induction option helps at H ≤ 5
+  (H = 5: 128 → 125 terms), and `cut_lean.py` does not translate them. With
   `run(H, 5000, per_round=1, wlog=True, room='fit')`: H = 3, 4, 5 UNSAT with 7 / 19 / 128 terms (H = 5 in 17 s);
   depth-first selection (§34.3g) needed 35 / 388 terms for H = 3, 4 and did not finish H = 5.
 - `cut_lean.py H core.cnf maps.pkl out.lean`: turns a drat-trim core of an UNSAT run into a Lean file

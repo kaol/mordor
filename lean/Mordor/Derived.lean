@@ -104,4 +104,21 @@ theorem m_eq_n_iff : m F = n F ↔ ∀ z, a F z = z → b F z = z → z = m F :=
   · intro h z ha hb; exact le_antisymm (h ▸ common_le_n hb) (m_le_common ha)
   · intro h; exact (h _ a_n b_n).symm
 
+/-- **Realizability Criterion, row half (§24.1).** `a' = a_F` iff the pins `F x (a' x) = a' x` hold and every
+row fixed point lies below `a' x` (the greatest-fixed-point exclusion). No finiteness is needed. -/
+theorem a_eq_iff (a' : α → α) :
+    (∀ x, a F x = a' x) ↔ ∀ x, F x (a' x) = a' x ∧ ∀ y, F x y = y → y ≤ a' x := by
+  constructor
+  · intro h x; rw [← h x]; exact ⟨row_a x, fun y hy => le_a hy.ge⟩
+  · intro h x
+    exact le_antisymm ((h x).2 _ (row_a x)) (le_a (h x).1.ge)
+
+/-- **Realizability Criterion, column half (§24.1).** -/
+theorem b_eq_iff (b' : α → α) :
+    (∀ y, b F y = b' y) ↔ ∀ y, F (b' y) y = b' y ∧ ∀ x, F x y = x → b' y ≤ x := by
+  constructor
+  · intro h y; rw [← h y]; exact ⟨col_b y, fun x hx => b_le hx.le⟩
+  · intro h y
+    exact le_antisymm (b_le (h y).1.le) ((h y).2 _ (col_b y))
+
 end Mordor

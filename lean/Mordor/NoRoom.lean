@@ -1,4 +1,4 @@
-import Mordor.Derived
+import Mordor.Cut
 import Mathlib.Order.Atoms
 
 /-!
@@ -9,6 +9,9 @@ import Mathlib.Order.Atoms
 * `cl_noRoom`: on a complete lattice in which every element other than `⊥, ⊤` is both an atom and a coatom
   (edge-height ≤ 2, e.g. the diamonds `M_κ` for every cardinal `κ`, infinite included), commutation
   `a ∘ b = b ∘ a` forces `μX. νY. F = νY. μX. F`.
+* `cut_noRoom`: on the same lattices the **Cut Lemma** holds for every `F` and every down-set (one cell of
+  `{(⊥, ⊤), (c, ⊤), (⊥, c)}`, `c = F ⊥ ⊤`, is a witness), hence `semi_noRoom`: semi-commutation forces
+  `m = n`. The log had this only through z3 (`C₁`, `C₂` unsat, §31.5).
 -/
 
 namespace Mordor
@@ -71,5 +74,31 @@ theorem cl_noRoom (hmid : ∀ x : α, x ≠ ⊥ → x ≠ ⊤ → IsAtom x ∧ I
   have := hcomm c
   rw [hbc, hac, ← hm, a_m, ← hn, b_n] at this
   exact hne this
+
+/-- **The Cut Lemma at edge-height ≤ 2.** -/
+theorem cut_noRoom (hmid : ∀ x : α, x ≠ ⊥ → x ≠ ⊤ → IsAtom x ∧ IsCoatom x) (G : α →o α →o α) :
+    CutCells G := by
+  intro D hD ⟨d, hd⟩ ⟨u, hu⟩
+  have hbot : ⊥ ∈ D := hD bot_le hd
+  have htop : ⊤ ∉ D := fun h => hu (hD le_top h)
+  by_cases hc0 : G ⊥ ⊤ = ⊥
+  · exact ⟨⊥, hbot, ⊤, htop, Or.inl hc0.le⟩
+  by_cases hc1 : G ⊥ ⊤ = ⊤
+  · exact ⟨⊥, hbot, ⊤, htop, Or.inr hc1.ge⟩
+  obtain ⟨hat, hco⟩ := hmid _ hc0 hc1
+  by_cases hcD : G ⊥ ⊤ ∈ D
+  · refine ⟨G ⊥ ⊤, hcD, ⊤, htop, ?_⟩
+    rcases lt_or_eq_of_le (G.mono (bot_le : ⊥ ≤ G ⊥ ⊤) ⊤) with hlt | heq
+    · exact Or.inr (hco.2 _ hlt).ge
+    · exact Or.inl heq.ge
+  · refine ⟨⊥, hbot, G ⊥ ⊤, hcD, ?_⟩
+    rcases lt_or_eq_of_le ((G ⊥).mono (le_top : G ⊥ ⊤ ≤ ⊤)) with hlt | heq
+    · exact Or.inl (hat.2 _ hlt).le
+    · exact Or.inr heq.ge
+
+/-- **Semi-CL at edge-height ≤ 2.** -/
+theorem semi_noRoom (hmid : ∀ x : α, x ≠ ⊥ → x ≠ ⊤ → IsAtom x ∧ IsCoatom x) (G : α →o α →o α)
+    (hsemi : ∀ x, b G (a G x) ≤ a G (b G x)) : m G = n G :=
+  semi_of_cut (cutMaps_of_cells (cut_noRoom hmid G)) hsemi
 
 end Mordor

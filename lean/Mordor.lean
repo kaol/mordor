@@ -10,3 +10,4 @@ import Mordor.NoRoom
 import Mordor.Sharpness
 import Mordor.Retract
 import Mordor.TheoremA
+import Mordor.Frontier

@@ -5,7 +5,9 @@ import Mordor.PrincipalCut
 
 `R F` is the least down-set containing `⊥`, closed under `a` and under `b⁻¹`.
 * `cutMaps_iff_R`: the Cut Lemma for `F` holds iff `R F = univ`.
-* `R_univ_of_joinClosed`: on a finite lattice, if `R F` is closed under binary joins then `R F = univ`.
+* `R_univ_of_joinClosed`: on a complete lattice without infinite ascending or descending chains (every finite
+  lattice, and the infinite chain-finite frontier D_ω, E_ω, M_ω × C₂ of §31.6), if `R F` is closed under binary
+  joins then `R F = univ`.
   So the Cut Lemma for `F` is equivalent to join-closure of `R F`: the principal (ideal) case is settled by
   `cut_principal_down`, and joins are the entire gap.
 -/
@@ -41,22 +43,16 @@ theorem cutMaps_iff_R : CutMaps F ↔ R F = Set.univ := by
     exact R_subset ⟨hD, h0, ha, hb⟩ (h ▸ Set.mem_univ u)
 
 /-- **The gap is joins.** On a finite lattice, a join-closed `R(F)` is everything. -/
-theorem R_univ_of_joinClosed [Finite α] (hj : ∀ x ∈ R F, ∀ y ∈ R F, x ⊔ y ∈ R F) : R F = Set.univ := by
+theorem R_univ_of_joinClosed [WellFoundedGT α] [WellFoundedLT α] (hj : ∀ x ∈ R F, ∀ y ∈ R F, x ⊔ y ∈ R F) :
+    R F = Set.univ := by
   obtain ⟨hD, h0, ha, hb⟩ := (R_closed (F := F))
-  -- a finite, nonempty, join-closed down-set is the principal ideal of its join
+  -- a nonempty join-closed set with a maximal element (ACC) contains its join
   have hsup : sSup (R F) ∈ R F := by
-    have hfin : (R F).Finite := (R F).toFinite
-    classical
-    have key : ∀ s : Finset α, (↑s : Set α) ⊆ R F → s.sup id ∈ R F := by
-      intro s
-      induction s using Finset.induction_on with
-      | empty => intro _; simpa using h0
-      | insert x s hx ih =>
-        intro hs
-        rw [Finset.sup_insert]
-        exact hj _ (hs (Finset.mem_insert_self x s)) _ (ih fun z hz => hs (Finset.mem_insert_of_mem hz))
-    have := key hfin.toFinset (by simp)
-    simpa [Finset.sup_id_eq_sSup] using this
+    obtain ⟨x, hxR, hmax⟩ := (wellFounded_gt (α := α)).has_min (R F) ⟨⊥, h0⟩
+    have hgreat : ∀ y ∈ R F, y ≤ x := fun y hy =>
+      le_sup_right.trans (eq_of_le_of_not_lt le_sup_left (hmax _ (hj x hxR y hy))).ge
+    have : sSup (R F) = x := le_antisymm (sSup_le hgreat) (le_sSup hxR)
+    rwa [this]
   by_contra hne
   have hd : sSup (R F) ≠ ⊤ := by
     intro htop; apply hne; exact Set.eq_univ_of_forall fun u => hD le_top (htop ▸ hsup)
@@ -65,5 +61,11 @@ theorem R_univ_of_joinClosed [Finite α] (hj : ∀ x ∈ R F, ∀ y ∈ R F, x �
     exact hy (le_sSup (hb y (hD (b_le hc) (hD hx hsup))))
   · -- y ≤ F x y: y ≤ a x ∈ R, so y ∈ R
     exact hy (le_sSup (hD (le_a hc) (ha x (hD hx hsup))))
+
+/-- **The Cut Lemma for `F` ⟺ join-closure of `R(F)`**, on complete lattices with ACC and DCC. -/
+theorem cutMaps_iff_joinClosed [WellFoundedGT α] [WellFoundedLT α] :
+    CutMaps F ↔ ∀ x ∈ R F, ∀ y ∈ R F, x ⊔ y ∈ R F := by
+  refine ⟨fun h x _ y _ => ?_, fun h => cutMaps_iff_R.mpr (R_univ_of_joinClosed h)⟩
+  rw [cutMaps_iff_R.mp h]; trivial
 
 end Mordor

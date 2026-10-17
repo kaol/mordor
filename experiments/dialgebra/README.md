@@ -10,3 +10,4 @@ They need numpy and torch (CPU is fine), and z3 for `orbit_lax.py`. Run from thi
 | `naive_ab.py` | §32.5 | negative: dialgebras of (a, b) / (b, a) do not encode m = n |
 | `cut_transpose.py` | §32.6.1–2 | principal cuts ⟺ κ-prefixed points; μκ = ⊤; the lax square on arbitrary down-sets |
 | `orbit_lax.py` | §32.6.3 | z3: F with ⋁R_k ≠ r_k (orbit not tight), top-closedness, delay-d simulation; witnesses re-checked by `gpu/reference.py` |
+| `cut_adjoint.py` | §33.3 (round 25) | Φ ⊣ cΨc: R_k ∩ U_j = ∅ ⟺ R_(k+j) ≠ L ⟺ U_(k+j) ≠ L over all of Mon(L)², every lattice of size 4–5 |

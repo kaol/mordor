@@ -84,3 +84,5 @@ Orbit-lax F are not errors: they are expected on lattices where L ∖ {⊤} is n
 - `reference.py`: an independent per-F reference, used by the self-test and the tests.
 - `run.py`: the CLI and the batch. It writes `results.jsonl`, `batch.log` and `checkpoints/`.
 - `tests/test_gpu.py`: the validation suite.
+- `analyze.py`: markdown tables from a `results.jsonl` (`python3 analyze.py results.jsonl`). The first run's data is in
+  `../data/gpu-2026-10/` (round 25, §33).

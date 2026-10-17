@@ -94,7 +94,9 @@ It is kept only to show examples, and its *count* is in the monoid.
 - Measured on this container's CPU (4 threads, torch 2.14): census C5 (16,818,516 F) in 8.7 s and N5 (31,022,611 F)
   in 15.6 s, ≈ 2·10⁶ F/s; `observe` alone ≈ 2.6·10⁶ F/s. The early exit of the R(F) loop (stop when no F in the
   batch grows) was worth 24×. MCMC: ≈ 5·10⁴ chain-sweeps/s on B4 and 7·10⁴ on E4. On the GPU, throughput is
-  bandwidth-bound and the first run prints F/s; C6 (5.5·10¹⁰ F) is the first census where the GPU matters.
+  bandwidth-bound. Measured on a Radeon Pro W6600 (round 25): 6.1–6.9·10⁶ F/s on six-element censuses, C6
+  (55,197,331,332 F) in 2.5 h, peak device memory 1,689 MiB at MORDOR_MEM = 1024. The Knuth estimate was off by up to
+  0.66× (L6_7, z = −3.4): its tails are heavier than the standard error suggests.
 - `MORDOR_MEM` (MiB) bounds every working set: level masks (≈ 10·|Mon| bytes per parent: mask, gathered row, and the int64 row count that HIP materializes), the children of one
   expansion (≈ 8n + 24 bytes per child) and observe batches. A parent batch whose admissible-row count exceeds the
   child budget is split by the cumulative count *before* `nonzero`, so the stack holds views of parent tensors and

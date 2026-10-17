@@ -34,7 +34,7 @@ def main(H, core_path, maps_path, out_path):
         elif o == 1: expr[o] = "⊤"
         else:
             s, t = terms[o]; expr[o] = f"F ({expr[s]}) ({expr[t]})"
-    need_e = set(); lines = []
+    need_e = set(); lines = []; wlog = None
     def e(i): need_e.add(i); return f"e{ren[i]}"
     for c in core:
         pos = [x for x in c if x > 0]; neg = [-x for x in c if x < 0]
@@ -49,8 +49,10 @@ def main(H, core_path, maps_path, out_path):
                 else: raise ValueError(c)
             elif k == 'le':
                 assert LE[v] == (1, 0); lines.append("cl_topbot H h1 h0")
-            elif k == 'd':
+            elif k == 'd' and (pos or Dv[v] == 1):
                 lines.append("cl_dbot H h0" if pos else "cl_dtop H h1")
+            elif k == 'd':                                    # WLOG unit F(⊥,⊤) ∉ D (cut_ground.run(wlog=True))
+                assert terms[Dv[v]] == (0, 1); wlog = Dv[v]; e(wlog); lines.append("cl_wlog hw")
             else:
                 i, kk = Gv[v]; assert not pos and kk == H + 1; lines.append(f"cl_rankmax hn {T(i)}")
             continue
@@ -91,7 +93,15 @@ def main(H, core_path, maps_path, out_path):
     haves = "\n".join(f"  have c{k} := {l}" for k, l in enumerate(lines))
     tv = "\n".join(f"  | {ren[o]} => {expr[o]}" for o in order)
     es = " ".join("rfl" for _ in sorted(need_e))
-    clears = " ".join(f"e{ren[i]}" for i in sorted(need_e))
+    clears = " ".join(f"e{ren[i]}" for i in sorted(need_e)) + (" hw" if wlog is not None else "")
+    hw = f"\n    (hw : t {ren[wlog]} ∉ D)" if wlog is not None else ""
+    if wlog is None:
+        fin = f"core{H} ⟨hF, hD, hbot, htop, fun x hx y hy => hno x hx y hy⟩ hn (tv{H} F) rfl rfl {es}"
+    else:
+        fin = (f"cut_of_wlog (fun H hn hw => core{H} H hn (tv{H} _) rfl rfl {es} hw)\n"
+               f"    ⟨hF, hD, hbot, htop, fun x hx y hy => hno x hx y hy⟩ hn")
+    wl = ("\nThe refutation assumes `F(⊥,⊤) ∉ D`; `cut_of_wlog` (order duality) removes the assumption."
+          if wlog is not None else "")
     src = f'''import Mordor.GroundCut
 
 /-!
@@ -101,7 +111,7 @@ def main(H, core_path, maps_path, out_path):
 `C_{H}^≤` over {N} F-terms built from `⊥, ⊤` (`experiments/sat/cut_ground.py`); every clause is an instance of a
 lemma of `GroundCut.lean`, and `bv_decide` checks the propositional refutation (LRAT, kernel-checked).
 `{name}`: in every bounded poset with no chain of {H + 2} elements, every monotone `F` and every down-set
-`D ∋ ⊥`, `⊤ ∉ D` have a witness cell. Do not edit by hand; regenerate.
+`D ∋ ⊥`, `⊤ ∉ D` have a witness cell.{wl} Do not edit by hand; regenerate.
 -/
 
 namespace Mordor.Ground
@@ -110,7 +120,7 @@ set_option maxRecDepth 100000
 
 theorem core{H} {{α : Type*}} [PartialOrder α] [OrderBot α] [OrderTop α] {{F : α → α → α}} {{D : Set α}}
     (H : CutCx F D) (hn : NoChain α {H + 1}) (t : ℕ → α) (h0 : t 0 = ⊥) (h1 : t 1 = ⊤)
-{hyps} : False := by
+{hyps}{hw} : False := by
 {haves}
   clear {clears} h0 h1 hn H
   bv_decide
@@ -127,7 +137,7 @@ theorem {name} {{α : Type*}} [PartialOrder α] [OrderBot α] [OrderTop α] (hn 
     ∃ x ∈ D, ∃ y, y ∉ D ∧ (F x y ≤ x ∨ y ≤ F x y) := by
   by_contra hno
   push_neg at hno
-  exact core{H} ⟨hF, hD, hbot, htop, fun x hx y hy => hno x hx y hy⟩ hn (tv{H} F) rfl rfl {es}
+  exact {fin}
 
 end Mordor.Ground
 '''

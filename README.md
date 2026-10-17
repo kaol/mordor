@@ -25,7 +25,7 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
 - **The Cut Lemma as a dialgebra L → 𝒪(L)** (round 24): transposed along sup ⊣ ↓, it is the principal-cut proposition μκ = ⊤. The comparison square is lax. Along the orbit it is tight for every F exactly on lattices where L ∖ {⊤} is a tree. That direction is proved; the converse holds on all 73 lattices of size 5–7, and the delay grows off trees (§32.6).
 - **GPU census** (round 25, Radeon W6600): 373,086,957,077 bifunctions enumerated exactly on 13 lattices of ≤ 6 elements, plus 2.4·10⁸ heat-bath samples up to B5. Zero tripwires and zero CL / semi-CL / Cut violators. Orbit lag is positive on exactly the 6 non-top-closed 6-element lattices. The uniform law concentrates on commuting and generic polar F, so it calibrates rather than searches (§33).
 
-**Standing conjecture:** every chain-finite complete lattice satisfies CL. Formally (`lean/Mordor/Frontier.lean`), it follows from one statement: for every monotone F on a chain-finite complete lattice, R(F) is join-closed (§34.4a). The open frontier is the Cut Lemma at edge-height ≥ 5 and on chain-finite lattices of unbounded height; edge-height ≤ 4 is settled (§34.3f–g).
+**Standing conjecture:** every chain-finite complete lattice satisfies CL. Formally (`lean/Mordor/Frontier.lean`), it follows from one statement: for every monotone F on a chain-finite complete lattice, R(F) is join-closed (§34.4a). The open frontier is the Cut Lemma at edge-height ≥ 6 and on chain-finite lattices of unbounded height; edge-height ≤ 5 is settled, in Lean (§34.3f–h).
 
 ## Repository layout
 

@@ -29,12 +29,22 @@ Round 23 (`docs/rounds/23-v3.4.md`):
 Every satisfying assignment returned by the SAT layer is decoded and re-derived by brute-force fixed-point
 computation before it is reported; an unsat answer is only as trustworthy as the solver unless DRAT-checked.
 
-## Round 26: ground refutation of the cut theory (§34.3g)
+## Round 26: ground refutation of the cut theory (§34.3g–h)
 
 - `cut_ground.py H [maxterms]`: model-guided ground refutation of `C_H^≤` (poset version) with lazy transitivity and
-  a rank encoding of the height bound. UNSAT is a proof. Results: H = 2, 3, 4 UNSAT (6 / 35 / 388 terms).
+  a rank encoding of the height bound. UNSAT is a proof. Options of `run`: `wlog=True` (unit F(⊥,⊤) ∉ D, sound by
+  order duality, Lean `cut_of_wlog`), `room='fit'` (tightness-guided term selection, §34.3h), `stream=path` (clauses
+  to disk instead of memory), `lazy_ih=True` (height-induction clauses on violation). With
+  `run(H, 5000, per_round=1, wlog=True, room='fit')`: H = 3, 4, 5 UNSAT with 7 / 19 / 128 terms (H = 5 in 17 s);
+  depth-first selection (§34.3g) needed 35 / 388 terms for H = 3, 4 and did not finish H = 5.
 - `cut_lean.py H core.cnf maps.pkl out.lean`: turns a drat-trim core of an UNSAT run into a Lean file
-  (`lean/Mordor/CutHeight<H>.lean`) whose clauses are instances of `lean/Mordor/GroundCut.lean`, refuted by `bv_decide`.
-  To reproduce H = 4: run `cut_ground.run(4, 400)`, `write_dimacs`, solve with a proof-producing solver, then
-  `drat-trim cnf drat -c core`, then `cut_lean.py`.
-- `cut_ground2.py H`: fully lazy variant (all axiom families added on violation; height bound as direct chain clauses) for H ≥ 5. Reproduces H ≤ 3; H = 5 is open, see §34.3g.
+  (`lean/Mordor/CutHeight<H>.lean`) whose clauses are instances of `lean/Mordor/GroundCut.lean`, refuted by `bv_decide`;
+  a WLOG unit becomes `cl_wlog` and the final theorem goes through `cut_of_wlog`.
+  To reproduce H = 5: `ok, G = run(5, 5000, per_round=1, wlog=True, room='fit')`, `write_dimacs(G, cnf)`, pickle the
+  variable maps (`le`, `d`, `g` inverted, `terms`, `F`), solve with a proof-producing solver (Glucose via PySAT
+  `with_proof=True`), `drat-trim cnf drat -c core`, then `cut_lean.py 5 core maps out.lean`.
+- `cut_finite.py H n_min n_max [--lattice]`: direct SAT search for a finite cut counterexample (poset of n elements
+  numbered by a linear extension, F one-hot, WLOG F(⊥,⊤) ∉ D). None with ≤ 10 elements at any height, none with
+  ≤ 11 elements at height ≤ 5 (§34.3h).
+- `cut_ground2.py H`: fully lazy variant (all axiom families added on violation; height bound as direct chain clauses).
+  Reproduces H ≤ 3; superseded by `room='fit'`.

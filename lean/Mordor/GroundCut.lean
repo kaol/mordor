@@ -97,4 +97,60 @@ theorem cl_rank0 (p q : α) : (!decide (p ≤ q) || decide (q ≤ p) || decide (
 theorem cl_rankmax {n : ℕ} (hn : NoChain α n) (x : α) : (!decide (chainTo x n)) = true := by
   simpa using hn x
 
+/-! ## Self-duality of the cut theory (for `WLOG F(⊥,⊤) ∉ D` in certificates)
+
+The order dual of a cut counterexample `(α, F, D)` is `(αᵒᵈ, Fᵈ, Dᵈ)` with `Fᵈ x y = F y x` and `Dᵈ` the complement
+of `D`; the chain bound is preserved and `Fᵈ(⊥,⊤) = F(⊥,⊤)` changes side. So a refutation of the theory plus the
+unit clause `F(⊥,⊤) ∉ D` refutes the theory (`cut_of_wlog`). -/
+
+open OrderDual
+
+/-- A strict chain of `k + 1` elements starts at `x` (going up). -/
+def chainFrom : α → ℕ → Prop
+  | _, 0 => True
+  | x, k + 1 => ∃ y, x < y ∧ chainFrom y k
+
+theorem chainTo_add : ∀ (k j : ℕ) (x : α), chainFrom x k → chainTo x j → ∃ z : α, chainTo z (j + k)
+  | 0, _, x, _, h => ⟨x, h⟩
+  | k + 1, j, x, ⟨y, hxy, hy⟩, h => by
+      obtain ⟨z, hz⟩ := chainTo_add k (j + 1) y hy ⟨x, hxy, h⟩
+      exact ⟨z, by rwa [Nat.add_right_comm, Nat.add_assoc] at hz⟩
+
+theorem chainTo_dual : ∀ (k : ℕ) (x : αᵒᵈ), chainTo x k ↔ chainFrom (ofDual x) k
+  | 0, _ => Iff.rfl
+  | k + 1, x => by
+      constructor
+      · rintro ⟨y, hyx, hy⟩; exact ⟨ofDual y, hyx, (chainTo_dual k y).1 hy⟩
+      · rintro ⟨y, hxy, hy⟩; exact ⟨toDual y, hxy, (chainTo_dual k (toDual y)).2 hy⟩
+
+theorem NoChain.dual {n : ℕ} (hn : NoChain α n) : NoChain αᵒᵈ n := fun x hx => by
+  obtain ⟨z, hz⟩ := chainTo_add n 0 (ofDual x) ((chainTo_dual n x).1 hx) trivial
+  exact hn z (by simpa using hz)
+
+/-- The dual bifunction `Fᵈ x y = F y x` on `αᵒᵈ`. -/
+def dualF (F : α → α → α) : αᵒᵈ → αᵒᵈ → αᵒᵈ := fun x y => toDual (F (ofDual y) (ofDual x))
+/-- The dual cut: the complement, read in `αᵒᵈ`. -/
+def dualD (D : Set α) : Set αᵒᵈ := {x | ofDual x ∉ D}
+
+theorem CutCx.dual (H : CutCx F D) : CutCx (dualF F) (dualD D) where
+  mono _ _ _ _ hx hy := H.mono _ _ _ _ hy hx
+  down _ _ hxy hy hx := hy (H.down _ _ hxy hx)
+  bot := H.top
+  top := fun h => h H.bot
+  nowit x hx y hy := ⟨fun h => (H.nowit (ofDual y) (not_not.mp hy) (ofDual x) hx).2 h,
+                      fun h => (H.nowit (ofDual y) (not_not.mp hy) (ofDual x) hx).1 h⟩
+
+universe u in
+/-- A refutation under `F(⊥,⊤) ∉ D`, uniform in the poset, refutes every cut counterexample. -/
+theorem cut_of_wlog {n : ℕ}
+    (core : ∀ {β : Type u} [PartialOrder β] [OrderBot β] [OrderTop β] {G : β → β → β} {E : Set β},
+      CutCx G E → NoChain β n → G ⊥ ⊤ ∉ E → False)
+    {α : Type u} [PartialOrder α] [OrderBot α] [OrderTop α] {F : α → α → α} {D : Set α}
+    (H : CutCx F D) (hn : NoChain α n) : False := by
+  by_cases hc : F ⊥ ⊤ ∈ D
+  · exact core H.dual hn.dual (fun h => h hc)
+  · exact core H hn hc
+
+theorem cl_wlog {x : α} (hx : x ∉ D) : (!decide (x ∈ D)) = true := by simpa using hx
+
 end Mordor.Ground

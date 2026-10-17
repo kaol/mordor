@@ -4,7 +4,7 @@ An autonomous mathematics research program studying the **Commutation Lemma (CL)
 
 Mordor is a formal system organized as three layers — **bialgebraic axioms** (algebra + coalgebra on one carrier), **dialgebraic axioms** (algebra and coalgebra fused), and a calculus of **bounds and interaction rules** governing how μ- and ν-axioms mix without collapse. The program combines this formal apparatus with exhaustive machine experiments: every claim in the research log is either proved, or enumerated and refuted to the last instance.
 
-## Current status (v3.6 · The First GPU Census)
+## Current status (v3.7 · The Proved Layer, Machine-Checked)
 
 **Proven:**
 - **Finite Commutation Lemma** — CL holds on every finite chain (§20.5, round 12). Round 22 gives a short proof of a stronger statement: on a finite chain, one-sided **semi-commutation** b∘a ⊑ a∘b already forces μν = νμ (§30.3).
@@ -14,6 +14,8 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
 - **Dialgebraic layer, thin model** (round 24): D1 holds when G is a right adjoint (μ^{F,G} = μ(G*∘F)), and dually D2. For meet-preserving G, δ₀ is iso ⟺ F(A₀) ∈ Im G. So the Lambek failure zone is the unit of G* ⊣ G, which overturns the §13.3 negative. D5 through an anti-automorphism is the Duality Theorem §22.1 (§32.2–§32.4).
 - **The Cut Lemma is self-dual per F** (round 25): the down-set step Φ and the up-set step Ψ satisfy Φ ⊣ c∘Ψ∘c, so R_k ∩ U_j = ∅ ⟺ R_{k+j} ≠ L for any monotone a, b. The down-set and up-set forms of the lemma coincide for each F (§33.3).
 - **Finite lattices, decided by SAT** (§30.1; DRAT-certified where marked): E₂ (Theorem B), E₃ (Theorem C), **E₄, E₅, B₄**, C₄×C₄, M₃×M₃, and **every lattice with ≤ 4 join-irreducibles** satisfy CL.
+
+- **Machine-checked in Lean 4 + Mathlib** (round 26, `lean/`): stability, I1, fusion, I2; the Finite Commutation and Semi-Commutation Lemmas on finite chains; principal cuts; Cut ⟺ R(F) = L, and on finite lattices "the gap is joins"; the Duality Theorem; the dialgebra theorems of round 24; orbit tightness; the self-duality of round 25. Doing so found a wrong step in the log's L2 proof and a gap in its L1 proof (§34.1). Cut ⟹ semi-CL now holds per F on L itself, with no interval reduction (§34.2).
 
 **Reductions (round 22):**
 - **Cut Lemma ⟹ CL.** If every monotone F and every proper down-set D admit x ∈ D, y ∉ D with F(x, y) ≤ x or F(x, y) ≥ y, then semi-commutation (hence CL) holds; proved for principal cuts, machine-checked on 55,320 instances, open in general (§30.4).
@@ -30,11 +32,12 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
 |---|---|
 | `docs/00-foundations.md` | The formal system: ambient setting, bialgebraic & dialgebraic axioms, bounds, interaction rules, metatheorems (§1–§7) |
 | `docs/01-early-notes.md` | Early revision notes and first exploration findings (v1.1–v1.2) |
-| `docs/rounds/` | The research log, one file per exploration round (rounds 2–25, versions v1.3 → v3.6) |
+| `docs/rounds/` | The research log, one file per exploration round (rounds 2–26, versions v1.3 → v3.7) |
 | `docs/README.md` | Index to the research log with one-line summaries |
 | `experiments/` | The machine-experiment stack: exact realizability CSP solver, E₃ census pipeline, validation harness |
 | `gpu/` | GPU census of the projection F ↦ (a, b): exact enumeration and heat-bath MCMC with tripwires (PyTorch, ROCm/CUDA/CPU); see `gpu/README.md` |
 | `experiments/sat/` | Round 22: direct SAT encoding (CaDiCaL via PySAT), DRAT certification, semi-commutation and Cut Lemma sweeps, z3 theories |
+| `lean/` | Round 26: Lean 4 / Mathlib proofs of the log's proved core (Mathlib is a lake dependency, not committed) |
 | `data/gpu-2026-10/` | Round 25: results.jsonl and batch.log of the first GPU run |
 | `experiments/dialgebra/` | Round 24: thin-model dialgebra censuses (transposition, failure zone, D5), the Cut Lemma transposition, orbit-laxity z3 searches |
 | `data/` | Machine-experiment results (JSON) |

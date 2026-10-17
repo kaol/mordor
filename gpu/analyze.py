@@ -24,19 +24,33 @@ def rates(r):
 def main(path):
     R, seen = [], set()
     for line in open(path):
-        r = json.loads(line); k = (r['mode'], r['lid'])
+        r = json.loads(line); k = (r['mode'], r['lid'], r.get('score'), r.get('box'))
         if k in seen: continue
         seen.add(k); R.append(r)
     pct = lambda x, c: f"{100 * x / c:.4f}" if c else "-"
     print("| lattice | n | mode | F | comm | m = n | polar | m ≠ n, not polar | m = n, not comm | ψ ≤ φ | φ ≤ ψ | polar ∧ φ ≤ ψ | orbit-lax | trips | viol |")
     print("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
     for r in R:
+        if r['mode'] == 'mucan': continue
         q = rates(r); c = q['count']
         lax = "n/a (schema 1)" if q['lax'] is None else f"{q['lax']:,} ({pct(q['lax'], c)})"
-        print(f"| {r['lattice']} | {r['n']} | {r['mode']} | {c:,} | {pct(q['comm'], c)} | {pct(q['meqn'], c)} | "
+        name = r['lattice'] + (f" (box {r['box']})" if r.get('box') else "")
+        print(f"| {name} | {r['n']} | {r['mode']} | {c:,} | {pct(q['comm'], c)} | {pct(q['meqn'], c)} | "
               f"{pct(q['polar'], c)} | {pct(q['resid'], c)} | {pct(q['clgap'], c)} | {pct(q['semi'], c)} | "
               f"{pct(q['dsemi'], c)} | {pct(q['pol_dsemi'], c)} | {lax} | {sum(r['trips'].values())} | "
               f"{sum(r['viols'].values())} |")
+    mu = [r for r in R if r['mode'] == 'mucan']
+    if mu:
+        fmt = lambda v: ', '.join('—' if x is None else f"{x:.3g}" for x in v)
+        print("\n| lattice | score | box | P_uniform by level (TMMC) | ⊥-start / ⊤-start halves | from visits | visits | "
+              "entries (proposals s+1 → s) | acceptance | trips | viol |")
+        print("|---|---|---|---|---|---|---|---|---|---|---|")
+        for r in mu:
+            C = r['proposals']; ent = [C[s + 1][s] for s in range(len(C) - 1)]
+            print(f"| {r['lattice']} | {r['score']} | {r.get('box') or '—'} | {fmt(r['p_uniform'])} | "
+                  f"{fmt(r['p_uniform_bot_start'])} / {fmt(r['p_uniform_top_start'])} | {fmt(r['p_uniform_hist'])} | "
+                  f"{r['visits']} | {ent} | {r['acceptance']} | {sum(sum(l['trips'].values()) for l in r['levels'])} | "
+                  f"{sum(sum(l['viols'].values()) for l in r['levels'])} |")
     tot = sum(r['count'] for r in R if r['mode'] == 'census')
     print(f"\nexact census total (distinct lattices): {tot:,} F; MCMC samples: "
           f"{sum(r['count'] for r in R if r['mode'] == 'mcmc'):,}")

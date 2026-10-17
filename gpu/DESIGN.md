@@ -119,3 +119,38 @@ It is kept only to show examples, and its *count* is in the monoid.
 | tripwires = proved theorems, evaluated on every F | CP (error at the point of failure), LC | trusting the engine because tests passed once |
 | independent reference by a different method | L2 bisimulation at the strongest observation (the per-F record) | a reference that shares code with the engine |
 | overdispersed MCMC starts + census calibration job | L3 made explicit | reporting sampler rates as facts (the log's §23.4 lesson) |
+
+## 7. Boxes and multicanonical sampling (round 26)
+
+Round 25 (§33.4) showed that the uniform law on F puts vanishing mass on what the CL program studies. Two exact tools
+go after that complement.
+
+- **Boxes.** A box confines each cell c to an interval [lo_c, hi_c]. The monotone F in a box form a sublattice of
+  L^(L×L), with least element F_lo(c) = ⋁_{c' ≤ c} lo and greatest element F_hi(c) = ⋀_{c' ≥ c} hi; the box is nonempty
+  iff F_lo ≤ hi (`Plan.set_box`). The heat bath intersects each cell's interval with [lo_c, hi_c], so it stays
+  reversible w.r.t. the uniform law on the box and irreducible (descend to F_lo). Chains start at F_lo and F_hi.
+  Presets (`box_preset`):
+  - `corners`: b(⊥) = ⊥ and a(⊤) = ⊤;
+  - `rowgap`: corners, and F(⊥, y) ≥ p on ↑q for two atoms p ≠ q. This keeps b⁻¹(⊥) out of ↑q and so holds the
+    principal step κ(⊥) below ⊤.
+
+  `test_box_heat_bath_exact` compares the result against exhaustive enumeration.
+- **mucan.** A score S has a few integer levels (`SCORES`): `lag`, `kappa`, `rstages`, `defects`.
+  - *Target:* π(F) ∝ exp(w(S(F))).
+  - *Proposal:* a heat bath on one color class, restricted to a random fraction ρ of its cells chosen independently of
+    the state. This is a symmetric kernel.
+  - *Acceptance:* min(1, e^{w(S′) − w(S)}).
+  - *What is exact:* π depends on F only through S, so recorded samples at level s are uniform on {S = s}, and the
+    per-level Hists are exact conditional laws for any frozen w.
+  - *Level masses:* estimated by TMMC (`tmmc_logg`). Every proposal, accepted or rejected, is counted in C[s, s′]. The
+    symmetric kernel lumps to g(s) T(s→s′) = g(s′) T(s′→s), which is solved by weighted least squares in log g. This
+    needs only uniformity *within* levels, not flux equilibrium *between* them. A histogram recursion (tried first,
+    Wang–Landau and Berg) overshot by tens of e-folds on B3/lag, where the rare level is entered only by rare
+    proposals; TMMC does not, because it reads rejected proposals as well.
+  - *Weights:* the adaptation phase sets w = −log ĝ every adapt/8 sweeps. The production phase freezes w.
+  - *Checks:* `p_uniform_hist` (from visits) and the ⊥/⊤-start halves are consistency checks.
+    `test_mucan_matches_census_C4` reproduces the exact level masses (±0.02) and the per-level joint laws of the C4
+    census. `test_tmmc_logg_synthetic` checks the estimator on exact counts.
+  - *Limit:* a level that no proposal connects in both directions is reported as `None`. It is too rare for the run,
+    which is not the same as impossible.
+- **Knuth paths** raised from 8,192 to 65,536. On L6_7 the estimate went from 0.66× to 1.04× the exact total.

@@ -113,3 +113,71 @@ def test_orbit_lax_top_closed_and_witnesses():
     for f in W:
         o = reference.observe_one(L, np.array(f).reshape(L.n, L.n))
         assert o['laxfirst'] >= 0 and not o['trip_lax']
+
+
+def _all_F(L):
+    P = engine.Plan(L, DEV); Rw = torch.zeros(1, 0, dtype=torch.int32, device=DEV)
+    for k in range(L.n): Rw = engine.census_level(P, Rw, k)
+    return P, engine.leaves_to_F(P, Rw)
+
+
+def _joint_keys(f, sel):
+    keys = sum(f[k][sel].long() << i for i, k in enumerate(engine.JOINT_BITS))
+    return collections.Counter(''.join('1' if k >> i & 1 else '0' for i in range(len(engine.JOINT_BITS))) for k in keys.tolist())
+
+
+@pytest.mark.parametrize('spec,box', [('B2', 'corners'), ('B2', 'rowgap'), ('C4', 'corners')])
+def test_box_heat_bath_exact(spec, box):
+    """§33.5(1): the heat bath inside a box is uniform on the monotone F of the box (vs exhaustive enumeration)."""
+    L = lattices.parse(spec); P, F = _all_F(L)
+    lo, hi = engine.box_preset(L, box)
+    lo, hi = torch.as_tensor(lo, device=DEV), torch.as_tensor(hi, device=DEV)
+    inb = (P.leq[lo[None], F] & P.leq[F, hi[None]]).flatten(1).all(1)
+    f = engine.observe(P, F); exact = _joint_keys(f, inb); tot = int(inb.sum())
+    r = engine.mcmc(L, DEV, chains=2048, sweeps=300, burn=50, thin=10, seed=4, log=quiet, box=box)
+    N = r['count']; chi2 = sum((r['joint'].get(k, 0) - N * c / tot) ** 2 / (N * c / tot) for k, c in exact.items())
+    assert set(r['joint']) <= set(exact), "sampler produced a joint key absent from the box"
+    dof = max(1, len(exact) - 1)
+    assert chi2 < dof + 10 * (2 * dof) ** 0.5 + 50, (chi2, dof)
+
+
+def test_tmmc_logg_synthetic():
+    """Level masses from exact proposal counts of a symmetric kernel: C[s, t] = g(s) Q(s→t) with g Q symmetric."""
+    rng = np.random.default_rng(0); g = np.array([1e-6, 3e-3, 0.2, 0.797]); m = len(g)
+    K = rng.random((m, m)); K = K + K.T                                          # symmetric flux g(s) Q(s, t)
+    C = K * 1e9                                                                   # counts ∝ flux
+    assert np.allclose(np.exp(engine.tmmc_logg(C)), C.sum(1) / C.sum(), rtol=1e-9)  # symmetric C ⇒ g ∝ visits
+    Q = K / g[:, None]; Q /= Q.sum(1).max(); np.fill_diagonal(Q, 0); np.fill_diagonal(Q, 1 - Q.sum(1))
+    C = g[:, None] * Q * 1e12
+    assert np.allclose(np.exp(engine.tmmc_logg(C)), g, rtol=1e-6)
+
+
+def test_mucan_matches_census_C4():
+    """§33.5(1): multicanonical/TMMC level masses and per-level conditional laws vs the exact C4 census."""
+    L = lattices.chain(4); P, F = _all_F(L); f = engine.observe(P, F)
+    nlev, Sf = engine.SCORES['rstages'][0](P), engine.SCORES['rstages'][1]; S = Sf(P, f)
+    exact = (torch.bincount(S, minlength=nlev).double() / len(S)).tolist()
+    r = engine.mucan(L, DEV, 'rstages', chains=2048, sweeps=300, adapt=200, burn=50, thin=5, seed=1, log=quiet)
+    for e, p in zip(exact, r['p_uniform']):
+        assert (p is None and e == 0) or abs(p - e) < 0.02, (exact, r['p_uniform'])
+    for lev in r['levels']:
+        sel = S == lev['level']; ex = _joint_keys(f, sel); tot = int(sel.sum()); N = lev['count']
+        assert set(lev['joint']) <= set(ex)
+        chi2 = sum((lev['joint'].get(k, 0) - N * c / tot) ** 2 / (N * c / tot) for k, c in ex.items())
+        assert chi2 < len(ex) + 10 * (2 * len(ex)) ** 0.5 + 50, (lev['level'], chi2)
+        for x in lev['examples']:
+            assert int(Sf(P, engine.observe(P, torch.as_tensor([x], device=DEV)))[0]) == lev['level']
+
+
+def test_mucan_checkpoint_resume(tmp_path):
+    L = lattices.B(2); ck = str(tmp_path / 'u.pkl')
+    kw = dict(chains=256, sweeps=40, adapt=40, burn=10, thin=5, seed=3, log=quiet)
+    a = engine.mucan(L, DEV, 'defects', **kw)
+    engine.mucan(L, DEV, 'defects', ck=ck, **kw)
+    b = engine.mucan(L, DEV, 'defects', ck=ck, **kw)                             # resumed at the end
+    for r in (a, b): r.pop('t'); r.pop('device')
+    assert a == b
+
+
+def test_parse_all_lattice_names():
+    assert lattices.parse('L6_12').leq.tolist() == lattices.all_lattices(6)[12].leq.tolist()

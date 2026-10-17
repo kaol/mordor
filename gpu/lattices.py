@@ -130,7 +130,8 @@ def all_lattices(n):
 
 
 def parse(spec):
-    """'C5', 'M3', 'N5', 'B3', 'E2', 'D3', 'Pi4', products 'C3xC3', families 'all6' and 'all<=6' (a list)."""
+    """'C5', 'M3', 'N5', 'B3', 'E2', 'D3', 'Pi4', products 'C3xC3', 'L6_12' (the names all_lattices gives), families
+    'all6' and 'all<=6' (a list)."""
     if spec.startswith('all<='): return [L for n in range(3, int(spec[5:]) + 1) for L in all_lattices(n)]
     if spec.startswith('all'): return all_lattices(int(spec[3:]))
     if 'x' in spec:
@@ -138,6 +139,8 @@ def parse(spec):
         L = parts[0]
         for Q in parts[1:]: L = product(L, Q)
         return L
+    if spec[0] == 'L' and '_' in spec:                                            # 'L6_12': all_lattices(6)[12]
+        n, i = map(int, spec[1:].split('_')); return all_lattices(n)[i]
     if spec == 'N5': return N5()
     if spec.startswith('Pi'): return Pi(int(spec[2:]))
     kind, k = spec[0], int(spec[1:])

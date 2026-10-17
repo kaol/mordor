@@ -98,6 +98,29 @@ class Plan:
                 iv = [w for w in range(n) if L.leq[u, w] and L.leq[w, v]]
                 cnt[u, v] = max(1, len(iv)); il[u, v, :len(iv)] = iv
         self.cnt = torch.as_tensor(cnt, device=self.dev); self.ilist = torch.as_tensor(il, device=self.dev)
+        self.set_box(None)
+
+    def set_box(self, box):
+        """Confine every cell c = (x, y) to an interval [lo_c, hi_c] (box = (lo, hi), two (n, n) arrays, or None for
+        the whole space). Monotone F inside a box form a sublattice of L^(L×L) with least element F_lo(c) = ⋁_{c' ≤ c} lo
+        and greatest F_hi(c) = ⋀_{c' ≥ c} hi; the box is nonempty iff F_lo ≤ hi. The heat bath restricted to the box is
+        reversible w.r.t. the uniform law on it and irreducible (descend cell by cell to F_lo), as without a box."""
+        L, n = self.L, self.n; N = n * n
+        lo = np.full((n, n), L.bot, dtype=np.int64) if box is None else np.asarray(box[0], dtype=np.int64)
+        hi = np.full((n, n), L.top, dtype=np.int64) if box is None else np.asarray(box[1], dtype=np.int64)
+        Flo, Fhi = np.empty_like(lo), np.empty_like(hi)
+        for x in range(n):
+            for y in range(n):
+                v, w = L.bot, L.top
+                for x2 in range(n):
+                    for y2 in range(n):
+                        if L.leq[x2, x] and L.leq[y2, y]: v = L.join[v, lo[x2, y2]]
+                        if L.leq[x, x2] and L.leq[y, y2]: w = L.meet[w, hi[x2, y2]]
+                Flo[x, y], Fhi[x, y] = v, w
+        if not L.leq[Flo, hi].all(): raise SystemExit(f"box on {L.name} contains no monotone F")
+        T = lambda a: torch.as_tensor(np.concatenate([a.reshape(-1), [L.bot, L.top]]), device=self.dev)
+        self.blo, self.bhi, self.Flo, self.Fhi = T(lo), T(hi), T(Flo), T(Fhi)
+        self.box = None if box is None else (lo.tolist(), hi.tolist())
 
     def selftest(self, k=64):
         """L2 contract: observe on device ≡ reference.observe_one, on random monotone F (heat bath from both ends)."""
@@ -269,7 +292,7 @@ def census_level(P, Rw, k, ok=None):
     return torch.cat([Rw[pi], ri[:, None].to(Rw.dtype)], 1)
 
 
-def estimate_count(P, paths=8192, seed=0):
+def estimate_count(P, paths=65536, seed=0):
     """Knuth's estimator of the census size: random root-to-leaf descents choosing a uniform admissible row at each
     level; the product of branching numbers is an unbiased estimate of the number of leaves. → (mean, std. error)."""
     g = torch.Generator(device=P.dev); g.manual_seed(seed)
@@ -288,7 +311,7 @@ def estimate_count(P, paths=8192, seed=0):
     return float(w.mean()), float(w.std() / paths ** 0.5)
 
 
-def census_size(L, dev, paths=8192):
+def census_size(L, dev, paths=65536):
     """(estimate, std. error) of the census size of L, or None if a census of L is refused outright."""
     try: P = Plan(L, dev, census=True, mcmc=True)
     except SystemExit: return None
@@ -377,44 +400,53 @@ def census(L, dev, ck=None, fibres=False, log=print):
 
 # ---------------------------------------------------------------- mcmc (heat bath)
 def mcmc_init(P, C):
-    """Half the chains start at the constant-⊥ map, half at constant-⊤ (overdispersed; used for the mixing check)."""
-    N = P.n * P.n
-    Fs = torch.full((C, N + 2), P.bot, dtype=torch.long, device=P.dev)
-    Fs[C // 2:, :N] = P.top
-    Fs[:, N] = P.bot; Fs[:, N + 1] = P.top
+    """Half the chains start at the least F of the box (constant-⊥ without a box), half at the greatest (constant-⊤):
+    overdispersed starts, used for the mixing check. Columns N, N+1 are the constant ⊥ / ⊤ padding cells."""
+    Fs = P.Flo[None].repeat(C, 1)
+    Fs[C // 2:] = P.Fhi
+    return Fs
+
+
+def class_step(P, Fs, i, g, rho=1.0):
+    """Heat bath on color class i (an independent set of cells), in place: resample each cell uniformly from
+    [⋁ lower neighbours ∨ lo_c, ⋀ upper neighbours ∧ hi_c]. With rho < 1 only a random subset of the class (each cell
+    with probability rho, independently of the state) is resampled. Either way the kernel is symmetric, i.e.
+    reversible w.r.t. the uniform law on the box: the interval of a cell depends only on cells outside the class."""
+    cells, lo_i, hi_i = P.colors[i]
+    lov, hiv = Fs[:, lo_i], Fs[:, hi_i]                                             # (C, K, deg)
+    lo, hi = P.join[lov[..., 0], P.blo[cells]], P.meet[hiv[..., 0], P.bhi[cells]]
+    for t in range(1, lov.shape[-1]): lo = P.join[lo, lov[..., t]]
+    for t in range(1, hiv.shape[-1]): hi = P.meet[hi, hiv[..., t]]
+    c = P.cnt[lo, hi]
+    u = torch.rand(lo.shape, generator=g, device=P.dev)
+    new = P.ilist[lo, hi, torch.minimum((u * c).long(), c - 1)]
+    if rho < 1.0: new = torch.where(torch.rand(lo.shape, generator=g, device=P.dev) < rho, new, Fs[:, cells])
+    Fs[:, cells] = new
     return Fs
 
 
 def sweep(P, Fs, g):
-    """One systematic heat-bath sweep: per color class (an antichain-like independent set of cells), resample every
-    cell uniformly from [⋁ lower-neighbour values, ⋀ upper-neighbour values]. Reversible w.r.t. the uniform law on
-    monotone F; irreducible (every F descends cell by cell to constant-⊥)."""
-    C = Fs.shape[0]
-    for cells, lo_i, hi_i in P.colors:
-        lov, hiv = Fs[:, lo_i], Fs[:, hi_i]                                         # (C, K, deg)
-        lo, hi = lov[..., 0], hiv[..., 0]
-        for t in range(1, lov.shape[-1]): lo = P.join[lo, lov[..., t]]
-        for t in range(1, hiv.shape[-1]): hi = P.meet[hi, hiv[..., t]]
-        c = P.cnt[lo, hi]
-        u = torch.rand(lo.shape, generator=g, device=P.dev)
-        k = torch.minimum((u * c).long(), c - 1)
-        Fs[:, cells] = P.ilist[lo, hi, k]
+    """One systematic heat-bath sweep (every color class once). Reversible w.r.t. the uniform law on monotone F in
+    the box; irreducible (every F descends cell by cell to the least F of the box)."""
+    for i in range(len(P.colors)): class_step(P, Fs, i, g)
     return Fs
 
 
-def mcmc(L, dev, chains, sweeps, burn, thin, seed, ck=None, log=print):
+def mcmc(L, dev, chains, sweeps, burn, thin, seed, ck=None, log=print, box=None):
+    """Heat bath, uniform on monotone F (in the named box, `box_preset`; then every rate is conditional on the box)."""
     P = Plan(L, dev, census=False, mcmc=True); n = P.n; N = n * n
+    P.set_box(box_preset(L, box))
     g = torch.Generator(device=dev); g.manual_seed(seed)
-    state = dict(lattice=L.name, lid=lattice_id(L), schema=SCHEMA, chains=chains, seed=seed, done=0,
+    state = dict(lattice=L.name, lid=lattice_id(L), schema=SCHEMA, chains=chains, seed=seed, box=box, done=0,
                  hist=[Hist(n), Hist(n)], Fs=None, rng=None)
     if ck and os.path.exists(ck):
         with open(ck, 'rb') as fh: old = pickle.load(fh)
-        assert (old['lid'], old['schema'], old['chains'], old['seed']) == (state['lid'], SCHEMA, chains, seed), \
-            "checkpoint belongs to another lattice/schema/chains/seed"
+        assert (old['lid'], old['schema'], old['chains'], old['seed'], old.get('box')) == \
+            (state['lid'], SCHEMA, chains, seed, box), "checkpoint belongs to another lattice/schema/chains/seed/box"
         state = old; g.set_state(state['rng'])
     Fs = mcmc_init(P, chains) if state['Fs'] is None else torch.as_tensor(state['Fs'], device=dev)
     grp = torch.arange(chains, device=dev) >= chains // 2
-    log(f"  mcmc {L.name}: n={n}, height {P.h}, {len(P.colors)} color classes, {chains} chains, sweeps {sweeps} "
+    log(f"  mcmc {L.name}: n={n}, height {P.h}, {len(P.colors)} color classes, box {box or 'none'}, {chains} chains, sweeps {sweeps} "
         f"(burn {burn}, thin {thin}), resuming at {state['done']}; device {describe(dev)}")
     t0 = last = time.time()
     def save():
@@ -437,6 +469,7 @@ def mcmc(L, dev, chains, sweeps, burn, thin, seed, ck=None, log=print):
     res = dict(schema=SCHEMA, mode='mcmc', lattice=L.name, lid=state['lid'], n=n, height=P.h, chains=chains,
                sweeps=sweeps, burn=burn, thin=thin, seed=seed, t=round(time.time() - t0, 1), device=describe(dev),
                **tot.json(), mixing=mixing_check(H0, H1))
+    if box: res.update(box=box, box_cells=P.box)
     return res
 
 
@@ -453,3 +486,156 @@ def mixing_check(H0, H1):
         se = (p * (1 - p) * (1 / n0 + 1 / n1)) ** 0.5
         out[k] = dict(rate_bot_start=round(p0, 6), rate_top_start=round(p1, 6), z=round((p0 - p1) / se, 2) if se else 0.0)
     return out
+
+
+# ---------------------------------------------------------------- boxes and multicanonical sampling (round 26)
+def box_preset(L, name):
+    """Named boxes (lo, hi) of cell intervals.
+      corners  F(⊥,⊥) = ⊥ and F(⊤,⊤) = ⊤, i.e. b(⊥) = ⊥ and a(⊤) = ⊤ (two of the four polar conditions)
+      rowgap   corners, and F(⊥, y) ≥ p for every y ≥ q, for the first two atoms p ≠ q: then b(y) ≠ ⊥ on ↑q, so
+               b⁻¹(⊥) avoids ↑q and the principal step κ(⊥) = a(⊥) ∨ ⋁b⁻¹(⊥) is kept off ⊤ whenever ⋁(L ∖ ↑q) < ⊤"""
+    if name in (None, '', 'none'): return None
+    n = L.n
+    lo = np.full((n, n), L.bot, dtype=np.int64); hi = np.full((n, n), L.top, dtype=np.int64)
+    hi[L.bot, L.bot] = L.bot; lo[L.top, L.top] = L.top
+    if name == 'corners': return lo, hi
+    if name == 'rowgap':
+        atoms = [x for x in range(n) if x != L.bot and all(z in (L.bot, x) for z in range(n) if L.leq[z, x])]
+        if len(atoms) < 2: raise SystemExit(f"box rowgap needs two atoms; {L.name} has {len(atoms)}")
+        p, q = atoms[:2]
+        for y in range(n):
+            if L.leq[q, y]: lo[L.bot, y] = L.join[lo[L.bot, y], p]
+        return lo, hi
+    raise SystemExit(f"unknown box {name!r} (corners, rowgap)")
+
+
+# Scores for multicanonical runs: name → (number of levels, S(observe output) ∈ {0, …, levels−1}). Low S = rare.
+SCORES = {
+    'kappa':   (lambda P: P.h + 1, lambda P, f: (P.h - f['kstages']).clamp(min=0)),       # long ideal (κ) orbits
+    'rstages': (lambda P: P.n, lambda P, f: (P.n - 1 - f['rstages']).clamp(min=0)),       # long R(F) closures
+    'lag':     (lambda P: 2, lambda P, f: (f['laxfirst'] < 0).long()),                    # orbit lag (§32.6.3)
+    'defects': (lambda P: P.n + 2, lambda P, f: torch.where(f['polar'], f['ndef'], torch.full_like(f['ndef'], P.n + 1))),
+}                                                                                          # polar F with few defects
+
+
+def tmmc_logg(C):
+    """Level masses from proposal counts C[s, s'] (rows: from). The proposal kernel is symmetric, so the uniform law is
+    stationary for it and, lumped onto levels, g(s) T(s→s') = g(s') T(s'→s) with T = C / row sums. Weighted least
+    squares for x = log g over level pairs seen in both directions (weight = inverse variance 1/(1/C[s,s'] + 1/C[s',s]))
+    on the component of the most visited level; x normalized so Σ g = 1 there. Other levels: nan."""
+    C = np.asarray(C, dtype=np.float64); m = len(C); rows = C.sum(1)
+    ref = int(np.argmax(rows)); comp = {ref}; grew = True
+    E = [(s, t) for s in range(m) for t in range(s + 1, m) if C[s, t] > 0 and C[t, s] > 0]
+    while grew:
+        grew = False
+        for s, t in E:
+            if (s in comp) != (t in comp): comp |= {s, t}; grew = True
+    idx = sorted(comp); pos = {v: i for i, v in enumerate(idx)}
+    A, b, wt = [], [], []
+    for s, t in E:
+        if s in comp:
+            row = np.zeros(len(idx)); row[pos[t]], row[pos[s]] = 1.0, -1.0
+            A.append(row); b.append(np.log(C[s, t] / rows[s]) - np.log(C[t, s] / rows[t]))
+            wt.append(1.0 / (1.0 / C[s, t] + 1.0 / C[t, s]))
+    A.append(np.eye(len(idx))[pos[ref]]); b.append(0.0); wt.append(1e12)                # gauge x_ref = 0
+    sw = np.sqrt(np.array(wt))[:, None]
+    x = np.linalg.lstsq(np.array(A) * sw, np.array(b) * sw[:, 0], rcond=None)[0]
+    out = np.full(m, np.nan); out[idx] = x - np.log(np.exp(x - x.max()).sum()) - x.max()
+    return out
+
+
+def mucan(L, dev, score, chains, sweeps, adapt, burn, thin, seed, rho=0.25, box=None, ck=None, log=print):
+    """Multicanonical Metropolis on monotone F (in a box): target π(F) ∝ exp(w(S(F))) for a score S with few levels.
+    Proposal: heat bath on one color class, on a random fraction rho of its cells (symmetric, §class_step); accept
+    with min(1, exp(w(S') − w(S))). Every proposal, accepted or not, is counted in C[s, s'] (transition-matrix Monte
+    Carlo); `tmmc_logg` turns C into level masses g. Phase 1 (`adapt` sweeps): every adapt/8 sweeps, w ← −log ĝ
+    (levels not yet connected get the largest weight + 1, which pulls chains toward them). Phase 2 (`sweeps` sweeps,
+    w frozen): exact Metropolis; after `burn`, every `thin` sweeps every
+    chain is recorded. Since π depends on F only through S, the samples at level s are uniform on {F : S(F) = s}:
+    per-level Hists are exact conditional laws. P_uniform(S = s) is estimated twice: from production proposal counts
+    (TMMC, `p_uniform`; needs only uniformity within levels) and from visits, H(s) e^(−w(s)) / Σ (`p_uniform_hist`;
+    needs flux equilibrium between levels). Disagreement means: run longer."""
+    P = Plan(L, dev, census=False, mcmc=True); n = P.n; N = n * n
+    P.set_box(box_preset(L, box))
+    nlev, Sfun = SCORES[score][0](P), SCORES[score][1]
+    g = torch.Generator(device=dev); g.manual_seed(seed)
+    key = dict(lid=lattice_id(L), schema=SCHEMA, score=score, box=box, chains=chains, seed=seed,
+               adapt=adapt, rho=rho)
+    state = dict(key, lattice=L.name, done=0, w=np.zeros(nlev), Cad=np.zeros((nlev, nlev), dtype=np.int64),
+                 Cpr=np.zeros((2, nlev, nlev), dtype=np.int64), hist=[Hist(n) for _ in range(nlev)],
+                 visits=np.zeros((2, nlev), dtype=np.int64), acc=[0, 0], examples=[[] for _ in range(nlev)],
+                 Fs=None, rng=None)
+    if ck and os.path.exists(ck):
+        with open(ck, 'rb') as fh: old = pickle.load(fh)
+        assert all(old[k] == v for k, v in key.items()), "checkpoint belongs to another lattice/schema/run"
+        state = old; g.set_state(state['rng'])
+    Fs = mcmc_init(P, chains) if state['Fs'] is None else torch.as_tensor(state['Fs'], device=dev)
+    leaf = max(1, MEM // (n * n * 8 * 24))                                          # F per observe batch (as census)
+    def score_of(X):
+        F = X[:, :N].reshape(-1, n, n)
+        return torch.cat([Sfun(P, observe(P, F[i:i + leaf])) for i in range(0, F.shape[0], leaf)])
+    S = score_of(Fs)
+    w = torch.as_tensor(state['w'], dtype=torch.float64, device=dev)
+    grp = (torch.arange(chains, device=dev) >= chains // 2).long()
+    log(f"  mucan {L.name}: n={n}, score {score} ({nlev} levels), box {box or 'none'}, {chains} chains, adapt {adapt}, "
+        f"sweeps {sweeps} (burn {burn}, thin {thin}), rho {rho}, resuming at {state['done']}; device {describe(dev)}")
+    t0 = last = time.time()
+    def save():
+        if ck:
+            state['Fs'] = Fs.cpu().numpy(); state['rng'] = g.get_state(); state['w'] = w.cpu().numpy()
+            with open(ck + '.tmp', 'wb') as fh: pickle.dump(state, fh)
+            os.replace(ck + '.tmp', ck)
+    total = adapt + sweeps
+    while state['done'] < total:
+        t = state['done']; prod = t >= adapt
+        for i in range(len(P.colors)):
+            prop = class_step(P, Fs.clone(), i, g, rho)
+            Sp = score_of(prop)
+            ok = torch.log(torch.rand(chains, generator=g, device=dev, dtype=torch.float64)) < (w[Sp] - w[S]).clamp(max=0)
+            cc = torch.bincount((grp * nlev + S) * nlev + Sp, minlength=2 * nlev * nlev).reshape(2, nlev, nlev)
+            if prod: state['Cpr'] += cc.cpu().numpy()
+            else: state['Cad'] += cc.sum(0).cpu().numpy()
+            Fs = torch.where(ok[:, None], prop, Fs); S = torch.where(ok, Sp, S)
+            if prod: state['acc'][0] += int(ok.sum()); state['acc'][1] += chains
+        state['done'] = t + 1
+        if not prod and ((t + 1) % max(1, adapt // 8) == 0 or t == adapt - 1):     # w ← −log ĝ (TMMC)
+            lg = tmmc_logg(state['Cad']); wn = -lg
+            wn[np.isnan(lg)] = np.nanmax(wn) + 1.0
+            w = torch.as_tensor(wn - wn.max(), device=dev)
+        else:
+            s_prod = state['done'] - adapt
+            if s_prod > burn and (s_prod - burn) % thin == 0:
+                Fa = Fs[:, :N].reshape(chains, n, n)
+                for i0 in range(0, chains, leaf):
+                    F = Fa[i0:i0 + leaf]; f = observe(P, F); Sc = Sfun(P, f)
+                    assert bool((Sc == S[i0:i0 + leaf]).all()), "score cache diverged from the state"
+                    for lev in torch.unique(Sc).tolist():
+                        sel = Sc == lev
+                        state['hist'][lev].add({k: v[sel] for k, v in f.items()}, F[sel])
+                        if len(state['examples'][lev]) < WITNESS_MAX:
+                            state['examples'][lev] += F[sel][:WITNESS_MAX - len(state['examples'][lev])].tolist()
+                state['visits'] += torch.bincount(grp * nlev + S, minlength=2 * nlev).reshape(2, nlev).cpu().numpy()
+        if time.time() - last > 60 or state['done'] == total:
+            save(); last = time.time()
+            log(f"  {'sweep' if prod else 'adapt'} {state['done'] - adapt * prod}/{sweeps if prod else adapt}, "
+                f"{(time.time() - t0):.0f}s, levels visited now {torch.bincount(S, minlength=nlev).tolist()}")
+    assert monotone(P, Fs[:, :N].reshape(chains, n, n)).all(), "sampler left the monotone set"
+    assert bool(((Fs >= 0) & P.leq[P.blo[None], Fs] & P.leq[Fs, P.bhi[None]]).all()), "sampler left the box"
+    wv = w.cpu().numpy(); H = state['visits']
+    def p_unif(h):
+        x = np.where(h > 0, np.exp(-(wv - wv.max())) * h, 0.0); return (x / x.sum()).tolist() if x.sum() else x.tolist()
+    def p_tmmc(C):
+        lg = tmmc_logg(C); return [None if np.isnan(v) else float(np.exp(v)) for v in lg]
+    levels = []
+    for lev in range(nlev):
+        if not state['visits'][:, lev].sum(): continue
+        levels.append(dict(level=lev, samples=int(H[:, lev].sum()), w=float(wv[lev]),
+                           **state['hist'][lev].json(), examples=state['examples'][lev]))
+    return dict(schema=SCHEMA, mode='mucan', lattice=L.name, lid=key['lid'], n=n, height=P.h, score=score,
+                box=box, box_cells=P.box, chains=chains, sweeps=sweeps, adapt=adapt, burn=burn, thin=thin,
+                seed=seed, rho=rho, t=round(time.time() - t0, 1), device=describe(dev),
+                acceptance=round(state['acc'][0] / max(state['acc'][1], 1), 4), count=int(H.sum()),
+                p_uniform=p_tmmc(state['Cpr'].sum(0)), p_uniform_bot_start=p_tmmc(state['Cpr'][0]),
+                p_uniform_top_start=p_tmmc(state['Cpr'][1]), p_uniform_hist=p_unif(H.sum(0)),
+                proposals=state['Cpr'].sum(0).tolist(),
+                visits=H.sum(0).tolist(), levels=levels)

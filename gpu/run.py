@@ -3,6 +3,8 @@
   python3 run.py census C4                     # exact census of one lattice (spec syntax: lattices.parse)
   python3 run.py census all5 --fibres          # every lattice with 5 elements, with exact fibre sizes of (a, b)
   python3 run.py mcmc B4 --chains 65536 --sweeps 4000 --burn 1000 --thin 10
+  python3 run.py mcmc B4 --box rowgap          # heat bath inside a box of cell intervals (rates conditional on it)
+  python3 run.py mucan B4 --score lag          # multicanonical/TMMC: unconditional rates of rare score levels
   python3 run.py batch --list                  # the prepared jobs, with sizes
   python3 run.py batch                         # all jobs, cheapest first; resumable (Ctrl-C safe)
   python3 run.py batch 3 7                     # only jobs 3 and 7
@@ -15,6 +17,8 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import lattices
 import engine
 import torch
+
+MU = {'chains': 32768, 'adapt': 1000, 'sweeps': 3000, 'burn': 200, 'thin': 10, 'rho': 0.25}
 
 # (mode, spec, params, why)
 BATCH = [
@@ -34,6 +38,21 @@ BATCH = [
     ('mcmc', 'Pi4', {'chains': 32768, 'sweeps': 6000, 'burn': 2000, 'thin': 10}, "partition lattice, non-modular"),
     ('mcmc', 'C4xC4', {'chains': 32768, 'sweeps': 6000, 'burn': 2000, 'thin': 10}, "distributive grid"),
     ('mcmc', 'B5', {'chains': 8192, 'sweeps': 8000, 'burn': 3000, 'thin': 20}, "32 elements: beyond the SAT sweeps of round 23"),
+    # round 26: exact orbit-lag laws, and the hard core of the uniform law (§33.4–33.5)
+    ('census', 'L6_12', {}, "exact orbit-lag law (non-top-closed, height 4; Knuth ≈ 8.4e10)"),
+    ('census', 'L6_11', {}, "exact orbit-lag law (non-top-closed, height 4; Knuth ≈ 1.4e11)"),
+    ('mucan', 'B3', MU | {'score': 'lag'}, "rate of orbit lag (uniform sampler: 33 in 1.97e7)"),
+    ('mucan', 'C4xC4', MU | {'score': 'lag'}, "rate of orbit lag (uniform sampler: 2 in 1.31e7)"),
+    ('mucan', 'B4', MU | {'score': 'lag'}, "rate of orbit lag (uniform sampler: 0 in 1.31e7)"),
+    ('mucan', 'Pi4', MU | {'score': 'lag'}, "rate of orbit lag (uniform sampler: 0 in 1.31e7)"),
+    ('mucan', 'B4', MU | {'score': 'kappa'}, "long ideal orbits: P(κ-steps = k), uniform sampler saw only k = 1"),
+    ('mucan', 'E3', MU | {'score': 'kappa'}, "long ideal orbits on a top-closed column lattice"),
+    ('mucan', 'B4', MU | {'score': 'rstages'}, "long R(F) closures: P(stages = k) and their conditional laws"),
+    ('mucan', 'B4', MU | {'score': 'defects'}, "CL margin: polar F by number of defects of a∘b vs b∘a"),
+    ('mcmc', 'B3', {'chains': 32768, 'sweeps': 4000, 'burn': 1000, 'thin': 10, 'box': 'rowgap'}, "law inside the rowgap box (κ(⊥) < ⊤ forced for polar F)"),
+    ('mcmc', 'B4', {'chains': 32768, 'sweeps': 4000, 'burn': 1000, 'thin': 10, 'box': 'rowgap'}, "law inside the rowgap box"),
+    ('census', 'L6_4', {}, "exact orbit-lag law (Knuth ≈ 5.4e11)"),
+    ('census', 'L6_10', {}, "exact orbit-lag law (Knuth ≈ 8.2e11)"),
 ]
 
 
@@ -42,7 +61,8 @@ def done(out):
     if os.path.exists(out):
         for line in open(out):
             try:
-                r = json.loads(line); res[(r['mode'], r['lattice'], r.get('chains'), r.get('sweeps'))] = r
+                r = json.loads(line)
+                res[(r['mode'], r['lattice'], r.get('chains'), r.get('sweeps'), r.get('score'), r.get('box'))] = r
             except Exception: pass
     return res
 
@@ -50,7 +70,9 @@ def done(out):
 MAX_F = float(os.environ.get('MORDOR_MAX_F', '1e11') or 1e11)
 
 
-def key(mode, L, p): return (mode, L.name, None, None) if mode == 'census' else (mode, L.name, p.get('chains'), p.get('sweeps'))
+def key(mode, L, p):
+    if mode == 'census': return (mode, L.name, None, None, None, None)
+    return (mode, L.name, p.get('chains'), p.get('sweeps'), p.get('score'), p.get('box'))
 
 
 def is_done(res, mode, L, p):
@@ -66,7 +88,17 @@ def summary(r):
          f"tripwires {sum(t.values())}; t={r['t']}s")
     if 'fibres' in r: s += f"; realizable pairs {r['fibres']['image']:,}"
     if 'mixing' in r and r['mixing']: s += "; mixing |z|max=" + str(max(abs(m['z']) for m in r['mixing'].values()))
+    if r.get('box'): s += f"; box {r['box']} (rates conditional on it)"
     return s
+
+
+def summary_mucan(r):
+    fmt = lambda v: '[' + ', '.join('—' if x is None else f"{x:.3g}" for x in v) + ']'
+    return (f"{r['lattice']}: score {r['score']}, {r['count']:,} recorded F; P_uniform(level) TMMC {fmt(r['p_uniform'])}, "
+            f"halves {fmt(r['p_uniform_bot_start'])} / {fmt(r['p_uniform_top_start'])}, from visits {fmt(r['p_uniform_hist'])}; "
+            f"visits {r['visits']}; acceptance {r['acceptance']}; "
+            f"violators {sum(sum(l['viols'].values()) for l in r['levels'])}; "
+            f"tripwires {sum(sum(l['trips'].values()) for l in r['levels'])}; t={r['t']}s")
 
 
 def run_one(mode, L, p, out, dev, log):
@@ -77,13 +109,23 @@ def run_one(mode, L, p, out, dev, log):
         log(f"  {L.name}: census size ≈ {sz[0]:.3g} ± {sz[1]:.2g}" if sz else f"  {L.name}: census refused (too large)")
         log(f"  → {mode} (MORDOR_MAX_F = {MAX_F:.3g})")
     tag = L.name + ('' if mode == 'census' else f"_c{p['chains']}_s{p['sweeps']}_seed{p.get('seed', 1)}")
+    tag += ''.join(f"_{p[k]}" for k in ('score', 'box') if p.get(k))
     ck = os.path.join(HERE, 'checkpoints', f"{mode}_{tag}{'_fib' if p.get('fibres') else ''}.pkl")
     if mode == 'census':
         r = engine.census(L, dev, ck=ck, fibres=p.get('fibres', False), log=log)
+    elif mode == 'mucan':
+        r = engine.mucan(L, dev, p['score'], p['chains'], p['sweeps'], p['adapt'], p['burn'], p['thin'], p.get('seed', 1),
+                         rho=p.get('rho', 0.25), box=p.get('box'), ck=ck, log=log)
     else:
-        r = engine.mcmc(L, dev, p['chains'], p['sweeps'], p['burn'], p['thin'], p.get('seed', 1), ck=ck, log=log)
+        r = engine.mcmc(L, dev, p['chains'], p['sweeps'], p['burn'], p['thin'], p.get('seed', 1), ck=ck, log=log,
+                        box=p.get('box'))
     if dev.type == 'cuda': torch.cuda.empty_cache()                               # free cached blocks between runs
     with open(out, 'a') as fh: fh.write(json.dumps(r) + '\n')
+    if mode == 'mucan':
+        log("  " + summary_mucan(r))
+        if any(sum(l['viols'].values()) + sum(l['trips'].values()) for l in r['levels']):
+            log("  !!! nonzero violator/tripwire counts: witnesses are in the JSON line. Please send results.jsonl.")
+        return r
     log("  " + summary(r))
     if sum(r['viols'].values()) or sum(r['trips'].values()):
         log("  !!! nonzero violator/tripwire counts: witnesses are in the JSON line. Please send results.jsonl.")
@@ -92,12 +134,16 @@ def run_one(mode, L, p, out, dev, log):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('mode', choices=['census', 'mcmc', 'batch'])
+    ap.add_argument('mode', choices=['census', 'mcmc', 'mucan', 'batch'])
     ap.add_argument('rest', nargs='*', help="lattice spec (census/mcmc) or job numbers (batch)")
     ap.add_argument('--list', action='store_true'); ap.add_argument('--fibres', action='store_true')
     ap.add_argument('--chains', type=int, default=32768); ap.add_argument('--sweeps', type=int, default=4000)
     ap.add_argument('--burn', type=int, default=1000); ap.add_argument('--thin', type=int, default=10)
     ap.add_argument('--seed', type=int, default=1)
+    ap.add_argument('--box', default=None, help="named box of cell intervals: corners, rowgap (engine.box_preset)")
+    ap.add_argument('--score', default='lag', choices=sorted(engine.SCORES), help="mucan score")
+    ap.add_argument('--adapt', type=int, default=1000, help="mucan adaptation sweeps")
+    ap.add_argument('--rho', type=float, default=0.25, help="mucan: fraction of a color class proposed per step")
     ap.add_argument('--out', default=os.path.join(HERE, 'results.jsonl'))
     ap.add_argument('--device', default=os.environ.get('DEVICE'))
     a = ap.parse_args()
@@ -125,7 +171,8 @@ def main():
                 run_one(mode, L, p, a.out, dev, log)
         return
     Ls = lattices.parse(a.rest[0]); Ls = Ls if isinstance(Ls, list) else [Ls]
-    p = dict(fibres=a.fibres, chains=a.chains, sweeps=a.sweeps, burn=a.burn, thin=a.thin, seed=a.seed)
+    p = dict(fibres=a.fibres, chains=a.chains, sweeps=a.sweeps, burn=a.burn, thin=a.thin, seed=a.seed, box=a.box)
+    if a.mode == 'mucan': p.update(score=a.score, adapt=a.adapt, rho=a.rho)
     if a.mode == 'census': p = dict(fibres=a.fibres)
     for L in Ls: run_one(a.mode, L, p, a.out, dev, log)
 

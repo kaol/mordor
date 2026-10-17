@@ -6,3 +6,4 @@ import Mordor.PrincipalCut
 import Mordor.Reach
 import Mordor.Orbit
 import Mordor.Duality
+import Mordor.NoRoom

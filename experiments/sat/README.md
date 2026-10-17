@@ -46,7 +46,6 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   variable maps (`le`, `d`, `g` inverted, `terms`, `F`), solve with a proof-producing solver (Glucose via PySAT
   `with_proof=True`), `drat-trim cnf drat -c core`, then `cut_lean.py 5 core maps out.lean`.
 - `cut_finite.py H n_min n_max [--lattice]`: direct SAT search for a finite cut counterexample (poset of n elements
-  numbered by a linear extension, F one-hot, WLOG F(⊥,⊤) ∉ D). None with ≤ 10 elements at any height, none with
-  ≤ 11 elements at height ≤ 5 (§34.3h).
+  numbered by a linear extension, F one-hot, WLOG F(⊥,⊤) ∉ D). None with ≤ 11 elements, at any height (§34.3h).
 - `cut_ground2.py H`: fully lazy variant (all axiom families added on violation; height bound as direct chain clauses).
   Reproduces H ≤ 3; superseded by `room='fit'`.

@@ -22,6 +22,9 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/Orbit.lean` | §32.6 | the lax square ⋁Θ⁺D ≤ κ⁺(⋁D), ⋁R_k ≤ r_k, and ⋁R_k = r_k on top-closed lattices |
 | `Mordor/NoRoom.lean` | §16.2 | the Corner Lemma at (m, n); CL, and the Cut Lemma, on complete lattices whose middle elements are atom-and-coatom (M_κ for every κ) |
 | `Mordor/Height3.lean` | §34.3f (new) | **the Cut Lemma, semi-CL and CL on every complete lattice of edge-height ≤ 3** (D_ω, M_ω × C₂ included) |
+| `Mordor/GroundCut.lean` | §34.3g | clause lemmas of the ground cut theory (one per axiom family), `chainTo`, `NoChain` |
+| `Mordor/CutHeight4.lean` | §34.3g | *generated* by `experiments/sat/cut_lean.py`: the Cut Lemma in bounded posets with no 6-chain, by `bv_decide` on a drat-trim-verified core (385 clauses, 64 terms) |
+| `Mordor/Height4.lean` | §34.3g | **semi-CL and CL on every complete lattice of edge-height ≤ 4** (E_ω included). Trust: `bv_decide` (`Lean.ofReduceBool`) |
 | `Mordor/Restrict.lean` | §15.1, §24.1, §30.5 | embedding lemma; polar reduction; interval violators transport to L; the Escape Lemma |
 | `Mordor/Sharpness.lean` | §22.2–§22.5 | Ladder Lemma (records of a well-order), ladder and co-ladder constructions, Infinitude Lemma, **Sharpness**: a complete chain satisfies CL iff it is finite |
 | `Mordor/Retract.lean` | §23.1 | the Retract Theorem for any retraction pair ι, σ (σ∘ι = id) between complete lattices |

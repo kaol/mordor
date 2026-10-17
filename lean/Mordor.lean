@@ -13,3 +13,4 @@ import Mordor.TheoremA
 import Mordor.Frontier
 import Mordor.Restrict
 import Mordor.Height3
+import Mordor.Height4

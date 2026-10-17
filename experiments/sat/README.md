@@ -28,3 +28,12 @@ Round 23 (`docs/rounds/23-v3.4.md`):
 
 Every satisfying assignment returned by the SAT layer is decoded and re-derived by brute-force fixed-point
 computation before it is reported; an unsat answer is only as trustworthy as the solver unless DRAT-checked.
+
+## Round 26: ground refutation of the cut theory (§34.3g)
+
+- `cut_ground.py H [maxterms]`: model-guided ground refutation of `C_H^≤` (poset version) with lazy transitivity and
+  a rank encoding of the height bound. UNSAT is a proof. Results: H = 2, 3, 4 UNSAT (6 / 35 / 388 terms).
+- `cut_lean.py H core.cnf maps.pkl out.lean`: turns a drat-trim core of an UNSAT run into a Lean file
+  (`lean/Mordor/CutHeight<H>.lean`) whose clauses are instances of `lean/Mordor/GroundCut.lean`, refuted by `bv_decide`.
+  To reproduce H = 4: run `cut_ground.run(4, 400)`, `write_dimacs`, solve with a proof-producing solver, then
+  `drat-trim cnf drat -c core`, then `cut_lean.py`.

@@ -37,3 +37,4 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   (`lean/Mordor/CutHeight<H>.lean`) whose clauses are instances of `lean/Mordor/GroundCut.lean`, refuted by `bv_decide`.
   To reproduce H = 4: run `cut_ground.run(4, 400)`, `write_dimacs`, solve with a proof-producing solver, then
   `drat-trim cnf drat -c core`, then `cut_lean.py`.
+- `cut_ground2.py H`: fully lazy variant (all axiom families added on violation; height bound as direct chain clauses) for H ≥ 5. Reproduces H ≤ 3; H = 5 is open, see §34.3g.

@@ -393,3 +393,41 @@ The machine certificates have a common shape, recorded in §34.5: a descent c_{k
   - **Theorem 4:** restricted to the sound rules.
 - **Ambient:** local cartesian closure is used only by the internal language M0.2. The thin model drops it, because non-distributive lattices are not cartesian closed.
 - **Erratum pointer:** ν is not bounded by pre-fixed points (§2.2; the L2 erratum, §34.1).
+- **Mechanization (§11):** the thin model derives every row with a thin reading; the categorical layer derives μ1–μ3, ν1–ν3, D1, D3, D5, D6 and Bd9, and refutes B1.
+
+---
+
+## 11. Mechanization (`lean/Mordor/Axioms/`)
+
+The axioms are derived as theorems, or refuted, in two Lean files. Both use only Lean's standard axioms (no `sorry`).
+- **`Axioms/Thin.lean`** works in an arbitrary complete lattice (§1.1). It covers every row that has a thin reading.
+- **`Axioms/Cat.lean`** works in an arbitrary category `C` with an endofunctor `F`, on top of Mathlib's `Endofunctor.Algebra` and `Coalgebra`. It needs no M0 and no cartesian closure: each result assumes only that the relevant initial algebra, terminal coalgebra or adjoint exists. It also defines the category `Dialg F G` of dialgebras.
+
+| Row | Thin model | Arbitrary category | Missing for the rest |
+|---|---|---|---|
+| M0, M0.1 | `bd4`, `bd6` (Kleene); Lambek is `mu1`, `nu1` | Lambek: `Cat.mu1`, `Cat.nu1` | the transfinite initial/final chains (Adámek's construction) are not in Mathlib |
+| M0.2 | — | — | a convention, not a statement |
+| μ1–μ5 | `mu1`…`mu5` | `Cat.mu1` (Lambek), `Cat.mu2` (fold: existence and uniqueness), `Cat.mu3` (a mono sub-algebra of the initial algebra is iso) | μ4 in `Subobject` form needs a precise choice of ambient X |
+| ν1–ν5 | `nu1`…`nu5` | `Cat.nu1`, `Cat.nu2` (ana), `Cat.nu3` (maps into the final coalgebra agree on every span: bisimilar ⇒ equal) | as for μ4 |
+| B1 | `b1` | **refuted**: `Cat.b1_false` (Type, X ⊕ X, X = 1) | — |
+| B2, B3 | — | — | free monad and cofree comonad on an endofunctor, and distributive laws with their EM-liftings, are not in Mathlib; B2 is a definition, B3 the Barr/Johnstone lifting theorem |
+| D1, D2 | `d1`, `d2` (transposition) | `Cat.Dialg.d1`: Dialg F G ≌ Algebra (F ⋙ L) when L ⊣ G | D2 by the dual construction |
+| D3, D4 | `d3`, `d4` | `Cat.Dialg.d3` | D4 needs a notion of dialgebraic bisimulation |
+| D5 | `d5` | `Cat.Dialg.d5`: an initial (F, G)-dialgebra on C is a final (Gᵒᵖ, Fᵒᵖ)-dialgebra on Cᵒᵖ | the full equivalence Dialg F G ≌ (Dialg Gᵒᵖ Fᵒᵖ)ᵒᵖ |
+| D6 | `d6` | `Cat.Dialg.d6`, `d6'` | — |
+| Bd1 | `bd1`, `bd1_eq` (equality ⟺ unique fixed point) | — | the comparison μF → νF (fold into the final coalgebra) |
+| Bd2–Bd7 | `bd2`…`bd7` (Bd4, Bd5 at finite stages) | — | Worrell's ω + ω bound (Lit) |
+| Bd8 | **refuted**: `bd8_false` | — | — |
+| Bd9 | `bd9` | `Cat.Dialg.bd9`: Dialg F Id ≌ Algebra F, and `bd9_initial` | — |
+| I1, I2 | `i1`; `i2_iff`; **I2 refuted as a rule**: `i2_false` (M0 holds, commutation holds) | — | — |
+| I3, I8 | — | — | the rows are not yet precise statements |
+| I4 | — | — | the guarded solution theorem (iteratable functors) |
+| I5 | — | — | Mathlib has dinatural transformations (`DinatTrans`), but "acyclic argument graph" and the parametrized μν are undefined; the row is unverified (§5.1) |
+| I6, I7, I11 | thin shadow: `Orbit.step_lax` (§7.5) | — | need B2 |
+| I9, I10 | `i10` (fibrewise duality) | via `Cat.Dialg.d5` | — |
+| §6, §7 | all of `lean/Mordor/` (Lean names in the tables) | — | the Bridge (§7.6) is open mathematics, not missing infrastructure |
+
+**What "deriving the axioms" shows.**
+- In the thin model, every μ-, ν-, dialgebra and bound row is a theorem or a refutation. Nothing there needs to be postulated: the only real postulate left is the existence condition of D1/D2, and the transposition theorem discharges it.
+- In a general category the inductive and coinductive layers follow from initiality and finality alone. D1, D5, D6 and Bd9 follow from the definition of dialgebras plus an adjoint.
+- The rows that remain postulates are those about the interaction layer (B2, B3, I4–I8, I11). They need infrastructure Mathlib does not have yet, and I3 and I8 first need precise statements.

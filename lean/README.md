@@ -32,6 +32,8 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/Retract.lean` | §23.1 | the Retract Theorem for any retraction pair ι, σ (σ∘ι = id) between complete lattices |
 | `Mordor/TheoremA.lean` | §23.2 | **Theorem A**: a complete lattice containing an infinite chain fails CL; CL lattices are chain-finite |
 | `Mordor/Continuous.lean` | §34.3i | an M0-continuous CL violator on ω + 1: F(x, y) = min(x + 1, y ∸ 1) preserves ω-sups and ω-infs, commutes, m = 0 ≠ ω = n |
+| `Mordor/Axioms/Thin.lean` | foundations §11 | every axiom, bound and rule with a thin reading, derived in an arbitrary complete lattice (μ1–μ5, ν1–ν5, B1, D1–D6, Bd1–Bd9, I1, I2, I10), with Bd8 and I2-as-a-rule refuted |
+| `Mordor/Axioms/Cat.lean` | foundations §11 | the categorical layer over Mathlib's `Endofunctor.Algebra`/`Coalgebra`: Lambek, fold/ana, induction, coinduction; B1 refuted in `Type`; the category of dialgebras with D1 (transposition along L ⊣ G as an equivalence), D3, D5, D6, Bd9 |
 | `Mordor/Frontier.lean` | §34.4a | `frontier`: CL ⟹ chain-finite; chain-finite ∧ (∀ F, R(F) join-closed) ⟹ CL. The conjecture reduced to one statement |
 | `Mordor/Dialgebra.lean` | §32.2–§32.4 | transposition (D1/D2 via adjoints), the failure-zone theorem and its dual, D5 by order reversal; `bd8_fails`: the cross bound Bd8 is false in the thin model (foundations v3.7) |
 | `Mordor/CutDuality.lean` | §33.3 | Φ ⊣ c∘Ψ∘c and the k + j law, for any preorder and arbitrary maps a, b |

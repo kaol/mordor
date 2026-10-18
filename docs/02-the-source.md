@@ -143,6 +143,10 @@ A remark on what is *not* there. If the derived maps were adjoint, a ⊣ b, then
 
 ---
 
+### 3.7 I5, settled thin
+
+Dinaturality is automatic in a thin category, so I5's content is its "acyclicity" hypothesis. The reading in which making and watching do not interact, F(x, y) = g(x) ⊔ h(y), is **false**: on the 3-chain with g = (0, 2, 2) and h = (0, 0, 1), m = 0 ≠ 2 = n (`Source.i5_sep_false`). Only dependence on one variable makes I5 true (`i5_left`, `i5_right`), and then it is trivial. Two powers that coexist without interacting still fail to collapse. Collapse needs the law *and* the guard (§3.3).
+
 ## 4. What the source corrected
 
 1. **One functor → a bifunctor at the root.** Making and watching are different powers (§3.2). The foundations' single F is the degenerate case in which every interaction axiom is automatic.

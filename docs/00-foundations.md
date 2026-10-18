@@ -164,10 +164,10 @@ In the thin model an (f, g)-dialgebra is an x with f(x) ≤ g(x). Write Dial(f, 
 | # | Axiom | Statement | Status |
 |---|---|---|---|
 | **D1** | **Initial dialgebra (μ^FG)** | There is an initial (F, G)-dialgebra `δ₀ : F(μFG) → G(μFG)`. For any dialgebra `φ : F(A) → G(A)` there is a unique `dfold φ : μFG → A` with `G(dfold φ) ∘ δ₀ = φ ∘ F(dfold φ)`. | **Cond.** Thin: holds when G is a right adjoint, with μ^{F,G} = μ(G*∘F) (transposition, `Dial.isLeast_dial`, §32.2). **Failure-zone theorem:** for G preserving binary meets, δ₀ is iso ⟺ F(A₀) ∈ Im G, i.e. the zone is the unit of G* ⊣ G (`Dial.failure_zone`, §32.3). |
-| **D2** | **Final dialgebra (ν^FG)** | *Assume the category of (F, G)-dialgebras admits a final object* (not automatic — see §9, OQ2). Then there is a final dialgebra `δ₁ : F(νFG) → G(νFG)`. For any φ there is a unique `dunfold φ : A → νFG` with `δ₁ ∘ F(dunfold φ) = G(dunfold φ) ∘ φ`. | **Cond.** Thin: holds when F is a left adjoint, with ν^{F,G} = ν(F_*∘G) (`Dial.isGreatest_dial`). For F preserving binary joins, δ₁ is iso ⟺ G(A₁) ∈ Im F (`Dial.failure_zone_dual`). |
+| **D2** | **Final dialgebra (ν^FG)** | *Assume the category of (F, G)-dialgebras admits a final object* (not automatic — see §9, OQ2). Then there is a final dialgebra `δ₁ : F(νFG) → G(νFG)`. For any φ there is a unique `dunfold φ : A → νFG` with `δ₁ ∘ F(dunfold φ) = G(dunfold φ) ∘ φ`. | **Cond.** Thin: holds when F is a left adjoint, with ν^{F,G} = ν(F_*∘G) (`Dial.isGreatest_dial`). For F preserving binary joins, δ₁ is iso ⟺ G(A₁) ∈ Im F (`Dial.failure_zone_dual`). Categorical (v3.8): Dialg F G ≌ Coalgebra (G ⋙ R) for F ⊣ R (`Axioms.Cat.Dialg.d2`). |
 | **D3** | **Dialgebraic induction** | Any dialgebra invariant closed under δ₀-propagation equals μFG. | Def (given D1) |
-| **D4** | **Dialgebraic coinduction** | Any dialgebraic bisimulation for δ₁ is contained in equality on νFG. | Def (given D2) |
-| **D5** | **Duality** | μ^FG on M = ν^GF on M^op. The dialgebraic layer is self-dual; μ and ν exchange sides when you walk the category backwards. | **Thm (thin)** (`Dial.d5`). Fibrewise, it is the engine of the Duality Theorem (§22.1, §32.4; `Duality.lean`). |
+| **D4** | **Dialgebraic coinduction** | Any dialgebraic bisimulation for δ₁ is contained in equality on νFG. | Def (given D2) Thm (v3.8): maps into the final dialgebra agree on spans, and an epi out of it is iso (`Axioms.Cat.Dialg.d4`, `d4_quot`). |
+| **D5** | **Duality** | μ^FG on M = ν^GF on M^op. The dialgebraic layer is self-dual; μ and ν exchange sides when you walk the category backwards. | **Thm (thin)** (`Dial.d5`). Fibrewise, it is the engine of the Duality Theorem (§22.1, §32.4; `Duality.lean`). Categorical (v3.8): the full equivalence Dial(F, G) ≌ Dial(Gᵒᵖ, Fᵒᵖ)ᵒᵖ (`Axioms.Cat.Dialg.d5Equiv`). |
 | **D6** | **Degeneracy** | μ^{Id,Id} ≅ ⊥ and ν^{Id,Id} ≅ ⊤. The identity functor admits no nontrivial fixed behavior: μX.X = ⊥, νX.X = ⊤. No dialgebra of the Eye sees itself. | Thm; thin: Dial(id, id) = L |
 
 **Note (Hagino extension).** Parameterized dialgebras give types `μα. F(α) → G(α)`, generalizing exponentials, products, and polymorphism in one scheme. Mordor's dialgebra layer is therefore expressive enough to host its own function spaces.
@@ -217,7 +217,7 @@ For a bifunctor F write a(x) = νY.F(x, Y), b(y) = μX.F(X, y), m = μX.νY.F = 
 | **I2** | **Beck-Chevalley commutation (upper)** | `νY.μX. F(X, Y) ⊑ μX.νY. F(X, Y)` | **Not a rule.** It fails for monotone bifunctors on the 3-chain, where M0 holds: 20 of 175 (§11.1). **Characterization (Thm, `m_eq_n_iff`, `lfp_ab`, `gfp_ab`; §14):** m = n ⟺ a and b have exactly one common fixed point ⟺ a∘b has exactly one fixed point. Sufficient conditions are the subject of §6.3. One-step commutation a∘b = b∘a is **not** sufficient in general: it fails on every complete lattice with an infinite chain (Theorem A), even under M0 (§34.3i). |
 | **I3** | **μ-inside-ν** | `νY. (A + F(Y))` solutions may embed `μX. G(X)` for G ⊑ F componentwise | **Sharpened (v3.8):** the embedding is the composite μG → μF → νF → ν(A + F) (fold of σ, the comparison, the anamorphism of inr ∘ out). It is mono when σ is mono, F preserves monos and the comparison is mono (I8). Thin: g ≤ f ⟹ μg ≤ ν(a ∨ f) (`Axioms.Source.i3`). |
 | **I4** | **Guardedness** | μ-expressions may occur under ν-constructors only in guarded positions: `μX. G(X)` inside `νY. H(Y)` is legal iff every occurrence of Y guards X (cf. the guarded solution theorem: for iteratable F, guarded equation morphisms have unique solutions) | Lit; violation ⇒ divergence of approximation chains |
-| **I5** | **μ-ν swap (e-conversion)** | `μX.νY. F ≅ νY.μX. F` holds when F is **dinatural in the fixed-point variables** (Dubuc–Street: the canonical mate squares of the μ- and ν-transitions commute) **and the argument graph of those transitions is acyclic** (McCusker–Santamaria: dinaturals compose to dinaturals precisely under acyclicity). The bialgebra is then *balanced* and Bd1 is tight. | **Unverified.** In the thin model every square commutes, so the dinaturality hypothesis is automatic. The 3-chain counterexamples of §11.1 then show that the whole content rests on the acyclicity condition, which has no established thin reading. Any reading under which every monotone bifunctor on a finite chain is acyclic makes I5 false. The v3.2 side condition "ω-cocontinuous in Y" is no help (§11.1, §34.3i). |
+| **I5** | **μ-ν swap (e-conversion)** | `μX.νY. F ≅ νY.μX. F` holds when F is **dinatural in the fixed-point variables** (Dubuc–Street: the canonical mate squares of the μ- and ν-transitions commute) **and the argument graph of those transitions is acyclic** (McCusker–Santamaria: dinaturals compose to dinaturals precisely under acyclicity). The bialgebra is then *balanced* and Bd1 is tight. | **Unverified.** In the thin model every square commutes, so the dinaturality hypothesis is automatic. The 3-chain counterexamples of §11.1 then show that the whole content rests on the acyclicity condition, which has no established thin reading. Any reading under which every monotone bifunctor on a finite chain is acyclic makes I5 false. The v3.2 side condition "ω-cocontinuous in Y" is no help (§11.1, §34.3i). **Settled in the thin model (v3.8):** true when F depends on one variable only (`Axioms.Source.i5_left`, `i5_right`); **false** under the natural no-interaction reading F(x, y) = g(x) ⊔ h(y): on the 3-chain with g = (0, 2, 2), h = (0, 0, 1), m = 0 ≠ 2 = n (`Source.i5_sep_false`; the meet-dual fails likewise, and each form fails on 24 of the 1,225 pairs (g, h) on the 4-chain and 996 of 31,684 on M3). So I5 is not a usable rule; the condition that does the work is I11's guard. |
 
 ### 5.2 Algebra–coalgebra interaction (bialgebra level)
 
@@ -410,7 +410,7 @@ The machine certificates have a common shape, recorded in §34.5: a descent c_{k
   - **Theorem 4:** restricted to the sound rules.
 - **Ambient:** local cartesian closure is used only by the internal language M0.2. The thin model drops it, because non-distributive lattices are not cartesian closed.
 - **Erratum pointer:** ν is not bounded by pre-fixed points (§2.2; the L2 erratum, §34.1).
-- **v3.8, bifunctor signature (§1.2);** Turi–Plotkin for plain laws mechanized (B3, I6, I7).
+- **v3.8, bifunctor signature (§1.2);** Turi–Plotkin for plain laws mechanized (B3, I6, I7); categorical D2, D4 and D5 (full equivalence); I5 settled in the thin model (false under separated variables).
 - **v3.8, read back to the source** ([`02-the-source.md`](02-the-source.md)): M0.1, B2, I3, I8 and I11 sharpened. I11 is the Commutation Lemma, guarded by the Cut Lemma; B2 has no content for a single functor; I8 is a side condition, not a theorem.
 - **Mechanization (§11):** the thin model derives every row with a thin reading; the categorical layer derives μ1–μ3, ν1–ν3, D1, D3, D5, D6 and Bd9, and refutes B1.
 
@@ -430,9 +430,9 @@ The axioms are derived as theorems, or refuted, in two Lean files. Both use only
 | ν1–ν5 | `nu1`…`nu5` | `Cat.nu1`, `Cat.nu2` (ana), `Cat.nu3` (maps into the final coalgebra agree on every span: bisimilar ⇒ equal) | as for μ4 |
 | B1 | `b1` | **refuted**: `Cat.b1_false` (Type, X ⊕ X, X = 1) | — |
 | B2, B3 | one functor: `Source.dist_law`, `bialg_iff`, `T_bot`, `D_top`; Turi–Plotkin: `Source.tp_thin`; bifunctor: `Source.DerivedLaw`, `Source.outer_sandwich` | plain laws S∘B ⇒ B∘S: `Law.Bialg`, `Law.initBialg`, `Law.finBialg` | the categorical free monad/cofree comonad and EM-liftings are not in Mathlib |
-| D1, D2 | `d1`, `d2` (transposition) | `Cat.Dialg.d1`: Dialg F G ≌ Algebra (F ⋙ L) when L ⊣ G | D2 by the dual construction |
-| D3, D4 | `d3`, `d4` | `Cat.Dialg.d3` | D4 needs a notion of dialgebraic bisimulation |
-| D5 | `d5` | `Cat.Dialg.d5`: an initial (F, G)-dialgebra on C is a final (Gᵒᵖ, Fᵒᵖ)-dialgebra on Cᵒᵖ | the full equivalence Dialg F G ≌ (Dialg Gᵒᵖ Fᵒᵖ)ᵒᵖ |
+| D1, D2 | `d1`, `d2` (transposition) | `Cat.Dialg.d1`: Dialg F G ≌ Algebra (F ⋙ L) when L ⊣ G; `Cat.Dialg.d2`: Dialg F G ≌ Coalgebra (G ⋙ R) when F ⊣ R | — |
+| D3, D4 | `d3`, `d4` | `Cat.Dialg.d3`, `Cat.Dialg.d4`, `d4_quot` | — |
+| D5 | `d5` | `Cat.Dialg.d5` (initial ↦ final), `Cat.Dialg.d5Equiv` (Dialg F G ≌ (Dialg Gᵒᵖ Fᵒᵖ)ᵒᵖ) | — |
 | D6 | `d6` | `Cat.Dialg.d6`, `d6'` | — |
 | Bd1 | `bd1`, `bd1_eq` (equality ⟺ unique fixed point) | `Law.bd1`, `Law.bd1_alg`: the canonical comparison μF → νF (fold = ana, an algebra map) | mono-ness is I8, a side condition |
 | Bd2–Bd7 | `bd2`…`bd7` (Bd4, Bd5 at finite stages) | — | Worrell's ω + ω bound (Lit) |
@@ -441,7 +441,7 @@ The axioms are derived as theorems, or refuted, in two Lean files. Both use only
 | I1, I2 | `i1`; `i2_iff`; **I2 refuted as a rule**: `i2_false` (M0 holds, commutation holds) | — | — |
 | I3, I8 | `Source.i3` | — | I8 sharpened to "the comparison is mono" (§5.2); its failure in Setᵒᵖ is by duality, not mechanized |
 | I4 | — | — | the guarded solution theorem (iteratable functors) |
-| I5 | — | — | Mathlib has dinatural transformations (`DinatTrans`), but "acyclic argument graph" and the parametrized μν are undefined; the row is unverified (§5.1) |
+| I5 | `Source.i5_left`, `i5_right` (one variable: true); `Source.i5_sep_false` (separated variables: false) | — | the categorical row needs a definition of "acyclic"; in the thin model it is settled (§5.1) |
 | I6, I7 | thin shadow: `Orbit.step_lax` (§7.5) | `Law.comparison_is_fold` (I6), `Law.comparison_alg` (I7 core) | GSOS laws S(B × Id) ⇒ B S*, which need the free monad |
 | I11 | `Source.guard`, `Source.i11_false`, `Source.one_ring` | — | the guarded collapse on chain-finite lattices is the open Bridge (§7.6) |
 | I9, I10 | `i10` (fibrewise duality) | via `Cat.Dialg.d5` | — |

@@ -1,5 +1,6 @@
 import Mordor.Cut
 import Mordor.Continuous
+import Mathlib.Data.Fintype.Order
 
 /-!
 # Sharpened axioms from the source (foundations v3.8, `docs/02-the-source.md`)
@@ -125,5 +126,41 @@ theorem outer_sandwich : (b F).lfp ≤ m F ∧ m F ≤ n F ∧ n F ≤ (a F).gfp
 
 theorem tp_derived (hlaw : DerivedLaw F) : (b F).lfp ≤ (a F).gfp := (tp_thin (b F) (a F) hlaw).2.2
 
+/-! ### I5 in the thin model
+
+Dinaturality is automatic in a thin category, so I5's content is its "acyclicity" hypothesis. The one reading that
+makes I5 true is that `F` depends on one variable only (`i5_left`, `i5_right`). Separating the variables, which is
+the natural weaker reading (`F x y = g x ⊔ h y`, no interaction between X and Y), does **not** suffice (`i5_sep_false`). -/
+
+theorem i5_left {g : L →o L} (hF : ∀ x y, F x y = g x) : m F = n F := by
+  have hb : ∀ y, b F y = g.lfp := fun y => le_antisymm (b_le (by rw [hF]; exact g.map_lfp.le))
+    (g.lfp_le (by have := col_b (F := F) y; rw [hF] at this; exact this.le))
+  rw [m_eq_n_iff]; intro z _ hzb
+  rw [← hzb, hb, ← hb (m F), b_m]
+
+theorem i5_right {h : L →o L} (hF : ∀ x y, F x y = h y) : m F = n F := by
+  have ha : ∀ x, a F x = h.gfp := fun x => le_antisymm
+    (h.le_gfp (by have := row_a (F := F) x; rw [hF] at this; exact this.ge))
+    (le_a (by rw [hF]; exact h.map_gfp.ge))
+  rw [m_eq_n_iff]; intro z hza _
+  rw [← hza, ha, ← ha (m F), a_m]
+
 end Bi
+
+/-- The separable bifunction `F x y = max (g x) (h y)` on the 3-chain, `g = (0, 2, 2)`, `h = (0, 0, 1)`. -/
+def sepF : Fin 3 →o Fin 3 →o Fin 3 :=
+  ⟨fun x => ⟨fun y => max (if x = 0 then 0 else 2) (if y = 2 then 1 else 0), by
+      intro y y' hy; dsimp only; apply max_le_max le_rfl; revert y y'; decide⟩,
+   by intro x x' hx y; dsimp only; apply max_le_max _ le_rfl; revert x x'; decide⟩
+
+/-- **I5 with separated variables is false**: `μX.νY.F = 0 ≠ 2 = νY.μX.F` for `sepF`. -/
+theorem i5_sep_false : m sepF = (0 : Fin 3) ∧ n sepF = (2 : Fin 3) := by
+  have ha : a sepF 0 = 0 := by
+    have h := row_a (F := sepF) 0
+    revert h; generalize a sepF 0 = y; revert y; decide
+  have hb : b sepF 2 = 2 := by
+    have h := col_b (F := sepF) 2
+    revert h; generalize b sepF 2 = x; revert x; decide
+  exact ⟨le_antisymm ((a sepF).lfp_le ha.le) bot_le, le_antisymm le_top ((b sepF).le_gfp hb.ge)⟩
+
 end Mordor.Axioms.Source

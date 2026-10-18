@@ -173,5 +173,62 @@ def d1 {L : C ⥤ C} (adj : L ⊣ G) : Dialg F G ≌ Algebra (F ⋙ L) where
   counitIso := NatIso.ofComponents (fun A => Algebra.isoMk (Iso.refl _) (by simp [untranspose, transpose]))
     (by intros; ext; simp [untranspose, transpose])
 
+/-- **D2, transposition (Cond).** If `F` has a right adjoint `R`, an `(F, G)`-dialgebra is a `(G ⋙ R)`-coalgebra:
+`F X ⟶ G X` corresponds to `X ⟶ R (G X)`. Hence final objects correspond and `ν^{F,G} = ν(R ∘ G)`. -/
+def cotranspose {R : C ⥤ C} (adj : F ⊣ R) : Dialg F G ⥤ Coalgebra (G ⋙ R) where
+  obj A := ⟨A.carrier, adj.homEquiv _ _ A.str⟩
+  map {A B} u := ⟨u.f, by
+    change adj.homEquiv _ _ A.str ≫ R.map (G.map u.f) = u.f ≫ adj.homEquiv _ _ B.str
+    rw [← Adjunction.homEquiv_naturality_right, ← Adjunction.homEquiv_naturality_left, u.h]⟩
+
+def uncotranspose {R : C ⥤ C} (adj : F ⊣ R) : Coalgebra (G ⋙ R) ⥤ Dialg F G where
+  obj A := ⟨A.V, (adj.homEquiv _ _).symm A.str⟩
+  map {A B} u := ⟨u.f, by
+    rw [← Adjunction.homEquiv_naturality_left_symm, ← Adjunction.homEquiv_naturality_right_symm]
+    exact congrArg _ u.h.symm⟩
+
+def d2 {R : C ⥤ C} (adj : F ⊣ R) : Dialg F G ≌ Coalgebra (G ⋙ R) where
+  functor := cotranspose adj
+  inverse := uncotranspose adj
+  unitIso := NatIso.ofComponents (fun A => ⟨⟨𝟙 _, by simp [uncotranspose, cotranspose]⟩,
+    ⟨𝟙 _, by simp [uncotranspose, cotranspose]⟩, by ext; simp, by ext; simp⟩)
+    (by intros; ext; simp [uncotranspose, cotranspose])
+  counitIso := NatIso.ofComponents (fun A => Coalgebra.isoMk (Iso.refl _) (by simp [uncotranspose, cotranspose]))
+    (by intros; ext; simp [uncotranspose, cotranspose])
+
+/-- **D4 (Dialgebraic coinduction).** Maps into the final dialgebra agree on every span: for a dialgebraic
+bisimulation `R` with projections `p q`, the two composites into `ν^{F,G}` coincide. -/
+theorem d4 {T R X : Dialg F G} (h : IsTerminal T) (p q : R ⟶ X) (k : X ⟶ T) : p ≫ k = q ≫ k :=
+  h.hom_ext _ _
+
+/-- **D4, quotient form.** An epi out of the final dialgebra is an isomorphism (dual of D3). -/
+theorem d4_quot {T Q : Dialg F G} (h : IsTerminal T) (e : T ⟶ Q) [Epi e] : IsIso e := by
+  have h1 : e ≫ h.from Q = 𝟙 T := h.hom_ext _ _
+  refine ⟨⟨h.from Q, h1, ?_⟩⟩
+  rw [← cancel_epi e, ← Category.assoc, h1, Category.id_comp, Category.comp_id]
+
+/-- **D5 (Duality), as an equivalence.** `(F, G)`-dialgebras on `C` are, contravariantly, `(Gᵒᵖ, Fᵒᵖ)`-dialgebras on
+`Cᵒᵖ`: `Dial(F, G) ≌ Dial(Gᵒᵖ, Fᵒᵖ)ᵒᵖ`. Initial objects go to final ones (`d5`). -/
+def toOp : Dialg F G ⥤ (Dialg G.op F.op)ᵒᵖ where
+  obj A := Opposite.op ⟨Opposite.op A.carrier, A.str.op⟩
+  map {A B} u := Quiver.Hom.op (⟨u.f.op, Quiver.Hom.unop_inj (by simp)⟩ :
+    (⟨Opposite.op B.carrier, B.str.op⟩ : Dialg G.op F.op) ⟶ ⟨Opposite.op A.carrier, A.str.op⟩)
+
+def ofOp : (Dialg G.op F.op)ᵒᵖ ⥤ Dialg F G where
+  obj P := ⟨P.unop.carrier.unop, P.unop.str.unop⟩
+  map {P Q} u := ⟨u.unop.f.unop, Quiver.Hom.op_inj (by simpa using u.unop.h.symm)⟩
+
+def d5Equiv : Dialg F G ≌ (Dialg G.op F.op)ᵒᵖ where
+  functor := toOp
+  inverse := ofOp
+  unitIso := NatIso.ofComponents (fun A => ⟨⟨𝟙 _, by simp [toOp, ofOp]⟩, ⟨𝟙 _, by simp [toOp, ofOp]⟩,
+    by ext; simp, by ext; simp⟩) (by intros; ext; simp [toOp, ofOp])
+  counitIso := NatIso.ofComponents (fun P => Iso.op ⟨⟨𝟙 _, by simp [ofOp]⟩, ⟨𝟙 _, by simp [ofOp]⟩,
+    by ext; simp, by ext; simp⟩) (by intros; apply Quiver.Hom.unop_inj; ext; simp [toOp, ofOp])
+  functor_unitIso_comp X := by
+    apply Quiver.Hom.unop_inj
+    ext
+    simp [toOp]
+
 end Dialg
 end Mordor.Axioms.Cat

@@ -147,6 +147,14 @@ A remark on what is *not* there. If the derived maps were adjoint, a ⊣ b, then
 
 Dinaturality is automatic in a thin category, so I5's content is its "acyclicity" hypothesis. The reading in which making and watching do not interact, F(x, y) = g(x) ⊔ h(y), is **false**: on the 3-chain with g = (0, 2, 2) and h = (0, 0, 1), m = 0 ≠ 2 = n (`Source.i5_sep_false`). Only dependence on one variable makes I5 true (`i5_left`, `i5_right`), and then it is trivial. Two powers that coexist without interacting still fail to collapse. Collapse needs the law *and* the guard (§3.3).
 
+### 3.8 The law, localised
+
+Treating the CL hypothesis as a law between the two powers raised the question of which laws are sound. Exhaustive tests (log §34.3j) give two answers:
+- GSOS-style laws and closure/interior laws hold for every F, so they carry no content;
+- semi-commutation imposed only on the gap [m, n] is sound, and it holds exactly when m = n. Proved via polar reduction, and unconditionally at edge-height ≤ 5 (`Local.semi_interval5`).
+
+The law need only hold between the walls.
+
 ## 4. What the source corrected
 
 1. **One functor → a bifunctor at the root.** Making and watching are different powers (§3.2). The foundations' single F is the degenerate case in which every interaction axiom is automatic.

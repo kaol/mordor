@@ -31,6 +31,7 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/Sharpness.lean` | §22.2–§22.5 | Ladder Lemma (records of a well-order), ladder and co-ladder constructions, Infinitude Lemma, **Sharpness**: a complete chain satisfies CL iff it is finite |
 | `Mordor/Retract.lean` | §23.1 | the Retract Theorem for any retraction pair ι, σ (σ∘ι = id) between complete lattices |
 | `Mordor/TheoremA.lean` | §23.2 | **Theorem A**: a complete lattice containing an infinite chain fails CL; CL lattices are chain-finite |
+| `Mordor/Continuous.lean` | §34.3i | an M0-continuous CL violator on ω + 1: F(x, y) = min(x + 1, y ∸ 1) preserves ω-sups and ω-infs, commutes, m = 0 ≠ ω = n |
 | `Mordor/Frontier.lean` | §34.4a | `frontier`: CL ⟹ chain-finite; chain-finite ∧ (∀ F, R(F) join-closed) ⟹ CL. The conjecture reduced to one statement |
 | `Mordor/Dialgebra.lean` | §32.2–§32.4 | transposition (D1/D2 via adjoints), the failure-zone theorem and its dual, D5 by order reversal |
 | `Mordor/CutDuality.lean` | §33.3 | Φ ⊣ c∘Ψ∘c and the k + j law, for any preorder and arbitrary maps a, b |

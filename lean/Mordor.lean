@@ -15,3 +15,4 @@ import Mordor.Restrict
 import Mordor.Height3
 import Mordor.Height4
 import Mordor.Height5
+import Mordor.Continuous

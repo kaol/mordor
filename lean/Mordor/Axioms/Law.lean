@@ -112,4 +112,14 @@ theorem comparison_is_fold :
   exact congrArg Algebra.Hom.f this
 
 end Comparison
+
+/-- **Bd1, categorical.** With `S = B = F` and the identity law, the comparison is the canonical arrow
+`μF → νF`, at once a fold, an anamorphism and an algebra map. (That it is mono is I8, a side condition.) -/
+def bd1 {F : C ⥤ C} {I : Algebra F} (hI : IsInitial I) {T : Coalgebra F} (hT : IsTerminal T) : I.a ⟶ T.V :=
+  comparison (𝟙 (F ⋙ F)) hI hT
+
+theorem bd1_alg {F : C ⥤ C} {I : Algebra F} (hI : IsInitial I) {T : Coalgebra F} (hT : IsTerminal T) :
+    I.str ≫ bd1 hI hT = F.map (bd1 hI hT) ≫ finAlg (𝟙 (F ⋙ F)) hT :=
+  comparison_alg _ hI hT
+
 end Mordor.Axioms.Law

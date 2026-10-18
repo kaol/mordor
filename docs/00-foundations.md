@@ -434,7 +434,7 @@ The axioms are derived as theorems, or refuted, in two Lean files. Both use only
 | D3, D4 | `d3`, `d4` | `Cat.Dialg.d3` | D4 needs a notion of dialgebraic bisimulation |
 | D5 | `d5` | `Cat.Dialg.d5`: an initial (F, G)-dialgebra on C is a final (Gᵒᵖ, Fᵒᵖ)-dialgebra on Cᵒᵖ | the full equivalence Dialg F G ≌ (Dialg Gᵒᵖ Fᵒᵖ)ᵒᵖ |
 | D6 | `d6` | `Cat.Dialg.d6`, `d6'` | — |
-| Bd1 | `bd1`, `bd1_eq` (equality ⟺ unique fixed point) | — | the comparison μF → νF (fold into the final coalgebra) |
+| Bd1 | `bd1`, `bd1_eq` (equality ⟺ unique fixed point) | `Law.bd1`, `Law.bd1_alg`: the canonical comparison μF → νF (fold = ana, an algebra map) | mono-ness is I8, a side condition |
 | Bd2–Bd7 | `bd2`…`bd7` (Bd4, Bd5 at finite stages) | — | Worrell's ω + ω bound (Lit) |
 | Bd8 | **refuted**: `bd8_false` | — | — |
 | Bd9 | `bd9` | `Cat.Dialg.bd9`: Dialg F Id ≌ Algebra F, and `bd9_initial` | — |

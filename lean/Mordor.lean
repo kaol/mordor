@@ -19,3 +19,4 @@ import Mordor.Continuous
 import Mordor.Axioms.Thin
 import Mordor.Axioms.Cat
 import Mordor.Axioms.Source
+import Mordor.Axioms.Law

@@ -70,6 +70,17 @@ In the thin model, the free monad of f is the closure T x = μY. x ∨ f(Y) and 
 
 This is the thin form of Turi–Plotkin with syntax and behaviour given by the same functor. In that form B2 holds automatically, B3 is trivial, and the bialgebras are B1's balanced objects. **So none of the interaction content of Mordor lives in a single functor.** It lives where the source puts it: between two powers.
 
+### 3.2a B2 with two functors: Turi–Plotkin
+
+For a syntax functor S (the Ring) and a behaviour functor B (the Eye) with a plain law λ : S∘B ⇒ B∘S (`lean/Mordor/Axioms/Law.lean`, any category):
+- the initial S-algebra lifts to a λ-bialgebra, and so does the final B-coalgebra (B3);
+- the comparison c : μS → νB is both the anamorphism of the lifted coalgebra and the fold of the lifted algebra (I6, fusion);
+- c is an algebra map, in ≫ c = S c ≫ α_ν, so behavioural equivalence is a congruence (I7's core).
+
+In the thin model this reads: a law S∘B ≤ B∘S gives μS ≤ B(μS), S(νB) ≤ νB and μS ≤ νB (`Source.tp_thin`).
+
+**The lesson for the program.** Apply this to the two powers of the bifunctor, with syntax b and behaviour a: the law b∘a ≤ a∘b yields μb ≤ νa. But μb ≤ m ≤ n ≤ νa holds for every F (`Source.outer_sandwich`). So the bialgebraic theory sees only the outer walls. The inner collapse m = n is a different kind of statement: the guarded I11 of §3.3. Bialgebraic semantics, as it stands, cannot by itself deliver the program's theorem.
+
 ### 3.3 B2 and I11 for the bifunctor: the derived law, its guard, the One Ring
 
 For F : L × L → L monotone, with derived maps a(x) = νY.F(x, Y) and b(y) = μX.F(X, y):

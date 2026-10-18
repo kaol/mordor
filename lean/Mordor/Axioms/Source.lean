@@ -80,6 +80,15 @@ theorem i3 (g : L →o L) (hg : ∀ x, g x ≤ f x) (a : L) : g.lfp ≤ (tStep f
   have h2 : f.gfp ≤ (tStep f a).gfp := (tStep f a).le_gfp (f.map_gfp.ge.trans le_sup_right)
   exact h1.trans (f.lfp_le_gfp.trans h2)
 
+/-- **Turi–Plotkin, thin.** A law `S ∘ B ≤ B ∘ S` lifts `μS` to a `B`-coalgebra and `νB` to an `S`-algebra, and
+gives the comparison `μS ≤ νB`. -/
+theorem tp_thin (S B : L →o L) (hlaw : ∀ x, S (B x) ≤ B (S x)) :
+    S.lfp ≤ B S.lfp ∧ S B.gfp ≤ B.gfp ∧ S.lfp ≤ B.gfp := by
+  have h1 : S.lfp ≤ B S.lfp := S.lfp_le ((hlaw _).trans (B.mono S.map_lfp.le))
+  refine ⟨h1, B.le_gfp ?_, B.le_gfp h1⟩
+  calc S B.gfp = S (B B.gfp) := by rw [B.map_gfp]
+    _ ≤ B (S B.gfp) := hlaw _
+
 end One
 
 /-! ## B2 and I11 for the bifunctor: the derived law, the guard, the One Ring -/
@@ -107,6 +116,14 @@ theorem one_ring : m F = n F ↔ ∃! z, a F z = z ∧ b F z = z := by
   constructor
   · intro h; exact ⟨m F, ⟨a_m, b_m⟩, fun z hz => h z hz.1 hz.2⟩
   · rintro ⟨z, _, hu⟩ w ha hb; rw [hu w ⟨ha, hb⟩, hu _ ⟨a_m, b_m⟩]
+
+/-- **What Turi–Plotkin gives for the derived law: only the outer sandwich, which holds anyway.** With syntax `b`
+and behaviour `a`, the law `b ∘ a ≤ a ∘ b` yields `μb ≤ νa` (`tp_thin`); but `μb ≤ m ≤ n ≤ νa` holds for every
+`F` (L1, L2, I1). The inner collapse `m = n` is not a bialgebra fact: it is I11, guarded by the Cut Lemma. -/
+theorem outer_sandwich : (b F).lfp ≤ m F ∧ m F ≤ n F ∧ n F ≤ (a F).gfp :=
+  ⟨(b F).lfp_le b_m.le, m_le_n, (a F).le_gfp a_n.ge⟩
+
+theorem tp_derived (hlaw : DerivedLaw F) : (b F).lfp ≤ (a F).gfp := (tp_thin (b F) (a F) hlaw).2.2
 
 end Bi
 end Mordor.Axioms.Source

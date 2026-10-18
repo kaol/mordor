@@ -126,6 +126,32 @@ theorem outer_sandwich : (b F).lfp ≤ m F ∧ m F ≤ n F ∧ n F ≤ (a F).gfp
 
 theorem tp_derived (hlaw : DerivedLaw F) : (b F).lfp ≤ (a F).gfp := (tp_thin (b F) (a F) hlaw).2.2
 
+/-! ### The automatic laws (log §34.3j)
+
+The exhaustive search found two laws between the powers that hold for every `F`. Both follow from one lemma. -/
+
+/-- **Cross lemma.** `y ≤ a z` and `b y ≤ z` give `b y ≤ a z`. -/
+theorem cross {y z : L} (hy : y ≤ a F z) (hb : b F y ≤ z) : b F y ≤ a F z := by
+  have hs : b F y ⊔ a F z ≤ F z (b F y ⊔ a F z) := sup_le
+    ((col_b (F := F) y).ge.trans ((F.mono hb _).trans ((F z).mono (hy.trans le_sup_right))))
+    ((row_a (F := F) z).ge.trans ((F z).mono le_sup_right))
+  exact le_sup_left.trans (le_a hs)
+
+/-- **The GSOS-style law is automatic**: `b (x ⊓ a x) ≤ a (T_b x)`. -/
+theorem gsos_law (x : L) : b F (x ⊓ a F x) ≤ a F (T (b F) x) :=
+  cross F (inf_le_right.trans ((a F).mono (le_T _ x)))
+    (((b F).mono (inf_le_left.trans (le_T _ x))).trans (f_T_le _ x))
+
+/-- **The closure/interior law is automatic**: `T_b (D_a x) ≤ D_a (T_b x)`. -/
+theorem clint_law (x : L) : T (b F) (D (a F) x) ≤ D (a F) (T (b F) x) := by
+  set t := T (b F) (D (a F) x)
+  have ht : t ≤ a F t := by
+    have hc : t ≤ t ⊓ a F t := T_le _ (le_inf (le_T _ _) ((D_le_f _ x).trans ((a F).mono (le_T _ _))))
+      (le_inf (((b F).mono inf_le_left).trans (f_T_le _ _)) (cross F inf_le_right
+        (((b F).mono inf_le_left).trans (f_T_le _ _))))
+    exact hc.trans inf_le_right
+  exact le_D _ (T_le _ ((D_le _ x).trans (le_T _ x)) (f_T_le _ x)) ht
+
 /-! ### I5 in the thin model
 
 Dinaturality is automatic in a thin category, so I5's content is its "acyclicity" hypothesis. The one reading that

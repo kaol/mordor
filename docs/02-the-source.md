@@ -150,7 +150,7 @@ Dinaturality is automatic in a thin category, so I5's content is its "acyclicity
 ### 3.8 The law, localised
 
 Treating the CL hypothesis as a law between the two powers raised the question of which laws are sound. Exhaustive tests (log §34.3j) give two answers:
-- GSOS-style laws and closure/interior laws hold for every F, so they carry no content;
+- GSOS-style laws and closure/interior laws hold for every F, so they carry no content. Both follow from the cross lemma: y ≤ a(z) and b(y) ≤ z give b(y) ≤ a(z) (`Source.cross`);
 - semi-commutation imposed only on the gap [m, n] is sound, and it holds exactly when m = n. Proved via polar reduction, and unconditionally at edge-height ≤ 5 (`Local.semi_interval5`).
 
 The law need only hold between the walls.

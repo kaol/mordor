@@ -85,7 +85,7 @@ In the thin model this reads: a law S∘B ≤ B∘S gives μS ≤ B(μS), S(νB)
 
 For F : L × L → L monotone, with derived maps a(x) = νY.F(x, Y) and b(y) = μX.F(X, y):
 
-- **B2 (bifunctor).** The derived law is λ : b ∘ a ⇒ a ∘ b, pointwise b(a(x)) ≤ a(b(x)) (`Source.DerivedLaw`). It is a distributive law of the μ-layer map over the ν-layer map.
+- **B2 (bifunctor).** The derived law is λ : b ∘ a ⇒ a ∘ b, a plain distributive law of one functor over another: in a thin category it is a pointwise inequality, and the coherence conditions of a *monad* distributive law do not arise because a and b carry no monad structure, pointwise b(a(x)) ≤ a(b(x)) (`Source.DerivedLaw`). It is a distributive law of the μ-layer map over the ν-layer map.
 - **I11 (Layer collapse guard), sharpened.**
   - "λ invertible ⟹ the layers collapse (m = n)" is exactly the **Commutation Lemma**.
   - "λ exists ⟹ m = n" is **semi-CL**.

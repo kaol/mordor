@@ -223,7 +223,7 @@ For a bifunctor F write a(x) = νY.F(x, Y), b(y) = μX.F(X, y), m = μX.νY.F = 
 
 | # | Rule | Statement | Status |
 |---|---|---|---|
-| **I6** | **fold/ana fusion** | `fold a ∘ ana c` is well-defined when the composite law squares commute; it equals `fold a'` for the fused algebra a' derived via λ (B2). | Def / Unexamined categorically. Its thin shadow is the comparison sup ∘ Θ⁺ ≤ κ⁺ ∘ sup of §7.5, which is lax. Strict fusion holds exactly at principal stages. **Thm (v3.8):** for a law λ, the comparison μS → νB is the anamorphism of the lifted coalgebra and the fold of the lifted algebra at once (`Axioms.Law.comparison_is_fold`). |
+| **I6** | **fold/ana fusion** | `fold a ∘ ana c` is well-defined when the composite law squares commute; it equals `fold a'` for the fused algebra a' derived via λ (B2). | Def / Unexamined categorically. Its thin shadow is the comparison sup ∘ Θ⁺ ≤ κ⁺ ∘ sup of §7.5, which is lax. Strict fusion (equality) is guaranteed on principal down-sets (`Orbit.step_principal`), and along the whole orbit on top-closed lattices (`orbit_tight`); it fails in general. **Thm (v3.8):** for a law λ, the comparison μS → νB is the anamorphism of the lifted coalgebra and the fold of the lifted algebra at once (`Axioms.Law.comparison_is_fold`). |
 | **I7** | **Bisimulation up-to algebra** | A relation R up-to a (i.e., closure under a ∘ F-projection) is contained in equality on νF provided (a, c) is a λ-bialgebra **and** the up-to function is *compatible* with the functor's progression: `R ⟩→ S ⟹ f(R) ⟩→ f(S)` (Pous–Sangiorgi compatibility). | Lit (v1.4): in the fibrational setting λ induces the compatible up-to-context function (Bonchi–Petrișan), so B2's law discharges the side condition. **Core Thm (v3.8):** the comparison is an algebra map, `in ≫ c = S c ≫ α_ν` (`Axioms.Law.comparison_alg`), so behavioural equivalence is a congruence for the syntax. Up-to techniques beyond this core remain Lit. |
 | **I8** | **No-confusion** | μ-sorted terms and ν-sorted observations never identify two μ-distinct elements through observation alone, unless forced by I5 balance. | **Sharpened (v3.8):** I8 ⟺ the comparison μF → νF is mono. It holds in the thin model and in Set for polynomial F. It is **not a categorical theorem**: in Setᵒᵖ it reads "the comparison is epi in Set", which is false for F = 1 + X (ℕ → ℕ ∪ {∞}). So it is a side condition on M. The kernel of ana : X → νF is bisimilarity (ν3): confusion is a theorem of the ν-layer, not a defect (source §3.5). |
 
@@ -342,7 +342,7 @@ The comparison between the down-set layer (𝒪(L), Θ⁺) and the join layer (L
 - Equality holds at every k, for every F, on top-closed lattices. A lattice is top-closed when every down-set containing ⊥ that misses its own join has join ⊤.
 
 How the axioms read this:
-- **I6 (fusion).** Strict fusion would make sup an algebra morphism Θ⁺ → κ⁺ and transfer μ between the layers. It holds at principal stages only.
+- **I6 (fusion).** Strict fusion would make sup an algebra morphism Θ⁺ → κ⁺ and transfer μ between the layers. It is guaranteed on principal down-sets, and along the orbit on top-closed lattices; it fails in general (§32.6).
 - **I11 (collapse guard).** The layers are strictly nested. ⋁R(F) = ⊤ does not give ⊤ ∈ R(F), because taking sups loses membership. A non-principal D has ⋁a(D) possibly below a(⋁D), and b(y) ∈ D is stronger than b(y) ≤ ⋁D.
 - **B2.** sup ⊣ ↓ is an established adjunction. It is not a distributive law, and no B2 law between these layers has been found.
 

@@ -4,7 +4,8 @@ One file per exploration round. Version tags are the framework versions in which
 
 ## Foundations
 
-- [`00-foundations.md`](00-foundations.md) — the formal system: ambient setting, bialgebraic axioms, dialgebraic axioms, bounds, interaction rules, consistency metatheorems, status tags; mixed fixed points (§6) and the Cut Lemma interface (§7). Version 3.7.
+- [`00-foundations.md`](00-foundations.md) — the formal system: ambient setting, bialgebraic axioms, dialgebraic axioms, bounds, interaction rules, consistency metatheorems, status tags; mixed fixed points (§6) and the Cut Lemma interface (§7). Version 3.8.
+- [`02-the-source.md`](02-the-source.md) — the framework's Tolkien vocabulary read back to its source: which names carry structure (the forge = Lambek's inverse as a fold; the walls = cut counterexamples; rule/find = initial/final, the One Ring = m = n), which are decoration, and the sharpened rows M0.1, B2, I3, I8, I11 (I11 is the Commutation Lemma guarded by the Cut Lemma).
 - [`01-early-notes.md`](01-early-notes.md) — revision notes (v1.1) and the first exploration findings (v1.2).
 
 ## Exploration rounds

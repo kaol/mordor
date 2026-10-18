@@ -38,6 +38,14 @@ theorem mu3 {I U : Algebra F} (h : IsInitial I) (m : U ⟶ I) [Mono m.f] : IsIso
   refine ⟨⟨h.to U, ?_, h1⟩⟩
   rw [← cancel_mono m, Category.assoc, h1, Category.comp_id, Category.id_comp]
 
+/-- **M0.1, sharpened ("only where it was made can it be unmade").** The inverse of `in : F(μF) → μF` is the fold
+of the algebra `F(in)`: the structure map is undone only by its own construction applied once more. -/
+theorem unmade_where_made {I : Algebra F} (h : IsInitial I) :
+    haveI := Algebra.Initial.str_isIso h
+    inv I.str = (h.to ⟨F.obj I.a, F.map I.str⟩).f := by
+  haveI := Algebra.Initial.str_isIso h
+  exact IsIso.inv_eq_of_hom_inv_id (Algebra.Initial.right_inv h)
+
 /-! ## ν-axioms -/
 
 /-- **ν1 (Lambek).** -/

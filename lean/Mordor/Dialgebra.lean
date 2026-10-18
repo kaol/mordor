@@ -62,4 +62,13 @@ theorem d5 [Preorder α] (f g : α → α) (A : α) :
   · rintro ⟨h1, h2⟩; exact ⟨h1, fun y hy => h2 hy⟩
   · rintro ⟨h1, h2⟩; exact ⟨h1, fun y hy => h2 (a := OrderDual.toDual y) hy⟩
 
+/-- **The cross bound Bd8 fails in the thin model (foundations v3.7).** On the 3-chain, with `f ≡ 1` and
+`g = (0, 2, 2)`, the least `(f, g)`-dialgebra is `1` and the greatest `(g, f)`-dialgebra is `0`, so
+`μ^{f,g} ⋢ ν^{g,f}`. D5 relates `μ^{f,g}` on `L` to `ν^{g,f}` on `Lᵒᵖ`, not on `L`. -/
+theorem bd8_fails :
+    IsLeast {x : Fin 3 | (fun _ => (1 : Fin 3)) x ≤ (fun x : Fin 3 => if x = 0 then (0 : Fin 3) else 2) x} 1 ∧
+      IsGreatest {x : Fin 3 | (fun x : Fin 3 => if x = 0 then (0 : Fin 3) else 2) x ≤ (fun _ => (1 : Fin 3)) x} 0 ∧ ¬ (1 : Fin 3) ≤ 0 := by
+  refine ⟨⟨by decide, fun x hx => ?_⟩, ⟨by decide, fun x hx => ?_⟩, by decide⟩ <;>
+    revert hx <;> revert x <;> decide
+
 end Mordor.Dial

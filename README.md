@@ -31,7 +31,7 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
 
 | Path | Contents |
 |---|---|
-| `docs/00-foundations.md` | The formal system: ambient setting, bialgebraic & dialgebraic axioms, bounds, interaction rules, metatheorems (§1–§7) |
+| `docs/00-foundations.md` | The formal system: ambient setting, bialgebraic & dialgebraic axioms, bounds, interaction rules, metatheorems, with status tags; the CL program and the Cut Lemma interface (§0–§10, v3.7) |
 | `docs/01-early-notes.md` | Early revision notes and first exploration findings (v1.1–v1.2) |
 | `docs/rounds/` | The research log, one file per exploration round (rounds 2–26, versions v1.3 → v3.7) |
 | `docs/README.md` | Index to the research log with one-line summaries |

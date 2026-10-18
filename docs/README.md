@@ -4,7 +4,7 @@ One file per exploration round. Version tags are the framework versions in which
 
 ## Foundations
 
-- [`00-foundations.md`](00-foundations.md) — the formal system: ambient setting, bialgebraic axioms, dialgebraic axioms, bounds, interaction rules, consistency metatheorems (§1–§7).
+- [`00-foundations.md`](00-foundations.md) — the formal system: ambient setting, bialgebraic axioms, dialgebraic axioms, bounds, interaction rules, consistency metatheorems, status tags; mixed fixed points (§6) and the Cut Lemma interface (§7). Version 3.7.
 - [`01-early-notes.md`](01-early-notes.md) — revision notes (v1.1) and the first exploration findings (v1.2).
 
 ## Exploration rounds

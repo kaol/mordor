@@ -277,7 +277,7 @@ Thin model throughout: L is a complete lattice and F : L × L → L is monotone.
 | edge-height ≤ 2, ≤ 3 | **Thm** (No-Room `cl_noRoom`; `cl_height3`), including M_κ, D_ω, M_ω × C₂ |
 | edge-height ≤ 4, ≤ 5 | **Thm** by verified ground refutation (`cl_height4`, `cl_height5`, §34.3g–h), including E_ω. Trust: `bv_decide` |
 | per F, any lattice | **Thm** when ⟨⊥, ⊤⟩_F has no 7-chain (`semi_local5`) |
-| E₂, E₃; all lattices with ≤ 11 elements | machine evidence: CSP censuses (§24–§29), SAT Cut search over all bounded posets ≤ 11 (§34.3h); 3.7·10¹¹ F on 13 lattices by GPU (§33) |
+| E₂, E₃; all lattices with ≤ 11 elements | machine evidence: CSP censuses (§24–§29), SAT Cut search over all bounded posets ≤ 11 (§34.3h); 2.1·10¹² F on 17 lattices by GPU, exact (§33, §33.7) |
 | chain-finite lattices | **Open**. This is the standing conjecture, and it reduces to §7.6 |
 
 ---

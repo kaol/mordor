@@ -661,3 +661,688 @@
   sweep 7500/8000, 733s
   sweep 8000/8000, 782s
   B5: 2,048,000 F; commuting 6.24%, m≠n 93.76%, polar 93.76%; violators cl=0 semi=0 cut=0; orbit-lax 0; tripwires 0; t=782.4s; mixing |z|max=1.46
+
+=== job 16: census L6_12 (10:22:24) ===
+  census L6_12: n=6, |Mon|=494, height 4, ≈9.27e+10 ± 1.1e+10 bifunctions (Knuth estimate), 60312 prefix jobs at depth 2, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4); mem 1024 MiB
+  256/60312 prefix jobs, 7,527,542,382 bifunctions, 857s (8,783,804/s this run), peak device memory 1706 MiB, ≈2.7 h left at this rate
+  512/60312 prefix jobs, 10,477,493,842 bifunctions, 1271s (8,240,456/s this run), peak device memory 1706 MiB, ≈2.8 h left at this rate
+  768/60312 prefix jobs, 14,824,884,206 bifunctions, 1896s (7,819,961/s this run), peak device memory 1706 MiB, ≈2.8 h left at this rate
+  1024/60312 prefix jobs, 17,273,038,015 bifunctions, 2246s (7,690,480/s this run), peak device memory 1706 MiB, ≈2.7 h left at this rate
+  1280/60312 prefix jobs, 19,373,309,631 bifunctions, 2550s (7,596,085/s this run), peak device memory 1706 MiB, ≈2.7 h left at this rate
+  1536/60312 prefix jobs, 23,158,952,720 bifunctions, 3095s (7,482,616/s this run), peak device memory 1706 MiB, ≈2.6 h left at this rate
+  1792/60312 prefix jobs, 23,842,855,265 bifunctions, 3196s (7,461,364/s this run), peak device memory 1706 MiB, ≈2.6 h left at this rate
+  2048/60312 prefix jobs, 26,567,679,744 bifunctions, 3588s (7,404,460/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  2560/60312 prefix jobs, 27,585,333,620 bifunctions, 3714s (7,428,388/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  2816/60312 prefix jobs, 33,476,512,234 bifunctions, 4618s (7,248,903/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  3072/60312 prefix jobs, 33,759,037,689 bifunctions, 4665s (7,236,898/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  3328/60312 prefix jobs, 37,591,540,039 bifunctions, 5262s (7,143,648/s this run), peak device memory 1706 MiB, ≈2.1 h left at this rate
+  3584/60312 prefix jobs, 38,286,716,004 bifunctions, 5372s (7,127,382/s this run), peak device memory 1706 MiB, ≈2.1 h left at this rate
+  3840/60312 prefix jobs, 41,549,365,327 bifunctions, 5884s (7,061,364/s this run), peak device memory 1706 MiB, ≈2.0 h left at this rate
+  4096/60312 prefix jobs, 43,690,084,200 bifunctions, 6216s (7,029,064/s this run), peak device memory 1706 MiB, ≈1.9 h left at this rate
+  4352/60312 prefix jobs, 44,305,936,735 bifunctions, 6315s (7,016,224/s this run), peak device memory 1706 MiB, ≈1.9 h left at this rate
+  4608/60312 prefix jobs, 45,052,243,458 bifunctions, 6403s (7,036,508/s this run), peak device memory 1706 MiB, ≈1.9 h left at this rate
+  4864/60312 prefix jobs, 46,641,148,824 bifunctions, 6649s (7,014,704/s this run), peak device memory 1706 MiB, ≈1.8 h left at this rate
+  5120/60312 prefix jobs, 46,927,810,914 bifunctions, 6696s (7,008,503/s this run), peak device memory 1706 MiB, ≈1.8 h left at this rate
+  5376/60312 prefix jobs, 48,186,304,074 bifunctions, 6893s (6,990,879/s this run), peak device memory 1706 MiB, ≈1.8 h left at this rate
+  5632/60312 prefix jobs, 48,605,434,440 bifunctions, 6944s (6,999,792/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  5888/60312 prefix jobs, 50,145,277,767 bifunctions, 7184s (6,980,543/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  6144/60312 prefix jobs, 50,484,839,732 bifunctions, 7239s (6,973,915/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  6400/60312 prefix jobs, 51,733,980,724 bifunctions, 7434s (6,958,801/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  6656/60312 prefix jobs, 52,117,446,490 bifunctions, 7482s (6,965,896/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  6912/60312 prefix jobs, 52,687,120,019 bifunctions, 7562s (6,967,757/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  7424/60312 prefix jobs, 53,101,714,526 bifunctions, 7616s (6,972,738/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  7680/60312 prefix jobs, 55,502,545,953 bifunctions, 7987s (6,949,475/s this run), peak device memory 1706 MiB, ≈1.5 h left at this rate
+  7936/60312 prefix jobs, 56,327,306,148 bifunctions, 8120s (6,936,534/s this run), peak device memory 1706 MiB, ≈1.5 h left at this rate
+  8192/60312 prefix jobs, 58,262,185,567 bifunctions, 8426s (6,914,899/s this run), peak device memory 1706 MiB, ≈1.4 h left at this rate
+  8448/60312 prefix jobs, 58,457,958,290 bifunctions, 8458s (6,911,211/s this run), peak device memory 1706 MiB, ≈1.4 h left at this rate
+  8704/60312 prefix jobs, 60,489,736,460 bifunctions, 8783s (6,887,164/s this run), peak device memory 1706 MiB, ≈1.3 h left at this rate
+  8960/60312 prefix jobs, 61,641,160,681 bifunctions, 8965s (6,875,882/s this run), peak device memory 1706 MiB, ≈1.3 h left at this rate
+  9216/60312 prefix jobs, 62,078,296,329 bifunctions, 9036s (6,869,884/s this run), peak device memory 1706 MiB, ≈1.2 h left at this rate
+  9472/60312 prefix jobs, 62,522,397,770 bifunctions, 9089s (6,878,629/s this run), peak device memory 1706 MiB, ≈1.2 h left at this rate
+  9728/60312 prefix jobs, 63,568,156,059 bifunctions, 9257s (6,866,794/s this run), peak device memory 1706 MiB, ≈1.2 h left at this rate
+  9984/60312 prefix jobs, 64,126,376,062 bifunctions, 9349s (6,859,343/s this run), peak device memory 1706 MiB, ≈1.2 h left at this rate
+  10240/60312 prefix jobs, 64,427,256,763 bifunctions, 9400s (6,854,232/s this run), peak device memory 1706 MiB, ≈1.1 h left at this rate
+  10496/60312 prefix jobs, 64,689,599,797 bifunctions, 9432s (6,858,277/s this run), peak device memory 1706 MiB, ≈1.1 h left at this rate
+  10752/60312 prefix jobs, 65,738,957,484 bifunctions, 9608s (6,841,930/s this run), peak device memory 1706 MiB, ≈1.1 h left at this rate
+  11008/60312 prefix jobs, 66,377,856,382 bifunctions, 9714s (6,833,286/s this run), peak device memory 1706 MiB, ≈1.1 h left at this rate
+  11264/60312 prefix jobs, 66,591,706,974 bifunctions, 9750s (6,829,577/s this run), peak device memory 1706 MiB, ≈1.1 h left at this rate
+  11520/60312 prefix jobs, 66,854,151,195 bifunctions, 9783s (6,833,686/s this run), peak device memory 1706 MiB, ≈1.1 h left at this rate
+  11776/60312 prefix jobs, 67,296,857,873 bifunctions, 9849s (6,832,638/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  12288/60312 prefix jobs, 67,650,638,011 bifunctions, 9900s (6,833,671/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  12544/60312 prefix jobs, 67,897,687,120 bifunctions, 9941s (6,829,838/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  13056/60312 prefix jobs, 68,152,600,584 bifunctions, 9980s (6,829,113/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  13568/60312 prefix jobs, 68,473,227,364 bifunctions, 10030s (6,826,992/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  13824/60312 prefix jobs, 68,676,686,813 bifunctions, 10062s (6,825,069/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  14592/60312 prefix jobs, 68,920,761,096 bifunctions, 10095s (6,826,984/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  15104/60312 prefix jobs, 71,387,610,485 bifunctions, 10497s (6,800,699/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  15360/60312 prefix jobs, 72,140,104,198 bifunctions, 10623s (6,790,997/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  15616/60312 prefix jobs, 74,121,705,902 bifunctions, 10956s (6,765,467/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  16128/60312 prefix jobs, 76,344,872,555 bifunctions, 11327s (6,740,086/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  16384/60312 prefix jobs, 77,511,121,793 bifunctions, 11520s (6,728,147/s this run), peak device memory 1706 MiB, ≈0.6 h left at this rate
+  16640/60312 prefix jobs, 77,890,172,661 bifunctions, 11584s (6,723,730/s this run), peak device memory 1706 MiB, ≈0.6 h left at this rate
+  16896/60312 prefix jobs, 78,336,209,745 bifunctions, 11638s (6,731,271/s this run), peak device memory 1706 MiB, ≈0.6 h left at this rate
+  17152/60312 prefix jobs, 79,383,570,434 bifunctions, 11819s (6,716,827/s this run), peak device memory 1706 MiB, ≈0.6 h left at this rate
+  17408/60312 prefix jobs, 79,991,514,143 bifunctions, 11922s (6,709,660/s this run), peak device memory 1706 MiB, ≈0.5 h left at this rate
+  17664/60312 prefix jobs, 80,238,978,370 bifunctions, 11964s (6,706,628/s this run), peak device memory 1706 MiB, ≈0.5 h left at this rate
+  17920/60312 prefix jobs, 80,501,480,693 bifunctions, 11996s (6,710,784/s this run), peak device memory 1706 MiB, ≈0.5 h left at this rate
+  18176/60312 prefix jobs, 81,566,088,095 bifunctions, 12172s (6,701,341/s this run), peak device memory 1706 MiB, ≈0.5 h left at this rate
+  18432/60312 prefix jobs, 82,256,816,187 bifunctions, 12284s (6,696,027/s this run), peak device memory 1706 MiB, ≈0.4 h left at this rate
+  18944/60312 prefix jobs, 82,665,774,375 bifunctions, 12341s (6,698,577/s this run), peak device memory 1706 MiB, ≈0.4 h left at this rate
+  19200/60312 prefix jobs, 83,108,846,014 bifunctions, 12405s (6,699,359/s this run), peak device memory 1706 MiB, ≈0.4 h left at this rate
+  19712/60312 prefix jobs, 84,301,126,905 bifunctions, 12595s (6,692,993/s this run), peak device memory 1706 MiB, ≈0.3 h left at this rate
+  19968/60312 prefix jobs, 85,180,351,181 bifunctions, 12748s (6,681,789/s this run), peak device memory 1706 MiB, ≈0.3 h left at this rate
+  20224/60312 prefix jobs, 86,357,728,446 bifunctions, 12951s (6,668,229/s this run), peak device memory 1706 MiB, ≈0.3 h left at this rate
+  20736/60312 prefix jobs, 87,766,624,051 bifunctions, 13194s (6,651,883/s this run), peak device memory 1706 MiB, ≈0.2 h left at this rate
+  20992/60312 prefix jobs, 88,603,065,716 bifunctions, 13336s (6,643,835/s this run), peak device memory 1706 MiB, ≈0.2 h left at this rate
+  21504/60312 prefix jobs, 89,016,191,405 bifunctions, 13393s (6,646,560/s this run), peak device memory 1706 MiB, ≈0.2 h left at this rate
+  21760/60312 prefix jobs, 89,738,850,879 bifunctions, 13518s (6,638,279/s this run), peak device memory 1706 MiB, ≈0.1 h left at this rate
+  22016/60312 prefix jobs, 90,233,760,513 bifunctions, 13602s (6,633,680/s this run), peak device memory 1706 MiB, ≈0.1 h left at this rate
+  22528/60312 prefix jobs, 90,903,733,514 bifunctions, 13710s (6,630,699/s this run), peak device memory 1706 MiB, ≈0.1 h left at this rate
+  22784/60312 prefix jobs, 91,186,526,657 bifunctions, 13760s (6,627,014/s this run), peak device memory 1706 MiB, ≈0.1 h left at this rate
+  23040/60312 prefix jobs, 91,719,998,410 bifunctions, 13851s (6,622,040/s this run), peak device memory 1706 MiB, ≈0.0 h left at this rate
+  23552/60312 prefix jobs, 92,194,556,784 bifunctions, 13916s (6,625,078/s this run), peak device memory 1706 MiB, ≈0.0 h left at this rate
+  24320/60312 prefix jobs, 92,557,370,802 bifunctions, 13971s (6,624,762/s this run), peak device memory 1706 MiB, ≈0.0 h left at this rate
+  24832/60312 prefix jobs, 92,824,642,587 bifunctions, 14013s (6,624,009/s this run), peak device memory 1706 MiB
+  25344/60312 prefix jobs, 93,052,776,614 bifunctions, 14049s (6,623,408/s this run), peak device memory 1706 MiB
+  25856/60312 prefix jobs, 93,250,495,572 bifunctions, 14080s (6,623,065/s this run), peak device memory 1706 MiB
+  26880/60312 prefix jobs, 93,671,073,094 bifunctions, 14144s (6,622,701/s this run), peak device memory 1706 MiB
+  27136/60312 prefix jobs, 93,881,197,530 bifunctions, 14178s (6,621,581/s this run), peak device memory 1706 MiB
+  27904/60312 prefix jobs, 94,127,317,666 bifunctions, 14212s (6,623,241/s this run), peak device memory 1706 MiB
+  28160/60312 prefix jobs, 94,312,688,828 bifunctions, 14242s (6,622,205/s this run), peak device memory 1706 MiB
+  28672/60312 prefix jobs, 94,583,367,292 bifunctions, 14283s (6,622,128/s this run), peak device memory 1706 MiB
+  29952/60312 prefix jobs, 94,811,239,141 bifunctions, 14317s (6,622,258/s this run), peak device memory 1706 MiB
+  30720/60312 prefix jobs, 95,107,424,023 bifunctions, 14365s (6,620,593/s this run), peak device memory 1706 MiB
+  30976/60312 prefix jobs, 95,306,440,167 bifunctions, 14398s (6,619,333/s this run), peak device memory 1706 MiB
+  31488/60312 prefix jobs, 95,528,080,187 bifunctions, 14428s (6,620,916/s this run), peak device memory 1706 MiB
+  32000/60312 prefix jobs, 95,809,320,967 bifunctions, 14477s (6,618,159/s this run), peak device memory 1706 MiB
+  32512/60312 prefix jobs, 96,008,114,518 bifunctions, 14507s (6,618,141/s this run), peak device memory 1706 MiB
+  33792/60312 prefix jobs, 96,234,528,784 bifunctions, 14541s (6,618,184/s this run), peak device memory 1706 MiB
+  36352/60312 prefix jobs, 97,054,175,729 bifunctions, 14675s (6,613,363/s this run), peak device memory 1706 MiB
+  36608/60312 prefix jobs, 97,465,234,092 bifunctions, 14746s (6,609,678/s this run), peak device memory 1706 MiB
+  36864/60312 prefix jobs, 97,890,441,616 bifunctions, 14819s (6,605,882/s this run), peak device memory 1706 MiB
+  37376/60312 prefix jobs, 98,409,591,452 bifunctions, 14908s (6,601,128/s this run), peak device memory 1706 MiB
+  37888/60312 prefix jobs, 98,806,361,696 bifunctions, 14971s (6,599,847/s this run), peak device memory 1706 MiB
+  38144/60312 prefix jobs, 99,018,663,264 bifunctions, 15007s (6,598,206/s this run), peak device memory 1706 MiB
+  38656/60312 prefix jobs, 99,375,166,142 bifunctions, 15065s (6,596,288/s this run), peak device memory 1706 MiB
+  38912/60312 prefix jobs, 99,587,631,049 bifunctions, 15101s (6,594,689/s this run), peak device memory 1706 MiB
+  39680/60312 prefix jobs, 99,854,233,122 bifunctions, 15138s (6,596,480/s this run), peak device memory 1706 MiB
+  40448/60312 prefix jobs, 100,056,669,639 bifunctions, 15171s (6,595,352/s this run), peak device memory 1706 MiB
+  41472/60312 prefix jobs, 100,291,460,925 bifunctions, 15207s (6,595,025/s this run), peak device memory 1706 MiB
+  42496/60312 prefix jobs, 100,482,552,883 bifunctions, 15237s (6,594,550/s this run), peak device memory 1706 MiB
+  44544/60312 prefix jobs, 100,730,899,399 bifunctions, 15277s (6,593,770/s this run), peak device memory 1706 MiB
+  45824/60312 prefix jobs, 100,937,901,610 bifunctions, 15309s (6,593,438/s this run), peak device memory 1706 MiB
+  50176/60312 prefix jobs, 101,149,183,882 bifunctions, 15342s (6,592,820/s this run), peak device memory 1706 MiB
+  50688/60312 prefix jobs, 101,384,918,744 bifunctions, 15384s (6,590,319/s this run), peak device memory 1706 MiB
+  51456/60312 prefix jobs, 101,592,104,848 bifunctions, 15418s (6,589,049/s this run), peak device memory 1706 MiB
+  52480/60312 prefix jobs, 101,774,822,247 bifunctions, 15448s (6,588,009/s this run), peak device memory 1706 MiB
+  55808/60312 prefix jobs, 101,969,080,754 bifunctions, 15480s (6,587,331/s this run), peak device memory 1706 MiB
+  60312/60312 prefix jobs, 102,021,748,324 bifunctions, 15488s (6,587,123/s this run), peak device memory 1706 MiB
+  L6_12: 102,021,748,324 F; commuting 17.57%, m≠n 69.56%, polar 66.58%; violators cl=0 semi=0 cut=0; orbit-lax 4,527,633,848; tripwires 0; t=15488.1s
+
+=== job 17: census L6_11 (14:40:33) ===
+  census L6_11: n=6, |Mon|=519, height 4, ≈1.97e+11 ± 5.3e+10 bifunctions (Knuth estimate), 56258 prefix jobs at depth 2, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4); mem 1024 MiB
+  256/56258 prefix jobs, 10,333,646,078 bifunctions, 1191s (8,677,632/s this run), peak device memory 1706 MiB, ≈6.0 h left at this rate
+  512/56258 prefix jobs, 11,041,648,280 bifunctions, 1276s (8,652,490/s this run), peak device memory 1706 MiB, ≈6.0 h left at this rate
+  768/56258 prefix jobs, 20,349,047,376 bifunctions, 2617s (7,775,529/s this run), peak device memory 1706 MiB, ≈6.3 h left at this rate
+  1024/56258 prefix jobs, 21,020,000,055 bifunctions, 2718s (7,734,896/s this run), peak device memory 1706 MiB, ≈6.3 h left at this rate
+  1280/56258 prefix jobs, 28,928,120,092 bifunctions, 3863s (7,487,758/s this run), peak device memory 1706 MiB, ≈6.2 h left at this rate
+  1536/56258 prefix jobs, 30,203,382,736 bifunctions, 4050s (7,457,009/s this run), peak device memory 1706 MiB, ≈6.2 h left at this rate
+  1792/56258 prefix jobs, 35,165,228,791 bifunctions, 4775s (7,363,822/s this run), peak device memory 1706 MiB, ≈6.1 h left at this rate
+  2048/56258 prefix jobs, 37,984,840,161 bifunctions, 5185s (7,325,591/s this run), peak device memory 1706 MiB, ≈6.0 h left at this rate
+  2304/56258 prefix jobs, 40,681,388,093 bifunctions, 5582s (7,288,068/s this run), peak device memory 1706 MiB, ≈6.0 h left at this rate
+  2560/56258 prefix jobs, 41,980,962,208 bifunctions, 5744s (7,308,130/s this run), peak device memory 1706 MiB, ≈5.9 h left at this rate
+  2816/56258 prefix jobs, 43,440,449,591 bifunctions, 5955s (7,294,846/s this run), peak device memory 1706 MiB, ≈5.9 h left at this rate
+  3072/56258 prefix jobs, 50,164,490,290 bifunctions, 7006s (7,160,156/s this run), peak device memory 1706 MiB, ≈5.7 h left at this rate
+  3328/56258 prefix jobs, 53,003,468,921 bifunctions, 7452s (7,112,554/s this run), peak device memory 1706 MiB, ≈5.6 h left at this rate
+  3584/56258 prefix jobs, 57,484,947,206 bifunctions, 8165s (7,040,193/s this run), peak device memory 1706 MiB, ≈5.5 h left at this rate
+  3840/56258 prefix jobs, 60,265,692,608 bifunctions, 8599s (7,008,462/s this run), peak device memory 1706 MiB, ≈5.4 h left at this rate
+  4096/56258 prefix jobs, 62,363,428,920 bifunctions, 8933s (6,981,475/s this run), peak device memory 1706 MiB, ≈5.4 h left at this rate
+  4352/56258 prefix jobs, 63,556,252,547 bifunctions, 9081s (6,999,102/s this run), peak device memory 1706 MiB, ≈5.3 h left at this rate
+  4608/56258 prefix jobs, 65,982,780,105 bifunctions, 9452s (6,980,676/s this run), peak device memory 1706 MiB, ≈5.2 h left at this rate
+  4864/56258 prefix jobs, 68,434,100,059 bifunctions, 9845s (6,951,429/s this run), peak device memory 1706 MiB, ≈5.1 h left at this rate
+  5120/56258 prefix jobs, 70,859,500,344 bifunctions, 10225s (6,930,189/s this run), peak device memory 1706 MiB, ≈5.1 h left at this rate
+  5376/56258 prefix jobs, 72,211,497,853 bifunctions, 10441s (6,916,018/s this run), peak device memory 1706 MiB, ≈5.0 h left at this rate
+  5632/56258 prefix jobs, 73,170,779,219 bifunctions, 10557s (6,930,979/s this run), peak device memory 1706 MiB, ≈5.0 h left at this rate
+  5888/56258 prefix jobs, 74,880,168,592 bifunctions, 10822s (6,919,222/s this run), peak device memory 1706 MiB, ≈4.9 h left at this rate
+  6144/56258 prefix jobs, 75,584,117,343 bifunctions, 10936s (6,911,618/s this run), peak device memory 1706 MiB, ≈4.9 h left at this rate
+  6400/56258 prefix jobs, 77,519,570,005 bifunctions, 11240s (6,896,536/s this run), peak device memory 1706 MiB, ≈4.8 h left at this rate
+  6656/56258 prefix jobs, 78,123,621,888 bifunctions, 11321s (6,900,909/s this run), peak device memory 1706 MiB, ≈4.8 h left at this rate
+  6912/56258 prefix jobs, 78,782,792,255 bifunctions, 11409s (6,905,047/s this run), peak device memory 1706 MiB, ≈4.8 h left at this rate
+  7168/56258 prefix jobs, 80,103,452,104 bifunctions, 11601s (6,904,581/s this run), peak device memory 1706 MiB, ≈4.7 h left at this rate
+  7424/56258 prefix jobs, 80,695,570,612 bifunctions, 11674s (6,912,365/s this run), peak device memory 1706 MiB, ≈4.7 h left at this rate
+  7936/56258 prefix jobs, 84,671,439,134 bifunctions, 12303s (6,882,219/s this run), peak device memory 1706 MiB, ≈4.5 h left at this rate
+  8192/56258 prefix jobs, 85,355,533,293 bifunctions, 12418s (6,873,468/s this run), peak device memory 1706 MiB, ≈4.5 h left at this rate
+  8448/56258 prefix jobs, 89,008,298,634 bifunctions, 13014s (6,839,673/s this run), peak device memory 1706 MiB, ≈4.4 h left at this rate
+  8704/56258 prefix jobs, 91,114,973,579 bifunctions, 13352s (6,824,046/s this run), peak device memory 1706 MiB, ≈4.3 h left at this rate
+  8960/56258 prefix jobs, 91,899,412,906 bifunctions, 13481s (6,816,982/s this run), peak device memory 1706 MiB, ≈4.3 h left at this rate
+  9216/56258 prefix jobs, 92,617,407,276 bifunctions, 13568s (6,826,038/s this run), peak device memory 1706 MiB, ≈4.3 h left at this rate
+  9472/56258 prefix jobs, 95,237,626,283 bifunctions, 13997s (6,804,237/s this run), peak device memory 1706 MiB, ≈4.2 h left at this rate
+  9728/56258 prefix jobs, 96,467,346,790 bifunctions, 14196s (6,795,410/s this run), peak device memory 1706 MiB, ≈4.1 h left at this rate
+  9984/56258 prefix jobs, 97,612,188,145 bifunctions, 14382s (6,786,908/s this run), peak device memory 1706 MiB, ≈4.1 h left at this rate
+  10240/56258 prefix jobs, 98,210,560,346 bifunctions, 14456s (6,793,807/s this run), peak device memory 1706 MiB, ≈4.1 h left at this rate
+  10496/56258 prefix jobs, 99,124,850,674 bifunctions, 14590s (6,794,129/s this run), peak device memory 1706 MiB, ≈4.0 h left at this rate
+  10752/56258 prefix jobs, 99,522,738,505 bifunctions, 14642s (6,797,070/s this run), peak device memory 1706 MiB, ≈4.0 h left at this rate
+  11264/56258 prefix jobs, 100,724,346,164 bifunctions, 14828s (6,792,998/s this run), peak device memory 1706 MiB, ≈3.9 h left at this rate
+  11520/56258 prefix jobs, 101,477,157,243 bifunctions, 14948s (6,788,868/s this run), peak device memory 1706 MiB, ≈3.9 h left at this rate
+  11776/56258 prefix jobs, 101,858,255,314 bifunctions, 15006s (6,788,038/s this run), peak device memory 1706 MiB, ≈3.9 h left at this rate
+  12032/56258 prefix jobs, 102,245,739,584 bifunctions, 15058s (6,789,939/s this run), peak device memory 1706 MiB, ≈3.9 h left at this rate
+  12288/56258 prefix jobs, 102,561,497,411 bifunctions, 15106s (6,789,558/s this run), peak device memory 1706 MiB, ≈3.9 h left at this rate
+  12800/56258 prefix jobs, 103,180,513,366 bifunctions, 15197s (6,789,431/s this run), peak device memory 1706 MiB, ≈3.9 h left at this rate
+  13056/56258 prefix jobs, 103,541,152,883 bifunctions, 15256s (6,786,942/s this run), peak device memory 1706 MiB, ≈3.8 h left at this rate
+  13568/56258 prefix jobs, 104,006,710,828 bifunctions, 15322s (6,788,080/s this run), peak device memory 1706 MiB, ≈3.8 h left at this rate
+  14080/56258 prefix jobs, 104,279,282,632 bifunctions, 15358s (6,790,037/s this run), peak device memory 1706 MiB, ≈3.8 h left at this rate
+  14848/56258 prefix jobs, 107,021,283,045 bifunctions, 15793s (6,776,416/s this run), peak device memory 1706 MiB, ≈3.7 h left at this rate
+  15104/56258 prefix jobs, 109,111,063,683 bifunctions, 16133s (6,763,027/s this run), peak device memory 1706 MiB, ≈3.6 h left at this rate
+  15360/56258 prefix jobs, 110,142,560,194 bifunctions, 16301s (6,756,760/s this run), peak device memory 1706 MiB, ≈3.6 h left at this rate
+  15616/56258 prefix jobs, 111,112,213,134 bifunctions, 16458s (6,751,160/s this run), peak device memory 1706 MiB, ≈3.5 h left at this rate
+  15872/56258 prefix jobs, 111,557,974,523 bifunctions, 16513s (6,755,902/s this run), peak device memory 1706 MiB, ≈3.5 h left at this rate
+  16128/56258 prefix jobs, 113,297,886,303 bifunctions, 16796s (6,745,380/s this run), peak device memory 1706 MiB, ≈3.5 h left at this rate
+  16384/56258 prefix jobs, 114,449,106,176 bifunctions, 16982s (6,739,445/s this run), peak device memory 1706 MiB, ≈3.4 h left at this rate
+  16640/56258 prefix jobs, 114,929,412,145 bifunctions, 17049s (6,741,104/s this run), peak device memory 1706 MiB, ≈3.4 h left at this rate
+  16896/56258 prefix jobs, 115,486,844,527 bifunctions, 17129s (6,742,315/s this run), peak device memory 1706 MiB, ≈3.4 h left at this rate
+  17152/56258 prefix jobs, 115,798,334,005 bifunctions, 17172s (6,743,591/s this run), peak device memory 1706 MiB, ≈3.4 h left at this rate
+  17664/56258 prefix jobs, 117,419,906,749 bifunctions, 17439s (6,733,096/s this run), peak device memory 1706 MiB, ≈3.3 h left at this rate
+  17920/56258 prefix jobs, 118,712,489,365 bifunctions, 17660s (6,721,998/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  18176/56258 prefix jobs, 119,639,537,546 bifunctions, 17816s (6,715,347/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  18432/56258 prefix jobs, 120,056,361,400 bifunctions, 17880s (6,714,726/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  18688/56258 prefix jobs, 120,993,723,652 bifunctions, 18035s (6,708,900/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  18944/56258 prefix jobs, 121,638,797,272 bifunctions, 18146s (6,703,231/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  19200/56258 prefix jobs, 122,142,837,662 bifunctions, 18233s (6,699,176/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  19456/56258 prefix jobs, 122,559,404,213 bifunctions, 18289s (6,701,231/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  19712/56258 prefix jobs, 122,857,793,608 bifunctions, 18332s (6,701,702/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  20224/56258 prefix jobs, 123,417,823,813 bifunctions, 18421s (6,699,668/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  20480/56258 prefix jobs, 123,774,848,054 bifunctions, 18479s (6,697,985/s this run), peak device memory 1706 MiB, ≈3.0 h left at this rate
+  20736/56258 prefix jobs, 124,006,690,646 bifunctions, 18511s (6,698,923/s this run), peak device memory 1706 MiB, ≈3.0 h left at this rate
+  21248/56258 prefix jobs, 124,247,885,749 bifunctions, 18546s (6,699,523/s this run), peak device memory 1706 MiB, ≈3.0 h left at this rate
+  22272/56258 prefix jobs, 124,876,273,212 bifunctions, 18645s (6,697,640/s this run), peak device memory 1706 MiB, ≈3.0 h left at this rate
+  22528/56258 prefix jobs, 125,263,240,233 bifunctions, 18708s (6,695,618/s this run), peak device memory 1706 MiB, ≈3.0 h left at this rate
+  23040/56258 prefix jobs, 125,630,653,687 bifunctions, 18760s (6,696,573/s this run), peak device memory 1706 MiB, ≈3.0 h left at this rate
+  23552/56258 prefix jobs, 126,022,868,558 bifunctions, 18826s (6,694,260/s this run), peak device memory 1706 MiB, ≈3.0 h left at this rate
+  23808/56258 prefix jobs, 126,293,719,699 bifunctions, 18869s (6,693,256/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  24320/56258 prefix jobs, 126,505,380,323 bifunctions, 18899s (6,693,728/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  24832/56258 prefix jobs, 126,785,682,870 bifunctions, 18944s (6,692,676/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  26112/56258 prefix jobs, 127,135,163,470 bifunctions, 18997s (6,692,414/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  26368/56258 prefix jobs, 127,380,817,864 bifunctions, 19037s (6,691,330/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  26880/56258 prefix jobs, 127,663,357,459 bifunctions, 19077s (6,692,051/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  27648/56258 prefix jobs, 127,874,310,241 bifunctions, 19107s (6,692,477/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  28928/56258 prefix jobs, 128,072,182,168 bifunctions, 19137s (6,692,240/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  30720/56258 prefix jobs, 129,165,679,822 bifunctions, 19310s (6,688,931/s this run), peak device memory 1706 MiB, ≈2.8 h left at this rate
+  30976/56258 prefix jobs, 129,974,652,747 bifunctions, 19443s (6,684,833/s this run), peak device memory 1706 MiB, ≈2.8 h left at this rate
+  31232/56258 prefix jobs, 130,922,784,336 bifunctions, 19600s (6,679,845/s this run), peak device memory 1706 MiB, ≈2.8 h left at this rate
+  31488/56258 prefix jobs, 131,769,433,182 bifunctions, 19736s (6,676,661/s this run), peak device memory 1706 MiB, ≈2.7 h left at this rate
+  31744/56258 prefix jobs, 132,023,279,722 bifunctions, 19768s (6,678,773/s this run), peak device memory 1706 MiB, ≈2.7 h left at this rate
+  32000/56258 prefix jobs, 133,019,548,746 bifunctions, 19931s (6,673,872/s this run), peak device memory 1706 MiB, ≈2.7 h left at this rate
+  32256/56258 prefix jobs, 133,725,753,900 bifunctions, 20045s (6,671,147/s this run), peak device memory 1706 MiB, ≈2.6 h left at this rate
+  32768/56258 prefix jobs, 134,312,876,989 bifunctions, 20128s (6,672,975/s this run), peak device memory 1706 MiB, ≈2.6 h left at this rate
+  33280/56258 prefix jobs, 134,925,460,062 bifunctions, 20221s (6,672,457/s this run), peak device memory 1706 MiB, ≈2.6 h left at this rate
+  33536/56258 prefix jobs, 135,300,494,744 bifunctions, 20282s (6,670,976/s this run), peak device memory 1706 MiB, ≈2.6 h left at this rate
+  34048/56258 prefix jobs, 135,670,937,684 bifunctions, 20334s (6,672,069/s this run), peak device memory 1706 MiB, ≈2.6 h left at this rate
+  34816/56258 prefix jobs, 136,160,175,487 bifunctions, 20412s (6,670,603/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  35072/56258 prefix jobs, 136,757,027,669 bifunctions, 20514s (6,666,645/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  35328/56258 prefix jobs, 137,257,000,086 bifunctions, 20598s (6,663,559/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  35584/56258 prefix jobs, 137,490,644,299 bifunctions, 20633s (6,663,599/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  35840/56258 prefix jobs, 137,959,246,549 bifunctions, 20713s (6,660,460/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  36096/56258 prefix jobs, 138,295,089,440 bifunctions, 20769s (6,658,616/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  36608/56258 prefix jobs, 138,618,377,325 bifunctions, 20814s (6,659,816/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  36864/56258 prefix jobs, 138,824,361,154 bifunctions, 20847s (6,659,082/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  37120/56258 prefix jobs, 139,024,609,712 bifunctions, 20880s (6,658,152/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  37888/56258 prefix jobs, 139,259,295,031 bifunctions, 20914s (6,658,744/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  38400/56258 prefix jobs, 139,491,799,723 bifunctions, 20953s (6,657,305/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  39168/56258 prefix jobs, 139,718,057,578 bifunctions, 20988s (6,657,027/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  41216/56258 prefix jobs, 139,930,791,562 bifunctions, 21020s (6,657,159/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  41984/56258 prefix jobs, 140,136,656,767 bifunctions, 21053s (6,656,243/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  43008/56258 prefix jobs, 140,337,357,707 bifunctions, 21084s (6,656,258/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  45312/56258 prefix jobs, 140,532,348,212 bifunctions, 21114s (6,655,893/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  46848/56258 prefix jobs, 140,722,965,471 bifunctions, 21145s (6,655,236/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  49920/56258 prefix jobs, 141,013,495,234 bifunctions, 21194s (6,653,458/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  50432/56258 prefix jobs, 141,211,919,040 bifunctions, 21227s (6,652,545/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  51712/56258 prefix jobs, 141,413,863,052 bifunctions, 21259s (6,651,993/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  56258/56258 prefix jobs, 141,552,592,301 bifunctions, 21281s (6,651,537/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  L6_11: 141,552,592,301 F; commuting 18.96%, m≠n 64.80%, polar 62.18%; violators cl=0 semi=0 cut=0; orbit-lax 11,391,095,435; tripwires 0; t=21281.2s
+
+=== job 18: mucan B3 (20:35:15) ===
+  mucan B3: n=8, score lag (2 levels), box none, 32768 chains, adapt 1000, sweeps 3000 (burn 200, thin 10), rho 0.25, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4)
+  sweep 873/3000, 60s, levels visited now [48, 32720]
+  sweep 2669/3000, 120s, levels visited now [112, 32656]
+  sweep 3000/3000, 131s, levels visited now [122, 32646]
+  B3: score lag, 9,175,040 recorded F; P_uniform(level) TMMC [1.84e-06, 1], halves [2.13e-06, 1] / [1.56e-06, 1], from visits [4.96e-09, 1]; visits [21048, 9153992]; acceptance 0.9994; violators 0; tripwires 0; t=131.2s
+
+=== job 19: mucan C4xC4 (20:37:26) ===
+  mucan C4xC4: n=16, score lag (2 levels), box none, 32768 chains, adapt 1000, sweeps 3000 (burn 200, thin 10), rho 0.25, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4)
+  adapt 636/1000, 60s, levels visited now [27, 32741]
+  sweep 246/3000, 120s, levels visited now [28, 32740]
+  sweep 829/3000, 180s, levels visited now [31, 32737]
+  sweep 1410/3000, 240s, levels visited now [33, 32735]
+  sweep 1993/3000, 301s, levels visited now [34, 32734]
+  sweep 2575/3000, 361s, levels visited now [36, 32732]
+  sweep 3000/3000, 405s, levels visited now [37, 32731]
+  C4xC4: score lag, 9,175,040 recorded F; P_uniform(level) TMMC [1.39e-07, 1], halves [1.87e-07, 1] / [9.27e-08, 1], from visits [1.73e-09, 1]; visits [9214, 9165826]; acceptance 0.9997; violators 0; tripwires 0; t=404.7s
+
+=== job 20: mucan B4 (20:44:11) ===
+  mucan B4: n=16, score lag (2 levels), box none, 32768 chains, adapt 1000, sweeps 3000 (burn 200, thin 10), rho 0.25, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4)
+  adapt 458/1000, 60s, levels visited now [0, 32768]
+  adapt 914/1000, 120s, levels visited now [0, 32768]
+  sweep 365/3000, 180s, levels visited now [0, 32768]
+  sweep 807/3000, 240s, levels visited now [0, 32768]
+  sweep 1250/3000, 301s, levels visited now [0, 32768]
+  sweep 1693/3000, 361s, levels visited now [0, 32768]
+  sweep 2135/3000, 421s, levels visited now [0, 32768]
+  sweep 2578/3000, 481s, levels visited now [0, 32768]
+  sweep 3000/3000, 538s, levels visited now [0, 32768]
+  B4: score lag, 9,175,040 recorded F; P_uniform(level) TMMC [—, 1], halves [—, 1] / [—, 1], from visits [0, 1]; visits [0, 9175040]; acceptance 1.0; violators 0; tripwires 0; t=538.4s
+
+=== job 21: mucan Pi4 (20:53:09) ===
+  mucan Pi4: n=15, score lag (2 levels), box none, 32768 chains, adapt 1000, sweeps 3000 (burn 200, thin 10), rho 0.25, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4)
+  adapt 263/1000, 60s, levels visited now [0, 32768]
+  adapt 524/1000, 120s, levels visited now [0, 32768]
+  adapt 784/1000, 181s, levels visited now [0, 32768]
+  sweep 44/3000, 241s, levels visited now [0, 32768]
+  sweep 303/3000, 301s, levels visited now [0, 32768]
+  sweep 560/3000, 361s, levels visited now [0, 32768]
+  sweep 817/3000, 421s, levels visited now [0, 32768]
+  sweep 1073/3000, 482s, levels visited now [0, 32768]
+  sweep 1330/3000, 542s, levels visited now [0, 32768]
+  sweep 1588/3000, 602s, levels visited now [0, 32768]
+  sweep 1846/3000, 662s, levels visited now [0, 32768]
+  sweep 2104/3000, 722s, levels visited now [0, 32768]
+  sweep 2362/3000, 783s, levels visited now [0, 32768]
+  sweep 2620/3000, 843s, levels visited now [0, 32768]
+  sweep 2877/3000, 903s, levels visited now [0, 32768]
+  sweep 3000/3000, 932s, levels visited now [0, 32768]
+  Pi4: score lag, 9,175,040 recorded F; P_uniform(level) TMMC [—, 1], halves [—, 1] / [—, 1], from visits [0, 1]; visits [0, 9175040]; acceptance 1.0; violators 0; tripwires 0; t=931.9s
+
+=== job 22: mucan B4 (21:08:41) ===
+  mucan B4: n=16, score kappa (5 levels), box none, 32768 chains, adapt 1000, sweeps 3000 (burn 200, thin 10), rho 0.25, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4)
+  adapt 457/1000, 60s, levels visited now [0, 0, 1, 32767, 0]
+  adapt 913/1000, 120s, levels visited now [0, 0, 1, 32767, 0]
+  sweep 363/3000, 180s, levels visited now [0, 0, 1, 32767, 0]
+  sweep 806/3000, 241s, levels visited now [0, 0, 1, 32767, 0]
+  sweep 1247/3000, 301s, levels visited now [0, 0, 1, 32767, 0]
+  sweep 1688/3000, 361s, levels visited now [0, 0, 1, 32767, 0]
+  sweep 2130/3000, 421s, levels visited now [0, 0, 1, 32767, 0]
+  sweep 2572/3000, 481s, levels visited now [0, 0, 1, 32767, 0]
+  sweep 3000/3000, 540s, levels visited now [0, 0, 1, 32767, 0]
+  B4: score kappa, 9,175,040 recorded F; P_uniform(level) TMMC [—, —, —, 1, —], halves [—, —, —, 1, —] / [—, —, —, 1, —], from visits [0, 0, 2.95e-09, 1, 0]; visits [0, 0, 280, 9174760, 0]; acceptance 1.0; violators 0; tripwires 0; t=539.6s
+
+=== job 23: mucan E3 (21:17:41) ===
+  mucan E3: n=11, score kappa (5 levels), box none, 32768 chains, adapt 1000, sweeps 3000 (burn 200, thin 10), rho 0.25, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4)
+  sweep 26/3000, 60s, levels visited now [1, 4, 21, 32742, 0]
+  sweep 955/3000, 120s, levels visited now [3, 6, 24, 32735, 0]
+  sweep 1876/3000, 180s, levels visited now [7, 9, 24, 32728, 0]
+  sweep 2795/3000, 240s, levels visited now [9, 8, 24, 32727, 0]
+  sweep 3000/3000, 254s, levels visited now [9, 10, 23, 32726, 0]
+  E3: score kappa, 9,175,040 recorded F; P_uniform(level) TMMC [2.78e-12, 8.91e-10, 8.49e-07, 1, —], halves [1.03e-12, 6.95e-10, 8.07e-07, 1, —] / [3.38e-12, 1e-09, 8.91e-07, 1, —], from visits [3.49e-13, 1.67e-10, 2.73e-07, 1, 0]; visits [1682, 1971, 6711, 9164676, 0]; acceptance 0.9998; violators 0; tripwires 0; t=253.7s
+
+=== job 24: mucan B4 (21:21:55) ===
+  mucan B4: n=16, score rstages (16 levels), box none, 32768 chains, adapt 1000, sweeps 3000 (burn 200, thin 10), rho 0.25, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4)
+  adapt 470/1000, 60s, levels visited now [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26793, 5975, 0]
+  adapt 939/1000, 120s, levels visited now [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20587, 12181, 0]
+  sweep 401/3000, 180s, levels visited now [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20016, 12752, 0]
+  sweep 855/3000, 241s, levels visited now [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19892, 12876, 0]
+  sweep 1309/3000, 301s, levels visited now [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19949, 12819, 0]
+  sweep 1763/3000, 361s, levels visited now [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20016, 12752, 0]
+  sweep 2217/3000, 421s, levels visited now [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19766, 13002, 0]
+  sweep 2670/3000, 481s, levels visited now [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19934, 12834, 0]
+  sweep 3000/3000, 525s, levels visited now [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20058, 12710, 0]
+  B4: score rstages, 9,175,040 recorded F; P_uniform(level) TMMC [—, —, —, —, —, —, —, —, —, —, —, —, —, 0.875, 0.125, —], halves [—, —, —, —, —, —, —, —, —, —, —, —, —, 0.875, 0.125, —] / [—, —, —, —, —, —, —, —, —, —, —, —, —, 0.875, 0.125, —], from visits [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.875, 0.125, 0]; visits [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5599321, 3575719, 0]; acceptance 0.9692; violators 0; tripwires 0; t=525.2s
+
+=== job 25: mucan B4 (21:30:40) ===
+  mucan B4: n=16, score defects (18 levels), box none, 32768 chains, adapt 1000, sweeps 3000 (burn 200, thin 10), rho 0.25, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4)
+  adapt 468/1000, 60s, levels visited now [0, 0, 0, 0, 0, 0, 3, 16, 156, 639, 1592, 3610, 6484, 9065, 10311, 0, 0, 892]
+  adapt 937/1000, 120s, levels visited now [0, 0, 0, 0, 0, 3, 14, 268, 894, 1867, 2954, 4519, 5842, 6895, 7465, 0, 0, 2047]
+  sweep 387/3000, 180s, levels visited now [0, 0, 0, 0, 0, 4, 51, 479, 1198, 2135, 3223, 4511, 5649, 6407, 7010, 0, 0, 2101]
+  sweep 815/3000, 241s, levels visited now [0, 0, 0, 0, 0, 0, 54, 444, 1243, 2161, 3297, 4446, 5756, 6374, 6846, 0, 0, 2147]
+  sweep 1243/3000, 301s, levels visited now [0, 0, 0, 0, 0, 2, 59, 495, 1260, 2108, 3157, 4473, 5707, 6469, 6835, 0, 0, 2203]
+  sweep 1664/3000, 361s, levels visited now [0, 0, 0, 0, 1, 1, 61, 492, 1216, 2123, 3189, 4541, 5725, 6440, 6814, 0, 0, 2165]
+  sweep 2086/3000, 421s, levels visited now [0, 0, 0, 0, 0, 1, 49, 479, 1270, 2196, 3247, 4404, 5632, 6398, 6880, 0, 0, 2212]
+  sweep 2509/3000, 481s, levels visited now [0, 0, 0, 0, 0, 1, 57, 500, 1243, 2140, 3134, 4398, 5717, 6428, 6954, 0, 0, 2196]
+  sweep 2931/3000, 541s, levels visited now [0, 0, 0, 0, 0, 3, 46, 447, 1203, 2134, 3167, 4488, 5842, 6396, 6934, 0, 0, 2108]
+  sweep 3000/3000, 551s, levels visited now [0, 0, 0, 0, 1, 1, 60, 480, 1229, 2009, 3242, 4525, 5708, 6514, 6779, 0, 0, 2220]
+  B4: score defects, 9,175,040 recorded F; P_uniform(level) TMMC [—, —, —, 5.06e-12, 3.3e-10, 1.38e-08, 4.65e-07, 1.13e-05, 0.000185, 0.00205, 0.0152, 0.072, 0.209, 0.339, 0.237, —, —, 0.125], halves [—, —, —, 9.99e-12, 3.57e-10, 1.5e-08, 4.68e-07, 1.13e-05, 0.000184, 0.00204, 0.0152, 0.072, 0.209, 0.339, 0.237, —, —, 0.125] / [—, —, —, —, 2.99e-10, 1.27e-08, 4.62e-07, 1.14e-05, 0.000186, 0.00206, 0.0152, 0.072, 0.208, 0.339, 0.238, —, —, 0.126], from visits [0, 0, 0, 1.6e-11, 3.33e-10, 1.38e-08, 4.67e-07, 1.14e-05, 0.000186, 0.00205, 0.0152, 0.072, 0.209, 0.339, 0.237, 0, 0, 0.125]; visits [0, 0, 0, 1, 11, 407, 14635, 134424, 344166, 596865, 898021, 1258832, 1581692, 1807226, 1922821, 0, 0, 615939]; acceptance 0.9319; violators 0; tripwires 0; t=551.3s
+
+=== job 26: mcmc B3 (21:39:52) ===
+  mcmc B3: n=8, height 3, 2 color classes, box rowgap, 32768 chains, sweeps 4000 (burn 1000, thin 10), resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4)
+  sweep 4000/4000, 59s
+  B3: 9,830,400 F; commuting 25.25%, m≠n 68.12%, polar 67.92%; violators cl=0 semi=0 cut=0; orbit-lax 3,753; tripwires 0; t=58.6s; mixing |z|max=2.18; box rowgap (rates conditional on it)
+
+=== job 27: mcmc B4 (21:40:50) ===
+  mcmc B4: n=16, height 4, 2 color classes, box rowgap, 32768 chains, sweeps 4000 (burn 1000, thin 10), resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4)
+  sweep 766/4000, 61s
+  sweep 1500/4000, 122s
+  sweep 2230/4000, 183s
+  sweep 2950/4000, 243s
+  sweep 3680/4000, 303s
+  sweep 4000/4000, 330s
+  B4: 9,830,400 F; commuting 12.50%, m≠n 87.31%, polar 87.31%; violators cl=0 semi=0 cut=0; orbit-lax 0; tripwires 0; t=330.2s; mixing |z|max=1.99; box rowgap (rates conditional on it)
+
+=== job 28: census L6_4 (21:46:21) ===
+  census L6_4: n=6, |Mon|=650, height 3, ≈6.08e+11 ± 4.6e+10 bifunctions (Knuth estimate), 57961 prefix jobs at depth 2, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4); mem 1024 MiB
+  256/57961 prefix jobs, 49,570,262,813 bifunctions, 5928s (8,362,668/s this run), peak device memory 1706 MiB, ≈18.5 h left at this rate
+  512/57961 prefix jobs, 72,199,748,085 bifunctions, 8723s (8,277,013/s this run), peak device memory 1706 MiB, ≈18.0 h left at this rate
+  768/57961 prefix jobs, 101,603,567,597 bifunctions, 13006s (7,811,837/s this run), peak device memory 1706 MiB, ≈18.0 h left at this rate
+  1024/57961 prefix jobs, 129,944,543,796 bifunctions, 17281s (7,519,519/s this run), peak device memory 1706 MiB, ≈17.7 h left at this rate
+  1280/57961 prefix jobs, 138,709,072,409 bifunctions, 18677s (7,426,670/s this run), peak device memory 1706 MiB, ≈17.6 h left at this rate
+  1536/57961 prefix jobs, 180,312,174,579 bifunctions, 24898s (7,242,055/s this run), peak device memory 1706 MiB, ≈16.4 h left at this rate
+  1792/57961 prefix jobs, 197,071,205,758 bifunctions, 27501s (7,166,007/s this run), peak device memory 1706 MiB, ≈15.9 h left at this rate
+  2048/57961 prefix jobs, 223,941,169,370 bifunctions, 31536s (7,101,186/s this run), peak device memory 1706 MiB, ≈15.0 h left at this rate
+  2304/57961 prefix jobs, 248,831,284,106 bifunctions, 35331s (7,042,905/s this run), peak device memory 1706 MiB, ≈14.2 h left at this rate
+  2560/57961 prefix jobs, 257,798,659,676 bifunctions, 36754s (7,014,180/s this run), peak device memory 1706 MiB, ≈13.9 h left at this rate
+  2816/57961 prefix jobs, 270,220,323,302 bifunctions, 38680s (6,986,030/s this run), peak device memory 1706 MiB, ≈13.4 h left at this rate
+  3072/57961 prefix jobs, 277,170,274,475 bifunctions, 39646s (6,991,151/s this run), peak device memory 1706 MiB, ≈13.1 h left at this rate
+  3328/57961 prefix jobs, 288,261,541,403 bifunctions, 41052s (7,021,860/s this run), peak device memory 1706 MiB, ≈12.6 h left at this rate
+  3584/57961 prefix jobs, 299,443,022,015 bifunctions, 42735s (7,006,919/s this run), peak device memory 1706 MiB, ≈12.2 h left at this rate
+  3840/57961 prefix jobs, 318,479,605,051 bifunctions, 45713s (6,966,897/s this run), peak device memory 1706 MiB, ≈11.5 h left at this rate
+  4096/57961 prefix jobs, 327,289,956,948 bifunctions, 47124s (6,945,269/s this run), peak device memory 1706 MiB, ≈11.2 h left at this rate
+  4352/57961 prefix jobs, 345,938,036,084 bifunctions, 50048s (6,912,136/s this run), peak device memory 1706 MiB, ≈10.5 h left at this rate
+  4608/57961 prefix jobs, 351,947,197,564 bifunctions, 51023s (6,897,766/s this run), peak device memory 1706 MiB, ≈10.3 h left at this rate
+  4864/57961 prefix jobs, 360,014,043,743 bifunctions, 52077s (6,913,124/s this run), peak device memory 1706 MiB, ≈10.0 h left at this rate
+  5120/57961 prefix jobs, 372,238,918,216 bifunctions, 53957s (6,898,757/s this run), peak device memory 1706 MiB, ≈9.5 h left at this rate
+  5376/57961 prefix jobs, 390,372,140,688 bifunctions, 56813s (6,871,151/s this run), peak device memory 1706 MiB, ≈8.8 h left at this rate
+  5632/57961 prefix jobs, 400,399,263,558 bifunctions, 58409s (6,855,043/s this run), peak device memory 1706 MiB, ≈8.4 h left at this rate
+  5888/57961 prefix jobs, 418,149,912,905 bifunctions, 61202s (6,832,299/s this run), peak device memory 1706 MiB, ≈7.7 h left at this rate
+  6144/57961 prefix jobs, 423,888,909,257 bifunctions, 62095s (6,826,405/s this run), peak device memory 1706 MiB, ≈7.5 h left at this rate
+  6400/57961 prefix jobs, 431,284,450,429 bifunctions, 63051s (6,840,221/s this run), peak device memory 1706 MiB, ≈7.2 h left at this rate
+  6656/57961 prefix jobs, 439,205,201,647 bifunctions, 64236s (6,837,403/s this run), peak device memory 1706 MiB, ≈6.9 h left at this rate
+  6912/57961 prefix jobs, 448,608,517,745 bifunctions, 65684s (6,829,802/s this run), peak device memory 1706 MiB, ≈6.5 h left at this rate
+  7168/57961 prefix jobs, 453,532,139,354 bifunctions, 66364s (6,834,011/s this run), peak device memory 1706 MiB, ≈6.3 h left at this rate
+  7424/57961 prefix jobs, 456,920,447,770 bifunctions, 66822s (6,837,904/s this run), peak device memory 1706 MiB, ≈6.1 h left at this rate
+  7680/57961 prefix jobs, 459,130,490,550 bifunctions, 67183s (6,834,019/s this run), peak device memory 1706 MiB, ≈6.0 h left at this rate
+  7936/57961 prefix jobs, 460,988,275,663 bifunctions, 67442s (6,835,360/s this run), peak device memory 1706 MiB, ≈6.0 h left at this rate
+  8192/57961 prefix jobs, 462,361,949,192 bifunctions, 67632s (6,836,415/s this run), peak device memory 1706 MiB, ≈5.9 h left at this rate
+  8448/57961 prefix jobs, 466,502,422,488 bifunctions, 68247s (6,835,547/s this run), peak device memory 1706 MiB, ≈5.7 h left at this rate
+  8704/57961 prefix jobs, 470,722,750,691 bifunctions, 68907s (6,831,325/s this run), peak device memory 1706 MiB, ≈5.6 h left at this rate
+  8960/57961 prefix jobs, 476,998,609,355 bifunctions, 69870s (6,826,928/s this run), peak device memory 1706 MiB, ≈5.3 h left at this rate
+  9216/57961 prefix jobs, 479,498,163,072 bifunctions, 70215s (6,829,037/s this run), peak device memory 1706 MiB, ≈5.2 h left at this rate
+  9472/57961 prefix jobs, 482,772,551,319 bifunctions, 70725s (6,826,044/s this run), peak device memory 1706 MiB, ≈5.1 h left at this rate
+  9728/57961 prefix jobs, 485,763,159,261 bifunctions, 71210s (6,821,517/s this run), peak device memory 1706 MiB, ≈5.0 h left at this rate
+  9984/57961 prefix jobs, 488,134,240,351 bifunctions, 71594s (6,818,129/s this run), peak device memory 1706 MiB, ≈4.9 h left at this rate
+  10240/57961 prefix jobs, 489,903,586,966 bifunctions, 71845s (6,818,889/s this run), peak device memory 1706 MiB, ≈4.8 h left at this rate
+  10496/57961 prefix jobs, 492,921,889,297 bifunctions, 72337s (6,814,290/s this run), peak device memory 1706 MiB, ≈4.7 h left at this rate
+  10752/57961 prefix jobs, 494,295,280,284 bifunctions, 72522s (6,815,814/s this run), peak device memory 1706 MiB, ≈4.6 h left at this rate
+  11008/57961 prefix jobs, 496,552,760,620 bifunctions, 72876s (6,813,706/s this run), peak device memory 1706 MiB, ≈4.5 h left at this rate
+  11264/57961 prefix jobs, 497,600,088,102 bifunctions, 73021s (6,814,437/s this run), peak device memory 1706 MiB, ≈4.5 h left at this rate
+  11520/57961 prefix jobs, 498,016,270,982 bifunctions, 73081s (6,814,611/s this run), peak device memory 1706 MiB, ≈4.5 h left at this rate
+  11776/57961 prefix jobs, 503,522,919,212 bifunctions, 73914s (6,812,291/s this run), peak device memory 1706 MiB, ≈4.3 h left at this rate
+  12032/57961 prefix jobs, 508,015,612,676 bifunctions, 74613s (6,808,672/s this run), peak device memory 1706 MiB, ≈4.1 h left at this rate
+  12288/57961 prefix jobs, 512,564,288,543 bifunctions, 75324s (6,804,772/s this run), peak device memory 1706 MiB, ≈3.9 h left at this rate
+  12544/57961 prefix jobs, 514,857,853,091 bifunctions, 75630s (6,807,562/s this run), peak device memory 1706 MiB, ≈3.8 h left at this rate
+  12800/57961 prefix jobs, 518,260,152,599 bifunctions, 76175s (6,803,520/s this run), peak device memory 1706 MiB, ≈3.7 h left at this rate
+  13056/57961 prefix jobs, 519,829,950,401 bifunctions, 76403s (6,803,800/s this run), peak device memory 1706 MiB, ≈3.6 h left at this rate
+  13312/57961 prefix jobs, 523,221,640,973 bifunctions, 76942s (6,800,220/s this run), peak device memory 1706 MiB, ≈3.5 h left at this rate
+  13568/57961 prefix jobs, 526,101,272,039 bifunctions, 77413s (6,796,068/s this run), peak device memory 1706 MiB, ≈3.3 h left at this rate
+  13824/57961 prefix jobs, 528,469,781,946 bifunctions, 77791s (6,793,443/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  14080/57961 prefix jobs, 530,105,806,817 bifunctions, 78025s (6,794,038/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  14336/57961 prefix jobs, 531,942,748,291 bifunctions, 78313s (6,792,554/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  14592/57961 prefix jobs, 532,864,778,145 bifunctions, 78439s (6,793,350/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  14848/57961 prefix jobs, 533,225,466,889 bifunctions, 78491s (6,793,463/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  15104/57961 prefix jobs, 534,557,931,429 bifunctions, 78702s (6,792,168/s this run), peak device memory 1706 MiB, ≈3.0 h left at this rate
+  15360/57961 prefix jobs, 535,330,848,129 bifunctions, 78813s (6,792,420/s this run), peak device memory 1706 MiB, ≈3.0 h left at this rate
+  15616/57961 prefix jobs, 536,136,580,621 bifunctions, 78941s (6,791,569/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  15872/57961 prefix jobs, 536,930,990,609 bifunctions, 79070s (6,790,535/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  16128/57961 prefix jobs, 537,383,260,734 bifunctions, 79138s (6,790,494/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  16384/57961 prefix jobs, 538,016,455,046 bifunctions, 79236s (6,790,015/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  16896/57961 prefix jobs, 538,666,593,498 bifunctions, 79337s (6,789,575/s this run), peak device memory 1706 MiB, ≈2.8 h left at this rate
+  17152/57961 prefix jobs, 539,196,115,904 bifunctions, 79408s (6,790,173/s this run), peak device memory 1706 MiB, ≈2.8 h left at this rate
+  17408/57961 prefix jobs, 539,513,949,043 bifunctions, 79452s (6,790,414/s this run), peak device memory 1706 MiB, ≈2.8 h left at this rate
+  17664/57961 prefix jobs, 539,716,926,075 bifunctions, 79483s (6,790,384/s this run), peak device memory 1706 MiB, ≈2.8 h left at this rate
+  18432/57961 prefix jobs, 541,238,359,394 bifunctions, 79721s (6,789,139/s this run), peak device memory 1706 MiB, ≈2.7 h left at this rate
+  18688/57961 prefix jobs, 544,091,003,823 bifunctions, 80191s (6,784,927/s this run), peak device memory 1706 MiB, ≈2.6 h left at this rate
+  18944/57961 prefix jobs, 547,639,184,969 bifunctions, 80773s (6,779,983/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  19200/57961 prefix jobs, 549,051,685,912 bifunctions, 80967s (6,781,182/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  19456/57961 prefix jobs, 551,227,394,602 bifunctions, 81306s (6,779,700/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  19712/57961 prefix jobs, 552,299,688,355 bifunctions, 81457s (6,780,285/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  19968/57961 prefix jobs, 552,846,464,145 bifunctions, 81541s (6,779,977/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  20224/57961 prefix jobs, 553,692,158,726 bifunctions, 81683s (6,778,532/s this run), peak device memory 1706 MiB, ≈2.2 h left at this rate
+  20480/57961 prefix jobs, 554,111,430,775 bifunctions, 81747s (6,778,345/s this run), peak device memory 1706 MiB, ≈2.2 h left at this rate
+  20736/57961 prefix jobs, 554,547,365,484 bifunctions, 81815s (6,778,064/s this run), peak device memory 1706 MiB, ≈2.2 h left at this rate
+  20992/57961 prefix jobs, 555,022,541,318 bifunctions, 81893s (6,777,376/s this run), peak device memory 1706 MiB, ≈2.2 h left at this rate
+  21248/57961 prefix jobs, 555,417,489,246 bifunctions, 81954s (6,777,190/s this run), peak device memory 1706 MiB, ≈2.2 h left at this rate
+  21504/57961 prefix jobs, 555,752,501,748 bifunctions, 82006s (6,776,982/s this run), peak device memory 1706 MiB, ≈2.1 h left at this rate
+  22016/57961 prefix jobs, 556,066,004,227 bifunctions, 82057s (6,776,583/s this run), peak device memory 1706 MiB, ≈2.1 h left at this rate
+  22784/57961 prefix jobs, 559,941,614,237 bifunctions, 82667s (6,773,456/s this run), peak device memory 1706 MiB, ≈2.0 h left at this rate
+  23040/57961 prefix jobs, 563,451,115,969 bifunctions, 83226s (6,770,127/s this run), peak device memory 1706 MiB, ≈1.8 h left at this rate
+  23296/57961 prefix jobs, 565,058,335,146 bifunctions, 83458s (6,770,540/s this run), peak device memory 1706 MiB, ≈1.8 h left at this rate
+  23552/57961 prefix jobs, 567,064,793,340 bifunctions, 83766s (6,769,666/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  23808/57961 prefix jobs, 568,335,077,937 bifunctions, 83952s (6,769,726/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  24064/57961 prefix jobs, 568,759,885,886 bifunctions, 84014s (6,769,820/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  24320/57961 prefix jobs, 569,377,291,633 bifunctions, 84113s (6,769,220/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  24576/57961 prefix jobs, 569,784,607,019 bifunctions, 84177s (6,768,892/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  25088/57961 prefix jobs, 570,981,762,404 bifunctions, 84369s (6,767,669/s this run), peak device memory 1706 MiB, ≈1.5 h left at this rate
+  25344/57961 prefix jobs, 571,424,051,687 bifunctions, 84438s (6,767,403/s this run), peak device memory 1706 MiB, ≈1.5 h left at this rate
+  25600/57961 prefix jobs, 571,910,883,128 bifunctions, 84514s (6,767,091/s this run), peak device memory 1706 MiB, ≈1.5 h left at this rate
+  26112/57961 prefix jobs, 572,239,283,706 bifunctions, 84566s (6,766,755/s this run), peak device memory 1706 MiB, ≈1.5 h left at this rate
+  26880/57961 prefix jobs, 572,751,497,693 bifunctions, 84648s (6,766,284/s this run), peak device memory 1706 MiB, ≈1.4 h left at this rate
+  27136/57961 prefix jobs, 572,995,509,421 bifunctions, 84684s (6,766,318/s this run), peak device memory 1706 MiB, ≈1.4 h left at this rate
+  27648/57961 prefix jobs, 573,204,789,178 bifunctions, 84718s (6,766,060/s this run), peak device memory 1706 MiB, ≈1.4 h left at this rate
+  28672/57961 prefix jobs, 573,441,312,982 bifunctions, 84755s (6,765,843/s this run), peak device memory 1706 MiB, ≈1.4 h left at this rate
+  29440/57961 prefix jobs, 576,975,717,086 bifunctions, 85307s (6,763,533/s this run), peak device memory 1706 MiB, ≈1.3 h left at this rate
+  29696/57961 prefix jobs, 580,026,094,154 bifunctions, 85792s (6,760,806/s this run), peak device memory 1706 MiB, ≈1.1 h left at this rate
+  29952/57961 prefix jobs, 581,947,785,863 bifunctions, 86088s (6,759,943/s this run), peak device memory 1706 MiB, ≈1.1 h left at this rate
+  30208/57961 prefix jobs, 583,668,539,413 bifunctions, 86341s (6,760,063/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  30464/57961 prefix jobs, 585,303,877,690 bifunctions, 86591s (6,759,406/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  30720/57961 prefix jobs, 586,012,179,116 bifunctions, 86690s (6,759,890/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  30976/57961 prefix jobs, 586,719,362,599 bifunctions, 86804s (6,759,116/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  31232/57961 prefix jobs, 587,434,915,133 bifunctions, 86919s (6,758,401/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  31488/57961 prefix jobs, 587,899,941,686 bifunctions, 86992s (6,758,091/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  31744/57961 prefix jobs, 588,107,683,010 bifunctions, 87022s (6,758,127/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  32000/57961 prefix jobs, 588,732,835,492 bifunctions, 87122s (6,757,581/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  32256/57961 prefix jobs, 589,124,521,411 bifunctions, 87184s (6,757,239/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  32768/57961 prefix jobs, 589,500,942,416 bifunctions, 87242s (6,757,062/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  33536/57961 prefix jobs, 590,175,706,266 bifunctions, 87350s (6,756,412/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  33792/57961 prefix jobs, 590,890,191,740 bifunctions, 87470s (6,755,355/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  34048/57961 prefix jobs, 591,382,728,718 bifunctions, 87544s (6,755,278/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  34304/57961 prefix jobs, 591,646,188,630 bifunctions, 87584s (6,755,186/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  34560/57961 prefix jobs, 591,888,096,467 bifunctions, 87624s (6,754,844/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  35072/57961 prefix jobs, 592,163,603,879 bifunctions, 87669s (6,754,560/s this run), peak device memory 1706 MiB, ≈0.6 h left at this rate
+  35584/57961 prefix jobs, 592,357,109,097 bifunctions, 87701s (6,754,318/s this run), peak device memory 1706 MiB, ≈0.6 h left at this rate
+  36352/57961 prefix jobs, 592,788,473,858 bifunctions, 87769s (6,753,980/s this run), peak device memory 1706 MiB, ≈0.6 h left at this rate
+  36864/57961 prefix jobs, 593,019,146,374 bifunctions, 87805s (6,753,853/s this run), peak device memory 1706 MiB, ≈0.6 h left at this rate
+  37888/57961 prefix jobs, 593,226,119,364 bifunctions, 87838s (6,753,601/s this run), peak device memory 1706 MiB, ≈0.6 h left at this rate
+  38912/57961 prefix jobs, 596,738,322,743 bifunctions, 88430s (6,748,178/s this run), peak device memory 1706 MiB, ≈0.5 h left at this rate
+  39168/57961 prefix jobs, 599,736,901,129 bifunctions, 88949s (6,742,466/s this run), peak device memory 1706 MiB, ≈0.3 h left at this rate
+  39424/57961 prefix jobs, 601,726,511,165 bifunctions, 89277s (6,739,967/s this run), peak device memory 1706 MiB, ≈0.3 h left at this rate
+  39680/57961 prefix jobs, 603,442,632,713 bifunctions, 89530s (6,740,149/s this run), peak device memory 1706 MiB, ≈0.2 h left at this rate
+  39936/57961 prefix jobs, 605,082,187,687 bifunctions, 89781s (6,739,513/s this run), peak device memory 1706 MiB, ≈0.1 h left at this rate
+  40192/57961 prefix jobs, 605,806,685,352 bifunctions, 89882s (6,740,020/s this run), peak device memory 1706 MiB, ≈0.1 h left at this rate
+  40448/57961 prefix jobs, 606,368,265,313 bifunctions, 89982s (6,738,774/s this run), peak device memory 1706 MiB, ≈0.1 h left at this rate
+  40704/57961 prefix jobs, 606,827,284,945 bifunctions, 90051s (6,738,670/s this run), peak device memory 1706 MiB, ≈0.0 h left at this rate
+  40960/57961 prefix jobs, 607,050,239,334 bifunctions, 90085s (6,738,619/s this run), peak device memory 1706 MiB, ≈0.0 h left at this rate
+  41216/57961 prefix jobs, 607,723,507,802 bifunctions, 90206s (6,737,039/s this run), peak device memory 1706 MiB, ≈0.0 h left at this rate
+  41472/57961 prefix jobs, 608,470,966,614 bifunctions, 90335s (6,735,735/s this run), peak device memory 1706 MiB
+  41728/57961 prefix jobs, 608,904,394,383 bifunctions, 90404s (6,735,369/s this run), peak device memory 1706 MiB
+  42240/57961 prefix jobs, 609,293,221,621 bifunctions, 90466s (6,735,064/s this run), peak device memory 1706 MiB
+  43008/57961 prefix jobs, 609,731,176,227 bifunctions, 90535s (6,734,766/s this run), peak device memory 1706 MiB
+  43264/57961 prefix jobs, 609,944,339,800 bifunctions, 90567s (6,734,728/s this run), peak device memory 1706 MiB
+  44032/57961 prefix jobs, 610,149,169,993 bifunctions, 90600s (6,734,515/s this run), peak device memory 1706 MiB
+  44288/57961 prefix jobs, 610,642,901,758 bifunctions, 90686s (6,733,599/s this run), peak device memory 1706 MiB
+  44544/57961 prefix jobs, 611,355,999,018 bifunctions, 90815s (6,731,892/s this run), peak device memory 1706 MiB
+  44800/57961 prefix jobs, 611,853,234,628 bifunctions, 90890s (6,731,775/s this run), peak device memory 1706 MiB
+  45056/57961 prefix jobs, 612,122,010,735 bifunctions, 90932s (6,731,673/s this run), peak device memory 1706 MiB
+  45568/57961 prefix jobs, 612,355,241,178 bifunctions, 90971s (6,731,350/s this run), peak device memory 1706 MiB
+  45824/57961 prefix jobs, 612,589,229,961 bifunctions, 91014s (6,730,742/s this run), peak device memory 1706 MiB
+  46336/57961 prefix jobs, 612,834,556,833 bifunctions, 91054s (6,730,442/s this run), peak device memory 1706 MiB
+  47360/57961 prefix jobs, 613,022,160,463 bifunctions, 91085s (6,730,219/s this run), peak device memory 1706 MiB
+  48384/57961 prefix jobs, 613,450,709,295 bifunctions, 91155s (6,729,762/s this run), peak device memory 1706 MiB
+  48640/57961 prefix jobs, 613,690,835,621 bifunctions, 91190s (6,729,808/s this run), peak device memory 1706 MiB
+  49152/57961 prefix jobs, 613,899,882,326 bifunctions, 91224s (6,729,584/s this run), peak device memory 1706 MiB
+  50176/57961 prefix jobs, 614,088,112,227 bifunctions, 91255s (6,729,360/s this run), peak device memory 1706 MiB
+  51456/57961 prefix jobs, 614,274,607,778 bifunctions, 91286s (6,729,113/s this run), peak device memory 1706 MiB
+  52992/57961 prefix jobs, 614,489,012,973 bifunctions, 91321s (6,728,904/s this run), peak device memory 1706 MiB
+  57961/57961 prefix jobs, 614,662,458,602 bifunctions, 91351s (6,728,609/s this run), peak device memory 1706 MiB
+  L6_4: 614,662,458,602 F; commuting 26.26%, m≠n 61.50%, polar 60.67%; violators cl=0 semi=0 cut=0; orbit-lax 1,757,358,876; tripwires 0; t=91350.6s
+
+=== job 29: census L6_10 (23:08:51) ===
+  census L6_10: n=6, |Mon|=693, height 3, ≈9.1e+11 ± 5e+10 bifunctions (Knuth estimate), 71118 prefix jobs at depth 2, resuming at 0; device cuda (AMD Radeon Graphics, HIP 6.4.43484-123eb5128, torch 2.9.1+rocm6.4); mem 1024 MiB
+  256/71118 prefix jobs, 42,487,191,893 bifunctions, 4945s (8,591,887/s this run), peak device memory 1706 MiB, ≈28.0 h left at this rate
+  512/71118 prefix jobs, 74,818,264,199 bifunctions, 8793s (8,508,923/s this run), peak device memory 1706 MiB, ≈27.3 h left at this rate
+  768/71118 prefix jobs, 92,754,651,769 bifunctions, 11403s (8,134,269/s this run), peak device memory 1706 MiB, ≈27.9 h left at this rate
+  1024/71118 prefix jobs, 125,051,751,186 bifunctions, 16206s (7,716,342/s this run), peak device memory 1706 MiB, ≈28.2 h left at this rate
+  1280/71118 prefix jobs, 145,219,383,993 bifunctions, 19255s (7,541,962/s this run), peak device memory 1706 MiB, ≈28.2 h left at this rate
+  1536/71118 prefix jobs, 172,776,526,591 bifunctions, 23345s (7,400,858/s this run), peak device memory 1706 MiB, ≈27.7 h left at this rate
+  1792/71118 prefix jobs, 203,498,591,865 bifunctions, 27920s (7,288,694/s this run), peak device memory 1706 MiB, ≈26.9 h left at this rate
+  2048/71118 prefix jobs, 216,905,127,683 bifunctions, 29961s (7,239,668/s this run), peak device memory 1706 MiB, ≈26.6 h left at this rate
+  2304/71118 prefix jobs, 251,608,005,355 bifunctions, 35069s (7,174,596/s this run), peak device memory 1706 MiB, ≈25.5 h left at this rate
+  2560/71118 prefix jobs, 278,116,369,338 bifunctions, 39032s (7,125,322/s this run), peak device memory 1706 MiB, ≈24.6 h left at this rate
+  2816/71118 prefix jobs, 297,681,502,602 bifunctions, 41947s (7,096,684/s this run), peak device memory 1706 MiB, ≈23.9 h left at this rate
+  3072/71118 prefix jobs, 327,587,727,420 bifunctions, 46384s (7,062,452/s this run), peak device memory 1706 MiB, ≈22.9 h left at this rate
+  3328/71118 prefix jobs, 342,927,907,550 bifunctions, 48705s (7,040,886/s this run), peak device memory 1706 MiB, ≈22.4 h left at this rate
+  3584/71118 prefix jobs, 354,266,992,909 bifunctions, 50124s (7,067,782/s this run), peak device memory 1706 MiB, ≈21.8 h left at this rate
+  3840/71118 prefix jobs, 360,706,860,344 bifunctions, 50952s (7,079,340/s this run), peak device memory 1706 MiB, ≈21.5 h left at this rate
+  4096/71118 prefix jobs, 387,261,084,501 bifunctions, 54992s (7,042,087/s this run), peak device memory 1706 MiB, ≈20.6 h left at this rate
+  4352/71118 prefix jobs, 407,988,895,691 bifunctions, 58184s (7,012,008/s this run), peak device memory 1706 MiB, ≈19.9 h left at this rate
+  4608/71118 prefix jobs, 423,860,181,056 bifunctions, 60640s (6,989,783/s this run), peak device memory 1706 MiB, ≈19.3 h left at this rate
+  4864/71118 prefix jobs, 447,347,647,249 bifunctions, 64242s (6,963,518/s this run), peak device memory 1706 MiB, ≈18.4 h left at this rate
+  5120/71118 prefix jobs, 457,070,337,720 bifunctions, 65771s (6,949,392/s this run), peak device memory 1706 MiB, ≈18.1 h left at this rate
+  5376/71118 prefix jobs, 467,465,432,794 bifunctions, 67037s (6,973,215/s this run), peak device memory 1706 MiB, ≈17.6 h left at this rate
+  5632/71118 prefix jobs, 477,856,059,434 bifunctions, 68550s (6,970,926/s this run), peak device memory 1706 MiB, ≈17.2 h left at this rate
+  5888/71118 prefix jobs, 503,691,518,448 bifunctions, 72504s (6,947,048/s this run), peak device memory 1706 MiB, ≈16.2 h left at this rate
+  6144/71118 prefix jobs, 519,184,226,491 bifunctions, 74919s (6,929,926/s this run), peak device memory 1706 MiB, ≈15.6 h left at this rate
+  6400/71118 prefix jobs, 539,786,409,797 bifunctions, 78096s (6,911,864/s this run), peak device memory 1706 MiB, ≈14.9 h left at this rate
+  6656/71118 prefix jobs, 562,831,195,704 bifunctions, 81651s (6,893,103/s this run), peak device memory 1706 MiB, ≈14.0 h left at this rate
+  6912/71118 prefix jobs, 569,916,236,378 bifunctions, 82671s (6,893,801/s this run), peak device memory 1706 MiB, ≈13.7 h left at this rate
+  7168/71118 prefix jobs, 579,221,128,051 bifunctions, 83816s (6,910,606/s this run), peak device memory 1706 MiB, ≈13.3 h left at this rate
+  7424/71118 prefix jobs, 594,909,477,479 bifunctions, 86196s (6,901,802/s this run), peak device memory 1706 MiB, ≈12.7 h left at this rate
+  7680/71118 prefix jobs, 619,991,333,437 bifunctions, 90056s (6,884,485/s this run), peak device memory 1706 MiB, ≈11.7 h left at this rate
+  7936/71118 prefix jobs, 630,565,575,192 bifunctions, 91738s (6,873,541/s this run), peak device memory 1706 MiB, ≈11.3 h left at this rate
+  8192/71118 prefix jobs, 656,003,843,222 bifunctions, 95639s (6,859,200/s this run), peak device memory 1706 MiB, ≈10.3 h left at this rate
+  8448/71118 prefix jobs, 674,266,015,908 bifunctions, 98476s (6,847,039/s this run), peak device memory 1706 MiB, ≈9.5 h left at this rate
+  8704/71118 prefix jobs, 682,387,253,203 bifunctions, 99568s (6,853,488/s this run), peak device memory 1706 MiB, ≈9.2 h left at this rate
+  8960/71118 prefix jobs, 689,579,342,158 bifunctions, 100466s (6,863,827/s this run), peak device memory 1706 MiB, ≈8.9 h left at this rate
+  9216/71118 prefix jobs, 707,788,754,099 bifunctions, 103115s (6,864,075/s this run), peak device memory 1706 MiB, ≈8.2 h left at this rate
+  9472/71118 prefix jobs, 727,349,211,973 bifunctions, 105988s (6,862,544/s this run), peak device memory 1706 MiB, ≈7.4 h left at this rate
+  9728/71118 prefix jobs, 734,066,708,380 bifunctions, 106901s (6,866,788/s this run), peak device memory 1706 MiB, ≈7.1 h left at this rate
+  9984/71118 prefix jobs, 741,832,512,016 bifunctions, 107856s (6,877,987/s this run), peak device memory 1706 MiB, ≈6.8 h left at this rate
+  10240/71118 prefix jobs, 744,117,736,764 bifunctions, 108150s (6,880,444/s this run), peak device memory 1706 MiB, ≈6.7 h left at this rate
+  10496/71118 prefix jobs, 746,714,642,100 bifunctions, 108543s (6,879,423/s this run), peak device memory 1706 MiB, ≈6.6 h left at this rate
+  10752/71118 prefix jobs, 749,411,655,293 bifunctions, 108973s (6,877,022/s this run), peak device memory 1706 MiB, ≈6.5 h left at this rate
+  11008/71118 prefix jobs, 752,359,510,238 bifunctions, 109450s (6,874,007/s this run), peak device memory 1706 MiB, ≈6.4 h left at this rate
+  11264/71118 prefix jobs, 753,617,746,957 bifunctions, 109617s (6,874,982/s this run), peak device memory 1706 MiB, ≈6.3 h left at this rate
+  11520/71118 prefix jobs, 756,558,877,882 bifunctions, 110067s (6,873,637/s this run), peak device memory 1706 MiB, ≈6.2 h left at this rate
+  11776/71118 prefix jobs, 757,784,278,634 bifunctions, 110235s (6,874,253/s this run), peak device memory 1706 MiB, ≈6.1 h left at this rate
+  12032/71118 prefix jobs, 758,118,365,260 bifunctions, 110282s (6,874,332/s this run), peak device memory 1706 MiB, ≈6.1 h left at this rate
+  12288/71118 prefix jobs, 761,919,138,913 bifunctions, 110889s (6,870,995/s this run), peak device memory 1706 MiB, ≈6.0 h left at this rate
+  12544/71118 prefix jobs, 765,224,597,247 bifunctions, 111422s (6,867,813/s this run), peak device memory 1706 MiB, ≈5.8 h left at this rate
+  12800/71118 prefix jobs, 766,751,161,712 bifunctions, 111646s (6,867,707/s this run), peak device memory 1706 MiB, ≈5.8 h left at this rate
+  13056/71118 prefix jobs, 768,866,339,167 bifunctions, 111960s (6,867,304/s this run), peak device memory 1706 MiB, ≈5.7 h left at this rate
+  13312/71118 prefix jobs, 770,680,611,800 bifunctions, 112231s (6,866,936/s this run), peak device memory 1706 MiB, ≈5.6 h left at this rate
+  13568/71118 prefix jobs, 771,501,974,700 bifunctions, 112338s (6,867,680/s this run), peak device memory 1706 MiB, ≈5.6 h left at this rate
+  13824/71118 prefix jobs, 774,237,115,860 bifunctions, 112761s (6,866,162/s this run), peak device memory 1706 MiB, ≈5.5 h left at this rate
+  14080/71118 prefix jobs, 776,937,358,490 bifunctions, 113187s (6,864,183/s this run), peak device memory 1706 MiB, ≈5.4 h left at this rate
+  14336/71118 prefix jobs, 779,412,099,512 bifunctions, 113578s (6,862,331/s this run), peak device memory 1706 MiB, ≈5.3 h left at this rate
+  14592/71118 prefix jobs, 780,725,936,033 bifunctions, 113749s (6,863,575/s this run), peak device memory 1706 MiB, ≈5.2 h left at this rate
+  14848/71118 prefix jobs, 783,591,955,562 bifunctions, 114181s (6,862,688/s this run), peak device memory 1706 MiB, ≈5.1 h left at this rate
+  15104/71118 prefix jobs, 784,774,303,526 bifunctions, 114339s (6,863,596/s this run), peak device memory 1706 MiB, ≈5.0 h left at this rate
+  15360/71118 prefix jobs, 785,215,420,701 bifunctions, 114401s (6,863,683/s this run), peak device memory 1706 MiB, ≈5.0 h left at this rate
+  15616/71118 prefix jobs, 785,771,085,720 bifunctions, 114485s (6,863,543/s this run), peak device memory 1706 MiB, ≈5.0 h left at this rate
+  16128/71118 prefix jobs, 789,540,666,767 bifunctions, 115079s (6,860,885/s this run), peak device memory 1706 MiB, ≈4.9 h left at this rate
+  16384/71118 prefix jobs, 792,424,049,158 bifunctions, 115542s (6,858,310/s this run), peak device memory 1706 MiB, ≈4.7 h left at this rate
+  16640/71118 prefix jobs, 794,262,999,463 bifunctions, 115821s (6,857,651/s this run), peak device memory 1706 MiB, ≈4.7 h left at this rate
+  16896/71118 prefix jobs, 796,085,179,083 bifunctions, 116081s (6,858,017/s this run), peak device memory 1706 MiB, ≈4.6 h left at this rate
+  17152/71118 prefix jobs, 798,222,013,429 bifunctions, 116403s (6,857,405/s this run), peak device memory 1706 MiB, ≈4.5 h left at this rate
+  17408/71118 prefix jobs, 799,203,958,708 bifunctions, 116530s (6,858,358/s this run), peak device memory 1706 MiB, ≈4.5 h left at this rate
+  17664/71118 prefix jobs, 799,701,433,522 bifunctions, 116606s (6,858,132/s this run), peak device memory 1706 MiB, ≈4.4 h left at this rate
+  17920/71118 prefix jobs, 800,140,775,391 bifunctions, 116680s (6,857,571/s this run), peak device memory 1706 MiB, ≈4.4 h left at this rate
+  18176/71118 prefix jobs, 800,510,664,618 bifunctions, 116735s (6,857,521/s this run), peak device memory 1706 MiB, ≈4.4 h left at this rate
+  18688/71118 prefix jobs, 800,993,088,616 bifunctions, 116809s (6,857,299/s this run), peak device memory 1706 MiB, ≈4.4 h left at this rate
+  19200/71118 prefix jobs, 801,484,513,435 bifunctions, 116882s (6,857,232/s this run), peak device memory 1706 MiB, ≈4.4 h left at this rate
+  19968/71118 prefix jobs, 805,321,657,346 bifunctions, 117478s (6,855,111/s this run), peak device memory 1706 MiB, ≈4.2 h left at this rate
+  20224/71118 prefix jobs, 808,367,172,604 bifunctions, 117956s (6,853,144/s this run), peak device memory 1706 MiB, ≈4.1 h left at this rate
+  20480/71118 prefix jobs, 810,073,785,794 bifunctions, 118209s (6,852,906/s this run), peak device memory 1706 MiB, ≈4.0 h left at this rate
+  20736/71118 prefix jobs, 812,050,081,123 bifunctions, 118493s (6,853,129/s this run), peak device memory 1706 MiB, ≈4.0 h left at this rate
+  20992/71118 prefix jobs, 814,031,367,631 bifunctions, 118791s (6,852,642/s this run), peak device memory 1706 MiB, ≈3.9 h left at this rate
+  21248/71118 prefix jobs, 814,957,369,981 bifunctions, 118911s (6,853,484/s this run), peak device memory 1706 MiB, ≈3.8 h left at this rate
+  21504/71118 prefix jobs, 815,341,959,590 bifunctions, 118969s (6,853,407/s this run), peak device memory 1706 MiB, ≈3.8 h left at this rate
+  22016/71118 prefix jobs, 815,973,451,750 bifunctions, 119069s (6,852,968/s this run), peak device memory 1706 MiB, ≈3.8 h left at this rate
+  22272/71118 prefix jobs, 816,380,845,237 bifunctions, 119132s (6,852,719/s this run), peak device memory 1706 MiB, ≈3.8 h left at this rate
+  22528/71118 prefix jobs, 816,727,385,887 bifunctions, 119186s (6,852,530/s this run), peak device memory 1706 MiB, ≈3.8 h left at this rate
+  23040/71118 prefix jobs, 817,215,759,349 bifunctions, 119259s (6,852,458/s this run), peak device memory 1706 MiB, ≈3.7 h left at this rate
+  23808/71118 prefix jobs, 821,095,339,442 bifunctions, 119878s (6,849,408/s this run), peak device memory 1706 MiB, ≈3.6 h left at this rate
+  24064/71118 prefix jobs, 824,292,269,862 bifunctions, 120396s (6,846,529/s this run), peak device memory 1706 MiB, ≈3.5 h left at this rate
+  24320/71118 prefix jobs, 825,910,792,551 bifunctions, 120637s (6,846,265/s this run), peak device memory 1706 MiB, ≈3.4 h left at this rate
+  24576/71118 prefix jobs, 827,988,672,563 bifunctions, 120940s (6,846,302/s this run), peak device memory 1706 MiB, ≈3.3 h left at this rate
+  24832/71118 prefix jobs, 829,861,148,812 bifunctions, 121229s (6,845,401/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  25088/71118 prefix jobs, 830,711,982,544 bifunctions, 121348s (6,845,700/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  25344/71118 prefix jobs, 831,077,729,832 bifunctions, 121407s (6,845,362/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  25856/71118 prefix jobs, 831,562,452,304 bifunctions, 121486s (6,844,947/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  26112/71118 prefix jobs, 831,813,702,844 bifunctions, 121528s (6,844,630/s this run), peak device memory 1706 MiB, ≈3.2 h left at this rate
+  26368/71118 prefix jobs, 832,343,596,104 bifunctions, 121621s (6,843,755/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  26624/71118 prefix jobs, 832,639,197,568 bifunctions, 121669s (6,843,488/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  26880/71118 prefix jobs, 832,944,802,837 bifunctions, 121719s (6,843,162/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  27648/71118 prefix jobs, 833,722,434,172 bifunctions, 121848s (6,842,332/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  28160/71118 prefix jobs, 833,990,505,708 bifunctions, 121890s (6,842,153/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  28928/71118 prefix jobs, 834,190,812,781 bifunctions, 121925s (6,841,859/s this run), peak device memory 1706 MiB, ≈3.1 h left at this rate
+  29440/71118 prefix jobs, 835,225,002,315 bifunctions, 122094s (6,840,842/s this run), peak device memory 1706 MiB, ≈3.0 h left at this rate
+  29696/71118 prefix jobs, 838,217,081,435 bifunctions, 122567s (6,838,859/s this run), peak device memory 1706 MiB, ≈2.9 h left at this rate
+  29952/71118 prefix jobs, 841,702,905,786 bifunctions, 123110s (6,837,012/s this run), peak device memory 1706 MiB, ≈2.8 h left at this rate
+  30208/71118 prefix jobs, 843,079,237,244 bifunctions, 123297s (6,837,791/s this run), peak device memory 1706 MiB, ≈2.7 h left at this rate
+  30464/71118 prefix jobs, 845,795,115,261 bifunctions, 123699s (6,837,519/s this run), peak device memory 1706 MiB, ≈2.6 h left at this rate
+  30720/71118 prefix jobs, 847,137,690,069 bifunctions, 123888s (6,837,937/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  30976/71118 prefix jobs, 847,659,348,755 bifunctions, 123958s (6,838,272/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  31232/71118 prefix jobs, 848,098,134,975 bifunctions, 124029s (6,837,904/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  31488/71118 prefix jobs, 848,558,133,836 bifunctions, 124101s (6,837,668/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  31744/71118 prefix jobs, 848,892,952,698 bifunctions, 124153s (6,837,481/s this run), peak device memory 1706 MiB, ≈2.5 h left at this rate
+  32256/71118 prefix jobs, 849,394,723,503 bifunctions, 124227s (6,837,443/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  32512/71118 prefix jobs, 849,653,042,255 bifunctions, 124266s (6,837,353/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  33024/71118 prefix jobs, 849,921,786,374 bifunctions, 124307s (6,837,263/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  33280/71118 prefix jobs, 850,171,617,052 bifunctions, 124347s (6,837,091/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  33536/71118 prefix jobs, 850,675,591,463 bifunctions, 124429s (6,836,609/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  33792/71118 prefix jobs, 850,982,209,358 bifunctions, 124475s (6,836,572/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  34048/71118 prefix jobs, 851,254,473,257 bifunctions, 124516s (6,836,497/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  34560/71118 prefix jobs, 851,452,352,666 bifunctions, 124549s (6,836,311/s this run), peak device memory 1706 MiB, ≈2.4 h left at this rate
+  35840/71118 prefix jobs, 851,960,971,479 bifunctions, 124628s (6,836,051/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  36864/71118 prefix jobs, 852,166,398,463 bifunctions, 124660s (6,835,912/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  37376/71118 prefix jobs, 852,549,559,598 bifunctions, 124719s (6,835,768/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  38656/71118 prefix jobs, 852,791,316,166 bifunctions, 124758s (6,835,555/s this run), peak device memory 1706 MiB, ≈2.3 h left at this rate
+  39936/71118 prefix jobs, 854,620,677,213 bifunctions, 125065s (6,833,404/s this run), peak device memory 1706 MiB, ≈2.2 h left at this rate
+  40192/71118 prefix jobs, 857,138,011,786 bifunctions, 125506s (6,829,462/s this run), peak device memory 1706 MiB, ≈2.1 h left at this rate
+  40448/71118 prefix jobs, 860,499,043,706 bifunctions, 126087s (6,824,669/s this run), peak device memory 1706 MiB, ≈2.0 h left at this rate
+  40704/71118 prefix jobs, 861,806,705,268 bifunctions, 126265s (6,825,383/s this run), peak device memory 1706 MiB, ≈1.9 h left at this rate
+  40960/71118 prefix jobs, 864,684,051,103 bifunctions, 126698s (6,824,776/s this run), peak device memory 1706 MiB, ≈1.8 h left at this rate
+  41216/71118 prefix jobs, 865,953,347,641 bifunctions, 126873s (6,825,377/s this run), peak device memory 1706 MiB, ≈1.8 h left at this rate
+  41472/71118 prefix jobs, 866,338,614,867 bifunctions, 126926s (6,825,532/s this run), peak device memory 1706 MiB, ≈1.8 h left at this rate
+  41728/71118 prefix jobs, 866,694,113,863 bifunctions, 126980s (6,825,421/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  41984/71118 prefix jobs, 866,977,460,572 bifunctions, 127028s (6,825,064/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  42240/71118 prefix jobs, 867,476,984,532 bifunctions, 127120s (6,824,105/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  42496/71118 prefix jobs, 867,792,157,686 bifunctions, 127168s (6,823,992/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  42752/71118 prefix jobs, 868,067,547,260 bifunctions, 127210s (6,823,915/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  43008/71118 prefix jobs, 868,342,886,269 bifunctions, 127252s (6,823,797/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  43520/71118 prefix jobs, 868,589,032,056 bifunctions, 127289s (6,823,737/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  43776/71118 prefix jobs, 868,827,305,144 bifunctions, 127326s (6,823,635/s this run), peak device memory 1706 MiB, ≈1.7 h left at this rate
+  44288/71118 prefix jobs, 869,050,756,849 bifunctions, 127360s (6,823,576/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  45312/71118 prefix jobs, 869,558,127,169 bifunctions, 127449s (6,822,814/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  45568/71118 prefix jobs, 870,013,311,988 bifunctions, 127526s (6,822,217/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  45824/71118 prefix jobs, 870,355,293,671 bifunctions, 127579s (6,822,067/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  46592/71118 prefix jobs, 870,674,851,106 bifunctions, 127631s (6,821,818/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  47616/71118 prefix jobs, 871,049,085,461 bifunctions, 127690s (6,821,609/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  48128/71118 prefix jobs, 871,279,604,189 bifunctions, 127725s (6,821,548/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  49152/71118 prefix jobs, 871,466,664,016 bifunctions, 127755s (6,821,390/s this run), peak device memory 1706 MiB, ≈1.6 h left at this rate
+  50432/71118 prefix jobs, 873,916,324,756 bifunctions, 128169s (6,818,458/s this run), peak device memory 1706 MiB, ≈1.5 h left at this rate
+  50688/71118 prefix jobs, 876,527,694,329 bifunctions, 128628s (6,814,450/s this run), peak device memory 1706 MiB, ≈1.3 h left at this rate
+  50944/71118 prefix jobs, 879,299,350,748 bifunctions, 129111s (6,810,430/s this run), peak device memory 1706 MiB, ≈1.2 h left at this rate
+  51200/71118 prefix jobs, 880,527,987,469 bifunctions, 129271s (6,811,512/s this run), peak device memory 1706 MiB, ≈1.2 h left at this rate
+  51456/71118 prefix jobs, 883,459,916,303 bifunctions, 129711s (6,810,969/s this run), peak device memory 1706 MiB, ≈1.1 h left at this rate
+  51712/71118 prefix jobs, 884,681,410,483 bifunctions, 129876s (6,811,752/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  51968/71118 prefix jobs, 885,037,276,860 bifunctions, 129925s (6,811,892/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  52224/71118 prefix jobs, 885,373,021,986 bifunctions, 129976s (6,811,815/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  52480/71118 prefix jobs, 885,639,323,134 bifunctions, 130017s (6,811,729/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  52992/71118 prefix jobs, 886,223,278,609 bifunctions, 130115s (6,811,053/s this run), peak device memory 1706 MiB, ≈1.0 h left at this rate
+  53248/71118 prefix jobs, 886,683,901,368 bifunctions, 130194s (6,810,504/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  53504/71118 prefix jobs, 887,022,185,870 bifunctions, 130246s (6,810,341/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  54016/71118 prefix jobs, 887,254,869,990 bifunctions, 130281s (6,810,333/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  54272/71118 prefix jobs, 887,514,096,584 bifunctions, 130321s (6,810,216/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  55040/71118 prefix jobs, 887,758,326,635 bifunctions, 130358s (6,810,161/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  55808/71118 prefix jobs, 888,138,703,948 bifunctions, 130417s (6,809,989/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  56832/71118 prefix jobs, 888,369,513,403 bifunctions, 130453s (6,809,889/s this run), peak device memory 1706 MiB, ≈0.9 h left at this rate
+  57344/71118 prefix jobs, 889,067,175,578 bifunctions, 130578s (6,808,689/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  57600/71118 prefix jobs, 889,311,258,677 bifunctions, 130617s (6,808,538/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  57856/71118 prefix jobs, 889,678,586,946 bifunctions, 130673s (6,808,439/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  58624/71118 prefix jobs, 889,867,570,486 bifunctions, 130704s (6,808,286/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  59392/71118 prefix jobs, 890,056,440,747 bifunctions, 130736s (6,808,035/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  60928/71118 prefix jobs, 890,693,932,071 bifunctions, 130836s (6,807,709/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  61184/71118 prefix jobs, 890,983,449,272 bifunctions, 130877s (6,807,792/s this run), peak device memory 1706 MiB, ≈0.8 h left at this rate
+  61952/71118 prefix jobs, 891,228,339,395 bifunctions, 130916s (6,807,660/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  62976/71118 prefix jobs, 891,425,735,354 bifunctions, 130948s (6,807,504/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  65024/71118 prefix jobs, 891,678,818,613 bifunctions, 130989s (6,807,267/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  70400/71118 prefix jobs, 891,858,236,503 bifunctions, 131021s (6,807,005/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  71118/71118 prefix jobs, 891,862,121,166 bifunctions, 131021s (6,806,997/s this run), peak device memory 1706 MiB, ≈0.7 h left at this rate
+  L6_10: 891,862,121,166 F; commuting 21.20%, m≠n 65.85%, polar 65.34%; violators cl=0 semi=0 cut=0; orbit-lax 22,287,347,799; tripwires 0; t=131021.4s

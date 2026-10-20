@@ -21,3 +21,8 @@ import Mordor.Axioms.Cat
 import Mordor.Axioms.Source
 import Mordor.Axioms.Law
 import Mordor.Local
+import Mordor.FinGenWidth
+import Mordor.FinGen14
+import Mordor.FinGen41
+import Mordor.FinGen24
+import Mordor.FinGen42

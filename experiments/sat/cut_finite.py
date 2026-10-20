@@ -14,7 +14,7 @@ from pysat.card import CardEnc, EncType
 
 
 class Finite:
-    def __init__(self, n, H, lattice=False, wlog=True, nowit=(True, True)):
+    def __init__(self, n, H, lattice=False, wlog=True, nowit=(True, True), boundary=False):
         self.n, self.H = n, H; self.nv = 0; self.vars = {}; self.S = Cadical153(); self.ncl = 0
         R = range(n); add = self.add
         le, f, u, g, d = self.le, self.f, self.u, self.g, self.d
@@ -42,13 +42,34 @@ class Finite:
         for i, j in itertools.product(R, R):                                 # D down-set
             if i < j: add([-le(i, j), -d(j), d(i)])
         add([d(0)]); add([-d(n - 1)])
+        if boundary:                                                         # no witness on the boundary lines only
+            mx, mu = self.boundary_vars()
         for x, y in itertools.product(R, R):                                 # no witness
-            if nowit[0]: add([-d(x), d(y), -u(x, y, x)])
-            if nowit[1]:
-                for m in R: add([-d(x), d(y), -f(x, y, m), -le(y, m)])
+            guards = [[-d(x), d(y)]] if not boundary else [[-mx[x], d(y)], [-mu[y], -d(x)]]
+            for gd in guards:
+                if nowit[0]: add(gd + [-u(x, y, x)])
+                if nowit[1]:
+                    for m in R: add(gd + [-f(x, y, m), -le(y, m)])
         if wlog:
             for m in R: add([-f(0, n - 1, m), -d(m)])
         if lattice: self.lattice()
+
+    def boundary_vars(self):
+        """mx[x] ⟺ x maximal in D; mu[y] ⟺ y minimal in U = complement of D (Boundary Witness Conjecture, §34.3m)."""
+        n, R, le, d, add = self.n, range(self.n), self.le, self.d, self.add
+        mx, mu = {}, {}
+        for x in R:
+            mx[x] = self.var(('mx', x)); mu[x] = self.var(('mu', x))
+            above = []; below = []
+            for z in R:
+                if z == x: continue
+                ta = self.var(('ta', x, z)); add([-ta, le(x, z)]); add([-ta, d(z)]); add([ta, -le(x, z), -d(z)]); above.append(ta)
+                tb = self.var(('tb', x, z)); add([-tb, le(z, x)]); add([-tb, -d(z)]); add([tb, -le(z, x), d(z)]); below.append(tb)
+            add([-mx[x], d(x)]); add([-mu[x], -d(x)])
+            for t in above: add([-mx[x], -t])
+            for t in below: add([-mu[x], -t])
+            add([-d(x)] + above + [mx[x]]); add([d(x)] + below + [mu[x]])
+        return mx, mu
 
     def var(self, key):
         if key not in self.vars: self.nv += 1; self.vars[key] = self.nv

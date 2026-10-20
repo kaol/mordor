@@ -363,6 +363,7 @@ This is the only unproved link between the program's conjectures and its theorem
 - every lattice whose corner neighbourhoods {z : z ⊓ c ≠ ⊥, z ⊔ c ≠ ⊤} are finite, and every chain-finite lattice satisfying the box criterion (`Localize.cut_of_finite_nbhd`, `cut_of_box_criterion`; §34.3p).
 - every end-finite lattice (finite proper principal ideals and filters) and every hub-shaped lattice, e.g. S∞′ (`Pin.cut_of_end_finite`, `cut_hub`; §34.3r).
 - every lattice with finite proper principal ideals and finitely many elements with an infinite principal filter, its order dual, and more generally every lattice whose corner neighbourhoods satisfy one of these two conditions relative to themselves (`Hubs.cut_of_finite_hubs`, `cut_of_nbhd_hubs`; §34.3s).
+- every lattice with finite proper principal ideals and ACC, and dually every lattice with finite proper principal filters and DCC; in particular CL holds on every chain-finite complete lattice of either kind (`IdealFinite.cut_of_ideal_finite`, `semi_of_chainFinite_ideal`; §34.3t). Open: chain-finite lattices with infinite principal ideals and filters, e.g. Ω × Ω.
 
 The machine certificates have a common shape, recorded in §34.5: a descent c_{k+1} = F(⊥, c_k), followed by a row/column iteration inside the box it cuts out. Their size grows with the height (core terms 7, 17, 86 for edge-height 3, 4, 5).
 

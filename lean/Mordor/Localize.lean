@@ -192,13 +192,12 @@ theorem spine_top {s t t' : α} (hP : Prob F D s t) (hN : NoW F D s t) (ht' : t'
   · exact absurd (hyt.trans h) (hN x y hx hy hsx (hxt.trans htt) hsy (hyt.trans htt)).2
 
 /-- **Localization.** On a chain-finite complete lattice a cut has a witness unless the box recursion gets
-*stuck*: some reachable box `[s, t]` admits no finite capture of the corner neighbourhood `V`, cannot shrink
-(`⋁V = t` when the corner is outside `D`, `⋀V = s` when it is inside), and has no interior spine point on the
-correct side of the cut. The hypothesis `halt` rules this out. -/
+*stuck*: some reachable box `[s, t]` cannot be closed directly (the `False` alternative: e.g. a finite capture of
+the corner neighbourhood `V`, `box_capture`, or a reset, `Hubs.box_reset`), cannot shrink (`⋁V = t` when the corner
+is outside `D`, `⋀V = s` when it is inside), and has no interior spine point on the correct side of the cut. The
+hypothesis `halt` rules this out. -/
 theorem cut_localize [WellFoundedLT α] [WellFoundedGT α] (hbot : ⊥ ∈ D) (htop : ⊤ ∉ D)
-    (halt : ∀ s t, Prob F D s t → NoW F D s t →
-      (∃ TD TU : Finset α, (∀ p ∈ TD, p ∈ D ∧ s ≤ p ∧ p ≤ t) ∧ (∀ u ∈ TU, u ∉ D ∧ s ≤ u ∧ u ≤ t) ∧
-        (∀ z ∈ V F s t, z ∈ D → ∃ p ∈ TD, z ≤ p) ∧ (∀ z ∈ V F s t, z ∉ D → ∃ u ∈ TU, u ≤ z)) ∨
+    (halt : ∀ s t, Prob F D s t → NoW F D s t → False ∨
       (F s t ∉ D ∧ sSup (V F s t) < t) ∨ (F s t ∈ D ∧ s < sInf (V F s t)) ∨
       (∃ s', s' ∈ D ∧ s < s' ∧ s' ≤ t ∧ ∀ z, s ≤ z → z ≤ t → z ≤ s' ∨ s' ≤ z) ∨
       (∃ t', t' ∉ D ∧ s ≤ t' ∧ t' < t ∧ ∀ z, s ≤ z → z ≤ t → z ≤ t' ∨ t' ≤ z)) :
@@ -215,9 +214,9 @@ theorem cut_localize [WellFoundedLT α] [WellFoundedGT α] (hbot : ⊥ ∈ D) (h
     induction s using WellFoundedGT.induction with
     | _ s ihs =>
       intro hP hN
-      rcases halt s t hP hN with ⟨TD, TU, h1, h2, h3, h4⟩ | ⟨hc, hlt⟩ | ⟨hc, hlt⟩ |
+      rcases halt s t hP hN with h | ⟨hc, hlt⟩ | ⟨hc, hlt⟩ |
           ⟨s', hs', hlt, hst, hcmp⟩ | ⟨t', ht', hst, hlt, hcmp⟩
-      · exact box_capture hF hD hP hN TD TU h1 h2 h3 h4
+      · exact h
       · obtain ⟨hP', hN'⟩ := shrink_top hF hD hP hN hc
         exact iht _ hlt s hP' hN'
       · obtain ⟨hP', hN'⟩ := shrink_bot hF hD hP hN hc
@@ -245,12 +244,7 @@ theorem cut_of_box_criterion [WellFoundedLT α] [WellFoundedGT α]
   · by_cases hpD : p ∈ D
     · exact Or.inr (Or.inr (Or.inr (Or.inl ⟨p, hpD, hsp, hpt.le, hcmp⟩)))
     · exact Or.inr (Or.inr (Or.inr (Or.inr ⟨p, hpD, hsp.le, hpt, hcmp⟩)))
-  · left
-    refine ⟨hfin.toFinset.filter (· ∈ D), hfin.toFinset.filter (· ∉ D), ?_, ?_, ?_, ?_⟩
-    · intro q hq; simp only [mem_filter, Set.Finite.mem_toFinset] at hq; exact ⟨hq.2, hq.1.1, hq.1.2.1⟩
-    · intro q hq; simp only [mem_filter, Set.Finite.mem_toFinset] at hq; exact ⟨hq.2, hq.1.1, hq.1.2.1⟩
-    · intro z hz hzD; exact ⟨z, by simp only [mem_filter, Set.Finite.mem_toFinset]; exact ⟨hz, hzD⟩, le_rfl⟩
-    · intro z hz hzD; exact ⟨z, by simp only [mem_filter, Set.Finite.mem_toFinset]; exact ⟨hz, hzD⟩, le_rfl⟩
+  · exact Or.inl (box_finite hF hD hP hN hfin)
   · by_cases hcD : F s t ∈ D
     · exact Or.inr (Or.inr (Or.inl ⟨hcD, h2⟩))
     · exact Or.inr (Or.inl ⟨hcD, h1⟩)

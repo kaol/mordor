@@ -40,12 +40,12 @@ variable (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (hD :
 include hF hD
 
 /-- **The reset, structurally.** Under no witness, for a finite `A ∋ ⊥` there is a monotone, witness-free `G` such that
-every row `x ∈ D` is either a join of anchor rows (`G x = ⋁_{h ∈ P} F h` with `P ⊆ A ∩ D`), or is unchanged and
+anchor rows are unchanged and every row `x ∈ D` is either a join of anchor rows (`G x = ⋁_{h ∈ P} F h` with `P ⊆ A ∩ D`), or is unchanged and
 *pinned*: some anchor `h ≤ x` in `A ∩ D` has a `D`-valued cell value outside `A`. -/
 theorem reset_core (htop : ⊤ ∉ D) (A : Set α) (hA : A.Finite) (hA0 : ⊥ ∈ A)
     (nw : ∀ x ∈ D, ∀ y, y ∉ D → ¬ F x y ≤ x ∧ ¬ y ≤ F x y) :
     ∃ G : α → α → α, (∀ x x' y y', x ≤ x' → y ≤ y' → G x y ≤ G x' y') ∧
-      (∀ x ∈ D, ∀ y, y ∉ D → ¬ G x y ≤ x ∧ ¬ y ≤ G x y) ∧
+      (∀ x ∈ D, ∀ y, y ∉ D → ¬ G x y ≤ x ∧ ¬ y ≤ G x y) ∧ (∀ x ∈ A, ∀ y, G x y = F x y) ∧
       ∀ x ∈ D, (∃ P : Finset α, (∀ h ∈ P, h ∈ A ∧ h ∈ D) ∧ ∀ y, G x y = P.sup fun h => F h y) ∨
         ((∀ y, G x y = F x y) ∧
           ∃ h ∈ A, h ∈ D ∧ h ≤ x ∧ ∃ y₀, y₀ ∉ D ∧ F h y₀ ∈ D ∧ F h y₀ ∉ A) := by
@@ -59,7 +59,7 @@ theorem reset_core (htop : ⊤ ∉ D) (A : Set α) (hA : A.Finite) (hA0 : ⊥ �
   let G : α → α → α := fun x y => if free x then J x y else F x y
   have hJ_le : ∀ x x' y y', x ≤ x' → y ≤ y' → J x y ≤ F x' y' := fun x x' y y' hx hy =>
     Finset.sup_le fun h hh => hF _ _ _ _ ((memP.1 hh).2.trans hx) hy
-  refine ⟨G, ?_, ?_, ?_⟩
+  refine ⟨G, ?_, ?_, fun x hx y => by simp only [G, show ¬ free x from fun h => h.1 hx, if_false], ?_⟩
   · -- `G` is monotone
     intro x x' y y' hx hy
     by_cases h1 : free x <;> by_cases h2 : free x' <;> simp only [G, h1, h2, if_true, if_false]
@@ -124,7 +124,7 @@ theorem cut_of_region (hbot : ⊥ ∈ D) (htop : ⊤ ∉ D) (R A : Set α) (hA :
   have nw : ∀ x ∈ D, ∀ y, y ∉ D → ¬ F x y ≤ x ∧ ¬ y ≤ F x y := fun x hx y hy => hno x hx y hy
   have hRv := hR nw
   have hne : ∀ x ∈ D, F x ⊤ ≠ ⊤ := fun x hx h => (nw x hx ⊤ htop).2 h.ge
-  obtain ⟨G, hG, nwG, hcls⟩ := reset_core hF hD htop A hA hA0 nw
+  obtain ⟨G, hG, nwG, -, hcls⟩ := reset_core hF hD htop A hA hA0 nw
   -- the finitely many values of `G`
   have hvR : ∀ h ∈ D, F h ⊤ ∈ R := fun h hh => hRv h hh ⊤ htop
   let W : Set α := ⋃ h ∈ {h | h ∈ A ∧ h ∈ D}, Set.Iic (F h ⊤) ∩ R

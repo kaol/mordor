@@ -76,7 +76,7 @@ theorem key [WellFoundedGT α] {D : Set α} (hD : ∀ x y, x ≤ y → y ∈ D �
     Set.mem_insert_of_mem _ (Or.inl (Set.mem_biUnion (x := s) hs hz))
   have hAN : ∀ m ∈ N, m ≠ ⊤ → ∀ z, z ≤ m → z ∈ A := fun m hm hmt z hz =>
     Set.mem_insert_of_mem _ (Or.inr (Set.mem_biUnion (x := m) ⟨hm, hmt⟩ hz))
-  obtain ⟨G, hG, nwG, hcls⟩ := Hubs.reset_core hF hD htop A hA (Set.mem_insert _ _) nw
+  obtain ⟨G, hG, nwG, -, hcls⟩ := Hubs.reset_core hF hD htop A hA (Set.mem_insert _ _) nw
   have hneG : ∀ x ∈ D, G x ⊤ ≠ ⊤ := fun x hx h => (nwG x hx ⊤ htop).2 h.ge
   -- joins of anchor rows: finitely many values
   let W : Set α := ⋃ h ∈ {h | h ∈ A ∧ h ∈ D}, Set.Iic (F h ⊤)

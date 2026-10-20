@@ -34,3 +34,4 @@ import Mordor.Localize
 import Mordor.Pin
 import Mordor.Hubs
 import Mordor.IdealFinite
+import Mordor.TwoSided

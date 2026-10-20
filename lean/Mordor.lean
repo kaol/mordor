@@ -28,3 +28,5 @@ import Mordor.FinGen24
 import Mordor.FinGen42
 import Mordor.FinGen34
 import Mordor.FinGen43
+import Mordor.Sperner
+import Mordor.FinGenAll

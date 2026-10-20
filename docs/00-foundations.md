@@ -358,7 +358,7 @@ This is the only unproved link between the program's conjectures and its theorem
 - edge-height ≤ 5, in every bounded poset (§34.3f–h);
 - per F, whenever ⟨⊥, ⊤⟩_F has edge-height ≤ 5;
 - every bounded poset with ≤ 11 elements (SAT, §34.3h).
-- every finitely generated cut of every bounded lattice, hence every finite lattice: a paper proof via a KKM theorem on Δ^{k−1} × Δ^{l−1}, checked in Lean for width ≤ 3 (`FinGenWidth.cut_width3`, `cl_width3`; §34.3m).
+- every finitely generated cut of every bounded lattice, hence every finite lattice, by a product Sperner lemma, machine-checked (`FinGenAll.cut_fingen`, `cut_finite`, `cl_finite`; §34.3m–n).
 
 The machine certificates have a common shape, recorded in §34.5: a descent c_{k+1} = F(⊥, c_k), followed by a row/column iteration inside the box it cuts out. Their size grows with the height (core terms 7, 17, 86 for edge-height 3, 4, 5).
 

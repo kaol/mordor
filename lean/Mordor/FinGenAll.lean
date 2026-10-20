@@ -18,9 +18,20 @@ open Finset Classical
 
 variable {α : Type*} [Lattice α] [BoundedOrder α] {k l : ℕ}
 
-/-- **The labelling lemma, for all `k, l ≥ 1`.** A finitely generated cut of a bounded lattice has a witness. -/
-theorem lab {F : α → α → α} {D : Set α} {p : Fin k → α} {u : Fin l → α} (hk : 0 < k) (hl : 0 < l)
-    (H : Cx F D p u) : False := by
+/-- **Captured tables are impossible.** Let `p i ∈ D` and `u j ∉ D` be *any* finitely many elements (not
+necessarily generators) such that every cell `z(A, B) = F (⋀ p_A) (⋁ u_B)` is *captured*: below some `p i` if it is
+in `D`, above some `u j` if not. If no cell is a witness, this is contradictory. Only the Sperner pivot needs
+capturing; generation of `D` by the `p i` is never used. -/
+theorem captured {F : α → α → α} {D : Set α} {p : Fin k → α} {u : Fin l → α} (hk : 0 < k) (hl : 0 < l)
+    (mono : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
+    (capD : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
+      F (A.inf p) (B.sup u) ∈ D → ∃ i, F (A.inf p) (B.sup u) ≤ p i)
+    (capU : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
+      F (A.inf p) (B.sup u) ∉ D → ∃ j, u j ≤ F (A.inf p) (B.sup u))
+    (nwD : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
+      ¬ ∀ i ∈ A, F (A.inf p) (B.sup u) ≤ p i)
+    (nwU : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
+      ¬ ∀ j ∈ B, u j ≤ F (A.inf p) (B.sup u)) : False := by
   let z : Finset (Fin k) × Finset (Fin l) → α := fun c => F (c.1.inf p) (c.2.sup u)
   let f1 : Finset (Fin k) × Finset (Fin l) → Fin k := fun c =>
     if h : ∃ i ∈ c.1, ¬ z c ≤ p i then h.choose else ⟨0, hk⟩
@@ -30,13 +41,13 @@ theorem lab {F : α → α → α} {D : Set α} {p : Fin k → α} {u : Fin l �
       f1 c ∈ c.1 ∧ ¬ z c ≤ p (f1 c) := by
     intro c hA hB
     have h : ∃ i ∈ c.1, ¬ z c ≤ p i := by
-      by_contra hn; push_neg at hn; exact nwD H hA hB hn
+      by_contra hn; push_neg at hn; exact nwD _ _ hA hB hn
     simp only [f1, dif_pos h]; exact h.choose_spec
   have e2 : ∀ c : Finset (Fin k) × Finset (Fin l), c.1.Nonempty → c.2.Nonempty →
       f2 c ∈ c.2 ∧ ¬ u (f2 c) ≤ z c := by
     intro c hA hB
     have h : ∃ j ∈ c.2, ¬ u j ≤ z c := by
-      by_contra hn; push_neg at hn; exact nwU H hA hB hn
+      by_contra hn; push_neg at hn; exact nwU _ _ hA hB hn
     simp only [f2, dif_pos h]; exact h.choose_spec
   obtain ⟨w, hw, hg⟩ := Sperner.exists_good f1 f2 (fun c hA hB => (e1 c hA hB).1)
     (fun c hA hB => (e2 c hA hB).1) (univ : Finset (Fin k)) (univ : Finset (Fin l))
@@ -55,7 +66,7 @@ theorem lab {F : α → α → α} {D : Set α} {p : Fin k → α} {u : Fin l �
     intro t t' htt
     obtain ⟨h1, h2⟩ := Sperner.cellOf_mono (univ : Finset (Fin k)) (univ : Finset (Fin l))
       (Sperner.pre_mono w htt)
-    exact H.mono _ _ _ _ (Finset.inf_mono h1) (Finset.sup_mono h2)
+    exact mono _ _ _ _ (Finset.inf_mono h1) (Finset.sup_mono h2)
   have hA : ∀ i, ¬ z cstar ≤ p i := by
     intro i hi
     have him : i ∈ (((cs.take (univ : Finset (Fin k)).card).map f1 : List (Fin k)) : Multiset (Fin k)) := by
@@ -86,9 +97,17 @@ theorem lab {F : α → α → α} {D : Set α} {p : Fin k → α} {u : Fin l �
     have := (e2 _ hA1 hB1).2
     rw [hcj] at this
     exact this (hj.trans (zmono (k - 1) _ (by omega)))
+  obtain ⟨-, hA1, -, hB1⟩ := Sperner.cell_props hw (show k - 1 + 1 < (univ : Finset (Fin k)).card +
+    (univ : Finset (Fin l)).card by simp; omega)
   by_cases hz : z cstar ∈ D
-  · obtain ⟨i, hi⟩ := H.genD _ hz; exact hA i hi
-  · obtain ⟨j, hj⟩ := H.genU _ hz; exact hB j hj
+  · obtain ⟨i, hi⟩ := capD _ _ hA1 hB1 hz; exact hA i hi
+  · obtain ⟨j, hj⟩ := capU _ _ hA1 hB1 hz; exact hB j hj
+
+/-- **The labelling lemma, for all `k, l ≥ 1`.** A finitely generated cut of a bounded lattice has a witness. -/
+theorem lab {F : α → α → α} {D : Set α} {p : Fin k → α} {u : Fin l → α} (hk : 0 < k) (hl : 0 < l)
+    (H : Cx F D p u) : False :=
+  captured hk hl H.mono (fun _ _ _ _ hz => H.genD _ hz) (fun _ _ _ _ hz => H.genU _ hz)
+    (fun _ _ hA hB h => nwD H hA hB h) (fun _ _ hA hB h => nwU H hA hB h)
 
 /-- **The Cut Lemma for finitely generated cuts.** If `D = ↓{p i}` and its complement is `↑{u j}`, some cell of
 `D × Dᶜ` is a witness. No chain condition. -/
@@ -114,6 +133,47 @@ theorem cut_finite [Finite α] (F : α → α → α) (hF : ∀ x x' y y', x ≤
       ⟨OrderDual.toDual (⊤ : α), htop⟩
   exact cut_fingen hF hD hpD huU hgD hgU hk0 hl0
 
+/-- **Finite closure ⟹ Cut, per `F`, on any bounded lattice.** If a finite set `S` contains `⊥` and `⊤` and is
+closed under `⊓`, `⊔` and `F`, then every cut has a witness. Take `p` = `S ∩ D` and `u` = `S ∖ D`: every cell value
+lies in `S`, so it captures itself. No chain condition is needed. -/
+theorem cut_of_finite_closure (F : α → α → α) (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
+    (S : Set α) (hS : S.Finite) (hbotS : ⊥ ∈ S) (htopS : ⊤ ∈ S) (hinf : ∀ x ∈ S, ∀ y ∈ S, x ⊓ y ∈ S)
+    (hsup : ∀ x ∈ S, ∀ y ∈ S, x ⊔ y ∈ S) (hFS : ∀ x ∈ S, ∀ y ∈ S, F x y ∈ S)
+    (D : Set α) (hD : ∀ x y, x ≤ y → y ∈ D → x ∈ D) (hbot : ⊥ ∈ D) (htop : ⊤ ∉ D) :
+    ∃ x ∈ D, ∃ y, y ∉ D ∧ (F x y ≤ x ∨ y ≤ F x y) := by
+  by_contra hno
+  push_neg at hno
+  have hA : (S ∩ D).Finite := hS.subset Set.inter_subset_left
+  have hB : (S \ D).Finite := hS.subset Set.diff_subset
+  set A := hA.toFinset
+  set B := hB.toFinset
+  let p : Fin A.card → α := fun i => (A.equivFin.symm i : α)
+  let u : Fin B.card → α := fun j => (B.equivFin.symm j : α)
+  have hp : ∀ i, p i ∈ S ∩ D := fun i => hA.mem_toFinset.1 (A.equivFin.symm i).2
+  have hu : ∀ j, u j ∈ S \ D := fun j => hB.mem_toFinset.1 (B.equivFin.symm j).2
+  have hpS : ∀ x ∈ S ∩ D, ∃ i, p i = x := fun x hx =>
+    ⟨A.equivFin ⟨x, hA.mem_toFinset.2 hx⟩, by simp [p]⟩
+  have huS : ∀ y ∈ S \ D, ∃ j, u j = y := fun y hy =>
+    ⟨B.equivFin ⟨y, hB.mem_toFinset.2 hy⟩, by simp [u]⟩
+  have hk : 0 < A.card := Finset.card_pos.2 ⟨⊥, hA.mem_toFinset.2 ⟨hbotS, hbot⟩⟩
+  have hl : 0 < B.card := Finset.card_pos.2 ⟨⊤, hB.mem_toFinset.2 ⟨htopS, htop⟩⟩
+  have hzS : ∀ (P : Finset (Fin A.card)) (Q : Finset (Fin B.card)), P.Nonempty → Q.Nonempty →
+      F (P.inf p) (Q.sup u) ∈ S := by
+    intro P Q hP hQ
+    refine hFS _ ?_ _ ?_
+    · rw [← Finset.inf'_eq_inf hP]; exact Finset.inf'_mem S hinf P hP p fun i _ => (hp i).1
+    · rw [← Finset.sup'_eq_sup hQ]; exact Finset.sup'_mem S hsup Q hQ u fun j _ => (hu j).1
+  have hxD : ∀ P : Finset (Fin A.card), P.Nonempty → P.inf p ∈ D := fun P ⟨i, hi⟩ =>
+    hD _ _ (Finset.inf_le hi) (hp i).2
+  have hyD : ∀ Q : Finset (Fin B.card), Q.Nonempty → Q.sup u ∉ D := fun Q ⟨j, hj⟩ h =>
+    (hu j).2 (hD _ _ (Finset.le_sup hj) h)
+  refine captured (D := D) (p := p) (u := u) hk hl hF (fun P Q hP hQ hz => ?_) (fun P Q hP hQ hz => ?_) (fun P Q hP hQ h => ?_)
+    (fun P Q hP hQ h => ?_)
+  · obtain ⟨i, hi⟩ := hpS _ ⟨hzS P Q hP hQ, hz⟩; exact ⟨i, hi.ge⟩
+  · obtain ⟨j, hj⟩ := huS _ ⟨hzS P Q hP hQ, hz⟩; exact ⟨j, hj.le⟩
+  · exact (hno _ (hxD P hP) _ (hyD Q hQ)).1 (Finset.le_inf h)
+  · exact (hno _ (hxD P hP) _ (hyD Q hQ)).2 (Finset.sup_le h)
+
 end Mordor.FinGen
 
 namespace Mordor
@@ -134,5 +194,13 @@ theorem semi_finite (F : α →o α →o α) (hsemi : ∀ x, b F (a F x) ≤ a F
 /-- **The Commutation Lemma on every finite lattice.** -/
 theorem cl_finite (F : α →o α →o α) (hcomm : ∀ x, b F (a F x) = a F (b F x)) : m F = n F :=
   semi_finite F fun x => (hcomm x).le
+
+/-- **Semi-CL per `F` on any complete lattice**, whenever `⊥, ⊤` generate a finite `(⊓, ⊔, F)`-subalgebra. -/
+theorem semi_of_finite_closure {β : Type*} [CompleteLattice β] (F : β →o β →o β) (S : Set β) (hS : S.Finite) (hbotS : ⊥ ∈ S) (htopS : ⊤ ∈ S)
+    (hinf : ∀ x ∈ S, ∀ y ∈ S, x ⊓ y ∈ S) (hsup : ∀ x ∈ S, ∀ y ∈ S, x ⊔ y ∈ S) (hFS : ∀ x ∈ S, ∀ y ∈ S, F x y ∈ S)
+    (hsemi : ∀ x, b F (a F x) ≤ a F (b F x)) : m F = n F := by
+  refine semi_of_cut (cutMaps_of_cells fun D hD ⟨d, hd⟩ ⟨u, hu⟩ => ?_) hsemi
+  exact cut_of_finite_closure (fun x y => F x y) (fun x x' y y' hx hy => (F.mono hx y).trans ((F x').mono hy))
+    S hS hbotS htopS hinf hsup hFS D (fun x y h hy => hD h hy) (hD bot_le hd) (fun ht => hu (hD le_top ht))
 
 end Mordor

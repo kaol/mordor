@@ -31,3 +31,4 @@ import Mordor.FinGen43
 import Mordor.Sperner
 import Mordor.FinGenAll
 import Mordor.Localize
+import Mordor.Pin

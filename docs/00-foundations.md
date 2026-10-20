@@ -362,6 +362,7 @@ This is the only unproved link between the program's conjectures and its theorem
 - per F, whenever ⊥ and ⊤ generate a finite (⊓, ⊔, F)-closed set, on any complete lattice (`FinGenAll.cut_of_finite_closure`, `Mordor.semi_of_finite_closure`; §34.3o).
 - every lattice whose corner neighbourhoods {z : z ⊓ c ≠ ⊥, z ⊔ c ≠ ⊤} are finite, and every chain-finite lattice satisfying the box criterion (`Localize.cut_of_finite_nbhd`, `cut_of_box_criterion`; §34.3p).
 - every end-finite lattice (finite proper principal ideals and filters) and every hub-shaped lattice, e.g. S∞′ (`Pin.cut_of_end_finite`, `cut_hub`; §34.3r).
+- every lattice with finite proper principal ideals and finitely many elements with an infinite principal filter, its order dual, and more generally every lattice whose corner neighbourhoods satisfy one of these two conditions relative to themselves (`Hubs.cut_of_finite_hubs`, `cut_of_nbhd_hubs`; §34.3s).
 
 The machine certificates have a common shape, recorded in §34.5: a descent c_{k+1} = F(⊥, c_k), followed by a row/column iteration inside the box it cuts out. Their size grows with the height (core terms 7, 17, 86 for edge-height 3, 4, 5).
 

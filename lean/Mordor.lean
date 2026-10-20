@@ -32,3 +32,4 @@ import Mordor.Sperner
 import Mordor.FinGenAll
 import Mordor.Localize
 import Mordor.Pin
+import Mordor.Hubs

@@ -36,3 +36,4 @@ import Mordor.Hubs
 import Mordor.IdealFinite
 import Mordor.TwoSided
 import Mordor.Strip
+import Mordor.Strips

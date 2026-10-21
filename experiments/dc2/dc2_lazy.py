@@ -45,13 +45,26 @@ class Vars:
         if k not in self.d: self.n += 1; self.d[k] = self.n
         return self.d[k]
 
-def onehot(S, lits):
+_AMO = [0]
+
+def onehot(S, lits, V=None):
+    """exactly one of lits; pairwise at-most-one for short lists, sequential counter (aux vars from V) otherwise"""
     S.add_clause(lits)
-    for a, b in itertools.combinations(lits, 2): S.add_clause([-a, -b])
+    if V is None or len(lits) <= 6:
+        for a, b in itertools.combinations(lits, 2): S.add_clause([-a, -b])
+        return
+    _AMO[0] += 1; tag = _AMO[0]
+    prev = None
+    for j, x in enumerate(lits):
+        sj = V('amo', tag, j)                      # some literal among lits[0..j] is true
+        S.add_clause([-x, sj])
+        if prev is not None:
+            S.add_clause([-prev, sj]); S.add_clause([-prev, -x])
+        prev = sj
 
 def pair_constraints(S, V, x, y, dom, dmx, dmy, wit=True):
     """one-hot values and witness-freeness at pair (x, y), guarded by cell(x, y)"""
-    for i in range(2): onehot(S, [V('v', x, y, i, a) for a in dom])
+    for i in range(2): onehot(S, [V('v', x, y, i, a) for a in dom], V)
     onehot(S, [V('v', x, y, 2, l) for l in range(len(LAYERS))])
     if not wit: return
     g = [-dmx, dmy]
@@ -87,8 +100,15 @@ LAYERS = []
 WIT = 'both'      # sanity switch: 'lo' / 'hi' keeps only one half of the witness condition
 SKIP_BLOCKS = False
 MINIMIZE = True
+BLOCK_MAXL1 = None  # drop block pairs with more than this many distinct L1 atoms (sound relaxation of blocks)
+MAXL1 = None      # drop pairs (master and block) with more than MAXL1 distinct L1 atoms (sound relaxation)
 DUMP = None
 ALL_BLOCKS = True
+SYM = True        # close native lemmas under permutations of L1
+DPAT = None       # optional dict point -> bool fixing D on level-0 points
+ZERO0 = None      # predicate on level-0 pairs forced atom-free (case split): domain {⊥, ⊤}
+SHUFFLE = None    # random.Random for randomized core minimization order
+SEL1 = None       # predicate: level-1 pairs that get a closure selector (core extraction)
 SEL0 = False      # selectors on level-0 closure (core extraction)
 CLOSED1 = None    # predicate on level-1 pairs; None = all closed.  Open level-1 pairs get + o; L2 = atoms at closed ones.
 CLOSED0 = None    # predicate on level-0 pairs; None = all closed.  Open level-0 pairs get the full domain + o.
@@ -99,13 +119,19 @@ def build_master(I):
     for p in I.P1:
         for q in I.covers(p, I.c1): S.add_clause([-dm(q), dm(p)])
     S.add_clause([dm((B, B, 0))]); S.add_clause([-dm((T, T, I.n - 1))])
+    if DPAT:
+        for p, v in DPAT.items(): S.add_clause([dm(p) if v else -dm(p)])
     lev0 = lambda p: p[0] in (B, T) and p[1] in (B, T)
     def dom(x, y):
-        if not (lev0(x) and lev0(y)): return [B, T] + I.L1 + I.L2 + ([] if CLOSED1 is None or CLOSED1(x, y) else [O])
+        if not (lev0(x) and lev0(y)):
+            if SEL1 is not None and SEL1(x, y): return [B, T] + I.L1 + I.L2 + [O]
+            return [B, T] + I.L1 + I.L2 + ([] if CLOSED1 is None or CLOSED1(x, y) else [O])
+        if ZERO0 is not None and ZERO0(x, y): return [B, T]
         if SEL0: return [B, T] + I.L1 + I.L2 + [O]
         if CLOSED0 is None or CLOSED0(x, y): return [B, T] + I.L1
         return [B, T] + I.L1 + I.L2 + [O]
-    pairs = [(x, y) for x in I.P1 for y in I.P1 if not I.ple(y, x)]
+    nl1 = lambda *ps: len({t for p in ps for t in p[:2] if t not in (B, T) and t[0] == 'a'})
+    pairs = [(x, y) for x in I.P1 for y in I.P1 if not I.ple(y, x) and (MAXL1 is None or nl1(x, y) <= MAXL1)]
     pset = set(pairs)
     for x, y in pairs:
         pair_constraints(S, V, x, y, dom(x, y), dm(x), dm(y))
@@ -129,9 +155,10 @@ def build_master(I):
     for b in I.L2:
         u = V('used', b); lits = []
         for x, y in pairs:
-            if not (lev0(x) and lev0(y)) and (CLOSED1 is None or CLOSED1(x, y)):
+            if not (lev0(x) and lev0(y)) and ((SEL1 is not None and SEL1(x, y)) or CLOSED1 is None or CLOSED1(x, y)):
                 for i in range(2):
                     z = V('u2', b, x, y, i); lits.append(z)
+                    if SEL1 is not None and SEL1(x, y): S.add_clause([-z, V('sel1', x, y)])
                     S.add_clause([-z, V('cell', x, y)]); S.add_clause([-z, V('v', x, y, i, b)])
                     S.add_clause([z, -V('cell', x, y), -V('v', x, y, i, b)])
         for z in lits: S.add_clause([-z, u])
@@ -142,6 +169,10 @@ def build_master(I):
             z = V('isL2', x, y, i)
             S.add_clause([-z] + [V('v', x, y, i, b) for b in I.L2])
             for b in I.L2: S.add_clause([z, -V('v', x, y, i, b)])
+    if SEL1 is not None:
+        for x, y in pairs:
+            if not (lev0(x) and lev0(y)) and SEL1(x, y):
+                for i in range(2): S.add_clause([-V('sel1', x, y), -V('v', x, y, i, O)])
     if SEL0:
         for x, y in pairs:
             if lev0(x) and lev0(y):
@@ -165,7 +196,10 @@ def build_block(I):
         for q in I.covers(p, cb): S.add_clause([-dm(q), dm(p)])
     hasb = lambda p: bb in p[:2]
     pdom = [B, T] + I.L1 + [bb, O]
-    pairs = [(x, y) for x in Pb for y in Pb if not I.ple(y, x)]
+    nl1 = lambda *ps: len({t for p in ps for t in p[:2] if t not in (B, T) and t[0] == 'a'})
+    lim = BLOCK_MAXL1 if BLOCK_MAXL1 is not None else MAXL1
+    Pb = [p for p in Pb if lim is None or nl1(p) <= lim]
+    pairs = [(x, y) for x in Pb for y in Pb if not I.ple(y, x) and (lim is None or nl1(x, y) <= lim)]
     pset = set(pairs)
     for x, y in pairs:
         pair_constraints(S, V, x, y, pdom, dm(x), dm(y), wit=hasb(x) or hasb(y))
@@ -176,13 +210,55 @@ def build_block(I):
             if (x, y2) in pset and (hasb(x) or hasb(y) or hasb(y2)): mono(S, V, (x, y), (x, y2), pdom, pdom, [-dm(x), dm(y)])
     return S, V, bb
 
-def run(k, m, n, verbose=True, maxit=100000):
+def sym_maps(src, dst, cap=24):
+    """injective maps src → dst (all of them, up to cap)"""
+    out = []
+    for img in itertools.permutations(dst, len(src)):
+        out.append(dict(zip(src, img)))
+        if len(out) >= cap: break
+    return out
+
+def add_lemma(S, V, I, dom, core, amap, bb):
+    """Add, for every pool atom b2, the master lemma ¬(core) with L1 atoms renamed by amap.  A projected value 'o'
+    at (cell, coord) stands for: an L1 atom outside the image of amap, an L2 atom ≠ b2, or o itself — one clause per
+    combination of alternatives (CNF of the negated disjunction)."""
+    mp = lambda t: amap.get(t, t)
+    mpt = lambda p: tuple(mp(t) for t in p[:2]) + (p[2],)
+    img = set(amap.values())
+    for b2 in I.L2:
+        base = [-V('used', b2)]
+        alts = []
+        for f in core:
+            if f[0] == 'D':
+                base.append(-V('D', mpt(f[1])) if f[2] else V('D', mpt(f[1])))
+                continue
+            _, x, y, i, pa = f
+            x, y = mpt(x), mpt(y)
+            base.append(-V('cell', x, y))
+            if i == 2: base.append(-V('v', x, y, i, pa))
+            elif pa == bb: base.append(-V('v', x, y, i, b2))
+            elif pa == O:
+                ldom = dom(x, y)
+                choice = [[-V('v', x, y, i, a)] for a in I.L1 if a not in img]
+                if any(b in ldom for b in I.L2): choice.append([-V('isL2', x, y, i), V('v', x, y, i, b2)])
+                if O in ldom: choice.append([-V('v', x, y, i, O)])
+                alts.append(choice)
+            else: base.append(-V('v', x, y, i, mp(pa)))
+        for combo in itertools.product(*alts):
+            S.add_clause(base + [l for c in combo for l in c])
+
+def run(k, m, n, verbose=True, maxit=100000, preload=()):
     global LAYERS
     LAYERS = list(range(n))
     I = Inst(k, m, n)
     S, V, pairs, dom = build_master(I)
     BS, BV, bb = build_block(I)
     it = 0; lemmas = 0; t0 = time.time(); coresz = []
+    bb0 = ('c', 'b')
+    for k0, cores in preload:                       # lift cores from instances with k0 ≤ k L1 atoms
+        src = [('a', i) for i in range(k0)]
+        for amap in sym_maps(src, I.L1, cap=10**6):
+            for core in cores: add_lemma(S, V, I, dom, core, amap, bb0)
     lev0 = lambda p: p[0] in (B, T) and p[1] in (B, T)
     while True:
         it += 1
@@ -223,17 +299,8 @@ def run(k, m, n, verbose=True, maxit=100000):
             found = True; lemmas += 1
             coresz.append(len(core))
             if DUMP is not None: DUMP.append(core)
-            for b2 in I.L2:
-                cl = [-V('used', b2)]
-                for f in core:
-                    if f[0] == 'D': cl.append(-V('D', f[1]) if f[2] else V('D', f[1]))
-                    else:
-                        _, x, y, i, pa = f
-                        cl += [-V('cell', x, y)]
-                        if pa == bb: cl.append(-V('v', x, y, i, b2))
-                        elif pa == O: cl += [-V('isL2', x, y, i), V('v', x, y, i, b2)]
-                        else: cl.append(-V('v', x, y, i, pa))
-                S.add_clause(cl)
+            for amap in (sym_maps(I.L1, I.L1) if SYM else [{a: a for a in I.L1}]):
+                add_lemma(S, V, I, dom, core, amap, bb)
             if not ALL_BLOCKS: break
         if not found:
             if verbose: print(f"k={k} m={m} n={n}: SAT (relaxed) after {it} iterations; used L2 = {len(used)}", flush=True)

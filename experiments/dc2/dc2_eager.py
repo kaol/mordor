@@ -90,15 +90,17 @@ def run(k, m, n, verbose=True):
                 c2 = (x, y2)
                 if c2 in allp and ((x, y) in set(bpairs) or c2 in set(bpairs)):
                     d_mono(S, W, (x, y), c2, pdom, [-u, -dm(x), dm(y)])
-    if d.SEL0:
-        sels = {V('sel0', x, y): (x, y) for x, y in pairs if ('sel0', x, y) in V.d}
+    if d.SEL0 or d.SEL1 is not None:
+        tag = 'sel0' if d.SEL0 else 'sel1'
+        sels = {V(tag, x, y): (x, y) for x, y in pairs if (tag, x, y) in V.d}
         cur = list(sels)
         if S.solve(assumptions=cur): return 'SAT-all-closed'
-        cur = list(S.get_core()); i = 0
+        cur = list(S.get_core() or []); i = 0
+        if d.SHUFFLE is not None: d.SHUFFLE.shuffle(cur)
         while i < len(cur):
             trial = cur[:i] + cur[i + 1:]
             if not S.solve(assumptions=trial):
-                c = set(S.get_core()); cur = [l for l in trial if l in c]
+                c = set(S.get_core() or []); cur = [l for l in trial if l in c]
             else: i += 1
         return [sels[l] for l in cur]
     r = S.solve()

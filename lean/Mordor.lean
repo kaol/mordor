@@ -40,3 +40,4 @@ import Mordor.Strips
 import Mordor.Layers
 import Mordor.Plane
 import Mordor.KPass
+import Mordor.Merge

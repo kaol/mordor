@@ -68,3 +68,79 @@ theorem gen_collapse {F : β × K → β × K → β × K} {D : Set (β × K)}
   · rw [e]; exact ⟨rfl, Or.inr rfl⟩
 
 end Mordor.GenCollapse
+
+namespace Mordor.GenCollapse
+open Finset Classical
+
+variable {β K Λ : Type*} [CompleteLattice β] [CompleteLattice K] [Preorder Λ]
+
+/-- **Cell-labelled generalized collapse.** As `gen_collapse`, but the floor and ceiling sets are selected by a label
+of the *cell*, monotone on comparable active cells. -/
+theorem gen_collapse_cell {F : β × K → β × K → β × K} {D : Set (β × K)}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
+    (nw : ∀ x ∈ D, ∀ y, y ∉ D → ¬ F x y ≤ x ∧ ¬ y ≤ F x y)
+    (lab : β × K → β × K → Λ)
+    (hlab : ∀ x y x' y', x ∈ D → y ∉ D → x' ∈ D → y' ∉ D → x ≤ x' → y ≤ y' → lab x y ≤ lab x' y')
+    (A B : Λ → Finset β)
+    (hA : ∀ l l', l ≤ l' → A l ⊆ A l') (hB : ∀ l l', l ≤ l' → B l' ⊆ B l)
+    (hpair : ∀ x y x' y', x ∈ D → y ∉ D → x' ∈ D → y' ∉ D → x ≤ x' → y ≤ y' →
+      (F x y).2 ≤ x.2 → y'.2 ≤ (F x' y').2 →
+      (F x y).1 ∈ A (lab x y) ∨ (F x' y').1 ∈ B (lab x' y')) :
+    ∃ H : β × K → β × K → β × K,
+      (∀ x x' y y', x ∈ D → x' ∈ D → y ∉ D → y' ∉ D → x ≤ x' → y ≤ y' → H x y ≤ H x' y') ∧
+      (∀ x ∈ D, ∀ y, y ∉ D → ¬ H x y ≤ x ∧ ¬ y ≤ H x y) ∧
+      (∀ x ∈ D, ∀ y, y ∉ D → (H x y).2 = (F x y).2 ∧
+        ((H x y).1 = ((A (lab x y)).filter (· ≤ (F x y).1)).sup id ∨
+         (H x y).1 = ((B (lab x y)).filter ((F x y).1 ≤ ·)).inf id)) := by
+  let fl : β × K → β × K → β := fun x y => ((A (lab x y)).filter (· ≤ (F x y).1)).sup id
+  let cl : β × K → β × K → β := fun x y => ((B (lab x y)).filter ((F x y).1 ≤ ·)).inf id
+  let Low : β × K → β × K → Prop := fun x y =>
+    ∃ x' y', x ≤ x' ∧ x' ∈ D ∧ y ≤ y' ∧ y' ∉ D ∧ y' ≤ (cl x' y', (F x' y').2)
+  let H : β × K → β × K → β × K := fun x y => if Low x y then (fl x y, (F x y).2) else (cl x y, (F x y).2)
+  have fl_le : ∀ x y, fl x y ≤ (F x y).1 := fun x y => Finset.sup_le fun f hf => (Finset.mem_filter.1 hf).2
+  have le_cl : ∀ x y, (F x y).1 ≤ cl x y := fun x y => Finset.le_inf fun f hf => (Finset.mem_filter.1 hf).2
+  have Low_down : ∀ x x' y y', x ≤ x' → y ≤ y' → Low x' y' → Low x y :=
+    fun x x' y y' hxx hyy ⟨a, b, ha, haD, hb, hbD, hk⟩ => ⟨a, b, hxx.trans ha, haD, hyy.trans hb, hbD, hk⟩
+  have fl_mono : ∀ x y x' y', x ∈ D → y ∉ D → x' ∈ D → y' ∉ D → x ≤ x' → y ≤ y' → fl x y ≤ fl x' y' := by
+    intro x y x' y' hx hy hx' hy' hxx hyy
+    have h := Prod.le_def.1 (hF _ _ _ _ hxx hyy)
+    exact Finset.sup_mono fun f hf => Finset.mem_filter.2 ⟨hA _ _ (hlab _ _ _ _ hx hy hx' hy' hxx hyy)
+      (Finset.mem_filter.1 hf).1, (Finset.mem_filter.1 hf).2.trans h.1⟩
+  have cl_mono : ∀ x y x' y', x ∈ D → y ∉ D → x' ∈ D → y' ∉ D → x ≤ x' → y ≤ y' → cl x y ≤ cl x' y' := by
+    intro x y x' y' hx hy hx' hy' hxx hyy
+    have h := Prod.le_def.1 (hF _ _ _ _ hxx hyy)
+    exact Finset.inf_mono fun f hf => Finset.mem_filter.2 ⟨hB _ _ (hlab _ _ _ _ hx hy hx' hy' hxx hyy)
+      (Finset.mem_filter.1 hf).1, h.1.trans (Finset.mem_filter.1 hf).2⟩
+  refine ⟨H, ?_, ?_, ?_⟩
+  · intro x x' y y' hx hx' hy hy' hxx hyy
+    have h := Prod.le_def.1 (hF _ _ _ _ hxx hyy)
+    by_cases l2 : Low x' y'
+    · have l1 := Low_down _ _ _ _ hxx hyy l2
+      simp only [H, l1, l2, if_true]
+      exact Prod.mk_le_mk.2 ⟨fl_mono _ _ _ _ hx hy hx' hy' hxx hyy, h.2⟩
+    · simp only [H, l2, if_false]
+      split_ifs
+      · exact Prod.mk_le_mk.2 ⟨(fl_le x y).trans (h.1.trans (le_cl x' y')), h.2⟩
+      · exact Prod.mk_le_mk.2 ⟨cl_mono _ _ _ _ hx hy hx' hy' hxx hyy, h.2⟩
+  · intro x hx y hy
+    have h0 := nw x hx y hy
+    by_cases l : Low x y
+    · simp only [H, l, if_true]
+      obtain ⟨a, b, ha, haD, hb, hbD, hk⟩ := l
+      refine ⟨fun hle => ?_, fun hle => h0.2 (hle.trans (Prod.mk_le_mk.2 ⟨fl_le x y, le_rfl⟩))⟩
+      rcases hpair x y a b hx hy haD hbD ha hb (Prod.le_def.1 hle).2 (Prod.le_def.1 hk).2 with h | h
+      · have e : fl x y = (F x y).1 :=
+          le_antisymm (fl_le x y) (Finset.le_sup (f := id) (Finset.mem_filter.2 ⟨h, le_rfl⟩))
+        exact h0.1 (by rw [e] at hle; exact hle)
+      · have e : cl a b = (F a b).1 :=
+          le_antisymm (Finset.inf_le (f := id) (Finset.mem_filter.2 ⟨h, le_rfl⟩)) (le_cl a b)
+        exact (nw a haD b hbD).2 (by rw [e] at hk; exact hk)
+    · simp only [H, l, if_false]
+      exact ⟨fun hle => h0.1 ((Prod.mk_le_mk.2 ⟨le_cl x y, le_rfl⟩).trans hle),
+        fun hle => l ⟨x, y, le_rfl, hx, le_rfl, hy, hle⟩⟩
+  · intro x hx y hy
+    by_cases l : Low x y
+    · simp only [H, l, if_true, true_and]; exact Or.inl rfl
+    · simp only [H, l, if_false, true_and]; exact Or.inr rfl
+
+end Mordor.GenCollapse

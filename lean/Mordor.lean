@@ -41,3 +41,4 @@ import Mordor.Layers
 import Mordor.Plane
 import Mordor.KPass
 import Mordor.Merge
+import Mordor.GenCollapse

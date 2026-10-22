@@ -16,7 +16,7 @@ from pysat.solvers import Cadical153
 
 B, T, O = 'b', 't', 'o'
 
-def run(config, dim=2, nl=1, label="", verbose=True, core=False, possible=None):
+def run(config, dim=2, nl=1, label="", verbose=True, core=False, possible=None, witsel=None, span=None, dfix=None):
     # config: tuple of chains; chain: tuple of (kind, level)
     toks = [(c, r, kind, lv) for c, ch in enumerate(config) for r, (kind, lv) in enumerate(ch)]
     coords = [B, T] + [(c, r) for c, r, kind, lv in toks if kind != 'gap']
@@ -28,8 +28,13 @@ def run(config, dim=2, nl=1, label="", verbose=True, core=False, possible=None):
         return u[0] == v[0] and u[1] <= v[1]
     clv = lambda t: 0 if t in (B, T) else info[t][1]
     P = [c + (l,) for c in itertools.product(coords, repeat=dim) for l in range(nl)]
+    def spanof(*ps):
+        q = [t[1] for p in ps for t in p[:-1] if t not in (B, T) and info[t][1] == 2]
+        return max(q) - min(q) if q else 0
+    if span is not None: P = [p for p in P if spanof(p) <= span]
     Ple = lambda p, q: all(le(p[i], q[i]) for i in range(dim)) and p[-1] <= q[-1]
     covers = {}
+    Pset_ = set(P)
     for p in P:
         cs = []
         for i in range(dim):
@@ -37,7 +42,7 @@ def run(config, dim=2, nl=1, label="", verbose=True, core=False, possible=None):
                 if c != p[i] and le(p[i], c) and not any(e not in (p[i], c) and le(p[i], e) and le(e, c) for e in coords):
                     q = list(p); q[i] = c; cs.append(tuple(q))
         if p[-1] + 1 < nl: cs.append(p[:-1] + (p[-1] + 1,))
-        covers[p] = cs
+        covers[p] = [q for q in cs if q in Pset_]
     def vdom(x, y):
         m = max(clv(t) for p in (x, y) for t in p[:-1])
         if m == 0: return [B, T] + [t for t in vals_all if t not in (B, T, O) and info[t] == ('gen', 1)]
@@ -52,7 +57,10 @@ def run(config, dim=2, nl=1, label="", verbose=True, core=False, possible=None):
     for p in P:
         for q in covers[p]: S.add_clause([-dm(q), dm(p)])
     S.add_clause([dm((B,) * dim + (0,))]); S.add_clause([-dm((T,) * dim + (nl - 1,))])
-    pairs = [(x, y) for x in P for y in P if not Ple(y, x)]
+    if dfix:
+        for p, v in dfix.items():
+            if p in Pset_: S.add_clause([dm(p) if v else -dm(p)])
+    pairs = [(x, y) for x in P for y in P if not Ple(y, x) and (span is None or spanof(x, y) <= span)]
     pset = set(pairs)
     for x, y in pairs:
         vd = vdom(x, y); g = [-dm(x), dm(y)]
@@ -61,9 +69,12 @@ def run(config, dim=2, nl=1, label="", verbose=True, core=False, possible=None):
             for a, b in itertools.combinations(lits, 2): S.add_clause([-a, -b])
         lits = [V(x, y, dim, l) for l in range(nl)]; S.add_clause(lits)
         for a, b in itertools.combinations(lits, 2): S.add_clause([-a, -b])
+        if witsel is not None and not witsel(x, y): continue_wit = True
+        else: continue_wit = False
         sl = [-V('sel', x, y)] if core else []
-        S.add_clause(g + sl + [V(x, y, i, a) for i in range(dim) for a in vd if not le(a, x[i])] + [V(x, y, dim, l) for l in range(nl) if l > x[-1]])
-        S.add_clause(g + sl + [V(x, y, i, a) for i in range(dim) for a in vd if not le(y[i], a)] + [V(x, y, dim, l) for l in range(nl) if l < y[-1]])
+        if not continue_wit:
+            S.add_clause(g + sl + [V(x, y, i, a) for i in range(dim) for a in vd if not le(a, x[i])] + [V(x, y, dim, l) for l in range(nl) if l > x[-1]])
+            S.add_clause(g + sl + [V(x, y, i, a) for i in range(dim) for a in vd if not le(y[i], a)] + [V(x, y, dim, l) for l in range(nl) if l < y[-1]])
         nb = [((x2, y), [-dm(x2), dm(y)]) for x2 in covers[x]] + [((x, y2), [-dm(x), dm(y)]) for y2 in covers[y]]
         for c2, gg in nb:
             if c2 not in pset: continue

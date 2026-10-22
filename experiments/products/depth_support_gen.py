@@ -49,7 +49,7 @@ def run(pools, nl, label="", extra=None, quiet=False, wit="both", core=False, o_
         for q in covers[p]: S.add_clause([-dm(q), dm(p)])          # downset
     bot, top = (B,) * dim + (0,), (T,) * dim + (nl - 1,)
     S.add_clause([dm(bot)]); S.add_clause([-dm(top)])
-    if extra: extra(S, dm, B, T)
+    if extra: extra(S, dm, B, T, V)
     m_ = lambda x, y: max(lvl(t) for p in (x, y) for t in p[:-1]) + 1
     def vdom(x, y):
         m = max(lvl(t) for p in (x, y) for t in p[:-1]) + 1

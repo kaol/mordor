@@ -42,3 +42,4 @@ import Mordor.Plane
 import Mordor.KPass
 import Mordor.Merge
 import Mordor.GenCollapse
+import Mordor.Exact

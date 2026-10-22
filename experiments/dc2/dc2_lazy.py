@@ -100,6 +100,7 @@ LAYERS = []
 WIT = 'both'      # sanity switch: 'lo' / 'hi' keeps only one half of the witness condition
 SKIP_BLOCKS = False
 MINIMIZE = True
+PREC_L2 = True    # value precedence on L2 (memory-heavy); False keeps only the used-prefix symmetry break
 BLOCK_MAXL1 = None  # drop block pairs with more than this many distinct L1 atoms (sound relaxation of blocks)
 MAXL1 = None      # drop pairs (master and block) with more than MAXL1 distinct L1 atoms (sound relaxation)
 DUMP = None
@@ -181,7 +182,7 @@ def build_master(I):
     # symmetry breaking: value precedence for L1 (all pairs) and for L2 (level-1 pairs)
     allpos = [(x, y, i) for x, y in pairs for i in range(2)]
     precedence(S, V, 'L1', allpos, I.L1)
-    precedence(S, V, 'L2', [(x, y, i) for x, y, i in allpos if not (lev0(x) and lev0(y))], I.L2)
+    if PREC_L2: precedence(S, V, 'L2', [(x, y, i) for x, y, i in allpos if not (lev0(x) and lev0(y))], I.L2)
     for j in range(I.m - 1): S.add_clause([-V('used', I.L2[j + 1]), V('used', I.L2[j])])
     return S, V, pairs, dom
 

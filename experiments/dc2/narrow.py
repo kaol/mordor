@@ -52,6 +52,7 @@ def run(tag, cells, ks=None, shapes=None):
 if __name__ == "__main__":
     import os
     if os.environ.get('BLOCK_MAXL1'): d.BLOCK_MAXL1 = int(os.environ['BLOCK_MAXL1'])
+    if os.environ.get('PREC_L2') == '0': d.PREC_L2 = False
     # argv: tag, closed level-0 cells, [atom-free level-0 cells (case split) | -], [k list]
     if len(sys.argv) > 3 and sys.argv[3] != '-':
         Z = set(PF.parse_cell(c) for c in sys.argv[3].split(';')); d.ZERO0 = lambda x, y: (x, y) in Z

@@ -43,3 +43,4 @@ import Mordor.KPass
 import Mordor.Merge
 import Mordor.GenCollapse
 import Mordor.Exact
+import Mordor.Skeleton

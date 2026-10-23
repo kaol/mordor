@@ -15,6 +15,10 @@ So every cut counterexample on a chain-finite lattice can be assumed to have its
 its columns among joins of `Min Dᶜ` (finite meets and joins, by DCC and ACC).  When both `Max D` and `Min Dᶜ` are
 finite this is the finitely generated case (`FinGenAll`); the open case is the one where one of them is infinite.
 When only `Max D` is finite, the rows take finitely many values (the k × ∞ case of §34.3z¹¹).
+
+`bnf_nowit` goes further: `F` may be replaced by its *boundary normal form*
+`bnf F D x y = ⋀_{p ∈ Max D, x ≤ p} ⋁_{v ∈ Min Dᶜ, v ≤ y} F p v`, which depends only on the boundary table
+`Max D × Min Dᶜ`.  (No down-set hypothesis is needed for this step.)
 -/
 
 namespace Mordor.Skeleton
@@ -83,5 +87,55 @@ theorem skeleton [WellFoundedGT L] [WellFoundedLT L] (hD : ∀ x y, x ≤ y → 
   compress h (fun _ hx => rho_spec hD hx) (fun _ hy => kappa_spec hD hy)
 
 end
+
+section Boundary
+variable [CompleteLattice L] {D : Set L}
+
+/-- Column join from the minimal elements of `Dᶜ` below `y`. -/
+def colJoin (F : L → L → L) (D : Set L) (x y : L) : L :=
+  ⨆ (v : L) (_ : v ∉ D ∧ (∀ w, w ∉ D → ¬ w < v)) (_ : v ≤ y), F x v
+
+/-- Row meet over the maximal elements of `D` above `x`, of the column joins. -/
+def bnf (F : L → L → L) (D : Set L) (x y : L) : L :=
+  ⨅ (p : L) (_ : p ∈ D ∧ (∀ q ∈ D, ¬ p < q)) (_ : x ≤ p), colJoin F D p y
+
+theorem colJoin_le {F : L → L → L} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (x y : L) :
+    colJoin F D x y ≤ F x y :=
+  iSup₂_le fun _ _ => iSup_le fun hv => hF _ _ _ _ le_rfl hv
+
+theorem colJoin_mono {F : L → L → L} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') {x x' y y' : L}
+    (hx : x ≤ x') (hy : y ≤ y') : colJoin F D x y ≤ colJoin F D x' y' :=
+  iSup₂_le fun v hv => iSup_le fun hvy =>
+    (hF _ _ _ _ hx le_rfl).trans (le_iSup₂_of_le v hv (le_iSup_of_le (hvy.trans hy) le_rfl))
+
+theorem bnf_mono {F : L → L → L} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') {x x' y y' : L}
+    (hx : x ≤ x') (hy : y ≤ y') : bnf F D x y ≤ bnf F D x' y' :=
+  le_iInf₂ fun p hp => le_iInf fun hxp =>
+    (iInf₂_le p hp).trans ((iInf_le _ (hx.trans hxp)).trans (colJoin_mono hF le_rfl hy))
+
+/-- **Boundary normal form.** Under ACC and DCC, a witness-free monotone `F` on a cut `D` stays witness-free after
+replacing it by `bnf F D`, which depends only on the values of `F` on (maximal elements of `D`) × (minimal elements of
+`Dᶜ`): `bnf F D x y = ⋀_{p ∈ Max D, x ≤ p} ⋁_{v ∈ Min Dᶜ, v ≤ y} F p v`. -/
+theorem bnf_nowit [WellFoundedGT L] [WellFoundedLT L]
+    {F : L → L → L} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (h : NoWit F D) :
+    NoWit (bnf F D) D := by
+  -- witness-freeness of the column joins
+  have hc : NoWit (colJoin F D) D := by
+    intro x hx y hy
+    obtain ⟨v, ⟨hvD, hvy⟩, hmin⟩ := (wellFounded_lt (α := L)).has_min {v | v ∉ D ∧ v ≤ y} ⟨y, hy, le_rfl⟩
+    have hvm : v ∉ D ∧ (∀ w, w ∉ D → ¬ w < v) := ⟨hvD, fun w hw hwv => hmin w ⟨hw, hwv.le.trans hvy⟩ hwv⟩
+    refine ⟨fun c => (h x hx v hvD).1 ?_, fun c => (h x hx y hy).2 (c.trans (colJoin_le hF x y))⟩
+    exact (le_iSup₂_of_le (f := fun v _ => ⨆ (_ : v ≤ y), F x v) v hvm
+      (le_iSup (fun _ : v ≤ y => F x v) hvy)).trans c
+  intro x hx y hy
+  refine ⟨fun c => (hc x hx y hy).1 ?_, fun c => ?_⟩
+  · have hle : colJoin F D x y ≤ bnf F D x y :=
+      le_iInf₂ fun p hp => le_iInf fun hxp => colJoin_mono hF hxp le_rfl
+    exact hle.trans c
+  · obtain ⟨p, ⟨hpD, hxp⟩, hmax⟩ := (wellFounded_gt (α := L)).has_min {p | p ∈ D ∧ x ≤ p} ⟨x, hx, le_rfl⟩
+    have hpm : p ∈ D ∧ (∀ q ∈ D, ¬ p < q) := ⟨hpD, fun q hq hpq => hmax q ⟨hq, hxp.trans hpq.le⟩ hpq⟩
+    exact (hc p hpD y hy).2 (c.trans ((iInf₂_le p hpm).trans (iInf_le _ hxp)))
+
+end Boundary
 
 end Mordor.Skeleton

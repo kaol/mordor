@@ -98,6 +98,16 @@ if 'notC' in LAWS:   # negation of candidate: some u ∈ T_r^q has F(q,u) = v �
     s.add(z3.Or([z3.And(isQ(F[(r, u)]), F[(q, u)] == v, isP(F[(r, v)])) for u in U for v in U]))
 if 'notC2' in LAWS:  # weaker: some u ∈ T_r^q has F(q,u) ∈ T_q
     s.add(z3.Or([z3.And(isQ(F[(r, u)]), F[(q, u)] == v, isD(F[(q, v)])) for u in U for v in U]))
+if 'meetR' in LAWS:   # boundary normal form: row r = glb(row p, row q)
+    for u in U:
+        for c in X:
+            s.add(z3.Implies(F[(r, u)] == c, z3.And([z3.Implies(z3.And(LE(z3.IntVal(x), F[(p, u)]), LE(z3.IntVal(x), F[(q, u)])), le[x][c]) for x in X])))
+if 'joinC' in LAWS:   # boundary normal form: rows p, q are joins of their values at minimal columns below
+    for m in (p, q):
+        for u in U:
+            mins = [(v, z3.And(le[v][u], *[z3.Not(le[w][v]) for w in U if w != v])) for v in U]
+            for x in X:   # every upper bound of {F(m,v) : v minimal ≤ u} is above F(m,u)
+                s.add(z3.Implies(z3.And([z3.Implies(mv, LE(F[(m, v)], z3.IntVal(x))) for v, mv in mins]), LE(F[(m, u)], z3.IntVal(x))))
 if 'Ztop' in LAWS:     # item 6: a minimal instance has Z = S_p ∩ S_q = {⊤}
     for u in U:
         if u != TOP: s.add(z3.Not(z3.And(LE(F[(p, u)], z3.IntVal(u)), LE(F[(q, u)], z3.IntVal(u)))))
@@ -106,6 +116,7 @@ print(NU, NE, sorted(LAWS), r_, flush=True)
 if r_ == z3.sat:
     M = s.model(); name = {r: 'r', p: 'p', q: 'q', **{e: f"e{i}" for i, e in enumerate(E)},
                            **{u: (f"u{i}" if u != TOP else '⊤') for i, u in enumerate(U)}}
+    if "quiet" in LAWS: sys.exit(0)
     print(' order:', [(name[i], name[j]) for i in X for j in X if i != j and z3.is_true(M[le[i][j]])
                       and not any(k not in (i, j) and z3.is_true(M[le[i][k]]) and z3.is_true(M[le[k][j]]) for k in X)])
     print(' F:', {f"{name[m]},{name[u]}": name[M[v].as_long()] for (m, u), v in F.items()})

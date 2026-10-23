@@ -50,16 +50,23 @@ F = {(m, u): z3.Int(f"F_{m}_{u}") for m in (r, p, q) for u in U}
 for v in F.values(): s.add(v >= 0, v < N)
 def LE(a_expr, b_expr):
     return z3.Or([z3.And(a_expr == i, b_expr == j, le[i][j]) for i in X for j in X])
+VIOL = []
 for (m, u), v in F.items():
     for (m2, u2), v2 in F.items():
         if (m, u) != (m2, u2):
             s.add(z3.Implies(z3.And(le[m][m2], le[u][u2]), LE(v, v2)))
     if f"noW1{'rpq'[m]}" not in LAWS: s.add(z3.Not(LE(v, z3.IntVal(m))))
     if f"noW2{'rpq'[m]}" not in LAWS:
-        w2 = z3.Not(LE(z3.IntVal(u), v))
+        w2 = z3.Not(LE(z3.IntVal(u), v)) if 'weakW2' not in LAWS else (v != u)   # weakW2: only no U-fixed point
         if 'floorW2' in LAWS:   # near-models: W2 waived at minimal columns of U (a truncated infinite descent)
             w2 = z3.Implies(z3.Or([le[u2][u] for u2 in U if u2 != u]), w2)
-        s.add(w2)
+        if 'oneviol' in LAWS: VIOL.append(z3.If(w2, 0, 1))
+        else: s.add(w2)
+if 'oneviol' in LAWS: s.add(z3.Sum(VIOL) == 1)
+isD = lambda v: z3.Or([v == d for d in D])
+if 'ends' in LAWS:   # descent endpoints that DCC guarantees: t ∈ T_m ∩ S_m for m = p, q
+    for m in (p, q):
+        s.add(z3.Or([z3.And(isD(F[(m, u)]), LE(F[(m, u)], z3.IntVal(u))) for u in U]))
 r_ = s.check()
 print(NU, NE, sorted(LAWS), r_, flush=True)
 if r_ == z3.sat:

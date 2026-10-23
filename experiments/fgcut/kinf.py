@@ -51,6 +51,11 @@ for v in F.values(): s.add(v >= 0, v < N)
 def LE(a_expr, b_expr):
     return z3.Or([z3.And(a_expr == i, b_expr == j, le[i][j]) for i in X for j in X])
 VIOL = []
+ORB = {(m, u): z3.Bool(f"orb_{m}_{u}") for m in (r, p, q) for u in U}   # superset of the f_m-orbit of ⊤
+for m in (r, p, q):
+    s.add(ORB[(m, TOP)])
+    for u in U:
+        for v in U: s.add(z3.Implies(z3.And(ORB[(m, u)], F[(m, u)] == v), ORB[(m, v)]))
 for (m, u), v in F.items():
     for (m2, u2), v2 in F.items():
         if (m, u) != (m2, u2):
@@ -59,6 +64,16 @@ for (m, u), v in F.items():
     if f"noW2{'rpq'[m]}" not in LAWS:
         w2 = z3.Not(LE(z3.IntVal(u), v)) if 'weakW2' not in LAWS else (v != u)   # weakW2: only no U-fixed point
         if 'W2topOnly' in LAWS and u != TOP: w2 = z3.BoolVal(True)
+        pol = next((x.split('=')[1] for x in LAWS if x.startswith(f"pol{'rpq'[m]}=")), None)
+        if pol == 'top' and u != TOP: w2 = z3.BoolVal(True)
+        if pol == 'orb' and u != TOP: w2 = z3.Implies(ORB[(m, u)], w2)
+        if pol == 'orbpq' and u != TOP: w2 = z3.Implies(z3.Or(ORB[(p, u)], ORB[(q, u)]), w2)
+        if 'W2orb' in LAWS and u != TOP:
+            w2 = z3.Implies(ORB[(m, u)], w2)
+        if 'W2lvl2' in LAWS and u != TOP:   # W2 only at ⊤, F(m, ⊤), F(m', F(m, ⊤)) (when those are columns)
+            lvl1 = [F[(m2, TOP)] == u for m2 in (r, p, q)]
+            lvl2 = [z3.And(F[(m2, TOP)] == u1, F[(m3, u1)] == u) for m2 in (r, p, q) for m3 in (r, p, q) for u1 in U]
+            w2 = z3.Implies(z3.Or(lvl1 + lvl2), w2)
         if 'W2lvl1' in LAWS and u != TOP:   # W2 only at ⊤ and at the columns F(m, ⊤)
             w2 = z3.Implies(z3.Or([F[(m2, TOP)] == u for m2 in (r, p, q)]), w2)
         if 'floorW2' in LAWS:   # near-models: W2 waived at minimal columns of U (a truncated infinite descent)
@@ -76,6 +91,9 @@ if 'lemmas' in LAWS:   # consequences of DCC proved in §34.3z¹¹ (items 1-4), 
         Su = {m: LE(F[(m, u)], z3.IntVal(u)) for m in (p, q)}
         s.add(z3.Not(z3.And(isD(F[(p, u)]), Su[q])), z3.Not(z3.And(isD(F[(q, u)]), Su[p])))   # T_p∩S_q, T_q∩S_p
         s.add(z3.Not(z3.And(isQ(F[(r, u)]), Su[q])), z3.Not(z3.And(isP(F[(r, u)]), Su[p])))   # T_r^q∩S_q, T_r^p∩S_p
+if 'endsBelow' in LAWS:   # Kleene of f_m from ⊤ ends at e_m ≤ F(m, ⊤) with F(m, e_m) ∈ D and F(m, e_m) ≤ e_m
+    for m in (r, p, q):
+        s.add(z3.Or([z3.And(isD(F[(m, u)]), LE(F[(m, u)], z3.IntVal(u)), LE(z3.IntVal(u), F[(m, TOP)])) for u in U]))
 if 'Ztop' in LAWS:     # item 6: a minimal instance has Z = S_p ∩ S_q = {⊤}
     for u in U:
         if u != TOP: s.add(z3.Not(z3.And(LE(F[(p, u)], z3.IntVal(u)), LE(F[(q, u)], z3.IntVal(u)))))

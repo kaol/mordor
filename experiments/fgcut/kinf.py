@@ -58,6 +58,9 @@ for (m, u), v in F.items():
     if f"noW1{'rpq'[m]}" not in LAWS: s.add(z3.Not(LE(v, z3.IntVal(m))))
     if f"noW2{'rpq'[m]}" not in LAWS:
         w2 = z3.Not(LE(z3.IntVal(u), v)) if 'weakW2' not in LAWS else (v != u)   # weakW2: only no U-fixed point
+        if 'W2topOnly' in LAWS and u != TOP: w2 = z3.BoolVal(True)
+        if 'W2lvl1' in LAWS and u != TOP:   # W2 only at ⊤ and at the columns F(m, ⊤)
+            w2 = z3.Implies(z3.Or([F[(m2, TOP)] == u for m2 in (r, p, q)]), w2)
         if 'floorW2' in LAWS:   # near-models: W2 waived at minimal columns of U (a truncated infinite descent)
             w2 = z3.Implies(z3.Or([le[u2][u] for u2 in U if u2 != u]), w2)
         if 'oneviol' in LAWS: VIOL.append(z3.If(w2, 0, 1))
@@ -67,6 +70,15 @@ isD = lambda v: z3.Or([v == d for d in D])
 if 'ends' in LAWS:   # descent endpoints that DCC guarantees: t ∈ T_m ∩ S_m for m = p, q
     for m in (p, q):
         s.add(z3.Or([z3.And(isD(F[(m, u)]), LE(F[(m, u)], z3.IntVal(u))) for u in U]))
+isQ = lambda v: LE(v, z3.IntVal(q)); isP = lambda v: LE(v, z3.IntVal(p))
+if 'lemmas' in LAWS:   # consequences of DCC proved in §34.3z¹¹ (items 1-4), valid in every real instance
+    for u in U:
+        Su = {m: LE(F[(m, u)], z3.IntVal(u)) for m in (p, q)}
+        s.add(z3.Not(z3.And(isD(F[(p, u)]), Su[q])), z3.Not(z3.And(isD(F[(q, u)]), Su[p])))   # T_p∩S_q, T_q∩S_p
+        s.add(z3.Not(z3.And(isQ(F[(r, u)]), Su[q])), z3.Not(z3.And(isP(F[(r, u)]), Su[p])))   # T_r^q∩S_q, T_r^p∩S_p
+if 'Ztop' in LAWS:     # item 6: a minimal instance has Z = S_p ∩ S_q = {⊤}
+    for u in U:
+        if u != TOP: s.add(z3.Not(z3.And(LE(F[(p, u)], z3.IntVal(u)), LE(F[(q, u)], z3.IntVal(u)))))
 r_ = s.check()
 print(NU, NE, sorted(LAWS), r_, flush=True)
 if r_ == z3.sat:

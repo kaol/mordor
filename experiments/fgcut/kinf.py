@@ -94,6 +94,10 @@ if 'lemmas' in LAWS:   # consequences of DCC proved in §34.3z¹¹ (items 1-4), 
 if 'endsBelow' in LAWS:   # Kleene of f_m from ⊤ ends at e_m ≤ F(m, ⊤) with F(m, e_m) ∈ D and F(m, e_m) ≤ e_m
     for m in (r, p, q):
         s.add(z3.Or([z3.And(isD(F[(m, u)]), LE(F[(m, u)], z3.IntVal(u)), LE(z3.IntVal(u), F[(m, TOP)])) for u in U]))
+if 'notC' in LAWS:   # negation of candidate: some u ∈ T_r^q has F(q,u) = v ∈ U with v ∈ T_r^p
+    s.add(z3.Or([z3.And(isQ(F[(r, u)]), F[(q, u)] == v, isP(F[(r, v)])) for u in U for v in U]))
+if 'notC2' in LAWS:  # weaker: some u ∈ T_r^q has F(q,u) ∈ T_q
+    s.add(z3.Or([z3.And(isQ(F[(r, u)]), F[(q, u)] == v, isD(F[(q, v)])) for u in U for v in U]))
 if 'Ztop' in LAWS:     # item 6: a minimal instance has Z = S_p ∩ S_q = {⊤}
     for u in U:
         if u != TOP: s.add(z3.Not(z3.And(LE(F[(p, u)], z3.IntVal(u)), LE(F[(q, u)], z3.IntVal(u)))))

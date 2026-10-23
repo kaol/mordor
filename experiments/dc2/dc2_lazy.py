@@ -107,6 +107,7 @@ DUMP = None
 ALL_BLOCKS = True
 SYM = True        # close native lemmas under permutations of L1
 DPAT = None       # optional dict point -> bool fixing D on level-0 points
+CARRY0 = None     # predicate on closed level-0 pairs whose value must contain an L1 atom (case split)
 ZERO0 = None      # predicate on level-0 pairs forced atom-free (case split): domain {⊥, ⊤}
 SHUFFLE = None    # random.Random for randomized core minimization order
 SEL1 = None       # predicate: level-1 pairs that get a closure selector (core extraction)
@@ -170,6 +171,10 @@ def build_master(I):
             z = V('isL2', x, y, i)
             S.add_clause([-z] + [V('v', x, y, i, b) for b in I.L2])
             for b in I.L2: S.add_clause([z, -V('v', x, y, i, b)])
+    if CARRY0 is not None:
+        for x, y in pairs:
+            if lev0(x) and lev0(y) and CARRY0(x, y):
+                S.add_clause([-V('cell', x, y)] + [V('v', x, y, i, a) for i in range(2) for a in I.L1])
     if SEL1 is not None:
         for x, y in pairs:
             if not (lev0(x) and lev0(y)) and SEL1(x, y):

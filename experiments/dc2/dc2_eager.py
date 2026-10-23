@@ -104,6 +104,7 @@ def run(k, m, n, verbose=True):
             else: i += 1
         return [sels[l] for l in cur]
     r = S.solve()
+    if r: d.LAST_MODEL = (set(l for l in S.get_model() if l > 0), V, pairs, dom)
     if verbose: print(f"k={k} m={m} n={n}: {'SAT' if r else 'UNSAT'} [{time.time()-t0:.0f}s]", flush=True)
     return r
 

@@ -7,7 +7,9 @@ here = os.path.dirname(os.path.abspath(__file__))
 by = collections.defaultdict(dict)
 for f in glob.glob(os.path.join(here, 'c3_results*.jsonl')):
     for l in open(f):
-        r = json.loads(l); by[r['tag']].setdefault(r['k'], r)
+        r = json.loads(l)
+        if r['k'] == 'closure' and r.get('w') is not None: by[r['tag']]['closure'] = r
+        else: by[r['tag']].setdefault(r['k'], r)
 pats = list(c3.all_patterns(n)); reps, seen = [], set()
 for p in pats:
     t = c3.tag(p, n)

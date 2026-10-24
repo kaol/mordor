@@ -6,6 +6,6 @@ Lean generator cut_lean.py.
 import sys, cut_ground as c
 H = int(sys.argv[1]); cap = int(sys.argv[2]) if len(sys.argv) > 2 else 4000
 pr = int(sys.argv[3]) if len(sys.argv) > 3 else 1
-ok, G = c.run(H, cap, per_round=pr, wlog=True, room='fit')
+ok, G = c.run(H, cap, per_round=pr, wlog=True, room='fit', stream=f"cut_H{H}_pr{pr}.body")   # clauses to disk, not RAM
 if ok:
     c.write_dimacs(G, f"cut_H{H}_pr{pr}.cnf"); print(f"wrote cut_H{H}_pr{pr}.cnf ({G.nclauses} clauses)", flush=True)

@@ -1,3 +1,5 @@
 __pycache__/
 *.pyc
 experiments/dc2/c3_claims_n*/
+experiments/sat/cut_H*.body
+experiments/sat/cut_H*.cnf

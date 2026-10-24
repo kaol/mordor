@@ -89,8 +89,13 @@ isQ = lambda v: LE(v, z3.IntVal(q)); isP = lambda v: LE(v, z3.IntVal(p))
 if 'lemmas' in LAWS:   # consequences of DCC proved in §34.3z¹¹ (items 1-4), valid in every real instance
     for u in U:
         Su = {m: LE(F[(m, u)], z3.IntVal(u)) for m in (p, q)}
-        s.add(z3.Not(z3.And(isD(F[(p, u)]), Su[q])), z3.Not(z3.And(isD(F[(q, u)]), Su[p])))   # T_p∩S_q, T_q∩S_p
-        s.add(z3.Not(z3.And(isQ(F[(r, u)]), Su[q])), z3.Not(z3.And(isP(F[(r, u)]), Su[p])))   # T_r^q∩S_q, T_r^p∩S_p
+        if 'noL3' not in LAWS: s.add(z3.Not(z3.And(isD(F[(p, u)]), Su[q])), z3.Not(z3.And(isD(F[(q, u)]), Su[p])))   # T_p∩S_q, T_q∩S_p
+        if 'noL4' not in LAWS: s.add(z3.Not(z3.And(isQ(F[(r, u)]), Su[q])), z3.Not(z3.And(isP(F[(r, u)]), Su[p])))   # T_r^q∩S_q, T_r^p∩S_p
+if 'lemX' in LAWS:   # Lemma X: s ∈ S_q, h(s) = v ∈ U ⇒ v ∉ T_r^q;  s ∈ S_p, h(s) = v ∈ U ⇒ v ∉ T_r^p
+    for u in U:
+        for v in U:
+            s.add(z3.Not(z3.And(LE(F[(q, u)], z3.IntVal(u)), F[(r, u)] == v, isQ(F[(r, v)]))))
+            s.add(z3.Not(z3.And(LE(F[(p, u)], z3.IntVal(u)), F[(r, u)] == v, isP(F[(r, v)]))))
 if 'endsBelow' in LAWS:   # Kleene of f_m from ⊤ ends at e_m ≤ F(m, ⊤) with F(m, e_m) ∈ D and F(m, e_m) ≤ e_m
     for m in (r, p, q):
         s.add(z3.Or([z3.And(isD(F[(m, u)]), LE(F[(m, u)], z3.IntVal(u)), LE(z3.IntVal(u), F[(m, TOP)])) for u in U]))
@@ -108,6 +113,25 @@ if 'joinC' in LAWS:   # boundary normal form: rows p, q are joins of their value
             mins = [(v, z3.And(le[v][u], *[z3.Not(le[w][v]) for w in U if w != v])) for v in U]
             for x in X:   # every upper bound of {F(m,v) : v minimal ≤ u} is above F(m,u)
                 s.add(z3.Implies(z3.And([z3.Implies(mv, LE(F[(m, v)], z3.IntVal(x))) for v, mv in mins]), LE(F[(m, u)], z3.IntVal(x))))
+if 'notA1' in LAWS or 'A1prem' in LAWS:   # ChatGPT's A1, negated: the last U-term c_n of the r-orbit of ⊤ is q-type, and the
+    # exact q-orbit o_0 = c_n, o_{i+1} = F(q, o_i) leaves T_r^q while still in U (i.e. reaches A_r or T_r^p)
+    cn = z3.Int('cn'); s.add(z3.Or([cn == u for u in U]))
+    Fat = lambda m, e: z3.Sum([z3.If(e == u, F[(m, u)], 0) for u in U])
+    s.add(z3.Or([z3.And(cn == u, ORB[(r, u)]) for u in U]), isQ(Fat(r, cn)))
+    # exact r-orbit membership of cn: demand an explicit chain ⊤ = c_0 → … → c_t = cn under F(r, ·)
+    T = len(U); cs = [z3.Int(f'c{i}') for i in range(T + 1)]; tlen = z3.Int('tlen')
+    s.add(cs[0] == TOP, tlen >= 0, tlen <= T)
+    for i in range(T):
+        s.add(z3.Implies(i < tlen, cs[i + 1] == Fat(r, cs[i])))
+    s.add(z3.Or([z3.And(tlen == i, cs[i] == cn) for i in range(T + 1)]))
+    for i in range(T + 1): s.add(z3.Or([cs[i] == u for u in U]))
+    os_ = [z3.Int(f'o{i}') for i in range(T + 1)]; olen = z3.Int('olen')
+    s.add(os_[0] == cn, olen >= 1, olen <= T)
+    for i in range(T):
+        s.add(z3.Implies(i < olen, z3.And(os_[i + 1] == Fat(q, os_[i]), isQ(Fat(r, os_[i])))))
+    for i in range(T + 1): s.add(z3.Or([os_[i] == u for u in U]))
+    if 'notA1' in LAWS: s.add(z3.Or([z3.And(olen == i, z3.Not(isQ(Fat(r, os_[i])))) for i in range(1, T + 1)]))
+    else: pass
 if 'Ztop' in LAWS:     # item 6: a minimal instance has Z = S_p ∩ S_q = {⊤}
     for u in U:
         if u != TOP: s.add(z3.Not(z3.And(LE(F[(p, u)], z3.IntVal(u)), LE(F[(q, u)], z3.IntVal(u)))))

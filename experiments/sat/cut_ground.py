@@ -91,17 +91,25 @@ class Ground:
     def solve(self):
         while True:
             if not self.S.solve(): return None
-            model = self.S.get_model(); M = set(l for l in model if l > 0)
+            model = np.asarray(self.S.get_model()); M = set(model[model > 0].tolist())
             n = len(self.terms)
-            L = np.zeros((n, n), dtype=bool)
-            for (i, j), v in self.le_.items():
-                if i < n and j < n and model[v - 1] > 0: L[i, j] = True
-            # violations i ≤ j ≤ k, i ≰ k: (L·L) ∧ ¬L, with one middle j per (i, k)
-            Li = L.astype(np.int32)
-            bad = np.argwhere(((Li @ Li) > 0) & ~L)
-            for i, k in bad[:40000]:
-                j = int(np.argmax(L[i] & L[:, k]))
-                self.S.add_clause([-self.le(int(i), j), -self.le(j, int(k)), self.le(int(i), int(k))])
+            if len(self.le_) != getattr(self, '_le_n', -1):                       # vectorized order matrix
+                ks = np.array(list(self.le_.keys()), dtype=np.int64); self._leI, self._leJ = ks[:, 0], ks[:, 1]
+                self._leV = np.array(list(self.le_.values()), dtype=np.int64); self._le_n = len(self.le_)
+            sel = (self._leI < n) & (self._leJ < n)
+            sel[sel] = model[self._leV[sel] - 1] > 0
+            L = np.zeros((n, n), dtype=bool); L[self._leI[sel], self._leJ[sel]] = True
+            # violations i ≤ j ≤ k, i ≰ k: (L·L) ∧ ¬L, with one middle j per (i, k) (the first such j, as before)
+            Li = L.astype(np.float32)
+            bad = np.argwhere(((Li @ Li) > 0) & ~L)[:40000]
+            if getattr(self, 'allmid', False) and len(bad):              # every middle j (fewer re-solves, other trajectory)
+                for i, k in bad[:4000].tolist():
+                    for j in np.flatnonzero(L[i] & L[:, k]).tolist():
+                        self.S.add_clause([-self.le(i, j), -self.le(j, k), self.le(i, k)])
+            else:
+                mids = np.argmax(L[bad[:, 0]] & L[:, bad[:, 1]].T, axis=1) if len(bad) else []
+                for (i, k), j in zip(bad.tolist(), np.asarray(mids).tolist()):
+                    self.S.add_clause([-self.le(i, j), -self.le(j, k), self.le(i, k)])
             if len(bad): continue
             if self.lazy_rank and self.chains(L): continue
             if self.lazy_ih and self.ih_violations(L, M): continue
@@ -201,8 +209,8 @@ class Ground:
 
 
 def run(H, maxterms=300, per_round=40, nowitness=True, ih=False, lazy_rank=False, stream=None, wlog=False, room=False,
-        lazy_ih=False):
-    G = Ground(H, nowitness, ih, lazy_rank, stream, room, lazy_ih); c = G.add_term((0, 1), 1); G.add_ih(c); t0 = time.time(); rnd = 0
+        lazy_ih=False, allmid=False):
+    G = Ground(H, nowitness, ih, lazy_rank, stream, room, lazy_ih); G.allmid = allmid; c = G.add_term((0, 1), 1); G.add_ih(c); t0 = time.time(); rnd = 0
     if wlog: G.S.add_clause([-G.d(c)])         # WLOG F(⊥,⊤) ∉ D: the cut theory is self-dual (§33.3, §22.1)
     while True:
         rnd += 1

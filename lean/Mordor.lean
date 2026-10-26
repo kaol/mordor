@@ -44,3 +44,4 @@ import Mordor.Merge
 import Mordor.GenCollapse
 import Mordor.Exact
 import Mordor.Skeleton
+import Mordor.SubspaceCut

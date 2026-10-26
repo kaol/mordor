@@ -16,6 +16,12 @@ E = list(range(3, 3 + NE)); U = list(range(3 + NE, 3 + NE + NU)); TOP = U[-1]
 X = [r, p, q] + E + U; N = len(X); D = [r, p, q] + E
 le = [[z3.Bool(f"le_{i}_{j}") for j in X] for i in X]
 s = z3.Solver()
+TRACK = 'track' in LAWS
+TR = {}
+def tadd(name, c):
+    if TRACK:
+        b = z3.Bool(name); TR[name] = b; s.add(z3.Implies(b, c))
+    else: s.add(c)
 for i in X:
     s.add(le[i][i])
     for j in X:
@@ -57,10 +63,12 @@ for m in (r, p, q):
     for u in U:
         for v in U: s.add(z3.Implies(z3.And(ORB[(m, u)], F[(m, u)] == v), ORB[(m, v)]))
 for (m, u), v in F.items():
+    if 'noP' in LAWS and m == p: continue          # two-row version (rows q, r only)
     for (m2, u2), v2 in F.items():
+        if 'noP' in LAWS and m2 == p: continue
         if (m, u) != (m2, u2):
-            s.add(z3.Implies(z3.And(le[m][m2], le[u][u2]), LE(v, v2)))
-    if f"noW1{'rpq'[m]}" not in LAWS: s.add(z3.Not(LE(v, z3.IntVal(m))))
+            tadd(f"mono_{'rpq'[m]}{u}_{'rpq'[m2]}{u2}", z3.Implies(z3.And(le[m][m2], le[u][u2]), LE(v, v2)))
+    if f"noW1{'rpq'[m]}" not in LAWS: tadd(f"W1_{'rpq'[m]}{u}", z3.Not(LE(v, z3.IntVal(m))))
     if f"noW2{'rpq'[m]}" not in LAWS:
         w2 = z3.Not(LE(z3.IntVal(u), v)) if 'weakW2' not in LAWS else (v != u)   # weakW2: only no U-fixed point
         if 'W2topOnly' in LAWS and u != TOP: w2 = z3.BoolVal(True)
@@ -80,7 +88,7 @@ for (m, u), v in F.items():
             w2 = z3.Implies(z3.Or([le[u2][u] for u2 in U if u2 != u]), w2)
         if 'oneviol' in LAWS and not ('topstrict' in LAWS and u == TOP): VIOL.append(z3.If(w2, 0, 1))
         elif 'oneviol' in LAWS: s.add(w2)
-        else: s.add(w2)
+        else: tadd(f"W2_{'rpq'[m]}{u}", w2)
 if 'oneviol' in LAWS: s.add(z3.Sum(VIOL) == 1)
 isD = lambda v: z3.Or([v == d for d in D])
 if 'ends' in LAWS:   # descent endpoints that DCC guarantees: t ∈ T_m ∩ S_m for m = p, q
@@ -91,7 +99,7 @@ if 'lemmas' in LAWS:   # consequences of DCC proved in §34.3z¹¹ (items 1-4), 
     for u in U:
         Su = {m: LE(F[(m, u)], z3.IntVal(u)) for m in (p, q)}
         if 'noL3' not in LAWS: s.add(z3.Not(z3.And(isD(F[(p, u)]), Su[q])), z3.Not(z3.And(isD(F[(q, u)]), Su[p])))   # T_p∩S_q, T_q∩S_p
-        if 'noL4' not in LAWS: s.add(z3.Not(z3.And(isQ(F[(r, u)]), Su[q])), z3.Not(z3.And(isP(F[(r, u)]), Su[p])))   # T_r^q∩S_q, T_r^p∩S_p
+        if 'noL4' not in LAWS: tadd(f"L4q_{u}", z3.Not(z3.And(isQ(F[(r, u)]), Su[q]))); tadd(f"L4p_{u}", z3.Not(z3.And(isP(F[(r, u)]), Su[p])))   # T_r^q∩S_q, T_r^p∩S_p
 if 'lemX' in LAWS:   # Lemma X: s ∈ S_q, h(s) = v ∈ U ⇒ v ∉ T_r^q;  s ∈ S_p, h(s) = v ∈ U ⇒ v ∉ T_r^p
     for u in U:
         for v in U:
@@ -118,10 +126,13 @@ if 'notA1' in LAWS or 'A1prem' in LAWS:   # ChatGPT's A1, negated: the last U-te
     # exact q-orbit o_0 = c_n, o_{i+1} = F(q, o_i) leaves T_r^q while still in U (i.e. reaches A_r or T_r^p)
     cn = z3.Int('cn'); s.add(z3.Or([cn == u for u in U]))
     Fat = lambda m, e: z3.Sum([z3.If(e == u, F[(m, u)], 0) for u in U])
-    s.add(z3.Or([z3.And(cn == u, ORB[(r, u)]) for u in U]), isQ(Fat(r, cn)))
+    s.add(isQ(Fat(r, cn)))
+    if 'startS' not in LAWS: s.add(z3.Or([z3.And(cn == u, ORB[(r, u)]) for u in U]))
     # exact r-orbit membership of cn: demand an explicit chain ⊤ = c_0 → … → c_t = cn under F(r, ·)
     T = len(U); cs = [z3.Int(f'c{i}') for i in range(T + 1)]; tlen = z3.Int('tlen')
-    s.add(cs[0] == TOP, tlen >= 0, tlen <= T)
+    if 'startS' in LAWS:   # orbit may start at any column s with F(q,s) ≤ s (s ∈ S_q)
+        s.add(z3.Or([z3.And(cs[0] == u, LE(F[(q, u)], z3.IntVal(u))) for u in U]), tlen >= 0, tlen <= T)
+    else: s.add(cs[0] == TOP, tlen >= 0, tlen <= T)
     for i in range(T):
         s.add(z3.Implies(i < tlen, cs[i + 1] == Fat(r, cs[i])))
     s.add(z3.Or([z3.And(tlen == i, cs[i] == cn) for i in range(T + 1)]))
@@ -133,11 +144,40 @@ if 'notA1' in LAWS or 'A1prem' in LAWS:   # ChatGPT's A1, negated: the last U-te
     for i in range(T + 1): s.add(z3.Or([os_[i] == u for u in U]))
     if 'notA1' in LAWS: s.add(z3.Or([z3.And(olen == i, z3.Not(isQ(Fat(r, os_[i])))) for i in range(1, T + 1)]))
     else: pass
+if 'Tne' in LAWS:     # T = {u : F(r,u) is a D-value below q} is nonempty
+    s.add(z3.Or([isQ(F[(r, u)]) for u in U]))
+Sq = lambda u: LE(F[(q, u)], z3.IntVal(u))
+if 'belowH' in LAWS:  # some s ∈ S_q and x ∈ T with x ≤ F(r, s) ∈ U
+    s.add(z3.Or([z3.And(Sq(u), F[(r, u)] == v, le[x][v], isQ(F[(r, x)])) for u in U for v in U for x in U]))
+if 'belowG' in LAWS:  # some s ∈ S_q and x ∈ T with x ≤ F(q, s) ∈ U
+    s.add(z3.Or([z3.And(Sq(u), F[(q, u)] == v, le[x][v], isQ(F[(r, x)])) for u in U for v in U for x in U]))
+if 'stepK' in LAWS:   # one induction step: s ∈ S_q, s2 = F(q,s) ∈ U; r-orbit of s2 ends P-type; r-orbit of s ends Q-type
+    T = len(U); Fat = lambda m, e: z3.Sum([z3.If(e == u, F[(m, u)], 0) for u in U])
+    inU = lambda e: z3.Or([e == u for u in U])
+    s0, s2 = z3.Int('s0'), z3.Int('s2'); s.add(inU(s0), Sq0 := z3.Or([z3.And(s0 == u, Sq(u)) for u in U]), s2 == Fat(q, s0), inU(s2))
+    def orbit(tag, start, endtype):
+        e = [z3.Int(f'{tag}{i}') for i in range(T + 1)]; n_ = z3.Int(f'{tag}n')
+        s.add(e[0] == start, n_ >= 0, n_ < T)
+        for i in range(T + 1): s.add(z3.Implies(i <= n_, inU(e[i])))
+        for i in range(T): s.add(z3.Implies(i < n_, e[i + 1] == Fat(r, e[i])))
+        s.add(z3.Or([z3.And(n_ == i, endtype(Fat(r, e[i]))) for i in range(T)]))
+    isPt = lambda v: z3.And(isD(v), z3.Not(isQ(v)))
+    orbit('a', s0, isQ)          # orbit of s ends with a q-type value
+    if 'noIH' not in LAWS: orbit('b', s2, isPt)   # IH: orbit of F(q,s) ends p-type
 if 'Ztop' in LAWS:     # item 6: a minimal instance has Z = S_p ∩ S_q = {⊤}
     for u in U:
         if u != TOP: s.add(z3.Not(z3.And(LE(F[(p, u)], z3.IntVal(u)), LE(F[(q, u)], z3.IntVal(u)))))
-r_ = s.check()
+r_ = s.check(list(TR.values())) if TRACK else s.check()
 print(NU, NE, sorted(LAWS), r_, flush=True)
+if TRACK and r_ == z3.unsat:
+    core = [str(c) for c in s.unsat_core()]
+    i = 0
+    while i < len(core):
+        trial = core[:i] + core[i+1:]
+        if s.check([TR[c] for c in trial]) == z3.unsat:
+            uc = set(str(c) for c in s.unsat_core()); core = [c for c in trial if c in uc]
+        else: i += 1
+    print('core', len(core), sorted(core))
 if r_ == z3.sat:
     M = s.model(); name = {r: 'r', p: 'p', q: 'q', **{e: f"e{i}" for i, e in enumerate(E)},
                            **{u: (f"u{i}" if u != TOP else '⊤') for i, u in enumerate(U)}}

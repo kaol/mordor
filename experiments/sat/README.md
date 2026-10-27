@@ -49,3 +49,7 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   numbered by a linear extension, F one-hot, WLOG F(⊥,⊤) ∉ D). None with ≤ 11 elements, at any height (§34.3h).
 - `cut_ground2.py H`: fully lazy variant (all axiom families added on violation; height bound as direct chain clauses).
   Reproduces H ≤ 3; superseded by `room='fit'`.
+- `box_cut.py` (§34.3z¹⁵): `cells H` restricts the tightness search to box cells F(x, y) with x < y in the current
+  model (H = 5: UNSAT with 113 terms in 3 s); `cut H` is the box Cut theory, no-witness only for s < t (UNSAT for
+  H ≤ 4); `finite k` checks the box Cut Lemma on every lattice of closure systems on k points (k = 4: 932 cuts, all
+  have a box witness); `minimize H T.pkl` gives a deletion-minimal subterm-closed term set (H = 3, 4, 5: 7, 17, 71).

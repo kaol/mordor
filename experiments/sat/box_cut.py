@@ -2,8 +2,11 @@
 
 A box cell is F(x, y) with x ∈ D, y ∉ D, x < y.
   python3 box_cut.py cells H [maxterms]   ground refutation adding only cells that are box cells in the current model
-  python3 box_cut.py cut H [maxterms]     the box Cut theory: no-witness asserted only for s < t; UNSAT means every
-                                          bounded poset of edge-height ≤ H has a witness with x < y
+  python3 box_cut.py cut H [maxterms] [opts]   the box Cut theory: no-witness asserted only for s < t; UNSAT means
+                                          every bounded poset of edge-height ≤ H has a witness with x < y.
+      opts (comma-separated): disk  clauses go to box_H<H>.body, not RAM (same trajectory; on UNSAT writes box_H<H>.cnf)
+                              lazyrank  height bound by violated-chain clauses instead of 6n² eager rank clauses
+                                        (another trajectory; H = 5 Cut: 98 terms; cut_lean.py does not translate these)
   python3 box_cut.py finite k             the box Cut Lemma on every lattice of closure systems on k points, all D
   python3 box_cut.py minimize H in.pkl    deletion-minimal subterm-closed term set of a certificate (terms as nested
                                           pairs over '⊥', '⊤', e.g. read from tv4/tv5 of CutHeight4/5.lean)
@@ -27,7 +30,7 @@ def box_cells(H, cap):
     return c.run(H, cap, per_round=1, wlog=True, room='fit')
 
 
-def box_theory(H, cap):
+def box_theory(H, cap, opts=()):
     orig_add = c.Ground.add_term
     def add_term(self, st, dep):
         nw = self.nowitness; self.nowitness = False
@@ -38,7 +41,10 @@ def box_theory(H, cap):
             self.S.add_clause([-self.d(s), self.d(t), -self.le(s, t), -self.le(t, i)])
         return i
     c.Ground.add_term = add_term
-    return c.run(H, cap, per_round=1, wlog=True, room='fit')
+    body = f"box_H{H}.body" if 'disk' in opts else None
+    ok, G = c.run(H, cap, per_round=1, wlog=True, room='fit', stream=body, lazy_rank='lazyrank' in opts)
+    if ok and body: c.write_dimacs(G, f"box_H{H}.cnf"); print(f"wrote box_H{H}.cnf ({G.nclauses} clauses)", flush=True)
+    return ok, G
 
 
 def finite(k):
@@ -91,7 +97,8 @@ def minimize(H, T):
 if __name__ == '__main__':
     mode = sys.argv[1]
     if mode == 'cells': box_cells(int(sys.argv[2]), int(sys.argv[3]) if len(sys.argv) > 3 else 3000)
-    elif mode == 'cut': box_theory(int(sys.argv[2]), int(sys.argv[3]) if len(sys.argv) > 3 else 3000)
+    elif mode == 'cut': box_theory(int(sys.argv[2]), int(sys.argv[3]) if len(sys.argv) > 3 else 3000,
+                                   sys.argv[4].split(',') if len(sys.argv) > 4 else ())
     elif mode == 'finite': finite(int(sys.argv[2]))
     elif mode == 'minimize':
         T = pickle.load(open(sys.argv[3], 'rb')); M = minimize(int(sys.argv[2]), T)

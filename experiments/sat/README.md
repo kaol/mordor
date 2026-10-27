@@ -39,6 +39,8 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   (H = 5: 128 → 125 terms), and `cut_lean.py` does not translate them. With
   `run(H, 5000, per_round=1, wlog=True, room='fit')`: H = 3, 4, 5 UNSAT with 7 / 19 / 128 terms (H = 5 in 17 s);
   depth-first selection (§34.3g) needed 35 / 388 terms for H = 3, 4 and did not finish H = 5.
+- `cut_ground.fit` scores candidates in chunks of `FIT_CELLS` work cells, which bounds its cand × |F| arrays (about
+  9 GB transient at 1500 terms otherwise); the scores, and so the search trajectory, are unchanged.
 - `cut_lean.py H core.cnf maps.pkl out.lean`: turns a drat-trim core of an UNSAT run into a Lean file
   (`lean/Mordor/CutHeight<H>.lean`) whose clauses are instances of `lean/Mordor/GroundCut.lean`, refuted by `bv_decide`;
   a WLOG unit becomes `cl_wlog` and the final theorem goes through `cut_of_wlog`.
@@ -50,6 +52,8 @@ computation before it is reported; an unsat answer is only as trustworthy as the
 - `cut_ground2.py H`: fully lazy variant (all axiom families added on violation; height bound as direct chain clauses).
   Reproduces H ≤ 3; superseded by `room='fit'`.
 - `box_cut.py` (§34.3z¹⁵): `cells H` restricts the tightness search to box cells F(x, y) with x < y in the current
-  model (H = 5: UNSAT with 113 terms in 3 s); `cut H` is the box Cut theory, no-witness only for s < t (UNSAT for
-  H ≤ 4); `finite k` checks the box Cut Lemma on every lattice of closure systems on k points (k = 4: 932 cuts, all
+  model (H = 5: UNSAT with 113 terms in 3 s); `cut H [maxterms] [disk,lazyrank]` is the box Cut theory, no-witness
+  only for s < t (UNSAT for H ≤ 4). Memory at H = 5, 300 terms: 1.14 GB default, 0.55 GB with `disk` (clauses
+  streamed to `box_H<H>.body`, same trajectory), 0.17 GB and 3× faster with `disk,lazyrank` (chain clauses on
+  violation instead of eager rank clauses; another trajectory, not translated by `cut_lean.py`); `finite k` checks the box Cut Lemma on every lattice of closure systems on k points (k = 4: 932 cuts, all
   have a box witness); `minimize H T.pkl` gives a deletion-minimal subterm-closed term set (H = 3, 4, 5: 7, 17, 71).

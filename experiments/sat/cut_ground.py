@@ -19,6 +19,9 @@ import numpy as np
 from pysat.solvers import Cadical153
 
 
+FIT_CELLS = 1 << 24          # work-array budget of fit(), in cells (about 64 MB per float32 array)
+
+
 class Ground:
     def __init__(self, H, nowitness=True, ih=False, lazy_rank=False, stream=None, room=False, lazy_ih=False):
         self.H = H; self.nv = 0; self.terms = []; self.depth = []; self.nowitness = nowitness; self.lazy_ih = lazy_ih
@@ -154,19 +157,16 @@ class Ground:
             self.S.add_clause(c); added += 1
         return added
 
-    def fit(self, M, cand):
+    def fit(self, M, cand, chunk=None):
         """Tightness of each candidate F(x,y) in the current model: the number of existing elements z that F(x,y)
         could equal (above every F(s,t) with s ≤ x, t ≤ y; below every F(s,t) with x ≤ s, y ≤ t; z ≰ x; y ≰ z), plus 1
-        if a fresh element fits under the height bound. 0 means the term refutes the model."""
-        n = len(self.terms); L = self.L; X = np.array([c[1] for c in cand]); Y = np.array([c[2] for c in cand])
+        if a fresh element fits under the height bound. 0 means the term refutes the model.
+        Candidates are scored in chunks of about FIT_CELLS / (|F| + n) so the cand × |F| and cand × n work arrays stay
+        bounded (the scores do not depend on the chunking)."""
+        n = len(self.terms); L = self.L
         ST = np.array([(s, t, a) for (s, t), a in self.F.items()]); s_, t_, a_ = ST[:, 0], ST[:, 1], ST[:, 2]
-        lo = (L[s_][:, X] & L[t_][:, Y]).T.astype(np.float32)                    # cand × m
-        hi = (L[X][:, s_] & L[Y][:, t_]).astype(np.float32)
         nab = (~L[a_]).astype(np.float32); nbe = (~L[:, a_].T).astype(np.float32)  # m × n: a ≰ z, z ≰ b
-        ok = ((lo @ nab) == 0) & ((hi @ nbe) == 0)
-        dg = X == Y                                                              # diagonal: height induction
         Dm = np.array([self.d(i) in M for i in range(n)])
-        ok &= np.where(dg[:, None], np.where(Dm[X][:, None], ~L[X], ~L[:, X].T), ~L[:, X].T & ~L[Y])  # cand × n
         S = L & ~L.T; up = np.zeros(n, int); dn = np.zeros(n, int)               # longest chains below / above
         order = np.argsort(S.sum(0), kind='stable')
         for q in order:
@@ -175,10 +175,19 @@ class Ground:
         for q in order[::-1]:
             ps = np.nonzero(S[q])[0]
             if len(ps): dn[q] = dn[ps].max() + 1
-        lo_b, hi_b = lo.astype(bool), hi.astype(bool)
-        fresh = [(up[a_[lo_b[i]]].max(initial=0) + 1) + (dn[a_[hi_b[i]]].max(initial=0) + 1) <= self.H
-                 for i in range(len(cand))]
-        return ok.sum(1) + np.array(fresh, dtype=int)
+        chunk = chunk or max(1, FIT_CELLS // (len(s_) + n))
+        out = []
+        for c0 in range(0, len(cand), chunk):
+            cc = cand[c0:c0 + chunk]; X = np.array([c[1] for c in cc]); Y = np.array([c[2] for c in cc])
+            lo = (L[s_][:, X] & L[t_][:, Y]).T                                   # cand × m
+            hi = L[X][:, s_] & L[Y][:, t_]
+            ok = ((lo.astype(np.float32) @ nab) == 0) & ((hi.astype(np.float32) @ nbe) == 0)
+            dg = X == Y                                                          # diagonal: height induction
+            ok &= np.where(dg[:, None], np.where(Dm[X][:, None], ~L[X], ~L[:, X].T), ~L[:, X].T & ~L[Y])  # cand × n
+            fresh = [(up[a_[lo[i]]].max(initial=0) + 1) + (dn[a_[hi[i]]].max(initial=0) + 1) <= self.H
+                     for i in range(len(cc))]
+            out.append(ok.sum(1) + np.array(fresh, dtype=int))
+        return np.concatenate(out) if out else np.zeros(0, int)
 
     def expand(self, M, cap):
         n = len(self.terms); D = [self.d(i) in M for i in range(n)]

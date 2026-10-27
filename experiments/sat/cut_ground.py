@@ -17,7 +17,8 @@ whose value has the fewest places left in the model (§34.3h). wlog=True adds F(
 import sys, itertools, time, resource
 from array import array
 import numpy as np
-from pysat.solvers import Cadical153
+from pysat.solvers import Cadical153, Cadical195
+SOLVER = Cadical153          # run_height.py option cd195 switches to CaDiCaL 1.9.5
 
 
 FIT_CELLS = 1 << 24          # work-array budget of fit(), in cells (about 64 MB per float32 array)
@@ -45,7 +46,9 @@ class Ground:
         self.S.add_clause([-self.le(1, 0)]); self.S.add_clause([self.d(0)]); self.S.add_clause([-self.d(1)])
 
     def _new_solver(self):
-        self.S = Cadical153(); self._raw = self.S.add_clause; self.S.add_clause = self._add
+        old = getattr(self, 'S', None)
+        if old is not None: self._raw = None; self.S = None; old.delete()     # free the old solver before building anew
+        self.S = SOLVER(); self._raw = self.S.add_clause; self.S.add_clause = self._add
 
     def add_trans(self, i, j, k):
         c = [-self.le(i, j), -self.le(j, k), self.le(i, k)]

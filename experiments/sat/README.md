@@ -46,7 +46,12 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   an axiom instance); another trajectory. H = 6, one thread each, B = 10⁶: 353 terms at 0.47 GB / 275 s against
   0.82 GB / 454 s without, 403 terms at 0.57 GB with live transitivity clauses staying near 10⁶. H ≤ 5 Cut still
   closes (H = 5 with B = 10³ or 2·10⁴). The trajectory can also get worse: the box Cut theory at H = 4 with B = 10³
-  was still SAT past 200 terms (33 without forget; 10⁴ and 10⁵ close it).
+  was still SAT past 200 terms (33 without forget; 10⁴ and 10⁵ close it). The old solver is deleted before the new one is
+  built. A selector-epoch variant (no rebuild; old epochs disabled by a unit) used more memory, not less (H = 6, 300
+  terms: 0.70 / 1.30 GB for B = 10⁶ / 3·10⁵), and was dropped. One external run segfaulted inside CaDiCaL 1.5.3's
+  `Internal::propagate()` (located from the dmesg code bytes in the same pysolvers build); not reproduced in three H = 6
+  stress runs with 113–234 rebuilds each. Option `cd195` (run_height.py) switches to CaDiCaL 1.9.5; run long jobs under
+  `python3 -X faulthandler` so a crash prints the Python stack.
 - `cut_ground.fit` scores candidates in chunks of `FIT_CELLS` work cells, which bounds its cand × |F| arrays (about
   9 GB transient at 1500 terms otherwise); the scores, and so the search trajectory, are unchanged.
 - `cut_lean.py H core.cnf maps.pkl out.lean`: turns a drat-trim core of an UNSAT run into a Lean file

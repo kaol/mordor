@@ -50,7 +50,11 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   built. A selector-epoch variant (no rebuild; old epochs disabled by a unit) used more memory, not less (H = 6, 300
   terms: 0.70 / 1.30 GB for B = 10⁶ / 3·10⁵), and was dropped. One external run segfaulted inside CaDiCaL 1.5.3's
   `Internal::propagate()` (located from the dmesg code bytes in the same pysolvers build); not reproduced in three H = 6
-  stress runs with 113–234 rebuilds each. Option `cd195` (run_height.py) switches to CaDiCaL 1.9.5; run long jobs under
+  stress runs with 113–234 rebuilds each. A second one (CaDiCaL 1.9.5, 753 terms, 112 rebuilds, 45 min) died in
+  `get_model` → `Solver::val`. Under an AddressSanitizer build of pysat's CaDiCaL 1.5.3 and 1.9.5 with CaDiCaL's
+  assertions on, about 450 rebuilds at H = 5, 6 showed no memory error; the cause is unknown. Hence the term
+  checkpoint (`run(..., ckpt=path)`, written every 25 rounds; `run_height.py` resumes from `cut_H<H>_<tag>.ckpt` when
+  rerun) and the option `nophases` (no `set_phases` after a rebuild, the one unusual solver call on that path). Option `cd195` (run_height.py) switches to CaDiCaL 1.9.5; run long jobs under
   `python3 -X faulthandler` so a crash prints the Python stack.
 - `cut_ground.fit` scores candidates in chunks of `FIT_CELLS` work cells, which bounds its cand × |F| arrays (about
   9 GB transient at 1500 terms otherwise); the scores, and so the search trajectory, are unchanged.

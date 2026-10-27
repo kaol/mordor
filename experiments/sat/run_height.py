@@ -11,16 +11,21 @@ opts, comma-separated:
               H = 6, 300 terms: 3.5M transitivity clauses without, ≤ 0.9M live with B = 10⁶. Another, equally sound
               trajectory; the .cnf then holds the solver's final clause set.
   cd195       use CaDiCaL 1.9.5 instead of 1.5.3 (pysat's Cadical195).
-Without forget, clauses stream to cut_H<H>_<tag>.body on disk (not RAM). With forget they are kept in RAM as compact
-int32 arrays (about 20 bytes a clause) and no body file is written."""
+  nophases    forget rebuilds do not seed the new solver with the last model's phases (set_phases).
+The term list is checkpointed to cut_H<H>_<tag>.ckpt every 25 rounds (nophases does not change the tag). Rerunning
+the same command after a crash resumes from it: the same terms, then a new trajectory. The resumed run regenerates
+every clause of those terms, so the .body and the .cnf on UNSAT are complete for it.
+"""
 import sys, cut_ground as c
 H = int(sys.argv[1]); cap = int(sys.argv[2]) if len(sys.argv) > 2 else 4000
 pr = int(sys.argv[3]) if len(sys.argv) > 3 else 1
 opts = sys.argv[4].split(',') if len(sys.argv) > 4 else []
 am = 'allmid' in opts
 if 'cd195' in opts: c.SOLVER = c.Cadical195
+if 'nophases' in opts: c.PHASES = False
 fg = next((int(float(o.split('=')[1])) for o in opts if o.startswith('forget=')), None)
 tag = f"pr{pr}" + ("am" if am else "") + (f"f{fg}" if fg else "") + ("cd195" if 'cd195' in opts else "")
-ok, G = c.run(H, cap, per_round=pr, wlog=True, room='fit', stream=None if fg else f"cut_H{H}_{tag}.body", allmid=am, forget=fg)
+ok, G = c.run(H, cap, per_round=pr, wlog=True, room='fit', stream=None if fg else f"cut_H{H}_{tag}.body", allmid=am, forget=fg,
+              ckpt=f"cut_H{H}_{tag}.ckpt")
 if ok:
     c.write_dimacs(G, f"cut_H{H}_{tag}.cnf"); print(f"wrote cut_H{H}_{tag}.cnf", flush=True)

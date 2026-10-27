@@ -14,11 +14,12 @@ whose value has the fewest places left in the model (§34.3h). wlog=True adds F(
 
   python3 cut_ground.py 4        # UNSAT with 19 terms (default: wlog, room='fit', one term per round)
   python3 cut_ground.py 5 3000   # UNSAT with 128 terms in about 20 s"""
-import sys, itertools, time, resource
+import sys, os, pickle, itertools, time, resource
 from array import array
 import numpy as np
 from pysat.solvers import Cadical153, Cadical195
 SOLVER = Cadical153          # run_height.py option cd195 switches to CaDiCaL 1.9.5
+PHASES = True                # forget rebuilds start from the last model's phases (run_height.py option nophases: off)
 
 
 FIT_CELLS = 1 << 24          # work-array budget of fit(), in cells (about 64 MB per float32 array)
@@ -68,7 +69,8 @@ class Ground:
         for e in ends.tolist(): self._raw(B[st:e].tolist()); st = e + 1
         T = T[keep]; self.trans = array('i', T.ravel().tolist())
         for i, j, k in T.tolist(): self._raw([-self.le(i, j), -self.le(j, k), self.le(i, k)])
-        self.S.set_phases(self._lastmodel.tolist()); self.rebuilds += 1; self._kept = len(T)
+        if PHASES: self.S.set_phases(self._lastmodel.tolist())
+        self.rebuilds += 1; self._kept = len(T)
 
     def var(self):
         self.nv += 1; return self.nv
@@ -253,9 +255,17 @@ class Ground:
 
 
 def run(H, maxterms=300, per_round=40, nowitness=True, ih=False, lazy_rank=False, stream=None, wlog=False, room=False,
-        lazy_ih=False, allmid=False, forget=None):
+        lazy_ih=False, allmid=False, forget=None, ckpt=None):
+    """ckpt: path of a term checkpoint (the list of term pairs, rewritten every 25 rounds). If it exists, the run
+    starts from those terms (sound: any term set gives ground instances of the axioms; the search then continues on
+    its own trajectory)."""
     G = Ground(H, nowitness, ih, lazy_rank, stream, room, lazy_ih, forget); G.allmid = allmid; c = G.add_term((0, 1), 1); G.add_ih(c); t0 = time.time(); rnd = 0
     if wlog: G.S.add_clause([-G.d(c)])         # WLOG F(⊥,⊤) ∉ D: the cut theory is self-dual (§33.3, §22.1)
+    if ckpt and os.path.exists(ckpt):
+        with open(ckpt, 'rb') as fh: saved = pickle.load(fh)
+        assert saved[:3] == G.terms[:3], "checkpoint from another theory"
+        for st in saved[3:]: G.add_term(st, max(G.depth[st[0]], G.depth[st[1]]) + 1)
+        print(f"H={H}: resumed from {ckpt} with {len(G.terms)} terms", flush=True)
     while True:
         rnd += 1
         M = G.solve()
@@ -267,6 +277,9 @@ def run(H, maxterms=300, per_round=40, nowitness=True, ih=False, lazy_rank=False
             print(f"H={H}: inconclusive, still SAT at {len(G.terms)} terms after {rnd} rounds", flush=True)
             return False, G
         added = G.expand(M, per_round)
+        if rnd % 25 == 0 and ckpt:
+            with open(ckpt + '.tmp', 'wb') as fh: pickle.dump(G.terms, fh)
+            os.replace(ckpt + '.tmp', ckpt)
         if rnd % 25 == 0:
             print(f"  H={H} round {rnd}: {len(G.terms)} terms, {G.nv} vars, {time.time() - t0:.0f}s, "
                   f"peak RSS {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6:.2f} GB"

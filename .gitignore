@@ -5,3 +5,4 @@ experiments/sat/cut_H*.body
 experiments/sat/box_H*.body
 experiments/sat/box_H*.cnf
 experiments/sat/cut_H*.cnf
+experiments/sat/cut_H*.ckpt*

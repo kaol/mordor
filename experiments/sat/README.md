@@ -39,6 +39,14 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   (H = 5: 128 → 125 terms), and `cut_lean.py` does not translate them. With
   `run(H, 5000, per_round=1, wlog=True, room='fit')`: H = 3, 4, 5 UNSAT with 7 / 19 / 128 terms (H = 5 in 17 s);
   depth-first selection (§34.3g) needed 35 / 388 terms for H = 3, 4 and did not finish H = 5.
+- `run(..., forget=B)` / `run_height.py H cap pr forget=B`: memory bound for the lazily added transitivity clauses, which
+  are 81% of the solver's clauses at H = 6, 300 terms (3.5M of 4.3M; eager rank clauses 12%). When more than
+  max(B, 2 × last kept) are live, the solver is rebuilt from the other clauses (kept as int32 arrays) plus the
+  transitivity clauses whose premises hold in the last model, with that model as initial phases. Sound (every clause is
+  an axiom instance); another trajectory. H = 6, one thread each, B = 10⁶: 353 terms at 0.47 GB / 275 s against
+  0.82 GB / 454 s without, 403 terms at 0.57 GB with live transitivity clauses staying near 10⁶. H ≤ 5 Cut still
+  closes (H = 5 with B = 10³ or 2·10⁴). The trajectory can also get worse: the box Cut theory at H = 4 with B = 10³
+  was still SAT past 200 terms (33 without forget; 10⁴ and 10⁵ close it).
 - `cut_ground.fit` scores candidates in chunks of `FIT_CELLS` work cells, which bounds its cand × |F| arrays (about
   9 GB transient at 1500 terms otherwise); the scores, and so the search trajectory, are unchanged.
 - `cut_lean.py H core.cnf maps.pkl out.lean`: turns a drat-trim core of an UNSAT run into a Lean file

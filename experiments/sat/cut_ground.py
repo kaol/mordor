@@ -14,7 +14,8 @@ whose value has the fewest places left in the model (§34.3h). wlog=True adds F(
 
   python3 cut_ground.py 4        # UNSAT with 19 terms (default: wlog, room='fit', one term per round)
   python3 cut_ground.py 5 3000   # UNSAT with 128 terms in about 20 s"""
-import sys, itertools, time
+import sys, itertools, time, resource
+from array import array
 import numpy as np
 from pysat.solvers import Cadical153
 
@@ -23,20 +24,48 @@ FIT_CELLS = 1 << 24          # work-array budget of fit(), in cells (about 64 MB
 
 
 class Ground:
-    def __init__(self, H, nowitness=True, ih=False, lazy_rank=False, stream=None, room=False, lazy_ih=False):
+    def __init__(self, H, nowitness=True, ih=False, lazy_rank=False, stream=None, room=False, lazy_ih=False,
+                 forget=None):
         self.H = H; self.nv = 0; self.terms = []; self.depth = []; self.nowitness = nowitness; self.lazy_ih = lazy_ih
         self.ih = ih; self.diag = set(); self.lazy_rank = lazy_rank; self.room = room
-        self.clauses = []; self.nclauses = 0; self.S = Cadical153(); self.stream = open(stream, 'w') if stream else None
-        _add = self.S.add_clause
+        self.clauses = []; self.nclauses = 0; self.stream = open(stream, 'w') if stream else None
+        # forget = B: transitivity clauses are kept as index triples, and once more than B of them are live the solver
+        # is rebuilt from the other clauses plus the triples whose premises hold in the last model (sound: every
+        # clause is an axiom instance; dropped ones come back lazily if violated). Clause store: flat int32 arrays.
+        self.forget = forget; self.base = array('i'); self.trans = array('i'); self.rebuilds = 0
         def add(c):
             self.nclauses += 1
             if self.stream: self.stream.write(" ".join(map(str, c)) + " 0\n")
-            else: self.clauses.append(list(c))
-            _add(c)
-        self.S.add_clause = add
+            if self.forget: self.base.extend(c); self.base.append(0)
+            elif not self.stream: self.clauses.append(list(c))
+            self._raw(c)
+        self._add = add; self._new_solver()
         self.F = {}; self.le_ = {}; self.d_ = {}; self.g_ = {}; self.fterms = []
         self.add_term(None, 0); self.add_term(None, 0)                     # 0 = ⊥, 1 = ⊤
         self.S.add_clause([-self.le(1, 0)]); self.S.add_clause([self.d(0)]); self.S.add_clause([-self.d(1)])
+
+    def _new_solver(self):
+        self.S = Cadical153(); self._raw = self.S.add_clause; self.S.add_clause = self._add
+
+    def add_trans(self, i, j, k):
+        c = [-self.le(i, j), -self.le(j, k), self.le(i, k)]
+        if not self.forget: self.S.add_clause(c); return
+        self.nclauses += 1
+        if self.stream: self.stream.write(" ".join(map(str, c)) + " 0\n")
+        self.trans.extend((i, j, k)); self._raw(c)
+
+    def rebuild(self):
+        """Fresh solver: all non-transitivity clauses, the transitivity triples whose premises hold in the last
+        model, and that model as the initial phases. The next rebuild comes when the live triples exceed
+        max(forget, twice the number kept)."""
+        L = self._lastL; m = len(L); T = np.frombuffer(self.trans, dtype=np.int32).reshape(-1, 3)
+        inb = (T < m).all(1); keep = np.zeros(len(T), bool)
+        keep[inb] = L[T[inb, 0], T[inb, 1]] & L[T[inb, 1], T[inb, 2]]
+        self._new_solver(); B = np.frombuffer(self.base, dtype=np.int32); ends = np.flatnonzero(B == 0); st = 0
+        for e in ends.tolist(): self._raw(B[st:e].tolist()); st = e + 1
+        T = T[keep]; self.trans = array('i', T.ravel().tolist())
+        for i, j, k in T.tolist(): self._raw([-self.le(i, j), -self.le(j, k), self.le(i, k)])
+        self.S.set_phases(self._lastmodel.tolist()); self.rebuilds += 1; self._kept = len(T)
 
     def var(self):
         self.nv += 1; return self.nv
@@ -92,6 +121,8 @@ class Ground:
         self.S.add_clause([self.d(i), -self.le(dg, i), self.le(1, i)])
 
     def solve(self):
+        if self.forget and len(self.trans) > 3 * max(self.forget, 2 * getattr(self, '_kept', 0)) and hasattr(self, '_lastL'):
+            self.rebuild()
         while True:
             if not self.S.solve(): return None
             model = np.asarray(self.S.get_model()); M = set(model[model > 0].tolist())
@@ -108,15 +139,16 @@ class Ground:
             if getattr(self, 'allmid', False) and len(bad):              # every middle j (fewer re-solves, other trajectory)
                 for i, k in bad[:4000].tolist():
                     for j in np.flatnonzero(L[i] & L[:, k]).tolist():
-                        self.S.add_clause([-self.le(i, j), -self.le(j, k), self.le(i, k)])
+                        self.add_trans(i, j, k)
             else:
                 mids = np.argmax(L[bad[:, 0]] & L[:, bad[:, 1]].T, axis=1) if len(bad) else []
                 for (i, k), j in zip(bad.tolist(), np.asarray(mids).tolist()):
-                    self.S.add_clause([-self.le(i, j), -self.le(j, k), self.le(i, k)])
+                    self.add_trans(i, j, k)
             if len(bad): continue
             if self.lazy_rank and self.chains(L): continue
             if self.lazy_ih and self.ih_violations(L, M): continue
             self.L = L
+            if self.forget: self._lastL = L; self._lastmodel = model
             return M
 
     def ih_violations(self, L, M, cap=2000):
@@ -218,8 +250,8 @@ class Ground:
 
 
 def run(H, maxterms=300, per_round=40, nowitness=True, ih=False, lazy_rank=False, stream=None, wlog=False, room=False,
-        lazy_ih=False, allmid=False):
-    G = Ground(H, nowitness, ih, lazy_rank, stream, room, lazy_ih); G.allmid = allmid; c = G.add_term((0, 1), 1); G.add_ih(c); t0 = time.time(); rnd = 0
+        lazy_ih=False, allmid=False, forget=None):
+    G = Ground(H, nowitness, ih, lazy_rank, stream, room, lazy_ih, forget); G.allmid = allmid; c = G.add_term((0, 1), 1); G.add_ih(c); t0 = time.time(); rnd = 0
     if wlog: G.S.add_clause([-G.d(c)])         # WLOG F(⊥,⊤) ∉ D: the cut theory is self-dual (§33.3, §22.1)
     while True:
         rnd += 1
@@ -233,7 +265,9 @@ def run(H, maxterms=300, per_round=40, nowitness=True, ih=False, lazy_rank=False
             return False, G
         added = G.expand(M, per_round)
         if rnd % 25 == 0:
-            print(f"  H={H} round {rnd}: {len(G.terms)} terms, {G.nv} vars, {time.time() - t0:.0f}s", flush=True)
+            print(f"  H={H} round {rnd}: {len(G.terms)} terms, {G.nv} vars, {time.time() - t0:.0f}s, "
+                  f"peak RSS {resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6:.2f} GB"
+                  + (f", {len(G.trans) // 3} live transitivity clauses, {G.rebuilds} rebuilds" if G.forget else ""), flush=True)
         if not added:
             print(f"H={H}: SAT model closed under the term rule ({len(G.terms)} terms): a finite partial model "
                   f"with no witness among its F-terms", flush=True)
@@ -247,6 +281,14 @@ if __name__ == '__main__':
 
 
 def write_dimacs(G, path):
+    if G.forget:                                   # the solver's final clause set (a subset of the stream, still UNSAT)
+        B = np.frombuffer(G.base, dtype=np.int32); T = np.frombuffer(G.trans, dtype=np.int32).reshape(-1, 3)
+        with open(path, 'w') as fh:
+            fh.write(f"p cnf {G.nv} {int((B == 0).sum()) + len(T)}\n")
+            st = 0
+            for e in np.flatnonzero(B == 0).tolist(): fh.write(" ".join(map(str, B[st:e].tolist())) + " 0\n"); st = e + 1
+            for i, j, k in T.tolist(): fh.write(f"{-G.le(i, j)} {-G.le(j, k)} {G.le(i, k)} 0\n")
+        return
     if G.stream:
         G.stream.close()
         with open(path, 'w') as fh, open(G.stream.name) as body:

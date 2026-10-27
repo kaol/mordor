@@ -5,6 +5,7 @@ A box cell is F(x, y) with x ∈ D, y ∉ D, x < y.
   python3 box_cut.py cut H [maxterms] [opts]   the box Cut theory: no-witness asserted only for s < t; UNSAT means
                                           every bounded poset of edge-height ≤ H has a witness with x < y.
       opts (comma-separated): disk  clauses go to box_H<H>.body, not RAM (same trajectory; on UNSAT writes box_H<H>.cnf)
+                              forget=B  bounded transitivity clauses, as in run_height.py (another trajectory)
                               lazyrank  height bound by violated-chain clauses instead of 6n² eager rank clauses
                                         (another trajectory; H = 5 Cut: 98 terms; cut_lean.py does not translate these)
   python3 box_cut.py finite k             the box Cut Lemma on every lattice of closure systems on k points, all D
@@ -42,7 +43,10 @@ def box_theory(H, cap, opts=()):
         return i
     c.Ground.add_term = add_term
     body = f"box_H{H}.body" if 'disk' in opts else None
-    ok, G = c.run(H, cap, per_round=1, wlog=True, room='fit', stream=body, lazy_rank='lazyrank' in opts)
+    fg = next((int(float(o.split('=')[1])) for o in opts if o.startswith('forget=')), None)
+    if fg: body = None                                   # forget keeps compact clause stores; .cnf written from them
+    ok, G = c.run(H, cap, per_round=1, wlog=True, room='fit', stream=body, lazy_rank='lazyrank' in opts, forget=fg)
+    if ok and fg: c.write_dimacs(G, f"box_H{H}.cnf"); print(f"wrote box_H{H}.cnf", flush=True)
     if ok and body: c.write_dimacs(G, f"box_H{H}.cnf"); print(f"wrote box_H{H}.cnf ({G.nclauses} clauses)", flush=True)
     return ok, G
 

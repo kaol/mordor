@@ -16,6 +16,11 @@ With `r = p ⊓ q`, `h = F r` and `g = F a` for a generator `a` (the other one `
 * `sandwich`: if `g s ≤ s` and the `h`-orbit of `s` ends with a value below `a`, the same holds for `w = g s < s`,
   because `h s ≤ g s ≤ s` squeezes the `h`-orbit of `w` between consecutive terms of the orbit of `s`;
 * the `h`-orbit of `⊤` must end in `D` (`orbit_end`), below `p` or below `q`; `sandwich` with `s = ⊤` excludes both.
+
+**Bouquets** (`cut_bouquet`, log §34.3z¹⁶). The proof uses the second generator only through a down-set `InB` with
+`D = ↓a ∪ InB` and `↓a ∩ InB ⊆ ↓r`. So it covers any family of petals `↓pᵢ`, finite or infinite, that meet pairwise
+in one common `r`: the end of the `h`-orbit of `⊤` picks out one petal `a`, and the others form `InB`. For `k ≥ 3`
+generators with different pairwise meets this fails: an orbit value can lie below two petals without lying below `r`.
 -/
 
 namespace Mordor.FGTwo
@@ -25,18 +30,19 @@ set_option linter.unusedSectionVars false
 variable {α : Type*} [Lattice α] [BoundedOrder α] [WellFoundedLT α]
 
 section Generic
-/-! One generator `a` (the other is `b`), `r` their meet; `InD` is membership in `D = ↓a ∪ ↓b`. -/
-variable {F : α → α → α} {InD : α → Prop} {a b r : α}
+/-! One generator `a`, the rest of the cut a down-set `InB` meeting `↓a` only below `r ≤ a`: `D = ↓a ∪ InB`.
+For `D = ↓p ∪ ↓q` take `InB = (· ≤ q)` and `r = p ⊓ q`; for a bouquet, `InB` is the union of the other petals. -/
+variable {F : α → α → α} {InD InB : α → Prop} {a r : α}
   (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
-  (hD : ∀ x, InD x ↔ x ≤ a ∨ x ≤ b)
-  (hra : r ≤ a) (hr : ∀ z, z ≤ a → z ≤ b → z ≤ r)
+  (hD : ∀ x, InD x ↔ x ≤ a ∨ InB x) (hB : ∀ x y, x ≤ y → InB y → InB x)
+  (hra : r ≤ a) (hr : ∀ z, z ≤ a → InB z → z ≤ r)
   (nw : ∀ x, InD x → ∀ y, ¬ InD y → ¬ F x y ≤ x ∧ ¬ y ≤ F x y)
-include hF hD hra hr nw
+include hF hD hB hra hr nw
 
 theorem down {x y : α} (hxy : x ≤ y) (hy : InD y) : InD x := by
   rcases (hD y).1 hy with h | h
   · exact (hD x).2 (Or.inl (hxy.trans h))
-  · exact (hD x).2 (Or.inr (hxy.trans h))
+  · exact (hD x).2 (Or.inr (hB _ _ hxy h))
 
 theorem l4 : ∀ u, ¬ InD u → F r u ≤ a → ¬ F a u ≤ u := by
   intro u
@@ -49,7 +55,7 @@ theorem l4 : ∀ u, ¬ InD u → F r u ≤ a → ¬ F a u ≤ u := by
       intro hin
       rcases (hD _).1 hin with h1 | h1
       · exact (nw a haD u hu).1 h1
-      · exact (nw r hrD u hu).1 (hr _ hha ((hF _ _ _ _ hra le_rfl).trans h1))
+      · exact (nw r hrD u hu).1 (hr _ hha (hB _ _ (hF _ _ _ _ hra le_rfl) h1))
     have hlt : F a u < u := lt_of_le_of_ne hgu (fun heq => (nw a haD u hu).2 heq.ge)
     exact ih (F a u) hlt hgD ((hF _ _ _ _ le_rfl hgu).trans hha) (hF _ _ _ _ le_rfl hgu)
 
@@ -63,18 +69,18 @@ theorem sandwich : ∀ s, ¬ InD s → F a s ≤ s → ∀ m : ℕ, (∀ k ≤ m
     have hrD : InD r := (hD r).2 (Or.inl hra)
     have hmono : Monotone (F r) := fun y y' hy => hF _ _ _ _ le_rfl hy
     cases m with
-    | zero => exact l4 hF hD hra hr nw s hs (by simpa using hend) hgs
+    | zero => exact l4 hF hD hB hra hr nw s hs (by simpa using hend) hgs
     | succ m =>
       have h1 : F r s ≤ F a s := hF _ _ _ _ hra le_rfl
       have hwD : ¬ InD (F a s) := fun hin =>
-        hU 1 (by omega) (down hF hD hra hr nw (by simpa using h1) hin)
+        hU 1 (by omega) (down hF hD hB hra hr nw (by simpa using h1) hin)
       have hlt : F a s < s := lt_of_le_of_ne hgs (fun heq => (nw a haD s hs).2 heq.ge)
       have hgw : F a (F a s) ≤ F a s := hF _ _ _ _ le_rfl hgs
       have lo : ∀ k, (F r)^[k + 1] s ≤ (F r)^[k] (F a s) := fun k => by
         rw [Function.iterate_succ_apply]; exact (hmono.iterate k) h1
       have hi : ∀ k, (F r)^[k] (F a s) ≤ (F r)^[k] s := fun k => (hmono.iterate k) hgs
       have hUw : ∀ k ≤ m, ¬ InD ((F r)^[k] (F a s)) := fun k hk hin =>
-        hU (k + 1) (by omega) (down hF hD hra hr nw (lo k) hin)
+        hU (k + 1) (by omega) (down hF hD hB hra hr nw (lo k) hin)
       by_cases hlast : InD ((F r)^[m + 1] (F a s))
       · refine ih (F a s) hlt hwD hgw m hUw ?_
         rw [← Function.iterate_succ_apply' (F r) m (F a s)]
@@ -83,7 +89,7 @@ theorem sandwich : ∀ s, ¬ InD s → F a s ≤ s → ∀ m : ℕ, (∀ k ≤ m
         · exfalso
           have hz : F r ((F r)^[m + 1] s) ≤ (F r)^[m + 1] (F a s) := by
             have := lo (m + 1); rwa [Function.iterate_succ_apply'] at this
-          exact (nw r hrD _ (hU (m + 1) le_rfl)).1 (hr _ hend (hz.trans h2))
+          exact (nw r hrD _ (hU (m + 1) le_rfl)).1 (hr _ hend (hB _ _ hz h2))
       · refine ih (F a s) hlt hwD hgw (m + 1) (fun k hk => ?_) ((hmono (hi (m + 1))).trans hend)
         rcases Nat.lt_or_ge k (m + 1) with hk' | hk'
         · exact hUw k (by omega)
@@ -121,9 +127,28 @@ theorem cut_two {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y
   have hrD : (p ⊓ q) ≤ p ∨ (p ⊓ q) ≤ q := Or.inl inf_le_left
   obtain ⟨n, hU, hend⟩ := orbit_end (InD := fun x => x ≤ p ∨ x ≤ q) hF hrD nw ⊤ htop le_top
   rcases hend with hp | hq
-  · exact sandwich (InD := fun x => x ≤ p ∨ x ≤ q) (a := p) (b := q) hF (fun x => Iff.rfl) inf_le_left
-      (fun z hza hzb => le_inf hza hzb) nw ⊤ htop le_top n hU hp
-  · exact sandwich (InD := fun x => x ≤ p ∨ x ≤ q) (a := q) (b := p) hF (fun x => Or.comm) inf_le_right
-      (fun z hza hzb => le_inf hzb hza) nw ⊤ htop le_top n hU hq
+  · exact sandwich (InD := fun x => x ≤ p ∨ x ≤ q) (InB := (· ≤ q)) (a := p) hF (fun x => Iff.rfl)
+      (fun _ _ h h' => h.trans h') inf_le_left (fun z hza hzb => le_inf hza hzb) nw ⊤ htop le_top n hU hp
+  · exact sandwich (InD := fun x => x ≤ p ∨ x ≤ q) (InB := (· ≤ p)) (a := q) hF (fun x => Or.comm)
+      (fun _ _ h h' => h.trans h') inf_le_right (fun z hza hzb => le_inf hzb hza) nw ⊤ htop le_top n hU hq
+
+/-- **The Cut Lemma for bouquet cuts.** Let `D = ⋃ᵢ ↓pᵢ` for any nonempty family (finite or not) whose members meet
+pairwise in one common element `r` (`r ≤ pᵢ`, and `pᵢ ⊓ pⱼ ≤ r` for `i ≠ j`), with `⊤ ∉ D`. In a bounded lattice with
+DCC, every monotone `F` has a witness. One petal (`r = p`) and two petals (`r = p ⊓ q`, `cut_two`) are the special
+cases `k = 1, 2`; with infinitely many petals `D` has infinitely many maximal elements. -/
+theorem cut_bouquet {ι : Type*} [Nonempty ι] {F : α → α → α}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α) {r : α} (hrp : ∀ i, r ≤ p i)
+    (hmeet : ∀ i j, i ≠ j → ∀ z, z ≤ p i → z ≤ p j → z ≤ r) (htop : ¬ ∃ i, ⊤ ≤ p i) :
+    ∃ x, (∃ i, x ≤ p i) ∧ ∃ y, ¬ (∃ i, y ≤ p i) ∧ (F x y ≤ x ∨ y ≤ F x y) := by
+  by_contra hno
+  have nw : ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F x y ≤ x ∧ ¬ y ≤ F x y :=
+    fun x hx y hy => ⟨fun h => hno ⟨x, hx, y, hy, Or.inl h⟩, fun h => hno ⟨x, hx, y, hy, Or.inr h⟩⟩
+  obtain ⟨i₀⟩ := ‹Nonempty ι›
+  obtain ⟨n, hU, a, ha⟩ := orbit_end (InD := fun x => ∃ i, x ≤ p i) hF ⟨i₀, hrp i₀⟩ nw ⊤ htop le_top
+  exact sandwich (InD := fun x => ∃ i, x ≤ p i) (InB := fun x => ∃ j, j ≠ a ∧ x ≤ p j) (a := p a) hF
+    (fun x => ⟨fun ⟨i, hi⟩ => (em (i = a)).elim (fun h => Or.inl (h ▸ hi)) (fun h => Or.inr ⟨i, h, hi⟩),
+      fun h => h.elim (fun h => ⟨a, h⟩) (fun ⟨j, _, hj⟩ => ⟨j, hj⟩)⟩)
+    (fun _ _ hxy ⟨j, hj, hy⟩ => ⟨j, hj, hxy.trans hy⟩) (hrp a)
+    (fun z hza ⟨j, hj, hzj⟩ => hmeet a j (Ne.symm hj) z hza hzj) nw ⊤ htop le_top n hU ha
 
 end Mordor.FGTwo

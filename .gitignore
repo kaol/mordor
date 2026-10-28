@@ -4,5 +4,6 @@ experiments/dc2/c3_claims_n*/
 experiments/sat/cut_H*.body
 experiments/sat/box_H*.body
 experiments/sat/box_H*.cnf
+experiments/sat/box_H*.ckpt*
 experiments/sat/cut_H*.cnf
 experiments/sat/cut_H*.ckpt*

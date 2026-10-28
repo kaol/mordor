@@ -56,6 +56,10 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   checkpoint (`run(..., ckpt=path)`, written every 25 rounds; `run_height.py` resumes from `cut_H<H>_<tag>.ckpt` when
   rerun) and the option `nophases` (no `set_phases` after a rebuild, the one unusual solver call on that path). Option `cd195` (run_height.py) switches to CaDiCaL 1.9.5; run long jobs under
   `python3 -X faulthandler` so a crash prints the Python stack.
+- `rescue_terms.sh PID OUT.ckpt`: copies the term list out of a running `cut_ground`-based process (one started before
+  checkpoints existed) into a checkpoint, via gdb: it stops at the next entry to pysat's `solve`, runs a few lines of
+  Python there, and detaches; the process keeps running (tested: 0.7 s). Rerun `box_cut.py cut` / `run_height.py` with
+  the checkpoint under its expected name (`box_H<H>.ckpt`, `cut_H<H>_<tag>.ckpt`) to resume with new options.
 - `cut_ground.fit` scores candidates in chunks of `FIT_CELLS` work cells, which bounds its cand × |F| arrays (about
   9 GB transient at 1500 terms otherwise); the scores, and so the search trajectory, are unchanged.
 - `cut_lean.py H core.cnf maps.pkl out.lean`: turns a drat-trim core of an UNSAT run into a Lean file

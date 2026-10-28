@@ -46,4 +46,5 @@ import Mordor.Exact
 import Mordor.Skeleton
 import Mordor.SubspaceCut
 import Mordor.FGTwo
+import Mordor.Laminar
 import Mordor.ClipEscape

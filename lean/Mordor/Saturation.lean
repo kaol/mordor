@@ -72,3 +72,43 @@ theorem min_common_join [Nonempty ι] {c : α} (hc : Common F p c) (hmin : ∀ x
   exact (hF _ _ _ _ le_rfl hyc).trans (Finset.le_sup (f := fun i => F (p i) c) (Finset.mem_univ l))
 
 end Mordor.Saturation
+
+namespace Mordor.Saturation
+
+set_option linter.unusedSectionVars false
+
+variable {α : Type*} [Lattice α] [BoundedOrder α]
+
+/-- **History meet keeps contraction.** If row `a` contracts at `y`, then the meet row `a ⊓ b` contracts at the meet
+`y ⊓ F b y` of `y` with its `b`-successor. (The "superko" reading: the meet of the history visited so far is a state
+that contracts on the meet of the rows used.) -/
+theorem theta_contract {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') {a b y : α}
+    (hy : F a y ≤ y) : F (a ⊓ b) (y ⊓ F b y) ≤ y ⊓ F b y :=
+  le_inf ((hF _ _ _ _ inf_le_left inf_le_left).trans hy) (hF _ _ _ _ inf_le_right inf_le_left)
+
+/-- **The history-meet descent ends.** Under DCC, starting from `⊤` (where every row contracts), repeatedly replacing
+`y` by `y ⊓ gⱼ y` while this stays outside `D` must stop: there is `y ∉ D` and a row `a ∈ D` (the meet of a generator
+and the rows used) with `F a y ≤ y` such that `y ⊓ gⱼ y ∈ D` for every generator `j`. Each step is strict because
+`y ≰ gⱼ y` (W2). -/
+theorem theta_terminal [WellFoundedLT α] {ι : Type*} [Nonempty ι] {F : α → α → α}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α) (htop : ¬ ∃ j, ⊤ ≤ p j)
+    (nw : ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F x y ≤ x ∧ ¬ y ≤ F x y) :
+    ∃ y, (¬ ∃ j, y ≤ p j) ∧ ∃ a, (∃ j, a ≤ p j) ∧ F a y ≤ y ∧ ∀ j, ∃ k, y ⊓ F (p j) y ≤ p k := by
+  obtain ⟨i₀⟩ := ‹Nonempty ι›
+  suffices H : ∀ y, (¬ ∃ j, y ≤ p j) → ∀ a, (∃ j, a ≤ p j) → F a y ≤ y →
+      ∃ y', (¬ ∃ j, y' ≤ p j) ∧ ∃ a', (∃ j, a' ≤ p j) ∧ F a' y' ≤ y' ∧ ∀ j, ∃ k, y' ⊓ F (p j) y' ≤ p k from
+    H ⊤ htop (p i₀) ⟨i₀, le_rfl⟩ le_top
+  intro y
+  induction y using WellFoundedLT.induction with
+  | _ y ih =>
+    intro hy a ha hay
+    by_cases hall : ∀ j, ∃ k, y ⊓ F (p j) y ≤ p k
+    · exact ⟨y, hy, a, ha, hay, hall⟩
+    · push_neg at hall
+      obtain ⟨j, hj⟩ := hall
+      have hout : ¬ ∃ k, y ⊓ F (p j) y ≤ p k := fun ⟨k, hk⟩ => (hj k) hk
+      have hlt : y ⊓ F (p j) y < y :=
+        lt_of_le_of_ne inf_le_left fun heq => (nw (p j) ⟨j, le_rfl⟩ y hy).2 (heq.symm.le.trans inf_le_right)
+      exact ih _ hlt hout (a ⊓ p j) (ha.elim fun k hk => ⟨k, inf_le_left.trans hk⟩) (theta_contract hF hay)
+
+end Mordor.Saturation

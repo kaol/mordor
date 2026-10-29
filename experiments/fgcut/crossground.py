@@ -1,6 +1,6 @@
 """Ground refutation of the reduced k-generator cut theory at edge-height H (poset of columns, rows = the meets m_A only).
 UNSAT ⇒ the reduced statement holds at height ≤ H.  A model closed under the term rule ⇒ a finite reduced countermodel.
-  python3 crossground.py K H maxterms [crossing|strict|laminar|bouquet]
+  python3 crossground.py K H maxterms [crossing|strict|laminar|bouquet] [out.cnf]
 Shapes: crossing = no relation among the meets beyond glb (they may coincide); strict = the pairwise meets pairwise
 incomparable; laminar = m13 = m23 = m123; bouquet = all meets equal.  Rows are the meets only, so the theory is weaker
 than the full cut theory: UNSAT means a proof using only the rows F(m_A, ·) exists at that height (§34.3z¹⁸)."""
@@ -10,6 +10,7 @@ import numpy as np
 import cut_ground as c
 
 K, H, CAP = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]); SHAPE = sys.argv[4] if len(sys.argv) > 4 else 'crossing'
+CNF = sys.argv[5] if len(sys.argv) > 5 else None     # on UNSAT, the full clause set in DIMACS (for sat/drat_certify.py)
 subsets = [frozenset(A) for n in range(1, K + 1) for A in itertools.combinations(range(K), n)]
 
 def equal_meets():                 # which meets coincide, by shape (K = 3)
@@ -66,7 +67,10 @@ G.add_term((rep[frozenset(range(K))], 1), 1)
 t0 = time.time(); rnd = 0
 while True:
     rnd += 1; M = G.solve()
-    if M is None: print(f"K={K} H={H} {SHAPE}: UNSAT with {len(G.terms)} terms, {rnd} rounds, {time.time()-t0:.1f}s", flush=True); break
+    if M is None:
+        print(f"K={K} H={H} {SHAPE}: UNSAT with {len(G.terms)} terms, {rnd} rounds, {time.time()-t0:.1f}s", flush=True)
+        if CNF: c.write_dimacs(G, CNF); print(f"wrote {CNF} ({len(G.clauses)} clauses, {G.nv} variables)", flush=True)
+        break
     if len(G.terms) >= CAP: print(f"K={K} H={H} {SHAPE}: still SAT at {len(G.terms)} terms", flush=True); break
     if not expand(M, 1):
         print(f"K={K} H={H} {SHAPE}: CLOSED model with {len(G.terms)} terms", flush=True)

@@ -13,8 +13,11 @@ generators.
 
 * `endpoint_not_le` (Lemma A), `entry_mono` (Lemma B), `entry_eq_le` (Lemma C): for anchors `a ≤ a'` in `D`, the orbit of
   `F a` enters `D` no later than that of `F a'`, at equal times below it, and never at a value below its own anchor.
-* `column_lemma`: at every column `y ∉ D` some generator row `F (pᵢ) y` lies outside `D`. If all of them lay in `D`, the
-  sets `Sₙ₊₁ = {j : ∃ i ∈ Sₙ, F (pᵢ) y ≤ pⱼ}` would shrink to a nonempty `S` with `F (⋀_S p) y ≤ ⋀_S p` (W1).
+* `no_closed_rows`, `column_lemma`: at a column `y ∉ D` no nonempty set of generator rows has all its values below
+  generators of the same set; in particular some generator row `F (pᵢ) y` lies outside `D`.
+* `escape_below`: escapes along rows that contract at `y` stay strictly below `y` (the composition law of escapes).
+* `meetRow`, `rows_to_meets`: compressing every row to the meet of the generators above it preserves monotonicity and
+  witness-freeness, so the meet-row reduction loses nothing about rows (log §34.3z¹⁹).
 * `anchor_sandwich`: with the join anchor `cᵢ = ⨆_{j ≠ i} pᵢ ⊓ pⱼ ≤ pᵢ`, the `F cᵢ`-orbit of a column `s` with
   `F pᵢ s ≤ s` (e.g. `⊤`) never enters `D` below `pᵢ`. This is `FGTwo.sandwich` with `InB = ⋃_{j ≠ i} ↓pⱼ`.
 -/
@@ -60,37 +63,85 @@ end Entry
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-/-- **Column lemma.** At every column outside `D = ⋃ᵢ ↓pᵢ`, some generator row takes a value outside `D`. -/
-theorem column_lemma [Nonempty ι] {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α) {y : α}
+/-- **Closed row sets are impossible.** At a column `y ∉ D`, no nonempty set `S` of generator rows has every value
+`F (pᵢ) y` (`i ∈ S`) below some `pⱼ` with `j ∈ S`. The targets of `S` form a smaller such set unless they are all of
+`S`, and then `F (⋀_S p) y ≤ ⋀_S p` (W1 at row `⋀_S p`). -/
+theorem no_closed_rows {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α) {y : α}
     (hy : ¬ ∃ i, y ≤ p i)
     (nw : ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F x y ≤ x ∧ ¬ y ≤ F x y) :
-    ∃ i, ¬ ∃ j, F (p i) y ≤ p j := by
+    ∀ S : Finset ι, S.Nonempty → ¬ ∀ i ∈ S, ∃ j ∈ S, F (p i) y ≤ p j := by
   classical
+  intro S
+  induction S using Finset.strongInduction with
+  | H S ih =>
+    intro hne hS
+    set S' := S.filter (fun j => ∃ i ∈ S, F (p i) y ≤ p j) with hS'
+    have hsub : S' ⊆ S := Finset.filter_subset _ _
+    by_cases heq : S' = S
+    · obtain ⟨i₀, hi₀⟩ := hne
+      have hle : F (S.inf p) y ≤ S.inf p := Finset.le_inf fun j hj => by
+        have hj' : j ∈ S' := heq ▸ hj
+        obtain ⟨i, hi, hij⟩ := (Finset.mem_filter.1 hj').2
+        exact (hF _ _ _ _ (Finset.inf_le hi) le_rfl).trans hij
+      exact (nw _ ⟨i₀, Finset.inf_le hi₀⟩ y hy).1 hle
+    · have hlt : S' ⊂ S := Finset.ssubset_iff_subset_ne.2 ⟨hsub, heq⟩
+      obtain ⟨i₀, hi₀⟩ := hne
+      obtain ⟨j₀, hj₀, h₀⟩ := hS i₀ hi₀
+      refine ih S' hlt ⟨j₀, Finset.mem_filter.2 ⟨hj₀, i₀, hi₀, h₀⟩⟩ fun i hi => ?_
+      obtain ⟨j, hj, hij⟩ := hS i (hsub hi)
+      exact ⟨j, Finset.mem_filter.2 ⟨hj, i, hsub hi, hij⟩, hij⟩
+
+/-- **Column lemma.** At every column outside `D = ⋃ᵢ ↓pᵢ`, some generator row takes a value outside `D`. -/
+theorem column_lemma [Nonempty ι] {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
+    (p : ι → α) {y : α} (hy : ¬ ∃ i, y ≤ p i)
+    (nw : ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F x y ≤ x ∧ ¬ y ≤ F x y) :
+    ∃ i, ¬ ∃ j, F (p i) y ≤ p j := by
   by_contra hall
   push_neg at hall
-  have key : ∀ S : Finset ι, S.Nonempty → (∀ i ∈ S, ∃ j ∈ S, F (p i) y ≤ p j) → False := by
-    intro S
-    induction S using Finset.strongInduction with
-    | H S ih =>
-      intro hne hS
-      set S' := S.filter (fun j => ∃ i ∈ S, F (p i) y ≤ p j) with hS'
-      have hsub : S' ⊆ S := Finset.filter_subset _ _
-      by_cases heq : S' = S
-      · obtain ⟨i₀, hi₀⟩ := hne
-        have hle : F (S.inf p) y ≤ S.inf p := Finset.le_inf fun j hj => by
-          have hj' : j ∈ S' := heq ▸ hj
-          obtain ⟨i, hi, hij⟩ := (Finset.mem_filter.1 hj').2
-          exact (hF _ _ _ _ (Finset.inf_le hi) le_rfl).trans hij
-        exact (nw _ ⟨i₀, Finset.inf_le hi₀⟩ y hy).1 hle
-      · have hlt : S' ⊂ S := Finset.ssubset_iff_subset_ne.2 ⟨hsub, heq⟩
-        obtain ⟨i₀, hi₀⟩ := hne
-        obtain ⟨j₀, hj₀, h₀⟩ := hS i₀ hi₀
-        refine ih S' hlt ⟨j₀, Finset.mem_filter.2 ⟨hj₀, i₀, hi₀, h₀⟩⟩ fun i hi => ?_
-        obtain ⟨j, hj, hij⟩ := hS i (hsub hi)
-        exact ⟨j, Finset.mem_filter.2 ⟨hj, i, hsub hi, hij⟩, hij⟩
   obtain ⟨i₀⟩ := ‹Nonempty ι›
-  exact key Finset.univ ⟨i₀, Finset.mem_univ _⟩ fun i _ => by
+  exact no_closed_rows hF p hy nw Finset.univ ⟨i₀, Finset.mem_univ _⟩ fun i _ => by
     obtain ⟨j, hj⟩ := hall i; exact ⟨j, Finset.mem_univ _, hj⟩
+
+/-- **Escapes stay below a contracting column.** If row `pᵢ` contracts at `y` (`F (pᵢ) y ≤ y`), then for every column
+`x ≤ y` outside `D`, `F (pᵢ) x < y`. By induction, an escape path from `y` that uses only rows contracting at `y` stays
+strictly below `y`. This is all that monotonicity gives for compositions of escapes: once a path uses a row that does
+not contract at its starting column, no comparison survives. -/
+theorem escape_below {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α)
+    (nw : ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F x y ≤ x ∧ ¬ y ≤ F x y)
+    {i : ι} {x y : α} (hyi : F (p i) y ≤ y) (hxy : x ≤ y) (hx : ¬ ∃ j, x ≤ p j) : F (p i) x < y := by
+  refine lt_of_le_of_ne ((hF _ _ _ _ le_rfl hxy).trans hyi) fun heq => ?_
+  exact (nw (p i) ⟨i, le_rfl⟩ x hx).2 (heq ▸ hxy)
+
+/-- Meet of the generators above `x`: the row a witness-free `F` may be compressed to (`rows_to_meets`). -/
+noncomputable def meetRow (p : ι → α) (x : α) : α :=
+  Finset.univ.inf fun i => @ite _ (x ≤ p i) (Classical.propDecidable _) (p i) ⊤
+
+theorem le_meetRow (p : ι → α) (x : α) : x ≤ meetRow p x :=
+  Finset.le_inf fun i _ => by
+    by_cases h : x ≤ p i
+    · rw [if_pos h]; exact h
+    · rw [if_neg h]; exact le_top
+
+theorem meetRow_le {p : ι → α} {x : α} {i : ι} (hi : x ≤ p i) : meetRow p x ≤ p i :=
+  (Finset.inf_le (f := fun i => @ite _ (x ≤ p i) (Classical.propDecidable _) (p i) ⊤) (Finset.mem_univ i)).trans
+    (by rw [if_pos hi])
+
+theorem meetRow_mono (p : ι → α) : Monotone (meetRow p) := fun x x' h =>
+  Finset.inf_mono_fun fun i _ => by
+    by_cases h' : x' ≤ p i
+    · rw [if_pos h', if_pos (h.trans h')]
+    · rw [if_neg h']; exact le_top
+
+/-- **Row compression is lossless for finitely generated cuts.** `F'(x, y) = F (⋀{pᵢ : x ≤ pᵢ}) y` is monotone and
+witness-free whenever `F` is, with no chain condition. So a counterexample may be assumed to read only the meet rows
+`⋀_S p`; the reduced meet-row theory forgets nothing about rows, only the lattice structure among columns. -/
+theorem rows_to_meets {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α)
+    (nw : ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F x y ≤ x ∧ ¬ y ≤ F x y) :
+    (∀ x x' y y', x ≤ x' → y ≤ y' → F (meetRow p x) y ≤ F (meetRow p x') y') ∧
+    ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F (meetRow p x) y ≤ x ∧ ¬ y ≤ F (meetRow p x) y := by
+  refine ⟨fun x x' y y' hx hy => hF _ _ _ _ (meetRow_mono p hx) hy, fun x ⟨i, hi⟩ y hy => ?_⟩
+  obtain ⟨h1, h2⟩ := nw (meetRow p x) ⟨i, meetRow_le hi⟩ y hy
+  exact ⟨fun h => h1 (h.trans (le_meetRow p x)), h2⟩
 
 /-- The join anchor of `i`: `cᵢ = ⨆_{j ≠ i} pᵢ ⊓ pⱼ`. -/
 def anchor (p : ι → α) (i : ι) : α := (Finset.univ.erase i).sup (fun j => p i ⊓ p j)

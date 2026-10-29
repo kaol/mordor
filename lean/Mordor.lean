@@ -52,3 +52,4 @@ import Mordor.Saturation
 import Mordor.MinSwitch
 import Mordor.HistoryFix
 import Mordor.ClipEscape
+import Mordor.Dismantle

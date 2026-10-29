@@ -4,7 +4,9 @@ m ≥ n, depending on (t, s, min(m − n, W)) — eventually constant, so tails 
 shift-invariant), and ⊤.  Rows: the 7 meet rows.  F(r, c_{t,n}) = a D-element, ⊤, some L_u, or c_{s,n+δ} (0 ≤ δ ≤ Δ),
 shift-invariant; F(r, L_u), F(r, ⊤) ∈ D ∪ L ∪ {⊤}, and with 'open' also a fixed column c_{s,m} (m ≤ W).
 Monotone; no-witness at every column, every L_u and ⊤ (log §34.3z²⁷).
-   python3 lasso.py T W Δ U E [open] [nonw | nwcols | notop | nolim]"""
+   python3 lasso.py T W Δ U E [open] [nonw | nwcols | notop | nolim] [mus]
+'mus' prints a minimal unsatisfiable set of constraint groups (no-witness per row and column, monotonicity per row pair
+and column pair; the poset axioms stay hard)."""
 import sys, itertools
 from pysat.solvers import Cadical195
 TT, W, DL, U, NE = map(int, sys.argv[1:6])
@@ -15,8 +17,9 @@ ND = 8 + NE; MEET = {A: 1 + k for k, A in enumerate(subsets)}; P = [MEET[frozens
 nv = [0]
 def new(): nv[0] += 1; return nv[0]
 cl = []
+GROUPS = {}; CUR = [None]
 def add(c):
-    out = []
+    out = [] if CUR[0] is None else [-GROUPS.setdefault(CUR[0], new())]
     for l in c:
         if l is True: return
         if l is False: continue
@@ -89,6 +92,7 @@ for r in rows:
             for x2 in COLX:
                 lx = le(x, x2)
                 if lx is False: continue
+                CUR[0] = ('mono', r, r2, x[0] + str(x[1]) if x[0] != 'T' else 'T', x2[0] + (str(x2[1]) if x2[0] != 'T' else '') + (f'+{x2[2]}' if x2[0] == 'c' else ''))
                 for s1, v1 in opts(r, x):
                     for s2, v2 in opts(r2, x2):
                         if x[0] == 'c' and x2[0] != 'c' and v1[0] == 'c' and v2[0] == 'c':
@@ -98,10 +102,28 @@ for r in rows:
 for r in rows:
     for x in ([] if 'nonw' in FLAGS else [b for b in BASE if b[0] == 'c'] if 'nwcols' in FLAGS else
               [b for b in BASE if b[0] != 'T'] if 'notop' in FLAGS else [b for b in BASE if b[0] != 'L'] if 'nolim' in FLAGS else BASE):
+        xn = x[0] + str(x[1]) if x[0] != 'T' else 'T'
         for s1, v1 in opts(r, x):
+            CUR[0] = ('W1', r, xn)
             if v1[0] == 'd': add([-s1, neg(le(v1, ('d', r)))])
+            CUR[0] = ('W2', r, xn)
             add([-s1, neg(le(x, v1))])
-sol = Cadical195(bootstrap_with=cl); res = sol.solve()
+CUR[0] = None
+sol = Cadical195(bootstrap_with=cl); res = sol.solve(assumptions=list(GROUPS.values()))
+if 'mus' in FLAGS and not res:
+    keep = list(GROUPS.items())
+    core = set(sol.get_core())
+    keep = [kv for kv in keep if kv[1] in core]
+    i = 0
+    while i < len(keep):
+        trial = keep[:i] + keep[i + 1:]
+        if not sol.solve(assumptions=[v for _, v in trial]):
+            core = set(sol.get_core()); keep = [kv for kv in trial if kv[1] in core]
+        else: i += 1
+    rn = {MEET[A]: (('m' + ''.join(str(j+1) for j in sorted(A))) if len(A) > 1 else f'p{min(A)+1}') for A in subsets}
+    print(f'MUS: {len(keep)} groups')
+    for (g, *rest), _ in sorted(keep, key=lambda kv: str(kv[0])):
+        print('  ', g, *[rn.get(x, x) if isinstance(x, int) else x for x in rest])
 print(f"T={TT} W={W} Δ={DL} U={U} E={NE}: {'SAT' if res else 'UNSAT'}  ({nv[0]} vars, {len(cl)} clauses)")
 if res:
     M = set(l for l in sol.get_model() if l > 0)

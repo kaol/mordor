@@ -72,3 +72,72 @@ theorem escapes_of_low_labels {ι : Type*} {p : ι → α} {F : α → α → α
   exact (nw (p j) ⟨j, le_rfl⟩ x hx).1 hj
 
 end Mordor.MinSwitch
+
+namespace Mordor.MinSwitch
+
+set_option linter.unusedSectionVars false
+
+variable {α : Type*} [Lattice α] [BoundedOrder α]
+
+/-- The terminal strict-switch state of §34.3z²² (three generators, row `p₁` exhausted into petal `2`):
+`x ∉ D`, `g₁ x ≤ x`, `g₁ x` below `p₂` only, and `h x = F (p₁ ⊓ p₂ ⊓ p₃) x` below `p₁` and `p₂` but not `p₃`. -/
+structure Terminal (F : α → α → α) (p₁ p₂ p₃ x : α) : Prop where
+  hx : ¬ (x ≤ p₁ ∨ x ≤ p₂ ∨ x ≤ p₃)
+  g1le : F p₁ x ≤ x
+  g1p2 : F p₁ x ≤ p₂
+  g1np1 : ¬ F p₁ x ≤ p₁
+  g1np3 : ¬ F p₁ x ≤ p₃
+  h1 : F (p₁ ⊓ p₂ ⊓ p₃) x ≤ p₁
+  h2 : F (p₁ ⊓ p₂ ⊓ p₃) x ≤ p₂
+  h3 : ¬ F (p₁ ⊓ p₂ ⊓ p₃) x ≤ p₃
+
+section Terminal
+variable {F : α → α → α} {p₁ p₂ p₃ x : α}
+  (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
+  (nw : ∀ a, (a ≤ p₁ ∨ a ≤ p₂ ∨ a ≤ p₃) → ∀ y, ¬ (y ≤ p₁ ∨ y ≤ p₂ ∨ y ≤ p₃) → ¬ F a y ≤ a ∧ ¬ y ≤ F a y)
+  (T : Terminal F p₁ p₂ p₃ x)
+include hF nw T
+
+/-- **At the terminal state row `p₂` escapes:** `v = g₂ x ∉ D`. -/
+theorem terminal_v_notin : ¬ (F p₂ x ≤ p₁ ∨ F p₂ x ≤ p₂ ∨ F p₂ x ≤ p₃) := by
+  have hhv : F (p₁ ⊓ p₂ ⊓ p₃) x ≤ F p₂ x := hF _ _ _ _ (inf_le_left.trans inf_le_right) le_rfl
+  rintro (h | h | h)
+  · have h12 : F (p₁ ⊓ p₂) x ≤ p₁ ⊓ p₂ :=
+      le_inf ((hF _ _ _ _ inf_le_right le_rfl).trans h) ((hF _ _ _ _ inf_le_left le_rfl).trans T.g1p2)
+    exact (nw _ (Or.inl inf_le_left) x T.hx).1 h12
+  · exact (nw p₂ (Or.inr (Or.inl le_rfl)) x T.hx).1 h
+  · exact T.h3 (hhv.trans h)
+
+/-- **The meet candidate.** In case II (`g₂ x ≰ x`) the meet `w = x ⊓ g₂ x` lies strictly below `x` and `g₂ x`, above
+`h x`; row 1 is bounded by `x` and row 2 by `g₂ x` at `w`; and if `w ∈ D` then `w` lies below `p₂` and neither `p₁` nor
+`p₃`. -/
+theorem terminal_meet (hvx : ¬ F p₂ x ≤ x) :
+    x ⊓ F p₂ x < x ∧ x ⊓ F p₂ x < F p₂ x ∧ F (p₁ ⊓ p₂ ⊓ p₃) x ≤ x ⊓ F p₂ x ∧
+    F p₁ (x ⊓ F p₂ x) ≤ x ∧ F p₂ (x ⊓ F p₂ x) ≤ F p₂ x ∧
+    ¬ x ⊓ F p₂ x ≤ p₁ ∧ ¬ x ⊓ F p₂ x ≤ p₃ := by
+  have hxv : ¬ x ≤ F p₂ x := (nw p₂ (Or.inr (Or.inl le_rfl)) x T.hx).2
+  have hr1 : p₁ ⊓ p₂ ⊓ p₃ ≤ p₁ := inf_le_left.trans inf_le_left
+  have hr2 : p₁ ⊓ p₂ ⊓ p₃ ≤ p₂ := inf_le_left.trans inf_le_right
+  have hhw : F (p₁ ⊓ p₂ ⊓ p₃) x ≤ x ⊓ F p₂ x :=
+    le_inf ((hF _ _ _ _ hr1 le_rfl).trans T.g1le) (hF _ _ _ _ hr2 le_rfl)
+  have h12w : F (p₁ ⊓ p₂) x ≤ x ⊓ F p₂ x :=
+    le_inf ((hF _ _ _ _ inf_le_left le_rfl).trans T.g1le) (hF _ _ _ _ inf_le_right le_rfl)
+  refine ⟨lt_of_le_of_ne inf_le_left fun h => hxv (h.symm.le.trans inf_le_right),
+    lt_of_le_of_ne inf_le_right fun h => hvx (h.symm.le.trans inf_le_left), hhw,
+    (hF _ _ _ _ le_rfl inf_le_left).trans T.g1le, hF _ _ _ _ le_rfl inf_le_left, fun h => ?_,
+    fun h => T.h3 (hhw.trans h)⟩
+  have : F (p₁ ⊓ p₂) x ≤ p₁ ⊓ p₂ :=
+    le_inf (h12w.trans h) ((hF _ _ _ _ inf_le_left le_rfl).trans T.g1p2)
+  exact (nw _ (Or.inl inf_le_left) x T.hx).1 this
+
+/-- **The cross-row transfer is exactly contraction at the meet.** `g₁ w ≤ g₂ x` makes row 1 contract at `w`, and
+`g₂ w ≤ x` makes row 2 contract at `w`. (Whether either holds is open: a near-model with no-witness at `x`, `g₂ x`,
+`w`, `⊤` violates both, §34.3z²³.) -/
+theorem terminal_transfer (hvx : ¬ F p₂ x ≤ x) :
+    (F p₁ (x ⊓ F p₂ x) ≤ F p₂ x → F p₁ (x ⊓ F p₂ x) ≤ x ⊓ F p₂ x) ∧
+    (F p₂ (x ⊓ F p₂ x) ≤ x → F p₂ (x ⊓ F p₂ x) ≤ x ⊓ F p₂ x) := by
+  obtain ⟨-, -, -, h1, h2, -, -⟩ := terminal_meet hF nw T hvx
+  exact ⟨fun h => le_inf h1 h, fun h => le_inf h h2⟩
+
+end Terminal
+end Mordor.MinSwitch

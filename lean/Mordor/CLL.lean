@@ -219,4 +219,93 @@ theorem cll (hk : 0 < k) (L : Labelling k C) : False := by
     obtain ⟨c'', hc'', hle⟩ := L.mono_col _ _ _ _ y hA hCt hch (Ap_anti hsub) (Cp_mono hsub) hzt
     rw [hz] at hc''; cases hc''; exact hle
 
+/-! ### Cut on finite posets whose `D`-generators have all meets -/
+
+section Cut
+
+theorem chain_max {β : Type*} [PartialOrder β] {σ : Finset β} (hne : σ.Nonempty)
+    (hch : IsChain (· ≤ ·) (σ : Set β)) : ∃ m ∈ σ, ∀ y ∈ σ, y ≤ m := by
+  obtain ⟨m, hm, hmax⟩ := σ.exists_maximal hne
+  refine ⟨m, hm, fun y hy => ?_⟩
+  by_cases h : y = m
+  · rw [h]
+  · rcases hch hy hm h with h1 | h1
+    · exact h1
+    · exact hmax hy h1
+
+/-- The top of a chain (`⊤` if there is none). -/
+noncomputable def cmax {β : Type*} [PartialOrder β] [OrderTop β] (σ : Finset β) : β :=
+  if h : ∃ m ∈ σ, ∀ y ∈ σ, y ≤ m then h.choose else ⊤
+
+theorem cmax_spec {β : Type*} [PartialOrder β] [OrderTop β] {σ : Finset β} (hne : σ.Nonempty)
+    (hch : IsChain (· ≤ ·) (σ : Set β)) : cmax σ ∈ σ ∧ ∀ y ∈ σ, y ≤ cmax σ := by
+  have h := chain_max hne hch
+  unfold cmax; rw [dif_pos h]; exact h.choose_spec
+
+/-- **The Cut Lemma on finite bounded posets whose `D`-generators have all meets.** No lattice structure is
+needed among the columns. -/
+theorem cut_of_meets {α : Type*} [Fintype α] [PartialOrder α] [BoundedOrder α] (D : Set α)
+    (hD : ∀ a b, a ≤ b → b ∈ D → a ∈ D) (htop : ⊤ ∉ D) (hbot : ⊥ ∈ D) {k : ℕ} (p : Fin k → α)
+    (hgen : ∀ x ∈ D, ∃ i, x ≤ p i) (hp : ∀ i, p i ∈ D) (m : Finset (Fin k) → α)
+    (hm : ∀ A : Finset (Fin k), A.Nonempty → IsGLB (p '' (A : Set (Fin k))) (m A))
+    (F : α → α → α) (hF : ∀ a a' b b', a ≤ a' → b ≤ b' → F a b ≤ F a' b') :
+    ∃ x ∈ D, ∃ y ∉ D, F x y ≤ x ∨ y ≤ F x y := by
+  by_contra hno
+  push_neg at hno
+  obtain ⟨i0, _⟩ := hgen ⊥ hbot
+  have hk : 0 < k := Fin.pos i0
+  letI : OrderTop {y : α // y ∉ D} := { top := ⟨⊤, htop⟩, le_top := fun a => (le_top : a.1 ≤ ⊤) }
+  have hmD : ∀ A : Finset (Fin k), A.Nonempty → m A ∈ D := fun A ⟨i, hi⟩ =>
+    hD _ _ ((hm A ⟨i, hi⟩).1 ⟨i, hi, rfl⟩) (hp i)
+  have hmanti : ∀ A A' : Finset (Fin k), A'.Nonempty → A' ⊆ A → A.Nonempty → m A ≤ m A' :=
+    fun A A' hA' hsub hA => (hm A' hA').2 fun x ⟨i, hi, hx⟩ => hx ▸ (hm A hA).1 ⟨i, hsub hi, rfl⟩
+  let val : Finset (Fin k) → Finset {y : α // y ∉ D} → α := fun A σ => F (m A) (cmax σ).1
+  let L : Labelling k {y : α // y ∉ D} :=
+    { z := fun A σ => if hv : val A σ ∈ D then Sum.inl (univ.filter fun i => val A σ ≤ p i)
+        else Sum.inr ⟨val A σ, hv⟩
+      ne := fun A σ α hA hσ hch h => by
+        by_cases hv : val A σ ∈ D
+        · simp only [dif_pos hv, Sum.inl.injEq] at h
+          obtain ⟨i, hi⟩ := hgen _ hv
+          exact ⟨i, h ▸ by simp [hi]⟩
+        · simp [dif_neg hv] at h
+      w1 := fun A σ α hA hσ hch h hsub => by
+        by_cases hv : val A σ ∈ D
+        · simp only [dif_pos hv, Sum.inl.injEq] at h
+          have hle : val A σ ≤ m A := (hm A hA).2 fun x ⟨i, hi, hx⟩ => by
+            have := hsub hi; rw [← h] at this; simp at this; exact hx ▸ this
+          exact (hno _ (hmD A hA) _ (cmax σ).2).1 hle
+        · simp [dif_neg hv] at h
+      w2 := fun A σ c hA hσ hch h hall => by
+        by_cases hv : val A σ ∈ D
+        · simp [dif_pos hv] at h
+        · simp only [dif_neg hv, Sum.inr.injEq] at h
+          have := hall _ (cmax_spec hσ hch).1
+          rw [← h] at this
+          exact (hno _ (hmD A hA) _ (cmax σ).2).2 this
+      mono_col := fun A σ A' σ' c hA' hσ hch' hsub hsσ h => by
+        have hA : A.Nonempty := hA'.mono hsub
+        have hσ' : σ'.Nonempty := hσ.mono hsσ
+        have hle : val A σ ≤ val A' σ' := hF _ _ _ _ (hmanti A A' hA' hsub hA)
+          ((cmax_spec hσ' hch').2 _ (hsσ (cmax_spec hσ (hch'.mono (by exact_mod_cast hsσ))).1))
+        by_cases hv : val A σ ∈ D
+        · simp [dif_pos hv] at h
+        · simp only [dif_neg hv, Sum.inr.injEq] at h
+          have hv' : val A' σ' ∉ D := fun h' => hv (hD _ _ hle h')
+          exact ⟨⟨val A' σ', hv'⟩, by simp [dif_neg hv'], h ▸ hle⟩
+      mono_lab := fun A σ A' σ' α α' hA' hσ hch' hsub hsσ h h' => by
+        have hA : A.Nonempty := hA'.mono hsub
+        have hσ' : σ'.Nonempty := hσ.mono hsσ
+        have hle : val A σ ≤ val A' σ' := hF _ _ _ _ (hmanti A A' hA' hsub hA)
+          ((cmax_spec hσ' hch').2 _ (hsσ (cmax_spec hσ (hch'.mono (by exact_mod_cast hsσ))).1))
+        by_cases hv : val A σ ∈ D
+        · by_cases hv' : val A' σ' ∈ D
+          · simp only [dif_pos hv, Sum.inl.injEq] at h; simp only [dif_pos hv', Sum.inl.injEq] at h'
+            intro i hi; rw [← h'] at hi; rw [← h]; simp at hi ⊢; exact hle.trans hi
+          · simp [dif_neg hv'] at h'
+        · simp [dif_neg hv] at h }
+  exact cll hk L
+
+end Cut
+
 end Mordor.CLL

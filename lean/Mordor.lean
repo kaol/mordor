@@ -49,4 +49,5 @@ import Mordor.FGTwo
 import Mordor.Laminar
 import Mordor.Crossing
 import Mordor.Saturation
+import Mordor.MinSwitch
 import Mordor.ClipEscape

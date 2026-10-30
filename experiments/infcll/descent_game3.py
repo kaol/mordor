@@ -1,10 +1,14 @@
-"""Exact attractor for the strengthened descent game (k = 3), bitset join. Constraints as in game2.py."""
+"""Exact attractor for the strengthened descent game (k = 3), bitset join. Constraints as in descent_game2.py.
+  python3 descent_game3.py [onlytop]   onlytop: successors must have a row not below them (WLOG: top is the only
+  closed column, since below a closed column the labelling restricts)."""
 import itertools, sys, numpy as np, time
 src = open(__import__('os').path.join(__import__('os').path.dirname(__file__), 'descent_game2.py')).read().split("memo = {}")[0]
 exec(src)
 t0 = time.time()
+ONLYTOP = len(sys.argv) > 1 and sys.argv[1] == 'onlytop'   # WLOG: top is the only closed column
+HASNC = (K == NC).any(1)
 def run(U):
-    Uidx = np.flatnonzero(U); nU = len(Uidx)
+    Uidx = np.flatnonzero(U & HASNC) if ONLYTOP else np.flatnonzero(U); nU = len(Uidx)
     words = (nU + 63) // 64
     vals = K[Uidx].astype(np.int32) * 8 + (E[Uidx].astype(np.int32) + 1)
     bits = {}
@@ -49,7 +53,7 @@ while True:
     it += 1
     U2 = run(U)
     print(f"iteration {it}: adversary-winning states {U2.sum()} ({time.time()-t0:.0f}s)", flush=True)
-    if (U2 == U).all(): break
+    if (U2 == U).all() or not U2.any() and False: break
     U = U2
 init = ~(K == NC).any(1)
 bad = np.flatnonzero(init & U)

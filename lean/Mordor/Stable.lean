@@ -154,15 +154,16 @@ theorem orbit_escape [WellFoundedGT α] [WellFoundedLT α] (h : R F ≠ Set.univ
 
 /-! ### Finite cross-capture -/
 
-theorem F_mono2 (F : α →o α →o α) : ∀ x x' y y' : α, x ≤ x' → y ≤ y' → F x y ≤ F x' y' :=
-  fun _ _ _ _ hx hy => (F.mono hx _).trans ((F _).mono hy)
+theorem F_mono2 (F : α →o α →o α) (D : Set α) :
+    ∀ x x' y y' : α, x ∈ D → x' ∈ D → y ∉ D → y' ∉ D → x ≤ x' → y ≤ y' → F x y ≤ F x' y' :=
+  fun _ _ _ _ _ _ _ _ hx hy => (F.mono hx _).trans ((F _).mono hy)
 
 /-- **Finite `F`-closure ⟹ Cut**, on any complete lattice: no `⊓`/`⊔`-closure needed. -/
 theorem cutCells_of_finite_Fclosure (S : Set α) (hS : S.Finite) (hbS : ⊥ ∈ S) (htS : ⊤ ∈ S)
     (hFS : ∀ x ∈ S, ∀ y ∈ S, F x y ∈ S) : CutCells F := by
   intro D hD ⟨d, hd⟩ ⟨u, hu⟩
   obtain ⟨x, hx, y, hy, h⟩ := RelativeCut.cut_cross D (fun x y h hy => hD h hy) (fun ht => hu (hD le_top ht))
-    (hD bot_le hd) (fun x y => F x y) (F_mono2 F) S hS hbS htS fun x hx _ y hy _ => hFS x hx y hy
+    (hD bot_le hd) (fun x y => F x y) (F_mono2 F D) S hS hbS htS fun x hx _ y hy _ => hFS x hx y hy
   exact ⟨x, hx, y, hy, h⟩
 
 /-- **Finite cross-capture for `R(F)`.** -/
@@ -172,7 +173,7 @@ theorem R_univ_of_cross (S : Set α) (hS : S.Finite) (hbS : ⊥ ∈ S) (htS : �
   have htop : (⊤ : α) ∉ R F := fun h => hne (R_univ_iff_top_mem.2 h)
   obtain ⟨hD, h0, ha, hb⟩ := (R_closed (F := F))
   obtain ⟨x, hx, y, hy, hc | hc⟩ := RelativeCut.cut_cross (R F) (fun x y h hy => hD h hy) htop h0
-    (fun x y => F x y) (F_mono2 F) S hS hbS htS hcross
+    (fun x y => F x y) (F_mono2 F (R F)) S hS hbS htS hcross
   · exact hy (hb y (hD (b_le hc) hx))
   · exact hy (hD (le_a hc) (ha x hx))
 
@@ -202,5 +203,79 @@ theorem cutCells_of_equivariant (σ : α ≃o α) (hσ : ∀ x y, F (σ x) (σ y
     fun x hx y hy => by
       show σ (F x y) = F x y
       rw [← hσ]; rw [show σ x = x from hx, show σ y = y from hy]
+
+
+/-! ### Sequential insertion and delays (log §34.3z⁴¹) -/
+
+theorem step_mono {D E : Set α} (h : D ⊆ E) : step F D ⊆ step F E := by
+  rintro x ⟨y, hxy, hy | ⟨z, hz, rfl⟩ | hb⟩
+  · exact ⟨y, hxy, Or.inl (h hy)⟩
+  · exact ⟨_, hxy, Or.inr (Or.inl ⟨z, h hz, rfl⟩)⟩
+  · exact ⟨y, hxy, Or.inr (Or.inr (h hb))⟩
+
+theorem step_subset_R {D : Set α} (h : D ⊆ R F) : step F D ⊆ R F := by
+  rintro x ⟨y, hxy, hy | ⟨z, hz, rfl⟩ | hb⟩
+  · exact R_closed.1 hxy (h hy)
+  · exact R_closed.1 hxy (R_closed.2.2.1 z (h hz))
+  · exact R_closed.1 hxy (R_closed.2.2.2 y (h hb))
+
+/-- **Finite delay ⟺ membership.** For `r ∈ R(F)`, an element is reachable iff it appears after finitely many
+`Θ⁺`-steps from `↓r`. So "`κ⁺ r` has finite delay" is exactly "`κ⁺ r ∈ R(F)`". -/
+theorem mem_R_iff_delay {r : α} (hr : r ∈ R F) (x : α) :
+    x ∈ R F ↔ ∃ k, x ∈ (step F)^[k] (Set.Iic r) := by
+  constructor
+  · intro hx
+    rw [R_eq_iUnion_Rk] at hx
+    obtain ⟨k, hk⟩ := Set.mem_iUnion.1 hx
+    refine ⟨k, ?_⟩
+    have : ∀ k, Rk F k ⊆ (step F)^[k] (Set.Iic r) := fun k => by
+      induction k with
+      | zero => exact Set.Iic_subset_Iic.2 bot_le
+      | succ k ih =>
+          rw [Rk_succ, Function.iterate_succ_apply']; exact step_mono ih
+    exact this k hk
+  · rintro ⟨k, hk⟩
+    have : ∀ k, (step F)^[k] (Set.Iic r) ⊆ R F := fun k => by
+      induction k with
+      | zero => exact fun y hy => R_closed.1 hy hr
+      | succ k ih => rw [Function.iterate_succ_apply']; exact step_subset_R ih
+    exact this k hk
+
+open Classical in
+/-- **Sequential insertion.** If `R(F)` contains `u ⊔ a u` for every `u ∈ R(F)` (Base) and `u ⊔ a u ⊔ y` whenever
+`u ∈ R(F)` and `b y ≤ u` (Insert), then `R(F)` is closed under the ideal step `κ⁺` (ACC: finite support of
+`⋁{y | b y ≤ r}`, inserted one generator at a time with the anchor updated after each insertion). -/
+theorem kstep_of_base_insert [WellFoundedGT α] (hbase : ∀ u ∈ R F, u ⊔ a F u ∈ R F)
+    (hins : ∀ u ∈ R F, ∀ y, b F y ≤ u → u ⊔ a F u ⊔ y ∈ R F) : ∀ r ∈ R F, kstep F r ∈ R F := by
+  intro r hr
+  obtain ⟨t, ht, he⟩ := sSup_finite_support {y | b F y ≤ r}
+  have key : ∀ s : Finset α, ↑s ⊆ {y | b F y ≤ r} → ∃ u ∈ R F, r ⊔ a F r ⊔ s.sup id ≤ u := by
+    intro s
+    induction s using Finset.induction_on with
+    | empty => intro _; exact ⟨r ⊔ a F r, hbase r hr, by simp⟩
+    | insert y s hy ih =>
+        intro hs
+        obtain ⟨u, hu, hle⟩ := ih (fun z hz => hs (Finset.mem_insert_of_mem hz))
+        have hby : b F y ≤ u :=
+          (show b F y ≤ r from hs (Finset.mem_insert_self y s)).trans (le_sup_left.trans (le_sup_left.trans hle))
+        refine ⟨u ⊔ a F u ⊔ y, hins u hu y hby, ?_⟩
+        rw [Finset.sup_insert]
+        refine sup_le (sup_le ?_ ?_) (sup_le ?_ ?_)
+        · exact (le_sup_left.trans (le_sup_left.trans hle)).trans (le_sup_left.trans le_sup_left)
+        · exact (le_sup_right.trans (le_sup_left.trans hle)).trans (le_sup_left.trans le_sup_left)
+        · exact le_sup_right
+        · exact (le_sup_right.trans hle).trans (le_sup_left.trans le_sup_left)
+  obtain ⟨u, hu, hle⟩ := key t ht
+  exact R_closed.1 (by rw [kstep, he]; exact hle) hu
+
+/-- **Base ∧ Insert ⟺ Cut**, for each `F` (ACC and DCC): the brief's local lemmas, quantified over `R(F)`, are not
+weaker than the conjecture. Only stage-sensitive versions (bounded delay) are independent statements. -/
+theorem cutMaps_iff_base_insert [WellFoundedGT α] [WellFoundedLT α] :
+    CutMaps F ↔ (∀ u ∈ R F, u ⊔ a F u ∈ R F) ∧ ∀ u ∈ R F, ∀ y, b F y ≤ u → u ⊔ a F u ⊔ y ∈ R F := by
+  refine ⟨fun h => ?_, fun ⟨h1, h2⟩ => cutMaps_iff_kstep.2 (kstep_of_base_insert h1 h2)⟩
+  rw [cutMaps_iff_R.1 h]; exact ⟨fun _ _ => trivial, fun _ _ _ _ => trivial⟩
+
+/-- An equality preimage is a fixed row: `b y = r ⟹ F r y = r`. -/
+theorem F_eq_of_b_eq {r y : α} (h : b F y = r) : F r y = r := h ▸ col_b y
 
 end Mordor

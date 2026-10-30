@@ -754,10 +754,11 @@ theorem cmin_spec {β : Type*} [PartialOrder β] [OrderBot β] {ρ : Finset β} 
   unfold cmin; rw [dif_pos h]; exact h.choose_spec
 
 /-- **Finite cross-capture.** In any bounded poset, if a finite set `S ∋ ⊥, ⊤` contains `F x y` for all
-`x ∈ S ∩ D`, `y ∈ S ∖ D`, then the cut `D` has a witness (in `S`). No lattice structure, no chain condition. -/
+`x ∈ S ∩ D`, `y ∈ S ∖ D`, then the cut `D` has a witness (in `S`). No lattice structure, no chain condition, and
+`F` need only be monotone on cross pairs `D × Dᶜ` (the ground theory of §34.3g–h encodes exactly this). -/
 theorem cut_cross {α : Type*} [PartialOrder α] [BoundedOrder α] (Dn : Set α)
     (hD : ∀ a b, a ≤ b → b ∈ Dn → a ∈ Dn) (htop : ⊤ ∉ Dn) (hbot : ⊥ ∈ Dn)
-    (F : α → α → α) (hF : ∀ a a' b b', a ≤ a' → b ≤ b' → F a b ≤ F a' b')
+    (F : α → α → α) (hF : ∀ a a' b b', a ∈ Dn → a' ∈ Dn → b ∉ Dn → b' ∉ Dn → a ≤ a' → b ≤ b' → F a b ≤ F a' b')
     (S : Set α) (hS : S.Finite) (hbS : ⊥ ∈ S) (htS : ⊤ ∈ S)
     (hcross : ∀ x ∈ S, x ∈ Dn → ∀ y ∈ S, y ∉ Dn → F x y ∈ S) :
     ∃ x ∈ Dn, ∃ y ∉ Dn, F x y ≤ x ∨ y ≤ F x y := by
@@ -787,7 +788,7 @@ theorem cut_cross {α : Type*} [PartialOrder α] [BoundedOrder α] (Dn : Set α)
       w2 := fun ρ σ c hρ hσ hρc hσc h hall => ?_ }
   · have hρ : ρ.Nonempty := hρ'.mono hsub
     have hσ' : σ'.Nonempty := hσ.mono hsσ
-    have hle : val ρ σ ≤ val ρ' σ' := hF _ _ _ _
+    have hle : val ρ σ ≤ val ρ' σ' := hF _ _ _ _ (cmin ρ).2.2 (cmin ρ').2.2 (cmax σ).2.2 (cmax σ').2.2
       ((cmin_spec hρ hρc).2 _ (hsub (cmin_spec hρ' (hρc.mono (by exact_mod_cast hsub))).1))
       ((cmax_spec hσ' hσc).2 _ (hsσ (cmax_spec hσ (hσc.mono (by exact_mod_cast hsσ))).1))
     simp only [zf]
@@ -816,7 +817,8 @@ theorem cut_finite {α : Type*} [Fintype α] [PartialOrder α] [BoundedOrder α]
     (hD : ∀ a b, a ≤ b → b ∈ Dn → a ∈ Dn) (htop : ⊤ ∉ Dn) (hbot : ⊥ ∈ Dn)
     (F : α → α → α) (hF : ∀ a a' b b', a ≤ a' → b ≤ b' → F a b ≤ F a' b') :
     ∃ x ∈ Dn, ∃ y ∉ Dn, F x y ≤ x ∨ y ≤ F x y :=
-  cut_cross Dn hD htop hbot F hF Set.univ Set.finite_univ trivial trivial fun _ _ _ _ _ _ => trivial
+  cut_cross Dn hD htop hbot F (fun a a' b b' _ _ _ _ => hF a a' b b') Set.univ Set.finite_univ trivial trivial
+    fun _ _ _ _ _ _ => trivial
 
 end Cut
 

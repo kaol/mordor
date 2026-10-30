@@ -542,6 +542,70 @@ theorem face_escape_funnel [WellFoundedLT β] (M : MaxLabelling 3 β) (l : Fin 3
     (fun B hne hB x hx d hd => FaceReach.step hx hne hB hd)
   exact ⟨B, x, hx, h⟩
 
+
+/-! ### Label regions and maximal label boundaries -/
+
+/-- **No column is all labels** (finite CLL at one column). -/
+theorem not_all_labels {k : ℕ} (hk : 0 < k) (M : MaxLabelling k β) (c : β) :
+    ∃ A : Finset (Fin k), A.Nonempty ∧ ∃ d, M.w A c = Sum.inr d := by
+  by_contra hno
+  push_neg at hno
+  have hlab : ∀ A : Finset (Fin k), A.Nonempty → ∃ α, M.w A c = Sum.inl α := fun A hA => by
+    rcases h : M.w A c with α | d
+    · exact ⟨α, rfl⟩
+    · exact absurd h (hno A hA d)
+  have hinl : ∀ A α, Sum.map id (fun _ : β => ()) (M.w A c) = Sum.inl α ↔ M.w A c = Sum.inl α := fun A α => by
+    rcases M.w A c with a | d <;> simp
+  have hinr : ∀ A, A.Nonempty → ∀ u, Sum.map id (fun _ : β => ()) (M.w A c) ≠ Sum.inr u := fun A hA u h => by
+    rcases hw : M.w A c with a | d
+    · rw [hw] at h; cases h
+    · exact hno A hA d hw
+  refine cll_max (β := Unit) hk
+    { w := fun A _ => Sum.map id (fun _ : β => ()) (M.w A c)
+      ne := fun A _ α hA h => M.ne A c α hA ((hinl A α).1 h)
+      w1 := fun A _ α hA h => M.w1 A c α hA ((hinl A α).1 h)
+      w2 := fun A _ c' hA h => absurd h (hinr A hA c')
+      mono_col := fun A A' _ _ d hA' hsub _ h => absurd h (hinr A (hA'.mono hsub) d)
+      mono_lab := fun A A' _ _ α α' hA' hsub _ h h' =>
+        M.mono_lab A A' c c α α' hA' hsub le_rfl ((hinl A α).1 h) ((hinl A' α').1 h') }
+
+/-- With a bottom column the problem is trivial: every row is a label at `⊥` (W2). -/
+theorem cll_max_of_bot {k : ℕ} [OrderBot β] (hk : 0 < k) (M : MaxLabelling k β) : False := by
+  obtain ⟨A, hA, d, h⟩ := not_all_labels hk M ⊥
+  exact M.w2 A ⊥ d hA h bot_le
+
+/-- **Every row has a label somewhere** (DCC): a row that is a column everywhere is a monotone map with `c ≰ g c`,
+excluded by `column_descent`. -/
+theorem label_region_nonempty {k : ℕ} [WellFoundedLT β] (M : MaxLabelling k β) {A : Finset (Fin k)}
+    (hA : A.Nonempty) : ∃ c α, M.w A c = Sum.inl α := by
+  by_contra hno
+  push_neg at hno
+  have hcol : ∀ c, ∃ d, M.w A c = Sum.inr d := fun c => by
+    rcases h : M.w A c with α | d
+    · exact absurd h (hno c α)
+    · exact ⟨d, rfl⟩
+  choose g hg using hcol
+  refine column_descent g (fun c c' h => ?_) (fun t => M.w2 A t (g t) hA (hg t))
+  obtain ⟨d', hd', hle⟩ := M.mono_col A A c c' (g c) hA (Finset.Subset.refl _) h (hg c)
+  rw [hg c'] at hd'; cases hd'; exact hle
+
+/-- Label regions are down-closed. -/
+theorem label_region_down {k : ℕ} (M : MaxLabelling k β) {A : Finset (Fin k)} (hA : A.Nonempty) {c c' : β}
+    (hc : c ≤ c') {α : Finset (Fin k)} (h : M.w A c' = Sum.inl α) : ∃ α', M.w A c = Sum.inl α' ∧ α ⊆ α' :=
+  M.lab_down_three hA (Finset.Subset.refl _) hc h
+
+/-- **Maximal label boundary** (DCC for existence of labels, ACC for maximality). Every row has a labelled column
+`c_A` above which it is a column everywhere (with `c ≰ d`, by W2). Not unique in general. -/
+theorem maximal_label_boundary {k : ℕ} [WellFoundedLT β] [WellFoundedGT β] (M : MaxLabelling k β)
+    {A : Finset (Fin k)} (hA : A.Nonempty) :
+    ∃ cA α, M.w A cA = Sum.inl α ∧ ∀ c, cA < c → ∃ d, M.w A c = Sum.inr d ∧ ¬ c ≤ d := by
+  obtain ⟨c0, α0, h0⟩ := label_region_nonempty M hA
+  obtain ⟨cA, ⟨α, hα⟩, hmax⟩ := (wellFounded_gt (α := β)).has_min {c | ∃ α, M.w A c = Sum.inl α} ⟨c0, α0, h0⟩
+  refine ⟨cA, α, hα, fun c hc => ?_⟩
+  rcases h : M.w A c with β' | d
+  · exact absurd hc (hmax c ⟨β', h⟩)
+  · exact ⟨d, rfl, M.w2 A c d hA h⟩
+
 end Mordor.InfiniteCLL
 
 /-! ### The minimal terminal meet -/

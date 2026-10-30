@@ -7,3 +7,4 @@ experiments/sat/box_H*.cnf
 experiments/sat/box_H*.ckpt*
 experiments/sat/cut_H*.cnf
 experiments/sat/cut_H*.ckpt*
+experiments/infcll/*.npy

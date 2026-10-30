@@ -403,6 +403,64 @@ theorem cut_two_poset {P : Type*} [PartialOrder P] [BoundedOrder P] [WellFounded
     simp only [mem_filter, mem_univ, true_and] at hi ⊢
     exact hle.trans hi
 
+
+/-! ### Face reduction for three rows -/
+
+/-- **Every max-only three-row labelling escapes every face.** For each generator `l`, some row avoiding `l` carries
+the label `{l}` at some column. Otherwise intersecting labels with the opposite face `{l}ᶜ` (pulled back along
+`Fin.succAbove l`) gives a two-row max-only labelling, which `cll_max_two` refutes. -/
+theorem face_escape [WellFoundedLT β] (M : MaxLabelling 3 β) (l : Fin 3) :
+    ∃ (B : Finset (Fin 3)) (c : β), B.Nonempty ∧ l ∉ B ∧ M.w B c = Sum.inl {l} := by
+  by_contra hno
+  push_neg at hno
+  let e : Fin 2 ↪ Fin 3 := Fin.succAboveEmb l
+  have hel : ∀ i, e i ≠ l := fun i => Fin.succAbove_ne l i
+  have hmapl : ∀ A : Finset (Fin 2), l ∉ A.map e := fun A h => by
+    obtain ⟨i, -, hi⟩ := Finset.mem_map.1 h; exact hel i hi
+  let pre : Finset (Fin 3) → Finset (Fin 2) := fun α => α.preimage e (e.injective.injOn)
+  have hpre : ∀ α i, i ∈ pre α ↔ e i ∈ α := fun α i => by simp [pre]
+  -- a nonempty label at a row avoiding l, other than {l}, meets the face
+  have hmeet : ∀ (A : Finset (Fin 2)) (c : β) α, A.Nonempty → M.w (A.map e) c = Sum.inl α → (pre α).Nonempty := by
+    intro A c α hA h
+    obtain ⟨x, hx⟩ := M.ne _ c α (hA.map) h
+    by_cases hxl : x = l
+    · -- α ≠ {l}, so α contains some y ≠ l
+      have hne : α ≠ {l} := fun h' => hno _ c hA.map (hmapl A) (h' ▸ h)
+      obtain ⟨y, hy, hyl⟩ : ∃ y ∈ α, y ≠ l := by
+        by_contra hall; push_neg at hall
+        exact hne (Finset.eq_singleton_iff_unique_mem.2 ⟨hxl ▸ hx, hall⟩)
+      obtain ⟨i, rfl⟩ := Fin.exists_succAbove_eq hyl
+      exact ⟨i, (hpre α i).2 hy⟩
+    · obtain ⟨i, rfl⟩ := Fin.exists_succAbove_eq hxl
+      exact ⟨i, (hpre α i).2 hx⟩
+  refine cll_max_two
+    { w := fun A c => match M.w (A.map e) c with
+        | Sum.inl α => Sum.inl (pre α)
+        | Sum.inr d => Sum.inr d
+      ne := fun A c α hA h => ?_
+      w1 := fun A c α hA h hsub => ?_
+      w2 := fun A c c' hA h => ?_
+      mono_col := fun A A' c c' d hA' hsub hc h => ?_
+      mono_lab := fun A A' c c' α α' hA' hsub hc h h' => ?_ }
+  · rcases hw : M.w (A.map e) c with β' | d <;> rw [hw] at h <;> simp only [Sum.inl.injEq, reduceCtorEq] at h
+    rw [← h]; exact hmeet A c β' hA hw
+  · rcases hw : M.w (A.map e) c with β' | d <;> rw [hw] at h <;> simp only [Sum.inl.injEq, reduceCtorEq] at h
+    refine M.w1 _ c β' hA.map hw fun x hx => ?_
+    obtain ⟨i, hi, rfl⟩ := Finset.mem_map.1 hx
+    exact (hpre β' i).1 (h ▸ hsub hi)
+  · rcases hw : M.w (A.map e) c with β' | d <;> rw [hw] at h <;> simp only [Sum.inr.injEq, reduceCtorEq] at h
+    exact M.w2 _ c c' hA.map (h ▸ hw)
+  · rcases hw : M.w (A.map e) c with β' | d0 <;> rw [hw] at h <;> simp only [Sum.inr.injEq, reduceCtorEq] at h
+    obtain ⟨d', hd', hle⟩ := M.mono_col _ _ c c' d0 hA'.map (Finset.map_subset_map.2 hsub) hc hw
+    refine ⟨d', ?_, h ▸ hle⟩
+    simp only [hd']
+  · rcases hw : M.w (A.map e) c with β1 | d0 <;> rw [hw] at h <;> simp only [Sum.inl.injEq, reduceCtorEq] at h
+    rcases hw' : M.w (A'.map e) c' with β2 | d1 <;> rw [hw'] at h' <;> simp only [Sum.inl.injEq, reduceCtorEq] at h'
+    have := M.mono_lab _ _ c c' β1 β2 hA'.map (Finset.map_subset_map.2 hsub) hc hw hw'
+    intro i hi
+    rw [← h'] at hi; rw [← h]
+    exact (hpre β1 i).2 (this ((hpre β2 i).1 hi))
+
 end Mordor.InfiniteCLL
 
 /-! ### The minimal terminal meet -/

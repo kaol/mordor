@@ -278,4 +278,92 @@ theorem cutMaps_iff_base_insert [WellFoundedGT α] [WellFoundedLT α] :
 /-- An equality preimage is a fixed row: `b y = r ⟹ F r y = r`. -/
 theorem F_eq_of_b_eq {r y : α} (h : b F y = r) : F r y = r := h ▸ col_b y
 
+
+/-! ### The normal form: every counterexample is a bottom critical pair (log §34.3z⁴²) -/
+
+open Classical in
+/-- The normalization of `F` at a down-set `D`: `⊥` on `D × D`, `F` on cross pairs, `⊤` off `D`. -/
+noncomputable def normalize (F : α →o α →o α) (D : Set α) (hD : IsDown D) : α →o α →o α where
+  toFun x := ⟨fun y => if x ∈ D then (if y ∈ D then ⊥ else F x y) else ⊤, fun y y' h => by
+    by_cases hx : x ∈ D
+    · simp only [if_pos hx]
+      by_cases hy' : y' ∈ D
+      · rw [if_pos (hD h hy'), if_pos hy']
+      · rw [if_neg hy']; split_ifs
+        · exact bot_le
+        · exact (F x).mono h
+    · simp only [if_neg hx]; exact le_rfl⟩
+  monotone' x x' h y := by
+    show (if x ∈ D then (if y ∈ D then ⊥ else F x y) else ⊤) ≤
+      (if x' ∈ D then (if y ∈ D then ⊥ else F x' y) else ⊤)
+    by_cases hx' : x' ∈ D
+    · rw [if_pos (hD h hx'), if_pos hx']; split_ifs
+      · exact le_rfl
+      · exact F.mono h y
+    · rw [if_neg hx']; exact le_top
+
+open Classical in
+theorem normalize_cross {D : Set α} (hD : IsDown D) {x y : α} (hx : x ∈ D) (hy : y ∉ D) :
+    normalize F D hD x y = F x y := by
+  show (if x ∈ D then (if y ∈ D then ⊥ else F x y) else ⊤) = F x y; rw [if_pos hx, if_neg hy]
+
+open Classical in
+theorem normalize_bot {D : Set α} (hD : IsDown D) {x y : α} (hx : x ∈ D) (hy : y ∈ D) :
+    normalize F D hD x y = ⊥ := by
+  show (if x ∈ D then (if y ∈ D then ⊥ else F x y) else ⊤) = ⊥; rw [if_pos hx, if_pos hy]
+
+/-- `R(F)` is closed for the normalization of `F` at `R(F)`, and it is exactly the set of columns rescued by `⊥`. -/
+theorem R_normalize :
+    R (normalize F (R F) R_closed.1) = R F ∧ R F = {y | b (normalize F (R F) R_closed.1) y ≤ ⊥} := by
+  set G := normalize F (R F) R_closed.1
+  obtain ⟨hD, h0, ha, hb⟩ := (R_closed (F := F))
+  have hsub : {y | b G y ≤ ⊥} ⊆ R G := fun y hy => R_closed.2.2.2 y (R_closed.1 hy R_closed.2.1)
+  have hcl : Closed G (R F) := by
+    refine ⟨hD, h0, fun x hx => ?_, fun y hy => ?_⟩
+    · by_contra hw
+      have h1 : G x (a G x) = a G x := row_a x
+      rw [normalize_cross _ hx hw] at h1
+      exact hw (hD (le_a h1.ge) (ha x hx))
+    · by_contra hy'
+      have h1 : G (b G y) y = b G y := col_b y
+      rw [normalize_cross _ hy hy'] at h1
+      exact hy' (hb y (hD (b_le h1.le) hy))
+  have hRG : R G ⊆ R F := R_subset hcl
+  have hB : R F ⊆ {y | b G y ≤ ⊥} := fun y hy => b_le (le_of_eq (normalize_bot _ h0 hy))
+  exact ⟨Set.Subset.antisymm hRG (hB.trans hsub), Set.Subset.antisymm hB (hsub.trans hRG)⟩
+
+/-- **The bottom critical pair is the whole conjecture** (DCC). If for every monotone `G` the join of the columns
+rescued by `⊥`, `⋁{y | b y ≤ ⊥}` (equivalently `⋁{y | G ⊥ y = ⊥}`), is reachable, then the Cut Lemma holds for
+every `F`. Hence "`r₁ ∈ R(G)` for all `G`" (§34.3z⁴¹.F) is equivalent to the conjecture on each lattice; it is
+weaker only for a single `G`. -/
+theorem cutMaps_of_bottom [WellFoundedLT α] (h : ∀ G : α →o α →o α, sSup {y | b G y ≤ ⊥} ∈ R G)
+    (F : α →o α →o α) : CutMaps F := by
+  obtain ⟨hR, hB⟩ := R_normalize (F := F)
+  have hs := h (normalize F (R F) R_closed.1)
+  rw [hR, ← hB] at hs
+  exact cutMaps_iff_R.2 (sSup_R_mem_iff.1 hs)
+
+theorem cutMaps_of_rk_one [WellFoundedLT α] (h : ∀ G : α →o α →o α, rk G 1 ∈ R G) (F : α →o α →o α) :
+    CutMaps F :=
+  cutMaps_of_bottom (fun G => R_closed.1 (show sSup {y | b G y ≤ ⊥} ≤ rk G 1 by
+    rw [rk_succ 0]; exact le_sup_right) (h G)) F
+
+
+/-- In the normal form the `a`-rule is idle on `R(F)`: `a x = ⊥` for `x ∈ R(F)`. -/
+theorem a_normalize {x : α} (hx : x ∈ R F) : a (normalize F (R F) R_closed.1) x = ⊥ := by
+  set G := normalize F (R F) R_closed.1
+  obtain ⟨hR, -⟩ := R_normalize (F := F)
+  have hw : a G x ∈ R F := hR ▸ R_closed.2.2.1 x (hR.symm ▸ hx)
+  have h1 : G x (a G x) = a G x := row_a x
+  rw [normalize_bot _ hx hw] at h1
+  exact h1.symm
+
+/-- In the normal form `R(F)` is reached in one step: `R = R₁`. So stage delays are not invariants of the problem:
+every counterexample has one in which all delays inside `R` are at most one. -/
+theorem R_normalize_eq_Rk_one : R (normalize F (R F) R_closed.1) = Rk (normalize F (R F) R_closed.1) 1 := by
+  obtain ⟨hR, hB⟩ := R_normalize (F := F)
+  refine Set.Subset.antisymm (fun y hy => ?_) (Rk_subset_R 1)
+  rw [hR, hB] at hy
+  rw [Rk_succ]; exact ⟨y, le_rfl, Or.inr (Or.inr hy)⟩
+
 end Mordor

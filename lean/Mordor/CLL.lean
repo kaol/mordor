@@ -25,7 +25,7 @@ set_option linter.unusedSectionVars false
 variable {k : ℕ} {C : Type*} [Fintype C] [PartialOrder C] [OrderTop C]
 
 /-- A chain labelling satisfying W1, W2 and monotonicity. -/
-structure Labelling (k : ℕ) (C : Type*) [Fintype C] [PartialOrder C] [OrderTop C] where
+structure Labelling (k : ℕ) (C : Type*) [PartialOrder C] [OrderTop C] where
   z : Finset (Fin k) → Finset C → Finset (Fin k) ⊕ C
   ne : ∀ (A : Finset (Fin k)) (σ : Finset C) (α : Finset (Fin k)), A.Nonempty → σ.Nonempty → IsChain (· ≤ ·) (σ : Set C) → z A σ = Sum.inl α → α.Nonempty
   w1 : ∀ (A : Finset (Fin k)) (σ : Finset C) (α : Finset (Fin k)), A.Nonempty → σ.Nonempty → IsChain (· ≤ ·) (σ : Set C) → z A σ = Sum.inl α → ¬ A ⊆ α

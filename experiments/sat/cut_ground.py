@@ -228,9 +228,22 @@ class Ground:
 
     def expand(self, M, cap):
         n = len(self.terms); D = [self.d(i) in M for i in range(n)]
-        if self.room == 'fit':
+        if self.room in ('fit', 'front'):
             cand = [(0, x, y) for x in range(n) for y in range(n)
                     if D[x] and not D[y] and (x, y) not in self.F and x not in self.diag and y not in self.diag]
+            if self.room == 'front':
+                # frontier: class pairs (model equivalence) without any F-term; one shallowest representative each.
+                # Nonempty in every model, since a quotient closed on cross pairs would be a finite counterexample
+                # (RelativeCut.cut_finite).
+                L = self.L; eq = L & L.T; rep = np.argmax(eq, axis=1)
+                have = {(int(rep[s]), int(rep[t])) for (s, t) in self.F}
+                best = {}
+                for (_, x, y) in cand:
+                    k = (int(rep[x]), int(rep[y]))
+                    if k in have: continue
+                    d = self.depth[x] + self.depth[y]
+                    if k not in best or d < best[k][0]: best[k] = (d, x, y)
+                cand = [(0, x, y) for (_, x, y) in best.values()] or cand
             if self.ih:                                                # F(x,x) for x ≠ ⊥, ⊤ (height induction)
                 cand += [(0, x, x) for x in range(2, n) if (x, x) not in self.F and x not in self.diag
                          and not self.L[x, 0] and not self.L[1, x]]

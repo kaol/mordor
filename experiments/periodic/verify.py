@@ -23,9 +23,11 @@ def F(x, y):
     c = cl(y[1] - x[1]) if (x[0] == 'I' and y[0] == 'I') else None
     o = m['F'][(kx, ky, c)]
     if o[0] == 'K': return o
+    if o[0] == 'a': return ('I', o[1], o[2])
     a = x[1] if o[0] == 'x' else y[1]
     return ('I', a + o[1], o[2])
-EL = [('K', k) for k in K] + [('I', i, t) for i in range(-N, N + 1) for t in T]
+LO = 0 if (len(sys.argv) > 3 and sys.argv[3] == 'N') else -N
+EL = [('K', k) for k in K] + [('I', i, t) for i in range(LO, N + 1) for t in T]
 bad = {}
 def fail(k, *w): bad.setdefault(k, w)
 for a in EL:

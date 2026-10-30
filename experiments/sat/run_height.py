@@ -11,6 +11,8 @@ opts, comma-separated:
               H = 6, 300 terms: 3.5M transitivity clauses without, ≤ 0.9M live with B = 10⁶. Another, equally sound
               trajectory; the .cnf then holds the solver's final clause set.
   cd195       use CaDiCaL 1.9.5 instead of 1.5.3 (pysat's Cadical195).
+  front       term selection restricted to frontier class pairs (no F-term on any pair of model-equivalent
+              terms); always nonempty since a closed quotient would be a finite counterexample (§34.3z⁴⁰).
   nophases    forget rebuilds do not seed the new solver with the last model's phases (set_phases).
 The term list is checkpointed to cut_H<H>_<tag>.ckpt every 25 rounds (nophases does not change the tag). Rerunning
 the same command after a crash resumes from it: the same terms, then a new trajectory. The resumed run regenerates
@@ -24,8 +26,8 @@ am = 'allmid' in opts
 if 'cd195' in opts: c.SOLVER = c.Cadical195
 if 'nophases' in opts: c.PHASES = False
 fg = next((int(float(o.split('=')[1])) for o in opts if o.startswith('forget=')), None)
-tag = f"pr{pr}" + ("am" if am else "") + (f"f{fg}" if fg else "") + ("cd195" if 'cd195' in opts else "")
-ok, G = c.run(H, cap, per_round=pr, wlog=True, room='fit', stream=None if fg else f"cut_H{H}_{tag}.body", allmid=am, forget=fg,
+tag = f"pr{pr}" + ("fr" if "front" in opts else "") + ("am" if am else "") + (f"f{fg}" if fg else "") + ("cd195" if 'cd195' in opts else "")
+ok, G = c.run(H, cap, per_round=pr, wlog=True, room=('front' if 'front' in opts else 'fit'), stream=None if fg else f"cut_H{H}_{tag}.body", allmid=am, forget=fg,
               ckpt=f"cut_H{H}_{tag}.ckpt")
 if ok:
     c.write_dimacs(G, f"cut_H{H}_{tag}.cnf"); print(f"wrote cut_H{H}_{tag}.cnf", flush=True)

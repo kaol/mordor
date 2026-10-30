@@ -367,3 +367,23 @@ theorem R_normalize_eq_Rk_one : R (normalize F (R F) R_closed.1) = Rk (normalize
   rw [Rk_succ]; exact ⟨y, le_rfl, Or.inr (Or.inr hy)⟩
 
 end Mordor
+
+namespace Mordor
+/-! ### Interval refinement is well-founded on chain-finite orders (log §34.3z⁵², the eighteenth-brief ranking) -/
+
+/-- Strict interval refinement: `[s', t'] ⊊ [s, t]` as endpoint pairs, `s ≤ s' ≤ t' ≤ t`, `(s', t') ≠ (s, t)`. -/
+def BoxRefine {α : Type*} [PartialOrder α] (p q : α × α) : Prop :=
+  q.1 ≤ p.1 ∧ p.1 ≤ p.2 ∧ p.2 ≤ q.2 ∧ p ≠ q
+
+/-- **Well-founded interval induction** under ACC and DCC: an infinite strict refinement chain would give an infinite
+ascending chain of lower endpoints or an infinite descending chain of upper endpoints. -/
+theorem boxRefine_wf {α : Type*} [PartialOrder α] [WellFoundedLT α] [WellFoundedGT α] :
+    WellFounded (BoxRefine (α := α)) := by
+  have h : WellFounded (fun a b : α × αᵒᵈ => b < a) := (inferInstance : WellFoundedGT (α × αᵒᵈ)).wf
+  refine Subrelation.wf (r := fun p q : α × α => (q.1, OrderDual.toDual q.2) < (p.1, OrderDual.toDual p.2))
+    (fun {p q} hpq => ?_) (InvImage.wf (fun p : α × α => (p.1, OrderDual.toDual p.2)) h)
+  obtain ⟨h1, -, h3, hne⟩ := hpq
+  refine lt_of_le_of_ne (Prod.mk_le_mk.2 ⟨h1, h3⟩) fun heq => hne ?_
+  have := Prod.ext_iff.1 heq
+  exact Prod.ext this.1.symm (OrderDual.toDual.injective this.2).symm
+end Mordor

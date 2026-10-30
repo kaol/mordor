@@ -404,28 +404,42 @@ theorem cut_two_poset {P : Type*} [PartialOrder P] [BoundedOrder P] [WellFounded
     exact hle.trans hi
 
 
+
+/-- A label at a larger cell forces a label at a smaller one (any `k`). -/
+theorem MaxLabelling.lab_down_three {k : ℕ} (M : MaxLabelling k β) {A A' : Finset (Fin k)} (hA' : A'.Nonempty)
+    (hsub : A' ⊆ A) {c c' : β} (hc : c ≤ c') {α' : Finset (Fin k)} (h : M.w A' c' = Sum.inl α') :
+    ∃ α, M.w A c = Sum.inl α ∧ α' ⊆ α := by
+  rcases hw : M.w A c with α | d
+  · exact ⟨α, rfl, M.mono_lab A A' c c' α α' hA' hsub hc hw h⟩
+  · obtain ⟨d', hd', -⟩ := M.mono_col A A' c c' d hA' hsub hc hw
+    rw [h] at hd'; cases hd'
+
 /-! ### Face reduction for three rows -/
 
-/-- **Every max-only three-row labelling escapes every face.** For each generator `l`, some row avoiding `l` carries
-the label `{l}` at some column. Otherwise intersecting labels with the opposite face `{l}ᶜ` (pulled back along
-`Fin.succAbove l`) gives a two-row max-only labelling, which `cll_max_two` refutes. -/
-theorem face_escape [WellFoundedLT β] (M : MaxLabelling 3 β) (l : Fin 3) :
-    ∃ (B : Finset (Fin 3)) (c : β), B.Nonempty ∧ l ∉ B ∧ M.w B c = Sum.inl {l} := by
+/-- **Local face escape.** Let `S` be a set of columns with a greatest element `t`, closed under the column values of
+the rows avoiding `l`. Then some row avoiding `l` carries the escape label `{l}` at a column of `S`. Otherwise those
+rows, with labels intersected with the face `{l}ᶜ` (pulled back along `Fin.succAbove l`), form a `MaxLabelling 2` on
+`S` with top `t`, which `cll_max_two` refutes. Rows containing `l` play no role. -/
+theorem face_escape_on [WellFoundedLT β] (M : MaxLabelling 3 β) (l : Fin 3) (S : Set β) {t : β} (ht : t ∈ S)
+    (htop : ∀ x ∈ S, x ≤ t)
+    (hS : ∀ B : Finset (Fin 3), B.Nonempty → l ∉ B → ∀ x ∈ S, ∀ d, M.w B x = Sum.inr d → d ∈ S) :
+    ∃ (B : Finset (Fin 3)) (c : β), c ∈ S ∧ B.Nonempty ∧ l ∉ B ∧ M.w B c = Sum.inl {l} := by
   by_contra hno
   push_neg at hno
+  letI : OrderTop S := { top := ⟨t, ht⟩, le_top := fun a => htop a.1 a.2 }
+  haveI : WellFoundedLT S :=
+    ⟨Subrelation.wf (fun {a b} h => (show a.1 < b.1 from h)) (InvImage.wf Subtype.val wellFounded_lt)⟩
   let e : Fin 2 ↪ Fin 3 := Fin.succAboveEmb l
   have hel : ∀ i, e i ≠ l := fun i => Fin.succAbove_ne l i
   have hmapl : ∀ A : Finset (Fin 2), l ∉ A.map e := fun A h => by
     obtain ⟨i, -, hi⟩ := Finset.mem_map.1 h; exact hel i hi
   let pre : Finset (Fin 3) → Finset (Fin 2) := fun α => α.preimage e (e.injective.injOn)
   have hpre : ∀ α i, i ∈ pre α ↔ e i ∈ α := fun α i => by simp [pre]
-  -- a nonempty label at a row avoiding l, other than {l}, meets the face
-  have hmeet : ∀ (A : Finset (Fin 2)) (c : β) α, A.Nonempty → M.w (A.map e) c = Sum.inl α → (pre α).Nonempty := by
+  have hmeet : ∀ (A : Finset (Fin 2)) (c : S) α, A.Nonempty → M.w (A.map e) c.1 = Sum.inl α → (pre α).Nonempty := by
     intro A c α hA h
-    obtain ⟨x, hx⟩ := M.ne _ c α (hA.map) h
+    obtain ⟨x, hx⟩ := M.ne _ c.1 α (hA.map) h
     by_cases hxl : x = l
-    · -- α ≠ {l}, so α contains some y ≠ l
-      have hne : α ≠ {l} := fun h' => hno _ c hA.map (hmapl A) (h' ▸ h)
+    · have hne : α ≠ {l} := fun h' => hno _ c.1 c.2 hA.map (hmapl A) (h' ▸ h)
       obtain ⟨y, hy, hyl⟩ : ∃ y ∈ α, y ≠ l := by
         by_contra hall; push_neg at hall
         exact hne (Finset.eq_singleton_iff_unique_mem.2 ⟨hxl ▸ hx, hall⟩)
@@ -433,33 +447,71 @@ theorem face_escape [WellFoundedLT β] (M : MaxLabelling 3 β) (l : Fin 3) :
       exact ⟨i, (hpre α i).2 hy⟩
     · obtain ⟨i, rfl⟩ := Fin.exists_succAbove_eq hxl
       exact ⟨i, (hpre α i).2 hx⟩
+  let val : S → Finset (Fin 2) → Finset (Fin 2) ⊕ S := fun c A =>
+    match M.w (A.map e) c.1 with
+    | Sum.inl α => Sum.inl (pre α)
+    | Sum.inr d => Sum.inr (if h : d ∈ S then ⟨d, h⟩ else ⊤)
+  have hval_inr : ∀ (A : Finset (Fin 2)), A.Nonempty → ∀ (c : S) (d : β), M.w (A.map e) c.1 = Sum.inr d →
+      ∃ h : d ∈ S, val c A = Sum.inr ⟨d, h⟩ := fun A hA c d hw => by
+    have hd : d ∈ S := hS _ hA.map (hmapl A) c.1 c.2 d hw
+    exact ⟨hd, by simp only [val, hw, dif_pos hd]⟩
+  have hval_inl : ∀ (A : Finset (Fin 2)) (c : S) α, M.w (A.map e) c.1 = Sum.inl α → val c A = Sum.inl (pre α) :=
+    fun A c α hw => by simp only [val, hw]
   refine cll_max_two
-    { w := fun A c => match M.w (A.map e) c with
-        | Sum.inl α => Sum.inl (pre α)
-        | Sum.inr d => Sum.inr d
+    { w := fun A c => val c A
       ne := fun A c α hA h => ?_
       w1 := fun A c α hA h hsub => ?_
       w2 := fun A c c' hA h => ?_
       mono_col := fun A A' c c' d hA' hsub hc h => ?_
       mono_lab := fun A A' c c' α α' hA' hsub hc h h' => ?_ }
-  · rcases hw : M.w (A.map e) c with β' | d <;> rw [hw] at h <;> simp only [Sum.inl.injEq, reduceCtorEq] at h
-    rw [← h]; exact hmeet A c β' hA hw
-  · rcases hw : M.w (A.map e) c with β' | d <;> rw [hw] at h <;> simp only [Sum.inl.injEq, reduceCtorEq] at h
-    refine M.w1 _ c β' hA.map hw fun x hx => ?_
-    obtain ⟨i, hi, rfl⟩ := Finset.mem_map.1 hx
-    exact (hpre β' i).1 (h ▸ hsub hi)
-  · rcases hw : M.w (A.map e) c with β' | d <;> rw [hw] at h <;> simp only [Sum.inr.injEq, reduceCtorEq] at h
-    exact M.w2 _ c c' hA.map (h ▸ hw)
-  · rcases hw : M.w (A.map e) c with β' | d0 <;> rw [hw] at h <;> simp only [Sum.inr.injEq, reduceCtorEq] at h
-    obtain ⟨d', hd', hle⟩ := M.mono_col _ _ c c' d0 hA'.map (Finset.map_subset_map.2 hsub) hc hw
-    refine ⟨d', ?_, h ▸ hle⟩
-    simp only [hd']
-  · rcases hw : M.w (A.map e) c with β1 | d0 <;> rw [hw] at h <;> simp only [Sum.inl.injEq, reduceCtorEq] at h
-    rcases hw' : M.w (A'.map e) c' with β2 | d1 <;> rw [hw'] at h' <;> simp only [Sum.inl.injEq, reduceCtorEq] at h'
-    have := M.mono_lab _ _ c c' β1 β2 hA'.map (Finset.map_subset_map.2 hsub) hc hw hw'
-    intro i hi
-    rw [← h'] at hi; rw [← h]
-    exact (hpre β1 i).2 (this ((hpre β2 i).1 hi))
+  · rcases hw : M.w (A.map e) c.1 with β' | d
+    · rw [hval_inl A c β' hw] at h; cases h; exact hmeet A c β' hA hw
+    · obtain ⟨_, h2⟩ := hval_inr A hA c d hw; rw [h2] at h; cases h
+  · rcases hw : M.w (A.map e) c.1 with β' | d
+    · rw [hval_inl A c β' hw] at h; cases h
+      refine M.w1 _ c.1 β' hA.map hw fun x hx => ?_
+      obtain ⟨i, hi, rfl⟩ := Finset.mem_map.1 hx
+      exact (hpre β' i).1 (hsub hi)
+    · obtain ⟨_, h2⟩ := hval_inr A hA c d hw; rw [h2] at h; cases h
+  · rcases hw : M.w (A.map e) c.1 with β' | d
+    · rw [hval_inl A c β' hw] at h; cases h
+    · obtain ⟨hd, h2⟩ := hval_inr A hA c d hw; rw [h2] at h; cases h
+      exact fun hle => M.w2 _ c.1 d hA.map hw hle
+  · rcases hw : M.w (A.map e) c.1 with β' | d0
+    · rw [hval_inl A c β' hw] at h; cases h
+    · obtain ⟨hd, h2⟩ := hval_inr A (hA'.mono hsub) c d0 hw; rw [h2] at h; cases h
+      obtain ⟨d', hd', hle⟩ := M.mono_col _ _ c.1 c'.1 d0 hA'.map (Finset.map_subset_map.2 hsub) hc hw
+      obtain ⟨hd'', h3⟩ := hval_inr A' hA' c' d' hd'
+      exact ⟨⟨d', hd''⟩, h3, hle⟩
+  · rcases hw : M.w (A.map e) c.1 with β1 | d0
+    · rcases hw' : M.w (A'.map e) c'.1 with β2 | d1
+      · rw [hval_inl A c β1 hw] at h; rw [hval_inl A' c' β2 hw'] at h'; cases h; cases h'
+        have := M.mono_lab _ _ c.1 c'.1 β1 β2 hA'.map (Finset.map_subset_map.2 hsub) hc hw hw'
+        intro i hi
+        exact (hpre β1 i).2 (this ((hpre β2 i).1 hi))
+      · obtain ⟨_, h3⟩ := hval_inr A' hA' c' d1 hw'; rw [h3] at h'; cases h'
+    · obtain ⟨_, h2⟩ := hval_inr A (hA'.mono hsub) c d0 hw; rw [h2] at h; cases h
+
+/-- **Every max-only three-row labelling escapes every face** (`face_escape_on` with `S = univ`). -/
+theorem face_escape [WellFoundedLT β] (M : MaxLabelling 3 β) (l : Fin 3) :
+    ∃ (B : Finset (Fin 3)) (c : β), B.Nonempty ∧ l ∉ B ∧ M.w B c = Sum.inl {l} := by
+  obtain ⟨B, c, -, h⟩ := face_escape_on M l Set.univ (Set.mem_univ ⊤) (fun x _ => le_top)
+    (fun _ _ _ _ _ _ _ => Set.mem_univ _)
+  exact ⟨B, c, h⟩
+
+/-- **Escape below a face-closed column.** If every row avoiding `l` is a label or contracting at `c`, then some row
+avoiding `l` carries `{l}` at a column `≤ c` (`face_escape_on` with `S = ↓c`). This makes the brief's challenge
+move sound at face-closed columns; it is false in general for arbitrary `c` (values may leave `↓c`). -/
+theorem face_escape_below [WellFoundedLT β] (M : MaxLabelling 3 β) (l : Fin 3) {c : β}
+    (hc : ∀ B : Finset (Fin 3), B.Nonempty → l ∉ B → ∀ d, M.w B c = Sum.inr d → d ≤ c) :
+    ∃ (B : Finset (Fin 3)) (x : β), x ≤ c ∧ B.Nonempty ∧ l ∉ B ∧ M.w B x = Sum.inl {l} := by
+  refine face_escape_on M l (Set.Iic c) (le_refl c) (fun x hx => hx) fun B hne hB x hx d hd => ?_
+  rcases hwc : M.w B c with α | d'
+  · obtain ⟨α', h1, -⟩ := MaxLabelling.lab_down_three M hne (Finset.Subset.refl _) hx hwc
+    rw [h1] at hd; cases hd
+  · obtain ⟨d'', hd'', hle⟩ := M.mono_col B B x c d hne (Finset.Subset.refl _) hx hd
+    rw [hwc] at hd''; cases hd''
+    exact hle.trans (hc B hne hB d' hwc)
 
 end Mordor.InfiniteCLL
 

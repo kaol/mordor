@@ -56,3 +56,4 @@ import Mordor.Dismantle
 import Mordor.ConeSperner
 import Mordor.CLL
 import Mordor.RelativeCut
+import Mordor.Stable

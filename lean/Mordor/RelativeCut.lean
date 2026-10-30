@@ -753,19 +753,34 @@ theorem cmin_spec {β : Type*} [PartialOrder β] [OrderBot β] {ρ : Finset β} 
       · exact hmin hy h1
   unfold cmin; rw [dif_pos h]; exact h.choose_spec
 
-/-- **The Cut Lemma on every finite bounded poset.** -/
-theorem cut_finite {α : Type*} [Fintype α] [PartialOrder α] [BoundedOrder α] (Dn : Set α)
+/-- **Finite cross-capture.** In any bounded poset, if a finite set `S ∋ ⊥, ⊤` contains `F x y` for all
+`x ∈ S ∩ D`, `y ∈ S ∖ D`, then the cut `D` has a witness (in `S`). No lattice structure, no chain condition. -/
+theorem cut_cross {α : Type*} [PartialOrder α] [BoundedOrder α] (Dn : Set α)
     (hD : ∀ a b, a ≤ b → b ∈ Dn → a ∈ Dn) (htop : ⊤ ∉ Dn) (hbot : ⊥ ∈ Dn)
-    (F : α → α → α) (hF : ∀ a a' b b', a ≤ a' → b ≤ b' → F a b ≤ F a' b') :
+    (F : α → α → α) (hF : ∀ a a' b b', a ≤ a' → b ≤ b' → F a b ≤ F a' b')
+    (S : Set α) (hS : S.Finite) (hbS : ⊥ ∈ S) (htS : ⊤ ∈ S)
+    (hcross : ∀ x ∈ S, x ∈ Dn → ∀ y ∈ S, y ∉ Dn → F x y ∈ S) :
     ∃ x ∈ Dn, ∃ y ∉ Dn, F x y ≤ x ∨ y ≤ F x y := by
   by_contra hno
   push_neg at hno
-  letI : OrderBot {x : α // x ∈ Dn} := { bot := ⟨⊥, hbot⟩, bot_le := fun a => (bot_le : ⊥ ≤ a.1) }
-  letI : OrderTop {y : α // y ∉ Dn} := { top := ⟨⊤, htop⟩, le_top := fun a => (le_top : a.1 ≤ ⊤) }
-  let val : Finset {x : α // x ∈ Dn} → Finset {y : α // y ∉ Dn} → α := fun ρ σ => F (cmin ρ).1 (cmax σ).1
-  let zf : Finset {x : α // x ∈ Dn} → Finset {y : α // y ∉ Dn} → {x : α // x ∈ Dn} ⊕ {y : α // y ∉ Dn} :=
-    fun ρ σ => if hv : val ρ σ ∈ Dn then Sum.inl ⟨val ρ σ, hv⟩ else Sum.inr ⟨val ρ σ, hv⟩
-  refine dcl (D := {x : α // x ∈ Dn}) (C := {y : α // y ∉ Dn})
+  haveI : Finite S := hS.to_subtype
+  haveI : Finite {x : α // x ∈ S ∧ x ∈ Dn} :=
+    Finite.of_injective (fun x => (⟨x.1, x.2.1⟩ : S)) fun a b h => Subtype.ext (by simpa using congrArg Subtype.val h)
+  haveI : Finite {y : α // y ∈ S ∧ y ∉ Dn} :=
+    Finite.of_injective (fun y => (⟨y.1, y.2.1⟩ : S)) fun a b h => Subtype.ext (by simpa using congrArg Subtype.val h)
+  letI : Fintype {x : α // x ∈ S ∧ x ∈ Dn} := Fintype.ofFinite _
+  letI : Fintype {y : α // y ∈ S ∧ y ∉ Dn} := Fintype.ofFinite _
+  letI : OrderBot {x : α // x ∈ S ∧ x ∈ Dn} :=
+    { bot := ⟨⊥, hbS, hbot⟩, bot_le := fun a => (bot_le : ⊥ ≤ a.1) }
+  letI : OrderTop {y : α // y ∈ S ∧ y ∉ Dn} :=
+    { top := ⟨⊤, htS, htop⟩, le_top := fun a => (le_top : a.1 ≤ ⊤) }
+  let val : Finset {x : α // x ∈ S ∧ x ∈ Dn} → Finset {y : α // y ∈ S ∧ y ∉ Dn} → α :=
+    fun ρ σ => F (cmin ρ).1 (cmax σ).1
+  have hvS : ∀ ρ σ, val ρ σ ∈ S := fun ρ σ => hcross _ (cmin ρ).2.1 (cmin ρ).2.2 _ (cmax σ).2.1 (cmax σ).2.2
+  let zf : Finset {x : α // x ∈ S ∧ x ∈ Dn} → Finset {y : α // y ∈ S ∧ y ∉ Dn} →
+      {x : α // x ∈ S ∧ x ∈ Dn} ⊕ {y : α // y ∈ S ∧ y ∉ Dn} :=
+    fun ρ σ => if hv : val ρ σ ∈ Dn then Sum.inl ⟨val ρ σ, hvS ρ σ, hv⟩ else Sum.inr ⟨val ρ σ, hvS ρ σ, hv⟩
+  refine dcl (D := {x : α // x ∈ S ∧ x ∈ Dn}) (C := {y : α // y ∈ S ∧ y ∉ Dn})
     { z := zf
       mono := fun ρ ρ' σ σ' hρ' hσ hρc hσc hsub hsσ => ?_
       w1 := fun ρ σ d hρ hσ hρc hσc h hall => ?_
@@ -786,7 +801,7 @@ theorem cut_finite {α : Type*} [Fintype α] [PartialOrder α] [BoundedOrder α]
     · rw [dif_pos hv, Sum.inl.injEq] at h
       have hle : val ρ σ ≤ (cmin ρ).1 := by
         have := hall _ (cmin_spec hρ hρc).1; rw [← h] at this; exact this
-      exact (hno _ (cmin ρ).2 _ (cmax σ).2).1 hle
+      exact (hno _ (cmin ρ).2.2 _ (cmax σ).2.2).1 hle
     · rw [dif_neg hv] at h; cases h
   · simp only [zf] at h
     by_cases hv : val ρ σ ∈ Dn
@@ -794,7 +809,14 @@ theorem cut_finite {α : Type*} [Fintype α] [PartialOrder α] [BoundedOrder α]
     · rw [dif_neg hv, Sum.inr.injEq] at h
       have hle : (cmax σ).1 ≤ val ρ σ := by
         have := hall _ (cmax_spec hσ hσc).1; rw [← h] at this; exact this
-      exact (hno _ (cmin ρ).2 _ (cmax σ).2).2 hle
+      exact (hno _ (cmin ρ).2.2 _ (cmax σ).2.2).2 hle
+
+/-- **The Cut Lemma on every finite bounded poset.** -/
+theorem cut_finite {α : Type*} [Fintype α] [PartialOrder α] [BoundedOrder α] (Dn : Set α)
+    (hD : ∀ a b, a ≤ b → b ∈ Dn → a ∈ Dn) (htop : ⊤ ∉ Dn) (hbot : ⊥ ∈ Dn)
+    (F : α → α → α) (hF : ∀ a a' b b', a ≤ a' → b ≤ b' → F a b ≤ F a' b') :
+    ∃ x ∈ Dn, ∃ y ∉ Dn, F x y ≤ x ∨ y ≤ F x y :=
+  cut_cross Dn hD htop hbot F hF Set.univ Set.finite_univ trivial trivial fun _ _ _ _ _ _ => trivial
 
 end Cut
 

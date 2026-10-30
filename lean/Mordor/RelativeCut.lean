@@ -820,6 +820,32 @@ theorem cut_finite {α : Type*} [Fintype α] [PartialOrder α] [BoundedOrder α]
   cut_cross Dn hD htop hbot F (fun a a' b b' _ _ _ _ => hF a a' b b') Set.univ Set.finite_univ trivial trivial
     fun _ _ _ _ _ _ => trivial
 
+
+/-- **The Cut Lemma on end-finite bounded posets** (poset form of `cut_of_end_finite`). If every proper principal ideal
+and filter is finite, every cut has a witness: with `c = F ⊥ ⊤ ≠ ⊥`, each value lies below `F x ⊤ ∈ ↑c ∖ {⊤}`, a
+finite set of elements with finite ideals, so all cross values lie in one finite set and `cut_cross` applies. -/
+theorem cut_end_finite_poset {α : Type*} [PartialOrder α] [BoundedOrder α]
+    (hI : ∀ g : α, g ≠ ⊤ → (Set.Iic g).Finite) (hJ : ∀ g : α, g ≠ ⊥ → (Set.Ici g).Finite) (Dn : Set α)
+    (hD : ∀ a b, a ≤ b → b ∈ Dn → a ∈ Dn) (htop : ⊤ ∉ Dn) (hbot : ⊥ ∈ Dn)
+    (F : α → α → α) (hF : ∀ a a' b b', a ≤ a' → b ≤ b' → F a b ≤ F a' b') :
+    ∃ x ∈ Dn, ∃ y ∉ Dn, F x y ≤ x ∨ y ≤ F x y := by
+  by_contra hno
+  push_neg at hno
+  have hc : F ⊥ ⊤ ≠ ⊥ := fun h => (hno ⊥ hbot ⊤ htop).1 (le_of_eq h)
+  let U : Set α := Set.Ici (F ⊥ ⊤) \ {⊤}
+  have hU : U.Finite := (hJ _ hc).subset Set.diff_subset
+  let Vs : Set α := Set.iUnion fun u => Set.iUnion fun (_ : u ∈ U) => Set.Iic u
+  have hV : Vs.Finite := Set.Finite.biUnion hU fun u hu => hI u hu.2
+  have hval : ∀ x ∈ Dn, ∀ y, y ∉ Dn → F x y ∈ Vs := fun x hx y hy => by
+    have hu : F x ⊤ ∈ U := ⟨hF _ _ _ _ bot_le le_rfl, fun h => (hno x hx ⊤ htop).2 (le_of_eq h.symm)⟩
+    exact Set.mem_iUnion₂.2 ⟨_, hu, hF _ _ _ _ le_rfl le_top⟩
+  obtain ⟨x, hx, y, hy, h⟩ := cut_cross Dn hD htop hbot F (fun a a' b b' _ _ _ _ => hF a a' b b')
+    (Vs ∪ {⊥, ⊤}) (hV.union (Set.toFinite _)) (Or.inr (Or.inl rfl)) (Or.inr (Or.inr rfl))
+    (fun x _ hx y _ hy => Or.inl (hval x hx y hy))
+  rcases h with h | h
+  · exact (hno x hx y hy).1 h
+  · exact (hno x hx y hy).2 h
+
 end Cut
 
 end Mordor.RelativeCut

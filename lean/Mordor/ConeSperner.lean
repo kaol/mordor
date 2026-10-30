@@ -186,11 +186,14 @@ theorem last_door {β : Type*} [AddCommMonoid β] (φ : Finset V → V) (m : ℕ
 
 /-! ### The complex and the matrices -/
 
-/-- `K` is a simplicial complex that is a cone with apex `v₀`, and `φ` sends complete flags to faces. -/
-structure ConeData (K : Finset (Finset V)) (φ : Finset V → V) (v₀ : V) : Prop where
+/-- `K` is a simplicial complex that is a cone with apex `v₀`. -/
+structure IsCone (K : Finset (Finset V)) (v₀ : V) : Prop where
   ne : ∀ τ ∈ K, τ.Nonempty
   down : ∀ τ ∈ K, ∀ σ : Finset V, σ ⊆ τ → σ.Nonempty → σ ∈ K
   apex : ∀ τ ∈ K, insert v₀ τ ∈ K
+
+/-- `K` is a cone with apex `v₀`, and `φ` sends complete flags to faces. -/
+structure ConeData (K : Finset (Finset V)) (φ : Finset V → V) (v₀ : V) : Prop extends IsCone K v₀ where
   simp : ∀ τ ∈ K, ∀ n, ∀ w ∈ W n τ, (lab φ w).toFinset ∈ K
 
 theorem sum_range_W {β : Type*} [AddCommMonoid β] (τ : Finset V) (F : ∀ n, (Fin n → V) → β) :
@@ -212,17 +215,18 @@ noncomputable def Pi : Matrix K K (ZMod 2) := fun σ τ => ind (σ.1 = {v₀} �
 
 variable {K φ v₀}
 
-theorem inner_rho (hK : ConeData K φ v₀) (σ τ : K) {n : ℕ} {w : Fin n → V} (hw : w ∈ W n τ.1) :
-    (∑ ρ : K, Bd K σ ρ * ind (((lab φ w : List V) : Multiset V) = ρ.1.val)) =
-      ind (∃ y, y ∉ σ.1.val ∧ ((lab φ w : List V) : Multiset V) = y ::ₘ σ.1.val) := by
-  by_cases hex : ∃ y, y ∉ σ.1.val ∧ ((lab φ w : List V) : Multiset V) = y ::ₘ σ.1.val
+/-- Summing a label list against the boundary: the faces one vertex above `σ`. -/
+theorem bd_ind (σ : K) (l : List V) (hl : l.toFinset ∈ K) :
+    (∑ ρ : K, Bd K σ ρ * ind (((l : List V) : Multiset V) = ρ.1.val)) =
+      ind (∃ y, y ∉ σ.1.val ∧ ((l : List V) : Multiset V) = y ::ₘ σ.1.val) := by
+  by_cases hex : ∃ y, y ∉ σ.1.val ∧ ((l : List V) : Multiset V) = y ::ₘ σ.1.val
   · obtain ⟨y, hy, he⟩ := hex
     have hyσ : y ∉ σ.1 := fun h => hy (by simpa using h)
     have hval : (insert y σ.1).val = y ::ₘ σ.1.val := Finset.insert_val_of_notMem hyσ
     have hρ₀ : insert y σ.1 ∈ K := by
-      have : (lab φ w).toFinset = insert y σ.1 := Finset.ext fun z => by
+      have : l.toFinset = insert y σ.1 := Finset.ext fun z => by
         rw [List.mem_toFinset, ← Multiset.mem_coe, he, Multiset.mem_cons, Finset.mem_insert]; simp
-      rw [← this]; exact hK.simp τ.1 τ.2 n w hw
+      rw [← this]; exact hl
     rw [sum_eq_single ⟨insert y σ.1, hρ₀⟩]
     · unfold Bd ind
       rw [if_pos ⟨Finset.subset_insert _ _, by rw [card_insert_of_notMem hyσ]⟩, if_pos (by rw [he, hval]),
@@ -238,7 +242,7 @@ theorem inner_rho (hK : ConeData K φ v₀) (σ τ : K) {n : ℕ} {w : Fin n →
     unfold Bd ind
     by_cases h1 : σ.1 ⊆ ρ.1 ∧ σ.1.card + 1 = ρ.1.card
     swap; · rw [if_neg h1, zero_mul]
-    by_cases h2 : ((lab φ w : List V) : Multiset V) = ρ.1.val
+    by_cases h2 : ((l : List V) : Multiset V) = ρ.1.val
     swap; · rw [if_neg h2, mul_zero]
     exfalso
     obtain ⟨hsub, hcard⟩ := h1
@@ -256,6 +260,55 @@ theorem inner_rho (hK : ConeData K φ v₀) (σ τ : K) {n : ℕ} {w : Fin n →
         · exact hyρ
         · exact hsub hz
     exact absurd ⟨y, fun h => hyσ (by simpa using h), by rw [h2, hρ, Finset.insert_val_of_notMem hyσ]⟩ hex
+
+theorem inner_rho (hK : ConeData K φ v₀) (σ τ : K) {n : ℕ} {w : Fin n → V} (hw : w ∈ W n τ.1) :
+    (∑ ρ : K, Bd K σ ρ * ind (((lab φ w : List V) : Multiset V) = ρ.1.val)) =
+      ind (∃ y, y ∉ σ.1.val ∧ ((lab φ w : List V) : Multiset V) = y ::ₘ σ.1.val) :=
+  bd_ind σ (lab φ w) (hK.simp τ.1 τ.2 n w hw)
+
+/-- Summing a row against the boundary: the facets of `τ`. -/
+theorem bd_right (hK : IsCone K v₀) (σ τ : K) (M : Matrix K K (ZMod 2)) (g : Finset V → ZMod 2) (hg0 : g ∅ = 0)
+    (hM : ∀ ρ : K, ρ.1 ⊆ τ.1 → ρ.1.card + 1 = τ.1.card → M σ ρ = g ρ.1) :
+    (∑ ρ : K, M σ ρ * Bd K ρ τ) = ∑ x ∈ τ.1, g (τ.1.erase x) := by
+  have hinj : Set.InjOn (fun x => τ.1.erase x) τ.1 := fun x hx y hy hxy => by
+    by_contra hne
+    have : x ∈ τ.1.erase y := mem_erase.2 ⟨hne, hx⟩
+    rw [← show τ.1.erase x = τ.1.erase y from hxy] at this; simp at this
+  calc (∑ ρ : K, M σ ρ * Bd K ρ τ)
+      = ∑ ρ : K, (if ρ.1 ⊆ τ.1 ∧ ρ.1.card + 1 = τ.1.card then g ρ.1 else 0) := by
+        refine sum_congr rfl fun ρ _ => ?_
+        unfold Bd ind; split_ifs with h
+        · rw [mul_one]; exact hM ρ h.1 h.2
+        · rw [mul_zero]
+    _ = ∑ ρ ∈ K, (if ρ ⊆ τ.1 ∧ ρ.card + 1 = τ.1.card then g ρ else 0) :=
+        Finset.sum_coe_sort K (fun ρ => if ρ ⊆ τ.1 ∧ ρ.card + 1 = τ.1.card then g ρ else 0)
+    _ = ∑ ρ ∈ K.filter (fun ρ => ρ ⊆ τ.1 ∧ ρ.card + 1 = τ.1.card), g ρ := (sum_filter _ _).symm
+    _ = ∑ ρ ∈ τ.1.image (fun x => τ.1.erase x), g ρ := by
+        refine sum_subset (fun ρ hρ => ?_) (fun ρ hρ hn => ?_)
+        · obtain ⟨_, hsub, hc⟩ := (mem_filter.1 hρ)
+          obtain ⟨x, hx⟩ : ∃ x, τ.1 \ ρ = {x} := by
+            apply Finset.card_eq_one.1; rw [card_sdiff_of_subset hsub]; omega
+          have hxτ : x ∈ τ.1 := (mem_sdiff.1 (hx ▸ mem_singleton_self x)).1
+          refine mem_image.2 ⟨x, hxτ, ?_⟩
+          ext z; simp only [mem_erase]
+          constructor
+          · rintro ⟨hzx, hz⟩
+            by_contra hzρ
+            have : z ∈ τ.1 \ ρ := mem_sdiff.2 ⟨hz, hzρ⟩
+            rw [hx, mem_singleton] at this; exact hzx this
+          · intro hz
+            refine ⟨fun h => ?_, hsub hz⟩
+            have : x ∉ ρ := (mem_sdiff.1 (hx ▸ mem_singleton_self x)).2
+            exact this (h ▸ hz)
+        · obtain ⟨x, hx, rfl⟩ := mem_image.1 hρ
+          have hP : τ.1.erase x ⊆ τ.1 ∧ (τ.1.erase x).card + 1 = τ.1.card :=
+            ⟨erase_subset _ _, by rw [card_erase_of_mem hx]; have := card_pos.2 ⟨x, hx⟩; omega⟩
+          have hnK : τ.1.erase x ∉ K := fun h => hn (mem_filter.2 ⟨h, hP⟩)
+          have he : τ.1.erase x = ∅ := by
+            by_contra hne
+            exact hnK (hK.down τ.1 τ.2 _ (erase_subset _ _) (Finset.nonempty_iff_ne_empty.2 hne))
+          rw [he, hg0]
+    _ = ∑ x ∈ τ.1, g (τ.1.erase x) := sum_image hinj
 
 theorem lab_zero (φ : Finset V → V) (u : Fin 0 → V) : lab φ u = [] := by simp [lab]
 
@@ -293,50 +346,13 @@ theorem chain (hK : ConeData K φ v₀) : G K φ * Bd K = Bd K * G K φ := by
             zero_add]
       _ = ∑ x ∈ τ.1, g (τ.1.erase x) := last_door φ m τ.1 (fun l => ind (((l : List V) : Multiset V) = σ.1.val))
   have hL : (∑ ρ : K, G K φ σ ρ * Bd K ρ τ) = ∑ x ∈ τ.1, g (τ.1.erase x) := by
-    have hinj : Set.InjOn (fun x => τ.1.erase x) τ.1 := fun x hx y hy hxy => by
-      by_contra hne
-      have : x ∈ τ.1.erase y := mem_erase.2 ⟨hne, hx⟩
-      rw [← show τ.1.erase x = τ.1.erase y from hxy] at this; simp at this
     have hg0 : g ∅ = 0 := sum_eq_zero fun u hu => by
       have h0 := card_of_mem_W hu; simp at h0; subst h0
       rw [lab_zero]; unfold ind; rw [if_neg]; exact fun h => hσ0 h.symm
-    calc (∑ ρ : K, G K φ σ ρ * Bd K ρ τ)
-        = ∑ ρ : K, (if ρ.1 ⊆ τ.1 ∧ ρ.1.card + 1 = τ.1.card then g ρ.1 else 0) := by
-          refine sum_congr rfl fun ρ _ => ?_
-          unfold Bd ind; split_ifs with h
-          · rw [mul_one]; unfold G
-            exact sum_eq_single m (fun n _ hn => sum_eq_zero fun u hu => by have := card_of_mem_W hu; omega)
-              (fun h' => absurd (mem_range.2 (by have := card_le_univ τ.1; omega)) h')
-          · rw [mul_zero]
-      _ = ∑ ρ ∈ K, (if ρ ⊆ τ.1 ∧ ρ.card + 1 = τ.1.card then g ρ else 0) :=
-          Finset.sum_coe_sort K (fun ρ => if ρ ⊆ τ.1 ∧ ρ.card + 1 = τ.1.card then g ρ else 0)
-      _ = ∑ ρ ∈ K.filter (fun ρ => ρ ⊆ τ.1 ∧ ρ.card + 1 = τ.1.card), g ρ := (sum_filter _ _).symm
-      _ = ∑ ρ ∈ τ.1.image (fun x => τ.1.erase x), g ρ := by
-          refine sum_subset (fun ρ hρ => ?_) (fun ρ hρ hn => ?_)
-          · obtain ⟨_, hsub, hc⟩ := (mem_filter.1 hρ)
-            obtain ⟨x, hx⟩ : ∃ x, τ.1 \ ρ = {x} := by
-              apply Finset.card_eq_one.1; rw [card_sdiff_of_subset hsub]; omega
-            have hxτ : x ∈ τ.1 := (mem_sdiff.1 (hx ▸ mem_singleton_self x)).1
-            refine mem_image.2 ⟨x, hxτ, ?_⟩
-            ext z; simp only [mem_erase]
-            constructor
-            · rintro ⟨hzx, hz⟩
-              by_contra hzρ
-              have : z ∈ τ.1 \ ρ := mem_sdiff.2 ⟨hz, hzρ⟩
-              rw [hx, mem_singleton] at this; exact hzx this
-            · intro hz
-              refine ⟨fun h => ?_, hsub hz⟩
-              have : x ∉ ρ := (mem_sdiff.1 (hx ▸ mem_singleton_self x)).2
-              exact this (h ▸ hz)
-          · obtain ⟨x, hx, rfl⟩ := mem_image.1 hρ
-            have hP : τ.1.erase x ⊆ τ.1 ∧ (τ.1.erase x).card + 1 = τ.1.card :=
-              ⟨erase_subset _ _, by rw [card_erase_of_mem hx]; omega⟩
-            have hnK : τ.1.erase x ∉ K := fun h => hn (mem_filter.2 ⟨h, hP⟩)
-            have he : τ.1.erase x = ∅ := by
-              by_contra hne
-              exact hnK (hK.down τ.1 τ.2 _ (erase_subset _ _) (Finset.nonempty_iff_ne_empty.2 hne))
-            rw [he, hg0]
-      _ = ∑ x ∈ τ.1, g (τ.1.erase x) := sum_image hinj
+    refine bd_right hK.toIsCone σ τ _ g hg0 fun ρ _ hc => ?_
+    unfold G
+    exact sum_eq_single m (fun n _ hn => sum_eq_zero fun u hu => by have := card_of_mem_W hu; omega)
+      (fun h' => absurd (mem_range.2 (by have := card_le_univ τ.1; omega)) h')
   rw [hL, hR]
 
 /-! ### The cone homotopy -/
@@ -428,7 +444,7 @@ theorem cone_entry (σ τ : Finset V) (v₀ : V) (hσ : σ.Nonempty) (hτ : τ.N
         · rintro rfl; exact ⟨h0, subset_insert _ _, hins.symm⟩
       exact ite_iff hiff
 
-theorem cone (hK : ConeData K φ v₀) : Bd K * Hc K v₀ + Hc K v₀ * Bd K = 1 + Pi K v₀ := by
+theorem cone (hK : IsCone K v₀) : Bd K * Hc K v₀ + Hc K v₀ * Bd K = 1 + Pi K v₀ := by
   ext σ τ
   simp only [Matrix.add_apply, Matrix.mul_apply, Matrix.one_apply]
   have h1 : (∑ ρ : K, Bd K σ ρ * Hc K v₀ ρ τ) =
@@ -491,40 +507,41 @@ theorem G_apex (_hK : ConeData K φ v₀) (hv : {v₀} ∈ K) (τ : K) :
   · intro h; apply Finset.val_inj.1; rw [← h]; rfl
   · intro h; rw [h]; rfl
 
-/-- **The mod-2 Hopf trace formula for cones: `trace G = 1`.** -/
-theorem trace_G (hK : ConeData K φ v₀) (hv : {v₀} ∈ K) : Matrix.trace (G K φ) = 1 := by
+/-- **The mod-2 Hopf trace formula for cones.** A chain map `M` on a cone has the trace of its action on `H₀`: the
+sum of the column of the apex over the vertices. -/
+theorem trace_chain (hK : IsCone K v₀) (hv : {v₀} ∈ K) (M : Matrix K K (ZMod 2)) (hM : M * Bd K = Bd K * M) :
+    Matrix.trace M = ∑ τ : K, ind (τ.1.card = 1) * M τ ⟨{v₀}, hv⟩ := by
   have two : ∀ x : ZMod 2, x + x = 0 := by decide
-  have twoM : ∀ M : Matrix K K (ZMod 2), M + M = 0 := fun M => by
+  have twoM : ∀ N : Matrix K K (ZMod 2), N + N = 0 := fun N => by
     ext i j; simp only [Matrix.add_apply, Matrix.zero_apply, two]
   have h1 : (1 : Matrix K K (ZMod 2)) = Bd K * Hc K v₀ + Hc K v₀ * Bd K + Pi K v₀ := by
     rw [cone hK, add_assoc, twoM, add_zero]
-  have hcyc : Matrix.trace (G K φ * (Bd K * Hc K v₀)) = Matrix.trace (G K φ * (Hc K v₀ * Bd K)) := by
-    rw [← Matrix.mul_assoc, chain hK, Matrix.mul_assoc, Matrix.trace_mul_comm, Matrix.mul_assoc]
-  calc Matrix.trace (G K φ) = Matrix.trace (G K φ * 1) := by rw [Matrix.mul_one]
-    _ = Matrix.trace (G K φ * (Bd K * Hc K v₀)) + Matrix.trace (G K φ * (Hc K v₀ * Bd K)) +
-          Matrix.trace (G K φ * Pi K v₀) := by
+  have hcyc : Matrix.trace (M * (Bd K * Hc K v₀)) = Matrix.trace (M * (Hc K v₀ * Bd K)) := by
+    rw [← Matrix.mul_assoc, hM, Matrix.mul_assoc, Matrix.trace_mul_comm, Matrix.mul_assoc]
+  calc Matrix.trace M = Matrix.trace (M * 1) := by rw [Matrix.mul_one]
+    _ = Matrix.trace (M * (Bd K * Hc K v₀)) + Matrix.trace (M * (Hc K v₀ * Bd K)) +
+          Matrix.trace (M * Pi K v₀) := by
         rw [h1, Matrix.mul_add, Matrix.mul_add, Matrix.trace_add, Matrix.trace_add]
-    _ = Matrix.trace (G K φ * Pi K v₀) := by rw [hcyc, two, zero_add]
-    _ = 1 := by
+    _ = Matrix.trace (M * Pi K v₀) := by rw [hcyc, two, zero_add]
+    _ = ∑ τ : K, ind (τ.1.card = 1) * M τ ⟨{v₀}, hv⟩ := by
         simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply]
-        have hφK : {φ {v₀}} ∈ K := by
-          have := hK.simp {v₀} hv 1 (fun _ => v₀) (by rw [W_one]; exact mem_singleton_self _)
-          have hpre : pre (fun _ : Fin 1 => v₀) 0 = {v₀} := by ext; simp [mem_pre, eq_comm]
-          simpa [lab, hpre] using this
-        rw [sum_eq_single ⟨{φ {v₀}}, hφK⟩]
-        · rw [sum_eq_single ⟨{v₀}, hv⟩, G_apex hK hv]
-          · unfold Pi; rw [ind_t rfl, ind_t ⟨rfl, card_singleton _⟩, mul_one]
-          · intro ρ _ hne; unfold Pi; rw [ind_f (fun h => hne (Subtype.ext h.1)), mul_zero]
-          · simp
-        · intro τ _ hne
-          refine sum_eq_zero fun ρ _ => ?_
-          unfold Pi
-          by_cases hρ : ρ.1 = {v₀} ∧ τ.1.card = 1
-          · have : ρ = ⟨{v₀}, hv⟩ := Subtype.ext hρ.1
-            subst this
-            rw [G_apex hK hv, ind_f (fun h => hne (Subtype.ext h)), zero_mul]
-          · rw [ind_f hρ, mul_zero]
+        refine sum_congr rfl fun τ _ => ?_
+        rw [sum_eq_single ⟨{v₀}, hv⟩]
+        · unfold Pi; rw [mul_comm]
+          exact congrArg (· * _) (ite_iff ⟨fun h => h.2, fun h => ⟨rfl, h⟩⟩)
+        · intro ρ _ hne; unfold Pi; rw [ind_f (fun h => hne (Subtype.ext h.1)), mul_zero]
         · simp
+
+theorem trace_G (hK : ConeData K φ v₀) (hv : {v₀} ∈ K) : Matrix.trace (G K φ) = 1 := by
+  rw [trace_chain hK.toIsCone hv _ (chain hK)]
+  have hφK : {φ {v₀}} ∈ K := by
+    have := hK.simp {v₀} hv 1 (fun _ => v₀) (by rw [W_one]; exact mem_singleton_self _)
+    have hpre : pre (fun _ : Fin 1 => v₀) 0 = {v₀} := by ext; simp [mem_pre, eq_comm]
+    simpa [lab, hpre] using this
+  rw [sum_eq_single ⟨{φ {v₀}}, hφK⟩]
+  · rw [G_apex hK hv, ind_t (card_singleton _), ind_t rfl, mul_one]
+  · intro τ _ hne; rw [G_apex hK hv, ind_f (fun h => hne (Subtype.ext h)), mul_zero]
+  · simp
 
 /-- **Cone Sperner lemma.** Some face of `K` has a complete flag whose labels are exactly that face. -/
 theorem exists_full (hK : ConeData K φ v₀) (hv : {v₀} ∈ K) :

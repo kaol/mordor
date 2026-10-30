@@ -513,6 +513,35 @@ theorem face_escape_below [WellFoundedLT β] (M : MaxLabelling 3 β) (l : Fin 3)
     rw [hwc] at hd''; cases hd''
     exact hle.trans (hc B hne hB d' hwc)
 
+
+/-- Columns reachable from `c` by finitely many column-value steps of rows avoiding `l`. -/
+inductive FaceReach (M : MaxLabelling 3 β) (l : Fin 3) (c : β) : β → Prop
+  | refl : FaceReach M l c c
+  | step {x d : β} {B : Finset (Fin 3)} : FaceReach M l c x → B.Nonempty → l ∉ B → M.w B x = Sum.inr d →
+      FaceReach M l c d
+
+/-- **Funnel escape.** At a face-closed column `c` (every row avoiding `l` is a label or contracting there), some
+row avoiding `l` carries `{l}` at a column reachable from `c` by face-row value steps. The reachable set lies in `↓c`
+(labels stay labels below `c`, column values stay below the values at `c`), has greatest element `c` and is closed
+under the face rows, so `face_escape_on` applies. -/
+theorem face_escape_funnel [WellFoundedLT β] (M : MaxLabelling 3 β) (l : Fin 3) {c : β}
+    (hc : ∀ B : Finset (Fin 3), B.Nonempty → l ∉ B → ∀ d, M.w B c = Sum.inr d → d ≤ c) :
+    ∃ (B : Finset (Fin 3)) (x : β), FaceReach M l c x ∧ B.Nonempty ∧ l ∉ B ∧ M.w B x = Sum.inl {l} := by
+  have hle : ∀ x, FaceReach M l c x → x ≤ c := by
+    intro x hx
+    induction hx with
+    | refl => exact le_rfl
+    | @step x d B _ hne hB hd ih =>
+        rcases hwc : M.w B c with α | d'
+        · obtain ⟨α', h1, -⟩ := MaxLabelling.lab_down_three M hne (Finset.Subset.refl _) ih hwc
+          rw [h1] at hd; cases hd
+        · obtain ⟨d'', hd'', hle⟩ := M.mono_col B B x c d hne (Finset.Subset.refl _) ih hd
+          rw [hwc] at hd''; cases hd''
+          exact hle.trans (hc B hne hB d' hwc)
+  obtain ⟨B, x, hx, h⟩ := face_escape_on M l {x | FaceReach M l c x} FaceReach.refl (fun x hx => hle x hx)
+    (fun B hne hB x hx d hd => FaceReach.step hx hne hB hd)
+  exact ⟨B, x, hx, h⟩
+
 end Mordor.InfiniteCLL
 
 /-! ### The minimal terminal meet -/

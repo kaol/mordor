@@ -1,6 +1,6 @@
 """Ground refutation of the cut theory at edge-height H (log §34.3h), as a long-running job.
 On UNSAT, writes the clause set to cut_H<H>_<tag>.cnf for DRAT certification (glucose -certified, drat-trim) and the
-Lean generator cut_lean.py.
+variable maps to cut_H<H>_<tag>.maps.pkl for the Lean generator cut_lean.py (experiments/heavy/certify_h6.sh).
 
   python3 run_height.py H [maxterms] [per_round] [opts]   e.g.  nohup python3 run_height.py 6 4000 1 forget=1000000 > h6.log &
 opts, comma-separated:
@@ -31,3 +31,8 @@ ok, G = c.run(H, cap, per_round=pr, wlog=True, room=('front' if 'front' in opts 
               ckpt=f"cut_H{H}_{tag}.ckpt")
 if ok:
     c.write_dimacs(G, f"cut_H{H}_{tag}.cnf"); print(f"wrote cut_H{H}_{tag}.cnf", flush=True)
+    import pickle                                      # variable maps for cut_lean.py (core clause -> axiom family)
+    maps = {'le': {v: k for k, v in G.le_.items()}, 'd': {v: k for k, v in G.d_.items()},
+            'g': {v: k for k, v in G.g_.items()}, 'terms': G.terms, 'F': dict(G.F)}
+    with open(f"cut_H{H}_{tag}.maps.pkl", 'wb') as fh: pickle.dump(maps, fh)
+    print(f"wrote cut_H{H}_{tag}.maps.pkl", flush=True)

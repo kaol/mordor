@@ -60,3 +60,4 @@ import Mordor.RelativeCut
 import Mordor.Stable
 import Mordor.InfiniteCLL
 import Mordor.Transport
+import Mordor.Rectangle

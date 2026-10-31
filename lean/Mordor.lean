@@ -20,6 +20,7 @@ import Mordor.Axioms.Thin
 import Mordor.Axioms.Cat
 import Mordor.Axioms.Source
 import Mordor.Axioms.Law
+import Mordor.Axioms.Leibniz
 import Mordor.Local
 import Mordor.FinGenWidth
 import Mordor.FinGen14

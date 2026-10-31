@@ -7,14 +7,15 @@ Encoding: elements 0 = ⊥ < … < n-1 = ⊤ numbered by a linear extension (le(
 with u(i,j,k) ⟺ F(i,j) ≤ k; rank variables g(i,k) ⟺ rank(i) ≥ k as in cut_ground.py; WLOG F(⊥,⊤) ∉ D by
 self-duality (§33.3). --lattice adds binary joins and meets (one-hot, with their universal properties).
 
-  python3 cut_finite.py H n_min n_max [--lattice]"""
+  python3 cut_finite.py H n_min n_max [--lattice] [--box]
+--box asserts no-witness only for x < y (the box Cut Lemma, §34.3z¹⁵): a model is a finite box counterexample."""
 import sys, itertools, time
 from pysat.solvers import Cadical153
 from pysat.card import CardEnc, EncType
 
 
 class Finite:
-    def __init__(self, n, H, lattice=False, wlog=True, nowit=(True, True), boundary=False):
+    def __init__(self, n, H, lattice=False, wlog=True, nowit=(True, True), boundary=False, box=False):
         self.n, self.H = n, H; self.nv = 0; self.vars = {}; self.S = Cadical153(); self.ncl = 0
         R = range(n); add = self.add
         le, f, u, g, d = self.le, self.f, self.u, self.g, self.d
@@ -45,7 +46,7 @@ class Finite:
         if boundary:                                                         # no witness on the boundary lines only
             mx, mu = self.boundary_vars()
         for x, y in itertools.product(R, R):                                 # no witness
-            guards = [[-d(x), d(y)]] if not boundary else [[-mx[x], d(y)], [-mu[y], -d(x)]]
+            guards = [[-d(x), d(y)] + ([-le(x, y)] if box else [])] if not boundary else [[-mx[x], d(y)], [-mu[y], -d(x)]]
             for gd in guards:
                 if nowit[0]: add(gd + [-u(x, y, x)])
                 if nowit[1]:
@@ -126,10 +127,10 @@ def check(le, F, D):
 
 
 if __name__ == '__main__':
-    H, lo, hi = map(int, sys.argv[1:4]); lat = '--lattice' in sys.argv
+    H, lo, hi = map(int, sys.argv[1:4]); lat = '--lattice' in sys.argv; box = '--box' in sys.argv
     for n in range(lo, hi + 1):
-        t = time.time(); P = Finite(n, H, lattice=lat); r = P.model()
-        print(f"H={H} n={n}{' lattice' if lat else ''}: {'UNSAT' if r is None else 'MODEL'} "
+        t = time.time(); P = Finite(n, H, lattice=lat, box=box); r = P.model()
+        print(f"H={H} n={n}{' lattice' if lat else ''}{' box' if box else ''}: {'UNSAT' if r is None else 'MODEL'} "
               f"({P.nv} vars, {P.ncl} clauses, {time.time() - t:.1f}s)", flush=True)
         if r is not None:
             le, F, D = r; print("  height", check(le, F, D)); print("  le", le); print("  F", F); print("  D", D)

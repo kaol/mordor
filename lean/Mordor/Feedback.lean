@@ -306,6 +306,87 @@ theorem feedback_window [WellFoundedLT α] {F : α → α → α}
   obtain ⟨t, ht1, ht2, ht3⟩ := hN i n
   exact ⟨t, ht1, lt_of_lt_of_le ht2 (Nat.add_le_add_left (Finset.le_sup (Finset.mem_univ i)) n), ht3⟩
 
+/-- **Contraction-tolerant window** (§34.3z⁶⁸, DCC). Along a ray of outside columns
+`q (t + 1) = F (meetRow p (x t)) (q t)` with `x t ∈ D`, for every generator `i` and every `n` there is a step
+`t ≥ n` that **omits `i` and does not contract** (`¬ x t ≤ p i` and `¬ q (t + 1) ≤ q t`). Steps containing `i`
+advance the bound `q ≤ (F pᵢ)^[k] ⊤`; contracting steps keep it; the orbit of `⊤` enters `D` after finitely many
+advances, and contractions alone are strict descents. -/
+theorem feedback_window_contract [WellFoundedLT α] {F : α → α → α}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α)
+    (nw : ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F x y ≤ x ∧ ¬ y ≤ F x y)
+    (htop : ¬ ∃ i, (⊤ : α) ≤ p i) (q x : ℕ → α) (hq : ∀ n, ¬ ∃ i, q n ≤ p i) (hx : ∀ t, ∃ i, x t ≤ p i)
+    (hstep : ∀ t, q (t + 1) = F (meetRow p (x t)) (q t)) (i : ι) (n : ℕ) :
+    ∃ t, n ≤ t ∧ ¬ x t ≤ p i ∧ ¬ q (t + 1) ≤ q t := by
+  classical
+  by_contra hall
+  push_neg at hall
+  obtain ⟨n₀, -, j₀, hj₀⟩ := FGTwo.orbit_end (InD := fun x => ∃ i, x ≤ p i) hF ⟨i, le_rfl⟩ nw ⊤ htop le_top
+  -- K j = number of steps containing `i` among n, …, n + j - 1
+  let K : ℕ → ℕ := fun j => ((Finset.range j).filter fun u => x (n + u) ≤ p i).card
+  have hK0 : K 0 = 0 := rfl
+  have hKs : ∀ j, K (j + 1) = K j + if x (n + j) ≤ p i then 1 else 0 := fun j => by
+    simp only [K, Finset.range_add_one, Finset.filter_insert]
+    split_ifs with h
+    · rw [Finset.card_insert_of_notMem (by simp)]
+    · rfl
+  have hbound : ∀ j, q (n + j) ≤ (F (p i))^[K j] ⊤ := by
+    intro j
+    induction j with
+    | zero => exact le_top
+    | succ j ih =>
+      rw [hKs, ← Nat.add_assoc]
+      by_cases hxi : x (n + j) ≤ p i
+      · rw [if_pos hxi, hstep, Function.iterate_succ_apply']
+        exact hF _ _ _ _ (meetRow_le hxi) ih
+      · rw [if_neg hxi, Nat.add_zero]
+        exact (hall (n + j) (Nat.le_add_right n j) hxi).trans ih
+  have hKmono : Monotone K := monotone_nat_of_le_succ fun j => by rw [hKs]; exact Nat.le_add_right _ _
+  -- K never reaches n₀ + 1
+  have hlt : ∀ j, K j < n₀ + 1 := by
+    intro j
+    by_contra hge
+    push_neg at hge
+    have hreach : ∃ j', K j' = n₀ + 1 := by
+      have hex : ∃ j', n₀ + 1 ≤ K j' := ⟨j, hge⟩
+      let j' := Nat.find hex
+      refine ⟨j', le_antisymm ?_ (Nat.find_spec hex)⟩
+      rcases Nat.eq_zero_or_pos j' with h0 | hpos
+      · have hs := Nat.find_spec hex; rw [show Nat.find hex = 0 from h0, hK0] at hs; omega
+      · obtain ⟨j'', hj''⟩ : ∃ j'', j' = j'' + 1 := ⟨j' - 1, by omega⟩
+        have hprev : K j'' < n₀ + 1 := by
+          have hm := Nat.find_min hex (show j'' < Nat.find hex by omega); omega
+        have hstep' := hKs j''
+        rw [← hj''] at hstep'
+        split_ifs at hstep' <;> omega
+    obtain ⟨j', hj'⟩ := hreach
+    have h := hbound j'
+    rw [hj', Function.iterate_succ_apply'] at h
+    exact hq (n + j') ⟨j₀, h.trans hj₀⟩
+  -- so K is eventually constant: from J on every step omits `i`, hence contracts strictly
+  obtain ⟨J, hJ⟩ : ∃ J, ∀ j, J ≤ j → K j = K J := by
+    have hfinvals : ∃ v, (∃ j, K j = v) ∧ ∀ j, K j ≤ v := by
+      have hS : ((Finset.range (n₀ + 1)).filter fun v => ∃ j, K j = v).Nonempty :=
+        ⟨K 0, Finset.mem_filter.2 ⟨Finset.mem_range.2 (hlt 0), 0, rfl⟩⟩
+      refine ⟨_, (Finset.mem_filter.1 (Finset.max'_mem _ hS)).2, fun j => Finset.le_max' _ _ ?_⟩
+      exact Finset.mem_filter.2 ⟨Finset.mem_range.2 (hlt j), j, rfl⟩
+    obtain ⟨v, ⟨J, hJv⟩, hmax⟩ := hfinvals
+    exact ⟨J, fun j hj => le_antisymm (hJv ▸ hmax j) (hKmono hj)⟩
+  have hdesc : ∀ j, J ≤ j → q (n + j + 1) < q (n + j) := by
+    intro j hj
+    have hxi : ¬ x (n + j) ≤ p i := by
+      intro h
+      have := hKs j; rw [if_pos h, hJ j hj, hJ (j + 1) (by omega)] at this; omega
+    have hc := hall (n + j) (Nat.le_add_right n j) hxi
+    refine lt_of_le_of_ne hc fun heq => ?_
+    have hnw := (nw (meetRow p (x (n + j))) (by obtain ⟨k, hk⟩ := hx (n + j); exact ⟨k, meetRow_le hk⟩)
+      (q (n + j)) (hq _)).2
+    rw [← hstep, heq] at hnw
+    exact hnw le_rfl
+  obtain ⟨_, ⟨m, rfl⟩, hmin⟩ := (wellFounded_lt (α := α)).has_min (Set.range fun m => q (n + (J + m))) ⟨_, ⟨0, rfl⟩⟩
+  refine hmin _ ⟨m + 1, rfl⟩ ?_
+  have := hdesc (J + m) (Nat.le_add_right J m)
+  rwa [show n + (J + m) + 1 = n + (J + (m + 1)) by omega] at this
+
 /-- The three-set core of the blocker classification (finite check). -/
 theorem blockers_core : ∀ A₀ A₁ A₂ : Finset (Fin 3), A₀.Nonempty → A₁.Nonempty → A₂.Nonempty →
     0 ∉ A₀ → 1 ∉ A₁ → 2 ∉ A₂ →

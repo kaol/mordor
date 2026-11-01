@@ -170,4 +170,73 @@ theorem terminal_below' [WellFoundedLT α] :
       obtain ⟨y, hyw, h1, h2⟩ := ih _ hlt fun ⟨k, hk⟩ => hj k hk
       exact ⟨y, hyw.trans inf_le_left, h1, h2⟩
 
+/-! ### Terminal-shadow continuation and certificate joins (§34.3z⁷¹) -/
+
+omit hF nw in
+/-- Labels of a join are the intersection of labels. -/
+theorem lab_sup (a b : α) : lab p (a ⊔ b) = lab p a ∩ lab p b := by
+  ext i; simp only [mem_lab, Finset.mem_inter, sup_le_iff]
+
+omit hF nw in
+/-- **Below a meet row iff the labels contain its index set.** So `c ≤ ⋀_S p` is a label condition. -/
+theorem le_meet_iff (c : α) (S : Finset ι) : c ≤ S.inf p ↔ S ⊆ lab p c := by
+  rw [Finset.le_inf_iff]; exact ⟨fun h i hi => mem_lab.2 (h i hi), fun h i hi => mem_lab.1 (h hi)⟩
+
+omit hF nw in
+/-- An element is in `D` iff its label is nonempty. -/
+theorem mem_D_iff (c : α) : (∃ j, c ≤ p j) ↔ (lab p c).Nonempty :=
+  ⟨fun ⟨j, hj⟩ => ⟨j, mem_lab.2 hj⟩, fun ⟨j, hj⟩ => ⟨j, mem_lab.1 hj⟩⟩
+
+/-- **Shadow escape** (a consequence of `Crossing.no_closed_rows`). If the meet row `⋀_K p` takes at the outside
+column `q` a value whose labels lie in `K`, then either that value is outside `D`, or some generator row `pᵢ` with
+`i` in its label escapes `D` at `q`, above it. -/
+theorem shadow_escape {q : α} (hq : ¬ ∃ j, q ≤ p j) {K : Finset ι} (hsub : lab p (F (K.inf p) q) ⊆ K) :
+    (¬ ∃ j, F (K.inf p) q ≤ p j) ∨
+      ∃ i ∈ lab p (F (K.inf p) q), (¬ ∃ j, F (p i) q ≤ p j) ∧ F (K.inf p) q ≤ F (p i) q := by
+  classical
+  by_cases hw : ∃ j, F (K.inf p) q ≤ p j
+  · right
+    set M := lab p (F (K.inf p) q)
+    have hMne : M.Nonempty := (mem_D_iff _).1 hw
+    have hle : ∀ i ∈ M, F (K.inf p) q ≤ F (p i) q := fun i hi =>
+      hF _ _ _ _ (Finset.inf_le (hsub hi)) le_rfl
+    by_contra hno
+    push_neg at hno
+    refine Crossing.no_closed_rows hF p hq nw M hMne fun i hi => ?_
+    have hex : ∃ j, F (p i) q ≤ p j := by
+      by_contra h; push_neg at h; exact hno i hi h (hle i hi)
+    obtain ⟨j, hj⟩ := hex
+    exact ⟨j, mem_lab.2 ((hle i hi).trans hj), hj⟩
+  · exact Or.inl hw
+
+/-- **Terminal-shadow continuation.** If `y ≤ q` carries a label fixed point `K`, the feedback from `q` continues
+by `⋀_K p` or by a generator row `pᵢ` with `i` in the label of `F (⋀_K p) y` (a proper subset of `K`), and the new
+column lies above the certificate `a = y ⊓ F (⋀_K p) y`. -/
+theorem terminal_shadow_escape {y q : α} (hyq : y ≤ q) (hy : ¬ ∃ j, y ≤ p j) (hq : ¬ ∃ j, q ≤ p j)
+    {K : Finset ι} (hne : K.Nonempty) (hK : lab p (zK F p y K) = K) :
+    ∃ r, (r = K.inf p ∨ ∃ i ∈ lab p (F (K.inf p) y), r = p i) ∧ (¬ ∃ j, F r q ≤ p j) ∧
+      zK F p y K ≤ F r q := by
+  have hvw : F (K.inf p) y ≤ F (K.inf p) q := hF _ _ _ _ le_rfl hyq
+  have hlab : lab p (F (K.inf p) q) ⊆ lab p (F (K.inf p) y) := fun i hi => mem_lab.2 (hvw.trans (mem_lab.1 hi))
+  have hstep := (terminal_step hF nw hy hne hK).1
+  rcases shadow_escape hF nw hq (hlab.trans hstep) with hout | ⟨i, hi, hout, hle⟩
+  · exact ⟨_, Or.inl rfl, hout, inf_le_right.trans hvw⟩
+  · exact ⟨_, Or.inr ⟨i, hlab hi, rfl⟩, hout, inf_le_right.trans (hvw.trans hle)⟩
+
+omit hF nw in
+/-- **The certificate lies below both consecutive columns**: `a = y ⊓ F (⋀_K p) y ≤ q` (as `y ≤ q`), and
+`a ≤ F r q` by `terminal_shadow_escape`. -/
+theorem certificate_below {y q z : α} (hyq : y ≤ q) {K : Finset ι} (hz : zK F p y K ≤ z) :
+    zK F p y K ≤ q ⊓ z :=
+  le_inf (inf_le_left.trans hyq) hz
+
+omit hF nw in
+/-- **Certificate join.** Two certificates below a common column `q` join below `q`, with label the intersection of
+their labels; the join is in `D` iff the labels meet. -/
+theorem certificate_join {a a' q : α} {K K' : Finset ι} (ha : a ≤ q) (ha' : a' ≤ q) (hK : lab p a = K)
+    (hK' : lab p a' = K') :
+    a ⊔ a' ≤ q ∧ lab p (a ⊔ a') = K ∩ K' ∧ ((∃ j, a ⊔ a' ≤ p j) ↔ (K ∩ K').Nonempty) := by
+  refine ⟨sup_le ha ha', by rw [lab_sup, hK, hK'], ?_⟩
+  rw [mem_D_iff, lab_sup, hK, hK']
+
 end Mordor.HistoryFix

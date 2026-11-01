@@ -593,6 +593,77 @@ theorem contract_fixed [WellFoundedLT γ] {G : γ → γ} (hG : Monotone G) {a :
 
 end Exchange
 
+/-! ### Cycle words of generator rows (§34.3z⁷⁵) -/
+
+section CycleWord
+set_option linter.unusedSectionVars false
+
+/-- **Block comparison.** A row below every letter of a word, iterated once per letter, stays below the word's
+composite: `h^r(x) ≤ G_w(x)`. -/
+theorem cycle_block_le {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α) {m : α} :
+    ∀ (w : List ι), (∀ i ∈ w, m ≤ p i) → ∀ x, (F m)^[w.length] x ≤ walkVal (fun i => F (p i)) x w
+  | [], _, _ => le_rfl
+  | i :: w, hm, x => by
+      rw [List.length_cons, Function.iterate_succ_apply]
+      refine (cycle_block_le hF p w (fun j hj => hm j (List.mem_cons_of_mem i hj)) (F m x)).trans ?_
+      exact walkVal_mono (fun i => F (p i)) (fun i _ _ h => hF _ _ _ _ le_rfl h) w
+        (hF _ _ _ _ (hm i List.mem_cons_self) le_rfl)
+
+/-- **Phase-meet contraction.** For a periodic cycle `x (k+1) = F (p (i k)) (x k)` (`k < r`), `x r = x 0`, and a row
+`m` below every letter, the meet `z = ⋀_{k<r} x k` satisfies `F m z ≤ z`. -/
+theorem cycle_meet_contracts {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
+    (p : ι → α) (r : ℕ) (hr : 0 < r) (x : ℕ → α) (i : ℕ → ι) (hx : ∀ k, k < r → x (k + 1) = F (p (i k)) (x k))
+    (hper : x r = x 0) {m : α} (hm : ∀ k, k < r → m ≤ p (i k)) :
+    F m ((Finset.range r).inf x) ≤ (Finset.range r).inf x := by
+  set z := (Finset.range r).inf x
+  have hz : ∀ k, k < r → z ≤ x k := fun k hk => Finset.inf_le (Finset.mem_range.2 hk)
+  have hstep : ∀ k, k < r → F m z ≤ x (k + 1) := fun k hk => by
+    rw [hx k hk]; exact hF _ _ _ _ (hm k hk) (hz k hk)
+  refine Finset.le_inf fun k hk => ?_
+  have hk' := Finset.mem_range.1 hk
+  rcases Nat.eq_zero_or_pos k with rfl | hpos
+  · rw [← hper, show r = (r - 1) + 1 by omega]; exact hstep (r - 1) (by omega)
+  · rw [show k = (k - 1) + 1 by omega]; exact hstep (k - 1) (by omega)
+
+/-- **A common lower bound in `D`** (DCC). Under the hypotheses of `cycle_meet_contracts`, with `m ∈ D`, some
+`e ∈ D` lies below every phase state: `z` itself, or the entry value of the `F m`-orbit of `z`, which descends. -/
+theorem cycle_common_lower [WellFoundedLT α] {F : α → α → α}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α)
+    (nw : ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F x y ≤ x ∧ ¬ y ≤ F x y)
+    (r : ℕ) (hr : 0 < r) (x : ℕ → α) (i : ℕ → ι) (hx : ∀ k, k < r → x (k + 1) = F (p (i k)) (x k))
+    (hper : x r = x 0) {m : α} (hmD : ∃ j, m ≤ p j) (hm : ∀ k, k < r → m ≤ p (i k)) :
+    ∃ e, (∃ j, e ≤ p j) ∧ ∀ k, k < r → e ≤ x k := by
+  set z := (Finset.range r).inf x
+  have hz : ∀ k, k < r → z ≤ x k := fun k hk => Finset.inf_le (Finset.mem_range.2 hk)
+  by_cases hzD : ∃ j, z ≤ p j
+  · exact ⟨z, hzD, hz⟩
+  · have hc := cycle_meet_contracts hF p r hr x i hx hper hm
+    obtain ⟨n, -, hn⟩ := FGTwo.orbit_end (InD := fun x => ∃ j, x ≤ p j) hF hmD nw z hzD hc
+    have hdesc : ∀ k, (F m)^[k] z ≤ z := fun k => by
+      induction k with
+      | zero => exact le_rfl
+      | succ k ih => rw [Function.iterate_succ_apply']; exact (hF _ _ _ _ le_rfl ih).trans hc
+    refine ⟨F m ((F m)^[n] z), hn, fun k hk => ?_⟩
+    have := hdesc (n + 1); rw [Function.iterate_succ_apply'] at this
+    exact this.trans (hz k hk)
+
+/-- **The one-phase `l4` step with a join anchor.** With `D = ↓a ∪ B`, `↓a ∩ B ⊆ ↓c`, `c ≤ a`: if the anchor row's
+value `F c u` at an outside column lies below `a`, then the generator row's value `F a u` is outside `D`. This is
+the step of `FGTwo.l4` that survives a change of letter; what does not survive is the hypothesis `F c u ≤ a`, which
+for the next letter `a'` must read `F c' u' ≤ a'` and is not implied. -/
+theorem phase_step {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
+    {InD InB : α → Prop} {a c : α} (hD : ∀ x, InD x ↔ x ≤ a ∨ InB x) (hB : ∀ x y, x ≤ y → InB y → InB x)
+    (hca : c ≤ a) (hc : ∀ z, z ≤ a → InB z → z ≤ c) (nw : ∀ x, InD x → ∀ y, ¬ InD y → ¬ F x y ≤ x ∧ ¬ y ≤ F x y)
+    {u : α} (hu : ¬ InD u) (hcu : F c u ≤ a) : ¬ InD (F a u) := by
+  intro hin
+  have haD : InD a := (hD a).2 (Or.inl le_rfl)
+  have hcD : InD c := (hD c).2 (Or.inl hca)
+  rcases (hD _).1 hin with h1 | h1
+  · exact (nw a haD u hu).1 h1
+  · exact (nw c hcD u hu).1 (hc _ hcu (hB _ _ (hF _ _ _ _ hca le_rfl) h1))
+
+end CycleWord
+
 /-- The three-set core of the blocker classification (finite check). -/
 theorem blockers_core : ∀ A₀ A₁ A₂ : Finset (Fin 3), A₀.Nonempty → A₁.Nonempty → A₂.Nonempty →
     0 ∉ A₀ → 1 ∉ A₁ → 2 ∉ A₂ →

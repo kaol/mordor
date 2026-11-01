@@ -387,6 +387,103 @@ theorem feedback_window_contract [WellFoundedLT α] {F : α → α → α}
   have := hdesc (J + m) (Nat.le_add_right J m)
   rwa [show n + (J + m) + 1 = n + (J + (m + 1)) by omega] at this
 
+/-! ### Coalition fixed point (§34.3z⁷³) -/
+
+/-- The collective row operator `H_J(t) = ⋁_{i ∈ J} F (pᵢ) t`. -/
+def coalition (F : α → α → α) (p : ι → α) (J : Finset ι) (t : α) : α := J.sup fun i => F (p i) t
+
+omit [Fintype ι] [DecidableEq ι] in
+theorem coalition_mono {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α)
+    (J : Finset ι) : Monotone (coalition F p J) := fun _ _ h =>
+  Finset.sup_mono_fun fun _ _ => hF _ _ _ _ le_rfl h
+
+/-- **The tail envelope is post-fixed for the coalition.** If from stage `N` every support meets `J`, every column
+lies below `S`, and `S` is the join of the successor tail, then `S ≤ H_J(S)`. -/
+theorem coalition_postfixed {γ : Type*} [CompleteLattice γ] {ι' : Type*} {F : γ → γ → γ}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι' → γ) (J : Finset ι') (q r : ℕ → γ) (N : ℕ) (S : γ)
+    (hstep : ∀ n, q (n + 1) = F (r n) (q n)) (hS : ∀ n, N ≤ n → q n ≤ S)
+    (hsup : S ≤ ⨆ n, ⨆ (_ : N ≤ n), q (n + 1)) (hJ : ∀ n, N ≤ n → ∃ i ∈ J, r n ≤ p i) :
+    S ≤ J.sup fun i => F (p i) S :=
+  hsup.trans (iSup₂_le fun n hn => by
+    obtain ⟨i, hi, hri⟩ := hJ n hn
+    rw [hstep]
+    exact (hF _ _ _ _ hri (hS n hn)).trans (Finset.le_sup (f := fun i => F (p i) S) hi))
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- **The coalition fixed point above a post-fixed point** (ACC): iterating `H_J` from `S` stabilizes at some
+`t = H_J^k(S) ≥ S` with `t = H_J(t)`. -/
+theorem coalition_fixedpoint [WellFoundedGT α] {F : α → α → α}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p : ι → α) (J : Finset ι) {S : α}
+    (hS : S ≤ coalition F p J S) :
+    ∃ k, S ≤ (coalition F p J)^[k] S ∧ coalition F p J ((coalition F p J)^[k] S) = (coalition F p J)^[k] S := by
+  set H := coalition F p J
+  have hmono := coalition_mono hF p J
+  have hasc : ∀ k, H^[k] S ≤ H^[k + 1] S := fun k => by
+    induction k with
+    | zero => exact hS
+    | succ k ih => rw [Function.iterate_succ_apply', Function.iterate_succ_apply' H (k + 1)]; exact hmono ih
+  have hge : ∀ k, S ≤ H^[k] S := fun k => by
+    induction k with
+    | zero => exact le_rfl
+    | succ k ih => exact ih.trans (hasc k)
+  obtain ⟨_, ⟨k, rfl⟩, hmax⟩ := (wellFounded_gt (α := α)).has_min (Set.range fun k => H^[k] S) ⟨_, ⟨0, rfl⟩⟩
+  refine ⟨k, hge k, ?_⟩
+  have h1 := hasc k
+  rw [Function.iterate_succ_apply'] at h1
+  by_contra hne
+  refine hmax _ ⟨k + 1, rfl⟩ ?_
+  show H^[k] S < H^[k + 1] S
+  rw [Function.iterate_succ_apply']; exact lt_of_le_of_ne h1 (Ne.symm hne)
+
+omit [DecidableEq ι] in
+/-- **Components of the coalition fixed point.** If `t = H_J(t)` lies outside `D`, every component
+`wᵢ = F (pᵢ) t` (`i ∈ J`) satisfies `wᵢ ≤ t` and `wᵢ < t` (no-witness); if moreover some outside column `q'` lies
+below `F (pᵢ) t` (as the ray successors do), `wᵢ ∉ D`. The full-meet row value `b = F (⋀ p) t` lies below every
+component, strictly below `t`, and the full-meet row contracts at `b`. -/
+theorem coalition_components {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
+    (p : ι → α) (nw : ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F x y ≤ x ∧ ¬ y ≤ F x y)
+    (J : Finset ι) {t : α} (ht : coalition F p J t = t) (htD : ¬ ∃ i, t ≤ p i) :
+    (∀ i ∈ J, F (p i) t < t) ∧
+    (∀ i ∈ J, ∀ q', (¬ ∃ j, q' ≤ p j) → q' ≤ F (p i) t → ¬ ∃ j, F (p i) t ≤ p j) ∧
+    ((∃ i, i ∈ J) → F (Finset.univ.inf p) t < t ∧ (∀ i ∈ J, F (Finset.univ.inf p) t ≤ F (p i) t) ∧
+      F (Finset.univ.inf p) (F (Finset.univ.inf p) t) ≤ F (Finset.univ.inf p) t) := by
+  have hle : ∀ i ∈ J, F (p i) t ≤ t := fun i hi => (Finset.le_sup (f := fun i => F (p i) t) hi).trans ht.le
+  refine ⟨fun i hi => lt_of_le_of_ne (hle i hi) fun heq => (nw (p i) ⟨i, le_rfl⟩ t htD).2 heq.ge,
+    fun i _ q' hq' hle ⟨j, hj⟩ => hq' ⟨j, hle.trans hj⟩, fun ⟨i₀, hi₀⟩ => ?_⟩
+  have hb : ∀ i ∈ J, F (Finset.univ.inf p) t ≤ F (p i) t := fun i _ =>
+    hF _ _ _ _ (Finset.inf_le (Finset.mem_univ i)) le_rfl
+  have hbt : F (Finset.univ.inf p) t ≤ t := (hb i₀ hi₀).trans (hle i₀ hi₀)
+  refine ⟨lt_of_le_of_ne hbt fun heq => (nw _ ⟨i₀, Finset.inf_le (Finset.mem_univ i₀)⟩ t htD).2 heq.ge, hb,
+    hF _ _ _ _ le_rfl hbt⟩
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- **No singleton coalition**: `t = F (pᵢ) t` is impossible for `t ∉ D`. -/
+theorem coalition_not_singleton {F : α → α → α} (p : ι → α)
+    (nw : ∀ x, (∃ i, x ≤ p i) → ∀ y, ¬ (∃ i, y ≤ p i) → ¬ F x y ≤ x ∧ ¬ y ≤ F x y) (i : ι) {t : α}
+    (ht : coalition F p {i} t = t) (htD : ¬ ∃ j, t ≤ p j) : False := by
+  simp only [coalition, Finset.sup_singleton] at ht
+  exact (nw (p i) ⟨i, le_rfl⟩ t htD).2 ht.ge
+
+/-- **Essential members of a minimal hitting set.** If `J` meets every member of `𝒜` and no proper subset does, every
+`i ∈ J` is the only member of `J` in some `A ∈ 𝒜`. -/
+theorem essential_member {κ : Type*} [DecidableEq κ] (𝒜 : Finset (Finset κ)) (J : Finset κ)
+    (hhit : ∀ A ∈ 𝒜, (A ∩ J).Nonempty) (hmin : ∀ J' ⊂ J, ¬ ∀ A ∈ 𝒜, (A ∩ J').Nonempty) :
+    ∀ i ∈ J, ∃ A ∈ 𝒜, A ∩ J = {i} := by
+  intro i hi
+  have hsub : J.erase i ⊂ J := Finset.erase_ssubset hi
+  have := hmin _ hsub
+  push_neg at this
+  obtain ⟨A, hA, hempty⟩ := this
+  refine ⟨A, hA, Finset.eq_singleton_iff_unique_mem.2 ⟨?_, fun j hj => ?_⟩⟩
+  · obtain ⟨j, hj⟩ := hhit A hA
+    by_contra hiA
+    have hji : j ≠ i := fun h => hiA (h ▸ hj)
+    exact Finset.not_nonempty_iff_eq_empty.2 hempty
+      ⟨j, Finset.mem_inter.2 ⟨(Finset.mem_inter.1 hj).1, Finset.mem_erase.2 ⟨hji, (Finset.mem_inter.1 hj).2⟩⟩⟩
+  · by_contra hji
+    exact Finset.not_nonempty_iff_eq_empty.2 hempty
+      ⟨j, Finset.mem_inter.2 ⟨(Finset.mem_inter.1 hj).1, Finset.mem_erase.2 ⟨hji, (Finset.mem_inter.1 hj).2⟩⟩⟩
+
 /-- The three-set core of the blocker classification (finite check). -/
 theorem blockers_core : ∀ A₀ A₁ A₂ : Finset (Fin 3), A₀.Nonempty → A₁.Nonempty → A₂.Nonempty →
     0 ∉ A₀ → 1 ∉ A₁ → 2 ∉ A₂ →

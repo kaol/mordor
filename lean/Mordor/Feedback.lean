@@ -662,6 +662,21 @@ theorem phase_step {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y �
   · exact (nw a haD u hu).1 h1
   · exact (nw c hcD u hu).1 (hc _ hcu (hB _ _ (hF _ _ _ _ hca le_rfl) h1))
 
+/-- **Anchor word below generator word.** If each anchor row is below its letter's generator row, the anchor
+composite is below the generator composite: `A_w(x) ≤ G_w(x)`. -/
+theorem anchor_word_le {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') (p c : ι → α)
+    (hcp : ∀ i, c i ≤ p i) : ∀ (w : List ι) (x y : α), x ≤ y →
+      walkVal (fun i => F (c i)) x w ≤ walkVal (fun i => F (p i)) y w
+  | [], _, _, h => h
+  | i :: w, x, y, h => anchor_word_le hF p c hcp w _ _ (hF _ _ _ _ (hcp i) h)
+
+/-- **Branch B kills the phase hypothesis.** If an anchor state `x ≤ y` has its anchor successor `F c x` outside
+`D`, the anchor row's value at the generator state `y` is outside `D` too, so `F c y ≤ a` (the `phase_step`
+hypothesis, `a ∈ D`) fails. -/
+theorem anchor_outside_blocks {F : α → α → α} (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
+    {InD : α → Prop} (hdown : ∀ x y, x ≤ y → InD y → InD x) {a c x y : α} (ha : InD a) (hxy : x ≤ y)
+    (hout : ¬ InD (F c x)) : ¬ F c y ≤ a := fun h => hout (hdown _ _ ((hF _ _ _ _ le_rfl hxy).trans h) ha)
+
 end CycleWord
 
 /-- The three-set core of the blocker classification (finite check). -/

@@ -102,4 +102,33 @@ theorem label_fixed_proper [Nonempty ι] {y : α} (hy : ¬ ∃ j, y ≤ p j)
   obtain ⟨K, hne, -, hK⟩ := label_fixed hF ht Finset.univ ⟨i₀, Finset.mem_univ _⟩ (Finset.subset_univ _)
   refine ⟨K, hne, fun hu => fixed_sideways hF nw hy hne hK (hu ▸ hh), hK, fixed_sideways hF nw hy hne hK⟩
 
+/-- **The terminal step** (§34.3z⁶⁹). At a label fixed point `K` of a column `y ∉ D`, the row `⋀_K p` steps
+sideways (`fixed_sideways`), and its value `v = F (⋀_K p) y` has labels a **proper** subset of `K` (empty when
+`v ∉ D`). The history meet `y ⊓ v` lies below `v`, so `lab v ⊆ K`; equality would put `v` below `⋀_K p`, a
+witness. -/
+theorem terminal_step {y : α} (hy : ¬ ∃ j, y ≤ p j) {K : Finset ι} (hne : K.Nonempty)
+    (hK : lab p (zK F p y K) = K) :
+    lab p (F (K.inf p) y) ⊂ K := by
+  have hsub : lab p (F (K.inf p) y) ⊆ K := fun i hi => by
+    rw [← hK]; exact mem_lab.2 (inf_le_right.trans (mem_lab.1 hi))
+  refine Finset.ssubset_iff_subset_ne.2 ⟨hsub, fun heq => ?_⟩
+  obtain ⟨i, hi⟩ := hne
+  have hle : F (K.inf p) y ≤ K.inf p := Finset.le_inf fun j hj => mem_lab.1 (heq.symm ▸ hj)
+  exact (nw _ ⟨i, Finset.inf_le hi⟩ y hy).1 hle
+
+/-- **A singleton label fixed point forces an outside sideways step**: if `lab (y ⊓ F pᵢ y) = {i}`, then
+`F pᵢ y ∉ D` and `F pᵢ y ≰ y`. So a terminal column with a singleton fixed label continues the feedback ray sideways
+by the generator row `pᵢ`. -/
+theorem singleton_step {y : α} (hy : ¬ ∃ j, y ≤ p j) {i : ι} (hK : lab p (zK F p y {i}) = {i}) :
+    (¬ ∃ j, F (p i) y ≤ p j) ∧ ¬ F (p i) y ≤ y := by
+  have hside := fixed_sideways hF nw hy (Finset.singleton_nonempty i) hK
+  rw [Finset.inf_singleton] at hside
+  refine ⟨fun hv => ?_, hside⟩
+  have := terminal_step hF nw hy (Finset.singleton_nonempty i) hK
+  rw [Finset.ssubset_singleton_iff, Finset.inf_singleton] at this
+  obtain ⟨j, hj⟩ := hv
+  have hjK : j ∈ lab p (F (p i) y) := mem_lab.2 hj
+  rw [this] at hjK
+  exact Finset.notMem_empty _ hjK
+
 end Mordor.HistoryFix

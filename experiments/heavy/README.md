@@ -77,6 +77,19 @@ DRAT_TRIM=/path/to/drat-trim experiments/heavy/run_dc2.sh ~/dc2 /path/to/kissat 
 - **Send back.** `dc2_summary.txt`. Any `s SATISFIABLE` is important: rerun that instance with
   `dc2_batch.py solve k,m` and keep the model.
 
+## 3. Edge-height 6 over lattices (`experiments/sat/lattice_ground.py`, §34.3z⁷²)
+
+```bash
+cd ~/h6lat && python3 -X faulthandler ~/mordor/experiments/sat/lattice_ground.py 6 20000 1 1 forget=2000000
+```
+
+- **What it is:** the frontier ground search plus meet and join terms with their glb/lub clauses. UNSAT proves Cut
+  for **lattices** of edge-height ≤ 6, which is enough for CL and covers M_ω² × C₃.
+- **H = 5 control:** one lattice term per round cut the F-terms needed from 120 to 85.
+- **H = 6 in the session:** still SAT at 474 terms (250 F-terms plus 220 lattice terms) after 15 min, 0.8 GB.
+- **Not wired to `certify_ground.sh` yet:** `cut_lean.py` does not translate the lattice clauses. Keep the run's CNF
+  and certify it with drat-trim alone first.
+
 ## Not prepared
 
 - *`box_cut.py cut 5`*: you can stop it. Box Cut is a side conjecture with no remaining consequence for CL, and no

@@ -1,5 +1,6 @@
 import Mordor.Rectangle
 import Mathlib.Data.Finset.Image
+import Mordor.Stable
 
 /-!
 # Boundary steps and support patterns (round 26, §34.3z⁶³)
@@ -70,4 +71,37 @@ theorem support_family :
   ⟨fun _ _ h => not_nested h, fun _ _ _ h1 h2 => not_delta h1 h2⟩
 
 end Supports
+
+section Root
+variable {L : Type*} [CompleteLattice L]
+
+/-- **Effective root** (§34.3z⁶⁴). For an increasing family of row supports `K n` with union `K`, the meets `⋀ K n`
+are eventually `⋀ K` (DCC); so a growing-root support `K n ∪ E n` has meet `⋀ K ⊓ ⋀ E n` from some stage on.
+The finite basis is `Stable.sInf_finite_support`, but stabilization alone already gives it. -/
+theorem effective_root [WellFoundedLT L] (K E : ℕ → Set L) (hK : Monotone K) :
+    ∃ N, ∀ n, N ≤ n → sInf (K n ∪ E n) = sInf (⋃ k, K k) ⊓ sInf (E n) := by
+  obtain ⟨t, ht, hinf⟩ := sInf_finite_support (⋃ k, K k)
+  have hidx : ∀ x ∈ t, ∃ k, x ∈ K k := fun x hx => Set.mem_iUnion.1 (ht hx)
+  choose! idx hidx using hidx
+  refine ⟨t.sup idx, fun n hn => ?_⟩
+  have hsub : (t : Set L) ⊆ K n := fun x hx => hK ((Finset.le_sup hx).trans hn) (hidx x hx)
+  have heq : sInf (K n) = sInf (⋃ k, K k) := le_antisymm
+    (hinf ▸ Finset.le_inf fun x hx => sInf_le (hsub hx))
+    (sInf_le_sInf (Set.subset_iUnion K n))
+  rw [sInf_union, heq]
+
+/-- Dual (ACC): column supports `H n ∪ G n` have join `⋁ H ⊔ ⋁ G n` from some stage on. -/
+theorem effective_root_dual [WellFoundedGT L] (H G : ℕ → Set L) (hH : Monotone H) :
+    ∃ N, ∀ n, N ≤ n → sSup (H n ∪ G n) = sSup (⋃ k, H k) ⊔ sSup (G n) := by
+  obtain ⟨t, ht, hsup⟩ := sSup_finite_support (⋃ k, H k)
+  have hidx : ∀ x ∈ t, ∃ k, x ∈ H k := fun x hx => Set.mem_iUnion.1 (ht hx)
+  choose! idx hidx using hidx
+  refine ⟨t.sup idx, fun n hn => ?_⟩
+  have hsub : (t : Set L) ⊆ H n := fun x hx => hH ((Finset.le_sup hx).trans hn) (hidx x hx)
+  have heq : sSup (H n) = sSup (⋃ k, H k) := le_antisymm
+    (sSup_le_sSup (Set.subset_iUnion H n))
+    (hsup ▸ Finset.sup_le fun x hx => le_sSup (hsub hx))
+  rw [sSup_union, heq]
+
+end Root
 end Mordor.Provenance

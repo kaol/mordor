@@ -484,6 +484,115 @@ theorem essential_member {κ : Type*} [DecidableEq κ] (𝒜 : Finset (Finset κ
     exact Finset.not_nonempty_iff_eq_empty.2 hempty
       ⟨j, Finset.mem_inter.2 ⟨(Finset.mem_inter.1 hj).1, Finset.mem_erase.2 ⟨hji, (Finset.mem_inter.1 hj).2⟩⟩⟩
 
+/-! ### Exchange networks (§34.3z⁷⁴) -/
+
+section Exchange
+set_option linter.unusedSectionVars false
+variable {γ : Type*} [Lattice γ] [OrderBot γ] {κ : Type*} [Fintype κ] [DecidableEq κ]
+  (E : κ → κ → Prop) [DecidableRel E] (g : κ → γ → γ)
+
+/-- The edge-balanced operator `Φ(x)ⱼ = ⋁_{i → j} gⱼ(xᵢ)`. -/
+def exch (x : κ → γ) (j : κ) : γ := (Finset.univ.filter fun i => E i j).sup fun i => g j (x i)
+
+theorem exch_mono (hg : ∀ j, Monotone (g j)) : Monotone (exch E g) := fun _ _ h j =>
+  Finset.sup_mono_fun fun i _ => hg j (h i)
+
+omit [DecidableEq κ] in
+/-- An ascending sequence in an ACC order is eventually constant. -/
+theorem asc_stable {δ : Type*} [PartialOrder δ] [WellFoundedGT δ] (a : ℕ → δ) (ha : Monotone a) :
+    ∃ N, ∀ n, N ≤ n → a n = a N := by
+  obtain ⟨_, ⟨N, rfl⟩, hmax⟩ := (wellFounded_gt (α := δ)).has_min (Set.range a) ⟨_, ⟨0, rfl⟩⟩
+  exact ⟨N, fun n hn => by
+    by_contra hne; exact hmax _ ⟨n, rfl⟩ (lt_of_le_of_ne (ha hn) (Ne.symm hne))⟩
+
+/-- **Edge-balanced vector fixed point** (ACC). If `s ≤ Φ(s)`, `Φ(w) ≤ w` and `s ≤ w`, iterating `Φ` from `s`
+reaches `u` with `s ≤ u ≤ w` and `Φ(u) = u` (coordinatewise ACC suffices for a finite vertex set). -/
+theorem exch_fixedpoint [WellFoundedGT γ] (hg : ∀ j, Monotone (g j)) {s w : κ → γ} (hs : s ≤ exch E g s)
+    (hw : exch E g w ≤ w) (hsw : s ≤ w) : ∃ u, s ≤ u ∧ u ≤ w ∧ exch E g u = u := by
+  have hm := exch_mono E g hg
+  let a : ℕ → κ → γ := fun k => (exch E g)^[k] s
+  have hasc : Monotone a := monotone_nat_of_le_succ fun k => by
+    show (exch E g)^[k] s ≤ (exch E g)^[k + 1] s
+    induction k with
+    | zero => exact hs
+    | succ k ih => rw [Function.iterate_succ_apply', Function.iterate_succ_apply' _ (k + 1)]; exact hm ih
+  have hle : ∀ k, a k ≤ w := fun k => by
+    show (exch E g)^[k] s ≤ w
+    induction k with
+    | zero => exact hsw
+    | succ k ih => rw [Function.iterate_succ_apply']; exact (hm ih).trans hw
+  have hcoord : ∀ j, ∃ N, ∀ n, N ≤ n → a n j = a N j := fun j =>
+    asc_stable (fun n => a n j) fun _ _ h => hasc h j
+  choose N hN using hcoord
+  let M := Finset.univ.sup N
+  have hMstab : ∀ n, M ≤ n → a n = a M := fun n hn => funext fun j => by
+    have hj : N j ≤ M := Finset.le_sup (Finset.mem_univ j)
+    rw [hN j n (hj.trans hn), hN j M hj]
+  refine ⟨a M, hasc (Nat.zero_le M), hle M, ?_⟩
+  have := hMstab (M + 1) (Nat.le_succ M)
+  simp only [a, Function.iterate_succ_apply'] at this
+  exact this
+
+omit [DecidableEq κ] in
+/-- At a fixed point, every edge contracts: `E i j → gⱼ(uᵢ) ≤ uⱼ`. -/
+theorem exch_edge_le {u : κ → γ} (hu : exch E g u = u) {i j : κ} (hij : E i j) :
+    g j (u i) ≤ u j := by
+  have hmem : i ∈ Finset.univ.filter fun i => E i j := by simp [hij]
+  exact (Finset.le_sup (f := fun i => g j (u i)) hmem).trans (congrFun hu j).le
+
+/-- The value of a walk: apply `g` along the listed vertices. -/
+def walkVal : γ → List κ → γ
+  | x, [] => x
+  | x, j :: js => walkVal (g j x) js
+
+omit [Fintype κ] [DecidableEq κ] [DecidableRel E] in
+theorem walkVal_mono (hg : ∀ j, Monotone (g j)) : ∀ js : List κ, Monotone fun x => walkVal g x js
+  | [], _, _, h => h
+  | j :: js, _, _, h => walkVal_mono hg js (hg j h)
+
+/-- A walk from `i` along the listed vertices uses only edges. -/
+def IsWalk : κ → List κ → Prop
+  | _, [] => True
+  | i, j :: js => E i j ∧ IsWalk j js
+
+/-- The endpoint of a walk. -/
+def walkEnd : κ → List κ → κ
+  | i, [] => i
+  | _, j :: js => walkEnd j js
+
+omit [DecidableEq κ] in
+/-- **Walks contract at the fixed point**: along a walk `i → j₁ → ⋯ → jᵣ` of edges, the composite of the `g`'s
+maps `uᵢ` below `u_{jᵣ}`. For a closed walk (`walkEnd i js = i`) this is `G_C(uᵢ) ≤ uᵢ`. -/
+theorem walk_contract (hg : ∀ j, Monotone (g j)) {u : κ → γ} (hu : exch E g u = u) :
+    ∀ (i : κ) (js : List κ), IsWalk E i js → walkVal g (u i) js ≤ u (walkEnd i js)
+  | i, [], _ => le_rfl
+  | i, j :: js, hc => (walkVal_mono g hg js (exch_edge_le E g hu hc.1)).trans (walk_contract hg hu j js hc.2)
+
+omit [Fintype κ] [DecidableEq κ] [DecidableRel E] in
+/-- **The cycle fixed point** (DCC): a monotone map with `G a ≤ a` has a fixed point below `a`, reached by
+iterating from `a`. -/
+theorem contract_fixed [WellFoundedLT γ] {G : γ → γ} (hG : Monotone G) {a : γ} (ha : G a ≤ a) :
+    ∃ x, x ≤ a ∧ G x = x := by
+  have hdesc : ∀ k, G^[k + 1] a ≤ G^[k] a := fun k => by
+    induction k with
+    | zero => exact ha
+    | succ k ih =>
+      have e1 : G^[k + 1 + 1] a = G (G^[k + 1] a) := Function.iterate_succ_apply' G (k + 1) a
+      have e2 : G^[k + 1] a = G (G^[k] a) := Function.iterate_succ_apply' G k a
+      rw [e1, e2]; rw [e2] at ih; exact hG ih
+  have hle : ∀ k, G^[k] a ≤ a := fun k => by
+    induction k with
+    | zero => exact le_rfl
+    | succ k ih => exact (hdesc k).trans ih
+  obtain ⟨_, ⟨k, rfl⟩, hmin⟩ := (wellFounded_lt (α := γ)).has_min (Set.range fun k => G^[k] a) ⟨_, ⟨0, rfl⟩⟩
+  refine ⟨G^[k] a, hle k, ?_⟩
+  by_contra hne
+  have h := hdesc k
+  rw [Function.iterate_succ_apply'] at h
+  exact hmin _ ⟨k + 1, rfl⟩ (by show G^[k + 1] a < G^[k] a; rw [Function.iterate_succ_apply']; exact lt_of_le_of_ne h hne)
+
+end Exchange
+
 /-- The three-set core of the blocker classification (finite check). -/
 theorem blockers_core : ∀ A₀ A₁ A₂ : Finset (Fin 3), A₀.Nonempty → A₁.Nonempty → A₂.Nonempty →
     0 ∉ A₀ → 1 ∉ A₁ → 2 ∉ A₂ →

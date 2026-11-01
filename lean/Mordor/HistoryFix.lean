@@ -131,4 +131,43 @@ theorem singleton_step {y : α} (hy : ¬ ∃ j, y ≤ p j) {i : ι} (hK : lab p 
   rw [this] at hjK
   exact Finset.notMem_empty _ hjK
 
+/-- **Terminal descent** (§34.3z⁷⁰, DCC). Below every column `q ∉ D` there is a terminal column `y ≤ q`
+(`y ∉ D` and `y ⊓ gⱼ y ∈ D` for every `j`). If `q` is not terminal, some meet `q ⊓ gⱼ q` lies outside `D`, and it is
+strictly below `q` because `q ≰ gⱼ q` (no-witness). If a row `r ≤ ⋀ p` contracts at `q`, it contracts at the
+terminal column too. -/
+theorem terminal_below [WellFoundedLT α] {r : α} (hr : ∀ j, r ≤ p j) :
+    ∀ q, (¬ ∃ j, q ≤ p j) → F r q ≤ q →
+      ∃ y, y ≤ q ∧ (¬ ∃ j, y ≤ p j) ∧ F r y ≤ y ∧ ∀ j, ∃ k, y ⊓ F (p j) y ≤ p k := by
+  intro q
+  induction q using WellFoundedLT.induction with
+  | _ q ih =>
+    intro hq hrq
+    by_cases ht : ∀ j, ∃ k, q ⊓ F (p j) q ≤ p k
+    · exact ⟨q, le_rfl, hq, hrq, ht⟩
+    · push_neg at ht
+      obtain ⟨j, hj⟩ := ht
+      have hjD : ¬ ∃ k, q ⊓ F (p j) q ≤ p k := fun ⟨k, hk⟩ => hj k hk
+      have hlt : q ⊓ F (p j) q < q :=
+        lt_of_le_of_ne inf_le_left fun heq => (nw (p j) ⟨j, le_rfl⟩ q hq).2 (heq.symm.le.trans inf_le_right)
+      have hrw : F r (q ⊓ F (p j) q) ≤ q ⊓ F (p j) q :=
+        le_inf ((hF _ _ _ _ le_rfl inf_le_left).trans hrq) (hF _ _ _ _ (hr j) inf_le_left)
+      obtain ⟨y, hyw, h1, h2, h3⟩ := ih _ hlt hjD hrw
+      exact ⟨y, hyw.trans inf_le_left, h1, h2, h3⟩
+
+/-- Terminal descent without a contracting row. -/
+theorem terminal_below' [WellFoundedLT α] :
+    ∀ q, (¬ ∃ j, q ≤ p j) → ∃ y, y ≤ q ∧ (¬ ∃ j, y ≤ p j) ∧ ∀ j, ∃ k, y ⊓ F (p j) y ≤ p k := by
+  intro q
+  induction q using WellFoundedLT.induction with
+  | _ q ih =>
+    intro hq
+    by_cases ht : ∀ j, ∃ k, q ⊓ F (p j) q ≤ p k
+    · exact ⟨q, le_rfl, hq, ht⟩
+    · push_neg at ht
+      obtain ⟨j, hj⟩ := ht
+      have hlt : q ⊓ F (p j) q < q :=
+        lt_of_le_of_ne inf_le_left fun heq => (nw (p j) ⟨j, le_rfl⟩ q hq).2 (heq.symm.le.trans inf_le_right)
+      obtain ⟨y, hyw, h1, h2⟩ := ih _ hlt fun ⟨k, hk⟩ => hj k hk
+      exact ⟨y, hyw.trans inf_le_left, h1, h2⟩
+
 end Mordor.HistoryFix

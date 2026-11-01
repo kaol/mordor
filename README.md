@@ -45,6 +45,7 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
 | Path | Contents |
 |---|---|
 | `docs/00-foundations.md` | The formal system: ambient setting, bialgebraic & dialgebraic axioms, bounds, interaction rules, metatheorems, with status tags; the CL program and the Cut Lemma interface (§0–§10, v3.7) |
+| `docs/00-foundations-double.md` | Draft: the axioms raised to double categories (horizontal monads, vertical comonads, dialgebras as universal squares, tabulator bounds, equipment interaction rules); its model E(L) restates the bridge as representability of μΘ (§34.3z⁶¹, `Axioms/Double.lean`) |
 | `docs/01-early-notes.md` | Early revision notes and first exploration findings (v1.1–v1.2) |
 | `docs/rounds/` | The research log, one file per exploration round (rounds 2–26, versions v1.3 → v3.8) |
 | `docs/02-the-source.md` | The framework's Tolkien vocabulary read back to its source; the sharpened axioms (I11 = CL guarded by the Cut Lemma) |

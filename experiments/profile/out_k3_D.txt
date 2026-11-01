@@ -1,0 +1,13 @@
+== D. the meet x of the anchor last points of top, as a named glb (row and column)
+  tau=(1, 2, 2): consistent -> unsat;  with x outside D -> unsat (Lean: unsat, lastpoints_no_common_lower)
+  tau=(2, 2, 2): consistent -> sat;  with x outside D -> unsat (Lean: unsat, lastpoints_no_common_lower)
+  tau=(1, 2, 3): consistent -> sat;  with x outside D -> unsat (Lean: unsat, lastpoints_no_common_lower)
+  ablation for tau=(1,2,2): which ingredients the refutation uses
+    x in D imposed, x as rowcol, sandwich/l4 imposed=True: unsat
+    x in D imposed, x as rowcol, sandwich/l4 imposed=False: sat
+    x in D imposed, x as col   , sandwich/l4 imposed=True: unsat
+    x in D imposed, x as col   , sandwich/l4 imposed=False: sat
+    x in D imposed, x as row   , sandwich/l4 imposed=True: unsat
+    x in D imposed, x as row   , sandwich/l4 imposed=False: sat
+    x in D imposed, x as none  , sandwich/l4 imposed=True: unsat
+    x in D imposed, x as none  , sandwich/l4 imposed=False: sat

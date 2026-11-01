@@ -65,3 +65,4 @@ import Mordor.Rectangle
 import Mordor.ZeroFibre
 import Mordor.Provenance
 import Mordor.Feedback
+import Mordor.Profile

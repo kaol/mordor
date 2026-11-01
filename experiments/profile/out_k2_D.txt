@@ -1,0 +1,4 @@
+== k=2 control D. the meet x of the anchor last points of top, as a named glb (row and column)
+  tau=(1, 1): consistent -> unsat;  with x outside D -> unsat (Lean: unsat, lastpoints_no_common_lower)
+  tau=(2, 2): consistent -> unsat;  with x outside D -> unsat (Lean: unsat, lastpoints_no_common_lower)
+done

@@ -87,3 +87,17 @@ theorem net_two_equal (p : Fin 2 → α)
   · rw [Finset.mem_singleton.1 hA1]; exact ⟨{0}, by simp, by simpa using h1⟩
 
 end Mordor.Profile
+
+namespace Mordor.Profile
+
+/-- **The clipped chain from a contracting start is the unclipped chain** (correction to the §34.3z⁸⁵ pointer). If
+`F a s ≤ s`, the clipped step `s ⊓ F a s` equals `F a s`, and contraction is inherited (`F a (F a s) ≤ F a s`). So
+the clipped chain from `⊤` is the `g`-chain of `FGTwo.sandwich`, and the second start `F a ⊤ ⊓ w` proposed in §34.3z⁸⁵
+adds nothing unless `w` cuts below `F a ⊤`, which is exactly where contraction, and with it the squeeze's base case, is
+lost. -/
+theorem clipped_eq_of_contracting {α : Type*} [Lattice α] {F : α → α → α}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') {a s : α} (hs : F a s ≤ s) :
+    s ⊓ F a s = F a s ∧ F a (F a s) ≤ F a s :=
+  ⟨inf_eq_right.2 hs, hF _ _ _ _ le_rfl hs⟩
+
+end Mordor.Profile

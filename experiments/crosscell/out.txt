@@ -1,0 +1,4 @@
+k=1, frontier pair: sat
+k=1, frontier pair with x = p1: sat
+k=2, frontier pair: sat
+k=2, frontier pair with x = p1: sat

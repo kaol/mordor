@@ -1,0 +1,3 @@
+k=1 tau={'1': 1}: unsat
+k=1 tau={'1': 2}: unsat
+k=1 tau={'1': 3}: unsat

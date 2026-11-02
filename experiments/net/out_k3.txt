@@ -1,0 +1,4 @@
+k=3 tau(singletons, pairs)=1, tau(123)=1: unsat
+k=3 tau(singletons, pairs)=2, tau(123)=1: sat
+k=3 tau(singletons, pairs)=2, tau(123)=2: unsat
+done

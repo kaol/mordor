@@ -1,0 +1,17 @@
+q <= u0, edges a->j: sat
+q <= u0, edges a->j,b->j: sat
+q <= u0, edges a->j,b->a: sat
+q <= u0, edges a->j,b->a,b->j: sat
+q <= u0, edges a->b: sat
+q <= u0, edges a->b,b->j: sat
+q <= u0, edges a->b,a->j: sat
+q <= u0, edges a->b,a->j,b->j: sat
+q not <= u0, edges a->j: sat
+q not <= u0, edges a->j,b->j: sat
+q not <= u0, edges a->j,b->a: sat
+q not <= u0, edges a->j,b->a,b->j: sat
+q not <= u0, edges a->b: sat
+q not <= u0, edges a->b,b->j: sat
+q not <= u0, edges a->b,a->j: sat
+q not <= u0, edges a->b,a->j,b->j: sat
+done

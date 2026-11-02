@@ -1,0 +1,9 @@
+k=2 A2 profile n=1, n'=1, d below p1: sat
+k=2 A2 profile n=1, n'=1, d below p2: sat
+k=2 A2 profile n=1, n'=2, d below p1: sat
+k=2 A2 profile n=1, n'=2, d below p2: sat
+k=2 A2 profile n=2, n'=2, d below p1: sat
+k=2 A2 profile n=2, n'=2, d below p2: sat
+k=3 terminal pair state (1,2), d below p1: sat
+k=3 terminal pair state (1,2), d below p2: sat
+k=3 terminal pair state (1,2), d below p3: sat

@@ -74,3 +74,4 @@ import Mordor.SinkCone
 import Mordor.CrossCellInduction
 import Mordor.Net
 import Mordor.Lag
+import Mordor.RowSwitch

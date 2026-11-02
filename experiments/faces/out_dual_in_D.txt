@@ -1,0 +1,2 @@
+anchor lengths (2, 2, 2), mJ-orbit entry at N=2, dual values in D=True: sat  | hybrids in D: h1_1,h1_2,h1_3 | z in D: True, z <= vJ: True | mJ-entry labels: p1,p2
+done

@@ -1,0 +1,2 @@
+k=3 Hamiltonian 3-cycle, orbit lengths 2, F(m123, top) in D: unsat
+k=3 Hamiltonian 3-cycle, orbit lengths 2, F(m123, top) outside D: sat

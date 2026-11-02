@@ -79,3 +79,4 @@ import Mordor.Envelope
 import Mordor.Baseline
 import Mordor.Faces
 import Mordor.FaceLabels
+import Mordor.DualVertices

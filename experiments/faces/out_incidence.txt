@@ -1,0 +1,3 @@
+1 all edge outputs in D: sat | edges in D: [True, True, True] | r in D: [True, True, True] | v=y: [True, True, True] | z<=vJ: True
+2 some edge output outside D: unsat
+(remaining cases stopped: decided by DualVertices.second_order_collapse)

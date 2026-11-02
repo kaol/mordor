@@ -1,0 +1,19 @@
+k=2: d below p1, v ⊓ R below p1: sat
+k=2: d below p1, v ⊓ R below p2: sat
+k=2: d below p1, v ⊓ R outside D: sat
+k=2: d below p2, v ⊓ R below p1: sat
+k=2: d below p2, v ⊓ R below p2: sat
+k=2: d below p2, v ⊓ R outside D: sat
+k=3: d below p1, v ⊓ R below p1: sat
+k=3: d below p1, v ⊓ R below p2: sat
+k=3: d below p1, v ⊓ R below p3: sat
+k=3: d below p1, v ⊓ R outside D: sat
+k=3: d below p2, v ⊓ R below p1: sat
+k=3: d below p2, v ⊓ R below p2: sat
+k=3: d below p2, v ⊓ R below p3: sat
+k=3: d below p2, v ⊓ R outside D: sat
+k=3: d below p3, v ⊓ R below p1: sat
+k=3: d below p3, v ⊓ R below p2: sat
+k=3: d below p3, v ⊓ R below p3: sat
+k=3: d below p3, v ⊓ R outside D: sat
+done

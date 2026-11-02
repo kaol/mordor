@@ -81,11 +81,12 @@ include hF nw in
 /-- **Row-projected fixed point at a minimal outside column** (ACC). If every strict predecessor of `v ∉ D` lies in
 `D`, the row map `G x = v ⊓ F x v` sends `{x | x < v}` into itself (no witness), so a maximal post-fixed point `r < v`
 of `G` above `⊥` is a fixed point. Then `r ≤ F r v`, `v ⊓ F r v = r`, and `F r v ∥ v`: `F r v ≤ v` would give
-`F r v = r`, a witness. No lower-boundary case split is needed; `jump_fixedpoint` is the variant where the strict
+`F r v = r`, a witness. Maximality: no `y` with `r < y < v` has `y ≤ F y v`. No lower-boundary case split is needed; `jump_fixedpoint` is the variant where the strict
 predecessors have a largest element `B` (and then DCC suffices). -/
 theorem minimal_row_fixedpoint [WellFoundedGT α] [Nonempty ι] {v : α} (hv : ¬ ∃ i, v ≤ p i)
     (hbelow : ∀ w, w < v → ∃ i, w ≤ p i) :
-    ∃ r, r < v ∧ v ⊓ F r v = r ∧ r ≤ F r v ∧ ¬ F r v ≤ v ∧ ¬ v ≤ F r v := by
+    ∃ r, r < v ∧ v ⊓ F r v = r ∧ r ≤ F r v ∧ ¬ F r v ≤ v ∧ ¬ v ≤ F r v ∧
+      ∀ y, r < y → y < v → ¬ y ≤ F y v := by
   have hG : ∀ x, x < v → v ⊓ F x v < v := fun x hx => meet_proj_lt p nw (hbelow x hx) hv
   obtain ⟨i₀⟩ := ‹Nonempty ι›
   have hbot : (⊥ : α) < v := lt_of_le_of_ne bot_le fun e => hv ⟨i₀, e ▸ bot_le⟩
@@ -95,7 +96,8 @@ theorem minimal_row_fixedpoint [WellFoundedGT α] [Nonempty ι] {v : α} (hv : �
     refine (eq_of_le_of_not_lt hGr fun hlt => hmax _ ⟨hG r hrv, ?_⟩ hlt).symm
     exact le_inf inf_le_left ((hF _ _ _ _ hGr le_rfl).trans' inf_le_right)
   obtain ⟨hn1, hn2⟩ := nw r (hbelow r hrv) v hv
-  refine ⟨r, hrv, hfix, hfix.symm.le.trans inf_le_right, fun h => hn1 ?_, hn2⟩
+  refine ⟨r, hrv, hfix, hfix.symm.le.trans inf_le_right, fun h => hn1 ?_, hn2,
+    fun y hry hyv hy => hmax y ⟨hyv, le_inf hyv.le hy⟩ hry⟩
   have e := hfix; rw [inf_eq_right.2 h] at e; exact e.le
 
 include hF nw in

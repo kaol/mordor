@@ -1,0 +1,15 @@
+== sink j=2, a=0 transfers, case I (b transfers) (row fixed point added)
+  A-disjoint labels 0 | 1: sat
+  A-disjoint labels 0 | 2: sat
+  A-disjoint labels 0 | 12: sat
+  A-disjoint labels 1 | 2: sat
+  A-disjoint labels 1 | 02: sat
+  A-disjoint labels 2 | 01: sat
+== sink j=2, a=0 transfers, case II (b does not) (row fixed point added)
+  A-disjoint labels 0 | 1: sat
+  A-disjoint labels 0 | 2: sat
+  A-disjoint labels 0 | 12: sat
+  A-disjoint labels 1 | 2: sat
+  A-disjoint labels 1 | 02: sat
+  A-disjoint labels 2 | 01: sat
+done

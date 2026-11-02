@@ -1,0 +1,19 @@
+== sink j=2, a=0 transfers, case I (b transfers)
+  A-disjoint labels 0 | 1: sat
+  A-disjoint labels 0 | 2: sat
+  A-disjoint labels 0 | 12: sat
+  A-disjoint labels 1 | 2: sat
+  A-disjoint labels 1 | 02: sat
+  A-disjoint labels 2 | 01: sat
+  A-triangle: sat
+  B-jump: sat
+== sink j=2, a=0 transfers, case II (b does not)
+  A-disjoint labels 0 | 1: sat
+  A-disjoint labels 0 | 2: sat
+  A-disjoint labels 0 | 12: sat
+  A-disjoint labels 1 | 2: sat
+  A-disjoint labels 1 | 02: sat
+  A-disjoint labels 2 | 01: sat
+  A-triangle: sat
+  B-jump: sat
+done

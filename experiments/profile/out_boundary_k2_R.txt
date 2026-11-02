@@ -1,0 +1,3 @@
+== k=2 control sink j=1, a=0 transfers, case - (row fixed point added)
+  A-disjoint labels 0 | 1: sat
+done

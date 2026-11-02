@@ -69,3 +69,4 @@ import Mordor.Profile
 import Mordor.TransferSets
 import Mordor.Boundary
 import Mordor.OrbitGfp
+import Mordor.WeakBase

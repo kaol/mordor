@@ -14,6 +14,8 @@ import Mordor.WeakBase
 * `self_entry_not_above_orbit`: a `j`-self-entry column is never above a pre-entry point of the `cⱼ`-orbit of a
   `pⱼ`-contracting column. So WB-cone at a reduced failure `v` reduces to the single cross-column inequality
   `(F cⱼ)^[k] μ ≤ v` for the hull `μ` of `v`.
+* `orbit_avoids_cone` (correction): that inequality is impossible on a sink cone, since no pre-entry orbit point of a
+  `pⱼ`-contracting column lies below `u₀`. The reduction above is therefore vacuous on the cone.
 -/
 
 namespace Mordor.Profile
@@ -97,5 +99,22 @@ theorem self_entry_not_above_orbit [WellFoundedLT α] {j : ι} {s : α} (hs : ¬
   · have hkn : k = n := le_antisymm hk hge
     subst hkn
     exact anchor_sandwich hF p j nw hs hgs k hU hnext
+
+include hF nw in
+/-- **Orbits of contracting columns avoid the cone** (correction to §34.3z⁸²). No pre-entry point of the `F cⱼ`-orbit of
+a `pⱼ`-contracting column lies below `u₀`: the orbit descends, so its last point would be a cone column, and it transfers
+(`anchor_sandwich`). Hence the inequality `(F cⱼ)^[k] μ ≤ v` proposed in §34.3z⁸² as the missing step is refuted by the
+cone package itself; establishing it would be a proof of Cut, not a step towards WB-cone. -/
+theorem orbit_avoids_cone [WellFoundedLT α] {u₀ : α} {j : ι} (hC : SinkCone F p u₀ j) {s : α}
+    (hs : ¬ ∃ i, s ≤ p i) (hgs : F (p j) s ≤ s) {n : ℕ} (hU : ∀ k ≤ n, ¬ ∃ i, (F (anchor p j))^[k] s ≤ p i)
+    (hin : ∃ i, F (anchor p j) ((F (anchor p j))^[n] s) ≤ p i) {k : ℕ} (hk : k ≤ n) :
+    ¬ (F (anchor p j))^[k] s ≤ u₀ := by
+  intro hku
+  have hcs : F (anchor p j) s ≤ s := (hF _ _ _ _ (anchor_le p j) le_rfl).trans hgs
+  have hanti := Monotone.antitone_iterate_of_map_le (fun _ _ h => hF _ _ _ _ le_rfl h) hcs
+  have hout := anchor_sandwich hF p j nw hs hgs n hU
+  obtain ⟨i, hi⟩ := hin
+  have hij : i ≠ j := fun e => hout (e ▸ hi)
+  exact hC.noTransfer _ ((hanti hk).trans hku) ⟨hU n le_rfl, i, hij, hi⟩
 
 end Mordor.Profile

@@ -1,0 +1,4 @@
+third pair state F(m13,z) <= p1 fails: sat
+F(p3, z) outside D: sat
+F(p3, z) <= p1 (switch to (3,1,z)): unsat
+third pair state holds (triangle): unsat

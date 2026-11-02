@@ -1,0 +1,12 @@
+N=1, z below px, d below px: sat
+N=1, z below px, d below py: sat
+N=1, z below py, d below px: sat
+N=1, z below py, d below py: sat
+N=2, z below px, d below px: sat
+N=2, z below px, d below py: sat
+N=2, z below py, d below px: sat
+N=2, z below py, d below py: sat
+N=1, z below px, d below px, m-orbit of top entering at step 2 below px (no sandwich): sat
+N=1, z below px, d below px, m-orbit of top entering at step 2 below py (no sandwich): unsat
+N=2, z below px, d below px, m-orbit of top entering at step 2 below px (no sandwich): sat
+N=2, z below px, d below px, m-orbit of top entering at step 2 below py (no sandwich): sat

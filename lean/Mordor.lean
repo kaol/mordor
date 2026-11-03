@@ -81,3 +81,4 @@ import Mordor.Faces
 import Mordor.FaceLabels
 import Mordor.DualVertices
 import Mordor.ResponseFrontier
+import Mordor.BranchFrontier

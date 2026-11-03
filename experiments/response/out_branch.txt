@@ -1,0 +1,20 @@
+k=1 depth=1 cases BBB: no transfer anywhere -> sat
+k=1 depth=1 cases BB: no transfer anywhere -> sat
+k=1 depth=2 cases BBBBBBB: no transfer anywhere -> sat
+k=1 depth=2 cases BB: no transfer anywhere -> sat
+k=2 depth=1 cases AAA: no transfer anywhere -> sat
+k=2 depth=1 cases BBB: no transfer anywhere -> sat
+k=2 depth=1 cases AAB: no transfer anywhere -> sat
+k=2 depth=1 cases BAB: no transfer anywhere -> sat
+k=2 depth=1 cases BBB: no transfer anywhere -> sat
+k=2 depth=2 cases AAAAAAA: no transfer anywhere -> sat
+k=2 depth=2 cases BBBBBBB: no transfer anywhere -> sat
+k=2 depth=2 cases AAB: no transfer anywhere -> sat
+k=2 depth=2 cases BAB: no transfer anywhere -> sat
+k=2 depth=2 cases BBB: no transfer anywhere -> sat
+k=3 depth=1 cases AAA: no transfer anywhere -> sat
+k=3 depth=1 cases BBB: no transfer anywhere -> sat
+k=3 depth=1 cases AAB: no transfer anywhere -> sat
+k=3 depth=1 cases BAB: no transfer anywhere -> sat
+k=3 depth=1 cases BBB: no transfer anywhere -> sat
+(k=3 depth 2: stopped after >20 min on its first case; not completed)

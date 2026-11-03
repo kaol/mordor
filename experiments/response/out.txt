@@ -1,0 +1,28 @@
+(P) persistent degenerate re-entry, no terminalization (re-entered pairs are frontier pairs):
+  k=1 cases B: sat
+  k=1 cases BB: sat
+  k=1 cases BBB: sat
+  k=2 cases A: sat
+  k=2 cases B: sat
+  k=2 cases AB: sat
+  k=2 cases BA: sat
+  k=2 cases AAA: sat
+  k=2 cases BBB: sat
+  k=2 cases ABA: sat
+  k=3 cases A: sat
+  k=3 cases B: sat
+  k=3 cases AB: sat
+  k=3 cases BA: sat
+  k=3 cases AAA: sat
+  k=3 cases BBB: sat
+  k=3 cases ABA: sat
+(A1) k=1, case A at all (D principal, join-closed): unsat
+(N) next response interval not nested in the previous one, with terminalization:
+  k=1 case B: sat
+  k=2 case B: sat
+  k=2 case A: sat
+(N0) next response interval not nested, re-entered pair already a frontier pair (no terminalization):
+  k=1 case B: sat
+  k=2 case B: sat
+  k=2 case A: sat
+done

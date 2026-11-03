@@ -1,0 +1,14 @@
+H=4: 17 terms (incl. ⊥, ⊤); descent length 4; classes {'descent': 4, 'row-iter': 7, 'col-iter': 2, 'mixed': 2}
+   distinct F-terms used as rows: 3; max depth 4
+   row term 3 used 4 times
+   row term 4 used 3 times
+   row term 5 used 2 times
+H=5: 86 terms (incl. ⊥, ⊤); descent length 5; classes {'descent': 5, 'row-iter': 26, 'col-iter': 15, 'mixed': 38}
+   distinct F-terms used as rows: 16; max depth 7
+   row term 3 used 11 times
+   row term 4 used 8 times
+   row term 5 used 6 times
+   row term 9 used 6 times
+   row term 8 used 4 times
+   row term 23 used 4 times
+H=4 terms contained in H=5 terms: 17 of 17

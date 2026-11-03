@@ -9,13 +9,13 @@ g_1 = p_1, g_2 = p_2 (`gen2`). Reports SAT and, per pair (i, j), the escape type
 against first_failure_dichotomy (expected UNSAT)."""
 import itertools, sys
 from z3 import *
-def run(mode, N, M, force=None):
+def run(mode, N, M, force=None, agg=None):
     c = {j: ['bot'] + [f"c{j}_{n}" for n in range(1, N[j] + 1)] for j in (1, 2)}
     y = {i: ['top'] + [f"y{i}_{m}" for m in range(1, M[i] + 1)] for i in (1, 2)}
-    base = ['bot', 'top', 'p1', 'p2', 'q1', 'q2', 'p12', 'q12'] + (['g12'] if mode == 'gen2' else [])
+    base = ['bot', 'top', 'p1', 'p2', 'q1', 'q2', 'p12', 'q12'] + (['g12'] if mode == 'gen2' else []) + (['r', 's'] if agg == 'named' else [])
     named = base + [x for j in (1, 2) for x in c[j][1:]] + [x for i in (1, 2) for x in y[i][1:]]
-    rowsD = [x for j in (1, 2) for x in c[j][:-1]] + ['p1', 'p2', 'q12'] + [y[i][-1] for i in (1, 2)] + (['g12'] if mode == 'gen2' else [])
-    colsO = ['top', 'q1', 'q2', 'p12'] + [c[j][-1] for j in (1, 2)] + [x for i in (1, 2) for x in y[i][:-1]]
+    rowsD = [x for j in (1, 2) for x in c[j][:-1]] + ['p1', 'p2', 'q12'] + [y[i][-1] for i in (1, 2)] + (['g12'] if mode == 'gen2' else []) + (['r'] if agg == 'named' else [])
+    colsO = ['top', 'q1', 'q2', 'p12'] + [c[j][-1] for j in (1, 2)] + [x for i in (1, 2) for x in y[i][:-1]] + (['s'] if agg == 'named' else [])
     rowsD = list(dict.fromkeys(rowsD)); colsO = list(dict.fromkeys(colsO))
     cell = {(r, k): f"F[{r},{k}]" for r in rowsD for k in colsO}
     E = list(dict.fromkeys(named + list(cell.values())))
@@ -49,6 +49,14 @@ def run(mode, N, M, force=None):
     # escape type per (i, j): A-side iff some c^j_n in D (n < N_j) is not below p_i
     Aside = {(i, j): Or([Not(le[c[j][n], f"p{i}"]) for n in range(1, N[j])] or [BoolVal(False)]) for i in (1, 2) for j in (1, 2)}
     Bside = {(i, j): Or([Not(le[f"q{j}", y[i][m]]) for m in range(1, M[i])] or [BoolVal(False)]) for i in (1, 2) for j in (1, 2)}
+    if agg == 'degenerate':      # (r, s) = (⊥, ⊤): ⊤ = F(p1,⊤) ∨ F(p2,⊤), ⊥ = F(⊥,q1) ∧ F(⊥,q2)
+        lub('top', [y[1][1], y[2][1]]); glb('bot', [c[1][1], c[2][1]])
+    if agg == 'named':           # s = ⋁ F(x, s) over a support {p1, p2, r}, F(x, s) ≤ s for all named rows;
+        #                          r = ⋀ F(r, y) over a support {q1, q2, s}, r ≤ F(r, y) for all named columns
+        s.add([le[cell[(x, 's')], 's'] for x in rowsD]); s.add([le['r', cell[('r', k)]] for k in colsO])
+        lub('s', [cell[('p1', 's')], cell[('p2', 's')], cell[('r', 's')]])
+        glb('r', [cell[('r', 'q1')], cell[('r', 'q2')], cell[('r', 's')]])
+        s.add(Not(eq('s', 'top')), Not(eq('r', 'bot')))
     if force == 'allA': s.add(*[Aside[ij] for ij in Aside], *[Not(Bside[ij]) for ij in Bside])
     if force == 'allB': s.add(*[Bside[ij] for ij in Bside], *[Not(Aside[ij]) for ij in Aside])
     if force == 'nodich': s.add(Or([And(Not(Aside[ij]), Not(Bside[ij])) for ij in Aside]))
@@ -59,6 +67,12 @@ def run(mode, N, M, force=None):
         mo = s.model()
         out += " | escape types: " + ", ".join(f"({i},{j})={'A' if is_true(mo.eval(Aside[i,j])) else ''}{'B' if is_true(mo.eval(Bside[i,j])) else ''}" for i in (1, 2) for j in (1, 2))
     return out
+if 'agg' in sys.argv:
+    for agg in ['degenerate', 'named']:
+        for N, M in [({1: 2, 2: 2}, {1: 2, 2: 2}), ({1: 2, 2: 3}, {1: 3, 2: 2})]:
+            print(f"gen2 + aggregate boundary '{agg}' N={N} M={M}: free {run('gen2', N, M, agg=agg)}; "
+                  f"all-B {run('gen2', N, M, 'allB', agg)}", flush=True)
+    sys.exit(0)
 for mode in ['abstract', 'gen2']:
     for N, M in [({1: 2, 2: 2}, {1: 2, 2: 2}), ({1: 2, 2: 3}, {1: 3, 2: 2})]:
         print(f"{mode} N={N} M={M}: {run(mode, N, M)}", flush=True)

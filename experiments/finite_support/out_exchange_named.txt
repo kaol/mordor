@@ -1,0 +1,7 @@
+staggered, named supports a_i (not generators), size 2: all-B sat | U in D: [False, False] | V in D: [True, True] | mixed pairs (v in D, u out): 4
+staggered, named supports a_i (not generators), size 3: all-B sat | U in D: [False, False, False] | V in D: [True, True, False] | mixed pairs (v in D, u out): 6
+staggered, generator support + exchange layer, case A: all-B unsat
+staggered, generator support + exchange layer, case B: all-B sat | U in D: [False, False] | V in D: [False, False] | mixed pairs (v in D, u out): 0
+staggered, generator support + exchange layer, case C: all-B sat | U in D: [False, False] | V in D: [True, True] | mixed pairs (v in D, u out): 4
+done
+(final case 'named size-3 + exchange layer, case C' was killed by the out-of-memory killer: not completed)

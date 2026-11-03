@@ -1,0 +1,9 @@
+staggered N={1: 2, 2: 3} M={1: 3, 2: 2}, size-2 supports: all-B sat | U in D: [False, False] | V in D: [True, True] | mixed pairs (v in D, u out): 4
+   + exchange layer: all-B sat | U in D: [False, False] | V in D: [False, False] | mixed pairs (v in D, u out): 0
+   size-3 irredundant supports: all-B unsat
+   free (no forced pattern), size 2 + exchange: sat | U in D: [False, False] | V in D: [False, False] | mixed pairs (v in D, u out): 0
+equal-time N={1: 2, 2: 2} M={1: 2, 2: 2}, size-2 supports: all-B unsat
+   + exchange layer: all-B unsat
+reverse N={1: 3, 2: 2} M={1: 2, 2: 3}, size-2 supports: all-B sat | U in D: [False, False] | V in D: [True, False] | mixed pairs (v in D, u out): 2
+   + exchange layer: all-B sat | U in D: [False, False] | V in D: [False, False] | mixed pairs (v in D, u out): 0
+done

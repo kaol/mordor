@@ -1,0 +1,21 @@
+abstract N={1: 2, 2: 2} M={1: 2, 2: 2}: sat | escape types: (1,1)=AB, (1,2)=AB, (2,1)=AB, (2,2)=AB
+   forced nodich: unsat
+   forced allA: sat
+   forced allB: sat
+   forced alt: sat
+abstract N={1: 2, 2: 3} M={1: 3, 2: 2}: sat | escape types: (1,1)=AB, (1,2)=AB, (2,1)=AB, (2,2)=AB
+   forced nodich: unsat
+   forced allA: sat
+   forced allB: sat
+   forced alt: sat
+gen2 N={1: 2, 2: 2} M={1: 2, 2: 2}: sat | escape types: (1,1)=B, (1,2)=AB, (2,1)=AB, (2,2)=B
+   forced nodich: unsat
+   forced allA: unsat
+   forced allB: unsat
+   forced alt: sat
+gen2 N={1: 2, 2: 3} M={1: 3, 2: 2}: sat | escape types: (1,1)=B, (1,2)=B, (2,1)=AB, (2,2)=AB
+   forced nodich: unsat
+   forced allA: unsat
+   forced allB: sat
+   forced alt: sat
+done

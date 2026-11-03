@@ -1,0 +1,15 @@
+1. individual necessity (UNSAT = still refuted without that term and its dependents):
+   remove t56 (+1 dependents): SAT (necessary)
+   remove t65 (+4 dependents): SAT (necessary)
+   remove t66 (+0 dependents): UNSAT (not necessary)
+   remove t70 (+0 dependents): SAT (necessary)
+   remove t73 (+0 dependents): SAT (necessary)
+   remove t74 (+0 dependents): SAT (necessary)
+   remove t76 (+0 dependents): SAT (necessary)
+   remove t77 (+0 dependents): SAT (necessary)
+   remove t82 (+0 dependents): SAT (necessary)
+   remove t83 (+0 dependents): SAT (necessary)
+   remove t84 (+0 dependents): SAT (necessary)
+   remove t85 (+0 dependents): SAT (necessary)
+2. deletion-minimal sufficient subset of the exceptions: [56, 65, 70, 73, 74, 76, 77, 82, 83, 84, 85]
+3. terms referenced by the Lean core: 85 of 86; exceptions referenced: [56, 65, 66, 70, 73, 74, 76, 77, 82, 83, 84, 85]; exceptions not referenced: []

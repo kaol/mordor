@@ -1,0 +1,8 @@
+|P|=2, |Q|=2: first layer with normalized boundary sat
+|P|=2, |Q|=3: first layer with normalized boundary sat
+|P|=3, |Q|=2: first layer with normalized boundary sat
+|P|=3, |Q|=3: first layer with normalized boundary sat
+|P|=2, |Q|=2: with second layer sat
+|P|=2, |Q|=3: with second layer sat
+|P|=3, |Q|=2: with second layer sat
+done

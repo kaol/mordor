@@ -1,0 +1,23 @@
+feedback vertices: H=4 3, H=5 12; H=4 feedback still feedback at H=5: 3
+   term  3 depth 2 (in T4; row@4 col@4) rows-use 11 cols-use 4
+   term  4 depth 3 (in T4; row@4 col@4) rows-use 8 cols-use 2
+   term  5 depth 3 (in T4; row@4 col@4) rows-use 6 cols-use 7
+   term  8 depth 4 (in T4;  ) rows-use 4 cols-use 1
+   term  9 depth 4 (in T4;  ) rows-use 6 cols-use 2
+   term 10 depth 4 (in T4;  ) rows-use 1 cols-use 2
+   term 14 depth 4 (in T4;  ) rows-use 3 cols-use 2
+   term 15 depth 4 (in T4;  ) rows-use 2 cols-use 7
+   term 21 depth 4 (in T4;  ) rows-use 3 cols-use 2
+   term 23 depth 5 (new;  ) rows-use 4 cols-use 2
+   term 38 depth 5 (new;  ) rows-use 3 cols-use 2
+   term 65 depth 5 (new;  ) rows-use 2 cols-use 2
+new H=5 terms by provenance of (row, column):
+   ('row-T4', 'col-old'): 20
+   ('row-old', 'col-T4'): 20
+   ('row-new', 'col-old'): 10
+   ('row-old', 'col-new'): 8
+   ('row-new', 'col-T4'): 6
+   ('row-T4', 'col-new'): 2
+   ('row-old', 'col-old'): 2
+   ('row-T4', 'col-T4'): 1
+grid-restricted H=6 pool rows(T5) x cols(T5) ∪ T5: 359 terms (vs |F(T5,T5)| = 7396)

@@ -1,0 +1,6 @@
+k=1 extracted pair LU: consistent sat, next response escapes [d,u] sat
+k=1 extracted pair dL: consistent sat, next response escapes [d,u] sat
+k=1 extracted pair Uu: consistent sat, next response escapes [d,u] sat
+k=2 extracted pair LU: consistent sat, next response escapes [d,u] sat
+k=2 extracted pair dL: consistent sat, next response escapes [d,u] sat
+k=2 extracted pair Uu: consistent sat, next response escapes [d,u] sat

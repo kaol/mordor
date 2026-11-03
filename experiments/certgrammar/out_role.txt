@@ -1,0 +1,20 @@
+|P(T4)| = 146; new H=5 terms explained by one round: 42 of 69
+iterated promotion (H=4 roles fixed, T grows by certificate terms): covers 57 of 69 in 2 rounds
+exceptions (12): neither coordinate in its H=4 role
+   term 56 depth 6: row new#23, column T4
+   term 65 depth 5: row T4, column T4
+   term 66 depth 6: row T4, column new#23
+   term 70 depth 7: row new#56, column role
+   term 73 depth 6: row role, column new#65
+   term 74 depth 6: row new#38, column T4
+   term 76 depth 6: row new#38, column T4
+   term 77 depth 6: row new#43, column T4
+   term 82 depth 6: row new#23, column T4
+   term 83 depth 6: row new#65, column T4
+   term 84 depth 6: row new#65, column role
+   term 85 depth 6: row T4, column new#65
+H=5 seeded with T5 (control): 86 terms -> UNSAT (0.6s)
+H=5 seeded with T4: 17 terms -> SAT (0.0s)
+H=5 seeded with T4 ∪ P(T4): 148 terms -> SAT (2.6s)
+H=6 role pool P(T5) ∪ T5: 2913 terms
+wrote p5_pool.pkl (checkpoint format of cut_ground.run: [⊥, ⊤, F(⊥,⊤), ...])

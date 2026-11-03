@@ -96,3 +96,17 @@ cd ~/h6lat && python3 -X faulthandler ~/mordor/experiments/sat/lattice_ground.py
   finite box counterexample exists with ≤ 11 elements at edge-height ≤ 5 (§34.3z¹⁵ note).
 - *The H = 6 ground search with lattice operations* (meets and joins as terms, so that `capturer_meet_escapes`,
   §34.3z⁵⁹, is expressible): this needs new encoder code, not more compute.
+
+## H = 6 seeded with the role-promotion pool (§34.3z⁹⁷)
+
+`certgrammar/p5_pool.pkl` holds the 2913-term pool P(T₅) ∪ T₅ in `cut_ground.run`'s checkpoint format
+([⊥, ⊤, F(⊥,⊤), …] as index pairs). Note: at H = 5 the analogous one-round pool T₄ ∪ P(T₄) is SAT and the 12
+double-promotion terms of T₅ are essential, so this pool is expected to need further expansion. To run (copy first:
+`run` overwrites its checkpoint every 25 rounds):
+
+    cd experiments/sat
+    cp ../certgrammar/p5_pool.pkl /scratch/p5.pkl
+    python3 -c "import cut_ground; cut_ground.run(6, 6000, per_round=1, wlog=True, room='fit', ckpt='/scratch/p5.pkl')"
+
+Memory: the ground instance is quadratic in the term count (down-set and rank clauses per term pair) plus the
+monotonicity clauses per pair of F-terms; expect tens of GB at ~3000 terms. On UNSAT, certify with `certify_ground.sh`.

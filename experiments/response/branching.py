@@ -10,7 +10,7 @@ Question: is the whole tree consistent with NO anchor transfer at any named outs
 import itertools, sys
 from z3 import *
 
-def run(K, pattern, depth, notransfer=True):
+def run(K, pattern, depth, notransfer=True, extra=None):
     I = list(range(1, K + 1)); P = [f"p{i}" for i in I]
     pairs = list(itertools.combinations(I, 2))
     M = {f"m{a}{b}": [f"p{a}", f"p{b}"] for a, b in pairs}
@@ -20,7 +20,7 @@ def run(K, pattern, depth, notransfer=True):
     def node_elems(n): return [f"x{n}", f"y{n}", f"z{n}", f"a{n}", f"b{n}"]
     # tree: node 0 root; children of node n: 2n+1, 2n+2 (binary heap), up to given depth
     N = 2 ** (depth + 1) - 1
-    for n in range(N): elems += node_elems(n)
+    for n in range(N): elems += node_elems(n) + [f"l{n}", f"u{n}"]
     cases = {n: pattern[n] for n in range(min(N, len(pattern)))}
     rows_fixed = P + list(C)
     cols_named = ['top'] + [f"y{n}" for n in range(N)] + [f"b{n}" for n in range(N)] + [f"z{n}" for n in range(N)]
@@ -49,6 +49,7 @@ def run(K, pattern, depth, notransfer=True):
         x, y, z, a, b = node_elems(n)
         s.add(inD[x], Not(inD[y]), eq(z, cell[(x, y)]))
         glb(a, [y, z]); lub(b, [x, z]); s.add(inD[a], Not(inD[b]))
+        glb(f"l{n}", [x, a]); lub(f"u{n}", [y, b])
         if n in cases: s.add(inD[z] if cases[n] == 'A' else Not(inD[z]))
         for ch, which in [(2 * n + 1, 0), (2 * n + 2, 1)]:
             if ch >= N: continue
@@ -60,9 +61,11 @@ def run(K, pattern, depth, notransfer=True):
             for i in I:
                 for j in I:
                     if i != j: s.add(Implies(Not(inD[u]), Not(le[cell[(f"c{i}", u)], f"p{j}"])))
+    if extra: extra(s, le, inD, cell, node_elems, N)
     return s.check()
 
-for K in [1, 2, 3]:
+if __name__ != '__main__': pass
+for K in ([] if __name__ != '__main__' else [1, 2, 3]):
     for depth in [1, 2]:
         for pat in (["B", "BB", "AB"] if K == 1 else ["A", "B", "AAB", "BAB", "BBB"]):
             if depth == 1 and len(pat) > 1 and False: continue

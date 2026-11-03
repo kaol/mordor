@@ -1,0 +1,16 @@
+k=1 cases BBB: single-support pattern 'root-both': sat
+k=1 cases BBB: single-support pattern 'child-both': sat
+k=1 cases BBB: single-support pattern 'diverge': sat
+k=1 cases BBB: single-support pattern 'two-needed': sat
+k=2 cases BBB: single-support pattern 'root-both': sat
+k=2 cases BBB: single-support pattern 'child-both': sat
+k=2 cases BBB: single-support pattern 'diverge': sat
+k=2 cases BBB: single-support pattern 'two-needed': sat
+k=2 cases AAA: single-support pattern 'root-both': sat
+k=2 cases AAA: single-support pattern 'child-both': sat
+k=2 cases AAA: single-support pattern 'diverge': sat
+k=2 cases AAA: single-support pattern 'two-needed': sat
+k=2 cases ABB: single-support pattern 'root-both': sat
+k=2 cases ABB: single-support pattern 'child-both': sat
+k=2 cases ABB: single-support pattern 'diverge': sat
+k=2 cases ABB: single-support pattern 'two-needed': sat

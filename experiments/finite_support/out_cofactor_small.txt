@@ -1,0 +1,13 @@
+K=2 n=2 rows all-in    | all-out: sat | one-in: unsat | multi-in: unsat
+K=2 n=2 rows one-out   | all-out: unsat | one-in: unsat | multi-in: unsat
+K=2 n=2 rows multi-out | all-out: unsat | one-in: unsat | multi-in: unsat
+K=2 n=2 verify exchanged equations (all-in, all-out, negated): unsat
+K=2 n=3 rows all-in    | all-out: unsat | one-in: unsat | multi-in: unsat
+K=2 n=3 rows one-out   | all-out: sat | one-in: sat | multi-in: sat
+K=2 n=3 rows multi-out | all-out: sat | one-in: sat | multi-in: sat
+K=2 n=3 verify exchanged equations (all-in, all-out, negated): unsat
+K=3 n=3 rows all-in    | all-out: sat | one-in: sat | multi-in: sat
+K=3 n=3 rows one-out   | all-out: sat | one-in: sat | multi-in: sat
+K=3 n=3 rows multi-out | all-out: sat | one-in: sat | multi-in: sat
+K=3 n=3 verify exchanged equations (all-in, all-out, negated): unsat
+K=3 n=3 generator support, rows all-in: unsat

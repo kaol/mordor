@@ -1,0 +1,10 @@
+(2,2;2,2) equal-time all-B, named n=3, rows one-out, cols all-out (control): unsat
+(2,3;3,2) all-B, generator support n=2 (cofactor = swap): sat
+(2,3;3,2) all-B, named n=3, rows one-out, cols all-out: sat
+(2,3;3,2) all-B, named n=3, rows one-out, cols one-in: sat
+(2,3;3,2) all-B, named n=3, rows one-out, cols multi-in: sat
+(2,3;3,2) all-B, named n=3, rows multi-out, cols all-out: sat
+(2,3;3,2) all-B, named n=3, rows multi-out, cols one-in: sat
+(2,3;3,2) all-B, named n=3, rows multi-out, cols multi-in: sat
+(2,3;3,2) all-B + Case C, named n=3, rows one-out, cols all-out: sat
+done

@@ -11,7 +11,8 @@ import itertools, sys
 from z3 import *
 R3 = (1, 2, 3); P3 = [(1, 2), (1, 3), (2, 3)]
 
-def build(irr=False, tN=None, wN=None, extra=None, drop=(), support=True):
+def build(irr=False, tN=None, wN=None, extra=None, drop=(), support=True, endmeets=False,
+          meets=('v12', 'v13', 'v23', 'v123'), track=None):
     G = [f"g{i}" for i in R3]; M = [f"m{i}{j}" for i, j in P3]; C = [f"c{i}" for i in R3]
     rows = [x for x in G + M + C + ['g123'] if x not in drop]
     cols = ['s']; t = {}; w = {}
@@ -21,6 +22,10 @@ def build(irr=False, tN=None, wN=None, extra=None, drop=(), support=True):
     if wN:
         for i in R3:
             w[i] = ['s'] + [f"w{i}_{n}" for n in range(1, wN[i - 1] + 1)]; cols += w[i][1:]
+    vend = {}
+    if endmeets:  # generator-orbit last outside points v_i and their pairwise / triple meets as new columns
+        vend = {i: w[i][wN[i - 1] - 1] for i in R3}
+        cols += list(meets)
     cell = {(a, b): f"F[{a},{b}]" for a in rows for b in cols}
     E = list(dict.fromkeys(['bot', 'top'] + G + M + C + ['g123'] + rows + cols + list(cell.values()) + [f"J{k}" for k in range(3)]))
     s = Solver(); le = {(a, b): Bool(f"le|{a}|{b}") for a in E for b in E}
@@ -36,10 +41,16 @@ def build(irr=False, tN=None, wN=None, extra=None, drop=(), support=True):
     glb('g123', G)
     lub('c1', ['m12', 'm13']); lub('c2', ['m12', 'm23']); lub('c3', ['m13', 'm23'])
     s.add(Not(inD['s']), Not(inD['top']))
+    if endmeets:
+        for name, idx in (('v12', (1, 2)), ('v13', (1, 3)), ('v23', (2, 3)), ('v123', (1, 2, 3))):
+            if name in meets: glb(name, [vend[i] for i in idx])
     for (a, b), v in cell.items():
         for (a2, b2), v2 in cell.items():
             if (a, b) != (a2, b2): s.add(Implies(And(le[a, a2], le[b, b2]), le[v, v2]))
-        s.add(Implies(And(inD[a], Not(inD[b])), And(Not(le[v, a]), Not(le[b, v]))))
+        nwc = Implies(And(inD[a], Not(inD[b])), And(Not(le[v, a]), Not(le[b, v])))
+        if track is None: s.add(nwc)
+        else:
+            tag = Bool(f"NW[{a},{b}]"); track[tag] = (a, b); s.add(Implies(tag, nwc))
     s.add([le[cell[(a, 's')], 's'] for a in rows])
     e = [cell[(m, 's')] for m in M if m not in drop]
     if support: lub('s', e)
@@ -56,7 +67,7 @@ def build(irr=False, tN=None, wN=None, extra=None, drop=(), support=True):
                 if n + 1 < N[i - 1]: s.add(Not(inD[orb[i][n + 1]]))
             s.add(inD[orb[i][N[i - 1]]])
     names = dict(e=e, a=[cell[(c, 's')] for c in C if c not in drop], u=[cell[(g, 's')] for g in G],
-                 tend=[t[i][-1] for i in R3 if len(t[i]) > 1] if tN else [], wend=[w[i][-1] for i in R3] if wN else [])
+                 tend=[t[i][-1] for i in R3 if len(t[i]) > 1] if tN else [], vend=vend, w=w, cell=cell, wend=[w[i][-1] for i in R3] if wN else [])
     if extra: extra(s, le, inD, names, G)
     return s, le, G, names
 
@@ -94,6 +105,66 @@ def canon(v, n):  # orbit representative under S3 acting on generator indices AN
         best = key if best is None or key < best else best
     return best
 
+def run_endpoints(part):
+    """Endpoint labels Λ_i = labels of F(c_i, v_i), palettes Π_i = labels of F(g123, v_i), pairwise endpoint meets.
+    Audit: F(g123, v_i) and F(c_i, v_i) are cells of the existing grid (rows g123, c_i; column v_i = last outside point
+    of the g_i-orbit); the NEW constraints are the columns v_ij, v123 (exact meets) and their cells."""
+    def cnt(bs): return Sum([If(b, 1, 0) for b in bs])
+    def tests(le, inD, nm, G):
+        c = nm['cell']; v = nm['vend']
+        lam = {(i, j): le[c[(f"c{i}", v[i])], f"g{j}"] for i in R3 for j in R3}
+        pal = {(i, j): le[c[('g123', v[i])], f"g{j}"] for i in R3 for j in R3}
+        L = lambda i: [lam[(i, j)] for j in R3]; Pl = lambda i: [pal[(i, j)] for j in R3]
+        eqP = lambda i, k: And([pal[(i, j)] == pal[(k, j)] for j in R3])
+        exact = lambda i, S: And([lam[(i, j)] if j in S else Not(lam[(i, j)]) for j in R3])
+        meetsD = [inD['v12'], inD['v13'], inD['v23']]
+        return [
+            ('C1 control: v123 outside D (endpoint_total_meet_in_D)', Not(inD['v123'])),
+            ('C2 control: 2-cycle 1->2, 2->1 with v12 outside (endpoint_two_cycle)', And(lam[(1, 2)], lam[(2, 1)], Not(inD['v12']))),
+            ('T1 singleton labels forming the 3-cycle 1->2->3->1', And(exact(1, {2}), exact(2, {3}), exact(3, {1}))),
+            ('T2 some endpoint with >= 2 labels', Or([cnt(L(i)) >= 2 for i in R3])),
+            ('T3 all endpoint palettes of size 1', And([cnt(Pl(i)) == 1 for i in R3])),
+            ('T4 all endpoint palettes of size 2', And([cnt(Pl(i)) == 2 for i in R3])),
+            ('T5 two identical palettes, one distinct', And(eqP(1, 2), Not(eqP(1, 3)))),
+            ('T6 all pairwise endpoint meets outside D', And([Not(b) for b in meetsD])),
+            ('T6+T1 3-cycle singleton labels and all pairwise meets outside', And(exact(1, {2}), exact(2, {3}), exact(3, {1}), *[Not(b) for b in meetsD])),
+            ('T7 exactly one pairwise endpoint meet in D', cnt(meetsD) == 1),
+        ]
+    # memory: a full anchor+generator grid with the endpoint meets needs ~7 GB per process, so the main battery runs
+    # with generator orbits only (anchor orbits are not needed for endpoint labels); the anchor profiles rerun the
+    # decisive tests, one process at a time (part 'A').
+    # Generator lengths (2, 2, 2) are excluded outright by `no_equal_time_two` (the base profile is UNSAT once the
+    # endpoint meets are columns), so the battery runs on (2, 2, 3); (3, 3, 3) reruns the decisive tests (part 'A').
+    if part == 'A':
+        jobs = [((None, (3, 3, 3)), k) for k in (8, 9)]
+    elif part == 'B':
+        jobs = [((None, (2, 2, 2)), None)]
+    else:
+        jobs = [((None, (2, 2, 3)), k) for k in range(10)]
+        jobs = [j for idx, j in enumerate(jobs) if part is None or idx % 2 == part]
+    for pr, k in jobs:
+        tN, wN = pr
+        s, le, G, nm = build(irr=True, tN=tN, wN=wN, endmeets=True)
+        ind = lambda a: Or([le[a, g] for g in G])  # membership in D, built on demand
+        class D:  # lazy dict
+            def __getitem__(self, a): return ind(a)
+        name, cons = ('base profile (no test constraint)', BoolVal(True)) if k is None else tests(le, D(), nm, G)[k]
+        s.add(cons)
+        r = s.check(); extra = ''
+        if r == sat:
+            mo = s.model(); ev = lambda b: is_true(mo.eval(b, model_completion=True))
+            c = nm['cell']; v = nm['vend']
+            lab = lambda x: '{' + ','.join(str(j) for j in R3 if ev(le[x, f"g{j}"])) + '}' if ev(ind(x)) else 'out'
+            Lam = [lab(c[(f"c{i}", v[i])]) for i in R3]
+            Pi = [lab(c[('g123', v[i])]) for i in R3]
+            trans = []
+            for i in R3:
+                orbit = nm['w'][i][:-1]
+                trans.append('->'.join(lab(c[('g123', y)]) for y in orbit))
+            md = ['D' if ev(ind(x)) else 'out' for x in ('v12', 'v13', 'v23', 'v123')]
+            extra = f" | Λ={Lam} Π(v_i)={Pi} | palettes along g-orbits {trans} | v12,v13,v23,v123: {md}"
+        print(f"anchor {tN} gen {wN}: {name}: {r}{extra}", flush=True)
+
 if __name__ == '__main__':
     mode = sys.argv[1] if len(sys.argv) > 1 else 'local'
     if mode == 'local':
@@ -122,6 +193,9 @@ if __name__ == '__main__':
             ends = sorted(set(fmt(v, 3) for v in vs))
             print(f"[{kind}] anchor orbit lengths {tN}, generator orbit lengths {wN}, irredundant meet support: "
                   f"{'SAT' if vs else 'UNSAT'}; sample anchor-entry labels (≤ 4): {ends}", flush=True)
+    elif mode.startswith('endpoints'):
+        arg = mode[9:]
+        run_endpoints(arg if arg in ('A', 'B') else (int(arg) if arg else None))
     elif mode == 'minimize':
         # the UNSAT profile a_1 ∈ D, u_3 ∈ D, g1/g2 orbits entering at step 2, with rows dropped one at a time
         print("found: anchor lengths (1,·,·), generator lengths (2,2,1) is UNSAT (see `orbits`)", flush=True)

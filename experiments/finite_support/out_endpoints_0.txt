@@ -1,0 +1,6 @@
+anchor None gen (2, 2, 3): C1 control: v123 outside D (endpoint_total_meet_in_D): unsat
+anchor None gen (2, 2, 3): T1 singleton labels forming the 3-cycle 1->2->3->1: sat | Λ=['{2}', '{3}', '{1}'] Π(v_i)=['{2}', '{3}', '{1}'] | palettes along g-orbits ['out->{2}', 'out->{3}', 'out->{1}->{1}'] | v12,v13,v23,v123: ['out', 'out', 'out', 'D']
+anchor None gen (2, 2, 3): T3 all endpoint palettes of size 1: sat | Λ=['{2}', '{3}', '{1}'] Π(v_i)=['{2}', '{3}', '{1}'] | palettes along g-orbits ['out->{2}', 'out->{3}', 'out->{1}->{1}'] | v12,v13,v23,v123: ['out', 'out', 'out', 'D']
+anchor None gen (2, 2, 3): T5 two identical palettes, one distinct: sat | Λ=['{3}', '{1}', '{2}'] Π(v_i)=['{1,3}', '{1,3}', '{2}'] | palettes along g-orbits ['out->{1,3}', 'out->{1,3}', 'out->{2}->{2}'] | v12,v13,v23,v123: ['out', 'D', 'D', 'D']
+anchor None gen (2, 2, 3): T6+T1 3-cycle singleton labels and all pairwise meets outside: sat | Λ=['{2}', '{3}', '{1}'] Π(v_i)=['{2}', '{3}', '{1}'] | palettes along g-orbits ['out->{2}', 'out->{3}', 'out->{1}->{1}'] | v12,v13,v23,v123: ['out', 'out', 'out', 'D']
+done

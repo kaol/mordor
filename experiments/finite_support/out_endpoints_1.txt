@@ -1,0 +1,6 @@
+anchor None gen (2, 2, 3): C2 control: 2-cycle 1->2, 2->1 with v12 outside (endpoint_two_cycle): unsat
+anchor None gen (2, 2, 3): T2 some endpoint with >= 2 labels: sat | Λ=['{2}', '{1,3}', '{2}'] Π(v_i)=['{2,3}', '{1,3}', '{2,3}'] | palettes along g-orbits ['{3}->{2,3}', '{3}->{1,3}', '{3}->{2,3}->{2,3}'] | v12,v13,v23,v123: ['D', 'out', 'D', 'D']
+anchor None gen (2, 2, 3): T4 all endpoint palettes of size 2: sat | Λ=['{2,3}', '{3}', '{2}'] Π(v_i)=['{2,3}', '{2,3}', '{2,3}'] | palettes along g-orbits ['{2,3}->{2,3}', '{2,3}->{2,3}', '{2,3}->{2,3}->{2,3}'] | v12,v13,v23,v123: ['out', 'out', 'D', 'D']
+anchor None gen (2, 2, 3): T6 all pairwise endpoint meets outside D: sat | Λ=['{3}', '{1}', '{2}'] Π(v_i)=['{3}', '{1}', '{2}'] | palettes along g-orbits ['out->{3}', 'out->{1}', 'out->{2}->{2}'] | v12,v13,v23,v123: ['out', 'out', 'out', 'D']
+anchor None gen (2, 2, 3): T7 exactly one pairwise endpoint meet in D: sat | Λ=['{2}', '{3}', '{1}'] Π(v_i)=['{2}', '{2,3}', '{1,2}'] | palettes along g-orbits ['{2}->{2}', '{2}->{2,3}', '{2}->{1,2}->{1,2}'] | v12,v13,v23,v123: ['out', 'out', 'D', 'D']
+done

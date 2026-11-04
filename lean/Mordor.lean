@@ -90,3 +90,6 @@ import Mordor.GlobalReciprocal
 import Mordor.SupportExchange
 import Mordor.SupportCofactors
 import Mordor.ExtremalSupport
+import Mordor.ResponsePalette
+import Mordor.PairedEndpoints
+import Mordor.EqualTimeTwo

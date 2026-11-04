@@ -1,0 +1,5 @@
+(2,3;3,2) all-B, named n=2, aggregate pair: F(y,x) in D, y < F(y,x), F(y,x) < x: sat
+(2,3;3,2) all-B, named n=2, aggregate pair: F(y,x) in D, y ∥ F(y,x), F(y,x) < x: sat
+(2,3;3,2) all-B, named n=2, aggregate pair: F(y,x) outside D, y < F(y,x), F(y,x) < x: sat
+(2,3;3,2) all-B, named n=2, aggregate pair: F(y,x) outside D, y ∥ F(y,x), F(y,x) < x: sat
+done

@@ -1,0 +1,13 @@
+found: anchor lengths (1,·,·), generator lengths (2,2,1) is UNSAT (see `orbits`)
+anchor lengths (1, 0, 0) (0 = no orbit), generator lengths (2, 2, 1), full rows, meet support: unsat
+anchor lengths (1, 0, 0) (0 = no orbit), generator lengths (2, 0, 1), full rows, meet support: sat
+anchor lengths (1, 0, 0) (0 = no orbit), generator lengths (3, 2, 1), full rows, meet support: unsat
+anchor lengths (0, 1, 0) (0 = no orbit), generator lengths (2, 2, 1), full rows, meet support: unsat
+anchor lengths (1, 0, 0) (0 = no orbit), generator lengths (2, 1, 2), full rows, meet support: unsat
+anchor lengths (1, 0, 0) (0 = no orbit), generator lengths (1, 2, 2), full rows, meet support: sat
+anchor lengths (1, 0, 0) (0 = no orbit), generator lengths (2, 2, 1), {'support': False, 'drop': ('c2', 'c3')}: unsat
+anchor lengths (1, 0, 0) (0 = no orbit), generator lengths (2, 2, 1), {'support': False, 'drop': ('c2', 'c3', 'g123')}: sat
+anchor lengths (1, 0, 0) (0 = no orbit), generator lengths (2, 2, 1), {'support': False, 'drop': ('c2', 'c3', 'm12')}: sat
+anchor lengths (1, 0, 0) (0 = no orbit), generator lengths (2, 2, 1), {'support': False, 'drop': ('c2', 'c3', 'm13')}: sat
+anchor lengths (1, 0, 0) (0 = no orbit), generator lengths (2, 2, 1), {'support': False, 'drop': ('c2', 'c3', 'm23')}: sat
+done

@@ -13,7 +13,7 @@ upper bound of the support, and every such bound in D lies below a generator).
 import itertools, sys
 from z3 import *
 
-def run(K, n, rowmode, colmode, verify=False, orbits=None, allB=False, caseC=False, gens_as_support=False):
+def run(K, n, rowmode, colmode, verify=False, orbits=None, allB=False, caseC=False, gens_as_support=False, agg=None):
     G = [f"g{k}" for k in range(K)]
     A = G[:n] if gens_as_support else [f"a{i}" for i in range(n)]
     B = [f"b{i}" for i in range(n)]
@@ -34,12 +34,14 @@ def run(K, n, rowmode, colmode, verify=False, orbits=None, allB=False, caseC=Fal
         orow = [x for x in rows if x not in Ac and (x not in A or x in G)]; ocol = [x for x in cols if x not in B + Bc]
         cellpairs += [(a, b) for a in orow for b in ocol]
         cellpairs += [(x, 's') for x in orow] + [('r', x) for x in ocol]
+    if agg is not None:  # size-2 aggregate cross pair (y, x), y = ⋀ b, x = ⋁ a, with the four neighbouring cells
+        cellpairs += [('y', 'x'), ('y', 's'), ('r', 'x'), ('x', 's'), ('r', 'y')]
     cellpairs = list(dict.fromkeys(cellpairs))
     cell = {ab: f"F[{ab[0]},{ab[1]}]" for ab in cellpairs}
     U = [cell[(a, 's')] for a in A]; V = [cell[('r', b)] for b in B]
     Uj = [f"Uj{i}" for i in range(n)]; Vm = [f"Vm{i}" for i in range(n)]
     W = 'W' if verify else None
-    E = list(dict.fromkeys(G + rows + cols + list(cell.values()) + Uj + Vm + (['W', 'Z'] if verify else []) + ['bot', 'top']))
+    E = list(dict.fromkeys(G + rows + cols + (['x', 'y'] if agg is not None else []) + list(cell.values()) + Uj + Vm + (['W', 'Z'] if verify else []) + ['bot', 'top']))
     sv = Solver(); le = {(a, b): Bool(f"le|{a}|{b}") for a in E for b in E}
     for a in E:
         sv.add(le[a, a], le['bot', a], le[a, 'top'])
@@ -69,6 +71,12 @@ def run(K, n, rowmode, colmode, verify=False, orbits=None, allB=False, caseC=Fal
     for i in range(n):
         lub(Uj[i], [U[j] for j in range(n) if j != i]); sv.add(Not(le['s', Uj[i]]))
         glb(Vm[i], [V[j] for j in range(n) if j != i]); sv.add(Not(le[Vm[i], 'r']))
+    if agg is not None:
+        lub('x', A); glb('y', B); wv = cell[('y', 'x')]
+        dIn, yle, wle = agg
+        sv.add(inD[wv] if dIn else Not(inD[wv]))
+        sv.add(le['y', wv] if yle else Not(le['y', wv]))
+        sv.add(le[wv, 'x'] if wle else Not(le[wv, 'x']))
     outs = [Not(inD[x]) for x in Ac]; ins = [inD[x] for x in Bc]
     cnt = lambda bs: Sum([If(b, 1, 0) for b in bs])
     sv.add({'all-in': cnt(outs) == 0, 'one-out': cnt(outs) == 1, 'multi-out': cnt(outs) >= 2}[rowmode])
@@ -104,6 +112,13 @@ elif mode == 'orbits':
         for cm in ('all-out', 'one-in', 'multi-in'):
             print(f"(2,3;3,2) all-B, named n=3, rows {rm}, cols {cm}: {run(2, 3, rm, cm, orbits=O, allB=True)}", flush=True)
     print(f"(2,3;3,2) all-B + Case C, named n=3, rows one-out, cols all-out: {run(2, 3, 'one-out', 'all-out', orbits=O, allB=True, caseC=True)}", flush=True)
+elif mode.startswith('agg'):
+    O = ({0: 2, 1: 3}, {0: 3, 1: 2}); part = int(mode[3:]) if len(mode) > 3 else None
+    combos = list(itertools.product((True, False), repeat=3))
+    for k, (dIn, yle, wle) in enumerate(combos):
+        if part is not None and k % 2 != part: continue
+        lab = f"F(y,x) {'in D' if dIn else 'outside D'}, {'y < F(y,x)' if yle else 'y ∥ F(y,x)'}, {'F(y,x) < x' if wle else 'F(y,x) ∥ x'}"
+        print(f"(2,3;3,2) all-B, named n=2, aggregate pair: {lab}: {run(2, 2, 'all-in', 'all-out', orbits=O, allB=True, agg=(dIn, yle, wle))}", flush=True)
 elif mode == 'card':
     print(f"K=3 n=4 rows all-in (cofactor_stable_card predicts unsat): {run(3, 4, 'all-in', 'all-out')}", flush=True)
     print(f"K=3 n=4 rows one-out (control): {run(3, 4, 'one-out', 'all-out')}", flush=True)

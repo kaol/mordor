@@ -1,0 +1,5 @@
+[control] anchor orbit lengths (1, 1, 1), generator orbit lengths (2, 2, 2), irredundant meet support: UNSAT; sample anchor-entry labels (≤ 4): []
+[control] anchor orbit lengths (1, 2, 2), generator orbit lengths (2, 2, 1), irredundant meet support: UNSAT; sample anchor-entry labels (≤ 4): []
+[allowed] anchor orbit lengths (1, 2, 2), generator orbit lengths (1, 2, 2), irredundant meet support: SAT; sample anchor-entry labels (≤ 4): ['{2} {3} {1,2}', '{2} {3} {1}', '{2} {3} {2}', '{3} {1} {2}']
+[allowed] anchor orbit lengths (2, 2, 2), generator orbit lengths (2, 2, 2), irredundant meet support: SAT; sample anchor-entry labels (≤ 4): ['{2,3} {1} {1}', '{2} {1,3} {1}', '{2} {1} {1}', '{2} {3} {2}']
+done

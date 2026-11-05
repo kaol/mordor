@@ -1,0 +1,15 @@
+k=4 n=(0, 0, 0, 0): unsat
+k=4 n=(0, 0, 0, 1): unsat
+k=4 n=(0, 0, 0, 2): unsat
+k=4 n=(0, 0, 1, 1): unsat
+k=4 n=(0, 0, 1, 2): unsat
+k=4 n=(0, 0, 2, 2): unsat
+k=4 n=(0, 1, 1, 1): unsat
+k=4 n=(0, 1, 1, 2): unsat
+k=4 n=(0, 1, 2, 2): unsat
+k=4 n=(0, 2, 2, 2): unsat
+k=4 n=(1, 1, 1, 1): unsat
+k=4 n=(1, 1, 1, 2): unsat
+k=4 n=(1, 1, 2, 2): unsat
+k=4 n=(1, 2, 2, 2): unsat
+k=4 n=(2, 2, 2, 2): unsat

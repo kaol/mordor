@@ -1,0 +1,10 @@
+last outside indices n = (1, 1, 1) (entry lengths (2, 2, 2)), grid 27 columns: unsat
+last outside indices n = (1, 1, 2) (entry lengths (2, 2, 3)), grid 36 columns: unsat
+last outside indices n = (1, 2, 2) (entry lengths (2, 3, 3)), grid 48 columns: unsat
+last outside indices n = (2, 2, 2) (entry lengths (3, 3, 3)), grid 64 columns: unsat
+last outside indices n = (1, 1, 3) (entry lengths (2, 2, 4)), grid 45 columns: unsat
+last outside indices n = (1, 2, 3) (entry lengths (2, 3, 4)), grid 60 columns: unsat
+last outside indices n = (2, 2, 3) (entry lengths (3, 3, 4)), grid 80 columns: unsat
+last outside indices n = (0, 1, 1) (entry lengths (1, 2, 2)), grid 18 columns: unsat
+last outside indices n = (0, 1, 2) (entry lengths (1, 2, 3)), grid 24 columns: unsat
+last outside indices n = (0, 2, 2) (entry lengths (1, 3, 3)), grid 32 columns: unsat

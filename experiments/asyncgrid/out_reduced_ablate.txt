@@ -1,0 +1,10 @@
+k=3 n=(1, 1, 2) without nothing: unsat
+k=3 n=(1, 1, 2) without ('mono',): sat
+k=3 n=(1, 1, 2) without (('nw', 1),): sat
+k=3 n=(1, 1, 2) without (('nw', 2),): sat
+k=3 n=(1, 1, 2) without (('nw', 3),): sat
+k=3 n=(2, 2, 2) without nothing: unsat
+k=3 n=(2, 2, 2) without ('mono',): sat
+k=3 n=(2, 2, 2) without (('nw', 1),): sat
+k=3 n=(2, 2, 2) without (('nw', 2),): sat
+k=3 n=(2, 2, 2) without (('nw', 3),): sat

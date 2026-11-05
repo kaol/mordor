@@ -40,3 +40,10 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/Frontier.lean` | §34.4a | `frontier`: CL ⟹ chain-finite; chain-finite ∧ (∀ F, R(F) join-closed) ⟹ CL. The conjecture reduced to one statement |
 | `Mordor/Dialgebra.lean` | §32.2–§32.4 | transposition (D1/D2 via adjoints), the failure-zone theorem and its dual, D5 by order reversal; `bd8_fails`: the cross bound Bd8 is false in the thin model (foundations v3.7) |
 | `Mordor/CutDuality.lean` | §33.3 | Φ ⊣ c∘Ψ∘c and the k + j law, for any preorder and arbitrary maps a, b |
+| `Mordor/Sperner.lean`, `Mordor/FinGenAll.lean` | §34.3n | the product Sperner lemma (`odd_goods`); `captured`, `cut_fingen` (finitely generated cut and complement), `cut_finite`, `cl_finite`: **Cut and CL on every finite lattice** |
+| `Mordor/FGTwo.lean` | §34.3z¹⁴, ¹⁶ | `orbit_end`, the sandwich, `cut_two` (two-generated cuts under DCC), `cut_bouquet` |
+| `Mordor/AsyncMeetGrid.lean` | §34.3z¹⁰⁵ | the asynchronous meet grid; **`cut_fingen_dcc`: the Cut Lemma for every finitely generated cut of a DCC lattice** (via `cut_finite` on the grid lattice); `cut_three`, `cut_two_of_grid` |
+| `Mordor/InfiniteCapture.lean` | §34.3z¹⁰⁶ | extremal boundary facts; `cut_of_grid_capture` (one-sided capture suffices); `uncaptured_column_exists`; `cut_cofingen_acc` (dual); `cut_chainfinite_of_finite_side` |
+
+The table lists the headline files; the other files under `Mordor/` (about 100 in all) are documented in their module
+docstrings and in the log section each one cites.

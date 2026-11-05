@@ -1,0 +1,20 @@
+universe ['p0', 'p1']+['u0', 'u1'], prefix [('p0', 'u0'), ('p0p1', 'u0')], captor u1: COUNTEREXAMPLE: no continuation reaches the captor (3 iterations) (0s)
+     ['p1'] ['u0', 'u1'] SP [] SU ['u1']
+     ['p0', 'p1'] ['u0'] SP ['p1'] SU []
+     ['p0', 'p1'] ['u1'] SP ['p1'] SU []
+     ['p0', 'p1'] ['u0', 'u1'] SP ['p1'] SU []
+universe ['p0', 'p1', 'p2']+['u0', 'u1'], prefix [('p0', 'u0'), ('p0p1', 'u0')], captor u1: COUNTEREXAMPLE: no continuation reaches the captor (6 iterations) (1s)
+     ['p0'] ['u0', 'u1'] SP [] SU ['u1']
+     ['p1'] ['u0', 'u1'] SP [] SU ['u1']
+     ['p2'] ['u0', 'u1'] SP [] SU ['u1']
+     ['p0', 'p1'] ['u0', 'u1'] SP [] SU ['u1']
+     ['p1', 'p2'] ['u0', 'u1'] SP [] SU ['u1']
+     ['p0', 'p1', 'p2'] ['u0'] SP ['p1'] SU []
+universe ['p0', 'p1']+['u0', 'u1', 'u2'], prefix [('p0', 'u0'), ('p0p1', 'u0')], captor u1: COUNTEREXAMPLE: no continuation reaches the captor (8 iterations) (0s)
+     ['p0'] ['u0', 'u1'] SP [] SU ['u1']
+     ['p1'] ['u0', 'u1'] SP [] SU ['u1']
+     ['p0'] ['u0', 'u1', 'u2'] SP [] SU ['u0', 'u1']
+     ['p1'] ['u0', 'u1', 'u2'] SP [] SU ['u0', 'u1']
+     ['p0', 'p1'] ['u1'] SP ['p0'] SU []
+     ['p0', 'p1'] ['u0', 'u1'] SP [] SU ['u1']
+     ['p0', 'p1'] ['u0', 'u1', 'u2'] SP [] SU ['u0', 'u1']

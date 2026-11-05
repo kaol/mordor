@@ -1,0 +1,14 @@
+  monotone sample 0: 18 constrained cells, A′ holds
+  monotone sample 1: 27 constrained cells, A′ holds
+  monotone sample 2: 36 constrained cells, A′ holds
+  monotone sample 3: 22 constrained cells, A′ holds
+  monotone sample 4: 21 constrained cells, A′ holds
+  monotone sample 5: 11 constrained cells, A′ holds
+  monotone sample 6: 24 constrained cells, A′ holds
+  monotone sample 7: 15 constrained cells, A′ holds
+  monotone sample 8: 17 constrained cells, A′ holds
+  monotone sample 9: 33 constrained cells, A′ holds
+  monotone sample 10: 11 constrained cells, A′ holds
+  monotone sample 11: 14 constrained cells, A′ holds
+random monotone systems |P|=3 |U|=3: A′ holds in 12/12
+done

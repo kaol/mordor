@@ -1,0 +1,2 @@
+arbitrary singleton system violating A′ at |P|=3 |U|=2: 1 good words of the full instance, none with a deletion chain; persistence-law violations: law 1 9, law 2 5
+arbitrary singleton system violating A′ at |P|=2 |U|=3: 1 good words of the full instance, none with a deletion chain; persistence-law violations: law 1 5, law 2 9

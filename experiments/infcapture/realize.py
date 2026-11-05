@@ -27,9 +27,15 @@ s.add(inD['p0'], inD['p1'], Not(inD['u0']), Not(inD['u1']), Not(inD['top']), inD
 for p in P: s.add([Not(And(le[p, w], inD[w])) for w in E if w != p])          # p maximal among named D
 for u in U: s.add([Not(And(le[w, u], Not(inD[w]))) for w in E if w != u])    # u minimal among named outside
 s.add(Not(le['p0', 'p1']), Not(le['p1', 'p0']), Not(le['u0', 'u1']), Not(le['u1', 'u0']))
+import sys
 SP = {c: set() for c in cells}; SU = {c: set() for c in cells}
-SU[(('p0',), ('u0', 'u1'))] = {'u1'}
-for B in subsets(U): SP[(('p0', 'p1'), B)] = {'p0'}
+if len(sys.argv) > 1 and sys.argv[1] == 'captor':   # the captor system of helper_rescue.py (u1 captures the pivot)
+    for c in [(('p0',), ('u0',)), (('p1',), ('u0',)), (('p0',), ('u0', 'u1')), (('p1',), ('u0', 'u1')),
+              (('p0', 'p1'), ('u0', 'u1'))]: SU[c] = {'u1'}
+    SP[(('p0', 'p1'), ('u0',))] = {'p0'}
+else:                                               # the minimal fixed-exhaustion counterexample
+    SU[(('p0',), ('u0', 'u1'))] = {'u1'}
+    for B in subsets(U): SP[(('p0', 'p1'), B)] = {'p0'}
 for c in cells:
     z = zname[c]; x = xs[c[0]]; y = ys[c[1]]
     s.add(Not(le[z, x]), Not(le[y, z]))                                     # no witness at the cell

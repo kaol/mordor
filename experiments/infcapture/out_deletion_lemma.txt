@@ -1,0 +1,6 @@
+random global selectors |P|=2 |U|=2 trials=500: {'words': 994, 'D_fail': 28, 'chain_fail_word': 28, 'Dprime_fail': 0}
+   smallest D-failure word: ('u1', 'u0', 'p1', 'p0')
+random global selectors |P|=3 |U|=2 trials=300: {'words': 978, 'D_fail': 92, 'chain_fail_word': 114, 'Dprime_fail': 5}
+random global selectors |P|=2 |U|=3 trials=300: {'words': 1012, 'D_fail': 81, 'chain_fail_word': 102, 'Dprime_fail': 2}
+random global selectors |P|=3 |U|=3 trials=60: {'words': 416, 'D_fail': 57, 'chain_fail_word': 123, 'Dprime_fail': 3}
+random global selectors |P|=4 |U|=2 trials=60: {'words': 280, 'D_fail': 32, 'chain_fail_word': 66, 'Dprime_fail': 0}

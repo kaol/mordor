@@ -1,0 +1,2 @@
+|P*|=2 |U*|=3, all 36 exhaustions: for every system some exhaustion admits a compatible chain (iterations 2746, 568s)
+done

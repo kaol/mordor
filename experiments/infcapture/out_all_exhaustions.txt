@@ -1,0 +1,3 @@
+# run_all_exhaustions.py 2x2 3x2 (session run, §34.3z¹⁰⁷)
+|P*|=2 |U*|=2, all 8 exhaustions: for every system some exhaustion admits a compatible chain (iterations 28, 1s)
+|P*|=3 |U*|=2, all 36 exhaustions: for every system some exhaustion admits a compatible chain (iterations 2260, 414s)

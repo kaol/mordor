@@ -1,0 +1,10 @@
+locally realizable: sat
+  z_p0_u0: in D=True; below ['top', 'u0', 'u1', 'j']
+  z_p0_u1: in D=True; below ['top', 'u0', 'u1', 'j']
+  z_p0_u0u1: in D=False; below ['top', 'j']
+  z_p1_u0: in D=True; below ['top', 'u0', 'u1', 'j']
+  z_p1_u1: in D=True; below ['top', 'u0', 'u1', 'j']
+  z_p1_u0u1: in D=True; below ['top', 'u0', 'u1', 'j']
+  z_p0p1_u0: in D=True; below ['top', 'p0', 'u0', 'u1', 'j']
+  z_p0p1_u1: in D=True; below ['top', 'p0', 'u0', 'u1', 'j']
+  z_p0p1_u0u1: in D=True; below ['top', 'p0', 'u0', 'u1', 'j']

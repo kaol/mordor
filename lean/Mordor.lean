@@ -95,3 +95,5 @@ import Mordor.PairedEndpoints
 import Mordor.EqualTimeTwo
 import Mordor.AsyncMeetGrid
 import Mordor.InfiniteCapture
+import Mordor.TermOrder
+import Mordor.GoodWordPivot

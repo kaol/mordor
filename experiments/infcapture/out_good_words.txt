@@ -1,0 +1,4 @@
+|P*|=3 |U|=1 trials=300: {'R_fail': 100, 'R_tot': 600, 'E_fail': 100, 'E_tot': 600, 'C_fail': 100, 'odd_fail': 0}
+|P*|=3 |U|=2 trials=200: {'R_fail': 564, 'R_tot': 1062, 'E_fail': 207, 'E_tot': 582, 'C_fail': 110, 'odd_fail': 0}
+|P*|=4 |U|=2 trials=60: {'R_fail': 388, 'R_tot': 654, 'E_fail': 166, 'E_tot': 366, 'C_fail': 50, 'odd_fail': 0}
+|P*|=4 |U|=3 trials=15: {'R_fail': 314, 'R_tot': 447, 'E_fail': 96, 'E_tot': 191, 'C_fail': 12, 'odd_fail': 0}

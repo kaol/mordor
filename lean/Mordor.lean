@@ -101,3 +101,4 @@ import Mordor.GoodWordRevision
 import Mordor.FirstEntryBoundary
 import Mordor.GridRefinement
 import Mordor.LocalizedCut
+import Mordor.PivotReplacement

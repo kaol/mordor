@@ -1,0 +1,5 @@
+two replacement steps, δ entry at 1, step-2 Alternative I, Case II (c1 ∨ c2 ∉ D), no witness: sat | c2 = d1; C ≤ F(μ, C): False
+two replacement steps, δ entry at 1, step-2 Alternative II, Case II (c1 ∨ c2 ∉ D), no witness: sat | c2 = d1; C ≤ F(μ, C): False
+two replacement steps, δ entry at 2, step-2 Alternative I, Case II (c1 ∨ c2 ∉ D), no witness: sat | c2 = d2; C ≤ F(μ, C): False
+two replacement steps, δ entry at 2, step-2 Alternative II, Case II (c1 ∨ c2 ∉ D), no witness: sat | c2 = d2; C ≤ F(μ, C): False
+control: additionally impose C ≤ F(μ, C) (a witness at (μ, C)): unsat

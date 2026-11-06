@@ -1,0 +1,11 @@
+[base, no capturers] N=(2, 2), boundary [(0, 3), (1, 2), (2, 1), (3, 0)], capturers of [] (meet ≤ m imposed: False, uncaptured: True): sat
+   free-shape model: minimal D-valued grid points [(0, 3), (3, 0)]
+[free shape, no capturers] N=(2, 2), boundary free, capturers of [] (meet ≤ m imposed: False, uncaptured: True): sat
+   free-shape model: minimal D-valued grid points [(0, 3), (2, 0)]
+[free shape, no capturers] N=(1, 2), boundary free, capturers of [] (meet ≤ m imposed: False, uncaptured: True): sat
+   free-shape model: minimal D-valued grid points [(0, 4), (3, 0)]
+[free shape, no capturers] N=(2, 3), boundary free, capturers of [] (meet ≤ m imposed: False, uncaptured: True): sat
+   free-shape model: minimal D-valued grid points [(0, 4), (2, 0)]
+[free shape, no capturers] N=(1, 3), boundary free, capturers of [] (meet ≤ m imposed: False, uncaptured: True): sat
+[base with capturers] N=(2, 2), boundary [(0, 3), (1, 2), (2, 1), (3, 0)], capturers of [(1, 2), (3, 0)] (meet ≤ m imposed: False, uncaptured: True): sat
+[base with capturers, captured allowed] N=(2, 2), boundary [(0, 3), (1, 2), (2, 1), (3, 0)], capturers of [(1, 2), (3, 0)] (meet ≤ m imposed: False, uncaptured: False): sat

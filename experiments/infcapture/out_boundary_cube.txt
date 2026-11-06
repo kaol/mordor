@@ -1,0 +1,5 @@
+[control: common outside lower point (1,1)] N=(2, 2), boundary [(0, 3), (1, 2), (2, 1), (3, 0)], capturers of [(1, 2), (2, 1)] (meet ≤ m imposed: True, uncaptured: True): unsat
+[control: common outside lower point (2,0)] N=(2, 2), boundary [(0, 3), (1, 2), (2, 1), (3, 0)], capturers of [(2, 1), (3, 0)] (meet ≤ m imposed: True, uncaptured: True): unsat
+[no common outside lower point] N=(2, 2), boundary [(0, 3), (1, 2), (2, 1), (3, 0)], capturers of [(1, 2), (3, 0)] (meet ≤ m imposed: True, uncaptured: True): sat
+[face points, no common outside lower point] N=(2, 2), boundary [(0, 3), (1, 2), (2, 1), (3, 0)], capturers of [(0, 3), (3, 0)] (meet ≤ m imposed: True, uncaptured: True): sat
+[triple, pairwise adjacent only] N=(2, 2), boundary [(0, 3), (1, 2), (2, 1), (3, 0)], capturers of [(1, 2), (2, 1), (3, 0)] (meet ≤ m imposed: True, uncaptured: True): sat

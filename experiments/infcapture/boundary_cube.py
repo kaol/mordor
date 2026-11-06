@@ -10,7 +10,7 @@ gᵢ: the uncaptured case) and ask whether the meet of a chosen set of capturers
 import itertools, sys
 from z3 import *
 
-def run(N, Dmin, chosen, label, meet=True, uncaptured=True):
+def run(N, Dmin, chosen, label, meet=True, uncaptured=True, pivot=None):
     k = len(N); box = list(itertools.product(*[range(n + 2) for n in N]))
     ge = lambda a, b: all(x >= y for x, y in zip(a, b))
     inDgrid = {t: any(ge(t, d) for d in Dmin) for t in box} if Dmin is not None else None
@@ -59,7 +59,30 @@ def run(N, Dmin, chosen, label, meet=True, uncaptured=True):
         if uncaptured: s.add([Not(le[wname(t), f"g{i}"]) for i in range(k)])
     if caps: glb('Mcap', list(caps.values()))
     if meet: s.add(le['Mcap', 'm'])
+    if pivot is not None:   # relative grid pivot tests
+        rowsT = [f"g{i}" for i in range(k)] + ['m']
+        for t_ in box:
+            w = wname(t_); cap = Or([le[w, f"g{i}"] for i in range(k)])
+            if pivot == 'full':        # every D-valued column captured (control: cut_of_grid_capture)
+                s.add(Implies(inD[w], cap))
+            elif pivot in ('faces_no_alt1', 'faces'):   # columns past an orbit entry are captured
+                if any(t_[i] == N[i] + 1 for i in range(k)): s.add(Implies(inD[w], cap))
+                if pivot == 'faces_no_alt1':
+                    s.add(Implies(And(inD[w], Not(cap)), And([Not(le[cell[(r, w)], r]) for r in rowsT])))
+            elif pivot == 'no_alt1':   # no uncaptured D-column has a row contraction F(m_T, c) <= m_T
+                s.add(Implies(And(inD[w], Not(cap)), And([Not(le[cell[(r, w)], r]) for r in rowsT])))
     r = s.check()
+    if r == sat and pivot == 'faces':
+        mo = s.model(); ev = lambda b: is_true(mo.eval(b, model_completion=True))
+        rowsT = [f"g{i}" for i in range(k)] + ['m']
+        unc = [t_ for t_ in box if ev(inD[wname(t_)]) and not any(ev(le[wname(t_), f"g{i}"]) for i in range(k))]
+        contr = [(t_, r) for t_ in unc for r in rowsT if ev(le[cell[(r, wname(t_))], r])]
+        print(f"   uncaptured D-columns {unc}; row contractions F(m_T, c) <= m_T: {contr}", flush=True)
+    if r == sat and pivot == 'no_alt1':
+        mo = s.model(); ev = lambda b: is_true(mo.eval(b, model_completion=True))
+        unc = [t_ for t_ in box if ev(inD[wname(t_)]) and not any(ev(le[wname(t_), f"g{i}"]) for i in range(k))]
+        alt2 = [t_ for t_ in unc if any(all(t_[i] == N[i] + 1 for i in T) for T in [(0,), (1,), (0, 1)][:3] if max(T) < k)]
+        print(f"   uncaptured D-columns {unc}; those past the entry of some T (alternative 2): {alt2}", flush=True)
     if r == sat and Dmin is None:
         mo = s.model(); Dset = [t for t in box if is_true(mo.eval(inD[wname(t)], model_completion=True))]
         mins = [t for t in Dset if not any(d != t and ge(t, d) for d in Dset)]
@@ -74,6 +97,13 @@ if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'base':
         run(NN, None, [], 'free shape, no capturers', meet=False)
     run(N, Dmin, [(3, 0), (1, 2)], 'base with capturers', meet=False)
     run(N, Dmin, [(3, 0), (1, 2)], 'base with capturers, captured allowed', meet=False, uncaptured=False)
+    sys.exit()
+if __name__ == '__main__' and len(sys.argv) > 1 and sys.argv[1] == 'pivot':
+    for NN in [(1, 2), (2, 2)]:
+        run(NN, None, [], 'relative pivot control: full capture', meet=False, pivot='full')
+        run(NN, None, [], 'relative pivot: alternative 1 forbidden everywhere', meet=False, pivot='no_alt1')
+        run(NN, None, [], 'faces captured, alternative 1 forbidden (interior_row_contraction predicts UNSAT)', meet=False, pivot='faces_no_alt1')
+        run(NN, None, [], 'faces captured', meet=False, pivot='faces')
     sys.exit()
 if __name__ == '__main__':
     N = (2, 2); Dmin = [(3, 0), (2, 1), (1, 2), (0, 3)]

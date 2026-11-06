@@ -1,0 +1,10 @@
+[case 2, (2,2) + u2] locally realizable with every balanced cell incomparable on the required side: sat
+   old instance: 6 (word, pivot) pairs; the given old pivot (('p0',), ('u0',)) occurs: True
+   enlarged instance: 2 (word, pivot) pairs, pivot cells [(('p1',), ('u1',)), (('p1',), ('u2',))]
+   pivots on the required side of z* and of D: NONE — Lemma A fails in this lattice
+   pivot spectra: old {'p0p1|u0u1': (4, 'D'), 'p1|u1': (1, 'D'), 'p0|u0': (1, 'out')}, enlarged {'p1|u2': (1, 'D'), 'p1|u1': (1, 'D')}; D-filtered parity old 1, enlarged 0
+[case 1, (3,2) + p3] locally realizable with every balanced cell incomparable on the required side: sat
+   old instance: 6 (word, pivot) pairs; the given old pivot (('p1', 'p2'), ('u0', 'u1')) occurs: True
+   enlarged instance: 2 (word, pivot) pairs, pivot cells [(('p3',), ('u0',)), (('p3',), ('u1',))]
+   pivots on the required side of z* and of D: NONE — Lemma A fails in this lattice
+   pivot spectra: old {'p1p2|u0u1': (4, 'D'), 'p2|u0': (1, 'D'), 'p2|u1': (1, 'D')}, enlarged {'p3|u1': (1, 'D'), 'p3|u0': (1, 'D')}; D-filtered parity old 0, enlarged 0

@@ -18,20 +18,28 @@ open Finset Classical
 
 variable {α : Type*} [Lattice α] [BoundedOrder α] {k l : ℕ}
 
-/-- **Captured tables are impossible.** Let `p i ∈ D` and `u j ∉ D` be *any* finitely many elements (not
-necessarily generators) such that every cell `z(A, B) = F (⋀ p_A) (⋁ u_B)` is *captured*: below some `p i` if it is
-in `D`, above some `u j` if not. If no cell is a witness, this is contradictory. Only the Sperner pivot needs
-capturing; generation of `D` by the `p i` is never used. -/
-theorem captured {F : α → α → α} {D : Set α} {p : Fin k → α} {u : Fin l → α} (hk : 0 < k) (hl : 0 < l)
+/-- Positions `≤ t` of a word of length `n > t` are `t + 1` letters. -/
+theorem card_filter_val_le {n t : ℕ} (ht : t < n) : (univ.filter fun s : Fin n => s.val ≤ t).card = t + 1 := by
+  have h : (univ.filter fun s : Fin n => s.val ≤ t).map Fin.valEmbedding = Finset.range (t + 1) := by
+    ext m
+    simp only [Finset.mem_map, Finset.mem_filter, Finset.mem_univ, true_and, Fin.valEmbedding_apply,
+      Finset.mem_range]
+    constructor
+    · rintro ⟨s, hs, rfl⟩; omega
+    · intro hm; exact ⟨⟨m, by omega⟩, by simp; omega, rfl⟩
+  rw [← Finset.card_map, h, Finset.card_range]
+
+/-- **The pivot of a good word** (extracted from `captured`). If no cell `z(A, B) = F (⋀ p_A) (⋁ u_B)` is a witness,
+some *balanced* cell (`|A| = |B|`, nonempty) has `z(A, B) ≰ pᵢ` for every `i` and `uⱼ ≰ z(A, B)` for every `j`:
+the `k`-th cell of a good maximal chain (`Sperner.exists_good`). -/
+theorem exists_pivot {F : α → α → α} {p : Fin k → α} {u : Fin l → α} (hk : 0 < k) (hl : 0 < l)
     (mono : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
-    (capD : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
-      F (A.inf p) (B.sup u) ∈ D → ∃ i, F (A.inf p) (B.sup u) ≤ p i)
-    (capU : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
-      F (A.inf p) (B.sup u) ∉ D → ∃ j, u j ≤ F (A.inf p) (B.sup u))
     (nwD : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
       ¬ ∀ i ∈ A, F (A.inf p) (B.sup u) ≤ p i)
     (nwU : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
-      ¬ ∀ j ∈ B, u j ≤ F (A.inf p) (B.sup u)) : False := by
+      ¬ ∀ j ∈ B, u j ≤ F (A.inf p) (B.sup u)) :
+    ∃ A : Finset (Fin k), ∃ B : Finset (Fin l), A.Nonempty ∧ B.Nonempty ∧ A.card = B.card ∧
+      (∀ i, ¬ F (A.inf p) (B.sup u) ≤ p i) ∧ ∀ j, ¬ u j ≤ F (A.inf p) (B.sup u) := by
   let z : Finset (Fin k) × Finset (Fin l) → α := fun c => F (c.1.inf p) (c.2.sup u)
   let f1 : Finset (Fin k) × Finset (Fin l) → Fin k := fun c =>
     if h : ∃ i ∈ c.1, ¬ z c ≤ p i then h.choose else ⟨0, hk⟩
@@ -99,7 +107,41 @@ theorem captured {F : α → α → α} {D : Set α} {p : Fin k → α} {u : Fin
     exact this (hj.trans (zmono (k - 1) _ (by omega)))
   obtain ⟨-, hA1, -, hB1⟩ := Sperner.cell_props hw (show k - 1 + 1 < (univ : Finset (Fin k)).card +
     (univ : Finset (Fin l)).card by simp; omega)
-  by_cases hz : z cstar ∈ D
+  refine ⟨cstar.1, cstar.2, hA1, hB1, ?_, hA, hB⟩
+  -- balance: the pivot prefix has `k` letters, `k - |A|` of them from `P` and `|B|` from `U`
+  set S := Sperner.pre w (k - 1) with hS
+  have hSc : S.card = k := by
+    have h1 : S.card = (univ.filter fun s : Fin ((univ : Finset (Fin k)).card + (univ : Finset (Fin l)).card) =>
+        s.val ≤ k - 1).card := by
+      rw [hS]; unfold Sperner.pre; convert Finset.card_image_of_injective _ hw.inj
+    rw [h1, card_filter_val_le (by simp; omega)]; omega
+  have hL : (univ.filter fun a : Fin k => Sum.inl a ∉ S).card + S.toLeft.card = k := by
+    have e : S.toLeft = univ.filter fun a : Fin k => Sum.inl a ∈ S := by ext a; simp
+    rw [e, add_comm, Finset.card_filter_add_card_filter_not]; simp
+  have hR : (univ.filter fun b : Fin l => Sum.inr b ∈ S) = S.toRight := by ext b; simp
+  have hsum := Finset.card_toLeft_add_card_toRight (u := S)
+  have hA' : cstar.1 = univ.filter fun a : Fin k => Sum.inl a ∉ S := by
+    ext a; simp [cstar, Sperner.cellOf, hS]
+  have hB' : cstar.2 = univ.filter fun b : Fin l => Sum.inr b ∈ S := by
+    ext b; simp [cstar, Sperner.cellOf, hS]
+  rw [hA', hB', hR]; omega
+
+/-- **Captured tables are impossible.** Let `p i ∈ D` and `u j ∉ D` be *any* finitely many elements (not
+necessarily generators) such that every cell `z(A, B) = F (⋀ p_A) (⋁ u_B)` is *captured*: below some `p i` if it is
+in `D`, above some `u j` if not. If no cell is a witness, this is contradictory. Only the Sperner pivot needs
+capturing; generation of `D` by the `p i` is never used. -/
+theorem captured {F : α → α → α} {D : Set α} {p : Fin k → α} {u : Fin l → α} (hk : 0 < k) (hl : 0 < l)
+    (mono : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y')
+    (capD : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
+      F (A.inf p) (B.sup u) ∈ D → ∃ i, F (A.inf p) (B.sup u) ≤ p i)
+    (capU : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
+      F (A.inf p) (B.sup u) ∉ D → ∃ j, u j ≤ F (A.inf p) (B.sup u))
+    (nwD : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
+      ¬ ∀ i ∈ A, F (A.inf p) (B.sup u) ≤ p i)
+    (nwU : ∀ A : Finset (Fin k), ∀ B : Finset (Fin l), A.Nonempty → B.Nonempty →
+      ¬ ∀ j ∈ B, u j ≤ F (A.inf p) (B.sup u)) : False := by
+  obtain ⟨A, B, hA1, hB1, -, hA, hB⟩ := exists_pivot hk hl mono nwD nwU
+  by_cases hz : F (A.inf p) (B.sup u) ∈ D
   · obtain ⟨i, hi⟩ := capD _ _ hA1 hB1 hz; exact hA i hi
   · obtain ⟨j, hj⟩ := capU _ _ hA1 hB1 hz; exact hB j hj
 

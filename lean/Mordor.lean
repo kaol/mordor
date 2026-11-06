@@ -97,3 +97,4 @@ import Mordor.AsyncMeetGrid
 import Mordor.InfiniteCapture
 import Mordor.TermOrder
 import Mordor.GoodWordPivot
+import Mordor.GoodWordRevision

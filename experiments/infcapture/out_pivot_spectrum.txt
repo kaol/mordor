@@ -1,0 +1,4 @@
+|P|=2 |U|=2: enlargements tested 1200; T1 fails 614, T2 fails 317
+|P|=3 |U|=2: enlargements tested 750; T1 fails 423, T2 fails 156
+|P|=2 |U|=3: enlargements tested 750; T1 fails 427, T2 fails 197
+|P|=3 |U|=3: enlargements tested 180; T1 fails 120, T2 fails 46

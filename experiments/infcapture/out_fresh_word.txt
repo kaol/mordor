@@ -1,0 +1,15 @@
+[case 2, 2x2 captor system] locally realizable with every balanced cell incomparable on the required side: sat
+   old instance: 1 (word, pivot) pairs; the given old pivot (('p0',), ('u0',)) occurs: True
+   enlarged instance: 1 (word, pivot) pairs, pivot cells [(('p0',), ('u1',))]
+   pivots on the required side of z* and of D: NONE — Lemma A fails in this lattice
+   pivot spectra: old {'p0|u0': (1, 'out')}, enlarged {'p0|u1': (1, 'D')}; D-filtered parity old 0, enlarged 1
+[case 1, 3x1] locally realizable with every balanced cell incomparable on the required side: sat
+   old instance: 1 (word, pivot) pairs; the given old pivot (('p1',), ('u0',)) occurs: True
+   enlarged instance: 1 (word, pivot) pairs, pivot cells [(('p2',), ('u0',))]
+   pivots on the required side of z* and of D: NONE — Lemma A fails in this lattice
+   pivot spectra: old {'p1|u0': (1, 'D')}, enlarged {'p2|u0': (1, 'D')}; D-filtered parity old 1, enlarged 1
+[case 1, 3x2] locally realizable with every balanced cell incomparable on the required side: sat
+   old instance: 2 (word, pivot) pairs; the given old pivot (('p1',), ('u1',)) occurs: True
+   enlarged instance: 2 (word, pivot) pairs, pivot cells [(('p2',), ('u0',)), (('p2',), ('u1',))]
+   pivots on the required side of z* and of D: NONE — Lemma A fails in this lattice
+   pivot spectra: old {'p1|u1': (1, 'D'), 'p1|u0': (1, 'D')}, enlarged {'p2|u1': (1, 'D'), 'p2|u0': (1, 'D')}; D-filtered parity old 0, enlarged 0

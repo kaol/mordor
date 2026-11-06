@@ -103,3 +103,5 @@ import Mordor.GridRefinement
 import Mordor.LocalizedCut
 import Mordor.PivotReplacement
 import Mordor.DominatedRows
+import Mordor.BoundedSupportPivot
+import Mordor.AxisCapture

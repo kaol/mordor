@@ -87,3 +87,13 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   baseline 147 terms / 4.9 s; P = 1: 321 terms / 24.8 s; P = −1: no result in 590 s. H = 6, P = 1: SAT at 434 terms / 540 s.
 - `grid_bite.py H rounds P`: share of live instances already satisfied by a single orbit point (96 % at H = 5, 100 % at H = 6).
 - `grid_maxd.py H rounds`: class counts of the partial models (H = 6: |Max D| ≤ 2, |Min Dᶜ| ≤ 3 over 120 rounds).
+
+## Round 26: axis-capture graphs (§34.3z¹¹⁷)
+
+- `axis_capture.py classify | ladder H [jobs] | minh [jobs] | controls`: loopless digraphs with out-degree ≥ 1
+  (k = 2: 1, k = 3: 7 up to isomorphism); the cumulative ladder S0–S6 (graph, maximal rows, interior pivot,
+  Alternative I, new maximum, its orbit and joins, minimal complement witnesses) on preorder partial models with a rank
+  bound; least H with S0–S6 SAT (max Eᵢ + 1 in every case); controls for `no_loop` and `orbit_support_bound`.
+  Output `out_axis_capture.txt`.
+- `axis_iterate.py k n_max Hmax`: n iterated cycle-to-new-maximum steps; least edge-height 3 for n ≤ 4 (k = 2) and
+  n ≤ 3 (k = 3). Output `out_axis_iterate.txt`.

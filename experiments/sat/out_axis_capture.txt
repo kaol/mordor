@@ -1,0 +1,35 @@
+k=2: 1 loopless digraphs with all out-degrees ≥ 1 (up to iso)
+    [(0, 1), (1, 0)]
+k=3: 7 loopless digraphs with all out-degrees ≥ 1 (up to iso)
+    [(0, 1), (1, 0), (2, 0)]
+    [(0, 1), (0, 2), (1, 0), (2, 0)]
+    [(0, 1), (1, 2), (2, 0)]
+    [(0, 1), (0, 2), (1, 0), (2, 1)]
+    [(0, 1), (0, 2), (1, 2), (2, 1)]
+    [(0, 1), (0, 2), (1, 0), (1, 2), (2, 0)]
+    [(0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1)]
+--- controls
+control loop e_0 ≤ g_0 (no_loop), H=6: unsat
+control pivot W(2,1), E=(3,3), H=3 (orbit_support_bound: t+|S| = 4 > 3): unsat
+same pivot at H=4 (bound 4 ≤ 4): sat
+control Situation II stage 2 at H=2 (|S|+1 ≤ H fails): unsat
+Situation II stage 2 at H=3: sat
+--- ladder (stages S0..S6), H = 5 and 6
+H=5 k=2 E=(2, 2) graph=[(0, 1), (1, 0)]: ['sat', 'sat', 'sat', 'sat', 'sat', 'sat(E_q=1)', 'sat(E_q=1)']
+H=5 k=2 E=(2, 3) graph=[(0, 1), (1, 0)]: ['sat', 'sat', 'sat', 'sat', 'sat', 'sat(E_q=1)', 'sat(E_q=1)']
+H=5 k=2 E=(3, 3) graph=[(0, 1), (1, 0)]: ['sat', 'sat', 'sat', 'sat', 'sat', 'sat(E_q=1)', 'sat(E_q=1)']
+H=5 k=3 E=(2, 2, 2) graph=[(0, 1), (1, 0), (2, 0)]: ['sat', 'sat', 'sat', 'sat', 'sat', 'sat(E_q=1)', 'sat(E_q=1)']
+H=6 k=2 E=(2, 2) graph=[(0, 1), (1, 0)]: ['sat', 'sat', 'sat', 'sat', 'sat', 'sat(E_q=1)', 'sat(E_q=1)']
+H=6 k=2 E=(2, 3) graph=[(0, 1), (1, 0)]: ['sat', 'sat', 'sat', 'sat', 'sat', 'sat(E_q=1)', 'sat(E_q=1)']
+H=6 k=2 E=(3, 3) graph=[(0, 1), (1, 0)]: ['sat', 'sat', 'sat', 'sat', 'sat', 'sat(E_q=1)', 'sat(E_q=1)']
+--- least edge-height with S0..S6 SAT (SAT is monotone in H)
+k=2 E=(2, 2) graph=[(0, 1), (1, 0)]: least edge-height with the full ladder S0–S6 SAT = 3
+k=2 E=(2, 3) graph=[(0, 1), (1, 0)]: least edge-height with the full ladder S0–S6 SAT = 4
+k=2 E=(3, 3) graph=[(0, 1), (1, 0)]: least edge-height with the full ladder S0–S6 SAT = 4
+k=3 E=(2, 2, 2) graph=[(0, 1), (1, 0), (2, 0)]: least edge-height with the full ladder S0–S6 SAT = 3
+k=3 E=(2, 2, 2) graph=[(0, 1), (0, 2), (1, 0), (2, 0)]: least edge-height with the full ladder S0–S6 SAT = 3
+k=3 E=(2, 2, 2) graph=[(0, 1), (1, 2), (2, 0)]: least edge-height with the full ladder S0–S6 SAT = 3
+k=3 E=(2, 2, 2) graph=[(0, 1), (0, 2), (1, 0), (2, 1)]: least edge-height with the full ladder S0–S6 SAT = 3
+k=3 E=(2, 2, 2) graph=[(0, 1), (0, 2), (1, 2), (2, 1)]: least edge-height with the full ladder S0–S6 SAT = 3
+k=3 E=(2, 2, 2) graph=[(0, 1), (0, 2), (1, 0), (1, 2), (2, 0)]: least edge-height with the full ladder S0–S6 SAT = 3
+k=3 E=(2, 2, 2) graph=[(0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1)]: least edge-height with the full ladder S0–S6 SAT = 3

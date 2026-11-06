@@ -1,0 +1,19 @@
+--- unseeded (no WLOG unit)
+H=3 noseed: UNSAT with 13 terms (9 F, 2 lattice) after 9 rounds, 0.0s
+H=4 noseed: UNSAT with 38 terms (29 F, 7 lattice) after 29 rounds, 0.1s
+H=5 noseed: inconclusive, SAT at 333 terms (187 F, 144 lattice), 187 rounds, 278s
+--- seeded
+H=3 seed: UNSAT with 17 terms (9 F, 3 lattice) after 2 rounds, 0.0s
+H=4 seed: UNSAT with 65 terms (33 F, 27 lattice) after 26 rounds, 0.2s
+H=5 seed: still SAT at 413 terms (207 F, 201 lattice) after 200 rounds, 480 s (killed at 590 s)
+--- seeded, q-responses forced to branch I / II
+branch I: H=3 seed: UNSAT with 21 terms (12 F, 4 lattice) after 2 rounds, 0.0s
+branch I: H=4 seed: UNSAT with 39 terms (21 F, 13 lattice) after 11 rounds, 0.0s
+branch II: H=3 seed: UNSAT with 21 terms (12 F, 4 lattice) after 2 rounds, 0.0s
+branch II: H=4 seed: UNSAT with 71 terms (37 F, 29 lattice) after 27 rounds, 0.2s
+[b5I]
+H=5 seed: inconclusive, SAT at 357 terms (180 F, 172 lattice), 170 rounds, 576s
+[b5II]
+H=5 seed: inconclusive, SAT at 383 terms (193 F, 185 lattice), 183 rounds, 578s
+[b6I]
+H=6 seed: inconclusive, SAT at 369 terms (186 F, 178 lattice), 176 rounds, 577s

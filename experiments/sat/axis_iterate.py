@@ -10,11 +10,12 @@ in D below no row of R; a new row q_s ∈ D with c_s ≤ q_s, incomparable with 
 gets the orbit u_{q_s}(1) ∉ D, u_{q_s}(2) ∈ D, whose entry point is below some row of R ∪ {q_s} other than q_s.
 Alternative I is not imposed (it only adds constraints; omitting it keeps SAT meaningful as a partial model).
 Output: the least H ≤ Hmax for which n steps are SAT.
-  python3 axis_iterate.py k n_max Hmax"""
+  python3 axis_iterate.py k n_max Hmax [cross]
+'cross' adds the cells F(q_s, u_r(1)) for every row r of the family at step s (monotone, witness-free)."""
 import sys, itertools
 from z3 import *
 
-def model(k, n, H, entry=2):
+def model(k, n, H, entry=2, cross=False):
     rows = [f"r{i}" for i in range(k)] + [f"q{s}" for s in range(1, n + 1)]
     E = ['bot', 'top'] + rows + [f"{r}_1" for r in rows] + [f"{r}_2" for r in rows]
     fam = {s: rows[:k + s - 1] for s in range(1, n + 1)}           # family at step s
@@ -24,6 +25,9 @@ def model(k, n, H, entry=2):
         for sz in range(2, len(R) + 1):
             for sub in itertools.combinations(R, sz):
                 if sub not in meets: meets[sub] = "M_" + "_".join(sub); E.append(meets[sub])
+    if cross:                                   # cross-generation cells F(q_s, x), x an interior point of an earlier row
+        xcells = {(f"q{s}", f"{r}_1"): f"X[q{s},{r}]" for s in range(1, n + 1) for r in fam[s]}
+        E += list(xcells.values())
     S = Solver()
     le = {(a, b): Bool(f"le|{a}|{b}") for a in E for b in E}; D = {a: Bool(f"D|{a}") for a in E}
     rk = {a: Int(f"rk|{a}") for a in E}
@@ -42,6 +46,7 @@ def model(k, n, H, entry=2):
     for r in rows:
         cells[(r, 'top')] = f"{r}_1"; cells[(r, f"{r}_1")] = f"{r}_2"
         S.add(D[r], Not(D[f"{r}_1"]), D[f"{r}_2"])
+    if cross: cells.update(xcells)
     for (r, x), v in cells.items():
         S.add(Implies(And(D[r], Not(D[x])), And(Not(le[v, r]), Not(le[x, v]))))
         for (r2, x2), v2 in cells.items():
@@ -69,9 +74,10 @@ def model(k, n, H, entry=2):
     return S
 
 if __name__ == '__main__':
-    k, nmax, Hmax = (int(x) for x in sys.argv[1:4])
+    k, nmax, Hmax = (int(x) for x in sys.argv[1:4]); cross = len(sys.argv) > 4 and sys.argv[4] == 'cross'
     for n in range(0, nmax + 1):
         best = None
         for H in range(1, Hmax + 1):
-            if str(model(k, n, H).check()) == 'sat': best = H; break
-        print(f"k={k}, {n} new-maximum steps: least edge-height of a partial model = {best}", flush=True)
+            if str(model(k, n, H, cross=cross).check()) == 'sat': best = H; break
+        print(f"k={k}, {n} new-maximum steps{' with cross-generation cells F(q_s, u_r(1))' if cross else ''}: "
+              f"least edge-height of a partial model = {best}", flush=True)

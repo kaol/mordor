@@ -60,7 +60,7 @@ class Model:
     def lub(s, z, q):
         s.S.add([s.le[x, z] for x in q]); s.S.add([Implies(And([s.le[x, w] for x in q]), s.le[z, w]) for w in s.E])
 
-def setup(H, k, Es, graph, stage, Eq=1, extra=None):
+def setup(H, k, Es, graph, stage, Eq=1, extra=None, pre=None):
     M = Model(H); rows = [f"g{i}" for i in range(k)]
     M.el('bot', 'top', *rows)
     orb = [['top'] + [f"u{i}_{n}" for n in range(1, Es[i] + 1)] for i in range(k)]
@@ -81,6 +81,7 @@ def setup(H, k, Es, graph, stage, Eq=1, extra=None):
         for n in range(Eq): M.cells[('q', oq[n])] = oq[n + 1]
         M.el(*[f"J{i}" for i in range(k)])
     if stage >= 6: M.el(*[f"w{i}" for i in range(k)], *[f"wm{i}{j}" for i in range(k) for j in range(i + 1, k)])
+    if pre: pre(M, rows, orb, wname)
     def base(M):
         S, le, D, eq = M.S, M.le, M.D, M.eq
         for r in rows: S.add(D[r])

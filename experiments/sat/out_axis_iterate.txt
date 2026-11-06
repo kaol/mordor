@@ -7,3 +7,12 @@ k=3, 0 new-maximum steps: least edge-height of a partial model = 3
 k=3, 1 new-maximum steps: least edge-height of a partial model = 3
 k=3, 2 new-maximum steps: least edge-height of a partial model = 3
 k=3, 3 new-maximum steps: least edge-height of a partial model = 3
+k=2, 0 new-maximum steps with cross-generation cells F(q_s, u_r(1)): least edge-height of a partial model = 3
+k=2, 1 new-maximum steps with cross-generation cells F(q_s, u_r(1)): least edge-height of a partial model = 3
+k=2, 2 new-maximum steps with cross-generation cells F(q_s, u_r(1)): least edge-height of a partial model = 3
+k=2, 3 new-maximum steps with cross-generation cells F(q_s, u_r(1)): least edge-height of a partial model = 3
+k=2, 4 new-maximum steps with cross-generation cells F(q_s, u_r(1)): least edge-height of a partial model = 3
+k=3, 0 new-maximum steps with cross-generation cells F(q_s, u_r(1)): least edge-height of a partial model = 3
+k=3, 1 new-maximum steps with cross-generation cells F(q_s, u_r(1)): least edge-height of a partial model = 3
+k=3, 2 new-maximum steps with cross-generation cells F(q_s, u_r(1)): least edge-height of a partial model = 3
+k=3, 3 new-maximum steps with cross-generation cells F(q_s, u_r(1)): least edge-height of a partial model = 3

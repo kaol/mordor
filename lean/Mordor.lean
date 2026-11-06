@@ -105,3 +105,4 @@ import Mordor.PivotReplacement
 import Mordor.DominatedRows
 import Mordor.BoundedSupportPivot
 import Mordor.AxisCapture
+import Mordor.CrossCell

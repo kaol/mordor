@@ -97,3 +97,13 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   Output `out_axis_capture.txt`.
 - `axis_iterate.py k n_max Hmax`: n iterated cycle-to-new-maximum steps; least edge-height 3 for n ≤ 4 (k = 2) and
   n ≤ 3 (k = 3). Output `out_axis_iterate.txt`.
+
+## Round 26: cross cells and the seeded ground search (§34.3z¹¹⁸)
+
+- `cross_cells.py [k2|k3|branch] [graph indices]`: the S0–S6 ladder plus the full cross rectangle F(c, x), F(q, x),
+  F(c, ⋁x), F(q, ⋁x), output-branch representatives and (k = 2) the boundary join/meet layer; least edge-height per
+  configuration (always max Eᵢ + 1); `branch` forces all q-responses into D or out of D. Output `out_cross_cells.txt`.
+- `axis_iterate.py k n Hmax cross`: iterated new maxima with cross-generation cells F(q_s, u_r(1)).
+- `seeded_ground.py H maxterms per_round J seed|noseed [seconds] [I|II]`: `lattice_ground` without the WLOG unit, seeded
+  with the two-cycle mixed-pivot configuration (constants g₀, g₁, q maximal over all terms). H = 3, 4 UNSAT
+  (seeded 17 / 65 terms, branch I 21 / 39, unseeded 13 / 38); H = 5, 6 SAT within 590 s. Output `out_seeded_ground.txt`.

@@ -1,0 +1,13 @@
+base (two old rows, entries at 2, no capturing row): sat
+capturing row c (uncaptured D-column), δ first entry at 1: (sat, ['z2', 'W11', 'W12', 'y2', 'W21', 'W22'])
+capturing row c (uncaptured D-column), δ first entry at 2: (sat, ['z2', 'W11', 'W12', 'y2', 'W21', 'W22'])
+capturing row c (uncaptured D-column), δ first entry at 3: (sat, ['z2', 'W11', 'W12', 'y2', 'W21', 'W22'])
+capturing row c (uncaptured D-column), δ first entry at 4: (sat, ['z2', 'W11', 'W12', 'y2', 'W21', 'W22'])
+non-degenerate (y2 ∥ z2, c ≢ y2, z2), δ first entry at 1: (sat, ['W11', 'W12', 'W21', 'W22'])
+non-degenerate (y2 ∥ z2, c ≢ y2, z2), δ first entry at 2: (sat, ['W21', 'W22'])
+non-degenerate (y2 ∥ z2, c ≢ y2, z2), δ first entry at 3: (sat, ['W11', 'W12', 'W21', 'W22'])
+non-degenerate (y2 ∥ z2, c ≢ y2, z2), δ first entry at 4: (sat, ['W11', 'W12', 'W21', 'W22'])
+control (non-degenerate): δ entry at 3 with δ(n) ≤ γ1(n) imposed: unsat
+control (non-degenerate): δ entry at 4 with δ(n) ≤ γ1(n) imposed: unsat
+control: δ entry at 3 with δ(n) ≤ γ1(n) imposed (orbit domination): unsat
+control: δ entry at 4 with δ(n) ≤ γ1(n) imposed (orbit domination): unsat

@@ -78,3 +78,12 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   streamed to `box_H<H>.body`, same trajectory), 0.17 GB and 3× faster with `disk,lazyrank` (chain clauses on
   violation instead of eager rank clauses; another trajectory, not translated by `cut_lean.py`); `finite k` checks the box Cut Lemma on every lattice of closure systems on k points (k = 4: 932 cuts, all
   have a box witness); `minimize H T.pkl` gives a deletion-minimal subterm-closed term set (H = 3, 4, 5: 7, 17, 71).
+
+## Round 26: grid-capture clauses (§34.3z¹¹⁶)
+
+- `grid_ground.py H maxterms per_round J P [seconds]`: `lattice_ground` plus derived clause instances of Lean
+  `InfCapture.uncaptured_column_upto` (rows = terms in D, orbits = F-terms, grid columns = meet terms). P instances on
+  incomparable D-class pairs per round, or P = −1: one instance on all maximal D-classes (k ≤ 3, N = H). H = 5:
+  baseline 147 terms / 4.9 s; P = 1: 321 terms / 24.8 s; P = −1: no result in 590 s. H = 6, P = 1: SAT at 434 terms / 540 s.
+- `grid_bite.py H rounds P`: share of live instances already satisfied by a single orbit point (96 % at H = 5, 100 % at H = 6).
+- `grid_maxd.py H rounds`: class counts of the partial models (H = 6: |Max D| ≤ 2, |Min Dᶜ| ≤ 3 over 120 rounds).

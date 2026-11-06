@@ -85,29 +85,28 @@ theorem no_witness_of_captured {F : α → α → α} (hF : ∀ x x' y y', x ≤
   · obtain ⟨hAD, hBD⟩ := cell_cross hD hp hu hA hB
     exact (nw _ hAD _ hBD).2 (Finset.sup_le h)
 
-/-- **One-sided grid capture suffices** (DCC). -/
-theorem cut_of_grid_capture [WellFoundedLT α] {k : ℕ} (hk : 0 < k) {F : α → α → α}
+/-- **One-sided grid capture suffices, up to given entry times** (no chain condition): if each orbit is in `D` at time
+`n i + 1` and every `D`-valued grid column with `t ≤ n + 1` lies below some row, there is a witness. -/
+theorem cut_of_grid_capture_upto {k : ℕ} (hk : 0 < k) {F : α → α → α}
     (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') {D : Set α} (hD : ∀ x y, x ≤ y → y ∈ D → x ∈ D)
-    (htop : ⊤ ∉ D) (g : Fin k → α) (hg : ∀ i, g i ∈ D)
-    (hcap : ∀ t : Fin k → ℕ, W (fun i m => (F (g i))^[m] ⊤) t ∈ D → ∃ i, W (fun i m => (F (g i))^[m] ⊤) t ≤ g i) :
+    (htop : ⊤ ∉ D) (g : Fin k → α) (hg : ∀ i, g i ∈ D) (n : Fin k → ℕ)
+    (huN : ∀ i, (F (g i))^[n i + 1] ⊤ ∈ D)
+    (hcap : ∀ t : Fin k → ℕ, (∀ i, t i ≤ n i + 1) → W (fun i m => (F (g i))^[m] ⊤) t ∈ D →
+      ∃ i, W (fun i m => (F (g i))^[m] ⊤) t ≤ g i) :
     ∃ x ∈ D, ∃ y ∉ D, F x y ≤ x ∨ y ≤ F x y := by
   classical
   by_contra hno
   have nw : ∀ x, x ∈ D → ∀ y, y ∉ D → ¬ F x y ≤ x ∧ ¬ y ≤ F x y :=
     fun x hx y hy => ⟨fun h => hno ⟨x, hx, y, hy, Or.inl h⟩, fun h => hno ⟨x, hx, y, hy, Or.inr h⟩⟩
-  have hent : ∀ i, ∃ n, (∀ m ≤ n, (F (g i))^[m] ⊤ ∉ D) ∧ F (g i) ((F (g i))^[n] ⊤) ∈ D :=
-    fun i => Mordor.FGTwo.orbit_end (InD := (· ∈ D)) hF (hg i) nw ⊤ htop le_top
-  choose n _ hin using hent
   set u : Fin k → ℕ → α := fun i m => (F (g i))^[m] ⊤ with hu
   have hanti : ∀ i, Antitone (u i) := fun i =>
     Monotone.antitone_iterate_of_map_le (fun _ _ h => hF _ _ _ _ le_rfl h) le_top
-  have huN : ∀ i, u i (n i + 1) ∈ D := fun i => by
-    simp only [hu]; rw [Function.iterate_succ_apply']; exact hin i
   let P := ∀ i : Fin k, Fin (n i + 2)
   let Wt : P → α := fun t => W u fun i => (t i : ℕ)
   have Wt_anti : ∀ a b : P, a ≤ b → Wt b ≤ Wt a := fun a b h =>
     grid_antitone hanti fun i => (Fin.le_iff_val_le_val.1 (h i))
-  have hcapW : ∀ t : P, Wt t ∈ D → ∃ i, Wt t ≤ g i := fun t h => hcap _ h
+  have hcapW : ∀ t : P, Wt t ∈ D → ∃ i, Wt t ≤ g i := fun t h =>
+    hcap _ (fun i => Nat.lt_succ_iff.1 (t i).isLt) h
   let LS : P → Finset (Fin k) := fun t => univ.filter fun j => Wt t ≤ g j
   have mem_LS : ∀ t j, j ∈ LS t ↔ Wt t ≤ g j := fun t j => by simp [LS]
   let step : P → P → P := fun x y i => if i ∈ LS x then sc (y i) else 0
@@ -164,6 +163,42 @@ theorem cut_of_grid_capture [WellFoundedLT α] {k : ℕ} (hk : 0 < k) {F : α �
     have := Fin.le_iff_val_le_val.1 (hle j0)
     rw [hstepval j0 hj0T] at this
     omega
+
+/-- **Grid capture gives a witness** (DCC): `cut_of_grid_capture_upto` with the orbit entry times. -/
+theorem cut_of_grid_capture [WellFoundedLT α] {k : ℕ} (hk : 0 < k) {F : α → α → α}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') {D : Set α} (hD : ∀ x y, x ≤ y → y ∈ D → x ∈ D)
+    (htop : ⊤ ∉ D) (g : Fin k → α) (hg : ∀ i, g i ∈ D)
+    (hcap : ∀ t : Fin k → ℕ, W (fun i m => (F (g i))^[m] ⊤) t ∈ D → ∃ i, W (fun i m => (F (g i))^[m] ⊤) t ≤ g i) :
+    ∃ x ∈ D, ∃ y ∉ D, F x y ≤ x ∨ y ≤ F x y := by
+  classical
+  by_contra hno
+  have nw : ∀ x, x ∈ D → ∀ y, y ∉ D → ¬ F x y ≤ x ∧ ¬ y ≤ F x y :=
+    fun x hx y hy => ⟨fun h => hno ⟨x, hx, y, hy, Or.inl h⟩, fun h => hno ⟨x, hx, y, hy, Or.inr h⟩⟩
+  have hent : ∀ i, ∃ n, (∀ m ≤ n, (F (g i))^[m] ⊤ ∉ D) ∧ F (g i) ((F (g i))^[n] ⊤) ∈ D :=
+    fun i => Mordor.FGTwo.orbit_end (InD := (· ∈ D)) hF (hg i) nw ⊤ htop le_top
+  choose n _ hin using hent
+  refine hno (cut_of_grid_capture_upto hk hF hD htop g hg n (fun i => ?_) fun t _ h => hcap t h)
+  rw [Function.iterate_succ_apply']; exact hin i
+
+/-- **Bounded uncaptured column** (no chain condition): if every orbit has reached `D` by time `N i`, some grid column
+with `t ≤ N` lies in `D` below no row. Ground form used as a derived clause family by `experiments/sat/grid_ground.py`. -/
+theorem uncaptured_column_upto {k : ℕ} (hk : 0 < k) {F : α → α → α}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') {D : Set α} (hD : ∀ x y, x ≤ y → y ∈ D → x ∈ D)
+    (htop : ⊤ ∉ D) (nw : ∀ x ∈ D, ∀ y ∉ D, ¬ F x y ≤ x ∧ ¬ y ≤ F x y) (g : Fin k → α) (hg : ∀ i, g i ∈ D)
+    (N : Fin k → ℕ) (hN : ∀ i, (F (g i))^[N i] ⊤ ∈ D) :
+    ∃ t : Fin k → ℕ, (∀ i, t i ≤ N i) ∧ W (fun i m => (F (g i))^[m] ⊤) t ∈ D ∧
+      ∀ i, ¬ W (fun i m => (F (g i))^[m] ⊤) t ≤ g i := by
+  have hpos : ∀ i, N i = (N i - 1) + 1 := fun i => by
+    rcases Nat.eq_zero_or_pos (N i) with h | h
+    · exact absurd (by simpa [h] using hN i) htop
+    · omega
+  by_contra h
+  push_neg at h
+  obtain ⟨x, hx, y, hy, hw⟩ := cut_of_grid_capture_upto hk hF hD htop g hg (fun i => N i - 1)
+    (fun i => by rw [← hpos i]; exact hN i) (fun t ht hD' => h t (fun i => (ht i).trans (hpos i).ge) hD')
+  rcases hw with hw | hw
+  · exact (nw x hx y hy).1 hw
+  · exact (nw x hx y hy).2 hw
 
 /-- **The dual of `cut_fingen_dcc`** (ACC): a cut whose complement is finitely generated has a witness. -/
 theorem cut_cofingen_acc [WellFoundedGT α] {k : ℕ} (hk : 0 < k) {F : α → α → α}

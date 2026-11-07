@@ -25,3 +25,12 @@
   causal fork. Output `out_rank_audit.txt`.
 - `multiset_audit.py FILE.json`: the multisets of response closure ranks along every run; a run that repeats a
   multiset admits no strictly decreasing multiset potential.
+
+## Round 26: ancestry and potentials (§34.3z¹²³)
+
+- `ancestry_audit.py records FILE | aggregate SEED N`: separator tokens with birth stages, minimum meet-supports of
+  bad-pair coordinates, fresh-token and coverage-cone checks, row/column fans, cross-generation response matrices;
+  aggregate-first greedy against greedy. Output `out_ancestry_audit.txt`.
+- `potential_audit.py random SEED N | records FILE | hunt SEED SECONDS K | hunt_from SEED SECONDS FILES...`:
+  exhaustive existential test of the parent-decrease property for the potentials resp, col, gap, respgap; `hunt_from`
+  mutates hard recorded instances. Output `out_potential_audit.txt`.

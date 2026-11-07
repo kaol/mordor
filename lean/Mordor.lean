@@ -110,3 +110,4 @@ import Mordor.FiniteQuotient
 import Mordor.ExtremalSeparators
 import Mordor.SeparatorStages
 import Mordor.SeparatorRank
+import Mordor.SeparatorAncestry

@@ -1,0 +1,26 @@
+--- python3 potential_audit.py random 1 300
+survives / fails / undecided: {'resp': [300, 0, 0], 'col': [300, 0, 0], 'gap': [300, 0, 0], 'respgap': [300, 0, 0]}
+--- random 2 300
+survives / fails / undecided: {'resp': [300, 0, 0], 'col': [300, 0, 0], 'gap': [300, 0, 0], 'respgap': [300, 0, 0]}
+--- records stage_records.json
+greedy_maximal H=5 |L|=27 {'resp': True, 'col': True, 'gap': True, 'respgap': True}
+greedy_maximal H=6 |L|=24 {'resp': True, 'col': True, 'gap': True, 'respgap': True}
+greedy_maximal H=7 |L|=68 {'resp': True, 'col': True, 'gap': True, 'respgap': True}
+existential_maximal H=3 |L|=10 {'resp': True, 'col': True, 'gap': True, 'respgap': True}
+existential_maximal H=4 |L|=12 {'resp': False, 'col': False, 'gap': True, 'respgap': True}
+existential_maximal H=5 |L|=16 {'resp': True, 'col': True, 'gap': True, 'respgap': True}
+existential_maximal H=6 |L|=27 {'resp': True, 'col': True, 'gap': True, 'respgap': True}
+existential_maximal H=7 |L|=21 {'resp': True, 'col': True, 'gap': True, 'respgap': True}
+survives / fails / undecided: {'resp': [7, 1, 0], 'col': [7, 1, 0], 'gap': [8, 0, 0], 'respgap': [8, 0, 0]}
+  smallest failure of resp: |L| = 12, height 4 (existential_maximal H=4 |L|=12)
+  smallest failure of col: |L| = 12, height 4 (existential_maximal H=4 |L|=12)
+--- hunt SEED 550 K (from scratch; dominated by trivial instances)
+tested 5961023 accepted states (k=4); failures: []
+tested 3536963 accepted states (k=5); failures: []
+tested 3551419 accepted states (k=5); failures: []
+tested 1942699 accepted states (k=6); failures: []
+--- hunt_from SEED 540 <hard records> (mutations of instances with existential minimum >= 3)
+tested 1623184 states (732626 distinct) with existential minimum ≥ 3 (histogram {3: 1065570, 4: 413239, 5: 134073, 6: 10302}); failures: []
+tested 1613659 states (727966 distinct) with existential minimum ≥ 3 (histogram {3: 1053130, 4: 417662, 5: 133070, 6: 9797}); failures: []
+tested 1621528 states (731860 distinct) with existential minimum ≥ 3 (histogram {3: 1060601, 4: 417197, 5: 133526, 6: 10204}); failures: []
+tested 1641973 states (741027 distinct) with existential minimum ≥ 3 (histogram {3: 1082892, 4: 418330, 5: 131250, 6: 9501}); failures: []

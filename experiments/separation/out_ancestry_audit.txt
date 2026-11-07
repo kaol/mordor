@@ -1,0 +1,24 @@
+--- python3 ancestry_audit.py records stage_records.json
+greedy_maximal H=5 |L|=27 optimal: 2 stages; max support 1 (≤ H: True); fresh token in every later pair: True; old-column pairs 2, cone violations 0; row fans []; column fans [('meet outside', 2)]; cross-generation witnesses 4/10
+greedy_maximal H=5 |L|=27 greedy: 6 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 18, cone violations 0; row fans [('join in D', 3), ('join in D', 3), ('join in D', 4), ('join in D', 3), ('join in D', 4), ('join in D', 4), ('join in D', 3), ('join in D', 2), ('join in D', 2)]; column fans [('meet in D', 6), ('meet outside', 4), ('meet in D', 9), ('meet in D', 9)]; cross-generation witnesses 199/366
+greedy_maximal H=6 |L|=24 optimal: 1 stages; max support 1 (≤ H: True); fresh token in every later pair: True; old-column pairs 0, cone violations 0; row fans []; column fans []; cross-generation witnesses 0/0
+greedy_maximal H=6 |L|=24 greedy: 6 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 20, cone violations 0; row fans [('join in D', 4), ('join in D', 4), ('join in D', 4), ('join in D', 3), ('join in D', 2), ('join in D', 3)]; column fans [('meet outside', 3), ('meet in D', 6), ('meet outside', 5), ('meet in D', 6)]; cross-generation witnesses 121/270
+greedy_maximal H=7 |L|=68 optimal: 3 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 6, cone violations 0; row fans [('join in D', 2), ('join in D', 2), ('join in D', 2)]; column fans [('meet outside', 3), ('meet outside', 3)]; cross-generation witnesses 18/42
+greedy_maximal H=7 |L|=68 greedy: 6 stages; max support 3 (≤ H: True); fresh token in every later pair: True; old-column pairs 7, cone violations 0; row fans [('join in D', 2), ('join in D', 2), ('join in D', 2), ('join in D', 2), ('join in D', 2), ('join in D', 2)]; column fans [('meet outside', 6), ('meet in D', 10)]; cross-generation witnesses 100/222
+existential_maximal H=3 |L|=10 optimal: 2 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 2, cone violations 0; row fans []; column fans [('meet in D', 3)]; cross-generation witnesses 6/14
+existential_maximal H=3 |L|=10 greedy: 2 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 2, cone violations 0; row fans []; column fans [('meet in D', 3)]; cross-generation witnesses 6/14
+existential_maximal H=4 |L|=12 optimal: 4 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 1, cone violations 0; row fans []; column fans []; cross-generation witnesses 4/20
+    stage 0: bad (0,11) row support [(0, -1)] column support [] (token = (value, birth stage); ⊥ = (0,-1))
+    stage 1: bad (0,9) row support [(0, -1)] column support [(9, 0)] (token = (value, birth stage); ⊥ = (0,-1))
+    stage 2: bad (0,6) row support [(0, -1)] column support [(6, 1)] (token = (value, birth stage); ⊥ = (0,-1))
+    stage 3: bad (7,10) row support [(9, 0), (10, 2)] column support [(10, 2)] (token = (value, birth stage); ⊥ = (0,-1))
+    stage 4: bad (8,6) row support [(8, 3)] column support [(6, 1)] (token = (value, birth stage); ⊥ = (0,-1))
+existential_maximal H=4 |L|=12 greedy: 4 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 1, cone violations 0; row fans []; column fans []; cross-generation witnesses 4/20
+existential_maximal H=5 |L|=16 optimal: 4 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 0, cone violations 0; row fans []; column fans []; cross-generation witnesses 4/20
+existential_maximal H=5 |L|=16 greedy: 4 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 0, cone violations 0; row fans []; column fans []; cross-generation witnesses 4/20
+existential_maximal H=6 |L|=27 optimal: 5 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 0, cone violations 0; row fans []; column fans []; cross-generation witnesses 1/20
+existential_maximal H=6 |L|=27 greedy: 5 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 0, cone violations 0; row fans []; column fans []; cross-generation witnesses 0/20
+existential_maximal H=7 |L|=21 optimal: 6 stages; max support 1 (≤ H: True); fresh token in every later pair: True; old-column pairs 0, cone violations 0; row fans []; column fans []; cross-generation witnesses 0/30
+existential_maximal H=7 |L|=21 greedy: 6 stages; max support 2 (≤ H: True); fresh token in every later pair: True; old-column pairs 1, cone violations 0; row fans []; column fans []; cross-generation witnesses 1/42
+--- python3 ancestry_audit.py aggregate 3 300
+aggregate-first greedy vs greedy on 300 instances: fewer stages 0, more 0 (max +0), same 300

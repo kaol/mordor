@@ -107,3 +107,4 @@ import Mordor.BoundedSupportPivot
 import Mordor.AxisCapture
 import Mordor.CrossCell
 import Mordor.FiniteQuotient
+import Mordor.ExtremalSeparators

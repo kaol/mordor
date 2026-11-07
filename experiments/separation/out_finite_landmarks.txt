@@ -1,0 +1,68 @@
+--- random instances: python3 finite_landmarks.py 400 1
+400 random instances (closure systems on 3–5 points)
+  height 2, end separated:   20 instances; |L| 3–5; stages max 0, mean 0.00; |T| max 2
+  height 2, end stuck    :    3 instances; |L| 3–5; stages max 1, mean 0.33; |T| max 3
+  height 3, end separated:  122 instances; |L| 4–11; stages max 2, mean 0.19; |T| max 5
+  height 3, end stuck    :   47 instances; |L| 4–9; stages max 2, mean 0.79; |T| max 5
+  height 4, end separated:   90 instances; |L| 5–17; stages max 2, mean 0.27; |T| max 5
+  height 4, end stuck    :   49 instances; |L| 8–23; stages max 3, mean 0.82; |T| max 9
+  height 5, end separated:   27 instances; |L| 12–25; stages max 3, mean 0.63; |T| max 7
+  height 5, end stuck    :   42 instances; |L| 8–30; stages max 4, mean 0.86; |T| max 10
+max stages by (height, |L| decile): {'h2,|L|~0': 1, 'h3,|L|~0': 2, 'h3,|L|~10': 0, 'h4,|L|~0': 2, 'h4,|L|~10': 3, 'h4,|L|~20': 1, 'h5,|L|~0': 0, 'h5,|L|~10': 4, 'h5,|L|~20': 3, 'h5,|L|~30': 2}
+--- adversarial hill-climb, 560 s per seed: python3 finite_landmarks.py climb <seed> 560
+[seed 1]
+height 4, |L| 13: 1 stages (stuck, |T| = 3)
+height 6, |L| 24: 1 stages (stuck, |T| = 3)
+height 5, |L| 22: 1 stages (separated, |T| = 3)
+height 4, |L| 14: 2 stages (stuck, |T| = 4)
+height 5, |L| 19: 2 stages (stuck, |T| = 4)
+height 4, |L| 8: 3 stages (stuck, |T| = 6)
+height 3, |L| 9: 1 stages (stuck, |T| = 3)
+height 5, |L| 21: 4 stages (stuck, |T| = 9)
+height 3, |L| 10: 2 stages (separated, |T| = 4)
+height 6, |L| 16: 2 stages (stuck, |T| = 4)
+height 6, |L| 16: 4 stages (stuck, |T| = 8)
+height 4, |L| 8: 4 stages (stuck, |T| = 7)
+height 6, |L| 22: 5 stages (stuck, |T| = 12)
+height 2, |L| 4: 1 stages (separated, |T| = 3)
+max stages found per height: {2: 1, 3: 2, 4: 4, 5: 4, 6: 5}
+[seed 2]
+height 4, |L| 6: 3 stages (stuck, |T| = 5)
+height 6, |L| 16: 2 stages (stuck, |T| = 5)
+height 3, |L| 5: 1 stages (stuck, |T| = 3)
+height 5, |L| 30: 1 stages (stuck, |T| = 3)
+height 5, |L| 28: 3 stages (stuck, |T| = 8)
+height 3, |L| 10: 2 stages (stuck, |T| = 5)
+height 5, |L| 22: 4 stages (stuck, |T| = 10)
+height 6, |L| 28: 3 stages (stuck, |T| = 6)
+height 6, |L| 20: 4 stages (stuck, |T| = 9)
+height 2, |L| 3: 1 stages (stuck, |T| = 3)
+height 4, |L| 15: 4 stages (stuck, |T| = 8)
+height 6, |L| 22: 5 stages (stuck, |T| = 14)
+height 3, |L| 8: 3 stages (stuck, |T| = 6)
+max stages found per height: {2: 1, 3: 3, 4: 4, 5: 4, 6: 5}
+[seed 3]
+height 4, |L| 9: 1 stages (stuck, |T| = 3)
+height 6, |L| 35: 2 stages (stuck, |T| = 5)
+height 3, |L| 6: 2 stages (separated, |T| = 4)
+height 4, |L| 18: 2 stages (stuck, |T| = 5)
+height 5, |L| 11: 3 stages (stuck, |T| = 5)
+height 6, |L| 29: 3 stages (stuck, |T| = 9)
+height 4, |L| 11: 3 stages (stuck, |T| = 6)
+height 5, |L| 20: 4 stages (stuck, |T| = 9)
+height 6, |L| 20: 4 stages (stuck, |T| = 8)
+height 2, |L| 4: 1 stages (stuck, |T| = 3)
+height 4, |L| 8: 4 stages (stuck, |T| = 8)
+height 5, |L| 19: 5 stages (stuck, |T| = 9)
+height 6, |L| 24: 5 stages (stuck, |T| = 12)
+height 4, |L| 12: 5 stages (stuck, |T| = 11)
+max stages found per height: {2: 1, 3: 2, 4: 5, 5: 5, 6: 5}
+--- height-3 linear spaces: python3 finite_landmarks.py width3 <seed> <points> <restarts>
+height-3 linear spaces on 3 points (|L| up to 8): max stages 3
+height-3 linear spaces on 4 points (|L| up to 11): max stages 2
+height-3 linear spaces on 5 points (|L| up to 12): max stages 3
+height-3 linear spaces on 6 points (|L| up to 12): max stages 2
+height-3 linear spaces on 7 points (|L| up to 16): max stages 4
+height-3 linear spaces on 8 points (|L| up to 14): max stages 2
+height-3 linear spaces on 9 points (|L| up to 22): max stages 3
+height-3 linear spaces on 10 points (|L| up to 21): max stages 1

@@ -111,3 +111,4 @@ import Mordor.ExtremalSeparators
 import Mordor.SeparatorStages
 import Mordor.SeparatorRank
 import Mordor.SeparatorAncestry
+import Mordor.IntervalRefinement

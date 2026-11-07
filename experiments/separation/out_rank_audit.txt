@@ -1,0 +1,22 @@
+--- python3 rank_audit.py random 1 400 (stuck stages exempt)
+{"n": 400, "aborted": 0, "ex_c": 400, "ex_a": 400, "all_c": 399, "all_a": 399, "nest": 0, "nonnest": 12, "ih": 32, "nontrivial": 32}
+--- python3 rank_audit.py random 2 400
+{"n": 400, "aborted": 0, "ex_c": 400, "ex_a": 400, "all_c": 394, "all_a": 394, "nest": 0, "nonnest": 38, "ih": 48, "nontrivial": 49}
+--- python3 rank_audit.py records stage_records.json
+greedy_maximal height 5 |L| 27: existential min 2; some run RP-causal True, RP-any True; all runs RP-causal False; carriers nest 0 / not 10, IH-branch 0
+greedy_maximal height 6 |L| 24: existential min 1; some run RP-causal True, RP-any True; all runs RP-causal False; carriers nest 7 / not 22, IH-branch 0
+greedy_maximal height 7 |L| 68: existential min 3; some run RP-causal True, RP-any True; all runs RP-causal True; carriers nest 0 / not 22, IH-branch 0
+existential_maximal height 3 |L| 10: existential min 2; some run RP-causal True, RP-any True; all runs RP-causal True; carriers nest 0 / not 0, IH-branch 0
+existential_maximal height 4 |L| 12: existential min 4; some run RP-causal False, RP-any False; all runs RP-causal False; carriers nest 1 / not 9, IH-branch 0
+existential_maximal height 5 |L| 16: existential min 4; some run RP-causal True, RP-any True; all runs RP-causal True; carriers nest 0 / not 8, IH-branch 0
+existential_maximal height 6 |L| 27: existential min 5; some run RP-causal True, RP-any True; all runs RP-causal False; carriers nest 0 / not 18, IH-branch 0
+existential_maximal height 7 |L| 21: existential min 6; some run RP-causal True, RP-any True; all runs RP-causal False; carriers nest 0 / not 8, IH-branch 0
+--- python3 multiset_audit.py stage_records.json
+greedy_maximal height 5 |L| 27: 13 runs, 8 repeat a multiset; a shortest run: [(5,), (4,)]
+greedy_maximal height 6 |L| 24: 20 runs, 4 repeat a multiset; a shortest run: [(6,)]
+greedy_maximal height 7 |L| 68: 66 runs, 0 repeat a multiset; a shortest run: [(7,), (6,), (5,)]
+existential_maximal height 3 |L| 10: 2 runs, 0 repeat a multiset; a shortest run: [(3,), (2,)]
+existential_maximal height 4 |L| 12: 4 runs, 4 repeat a multiset; a shortest run: [(4,), (3,), (2,), (3,)]
+existential_maximal height 5 |L| 16: 5 runs, 0 repeat a multiset; a shortest run: [(5,), (4,), (3,), (2,)]
+existential_maximal height 6 |L| 27: 8 runs, 4 repeat a multiset; a shortest run: [(6,), (4,), (3,), (2,), (5,)]
+existential_maximal height 7 |L| 21: 5 runs, 1 repeat a multiset; a shortest run: [(7,), (6,), (5,), (4,), (3,), (2,)]

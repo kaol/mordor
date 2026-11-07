@@ -109,3 +109,4 @@ import Mordor.CrossCell
 import Mordor.FiniteQuotient
 import Mordor.ExtremalSeparators
 import Mordor.SeparatorStages
+import Mordor.SeparatorRank

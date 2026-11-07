@@ -17,3 +17,11 @@
   - `compare SEED N`: existential minimum ≤ greedy ≤ universal maximum on small instances.
   Output `out_separator_stages.txt`; replayable maximal instances (lattice sets, F table, D, greedy trace) in
   `stage_records.json`.
+
+## Round 26: rank audit (§34.3z¹²²)
+
+- `rank_audit.py random SEED N | records FILE.json`: enumerates every run (all maximal-separator choices) and tests
+  the rank-parent property RP (causal and any-parent; stuck stages exempt), plus nesting of the carriers of the
+  causal fork. Output `out_rank_audit.txt`.
+- `multiset_audit.py FILE.json`: the multisets of response closure ranks along every run; a run that repeats a
+  multiset admits no strictly decreasing multiset potential.

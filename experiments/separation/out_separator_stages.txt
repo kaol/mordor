@@ -1,0 +1,99 @@
+300 instances compared (0 skipped: branching > limit): existential min < greedy in 10 (max gap 2); universal max > greedy in 18 (max gap 2)
+--- greedy climbs (climb SEED 550 K)
+height 6, |L| 26: greedy 1 stages (stuck), existential minimum 1
+height 6, |L| 50: greedy 3 stages (separated), existential minimum 3
+height 5, |L| 25: greedy 2 stages (separated), existential minimum 2
+height 5, |L| 16: greedy 4 stages (stuck), existential minimum 3
+height 6, |L| 39: greedy 4 stages (stuck), existential minimum 4
+height 6, |L| 30: greedy 5 stages (stuck), existential minimum 4
+height 5, |L| 16: greedy 5 stages (stuck), existential minimum 1
+height 6, |L| 24: greedy 6 stages (stuck), existential minimum 1
+height 5, |L| 27: greedy 6 stages (stuck), existential minimum 2
+best greedy stages by height: {5: 6, 6: 6}
+height 5, |L| 22: greedy 0 stages (stuck), existential minimum 0
+height 6, |L| 19: greedy 1 stages (stuck), existential minimum 1
+height 5, |L| 20: greedy 4 stages (stuck), existential minimum 2
+height 6, |L| 19: greedy 3 stages (separated), existential minimum 3
+height 6, |L| 21: greedy 5 stages (stuck), existential minimum 4
+height 5, |L| 10: greedy 5 stages (stuck), existential minimum 4
+height 5, |L| 36: greedy 6 stages (stuck), existential minimum 2
+best greedy stages by height: {5: 6, 6: 5}
+height 6, |L| 65: greedy 1 stages (stuck), existential minimum 1
+height 7, |L| 70: greedy 0 stages (stuck), existential minimum 0
+height 6, |L| 17: greedy 2 stages (stuck), existential minimum 2
+height 7, |L| 49: greedy 2 stages (separated), existential minimum 2
+height 7, |L| 42: greedy 3 stages (stuck), existential minimum 3
+height 6, |L| 24: greedy 3 stages (stuck), existential minimum 3
+height 7, |L| 33: greedy 4 stages (stuck), existential minimum 4
+height 6, |L| 20: greedy 4 stages (stuck), existential minimum 4
+height 6, |L| 19: greedy 5 stages (stuck), existential minimum 2
+height 7, |L| 41: greedy 5 stages (stuck), existential minimum 3
+height 7, |L| 68: greedy 6 stages (stuck), existential minimum 3
+height 6, |L| 19: greedy 6 stages (stuck), existential minimum 2
+best greedy stages by height: {6: 6, 7: 6}
+--- existential climbs (climbx SEED 550 K)
+[x5]
+height 5, |L| 14: existential minimum 3 (greedy 3, stuck)
+height 4, |L| 10: existential minimum 1 (greedy 1, stuck)
+height 4, |L| 19: existential minimum 2 (greedy 2, stuck)
+height 5, |L| 16: existential minimum 4 (greedy 4, stuck)
+height 4, |L| 15: existential minimum 3 (greedy 3, stuck)
+best existential minimum by height: {4: 3, 5: 4}
+[x6a]
+height 6, |L| 21: existential minimum 1 (greedy 1, stuck)
+height 5, |L| 12: existential minimum 2 (greedy 2, stuck)
+height 6, |L| 25: existential minimum 2 (greedy 2, stuck)
+height 6, |L| 19: existential minimum 3 (greedy 3, stuck)
+height 5, |L| 23: existential minimum 3 (greedy 3, stuck)
+height 5, |L| 20: existential minimum 4 (greedy 4, stuck)
+height 6, |L| 16: existential minimum 4 (greedy 5, stuck)
+height 6, |L| 27: existential minimum 5 (greedy 5, separated)
+best existential minimum by height: {5: 4, 6: 5}
+[x6b]
+height 5, |L| 27: existential minimum 0 (greedy 0, stuck)
+height 5, |L| 15: existential minimum 2 (greedy 2, stuck)
+height 6, |L| 20: existential minimum 2 (greedy 2, stuck)
+height 5, |L| 14: existential minimum 3 (greedy 3, stuck)
+height 6, |L| 25: existential minimum 3 (greedy 3, stuck)
+height 6, |L| 26: existential minimum 4 (greedy 4, stuck)
+height 5, |L| 15: existential minimum 4 (greedy 4, stuck)
+height 6, |L| 20: existential minimum 5 (greedy 5, separated)
+best existential minimum by height: {5: 4, 6: 5}
+[x4]
+height 4, |L| 9: existential minimum 1 (greedy 1, stuck)
+height 3, |L| 5: existential minimum 1 (greedy 1, stuck)
+height 4, |L| 9: existential minimum 2 (greedy 2, stuck)
+height 3, |L| 10: existential minimum 2 (greedy 2, stuck)
+height 4, |L| 8: existential minimum 3 (greedy 3, stuck)
+height 4, |L| 12: existential minimum 4 (greedy 4, stuck)
+best existential minimum by height: {3: 2, 4: 4}
+[x5b]
+height 4, |L| 11: existential minimum 1 (greedy 1, stuck)
+height 5, |L| 22: existential minimum 0 (greedy 0, stuck)
+height 5, |L| 20: existential minimum 1 (greedy 1, stuck)
+height 4, |L| 17: existential minimum 2 (greedy 2, stuck)
+height 5, |L| 16: existential minimum 2 (greedy 2, stuck)
+height 5, |L| 12: existential minimum 3 (greedy 3, stuck)
+height 5, |L| 9: existential minimum 4 (greedy 4, stuck)
+height 4, |L| 10: existential minimum 3 (greedy 3, stuck)
+best existential minimum by height: {4: 3, 5: 4}
+[x6c]
+height 5, |L| 19: existential minimum 2 (greedy 2, stuck)
+height 6, |L| 12: existential minimum 1 (greedy 1, stuck)
+height 5, |L| 12: existential minimum 3 (greedy 3, stuck)
+height 6, |L| 20: existential minimum 3 (greedy 3, stuck)
+height 5, |L| 17: existential minimum 4 (greedy 4, stuck)
+height 6, |L| 18: existential minimum 4 (greedy 4, stuck)
+height 6, |L| 20: existential minimum 5 (greedy 5, stuck)
+best existential minimum by height: {5: 4, 6: 5}
+[x7]
+height 6, |L| 32: existential minimum 1 (greedy 1, stuck)
+height 7, |L| 51: existential minimum 2 (greedy 2, stuck)
+height 7, |L| 26: existential minimum 3 (greedy 3, stuck)
+height 6, |L| 27: existential minimum 3 (greedy 3, separated)
+height 6, |L| 20: existential minimum 4 (greedy 4, stuck)
+height 7, |L| 36: existential minimum 4 (greedy 4, stuck)
+height 6, |L| 30: existential minimum 5 (greedy 5, stuck)
+height 7, |L| 34: existential minimum 5 (greedy 5, stuck)
+height 7, |L| 21: existential minimum 6 (greedy 6, stuck)
+best existential minimum by height: {6: 5, 7: 6}

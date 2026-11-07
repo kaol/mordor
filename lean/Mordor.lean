@@ -108,3 +108,4 @@ import Mordor.AxisCapture
 import Mordor.CrossCell
 import Mordor.FiniteQuotient
 import Mordor.ExtremalSeparators
+import Mordor.SeparatorStages

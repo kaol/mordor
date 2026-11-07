@@ -58,7 +58,43 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
   - Under a counterexample, every finite row family leaves a D-valued grid column uncaptured (`uncaptured_column_exists`). So finite-capture refinement terminates exactly when Cut holds for that F, and any termination measure must use F.
   - Finite Sperner good words exist at every stage (odd count) but need not be compatible under enlargement (`experiments/infcapture/`).
 
-**Open frontier now.** Chain-finite Cut, equivalently join-closure of R(F) (`Frontier.lean`), for cuts where **both** Max D and Min Dᶜ are infinite. Also still open:
+**Later (§34.3z¹⁰⁷–¹²³): the refinement and separator programs.**
+- **Grid refinement does not terminate by local means (§34.3z¹⁰⁷–¹¹⁶, Lean).**
+  - Pivot monotonicity, fresh-word transport and the first ideal-orbit stage are each refuted or equivalent to Cut
+    (`first_stage_iff`).
+  - Refinement by dominated rows is inert, and capturing rows have unconstrained orbits (`DominatedRows`).
+  - Grid capture holds without a chain condition once entry times are given (`cut_of_grid_capture_upto`). Its ground
+    instances do not help the edge-height-6 search: they are almost always satisfied by one orbit point.
+- **Axis capture and bounded support (§34.3z¹¹⁷–¹¹⁸, Lean).** An axis-capture graph splits each finite row family into
+  an axis escape or an interior mixed pivot with Alternative I (`axis_or_mixed`). At edge-height ≤ H a minimal mixed
+  pivot has 2 ≤ |S| ≤ H − 1 and tᵢ + |S| ≤ H (`mixed_minimal_support`). Partial models nevertheless realize
+  repeated new maxima, cross cells and boundary completion at constant height 3 (`experiments/sat/axis_*.py`,
+  `cross_cells.py`).
+- **Finite faithful images (§34.3z¹¹⁹, Lean).**
+  - A witness-free structure has no finite faithful poset image (`faithful_image_impossible`). The lattice-congruence
+    form is a corollary.
+  - Half-filtration: a finite meet-closed family separating every cross pair forces a witness
+    (`separating_family_witness`, and its dual).
+  - On ω + 1 the coarsest D-saturated congruence has two classes and violates cut-separation, so finite index is not
+    the obstruction.
+- **Extremal separators (§34.3z¹²⁰–¹²³, Lean).**
+  - Maximal separators exist under ACC and are ⊓-irreducible; aggregation has an exact criterion
+    (`ExtremalSeparators`).
+  - The refinement process is defined, with stopping conditions, persistence, the causal chain, and "a terminal run
+    gives Cut" (`SeparatorStages`).
+  - The closure-rank drop, the causal fork, and the contained branch at edge-height 6 via `cut_height5` are proved
+    (`SeparatorRank`).
+  - So are bounded meet and join supports, fresh tokens, fan collapse, and a generic potential-parent stage bound
+    (`SeparatorAncestry`).
+  - Search (`experiments/separation/`): f(H) = H − 1 is refuted by an exact height-4 instance, which needs 4 stages
+    under every choice. Rank-only potentials, scalar or multiset, fail on that instance. The gap potential
+    rank y − rank x survives every test (about 2.9 · 10⁶ mutated hard instances).
+
+**Open frontier now.** Chain-finite Cut, equivalently join-closure of R(F) (`Frontier.lean`), for cuts where **both**
+Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first open case. The current concrete target is
+the **gap rank-parent conjecture** (§34.3z¹²³): some choice of maximal separators gives every non-stuck bad pair a
+causal parent with a strictly larger rank y − rank x. By `potential_parent_stage_bound` and `cut_of_terminal_run`
+it would prove Cut at every finite edge-height. Also still open:
 - the poset form of FG∞ at k = 3 (max-only CLL);
 - Ω × Ω × Ω;
 - products with a factor that is not end-finite.
@@ -78,7 +114,8 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
 | `experiments/sat/` | Round 22: direct SAT encoding (CaDiCaL via PySAT), DRAT certification, semi-commutation and Cut Lemma sweeps, z3 theories |
 | `lean/` | Round 26: Lean 4 / Mathlib proofs of the log's proved core (Mathlib is a lake dependency, not committed) |
 | `data/gpu-2026-10/` | Round 25: results.jsonl and batch.log of the first GPU run |
-| `experiments/finite_support/`, `experiments/asyncgrid/`, `experiments/infcapture/` | Round 26, §34.3z⁹⁷–¹⁰⁶: z3 orbit and support profiles of the crossing case, the asynchronous-grid label abstraction (`reduced_grid.py`), good-word compatibility |
+| `experiments/finite_support/`, `experiments/asyncgrid/`, `experiments/infcapture/` | Round 26, §34.3z⁹⁷–¹¹⁵: z3 orbit and support profiles of the crossing case, the asynchronous-grid label abstraction (`reduced_grid.py`), good-word compatibility, grid refinement, dominated and capturing rows |
+| `experiments/separation/` | Round 26, §34.3z¹²⁰–¹²³: the extremal-separator process on finite lattices (bitset search, replayable records), rank, ancestry and potential audits |
 | `experiments/dialgebra/` | Round 24: thin-model dialgebra censuses (transposition, failure zone, D5), the Cut Lemma transposition, orbit-laxity z3 searches |
 | `data/` | Machine-experiment results (JSON) |
 

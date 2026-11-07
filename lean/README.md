@@ -43,7 +43,12 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/Sperner.lean`, `Mordor/FinGenAll.lean` | §34.3n | the product Sperner lemma (`odd_goods`); `captured`, `cut_fingen` (finitely generated cut and complement), `cut_finite`, `cl_finite`: **Cut and CL on every finite lattice** |
 | `Mordor/FGTwo.lean` | §34.3z¹⁴, ¹⁶ | `orbit_end`, the sandwich, `cut_two` (two-generated cuts under DCC), `cut_bouquet` |
 | `Mordor/AsyncMeetGrid.lean` | §34.3z¹⁰⁵ | the asynchronous meet grid; **`cut_fingen_dcc`: the Cut Lemma for every finitely generated cut of a DCC lattice** (via `cut_finite` on the grid lattice); `cut_three`, `cut_two_of_grid` |
-| `Mordor/InfiniteCapture.lean` | §34.3z¹⁰⁶ | extremal boundary facts; `cut_of_grid_capture` (one-sided capture suffices); `uncaptured_column_exists`; `cut_cofingen_acc` (dual); `cut_chainfinite_of_finite_side` |
+| `Mordor/InfiniteCapture.lean` | §34.3z¹⁰⁶, ¹¹⁶ | extremal boundary facts; `cut_of_grid_capture` (one-sided capture suffices) and `cut_of_grid_capture_upto` (no chain condition, given entry times); `uncaptured_column_exists`, `uncaptured_column_upto`; `cut_cofingen_acc` (dual); `cut_chainfinite_of_finite_side` |
+| `Mordor/BoundedSupportPivot.lean`, `Mordor/AxisCapture.lean` | §34.3z¹¹⁷ | minimal supports give strict partial-meet chains (\|S\| + 1 ≤ H, tᵢ + \|S\| ≤ H); the axis-capture graph, `axis_or_mixed`, `mixed_minimal_support`, `new_maximum` |
+| `Mordor/CrossCell.lean` | §34.3z¹¹⁸ | the cross-envelope lemma, its row-side dual, boundary extension of cross outputs, the two-point form at the blind coordinate |
+| `Mordor/FiniteQuotient.lean` | §34.3z¹¹⁹ | `faithful_image_impossible`, `finite_cut_faithful_quotient_impossible`; half-filtration `separating_family_witness` (and dual); the ω + 1 obstruction |
+| `Mordor/ExtremalSeparators.lean`, `Mordor/SeparatorStages.lean` | §34.3z¹²⁰–¹²¹ | maximal/minimal separators (⊓-/⊔-irreducible), the aggregation criterion; the separator process (`Step`, `Run`), persistence, strict growth, the causal chain, `cut_of_terminal_run`, `exists_run` |
+| `Mordor/SeparatorRank.lean`, `Mordor/SeparatorAncestry.lean` | §34.3z¹²²–¹²³ | closure-rank drop, `rank_parent_stage_bound`, the causal fork, `contained_branch_height6` (via `cut_height5`; `bv_decide` trust); separator tokens, fresh tokens, minimal meet/join supports ≤ H, fan collapse, `potential_parent_stage_bound` |
 
-The table lists the headline files; the other files under `Mordor/` (about 100 in all) are documented in their module
+The table lists the headline files; the other files under `Mordor/` (about 120 in all) are documented in their module
 docstrings and in the log section each one cites.

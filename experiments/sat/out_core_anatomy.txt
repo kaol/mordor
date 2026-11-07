@@ -1,0 +1,17 @@
+CutHeight4.lean: 15 F-terms, max depth 4
+clause families: {'mono': 23, 'rank': 22, 'now2': 13, 'trans': 9, 'now1': 8, 'refl': 7, 'bot': 5, 'top': 4, 'rank0': 4, 'rankmax': 1, 'dbot': 1, 'dtop': 1, 'wlog': 1, 'down': 1}
+rows used: 4 distinct; ⊥-row cells: 6 of 15; ⊤ as column: 4
+cells per row (row: count): ⊥:6, t3:4, t4:3, t5:2
+orbits from ⊤ present (row: length): ⊥:4, t3:2, t4:1, t5:1
+terms on some orbit from ⊤: 8 of 15
+no-witness instances: F≰x side on 8 cells, y≰F side on 13 cells; cells with both: 7
+monotonicity instances: 23 (distinct cell pairs 23)
+
+CutHeight5.lean: 84 F-terms, max depth 7
+clause families: {'mono': 233, 'rank': 195, 'trans': 193, 'now2': 60, 'now1': 42, 'down': 30, 'refl': 21, 'bot': 19, 'top': 17, 'rank0': 17, 'rankmax': 2, 'dbot': 1, 'dtop': 1, 'wlog': 1}
+rows used: 17 distinct; ⊥-row cells: 20 of 84; ⊤ as column: 16
+cells per row (row: count): ⊥:20, t3:11, t4:8, t5:6, t9:6, t8:4, t23:4, t12:4, t21:3, t14:3, t38:3, t47:3, t43:3, t15:2, t65:2, t10:1, t56:1
+orbits from ⊤ present (row: length): ⊥:5, t3:4, t4:2, t5:2, t8:1, t9:1, t10:1, t12:1, t14:1, t15:1, t21:1, t23:1, t38:1, t43:1, t47:1, t56:1
+terms on some orbit from ⊤: 25 of 84
+no-witness instances: F≰x side on 42 cells, y≰F side on 60 cells; cells with both: 30
+monotonicity instances: 233 (distinct cell pairs 233)

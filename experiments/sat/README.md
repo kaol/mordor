@@ -107,3 +107,9 @@ computation before it is reported; an unsat answer is only as trustworthy as the
 - `seeded_ground.py H maxterms per_round J seed|noseed [seconds] [I|II]`: `lattice_ground` without the WLOG unit, seeded
   with the two-cycle mixed-pivot configuration (constants g₀, g₁, q maximal over all terms). H = 3, 4 UNSAT
   (seeded 17 / 65 terms, branch I 21 / 39, unseeded 13 / 38); H = 5, 6 SAT within 590 s. Output `out_seeded_ground.txt`.
+
+## Round 26: certificate anatomy (§34.3z¹¹⁹)
+
+- `core_anatomy.py LEANFILE`: rows, ⊥-row share, orbit chains, no-witness sides and clause families of the generated
+  certificates `lean/Mordor/CutHeight4.lean`, `CutHeight5.lean` (drat-trim cores). Output `out_core_anatomy.txt`
+  (H = 5: 84 F-terms over 17 rows, 20 ⊥-row cells, 25 terms on orbits from ⊤).

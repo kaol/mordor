@@ -47,3 +47,10 @@
   existential and universal maximum-gap descent over all runs, on records, random instances and mutations of hard
   instances; `rule`/`rulehunt` test the one-step lookahead rule (minimize the next maximum gap). Output
   `out_gapmax_audit.txt`; lookahead counterexamples `gapmax_lookahead_counterexample_s7*.json` (|L| = 12, height 4).
+
+## Round 26: shortest runs and selection rules (§34.3z¹²⁷)
+
+- `shortest_audit.py records FILE | hunt SEED SECONDS FILES...`: maximum-gap descent among the shortest runs.
+- `nested_rule.py records FILE | hunt SEED SECONDS VARIANT FILES...`: deterministic rules `nested` (prefer a maximal
+  separator below the column), `nested_rank`, and `all` (the full process). Output `out_shortest_nested.txt`;
+  smallest rule failures `nested_*_counterexample_s*.json`.

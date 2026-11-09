@@ -1,0 +1,31 @@
+--- python3 shortest_audit.py records stage_records.json  (class among shortest runs, a longer run descends, shortest length)
+greedy_maximal 5 27 ('all', True, 2)
+greedy_maximal 6 24 ('all', True, 1)
+greedy_maximal 7 68 ('all', True, 3)
+existential_maximal 3 10 ('all', False, 2)
+existential_maximal 4 12 ('some', False, 4)
+existential_maximal 5 16 ('all', False, 4)
+existential_maximal 6 27 ('some', False, 5)
+existential_maximal 7 21 ('all', True, 6)
+--- hunt 81 / 82 / 83 (540 s, mutations with shortest length >= 3)
+shortest runs: (descending among shortest, some longer run descends) -> {('all', False): 64674, ('all', True): 8626, ('some', False): 7128}
+shortest runs: (descending among shortest, some longer run descends) -> {('all', False): 64466, ('some', False): 7017, ('all', True): 8634}
+shortest runs: (descending among shortest, some longer run descends) -> {('all', False): 64381, ('all', True): 8548, ('some', False): 7206}
+--- python3 nested_rule.py records stage_records.json
+greedy_maximal 5 27 {'nested': (True, [10, 9]), 'nested_rank': (True, [10, 9]), 'all': (True, [10, 9])}
+greedy_maximal 6 24 {'nested': (True, [12]), 'nested_rank': (True, [12]), 'all': (True, [12, 7])}
+greedy_maximal 7 68 {'nested': (True, [14, 13, 12, 11, 10]), 'nested_rank': (True, [14, 13, 12, 11, 10]), 'all': (True, [14, 13])}
+existential_maximal 3 10 {'nested': (True, [6, 5]), 'nested_rank': (True, [6, 5]), 'all': (True, [6])}
+existential_maximal 4 12 {'nested': (True, [8, 7, 6, 5]), 'nested_rank': (True, [8, 7, 6, 5]), 'all': (False, [8, 5, 5])}
+existential_maximal 5 16 {'nested': (True, [10, 9, 8, 7]), 'nested_rank': (True, [10, 9, 8, 7]), 'all': (True, [10, 8])}
+existential_maximal 6 27 {'nested': (False, [12, 10, 9, 8, 9]), 'nested_rank': (False, [12, 10, 9, 8, 9]), 'all': (False, [12, 9, 8, 9])}
+existential_maximal 7 21 {'nested': (True, [14, 13, 12, 11, 10, 9, 8]), 'nested_rank': (True, [14, 13, 12, 11, 10, 9, 8]), 'all': (True, [14, 13, 12, 11, 10])}
+--- hunt 91 nested / 92 nested_rank / 93, 94 all
+rule nested: 80857 distinct mutated hard instances, 5727 without descent
+smallest failure: |L| = 21, height 7, M = [14, 13, 12, 11, 10, 9, 9]
+rule nested_rank: 80546 distinct mutated hard instances, 5711 without descent
+smallest failure: |L| = 21, height 7, M = [14, 13, 12, 11, 10, 9, 9]
+rule all: 79135 distinct mutated hard instances, 7274 without descent
+smallest failure: |L| = 12, height 4, M = [8, 5, 5]
+rule all: 78575 distinct mutated hard instances, 7141 without descent
+smallest failure: |L| = 12, height 4, M = [8, 5, 5]

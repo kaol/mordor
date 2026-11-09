@@ -60,4 +60,12 @@ theorem cut_of_max_gap_drop (H : ℕ) (hF : ∀ x x' y y', x ≤ x' → y ≤ y'
     obtain ⟨p, hp, hlt'⟩ := (parent_iff_max_drop h h' (gap H)).2 hlt (x', y') (mem_badSet.2 hb)
     exact ⟨p.1, p.2, mem_badSet.1 hp, hlt'⟩
 
+/-- **Nested separators shrink the gap** (§34.3z¹²⁷). A separator `s ≤ y` of a pair `(x, y)` (so `y ≰ s`) lies
+strictly below `y`; at edge-height `≤ H` the child `(x, s)` has strictly smaller gap. This is the mechanism of the
+descending runs along the `⊥` row; it is not a selection rule (the nested-first rule fails, §34.3z¹²⁷). -/
+theorem nested_child_gap {H : ℕ} (hn : Mordor.Ground.NoChain β (H + 1)) {x y s : β} (hsy : s ≤ y) (hys : ¬ y ≤ s) :
+    gap H (x, s) < gap H (x, y) := by
+  have h := height_strictMono hn (lt_of_le_of_ne hsy fun h => hys (h ▸ le_rfl))
+  simp only [gap]; omega
+
 end Mordor.MaxGap

@@ -1,0 +1,37 @@
+--- python3 local_lex.py hard respmax_hard_witnesses_*.json
+{('random T', 'diff', False): 177, ('random T', 'diff', True): 3063, ('random T', 'gap', False): 177, ('random T', 'gap', True): 3063, ('random T', 'lex', False): 25, ('random T', 'lex', True): 3215, ('reachable', 'diff', False): 46, ('reachable', 'diff', True): 1084, ('reachable', 'gap', False): 46, ('reachable', 'gap', True): 1084, ('reachable', 'lex', False): 10, ('reachable', 'lex', True): 1120}
+smallest non-progressive ('random', 'gap'): |L| = 6
+smallest non-progressive ('random', 'diff'): |L| = 6
+smallest non-progressive ('reachable', 'gap'): |L| = 6
+smallest non-progressive ('reachable', 'diff'): |L| = 6
+smallest non-progressive ('reachable', 'lex'): |L| = 9
+smallest non-progressive ('random', 'lex'): |L| = 9
+--- python3 local_lex.py random 1 520
+{('random T', 'diff', False): 7931, ('random T', 'diff', True): 11969969, ('random T', 'gap', False): 7931, ('random T', 'gap', True): 11969969, ('random T', 'lex', False): 7065, ('random T', 'lex', True): 11970835, ('reachable', 'diff', False): 547, ('reachable', 'diff', True): 1355339, ('reachable', 'gap', False): 547, ('reachable', 'gap', True): 1355339, ('reachable', 'lex', False): 348, ('reachable', 'lex', True): 1355538}
+smallest non-progressive ('random', 'gap'): |L| = 6
+smallest non-progressive ('random', 'diff'): |L| = 6
+smallest non-progressive ('random', 'lex'): |L| = 6
+smallest non-progressive ('reachable', 'gap'): |L| = 6
+smallest non-progressive ('reachable', 'diff'): |L| = 6
+smallest non-progressive ('reachable', 'lex'): |L| = 6
+--- python3 local_lex.py random 2 520
+{('random T', 'diff', False): 8137, ('random T', 'diff', True): 11943243, ('random T', 'gap', False): 8137, ('random T', 'gap', True): 11943243, ('random T', 'lex', False): 7280, ('random T', 'lex', True): 11944100, ('reachable', 'diff', False): 573, ('reachable', 'diff', True): 1356322, ('reachable', 'gap', False): 573, ('reachable', 'gap', True): 1356322, ('reachable', 'lex', False): 345, ('reachable', 'lex', True): 1356550}
+smallest non-progressive ('random', 'lex'): |L| = 6
+smallest non-progressive ('random', 'gap'): |L| = 6
+smallest non-progressive ('random', 'diff'): |L| = 6
+smallest non-progressive ('reachable', 'gap'): |L| = 6
+smallest non-progressive ('reachable', 'diff'): |L| = 6
+smallest non-progressive ('reachable', 'lex'): |L| = 6
+--- python3 local_lex.py random 3 520
+{('random T', 'diff', False): 7823, ('random T', 'diff', True): 11388617, ('random T', 'gap', False): 7823, ('random T', 'gap', True): 11388617, ('random T', 'lex', False): 6874, ('random T', 'lex', True): 11389566, ('reachable', 'diff', False): 572, ('reachable', 'diff', True): 1291431, ('reachable', 'gap', False): 572, ('reachable', 'gap', True): 1291431, ('reachable', 'lex', False): 341, ('reachable', 'lex', True): 1291662}
+smallest non-progressive ('random', 'lex'): |L| = 5
+smallest non-progressive ('random', 'gap'): |L| = 5
+smallest non-progressive ('random', 'diff'): |L| = 5
+smallest non-progressive ('reachable', 'lex'): |L| = 6
+smallest non-progressive ('reachable', 'gap'): |L| = 6
+smallest non-progressive ('reachable', 'diff'): |L| = 6
+--- python3 stage_kinds.py respmax_hard_witnesses_*.json
+instances 11991
+11725 ('stage-0 kinds that work', ('RMu',))
+156 ('stage-0 kinds that work', ('Mu', 'Ru'))
+110 ('stage-0 kinds that work', ('Mu', 'Rd'))

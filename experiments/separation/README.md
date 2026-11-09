@@ -122,3 +122,12 @@
   same flags.
 - `respmax_audit.py random SEED SECONDS | hard SHARD NSHARDS`: candidate stage potentials along shortest
   response-or-maximal runs. Output `out_respmax.txt`.
+
+## Round 26: local progress fails; stage-0 kinds at height 3 (§34.3z¹³⁸)
+
+- `local_lex.py random SEED SECONDS | hard FILE...`: is every state (reachable, or a random meet-closed family)
+  *progressive* — some response-or-maximal choice gives goal or a lower stage potential (lex, gap, diff)? Smallest
+  reachable lex failure `local_lex_fail_min6.json`. Hard instances `respmax_hard_witnesses_{0..3}.json` (exact H − 1
+  witnesses on all 4-point closure systems).
+- `stage_kinds.py FILES`: stage-0 separator kinds (response / maximal, in / outside D) that begin a terminating
+  2-stage run at height 3. Output `out_local_lex.txt`.

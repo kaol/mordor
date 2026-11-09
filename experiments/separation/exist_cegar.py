@@ -7,9 +7,11 @@ with its stages T_0 … T_j and chosen separators, and blocked by the clause
   ¬( ∧_i bad-set(T_i) = B_i  ∧  every chosen s is a maximal separator of its pair  ∧  goal(T_j) ),
 which no instance with existential minimum ≥ k satisfies (sound). UNSAT ⇒ maximum < k; SAT with a verified model
 ⇒ maximum ≥ k.
+With --respmax a separator is the response F(x, y) or a maximal one (blocking literal f(x, y) = s for a response).
 With --general the runs use general separators (any s ≥ F(x, y), y ≰ s; the blocking clause drops maximality).
-With --nodesc: search for an instance with NO maximum-gap-descending run (blocking each descending run found).
-  python3 exist_cegar.py [--general] [--nodesc] (pencil K | linear K SEED COUNT | chain N | closure K M SEED COUNT) KMAX [SECONDS]
+With --nodesc [--pot gap|diff|lex]: search for an instance with NO run along which the stage potential strictly
+decreases (gap = max h(y) + H − h(x), diff = max h(y) − h(x), lex = (−min h(x), max h(y)) lexicographically) (blocking each descending run found).
+  python3 exist_cegar.py [--general | --respmax] [--nodesc] (pencil K | linear K SEED COUNT | chain N | closure K M SEED COUNT) KMAX [SECONDS]
 """
 import sys, itertools, time, random
 from pysat.solvers import Cadical153
@@ -74,7 +76,10 @@ class Cegar:
                     b = self.bad(T, x, y)
                     if b is None: continue
                     conj.append(b if (x, y) in ch else -b)
-            for (x, y), s in ch.items(): conj.append(self.fle(x, y, s))    # maximality of s is static given F ≤ s
+            for (x, y), s in ch.items():
+                # a maximal separator is maximal given F ≤ s (static rest); otherwise s was chosen as the response
+                if GENERAL or static_maxsep(self.L, s, y): conj.append(self.fle(x, y, s))
+                else: conj.append(self.v('f', x, y, s))
         Tf = run[-1]; g = self.v('goal', Tf)
         bl = [self.bad(Tf, x, y) for x in Tf for y in Tf]; bl = [b for b in bl if b is not None]
         stuck = []
@@ -95,10 +100,13 @@ def static_maxsep(L, s, y):
     return not L.le[y][s] and all(L.le[y][t] for t in L.covers_up[s])
 
 GENERAL = False          # set by --general: any separator s ≥ F(x, y) with y ≰ s
+RESPMAX = False          # set by --respmax: the response F(x, y) or a maximal separator
 
 def seps(L, F, x, y):
     if GENERAL: return [s for s in range(L.n) if L.le[F[x][y]][s] and not L.le[y][s]]
-    return ss.max_separators(L, F[x][y], y)
+    ms = ss.max_separators(L, F[x][y], y)
+    if RESPMAX and F[x][y] not in ms and not L.le[y][F[x][y]]: ms = ms + [F[x][y]]
+    return ms
 
 def exist_min_any(L, F, D, k):
     return not shortest_runs(L, F, D, k, cap=1)
@@ -123,14 +131,23 @@ def shortest_runs(L, F, D, k, cap=200):
         layer = nxt
     return out
 
+POT = 'gap'              # stage potential for --nodesc: gap | diff | lex  (--pot NAME)
+
+def stage_potential(L, bad):
+    rk = L.rank
+    if POT == 'gap': return max(rk[y] + L.height - rk[x] for x, y in bad)
+    if POT == 'diff': return max(rk[y] - rk[x] for x, y in bad)
+    if POT == 'lex': return (-min(rk[x] for x, y in bad), max(rk[y] for x, y in bad))
+    raise ValueError(POT)
+
 def descending_run(L, F, D, budget=200000):
-    """A maximum-gap-descending terminating run (separators per `seps`), as for `shortest_runs`; None if none
-    exists; 'cap' if the search budget is exceeded."""
-    H = L.height; rk = L.rank; phi = lambda p: rk[p[1]] + H - rk[p[0]]; memo = set(); work = [0]
+    """A terminating run along which the stage potential (POT) strictly decreases (separators per `seps`), as for
+    `shortest_runs`; None if none exists; 'cap' if the search budget is exceeded."""
+    memo = set(); work = [0]
     def go(T, bound):
         bad = ss.bad_pairs(L, F, D, T)
         if not bad or any(L.le[y][F[x][y]] for x, y in bad): return [T]
-        M = max(phi(p) for p in bad)
+        M = stage_potential(L, bad)
         if bound is not None and M >= bound: return None
         if (T, bound) in memo: return None
         for chv in itertools.product(*[seps(L, F, x, y) for x, y in bad]):
@@ -160,7 +177,7 @@ def at_least(L, k, seconds=None):
         if not C.S.solve(): return False, C.iters
         F, D = C.decode(); runs = shortest_runs(L, F, D, k)
         if not runs:
-            if not GENERAL: assert ss.exist_min(L, F, D, limit=10 ** 6) >= k
+            if not (GENERAL or RESPMAX): assert ss.exist_min(L, F, D, limit=10 ** 6) >= k
             return (F, D), C.iters
         for r in runs: C.block([(frozenset(T), ch) for T, ch in r[:-1]] + [frozenset(r[-1])])
 
@@ -175,6 +192,9 @@ def maximum(L, kmax, seconds):
 
 if __name__ == '__main__':
     if '--general' in sys.argv: sys.argv.remove('--general'); GENERAL = True
+    if '--respmax' in sys.argv: sys.argv.remove('--respmax'); RESPMAX = True
+    if '--pot' in sys.argv:
+        i = sys.argv.index('--pot'); POT = sys.argv[i + 1]; del sys.argv[i:i + 2]
     NODESC = '--nodesc' in sys.argv
     if NODESC: sys.argv.remove('--nodesc')
     fam = sys.argv[1]; secs = None
@@ -200,7 +220,7 @@ if __name__ == '__main__':
             t0 = time.time(); r, it = no_descent(L, secs)
             verdict = ('no descent-free instance (UNSAT)' if r is False else 'undecided' if r is None else
                        'search budget exceeded' if r == 'cap' else 'FOUND an instance with no descending run')
-            print(f"{name}: |L| = {L.n}, height {L.height}, {'general' if GENERAL else 'maximal'} separators: {verdict} "
+            print(f"{name}: |L| = {L.n}, height {L.height}, {'general' if GENERAL else 'response-or-maximal' if RESPMAX else 'maximal'} separators: {verdict} "
                   f"({it} blocks, {time.time() - t0:.0f} s)", flush=True)
             if isinstance(r, tuple):
                 import json

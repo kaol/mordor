@@ -114,3 +114,11 @@
 - `nodesc_sweep.py [--general] [--all-heights] P NMAX SECONDS [SHARD NSHARDS]`: all closure systems on P points up to
   point permutation; `max_sweep` for exact maxima. Minimal descent-free instance `descent_free_min6.json`.
   Output `out_exist_cegar.txt`.
+
+## Round 26: response-or-maximal separators and stage potentials (§34.3z¹³⁷)
+
+- `exist_cegar.py --respmax`: separators restricted to the response F(x, y) or a maximal separator;
+  `--nodesc --pot gap|diff|lex` chooses the stage potential that must strictly decrease. `nodesc_sweep.py` takes the
+  same flags.
+- `respmax_audit.py random SEED SECONDS | hard SHARD NSHARDS`: candidate stage potentials along shortest
+  response-or-maximal runs. Output `out_respmax.txt`.

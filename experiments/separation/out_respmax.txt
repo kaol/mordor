@@ -1,0 +1,98 @@
+--- python3 exist_cegar.py --respmax --nodesc pencil 4 0 50; --respmax pencil 5 8 80
+near-pencil 4: |L| = 10, height 3, response-or-maximal separators: no descent-free instance (UNSAT) (23 blocks, 0 s)
+near-pencil 5: |L| = 12, height 3, max existential minimum 2 (exact (56 blocks at k = 3, 0 s))
+--- python3 nodesc_sweep.py --respmax 4 16 60 SHARD 4 (max-gap potential)
+response-or-maximal separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 0/4: 39 lattices, descent-free instances on 0 [], undecided 0, 6 s
+response-or-maximal separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 1/4: 43 lattices, descent-free instances on 0 [], undecided 0, 7 s
+response-or-maximal separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 2/4: 40 lattices, descent-free instances on 0 [], undecided 0, 8 s
+response-or-maximal separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 3/4: 40 lattices, descent-free instances on 0 [], undecided 0, 12 s
+--- exact maxima, response-or-maximal (nodesc_sweep.max_sweep with ec.RESPMAX = True)
+response-or-maximal separators, 4-point closure systems, height 2 : (max existential minimum, exact) -> {(1, True): 17}
+response-or-maximal separators, 4-point closure systems, height 3 : (max existential minimum, exact) -> {(2, True): 64}
+response-or-maximal separators, 4-point closure systems, height 4 : (max existential minimum, exact) -> {(3, True): 98}
+--- python3 exist_cegar.py --respmax --nodesc closure 5 10 SEED 12 0 40 (SEED = 1, 2)
+closure 5: |L| = 15, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (73 blocks, 2 s)
+closure 5: |L| = 17, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (115 blocks, 4 s)
+closure 5: |L| = 17, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (402 blocks, 6 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (447 blocks, 10 s)
+closure 5: |L| = 11, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (48 blocks, 0 s)
+closure 5: |L| = 18, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (614 blocks, 11 s)
+closure 5: |L| = 22, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (645 blocks, 20 s)
+closure 5: |L| = 15, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (63 blocks, 0 s)
+closure 5: |L| = 15, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (158 blocks, 1 s)
+closure 5: |L| = 19, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (568 blocks, 10 s)
+closure 5: |L| = 17, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (658 blocks, 8 s)
+closure 5: |L| = 22, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (1136 blocks, 37 s)
+closure 5: |L| = 11, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (28 blocks, 0 s)
+closure 5: |L| = 14, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (103 blocks, 2 s)
+closure 5: |L| = 18, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (251 blocks, 9 s)
+closure 5: |L| = 14, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (193 blocks, 2 s)
+closure 5: |L| = 13, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (206 blocks, 1 s)
+closure 5: |L| = 9, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (17 blocks, 0 s)
+closure 5: |L| = 10, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (19 blocks, 0 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (1231 blocks, 25 s)
+closure 5: |L| = 15, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (208 blocks, 2 s)
+closure 5: |L| = 15, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (149 blocks, 1 s)
+closure 5: |L| = 17, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (549 blocks, 8 s)
+closure 5: |L| = 21, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (461 blocks, 11 s)
+--- python3 exist_cegar.py --respmax closure 5 10 SEED 4 8 120 (SEED = 4, 5)
+closure 5: |L| = 12, height 5, max existential minimum 4 (exact (97 blocks at k = 5, 1 s))
+closure 5: |L| = 14, height 5, max existential minimum 4 (exact (183 blocks at k = 5, 1 s))
+closure 5: |L| = 16, height 5, max existential minimum 4 (exact (184 blocks at k = 5, 2 s))
+closure 5: |L| = 14, height 5, max existential minimum 4 (exact (127 blocks at k = 5, 1 s))
+closure 5: |L| = 20, height 5, max existential minimum 4 (exact (664 blocks at k = 5, 13 s))
+closure 5: |L| = 19, height 5, max existential minimum 4 (exact (542 blocks at k = 5, 4 s))
+closure 5: |L| = 16, height 5, max existential minimum 4 (exact (244 blocks at k = 5, 2 s))
+closure 5: |L| = 21, height 5, max existential minimum 4 (exact (1173 blocks at k = 5, 13 s))
+--- python3 nodesc_sweep.py --respmax --pot (lex | diff) 4 16 60 SHARD 2
+response-or-maximal separators, potential diff, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 0/2: 79 lattices, descent-free instances on 0 [], undecided 0, 10 s
+response-or-maximal separators, potential diff, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 1/2: 83 lattices, descent-free instances on 0 [], undecided 0, 16 s
+response-or-maximal separators, potential lex, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 0/2: 79 lattices, descent-free instances on 0 [], undecided 0, 9 s
+response-or-maximal separators, potential lex, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 1/2: 83 lattices, descent-free instances on 0 [], undecided 0, 19 s
+--- python3 exist_cegar.py --respmax --nodesc --pot lex closure 5 10 7 12 0 40
+closure 5: |L| = 14, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (46 blocks, 0 s)
+closure 5: |L| = 12, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (31 blocks, 0 s)
+closure 5: |L| = 17, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (397 blocks, 8 s)
+closure 5: |L| = 12, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (38 blocks, 0 s)
+closure 5: |L| = 11, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (91 blocks, 0 s)
+closure 5: |L| = 13, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (52 blocks, 0 s)
+closure 5: |L| = 14, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (113 blocks, 1 s)
+closure 5: |L| = 19, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (426 blocks, 7 s)
+closure 5: |L| = 18, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (379 blocks, 5 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (989 blocks, 18 s)
+closure 5: |L| = 13, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (31 blocks, 0 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: undecided (2259 blocks, 40 s)
+--- python3 exist_cegar.py --respmax --nodesc --pot diff closure 5 10 7 12 0 40
+closure 5: |L| = 14, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (43 blocks, 0 s)
+closure 5: |L| = 12, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (30 blocks, 0 s)
+closure 5: |L| = 17, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (126 blocks, 3 s)
+closure 5: |L| = 12, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (40 blocks, 0 s)
+closure 5: |L| = 11, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (77 blocks, 0 s)
+closure 5: |L| = 13, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (48 blocks, 0 s)
+closure 5: |L| = 14, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (117 blocks, 1 s)
+closure 5: |L| = 19, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (206 blocks, 6 s)
+closure 5: |L| = 18, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (359 blocks, 5 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (468 blocks, 8 s)
+closure 5: |L| = 13, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (30 blocks, 0 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (504 blocks, 11 s)
+--- python3 exist_cegar.py --respmax --nodesc --pot gap closure 5 10 7 12 0 40
+closure 5: |L| = 14, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (43 blocks, 0 s)
+closure 5: |L| = 12, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (30 blocks, 0 s)
+closure 5: |L| = 17, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (126 blocks, 3 s)
+closure 5: |L| = 12, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (40 blocks, 0 s)
+closure 5: |L| = 11, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (77 blocks, 0 s)
+closure 5: |L| = 13, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (48 blocks, 0 s)
+closure 5: |L| = 14, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (117 blocks, 1 s)
+closure 5: |L| = 19, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (206 blocks, 6 s)
+closure 5: |L| = 18, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (359 blocks, 6 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (468 blocks, 9 s)
+closure 5: |L| = 13, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (30 blocks, 0 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (504 blocks, 12 s)
+--- python3 respmax_audit.py random SEED 240 (SEED = 1, 2; the script's first version, identical audit)
+{'instances': 573185, ('len-(H-1)', -1): 27351, ('len-(H-1)', -2): 189970, ('len-(H-1)', -3): 288150, ('len-(H-1)', -4): 67143, ('len-(H-1)', 0): 571, ('maxdiff', False): 3, ('maxdiff', True): 573182, ('maxdiff_lexy', False): 3, ('maxdiff_lexy', True): 573182, ('maxgap', False): 3, ('maxgap', True): 573182, ('maxy', False): 229, ('maxy', True): 572956, ('neg_minx_then_maxy', True): 573185, ('negminx', False): 7815, ('negminx', True): 565370} {'negminx': (15, 5), 'maxy': (9, 4), 'maxgap': (10, 5), 'maxdiff': (10, 5), 'maxdiff_lexy': (10, 5)}
+{'instances': 572647, ('len-(H-1)', -1): 27584, ('len-(H-1)', -2): 190054, ('len-(H-1)', -3): 286757, ('len-(H-1)', -4): 67657, ('len-(H-1)', 0): 595, ('maxdiff', True): 572647, ('maxdiff_lexy', True): 572647, ('maxgap', True): 572647, ('maxy', False): 195, ('maxy', True): 572452, ('neg_minx_then_maxy', True): 572647, ('negminx', False): 8022, ('negminx', True): 564625} {'negminx': (10, 4), 'maxy': (12, 5)}
+--- python3 respmax_audit.py hard SHARD 4 (SHARD = 0..3; first version of the script)
+{'instances': 11739, ('len-(H-1)', -1): 830, ('len-(H-1)', -2): 634, ('len-(H-1)', -3): 223, ('len-(H-1)', 0): 10052, ('maxdiff', True): 11739, ('maxdiff_lexy', True): 11739, ('maxgap', True): 11739, ('maxy', False): 25, ('maxy', True): 11714, ('neg_minx_then_maxy', True): 11739, ('negminx', False): 10551, ('negminx', True): 1188} {'negminx': (4, 3), 'maxy': (7, 4)}
+{'instances': 12943, ('len-(H-1)', -1): 888, ('len-(H-1)', -2): 949, ('len-(H-1)', -3): 149, ('len-(H-1)', 0): 10957, ('maxdiff', True): 12943, ('maxdiff_lexy', True): 12943, ('maxgap', True): 12943, ('maxy', False): 36, ('maxy', True): 12907, ('neg_minx_then_maxy', True): 12943, ('negminx', False): 11268, ('negminx', True): 1675} {'negminx': (5, 3), 'maxy': (7, 4)}
+{'instances': 12040, ('len-(H-1)', -1): 782, ('len-(H-1)', -2): 674, ('len-(H-1)', -3): 267, ('len-(H-1)', 0): 10317, ('maxdiff', True): 12040, ('maxdiff_lexy', True): 12040, ('maxgap', True): 12040, ('maxy', False): 33, ('maxy', True): 12007, ('neg_minx_then_maxy', True): 12040, ('negminx', False): 10712, ('negminx', True): 1328} {'negminx': (8, 3), 'maxy': (9, 4)}
+{'instances': 12040, ('len-(H-1)', -1): 858, ('len-(H-1)', -2): 747, ('len-(H-1)', -3): 191, ('len-(H-1)', 0): 10244, ('maxdiff', True): 12040, ('maxdiff_lexy', True): 12040, ('maxgap', True): 12040, ('maxy', False): 27, ('maxy', True): 12013, ('neg_minx_then_maxy', True): 12040, ('negminx', False): 10750, ('negminx', True): 1290} {'negminx': (5, 3), 'maxy': (7, 4)}

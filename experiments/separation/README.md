@@ -34,3 +34,9 @@
 - `potential_audit.py random SEED N | records FILE | hunt SEED SECONDS K | hunt_from SEED SECONDS FILES...`:
   exhaustive existential test of the parent-decrease property for the potentials resp, col, gap, respgap; `hunt_from`
   mutates hard recorded instances. Output `out_potential_audit.txt`.
+
+## Round 26: containment and x ≤ y (§34.3z¹²⁵)
+
+- `containment_audit.py records FILE | random SEED N`: existential test of strict interval containment and of the gap
+  parent property (causal parents, all separator choices). `xy_audit.py`: bad pairs with x ≰ y over all runs.
+  Output `out_containment_audit.txt`; `xy_counterexample.json` (|L| = 12, height 4).

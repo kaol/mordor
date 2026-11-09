@@ -1,0 +1,16 @@
+--- python3 selection_falsify.py SEED N (seeds 1: N=3000; 2-5: N=6000)
+[seed 1]
+{"instances": 243, "empty": 47, "selectable": 191, "blocked": 5}
+smallest counterexample to safe selection: closure|L|=8 (|L| = 8), interval (0, 4), D = [0, 1, 2, 3]
+[seed 2]
+{"instances": 467, "empty": 89, "selectable": 364, "blocked": 14}
+smallest counterexample to safe selection: closure|L|=6 (|L| = 6), interval (0, 4), D = [0, 2, 3]
+[seed 3]
+{"instances": 498, "empty": 104, "selectable": 382, "blocked": 12}
+smallest counterexample to safe selection: closure|L|=8 (|L| = 8), interval (0, 4), D = [0, 1, 2, 3, 6]
+[seed 4]
+{"instances": 477, "empty": 71, "selectable": 393, "blocked": 13}
+smallest counterexample to safe selection: closure|L|=6 (|L| = 6), interval (1, 5), D = [0, 1, 2]
+[seed 5]
+{"instances": 510, "empty": 107, "selectable": 390, "blocked": 13}
+smallest counterexample to safe selection: closure|L|=6 (|L| = 6), interval (0, 4), D = [0, 1, 2]

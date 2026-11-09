@@ -1,0 +1,16 @@
+--- python3 containment_audit.py records stage_records.json
+greedy_maximal H=5 |L|=27: {'contain': True, 'gap': True}; x ≤ y on every processed pair of an optimal run: True
+greedy_maximal H=6 |L|=24: {'contain': True, 'gap': True}; x ≤ y on every processed pair of an optimal run: True
+greedy_maximal H=7 |L|=68: {'contain': True, 'gap': True}; x ≤ y on every processed pair of an optimal run: True
+existential_maximal H=3 |L|=10: {'contain': True, 'gap': True}; x ≤ y on every processed pair of an optimal run: True
+existential_maximal H=4 |L|=12: {'contain': False, 'gap': True}; x ≤ y on every processed pair of an optimal run: True
+existential_maximal H=5 |L|=16: {'contain': True, 'gap': True}; x ≤ y on every processed pair of an optimal run: True
+existential_maximal H=6 |L|=27: {'contain': True, 'gap': True}; x ≤ y on every processed pair of an optimal run: True
+existential_maximal H=7 |L|=21: {'contain': True, 'gap': True}; x ≤ y on every processed pair of an optimal run: True
+--- random 1 300
+survives / fails / undecided: {'contain': [300, 0, 0], 'gap': [300, 0, 0]} ; smallest failure (|L|, height): {} ; optimal runs with x ≤ y on all processed pairs: 300 of 300
+--- random 2 300
+survives / fails / undecided: {'contain': [300, 0, 0], 'gap': [300, 0, 0]} ; smallest failure (|L|, height): {} ; optimal runs with x ≤ y on all processed pairs: 300 of 300
+--- python3 xy_audit.py 1 600
+bad pairs 935; with x ≰ y at non-stuck stages 1, at stuck stages 71
+smallest instance with a non-stuck bad pair x ≰ y: |L| = 12, height 4

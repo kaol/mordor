@@ -112,3 +112,5 @@ import Mordor.SeparatorStages
 import Mordor.SeparatorRank
 import Mordor.SeparatorAncestry
 import Mordor.IntervalRefinement
+import Mordor.InterfaceTrace
+import Mordor.GapPotential

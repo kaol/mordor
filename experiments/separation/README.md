@@ -63,3 +63,11 @@
   choices, completion distance d (Lean `ShortestRun.dist`), the optimal gap-successor property at all reachable states
   and at states on shortest paths, and the exchange depth of non-descending shortest runs. Output
   `out_state_graph.txt`; smallest failures `state_graph_fail_*_s*.json` (|L| = 12, height 4).
+
+## Round 26: general separators and the response rule (§34.3z¹³¹)
+
+- `general_sep.py records FILE | hunt SEED SECONDS FILES...`: general (non-maximal) separators; the canonical
+  response rule (separator = F(x, y)), polar rules, and existential descent over general separators.
+- `response_length.py SEED SECONDS K H`, `response_width3.py SEED SECONDS KS`: hill-climbing the response-run length
+  at fixed edge-height against lattice size. Output `out_response_rule.txt`; smallest response-rule descent failures
+  `response_rule_counterexample_s*.json`.

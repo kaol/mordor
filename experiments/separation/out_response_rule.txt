@@ -1,0 +1,42 @@
+--- python3 general_sep.py records stage_records.json  (response rule, existential over general / maximal separators)
+greedy_maximal 5 27 response rule: (True, [10, 9, 8, 6]) | existential (general): True | existential (maximal): True
+greedy_maximal 6 24 response rule: (True, [12, 11, 7]) | existential (general): True | existential (maximal): True
+greedy_maximal 7 68 response rule: (True, [14, 11]) | existential (general): True | existential (maximal): True
+existential_maximal 3 10 response rule: (True, [6]) | existential (general): True | existential (maximal): True
+existential_maximal 4 12 response rule: (True, [8]) | existential (general): True | existential (maximal): True
+existential_maximal 5 16 response rule: (True, [10, 7]) | existential (general): True | existential (maximal): True
+existential_maximal 6 27 response rule: (True, [12, 11, 8]) | existential (general): True | existential (maximal): True
+existential_maximal 7 21 response rule: (True, [14, 12, 9]) | existential (general): True | existential (maximal): True
+--- hunt 121 / 122 / 123 (540 s): response rule and existential general
+{'instances': 81326, 'existential general: True': 81326, 'response rule fails': 591} smallest response-rule failure (|L|, height, M): (12, 4, [8, 7, 6, 5, 6])
+{'instances': 81046, 'existential general: True': 81046, 'response rule fails': 637} smallest response-rule failure (|L|, height, M): (12, 4, [8, 6, 5, 6])
+{'instances': 81205, 'existential general: True': 81205, 'response rule fails': 607} smallest response-rule failure (|L|, height, M): (12, 4, [8, 6, 5, 6])
+--- records with polar rules
+greedy_maximal 5 27 response rule: (True, [10, 9, 8, 6]) | polar1: (False, [10, 9, 7, 8, 6]) | polar2: (True, [10, 9]) 
+greedy_maximal 6 24 response rule: (True, [12, 11, 7]) | polar1: (True, [12, 11, 10, 9, 8, 7]) | polar2: (True, [12, 11, 10, 9]) 
+greedy_maximal 7 68 response rule: (True, [14, 11]) | polar1: (True, [14, 11, 10, 9]) | polar2: (True, [14, 11]) 
+existential_maximal 3 10 response rule: (True, [6]) | polar1: (True, [6, 5]) | polar2: (True, [6, 5]) 
+existential_maximal 4 12 response rule: (True, [8]) | polar1: (True, [8, 7, 6, 5]) | polar2: (False, [8, 7, 5, 5]) 
+existential_maximal 5 16 response rule: (True, [10, 7]) | polar1: (True, [10, 7]) | polar2: (True, [10, 7]) 
+existential_maximal 6 27 response rule: (True, [12, 11, 8]) | polar1: (True, [12, 11, 10, 9, 8]) | polar2: (True, [12, 11, 10, 9, 8]) 
+existential_maximal 7 21 response rule: (True, [14, 12, 9]) | polar1: (False, [14, 12, 9, 10]) | polar2: (False, [14, 12, 9, 10]) 
+--- hunt 131 / 132 / 133 (540 s): response rule and polar rules
+{'instances': 82140, 'polar2 fails': 5895, 'polar1 fails': 4255, 'response rule fails': 667} smallest response-rule failure (|L|, height, M): (12, 4, [8, 7, 6, 5, 6])
+{'instances': 81400, 'polar2 fails': 5654, 'polar1 fails': 4065, 'response rule fails': 629} smallest response-rule failure (|L|, height, M): (12, 4, [8, 7, 6, 5, 6])
+{'instances': 81935, 'polar1 fails': 4104, 'polar2 fails': 5696, 'response rule fails': 632} smallest response-rule failure (|L|, height, M): (12, 4, [8, 6, 5, 6])
+--- python3 response_length.py SEED 550 K H (H = 3, 4, 5, 6)
+H=3 (closure systems on 4 points): lattices climbed per size bin {0: 73947, 10: 8855}; longest response run per bin {0: 6, 10: 5}
+H=4 (closure systems on 4 points): lattices climbed per size bin {0: 9011, 10: 57046}; longest response run per bin {0: 5, 10: 7}
+H=5 (closure systems on 5 points): lattices climbed per size bin {0: 318, 10: 6588, 20: 14674, 30: 2304}; longest response run per bin {0: 4, 10: 6, 20: 7, 30: 5}
+H=6 (closure systems on 6 points): lattices climbed per size bin {0: 1, 10: 345, 20: 1339, 30: 2458, 40: 3107, 50: 968, 60: 41}; longest response run per bin {0: 1, 10: 4, 20: 6, 30: 5, 40: 4, 50: 3, 60: 3}
+--- python3 response_width3.py SEED 540 KS
+height-3 linear spaces on 4 points (|L| ≤ 12, 41522 lattices): longest response run 5
+height-3 linear spaces on 5 points (|L| ≤ 17, 28288 lattices): longest response run 6
+height-3 linear spaces on 6 points (|L| ≤ 20, 24878 lattices): longest response run 6
+height-3 linear spaces on 7 points (|L| ≤ 24, 18279 lattices): longest response run 5
+height-3 linear spaces on 8 points (|L| ≤ 25, 16693 lattices): longest response run 5
+height-3 linear spaces on 9 points (|L| ≤ 28, 13167 lattices): longest response run 4
+height-3 linear spaces on 10 points (|L| ≤ 31, 18240 lattices): longest response run 6
+height-3 linear spaces on 11 points (|L| ≤ 32, 14887 lattices): longest response run 6
+height-3 linear spaces on 12 points (|L| ≤ 35, 14083 lattices): longest response run 4
+height-3 linear spaces on 14 points (|L| ≤ 36, 11539 lattices): longest response run 4

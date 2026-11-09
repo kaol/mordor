@@ -9,7 +9,7 @@ which no instance with existential minimum ≥ k satisfies (sound). UNSAT ⇒ ma
 ⇒ maximum ≥ k.
 With --respmax a separator is the response F(x, y) or a maximal one (blocking literal f(x, y) = s for a response).
 With --general the runs use general separators (any s ≥ F(x, y), y ≰ s; the blocking clause drops maximality).
-With --nodesc [--pot gap|diff|lex]: search for an instance with NO run along which the stage potential strictly
+With --nodesc [--pot gap|diff|lex] [--maxlen N|H-1]: search for an instance with NO run along which the stage potential strictly
 decreases (gap = max h(y) + H − h(x), diff = max h(y) − h(x), lex = (−min h(x), max h(y)) lexicographically) (blocking each descending run found).
   python3 exist_cegar.py [--general | --respmax] [--nodesc] (pencil K | linear K SEED COUNT | chain N | closure K M SEED COUNT) KMAX [SECONDS]
 """
@@ -132,6 +132,7 @@ def shortest_runs(L, F, D, k, cap=200):
     return out
 
 POT = 'gap'              # stage potential for --nodesc: gap | diff | lex  (--pot NAME)
+MAXLEN = None            # --maxlen N: descending runs must also have at most N non-goal stages ('H-1' allowed)
 
 def stage_potential(L, bad):
     rk = L.rank
@@ -144,18 +145,20 @@ def descending_run(L, F, D, budget=200000):
     """A terminating run along which the stage potential (POT) strictly decreases (separators per `seps`), as for
     `shortest_runs`; None if none exists; 'cap' if the search budget is exceeded."""
     memo = set(); work = [0]
-    def go(T, bound):
+    cap = None if MAXLEN is None else (L.height - 1 if MAXLEN == 'H-1' else int(MAXLEN))
+    def go(T, bound, depth=0):
         bad = ss.bad_pairs(L, F, D, T)
         if not bad or any(L.le[y][F[x][y]] for x, y in bad): return [T]
+        if cap is not None and depth >= cap: return None
         M = stage_potential(L, bad)
         if bound is not None and M >= bound: return None
-        if (T, bound) in memo: return None
+        if (T, bound, depth) in memo: return None
         for chv in itertools.product(*[seps(L, F, x, y) for x, y in bad]):
             work[0] += 1
             if work[0] > budget: raise RuntimeError
-            r = go(ss.mclose(L, set(T) | set(chv)), M)
+            r = go(ss.mclose(L, set(T) | set(chv)), M, depth + 1)
             if r is not None: return [(T, dict(zip(bad, chv)))] + r
-        memo.add((T, bound)); return None
+        memo.add((T, bound, depth)); return None
     try: return go(ss.mclose(L, {L.bot, L.top}), None)
     except RuntimeError: return 'cap'
 
@@ -195,6 +198,8 @@ if __name__ == '__main__':
     if '--respmax' in sys.argv: sys.argv.remove('--respmax'); RESPMAX = True
     if '--pot' in sys.argv:
         i = sys.argv.index('--pot'); POT = sys.argv[i + 1]; del sys.argv[i:i + 2]
+    if '--maxlen' in sys.argv:
+        i = sys.argv.index('--maxlen'); MAXLEN = sys.argv[i + 1]; del sys.argv[i:i + 2]
     NODESC = '--nodesc' in sys.argv
     if NODESC: sys.argv.remove('--nodesc')
     fam = sys.argv[1]; secs = None

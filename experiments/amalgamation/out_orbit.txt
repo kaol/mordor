@@ -1,0 +1,171 @@
+=== Programme C: R-stage amalgamation and the orbit length
+--- python3 amalg_sat.py mn N 1 6 (N = 3..6); pencil K 1 8 (K = 3..5)
+['mn', '3']: |L| = 5, height 2: every join of two R_1 elements is in R_2 (UNSAT)
+['mn', '4']: |L| = 6, height 2: every join of two R_1 elements is in R_2 (UNSAT)
+['mn', '5']: |L| = 7, height 2: every join of two R_1 elements is in R_2 (UNSAT)
+['mn', '6']: |L| = 8, height 2: every join of two R_1 elements is in R_2 (UNSAT)
+['pencil', '3']: |L| = 8, height 3: x, y ∈ R_1 with x ∨ y ∉ R_2 (stages 1, 1, join 3)
+['pencil', '3']: |L| = 8, height 3: every join of two R_1 elements is in R_3 (UNSAT)
+['pencil', '4']: |L| = 10, height 3: x, y ∈ R_1 with x ∨ y ∉ R_2 (stages 1, 1, join 3)
+['pencil', '4']: |L| = 10, height 3: every join of two R_1 elements is in R_3 (UNSAT)
+['pencil', '5']: |L| = 12, height 3: x, y ∈ R_1 with x ∨ y ∉ R_2 (stages 1, 1, join 3)
+['pencil', '5']: |L| = 12, height 3: every join of two R_1 elements is in R_3 (UNSAT)
+--- further amalg_sat.py runs (mn 8 1, mn 6 2, pencil 7 1, pencil 5 2/3, pencil 8 2, chain 6 1/2, closure 4 8 SEED, closure 5 10 SEED)
+['chain', '6']: |L| = 6, height 5: every join of two R_1 elements is in R_2 (UNSAT)
+['chain', '6']: |L| = 6, height 5: every join of two R_2 elements is in R_3 (UNSAT)
+['closure', '4', '8', '1']: |L| = 9, height 4: x, y ∈ R_1 with x ∨ y ∉ R_2 (stages 1, 1, join 4)
+['closure', '4', '8', '1']: |L| = 9, height 4: x, y ∈ R_1 with x ∨ y ∉ R_3 (stages 1, 1, join 4)
+['closure', '4', '8', '1']: |L| = 9, height 4: every join of two R_1 elements is in R_4 (UNSAT)
+['closure', '4', '8', '2']: |L| = 5, height 4: every join of two R_1 elements is in R_2 (UNSAT)
+['closure', '5', '10', '3']: |L| = 18, height 5: x, y ∈ R_1 with x ∨ y ∉ R_2 (stages 1, 1, join 3)
+['closure', '5', '10', '3']: |L| = 18, height 5: x, y ∈ R_1 with x ∨ y ∉ R_3 (stages 1, 1, join 4)
+['closure', '5', '10', '3']: |L| = 18, height 5: x, y ∈ R_1 with x ∨ y ∉ R_4 (stages 1, 1, join 5)
+['closure', '5', '10', '3']: |L| = 18, height 5: every join of two R_1 elements is in R_5 (UNSAT)
+['closure', '5', '10', '4']: |L| = 12, height 5: x, y ∈ R_2 with x ∨ y ∉ R_3 (stages 1, 2, join 4)
+['closure', '5', '10', '4']: |L| = 12, height 5: x, y ∈ R_2 with x ∨ y ∉ R_4 (stages 1, 1, join 5)
+['closure', '5', '10', '4']: |L| = 12, height 5: every join of two R_2 elements is in R_5 (UNSAT)
+['mn', '6']: |L| = 8, height 2: every join of two R_2 elements is in R_3 (UNSAT)
+['mn', '8']: |L| = 10, height 2: every join of two R_1 elements is in R_2 (UNSAT)
+['pencil', '5']: |L| = 12, height 3: every join of two R_2 elements is in R_3 (UNSAT)
+['pencil', '5']: |L| = 12, height 3: every join of two R_3 elements is in R_4 (UNSAT)
+['pencil', '7']: |L| = 16, height 3: x, y ∈ R_1 with x ∨ y ∉ R_2 (stages 1, 1, join 3)
+['pencil', '7']: |L| = 16, height 3: every join of two R_1 elements is in R_3 (UNSAT)
+['pencil', '8']: |L| = 18, height 3: every join of two R_2 elements is in R_3 (UNSAT)
+--- python3 orbit_sat.py (mn 2 3 5 8, pencil 3..6, chain 5)
+M_2: |L| = 4, height 2, max stage of ⊤ over all F = 2 (= H)
+M_3: |L| = 5, height 2, max stage of ⊤ over all F = 2 (= H)
+M_5: |L| = 7, height 2, max stage of ⊤ over all F = 2 (= H)
+M_8: |L| = 10, height 2, max stage of ⊤ over all F = 2 (= H)
+near-pencil 3: |L| = 8, height 3, max stage of ⊤ over all F = 3 (= H)
+near-pencil 4: |L| = 10, height 3, max stage of ⊤ over all F = 3 (= H)
+near-pencil 5: |L| = 12, height 3, max stage of ⊤ over all F = 3 (= H)
+near-pencil 6: |L| = 14, height 3, max stage of ⊤ over all F = 3 (= H)
+chain 5: |L| = 5, height 4, max stage of ⊤ over all F = 4 (= H)
+--- python3 orbit_sat.py sweep 4 16 | closure 5 10 SEED 8 (SEED 1..3) | closure 6 12 SEED 4 (SEED 1, 2; seed 2 timed out after 2) | closure 7 14 1 3
+closure 5: |L| = 15, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 17, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 17, height 4, max stage of ⊤ over all F = 4 (= H)
+closure 5: |L| = 20, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 11, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 18, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 22, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 15, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 11, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 14, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 18, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 14, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 13, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 9, height 4, max stage of ⊤ over all F = 4 (= H)
+closure 5: |L| = 10, height 4, max stage of ⊤ over all F = 4 (= H)
+closure 5: |L| = 20, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 18, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 20, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 18, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 18, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 14, height 4, max stage of ⊤ over all F = 4 (= H)
+closure 5: |L| = 28, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 24, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 5: |L| = 15, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 6: |L| = 22, height 6, max stage of ⊤ over all F = 6 (= H)
+closure 6: |L| = 29, height 6, max stage of ⊤ over all F = 6 (= H)
+closure 6: |L| = 22, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 6: |L| = 15, height 5, max stage of ⊤ over all F = 5 (= H)
+closure 7: |L| = 35, height 6, max stage of ⊤ over all F = 6 (= H)
+closure 7: |L| = 40, height 6, max stage of ⊤ over all F = 6 (= H)
+closure 7: |L| = 39, height 6, max stage of ⊤ over all F = 6 (= H)
+all closure systems on 4 points (|L| ≤ 16): (height, max stage of ⊤ − H) -> {(0, 0): 1, (1, 0): 4, (2, 0): 17, (3, 0): 64, (4, 0): 98}
+--- python3 orbit_mech.py 1 200; 2 200 (second run with (f), (g))
+{'instances': 249303, ('CHAIN', False): 16055, ('CHAIN', True): 325751, ('COHEIGHT', False): 16357, ('COHEIGHT', True): 325449, ('HEIGHT_RISES', False): 858, ('HEIGHT_RISES', True): 340948, ('MIN', False): 21440, ('MIN', True): 320366, ('REACH_HEIGHT_k', True): 341806, ('top stage - H', -1): 6076, ('top stage - H', -2): 49944, ('top stage - H', -3): 117622, ('top stage - H', -4): 64090, ('top stage - H', -5): 11362, ('top stage - H', 0): 209}
+smallest MIN violation: |L| = 4, height 2, stage 0
+smallest CHAIN violation: |L| = 4, height 2, stage 0
+smallest COHEIGHT violation: |L| = 4, height 2, stage 1
+smallest HEIGHT_RISES violation: |L| = 6, height 3, stage 1
+{'instances': 249426, ('CHAIN', False): 15736, ('CHAIN', True): 326227, ('COHEIGHT', False): 16066, ('COHEIGHT', True): 325897, ('HEIGHT_RISES', False): 907, ('HEIGHT_RISES', True): 341056, ('MIN', False): 20941, ('MIN', True): 321022, ('REACH_HEIGHT_k', True): 341963, ('top stage - H', -1): 6041, ('top stage - H', -2): 49729, ('top stage - H', -3): 117852, ('top stage - H', -4): 64331, ('top stage - H', -5): 11304, ('top stage - H', 0): 169}
+smallest MIN violation: |L| = 4, height 2, stage 0
+smallest CHAIN violation: |L| = 4, height 2, stage 0
+smallest COHEIGHT violation: |L| = 4, height 2, stage 1
+smallest HEIGHT_RISES violation: |L| = 6, height 3, stage 1
+--- python3 reach_height_sat.py (sweep 4 16; closure 5 10 SEED 8, SEED 1..3; closure 6 12 1 3; closure 7 14 1 2; pencil 6)
+closure 5: |L| = 15, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 17, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 17, height 4: (f) holds (UNSAT for every k)
+closure 5: |L| = 20, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 11, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 18, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 22, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 15, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 11, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 14, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 18, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 14, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 13, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 9, height 4: (f) holds (UNSAT for every k)
+closure 5: |L| = 10, height 4: (f) holds (UNSAT for every k)
+closure 5: |L| = 20, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 18, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 20, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 18, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 18, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 14, height 4: (f) holds (UNSAT for every k)
+closure 5: |L| = 28, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 24, height 5: (f) holds (UNSAT for every k)
+closure 5: |L| = 15, height 5: (f) holds (UNSAT for every k)
+closure 6: |L| = 22, height 6: (f) holds (UNSAT for every k)
+closure 6: |L| = 29, height 6: (f) holds (UNSAT for every k)
+closure 6: |L| = 22, height 5: (f) holds (UNSAT for every k)
+closure 7: |L| = 35, height 6: (f) holds (UNSAT for every k)
+closure 7: |L| = 40, height 6: (f) holds (UNSAT for every k)
+near-pencil 6: |L| = 14, height 3: (f) holds (UNSAT for every k)
+closure systems on 4 points: (height, (f) holds) -> {(0, True): 1, (1, True): 4, (2, True): 17, (3, True): 64, (4, True): 98}
+--- python3 ideal_compare.py 1 120
+{('height r_k - k', 0): 151454, ('height r_k - k', 1): 6143, ('height r_k - k', 2): 37034, ('height r_k - k', 3): 160518, ('maxheight R_k vs height r_k', -1): 32837, ('maxheight R_k vs height r_k', -2): 11944, ('maxheight R_k vs height r_k', -3): 1224, ('maxheight R_k vs height r_k', -4): 40, ('maxheight R_k vs height r_k', 0): 309104, ('r_k in R_k', False): 46045, ('r_k in R_k', True): 309104}
+--- python3 height_step.py 1 200
+{("P1'", True): 95640, ('P1', False): 39, ('P1', True): 95601, ('P2', True): 95640} {'P1': 5}
+--- python3 rising_sat.py (sweep 4 16; closure 5 10 SEED 8, SEED 1, 2; closure 6 12 1 3; pencil 6)
+|L| = 15, height 5: P1' holds
+|L| = 17, height 5: P1' holds
+|L| = 17, height 4: P1' holds
+|L| = 20, height 5: P1' holds
+|L| = 11, height 5: P1' holds
+|L| = 18, height 5: P1' holds
+|L| = 22, height 5: P1' holds
+|L| = 15, height 5: P1' holds
+|L| = 11, height 5: P1' holds
+|L| = 14, height 5: P1' holds
+|L| = 18, height 5: P1' holds
+|L| = 14, height 5: P1' holds
+|L| = 13, height 5: P1' holds
+|L| = 9, height 4: P1' holds
+|L| = 10, height 4: P1' holds
+|L| = 20, height 5: P1' holds
+|L| = 22, height 6: P1' holds
+|L| = 29, height 6: P1' holds
+|L| = 22, height 5: P1' holds
+|L| = 14, height 3: P1' holds
+closure systems on 4 points: (height, P1' holds) -> {(0, True): 1, (1, True): 4, (2, True): 17, (3, True): 64, (4, True): 98}
+--- python3 rising_routes.py 3 200
+{('b(y)≤m',): 62347, ('b(y)≤m', 'y≤a(x)'): 24795, ('y≤a(x)',): 8493, ('b(y)∈R_k', 'b(y)≤m'): 71, ('b(y)∈R_k', 'b(y)≤m', 'y≤a(x)'): 13, ('b(y)∈R_k', 'y≤a(x)'): 5}
+--- python3 upc.py 4 200
+{('UPC(m), all m', False): 108789, ('UPC(m), all m', True): 3551400, ('tight: UPC for every top m', False): 139, ('tight: UPC for every top m', True): 94109, ('tight: UPC for some top m', True): 94248} {'all': 4}
+--- python3 rising_sat.py --upc (sweep 4 16; closure 5 10 SEED 8, SEED 1, 2; closure 6 12 1 3; pencil 6)
+|L| = 15, height 5: UPC at some top element holds
+|L| = 17, height 5: UPC at some top element holds
+|L| = 17, height 4: UPC at some top element holds
+|L| = 20, height 5: UPC at some top element holds
+|L| = 11, height 5: UPC at some top element holds
+|L| = 18, height 5: UPC at some top element holds
+|L| = 22, height 5: UPC at some top element holds
+|L| = 15, height 5: UPC at some top element holds
+|L| = 11, height 5: UPC at some top element holds
+|L| = 14, height 5: UPC at some top element holds
+|L| = 18, height 5: UPC at some top element holds
+|L| = 14, height 5: UPC at some top element holds
+|L| = 13, height 5: UPC at some top element holds
+|L| = 9, height 4: UPC at some top element holds
+|L| = 10, height 4: UPC at some top element holds
+|L| = 20, height 5: UPC at some top element holds
+|L| = 22, height 6: UPC at some top element holds
+|L| = 29, height 6: UPC at some top element holds
+|L| = 22, height 5: UPC at some top element holds
+|L| = 14, height 3: UPC at some top element holds
+closure systems on 4 points: (height, UPC at some top element holds) -> {(0, True): 1, (1, True): 4, (2, True): 17, (3, True): 64, (4, True): 98}

@@ -91,7 +91,7 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     potential rank y − rank x survived the mutation tests of these rounds; exact search later refuted it for maximal
     separators (§34.3z¹³⁶, below).
 
-**Later (§34.3z¹²⁴–¹³⁹): what the separator process can and cannot do.**
+**Later (§34.3z¹²⁴–¹⁴⁰): what the separator process can and cannot do, and the orbit-length conjecture.**
 - **Proved in Lean.**
   - The crossing-interval order is well-founded (`IntervalRefinement`).
   - Interface traces, patching and pinning, and the infinite-antichain obstruction `atom_family_block`
@@ -124,9 +124,20 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
   - Along some shortest run the lexicographic potential (−min rank x, max rank y) decreases in all 1,194,594 audited
     instances (§34.3z¹³⁷).
 
+- **The R-orbit has length H (§34.3z¹⁴⁰).** Exact SAT on every finite lattice checked shows that the down-set orbit
+  R₀ = ↓⊥, R_{k+1} = ↓(R_k ∪ a(R_k) ∪ b⁻¹(R_k)) reaches L after exactly H stages in the worst case, at edge-height
+  H. The lattices checked are all 184 closure systems on 4 points and random lattices up to height 6 and |L| = 40.
+  The orbit-height invariant behind this (OH: if ⊤ ∉ R_k, then R_k has an element of height ≥ k) also holds
+  exactly. Lean (`OrbitHeight`) proves the chain *tight-stage upper principal cut ⇒ rising escape ⇒ OH ⇒ R_H = L ⇒
+  Cut*, and its first cases (`escape`, `orbitHeight_one`). `InterfaceExtraction` shows that the line-cycle
+  counterexamples to maximal descent force a lower witness via `atom_family_block`.
+
 **Open frontier now.** Chain-finite Cut, equivalently join-closure of R(F) (`Frontier.lean`), for cuts where **both**
-Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first open case. The concrete targets are the
-existential general-separator conjectures:
+Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first open case. The sharpest concrete target is now a
+choice-free one (§34.3z¹⁴⁰): the **tight-stage upper principal cut**. At a stage where R_k has height exactly k and
+⊤ ∉ R_{k+1}, some element m ∈ R_k of height k has a witness cell x ≤ m < y. By `OrbitHeight.cutMaps_of_tightUPC`
+it gives Cut at every finite edge-height. The statement is false for an arbitrary m, so a proof must use the
+orbit. The existential general-separator conjectures remain as an alternative:
 - **GSB(H):** every instance of edge-height H has a response-or-maximal run of at most H − 1 stages;
 - **GD(H):** some such run has strictly decreasing maximum gap.
 
@@ -155,6 +166,7 @@ open:
 | `data/gpu-2026-10/` | Round 25: results.jsonl and batch.log of the first GPU run |
 | `experiments/finite_support/`, `experiments/asyncgrid/`, `experiments/infcapture/` | Round 26, §34.3z⁹⁷–¹¹⁵: z3 orbit and support profiles of the crossing case, the asynchronous-grid label abstraction (`reduced_grid.py`), good-word compatibility, grid refinement, dominated and capturing rows |
 | `experiments/separation/` | Round 26, §34.3z¹²⁰–¹³⁹: the extremal-separator process on finite lattices (bitset search, replayable records), rank, ancestry and potential audits; response, term and lookahead rules with exact SAT maxima; exact CEGAR for existential minima and descent-free instances (`exist_cegar.py`, `nodesc_sweep.py`); the line-cycle family; restricted, local and lookahead progress audits |
+| `experiments/amalgamation/` | Round 26, §34.3z¹⁴⁰: exact R-orbit stages (SAT for a = gfp, b = lfp), slow joins, the orbit length, the orbit-height invariant, rising escape and the tight-stage upper principal cut |
 | `experiments/intervals/` | Round 26, §34.3z¹²⁴–¹²⁶: anchor envelopes, safe selection, Veinott and antichain-pin experiments |
 | `experiments/dialgebra/` | Round 24: thin-model dialgebra censuses (transposition, failure zone, D5), the Cut Lemma transposition, orbit-laxity z3 searches |
 | `data/` | Machine-experiment results (JSON) |

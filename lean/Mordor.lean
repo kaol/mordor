@@ -118,3 +118,5 @@ import Mordor.GapMax
 import Mordor.ShortestRun
 import Mordor.ResponseRun
 import Mordor.GeneralRun
+import Mordor.OrbitHeight
+import Mordor.InterfaceExtraction

@@ -3,7 +3,7 @@
 For every Moore family on P points (up to point permutation) whose lattice has at most NMAX elements and height ≥ 3,
 exist_cegar.no_descent decides whether some monotone F and cut D admit NO maximum-gap-descending run, with maximal or
 (--general) general separators. Each found instance is re-checked with general_sep.exist_desc.
-  python3 nodesc_sweep.py [--general | --respmax] [--all-heights] [--pot gap|diff|lex] P NMAX SECONDS_PER_LATTICE [SHARD NSHARDS]
+  python3 nodesc_sweep.py [--general | --respmax] [--all-heights] [--pot gap|diff|lex] [--maxlen N|H-1] P NMAX SECONDS_PER_LATTICE [SHARD NSHARDS]
 """
 import sys, itertools, time, json
 import separator_stages as ss
@@ -28,6 +28,8 @@ if __name__ == "__main__":
     if '--respmax' in sys.argv: sys.argv.remove('--respmax'); ec.RESPMAX = True
     if '--pot' in sys.argv:
         j = sys.argv.index('--pot'); ec.POT = sys.argv[j + 1]; del sys.argv[j:j + 2]
+    if '--maxlen' in sys.argv:
+        j = sys.argv.index('--maxlen'); ec.MAXLEN = sys.argv[j + 1]; del sys.argv[j:j + 2]
     if '--all-heights' in sys.argv: sys.argv.remove('--all-heights'); HMIN = 0
     P, NMAX, secs = int(sys.argv[1]), int(sys.argv[2]), float(sys.argv[3])
     shard, nsh = (int(sys.argv[4]), int(sys.argv[5])) if len(sys.argv) > 5 else (0, 1)
@@ -43,7 +45,7 @@ if __name__ == "__main__":
             F, D = r; ok = ec.descending_run(L, F, D, budget=10 ** 7) is None
             found.append((L.n, L.height)); print(f"FOUND: |L| = {L.n}, height {L.height}, verified {ok}, sets {fam}", flush=True)
             json.dump(dict(sets=L.S, F=F, D=D, general=ec.GENERAL, respmax=ec.RESPMAX), open(f"nodesc_sweep_{'g' if ec.GENERAL else 'r' if ec.RESPMAX else 'm'}_{L.n}_{i}.json", 'w'))
-    print(f"{'general' if ec.GENERAL else 'response-or-maximal' if ec.RESPMAX else 'maximal'} separators, potential {ec.POT}, closure systems on {P} points, |L| ≤ {NMAX}, height ≥ {HMIN}, "
+    print(f"{'general' if ec.GENERAL else 'response-or-maximal' if ec.RESPMAX else 'maximal'} separators, potential {ec.POT}, max length {ec.MAXLEN}, closure systems on {P} points, |L| ≤ {NMAX}, height ≥ {HMIN}, "
           f"shard {shard}/{nsh}: {cnt} lattices, descent-free instances on {len(found)} {sorted(found)}, undecided {undecided}, "
           f"{time.time() - t0:.0f} s", flush=True)
 

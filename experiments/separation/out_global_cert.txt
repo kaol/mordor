@@ -1,0 +1,64 @@
+=== Programme A: descending runs that also have at most H − 1 stages (exist_cegar --maxlen H-1)
+--- python3 nodesc_sweep.py --respmax --pot (lex | gap) --maxlen H-1 4 16 60 SHARD 2
+response-or-maximal separators, potential gap, max length H-1, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 0/2: 79 lattices, descent-free instances on 0 [], undecided 0, 8 s
+response-or-maximal separators, potential gap, max length H-1, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 1/2: 83 lattices, descent-free instances on 0 [], undecided 0, 11 s
+response-or-maximal separators, potential lex, max length H-1, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 0/2: 79 lattices, descent-free instances on 0 [], undecided 0, 8 s
+response-or-maximal separators, potential lex, max length H-1, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 1/2: 83 lattices, descent-free instances on 0 [], undecided 0, 10 s
+--- python3 exist_cegar.py --respmax --nodesc --pot lex --maxlen H-1 closure 5 10 7 12 0 40
+closure 5: |L| = 14, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (46 blocks, 0 s)
+closure 5: |L| = 12, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (31 blocks, 0 s)
+closure 5: |L| = 17, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (290 blocks, 7 s)
+closure 5: |L| = 12, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (41 blocks, 0 s)
+closure 5: |L| = 11, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (53 blocks, 0 s)
+closure 5: |L| = 13, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (50 blocks, 0 s)
+closure 5: |L| = 14, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (65 blocks, 0 s)
+closure 5: |L| = 19, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (173 blocks, 4 s)
+closure 5: |L| = 18, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (150 blocks, 2 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (377 blocks, 8 s)
+closure 5: |L| = 13, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (31 blocks, 0 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (867 blocks, 15 s)
+--- python3 exist_cegar.py --respmax --nodesc --pot gap --maxlen H-1 closure 5 10 7 12 0 40
+closure 5: |L| = 14, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (43 blocks, 0 s)
+closure 5: |L| = 12, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (30 blocks, 0 s)
+closure 5: |L| = 17, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (123 blocks, 4 s)
+closure 5: |L| = 12, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (41 blocks, 0 s)
+closure 5: |L| = 11, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (53 blocks, 0 s)
+closure 5: |L| = 13, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (46 blocks, 0 s)
+closure 5: |L| = 14, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (65 blocks, 1 s)
+closure 5: |L| = 19, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (157 blocks, 5 s)
+closure 5: |L| = 18, height 4, response-or-maximal separators: no descent-free instance (UNSAT) (150 blocks, 2 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (333 blocks, 7 s)
+closure 5: |L| = 13, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (30 blocks, 0 s)
+closure 5: |L| = 20, height 5, response-or-maximal separators: no descent-free instance (UNSAT) (420 blocks, 10 s)
+--- python3 exist_cegar.py --general --nodesc --pot lex --maxlen H-1 closure 5 10 8 10 0 40
+closure 5: |L| = 14, height 5, general separators: no descent-free instance (UNSAT) (135 blocks, 1 s)
+closure 5: |L| = 14, height 5, general separators: no descent-free instance (UNSAT) (111 blocks, 1 s)
+closure 5: |L| = 15, height 5, general separators: no descent-free instance (UNSAT) (210 blocks, 2 s)
+closure 5: |L| = 16, height 5, general separators: no descent-free instance (UNSAT) (303 blocks, 4 s)
+closure 5: |L| = 13, height 4, general separators: no descent-free instance (UNSAT) (84 blocks, 0 s)
+closure 5: |L| = 20, height 4, general separators: no descent-free instance (UNSAT) (202 blocks, 3 s)
+closure 5: |L| = 19, height 4, general separators: no descent-free instance (UNSAT) (190 blocks, 1 s)
+closure 5: |L| = 17, height 5, general separators: no descent-free instance (UNSAT) (358 blocks, 3 s)
+closure 5: |L| = 22, height 5, general separators: no descent-free instance (UNSAT) (461 blocks, 6 s)
+closure 5: |L| = 19, height 4, general separators: no descent-free instance (UNSAT) (154 blocks, 1 s)
+--- python3 exist_cegar.py --general --nodesc --pot gap --maxlen H-1 closure 5 10 8 10 0 40
+closure 5: |L| = 14, height 5, general separators: no descent-free instance (UNSAT) (121 blocks, 1 s)
+closure 5: |L| = 14, height 5, general separators: no descent-free instance (UNSAT) (116 blocks, 1 s)
+closure 5: |L| = 15, height 5, general separators: no descent-free instance (UNSAT) (170 blocks, 2 s)
+closure 5: |L| = 16, height 5, general separators: no descent-free instance (UNSAT) (249 blocks, 4 s)
+closure 5: |L| = 13, height 4, general separators: no descent-free instance (UNSAT) (71 blocks, 0 s)
+closure 5: |L| = 20, height 4, general separators: no descent-free instance (UNSAT) (186 blocks, 3 s)
+closure 5: |L| = 19, height 4, general separators: no descent-free instance (UNSAT) (148 blocks, 1 s)
+closure 5: |L| = 17, height 5, general separators: no descent-free instance (UNSAT) (294 blocks, 3 s)
+closure 5: |L| = 22, height 5, general separators: no descent-free instance (UNSAT) (432 blocks, 6 s)
+closure 5: |L| = 19, height 4, general separators: no descent-free instance (UNSAT) (125 blocks, 1 s)
+--- python3 exist_cegar.py --respmax --nodesc --pot lex --maxlen H-1 pencil K 0 200 (K = 4, 6)
+near-pencil 4: |L| = 10, height 3, response-or-maximal separators: no descent-free instance (UNSAT) (21 blocks, 0 s)
+near-pencil 6: |L| = 14, height 3, response-or-maximal separators: no descent-free instance (UNSAT) (42 blocks, 0 s)
+--- cycle family (cycle_family.family), RM, lex, ≤ H − 1 stages: exist_cegar.descending_run
+cycle family k = 4 lex-descending RM run with ≤ H−1 stages: True 1
+cycle family k = 5 lex-descending RM run with ≤ H−1 stages: True 1
+cycle family k = 6 lex-descending RM run with ≤ H−1 stages: True 1
+cycle family k = 7 lex-descending RM run with ≤ H−1 stages: True 1
+cycle family k = 8 lex-descending RM run with ≤ H−1 stages: True 1
+cycle family k = 9 lex-descending RM run with ≤ H−1 stages: True 1

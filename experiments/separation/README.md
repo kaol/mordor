@@ -139,3 +139,8 @@
 - `remaining_dist.py random SEED SECONDS | hard FILE... | cycle KMAX`: the RM state graph and the remaining distance
   dist(T) from every reachable state against H − 1; states with dist > H − 1 `remaining_dist_fail_h{3,4}.json`.
   Output `out_lookahead.txt`.
+
+## Round 26: combined certificate (§34.3z¹⁴⁰)
+
+- `exist_cegar.py --nodesc --pot P --maxlen H-1` (and `nodesc_sweep.py` with the same flags): no instance lacks a run
+  that is both P-descending and of at most H − 1 stages. Output `out_global_cert.txt`.

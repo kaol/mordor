@@ -123,4 +123,6 @@ computation before it is reported; an unsat answer is only as trustworthy as the
 
 - `dheight_ground.py H r maxterms per_round J [seconds]` (§34.3z¹⁴³): `lattice_ground` plus "the cut D has height
   ≤ r". UNSAT for H ≤ 5 (r ≤ 3) and H = 6, r = 1 (control); no verdict at H = 6, r = 2 within 2,500 s.
-  Output `out_dheight_ground.txt`.
+  Output `out_dheight_ground.txt`. Options: `--every N` (progress), `--dimacs OUT.cnf` (write the clause set on UNSAT,
+  for `drat_certify.py`), `--stream LOG` (clause log on disk), `--forget B` (bounded live transitivity clauses).
+  r = H − 1 is the unrestricted theory (⊤ ∉ D).

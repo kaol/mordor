@@ -1,0 +1,67 @@
+--- python3 response_sat.py chain N
+chain 3: height 2, max response-run length (1, 0.002377033233642578)
+chain 4: height 3, max response-run length (2, 0.00595855712890625)
+chain 5: height 4, max response-run length (3, 0.014579057693481445)
+chain 6: height 5, max response-run length (4, 0.05159878730773926)
+chain 7: height 6, max response-run length (5, 0.12730622291564941)
+--- closure 4 8 1 6
+(see log §34.3z¹³²: |L| = 9, 10, 12, 8, 10, 7 → 6, 7, 10, 5, 7, 5)
+--- linear K SEED COUNT
+linear space on 4 points: |L| = 10, height 3, max response-run length (k, s) = (7, 1.119966745376587)
+linear space on 4 points: |L| = 9, height 3, max response-run length (k, s) = (6, 0.49468016624450684)
+linear space on 4 points: |L| = 9, height 3, max response-run length (k, s) = (6, 0.5548875331878662)
+linear space on 5 points: |L| = 11, height 3, max response-run length (k, s) = (8, 2.3874926567077637)
+linear space on 5 points: |L| = 12, height 3, max response-run length (k, s) = (8, 5.088165521621704)
+linear space on 5 points: |L| = 13, height 3, max response-run length (k, s) = (8, 7.937657594680786)
+linear space on 6 points: |L| = 15, height 3, max response-run length (k, s) = (8, 15.334086179733276)
+linear space on 6 points: |L| = 12, height 3, max response-run length (k, s) = (8, 4.561864614486694)
+linear space on 7 points: |L| = 15, height 3, max response-run length (k, s) = (10, 63.955140113830566)
+linear space on 7 points: |L| = 15, height 3, max response-run length (k, s) = (10, 42.769733905792236)
+linear space on 8 points: |L| = 15, height 3, max response-run length (k, s) = (10, 67.12748837471008)
+linear space on 8 points: |L| = 16, height 3, max response-run length (k, s) = (10, 74.72571969032288)
+linear space on 9 points: |L| = 18, height 3, max response-run length (k, s) = (10, 193.6620647907257)
+linear space on 9 points: |L| = 18, height 3, max response-run length (k, s) = (10, 100.5683183670044)
+--- pencil K
+near-pencil on 4 points: |L| = 10, height 3, max response-run length (k, s) = (7, 3.623605728149414)
+near-pencil on 5 points: |L| = 12, height 3, max response-run length (k, s) = (9, 15.30370545387268)
+near-pencil on 6 points: |L| = 14, height 3, max response-run length (k, s) = (11, 74.9783411026001)
+near-pencil on 7 points: |L| = 16, height 3, max response-run length (k, s) = (13, 233.35166263580322)
+--- python3 pencil_family.py 40
+k = 3: |L| = 8, height 3, monotone True, cut True, response-run length 5 (2k − 1 = 5) OK
+k = 4: |L| = 10, height 3, monotone True, cut True, response-run length 7 (2k − 1 = 7) OK
+k = 5: |L| = 12, height 3, monotone True, cut True, response-run length 9 (2k − 1 = 9) OK
+k = 6: |L| = 14, height 3, monotone True, cut True, response-run length 11 (2k − 1 = 11) OK
+k = 7: |L| = 16, height 3, monotone True, cut True, response-run length 13 (2k − 1 = 13) OK
+k = 8: |L| = 18, height 3, monotone True, cut True, response-run length 15 (2k − 1 = 15) OK
+k = 9: |L| = 20, height 3, monotone True, cut True, response-run length 17 (2k − 1 = 17) OK
+k = 10: |L| = 22, height 3, monotone True, cut True, response-run length 19 (2k − 1 = 19) OK
+k = 11: |L| = 24, height 3, monotone True, cut True, response-run length 21 (2k − 1 = 21) OK
+k = 12: |L| = 26, height 3, monotone True, cut True, response-run length 23 (2k − 1 = 23) OK
+k = 13: |L| = 28, height 3, monotone True, cut True, response-run length 25 (2k − 1 = 25) OK
+k = 14: |L| = 30, height 3, monotone True, cut True, response-run length 27 (2k − 1 = 27) OK
+k = 15: |L| = 32, height 3, monotone True, cut True, response-run length 29 (2k − 1 = 29) OK
+k = 16: |L| = 34, height 3, monotone True, cut True, response-run length 31 (2k − 1 = 31) OK
+k = 17: |L| = 36, height 3, monotone True, cut True, response-run length 33 (2k − 1 = 33) OK
+k = 18: |L| = 38, height 3, monotone True, cut True, response-run length 35 (2k − 1 = 35) OK
+k = 19: |L| = 40, height 3, monotone True, cut True, response-run length 37 (2k − 1 = 37) OK
+k = 20: |L| = 42, height 3, monotone True, cut True, response-run length 39 (2k − 1 = 39) OK
+k = 21: |L| = 44, height 3, monotone True, cut True, response-run length 41 (2k − 1 = 41) OK
+k = 22: |L| = 46, height 3, monotone True, cut True, response-run length 43 (2k − 1 = 43) OK
+k = 23: |L| = 48, height 3, monotone True, cut True, response-run length 45 (2k − 1 = 45) OK
+k = 24: |L| = 50, height 3, monotone True, cut True, response-run length 47 (2k − 1 = 47) OK
+k = 25: |L| = 52, height 3, monotone True, cut True, response-run length 49 (2k − 1 = 49) OK
+k = 26: |L| = 54, height 3, monotone True, cut True, response-run length 51 (2k − 1 = 51) OK
+k = 27: |L| = 56, height 3, monotone True, cut True, response-run length 53 (2k − 1 = 53) OK
+k = 28: |L| = 58, height 3, monotone True, cut True, response-run length 55 (2k − 1 = 55) OK
+k = 29: |L| = 60, height 3, monotone True, cut True, response-run length 57 (2k − 1 = 57) OK
+k = 30: |L| = 62, height 3, monotone True, cut True, response-run length 59 (2k − 1 = 59) OK
+k = 31: |L| = 64, height 3, monotone True, cut True, response-run length 61 (2k − 1 = 61) OK
+k = 32: |L| = 66, height 3, monotone True, cut True, response-run length 63 (2k − 1 = 63) OK
+k = 33: |L| = 68, height 3, monotone True, cut True, response-run length 65 (2k − 1 = 65) OK
+k = 34: |L| = 70, height 3, monotone True, cut True, response-run length 67 (2k − 1 = 67) OK
+k = 35: |L| = 72, height 3, monotone True, cut True, response-run length 69 (2k − 1 = 69) OK
+k = 36: |L| = 74, height 3, monotone True, cut True, response-run length 71 (2k − 1 = 71) OK
+k = 37: |L| = 76, height 3, monotone True, cut True, response-run length 73 (2k − 1 = 73) OK
+k = 38: |L| = 78, height 3, monotone True, cut True, response-run length 75 (2k − 1 = 75) OK
+k = 39: |L| = 80, height 3, monotone True, cut True, response-run length 77 (2k − 1 = 77) OK
+k = 40: |L| = 82, height 3, monotone True, cut True, response-run length 79 (2k − 1 = 79) OK

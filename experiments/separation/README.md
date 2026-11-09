@@ -71,3 +71,10 @@
 - `response_length.py SEED SECONDS K H`, `response_width3.py SEED SECONDS KS`: hill-climbing the response-run length
   at fixed edge-height against lattice size. Output `out_response_rule.txt`; smallest response-rule descent failures
   `response_rule_counterexample_s*.json`.
+
+## Round 26: exact response-run lengths (§34.3z¹³²)
+
+- `response_sat.py chain N | linear K SEED COUNT | closure K M SEED COUNT | pencil K`: SAT (CaDiCaL) for the exact
+  maximum response-run length of a fixed lattice over all monotone F and cuts D; every satisfying model is decoded and
+  re-simulated. `pencil_family.py KMAX`: the explicit height-3 near-pencil family with response-run length 2k − 1.
+  Output `out_response_sat.txt`.

@@ -86,3 +86,13 @@
 - `term_sat.py (pencil K | linear K SEED COUNT | chain N) [depth=D]`, family suffix `_m` for meets: exact maximum
   term-rule run length of a fixed lattice (SAT, every model re-simulated). `term_family.py KMAX`: explicit near-pencil
   family with term1 run length k + 1. Output `out_term_rule.txt`; full-closure witness `term_omega_witness_k5.json`.
+
+## Round 26: lookahead and forced runs (§34.3z¹³⁴)
+
+- `look_rule.py families KMAX | stored`: lookahead term rule — per bad pair, the C-maximal separators whose addition
+  creates no new bad pair (else all). `look_sat.py (pencil K | linear K SEED COUNT | chain N) [depth=D]`: its exact
+  maximum (SAT, re-simulated). `term_sat.py` now takes the selection as a hook (`TermEnc.select`).
+- `forced_check.py DEPTH FILE...`: is a term-d run *forced* (one C-maximal separator per bad pair at every stage)?
+  `forced_sat.py (pencil K | linear K SEED COUNT) [depth=D]`: exact maximum length of a forced run, a lower bound for
+  every policy choosing nonempty sets of C-maximal separators. Output `out_look_rule.txt`; witnesses
+  `look1_witness_k5.json`, `look2_witness_k{5,6}.json`, `term1m_witness_k{4,5,6}.json`.

@@ -1,0 +1,76 @@
+--- python3 look_rule.py families 10   (look depth 1 / 2 / ω on the response family §34.3z¹³² and the term family §34.3z¹³³)
+k = 3: look depth 1/2/ω on response family [1, 1, 2], on term family [3, 1, 1]
+k = 4: look depth 1/2/ω on response family [1, 1, 2], on term family [4, 1, 1]
+k = 5: look depth 1/2/ω on response family [1, 1, 2], on term family [6, 1, 1]
+k = 6: look depth 1/2/ω on response family [1, 1, 2], on term family [7, 1, 1]
+k = 7: look depth 1/2/ω on response family [1, 1, 2], on term family [8, 1, 1]
+k = 8: look depth 1/2/ω on response family [1, 1, 2], on term family [9, 1, 1]
+k = 9: look depth 1/2/ω on response family [1, 1, 2], on term family [10, 1, 1]
+k = 10: look depth 1/2/ω on response family [1, 1, 2], on term family [11, 1, 1]
+--- python3 look_rule.py stored
+gapmax_lookahead_counterexample_s71.json 12 4 [2, 1, 1] existential 4
+gapmax_lookahead_counterexample_s72.json 12 4 [2, 1, 1] existential 4
+nested_all_counterexample_s93.json 12 4 [2, 1, 1] existential 4
+nested_all_counterexample_s94.json 12 4 [2, 1, 1] existential 4
+nested_nested_counterexample_s91.json 21 7 [3, 3, 4] existential 6
+nested_nested_rank_counterexample_s92.json 21 7 [3, 3, 4] existential 6
+response_rule_counterexample_s122.json 12 4 [2, 2, 2] existential 3
+response_rule_counterexample_s131.json 12 4 [3, 2, 2] existential 3
+response_rule_counterexample_s132.json 12 4 [3, 2, 2] existential 3
+response_rule_counterexample_s133.json 12 4 [2, 2, 2] existential 3
+state_graph_fail_a_s111.json 12 4 [2, 1, 1] existential 4
+state_graph_fail_a_s112.json 12 4 [2, 1, 1] existential 4
+state_graph_fail_a_s113.json 12 4 [2, 1, 1] existential 4
+state_graph_fail_b_s111.json 12 4 [2, 1, 1] existential 4
+state_graph_fail_b_s112.json 12 4 [2, 1, 1] existential 4
+state_graph_fail_b_s113.json 12 4 [2, 1, 1] existential 4
+term_omega_witness_k5.json 12 3 [1, 1, 4] existential 1
+xy_counterexample.json 12 4 [2, 3, 3] existential 3
+--- python3 look_sat.py chain N (N = 3..6), pencil K, pencil K depth=2, linear 6 1 2
+chain 3: height 2, max look1 length (1, 0.0)
+chain 4: height 3, max look1 length (2, 0.0)
+chain 5: height 4, max look1 length (3, 0.0)
+chain 6: height 5, max look1 length (4, 0.2)
+near-pencil on 3 points: |L| = 8, height 3, max look1 length (k, s) = (3, 0.5)
+near-pencil on 4 points: |L| = 10, height 3, max look1 length (k, s) = (5, 5.8)
+near-pencil on 5 points: |L| = 12, height 3, max look1 length (k, s) = (6, 58.9)
+near-pencil on 6 points: |L| = 14, height 3, max look1 length (k, s) = (7, 279.4)
+(K = 7: timeout at 580 s)
+near-pencil on 4 points: |L| = 10, height 3, max look2 length (k, s) = (4, 8.8)
+near-pencil on 5 points: |L| = 12, height 3, max look2 length (k, s) = (5, 50.6)
+near-pencil on 6 points: |L| = 14, height 3, max look2 length (k, s) = (6, 245.8)
+linear space on 6 points: |L| = 15, height 3, max look1 length (k, s) = (6, 224.4)
+linear space on 6 points: |L| = 12, height 3, max look1 length (k, s) = (5, 16.1)
+--- python3 forced_sat.py pencil K [depth=D]
+near-pencil on 4 points: |L| = 10, max forced term1 run (k, s) = (5, 3.7)
+near-pencil on 5 points: |L| = 12, max forced term1 run (k, s) = (6, 16.1)
+near-pencil on 6 points: |L| = 14, max forced term1 run (k, s) = (7, 64.3)
+near-pencil on 7 points: |L| = 16, max forced term1 run (k, s) = (8, 338.3)
+near-pencil on 4 points: |L| = 10, max forced term2 run (k, s) = (4, 4.2)
+near-pencil on 5 points: |L| = 12, max forced term2 run (k, s) = (5, 14.8)
+near-pencil on 6 points: |L| = 14, max forced term2 run (k, s) = (6, 53.2)
+near-pencil on 4 points: |L| = 10, max forced term3 run (k, s) = (4, 5.2)
+near-pencil on 5 points: |L| = 12, max forced term3 run (k, s) = (5, 13.5)
+--- python3 forced_check.py 1 look1_witness_k5.json term1m_witness_k{4,5,6}.json; 2 look2_witness_k{5,6}.json; omega ...
+look1_witness_k5.json: depth 1, run length 6, max number of C-maximal separators per bad pair by stage [1, 1, 1, 1, 1, 1], forced True, existential minimum 1
+term1m_witness_k4.json: depth 1, run length 5, max number of C-maximal separators per bad pair by stage [1, 1, 1, 1, 1], forced True, existential minimum 1
+term1m_witness_k5.json: depth 1, run length 6, max number of C-maximal separators per bad pair by stage [1, 1, 1, 1, 1, 1], forced True, existential minimum 1
+term1m_witness_k6.json: depth 1, run length 7, max number of C-maximal separators per bad pair by stage [1, 1, 1, 1, 1, 1, 1], forced True, existential minimum 1
+look2_witness_k5.json: depth 2, run length 5, max number of C-maximal separators per bad pair by stage [1, 1, 1, 1, 1], forced True, existential minimum 1
+look2_witness_k6.json: depth 2, run length 6, max number of C-maximal separators per bad pair by stage [2, 1, 1, 1, 1, 1], forced False, existential minimum 1
+term_omega_witness_k5.json: depth omega, run length 4, max number of C-maximal separators per bad pair by stage [2, 1, 1, 1], forced False, existential minimum 1
+look1_witness_k5.json: depth omega, run length 2, max number of C-maximal separators per bad pair by stage [4, 1], forced False, existential minimum 1
+look2_witness_k5.json: depth omega, run length 1, max number of C-maximal separators per bad pair by stage [4], forced False, existential minimum 1
+--- term family (term_family.py), forced check at depth 1 with meets
+k = 3: run length 3, forced True
+k = 4: run length 4, forced True
+k = 5: run length 6, forced True
+k = 6: run length 7, forced True
+k = 7: run length 8, forced True
+k = 8: run length 9, forced True
+k = 9: run length 10, forced True
+k = 10: run length 11, forced True
+k = 11: run length 12, forced True
+k = 12: run length 13, forced True
+k = 13: run length 14, forced True
+k = 14: run length 15, forced True

@@ -92,10 +92,12 @@ class TermEnc(Enc):
                     for s in range(n):
                         if le[y][s]: continue
                         c_ = self.v('cand', m, x, y, s); self.iff_and(c_, [C(s), fle(x, y, s)]); cand[s] = c_
+                    mxd = {}
                     for s in cand:
                         mx = self.v('mx', m, x, y, s)
-                        self.iff_and(mx, [cand[s]] + [-cand[s2] for s2 in cand if s2 != s and le[s][s2]])
-                        w = self.v('bmx', m, x, y, s); self.iff_and(w, [b(x, y), mx]); Nlits[s].append(w)
+                        self.iff_and(mx, [cand[s]] + [-cand[s2] for s2 in cand if s2 != s and le[s][s2]]); mxd[s] = mx
+                    for s, ch in self.select(m, x, y, mxd).items():
+                        w = self.v('bmx', m, x, y, s); self.iff_and(w, [b(x, y), ch]); Nlits[s].append(w)
             for s in range(n): self.iff_or(self.v('N', m, s), Nlits[s])
             for e in range(n):
                 if e == top: self.cl([t(m + 1, e)]); continue
@@ -108,6 +110,9 @@ class TermEnc(Enc):
                             w = self.v('A', m, a_); self.iff_or(w, [t(m, a_), self.v('N', m, a_)]); wit.append(w)
                     c = self.v('ex', m, e, z); self.iff_or(c, wit); conds.append(c)
                 self.iff_and(t(m + 1, e), conds)
+
+    def select(self, m, x, y, mxd):
+        return mxd                       # add every C-maximal separator
 
 def decode(E):
     L = E.L; n = L.n; mdl = set(x for x in E.S.get_model() if x > 0)

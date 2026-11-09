@@ -134,7 +134,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
   interval cell* (§34.3z¹⁴¹, exact on all lattices checked). It is proved in Lean whenever some top element is
   diagonal (m ≤ F(m, m): `upc_of_le_diag`, which covers 99.92 % of random tight stages), and at the first tight
   stage when a(⊥) ≠ ⊥. The non-diagonal residue, in which every top element entered through b, already occurs on
-  the 4-element chain and is the open case.
+  the 4-element chain and is the open case. The brief's normalized form of this lemma (§34.3z¹⁴²) turns out to
+  be the Cut Lemma itself: a lower cell at a maximal-height element of R(G) is a cell across R, and no such cell
+  exists (`BottomMaxCell.R_no_cross_cell`). Proved there: **the Cut Lemma holds for F whenever R(F) has height ≤ 1**
+  (`cutMaps_of_R_atomic`, a bouquet with centre ⊥); forced near-cells over atoms and below minimal non-members.
 
 **Open frontier now.** Chain-finite Cut, equivalently join-closure of R(F) (`Frontier.lean`), for cuts where **both**
 Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first open case. The sharpest concrete target is now a

@@ -114,3 +114,4 @@ import Mordor.SeparatorAncestry
 import Mordor.IntervalRefinement
 import Mordor.InterfaceTrace
 import Mordor.GapPotential
+import Mordor.GapMax

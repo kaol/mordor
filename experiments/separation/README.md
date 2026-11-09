@@ -40,3 +40,10 @@
 - `containment_audit.py records FILE | random SEED N`: existential test of strict interval containment and of the gap
   parent property (causal parents, all separator choices). `xy_audit.py`: bad pairs with x ≰ y over all runs.
   Output `out_containment_audit.txt`; `xy_counterexample.json` (|L| = 12, height 4).
+
+## Round 26: maximum-gap descent (§34.3z¹²⁶)
+
+- `gapmax_audit.py records FILE | random SEED N | hunt SEED SECONDS FILES... | rule FILE | rulehunt SEED SECONDS FILES...`:
+  existential and universal maximum-gap descent over all runs, on records, random instances and mutations of hard
+  instances; `rule`/`rulehunt` test the one-step lookahead rule (minimize the next maximum gap). Output
+  `out_gapmax_audit.txt`; lookahead counterexamples `gapmax_lookahead_counterexample_s7*.json` (|L| = 12, height 4).

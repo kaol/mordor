@@ -1,0 +1,28 @@
+--- python3 gapmax_audit.py records stage_records.json
+greedy_maximal H=5 |L|=27: some run descends True, all runs descend False; failing M-sequence [10, 9, 7, 8, 7, 6]
+greedy_maximal H=6 |L|=24: some run descends True, all runs descend False; failing M-sequence [12, 11, 10, 9, 8, 11, 7]
+greedy_maximal H=7 |L|=68: some run descends True, all runs descend True; failing M-sequence None
+existential_maximal H=3 |L|=10: some run descends True, all runs descend True; failing M-sequence None
+existential_maximal H=4 |L|=12: some run descends True, all runs descend False; failing M-sequence [8, 7, 5, 5]
+existential_maximal H=5 |L|=16: some run descends True, all runs descend True; failing M-sequence None
+existential_maximal H=6 |L|=27: some run descends True, all runs descend False; failing M-sequence [12, 10, 9, 8, 9]
+existential_maximal H=7 |L|=21: some run descends True, all runs descend True; failing M-sequence None
+--- random 1 600
+{"n": 600, "ex": 600, "all": 600, "aborted": 0}
+--- hunt 61 / 62 (540 s, mutations of hard instances)
+tested 80598 distinct mutated hard instances (existential minimum ≥ 3): existential failures 0, instances with some non-descending run 7353
+tested 80183 distinct mutated hard instances (existential minimum ≥ 3): existential failures 0, instances with some non-descending run 7407
+--- rule stage_records.json (one-step lookahead: minimize M_{n+1})
+greedy_maximal H=5 |L|=27: lookahead rule descends True, M = [10, 9]
+greedy_maximal H=6 |L|=24: lookahead rule descends True, M = [12]
+greedy_maximal H=7 |L|=68: lookahead rule descends True, M = [14, 13, 12]
+existential_maximal H=3 |L|=10: lookahead rule descends True, M = [6, 5]
+existential_maximal H=4 |L|=12: lookahead rule descends False, M = [8, 7, 5, 5]
+existential_maximal H=5 |L|=16: lookahead rule descends True, M = [10, 9, 8, 7]
+existential_maximal H=6 |L|=27: lookahead rule descends False, M = [12, 10, 9, 8, 9]
+existential_maximal H=7 |L|=21: lookahead rule descends True, M = [14, 13, 12, 11, 10, 8]
+--- rulehunt 71 / 72
+lookahead rule on 82835 distinct mutated hard instances: fails 7697
+smallest failure: |L| = 12, height 4, M = [8, 7, 5, 5]
+lookahead rule on 82718 distinct mutated hard instances: fails 7545
+smallest failure: |L| = 12, height 4, M = [8, 7, 5, 5]

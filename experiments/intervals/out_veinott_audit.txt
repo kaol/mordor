@@ -1,0 +1,43 @@
+--- python3 veinott_audit.py 1 4000
+   143  WV=True selectable=True general_pin=False   (smallest |L| = 4)
+    74  WV=False selectable=True general_pin=False   (smallest |L| = 5)
+    54  some window empty (external pin or trace-forced)
+    11  WV=False selectable=True general_pin=True | pinned once: selectable=True; pinned to fixed point (1 rounds): selectable=True WV=False   (smallest |L| = 6)
+    11  WV=True selectable=True general_pin=True | pinned once: selectable=True; pinned to fixed point (1 rounds): selectable=True WV=True   (smallest |L| = 7)
+     3  WV=False selectable=False general_pin=True | pinned once: selectable=True; pinned to fixed point (2 rounds): selectable=True WV=False   (smallest |L| = 8)
+     2  WV=False selectable=False general_pin=True | pinned once: selectable=True; pinned to fixed point (2 rounds): selectable=True WV=True   (smallest |L| = 8)
+--- python3 veinott_audit.py 2 4000
+   142  WV=True selectable=True general_pin=False   (smallest |L| = 4)
+    57  WV=False selectable=True general_pin=False   (smallest |L| = 5)
+    57  some window empty (external pin or trace-forced)
+    10  WV=False selectable=True general_pin=True | pinned once: selectable=True; pinned to fixed point (1 rounds): selectable=True WV=False   (smallest |L| = 7)
+     6  WV=True selectable=True general_pin=True | pinned once: selectable=True; pinned to fixed point (1 rounds): selectable=True WV=True   (smallest |L| = 5)
+     5  WV=False selectable=False general_pin=True | pinned once: selectable=True; pinned to fixed point (2 rounds): selectable=True WV=True   (smallest |L| = 6)
+     1  WV=False selectable=False general_pin=True | pinned once: selectable=True; pinned to fixed point (2 rounds): selectable=True WV=False   (smallest |L| = 10)
+--- python3 veinott_audit.py 3 4000
+   153  WV=True selectable=True general_pin=False   (smallest |L| = 4)
+    91  WV=False selectable=True general_pin=False   (smallest |L| = 5)
+    81  some window empty (external pin or trace-forced)
+    14  WV=False selectable=True general_pin=True | pinned once: selectable=True; pinned to fixed point (1 rounds): selectable=True WV=False   (smallest |L| = 7)
+    13  WV=True selectable=True general_pin=True | pinned once: selectable=True; pinned to fixed point (1 rounds): selectable=True WV=True   (smallest |L| = 6)
+     6  WV=False selectable=False general_pin=True | pinned once: selectable=True; pinned to fixed point (2 rounds): selectable=True WV=False   (smallest |L| = 8)
+     4  WV=False selectable=False general_pin=True | pinned once: selectable=True; pinned to fixed point (2 rounds): selectable=True WV=True   (smallest |L| = 8)
+     1  WV=False selectable=False general_pin=True | pinned once: selectable=False; pinned to fixed point (2 rounds): selectable=False WV=False   (smallest |L| = 11)
+--- python3 veinott_audit.py 4 4000
+   147  WV=True selectable=True general_pin=False   (smallest |L| = 4)
+    81  WV=False selectable=True general_pin=False   (smallest |L| = 5)
+    37  some window empty (external pin or trace-forced)
+    16  WV=True selectable=True general_pin=True | pinned once: selectable=True; pinned to fixed point (1 rounds): selectable=True WV=True   (smallest |L| = 6)
+     7  WV=False selectable=True general_pin=True | pinned once: selectable=True; pinned to fixed point (1 rounds): selectable=True WV=False   (smallest |L| = 6)
+     4  WV=False selectable=False general_pin=True | pinned once: selectable=True; pinned to fixed point (2 rounds): selectable=True WV=False   (smallest |L| = 6)
+     1  WV=False selectable=False general_pin=True | pinned once: selectable=False; pinned to fixed point (1 rounds): selectable=False WV=False   (smallest |L| = 11)
+     1  WV=False selectable=False general_pin=True | pinned once: selectable=True; pinned to fixed point (2 rounds): selectable=True WV=True   (smallest |L| = 9)
+--- merged over the four seeds
+585  WV=True selectable=True general_pin=False
+303  WV=False selectable=True general_pin=False
+229  some window empty (external pin or trace-forced)
+46  WV=True selectable=True general_pin=True | pinned once: selectable=True; pinned to fixed point : selectable=True WV=True
+42  WV=False selectable=True general_pin=True | pinned once: selectable=True; pinned to fixed point : selectable=True WV=False
+14  WV=False selectable=False general_pin=True | pinned once: selectable=True; pinned to fixed point : selectable=True WV=False
+12  WV=False selectable=False general_pin=True | pinned once: selectable=True; pinned to fixed point : selectable=True WV=True
+2  WV=False selectable=False general_pin=True | pinned once: selectable=False; pinned to fixed point : selectable=False WV=False

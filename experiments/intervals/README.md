@@ -8,3 +8,9 @@
   witness-free selection with values in the open interval (w, v)); random instances on closure-system lattices and
   the C4 / B2 regressions. Output `out_selection_falsify.txt`; minimal counterexamples (|L| = 6)
   `selection_counterexample_s2.json`, `_s5.json`.
+- `veinott_audit.py SEED N`: weak Veinott monotonicity (Kukushkin 2009) of the windows, selectability, general pins
+  (Lean `general_pin`, `general_pin_dual`) and iterated pinning. Output `out_veinott_audit.txt`.
+  `pinfree_blocked_counterexample.json`: the |L| = 10 instance that the narrow internal-pin pattern misses and the
+  general pin catches.
+- `antichain_pins.py NMAX`: the M_n crossing interval in which all n rows are blocked and every n − 1 are selectable
+  (unbounded pin arity; Lean `atom_family_block` for the infinite version). Output `out_antichain_pins.txt`.

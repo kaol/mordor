@@ -1,0 +1,6 @@
+n = 2: all 2 rows selectable: False; every family of 1 rows selectable: True
+n = 3: all 3 rows selectable: False; every family of 2 rows selectable: True
+n = 4: all 4 rows selectable: False; every family of 3 rows selectable: True
+n = 5: all 5 rows selectable: False; every family of 4 rows selectable: True
+n = 6: all 6 rows selectable: False; every family of 5 rows selectable: True
+n = 7: all 7 rows selectable: False; every family of 6 rows selectable: True

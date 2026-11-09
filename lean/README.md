@@ -55,7 +55,7 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/ShortestRun.lean` | §34.3z¹³⁰ | `Goal`, the reachable state graph, `dist`, `optimal_successor`, `maxSep_restrict` |
 | `Mordor/ResponseRun.lean` | §34.3z¹³¹ | the response run, sub-lattice transfer (`resp_transfer`), `cut_of_resp_bound` |
 | `Mordor/GeneralRun.lean` | §34.3z¹³⁶ | `Closed` stage sequences; `cut_of_gap_parent_closed`, `cut_of_max_gap_drop_closed`; general-separator runs `GStep`/`GRun`, `run_grun`, `cut_of_terminal_grun`, `cut_of_max_gap_drop_general` |
-| `Mordor/OrbitHeight.lean` | §34.3z¹⁴⁰ | `escape`, `orbitHeight_one`, `risingEscape_zero`; `TightUPC ⇒ RisingEscape ⇒ TightStep ⇒ OrbitHeightInv ⇒ ⊤ ∈ R_H`, `cutMaps_of_tightUPC`; `join_mem_of_top_mem` |
+| `Mordor/OrbitHeight.lean` | §34.3z¹⁴⁰ | `escape`, `orbitHeight_one`, `risingEscape_zero`; `TightUPC ⇒ RisingEscape ⇒ TightStep ⇒ OrbitHeightInv ⇒ ⊤ ∈ R_H`, `cutMaps_of_tightUPC`; `join_mem_of_top_mem`; §34.3z¹⁴¹: `upc_of_le_diag` (diagonal upper principal cut), `le_diag_of_a`, `TightIC`, `DiagTop ⇒ TightIC ⇒ Cut`, `tightIC_one_of_a_bot` |
 | `Mordor/InterfaceExtraction.lean` | §34.3z¹⁴⁰ | `cycle_lower_witness`, `cycle_impossible`: separator cycles force a lower witness (via `atom_family_block`) |
 
 The table lists the headline files; the other files under `Mordor/` (about 120 in all) are documented in their module

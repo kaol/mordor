@@ -6,13 +6,19 @@ k: m ∈ R_k → no y > m lies in R_{k+1}. (Tightness with OH forces some m of h
 assume OH.) UNSAT for all k proves P1' together with (OH) at k + 1 on that lattice.
 With --upc: the stronger orbit-local statement that some height-k element m ∈ R_k has a witness cell (x, y),
 x ≤ m < y (F(x, y) ≤ x or y ≤ F(x, y)).
-  python3 rising_sat.py [--upc] (sweep P NMAX | closure K MM SEED COUNT | pencil K)
+With --nodiag: search for a tight stage whose top elements are all non-diagonal (the residue of
+OrbitHeight.tightIC_of_diagTop); 'FAILS' then means such a residue exists.
+With --upc --xeqm: the cell must have x = m (the interval cell IC(m)).
+  python3 rising_sat.py [--upc [--xeqm]] (sweep P NMAX | closure K MM SEED COUNT | pencil K)
 """
 import sys, random, collections
 sys.path.insert(0, '../separation')
 import separator_stages as ss
 from amalg_sat import Enc
 from rstages import stages
+
+XEQM = False      # --xeqm: restrict the cell to x = m (the interval cell IC(m))
+NODIAG = False    # --nodiag: instead ask for a tight stage with NO diagonal top element (m ≤ F(m, m))
 
 def check_upc(L):
     """Tight stage k, ⊤ ∉ R_{k+1}, and no element m of height k in R_k satisfies UPC(m)."""
@@ -31,10 +37,16 @@ def check_upc(L):
             if key not in E.vars:
                 o = E.v(*key); E.iff_or(o, [E.v('f', x, y, w) for w in range(n) if L.le[y][w]])
             return E.vars[key]
+        if NODIAG:
+            for m in range(n):
+                if L.rank[m] == k: E.S.add_clause([-r(k, m), -yle(m, m)])
+            if E.S.solve():
+                F = E.decode(); return k, F
+            E.S.delete(); continue
         for m in range(n):
             if L.rank[m] != k: continue
             for x in range(n):
-                if not L.le[x][m]: continue
+                if not L.le[x][m] or (XEQM and x != m): continue
                 for y in range(n):
                     if y != m and L.le[m][y]:
                         E.S.add_clause([-r(k, m), -fle(x, y, x)]); E.S.add_clause([-r(k, m), -yle(x, y)])
@@ -59,7 +71,13 @@ def check(L):
     return None
 
 if __name__ == '__main__':
-    if '--upc' in sys.argv: sys.argv.remove('--upc'); check = check_upc; NAME = 'UPC at some top element'
+    if '--xeqm' in sys.argv: sys.argv.remove('--xeqm'); XEQM = True
+
+    if '--upc' in sys.argv:
+        sys.argv.remove('--upc'); check = check_upc
+        NAME = 'interval cell IC at some top element' if XEQM else 'UPC at some top element'
+    if '--nodiag' in sys.argv:
+        sys.argv.remove('--nodiag'); NODIAG = True; check = check_upc; NAME = 'every tight stage has a diagonal top'
     else: NAME = "P1'"
     if sys.argv[1] == 'sweep':
         import nodesc_sweep as ns

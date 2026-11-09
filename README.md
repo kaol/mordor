@@ -130,7 +130,11 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
   The orbit-height invariant behind this (OH: if ⊤ ∉ R_k, then R_k has an element of height ≥ k) also holds
   exactly. Lean (`OrbitHeight`) proves the chain *tight-stage upper principal cut ⇒ rising escape ⇒ OH ⇒ R_H = L ⇒
   Cut*, and its first cases (`escape`, `orbitHeight_one`). `InterfaceExtraction` shows that the line-cycle
-  counterexamples to maximal descent force a lower witness via `atom_family_block`.
+  counterexamples to maximal descent force a lower witness via `atom_family_block`. The step then sharpens to the *tight-stage
+  interval cell* (§34.3z¹⁴¹, exact on all lattices checked). It is proved in Lean whenever some top element is
+  diagonal (m ≤ F(m, m): `upc_of_le_diag`, which covers 99.92 % of random tight stages), and at the first tight
+  stage when a(⊥) ≠ ⊥. The non-diagonal residue, in which every top element entered through b, already occurs on
+  the 4-element chain and is the open case.
 
 **Open frontier now.** Chain-finite Cut, equivalently join-closure of R(F) (`Frontier.lean`), for cuts where **both**
 Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first open case. The sharpest concrete target is now a

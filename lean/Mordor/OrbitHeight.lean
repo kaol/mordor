@@ -21,6 +21,9 @@ hence **(ORB)** `R_H = L` at edge-height `H`, for every monotone `F` — a width
   `risingEscape_zero`: its `k = 0` case is a theorem.
 * `TightUPC` (tight-stage upper principal cut), `mem_succ_of_cell`, `risingEscape_of_tightUPC`,
   `cutMaps_of_tightUPC`: the sharpest local form of the unresolved step, and its implication to Cut.
+* §34.3z¹⁴¹: `upc_of_le_diag` (**diagonal upper principal cut**: `m ≤ F m m` makes `[m, ⊤]` `F`-invariant, and the
+  principal cut there gives the interval cell), `le_diag_of_a`, `TightIC`, `DiagTop`, `tightIC_of_diagTop`,
+  `cutMaps_of_diagTop`, `tightIC_one_of_a_bot` (the first tight stage when `a ⊥ ≠ ⊥`).
 * `join_mem_of_top_mem` (**amalgamation**): once `⊤ ∈ R_K`, any `x, y` have `x ⊔ y ∈ R_K`; so (ORB) is the
   width-independent amalgamation bound `k(H, m, n) = H` of Programme C.
 -/
@@ -131,6 +134,69 @@ theorem risingEscape_of_tightUPC {H : ℕ} (h : TightUPC F H) : RisingEscape F H
 /-- **Tight-stage upper principal cut ⇒ the Cut Lemma for `F`**, at edge-height `≤ H`. -/
 theorem cutMaps_of_tightUPC {H : ℕ} (hn : NoChain α (H + 1)) (h : TightUPC F H) : CutMaps F :=
   cutMaps_of_risingEscape hn (risingEscape_of_tightUPC h)
+
+/-- **Diagonal upper principal cut.** If `m ≤ F m m` and `m ≠ ⊤`, the interval `[m, ⊤]` is `F`-invariant, and the
+principal cut inside it gives `y > m` with `F m y ≤ m` or `y ≤ F m y` (the interval cell at `m`). -/
+theorem upc_of_le_diag [WellFoundedLT α] {m : α} (hm : m ≤ F m m) (ht : m ≠ ⊤) :
+    ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y) := by
+  haveI : Fact (m ≤ ⊤) := ⟨le_top⟩
+  have hge : ∀ x y : Set.Icc m ⊤, m ≤ F x.1 y.1 := fun x y =>
+    hm.trans ((F.mono x.2.1 m).trans ((F x.1).mono y.2.1))
+  let G : Set.Icc m ⊤ →o Set.Icc m ⊤ →o Set.Icc m ⊤ :=
+    ⟨fun x => ⟨fun y => ⟨F x.1 y.1, hge x y, le_top⟩, fun y y' h => (F x.1).mono h⟩,
+     fun x x' h y => F.mono h y.1⟩
+  have hbot : ((⊥ : Set.Icc m ⊤) : α) = m := rfl
+  have hne : (⊥ : Set.Icc m ⊤) ≠ ⊤ := fun h => ht (by
+    have := congrArg Subtype.val h; simpa [hbot] using this)
+  obtain ⟨x, hx, y, hy, hw⟩ := cut_principal_down G ⊥ hne
+  have hxm : x.1 = m := le_antisymm (show x.1 ≤ (⊥ : Set.Icc m ⊤).1 from hx) x.2.1
+  have hmy : m < y.1 := lt_of_le_of_ne y.2.1 (fun e => hy (show y.1 ≤ (⊥ : Set.Icc m ⊤).1 from e ▸ le_rfl))
+  refine ⟨y.1, hmy, ?_⟩
+  rcases hw with h | h
+  · left; have h' : F x.1 y.1 ≤ x.1 := h; rwa [hxm] at h'
+  · right; have h' : y.1 ≤ F x.1 y.1 := h; rwa [hxm] at h'
+
+/-- An `a`-value above its argument is diagonal: `x ≤ a x ⇒ a x ≤ F (a x) (a x)`. -/
+theorem le_diag_of_a {x : α} (hx : x ≤ a F x) : a F x ≤ F (a F x) (a F x) := by
+  have hfix : F x (a F x) = a F x := (F x).map_gfp
+  calc a F x = F x (a F x) := hfix.symm
+    _ ≤ F (a F x) (a F x) := F.mono hx _
+
+/-- **Tight-stage interval cell** (exact on every finite lattice checked): the cell can be taken with `x = m`. -/
+def TightIC (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k, (⊤ : α) ∉ Rk F (k + 1) → (∀ z ∈ Rk F k, height H z ≤ k) →
+    ∃ m ∈ Rk F k, height H m = k ∧ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)
+
+theorem tightUPC_of_tightIC {H : ℕ} (h : TightIC F H) : TightUPC F H := by
+  intro k ht hall
+  obtain ⟨m, hm, hmk, y, hmy, hw⟩ := h k ht hall
+  exact ⟨m, hm, hmk, m, le_rfl, y, hmy, hw⟩
+
+/-- At every tight stage some top-height element is diagonal. -/
+def DiagTop (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k, (⊤ : α) ∉ Rk F (k + 1) → (∀ z ∈ Rk F k, height H z ≤ k) →
+    ∃ m ∈ Rk F k, height H m = k ∧ m ≤ F m m
+
+/-- **Diagonal tops ⇒ the tight-stage interval cell** (DCC). -/
+theorem tightIC_of_diagTop [WellFoundedLT α] {H : ℕ} (h : DiagTop F H) : TightIC F H := by
+  intro k ht hall
+  obtain ⟨m, hm, hmk, hd⟩ := h k ht hall
+  have hmt : m ≠ ⊤ := fun e => ht (Rk_mono (Nat.le_succ k) (e ▸ hm))
+  exact ⟨m, hm, hmk, upc_of_le_diag hd hmt⟩
+
+theorem cutMaps_of_diagTop [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (h : DiagTop F H) : CutMaps F :=
+  cutMaps_of_tightUPC hn (tightUPC_of_tightIC (tightIC_of_diagTop h))
+
+/-- **The interval cell at the first tight stage when `a ⊥ ≠ ⊥`.** If `R₁` has height `≤ 1`, `⊤ ∉ R₂` and
+`a ⊥ ≠ ⊥`, then `m = a ⊥` is a top element of `R₁` with an interval cell. -/
+theorem tightIC_one_of_a_bot [WellFoundedLT α] {H : ℕ} (hH : 1 ≤ H) (ht : (⊤ : α) ∉ Rk F 2)
+    (hall : ∀ z ∈ Rk F 1, height H z ≤ 1) (ha : a F ⊥ ≠ ⊥) :
+    ∃ m ∈ Rk F 1, height H m = 1 ∧ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y) := by
+  have hm : a F ⊥ ∈ Rk F 1 := by
+    rw [Rk_succ]; exact ⟨a F ⊥, le_rfl, Or.inr (Or.inl ⟨⊥, show (⊥ : α) ∈ Rk F 0 from le_rfl, rfl⟩)⟩
+  have h1 : 1 ≤ height H (a F ⊥) := le_height hH ⟨⊥, bot_lt_iff_ne_bot.2 ha, trivial⟩
+  have hmt : a F ⊥ ≠ ⊤ := fun e => ht (Rk_mono (by omega) (e ▸ hm))
+  exact ⟨a F ⊥, hm, le_antisymm (hall _ hm) h1, upc_of_le_diag (le_diag_of_a bot_le) hmt⟩
 
 /-- Rising escape at `k = 0` holds unconditionally (DCC): it is `orbitHeight_one`. -/
 theorem risingEscape_zero [WellFoundedLT α] {H : ℕ} (ht : (⊤ : α) ∉ Rk F 1) :

@@ -12,4 +12,8 @@ a(x) = gfp_y F(x, y), b(y) = lfp_x F(x, y), R_0 = ↓⊥, R_{k+1} = ↓(R_k ∪ 
   escape, entry routes, upper principal cuts). Smallest violations `*_viol_s*.json`.
 - `rising_sat.py [--upc]`: exact check of rising escape (P1′) and of the tight-stage upper principal cut.
 
-Output `out_orbit.txt`. Lean: `lean/Mordor/OrbitHeight.lean`.
+- §34.3z¹⁴¹: `diag_upc.py` (diagonal top elements at tight stages), `nondiag.py` (cell types at non-diagonal tight
+  stages), `rising_sat.py --upc --xeqm` (exact tight-stage interval cell), `rising_sat.py --nodiag` (exact residue
+  search), `residue.py`, `residue_select.py` (anatomy of the residue and selection rules). Output `out_orbit2.txt`.
+
+Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lean: `lean/Mordor/OrbitHeight.lean`.

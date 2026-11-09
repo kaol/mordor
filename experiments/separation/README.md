@@ -131,3 +131,11 @@
   witnesses on all 4-point closure systems).
 - `stage_kinds.py FILES`: stage-0 separator kinds (response / maximal, in / outside D) that begin a terminating
   2-stage run at height 3. Output `out_local_lex.txt`.
+
+## Round 26: bounded lookahead and remaining distance (§34.3z¹³⁹)
+
+- `lookahead_progress.py random SEED SECONDS | hard FILE...`: k-step progress (k = 1, 2, 3) at all RM-reachable
+  states; the one state needing k = 4 is `lookahead_fail_k4.json`.
+- `remaining_dist.py random SEED SECONDS | hard FILE... | cycle KMAX`: the RM state graph and the remaining distance
+  dist(T) from every reachable state against H − 1; states with dist > H − 1 `remaining_dist_fail_h{3,4}.json`.
+  Output `out_lookahead.txt`.

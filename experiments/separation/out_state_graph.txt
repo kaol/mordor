@@ -1,0 +1,13 @@
+--- python3 state_graph_audit.py records stage_records.json
+greedy_maximal 5 27 {'states': 21, 'dT0': 2, 'fail_a': 0, 'fail_b': 0, 'desc0': True, 'depths': {}}
+greedy_maximal 6 24 {'states': 29, 'dT0': 1, 'fail_a': 0, 'fail_b': 0, 'desc0': True, 'depths': {}}
+greedy_maximal 7 68 {'states': 69, 'dT0': 3, 'fail_a': 0, 'fail_b': 0, 'desc0': True, 'depths': {}}
+existential_maximal 3 10 {'states': 4, 'dT0': 2, 'fail_a': 0, 'fail_b': 0, 'desc0': True, 'depths': {}}
+existential_maximal 4 12 {'states': 9, 'dT0': 4, 'fail_a': 1, 'fail_b': 1, 'desc0': True, 'depths': {1: 2}}
+existential_maximal 5 16 {'states': 8, 'dT0': 4, 'fail_a': 0, 'fail_b': 0, 'desc0': True, 'depths': {}}
+existential_maximal 6 27 {'states': 13, 'dT0': 5, 'fail_a': 1, 'fail_b': 1, 'desc0': True, 'depths': {1: 1, 2: 1, 3: 1}}
+existential_maximal 7 21 {'states': 12, 'dT0': 6, 'fail_a': 0, 'fail_b': 0, 'desc0': True, 'depths': {}}
+--- hunt 111 / 112 / 113 (540 s, distinct mutations of hard instances, d(T0) >= 3)
+{'instances': 81163, '(a) fails somewhere': 7474, '(b) fails on a shortest path': 7262, 'no descending shortest run': 0} exchange depth of non-descending shortest runs: {1: 8801, 2: 5661, 3: 5559} smallest failures (|L|, height): {'fail_a': (12, 4), 'fail_b': (12, 4)}
+{'instances': 80184, '(a) fails somewhere': 7265, '(b) fails on a shortest path': 7053, 'no descending shortest run': 0} exchange depth of non-descending shortest runs: {1: 8526, 2: 5529, 3: 5432} smallest failures (|L|, height): {'fail_a': (12, 4), 'fail_b': (12, 4)}
+{'instances': 80670, '(a) fails somewhere': 7375, '(b) fails on a shortest path': 7162, 'no descending shortest run': 0} exchange depth of non-descending shortest runs: {1: 8643, 2: 5625, 3: 5528} smallest failures (|L|, height): {'fail_a': (12, 4), 'fail_b': (12, 4)}

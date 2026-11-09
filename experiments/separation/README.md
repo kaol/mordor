@@ -56,3 +56,10 @@
   smallest rule failures `nested_*_counterexample_s*.json`.
 - `wide_h6.py SEED SECONDS MIN_SIZE` (§34.3z¹²⁸): shortest-run descent on wide edge-height-6 closure-system lattices
   (|L| 20–69), hill-climbing toward hard instances. Output `out_wide_h6.txt`.
+
+## Round 26: the state graph (§34.3z¹³⁰)
+
+- `state_graph_audit.py records FILE | hunt SEED SECONDS FILES...`: the reachable state graph over all separator
+  choices, completion distance d (Lean `ShortestRun.dist`), the optimal gap-successor property at all reachable states
+  and at states on shortest paths, and the exchange depth of non-descending shortest runs. Output
+  `out_state_graph.txt`; smallest failures `state_graph_fail_*_s*.json` (|L| = 12, height 4).

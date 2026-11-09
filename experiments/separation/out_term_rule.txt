@@ -1,0 +1,98 @@
+--- python3 term_rule.py pencil 12
+k = 3: response 5, term1_all 1, term1_one 1
+k = 4: response 7, term1_all 1, term1_one 1
+k = 5: response 9, term1_all 1, term1_one 1
+k = 6: response 11, term1_all 1, term1_one 1
+k = 7: response 13, term1_all 1, term1_one 1
+k = 8: response 15, term1_all 1, term1_one 1
+k = 9: response 17, term1_all 1, term1_one 1
+k = 10: response 19, term1_all 1, term1_one 1
+k = 11: response 21, term1_all 1, term1_one 1
+k = 12: response 23, term1_all 1, term1_one 1
+--- python3 term_rule.py records stage_records.json
+greedy_maximal 5 27 {'term1_all': (True, [10, 9, 6]), 'term1_one': (True, [10, 9, 7, 6])}
+greedy_maximal 6 24 {'term1_all': (True, [12]), 'term1_one': (True, [12])}
+greedy_maximal 7 68 {'term1_all': (True, [14, 11]), 'term1_one': (True, [14, 11])}
+existential_maximal 3 10 {'term1_all': (True, [6]), 'term1_one': (True, [6])}
+existential_maximal 4 12 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+existential_maximal 5 16 {'term1_all': (True, [10, 7]), 'term1_one': (True, [10, 7])}
+existential_maximal 6 27 {'term1_all': (True, [12, 11, 10, 9, 8]), 'term1_one': (True, [12, 11, 10, 9, 8])}
+existential_maximal 7 21 {'term1_all': (True, [14, 12, 10, 9]), 'term1_one': (True, [14, 12, 10, 9])}
+--- python3 term_rule.py stored   (*counterexample*.json, state_graph_fail_*.json of earlier rounds)
+gapmax_lookahead_counterexample_s71.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+gapmax_lookahead_counterexample_s72.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+nested_all_counterexample_s93.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+nested_all_counterexample_s94.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+nested_nested_counterexample_s91.json 21 7 {'term1_all': (True, [14, 12, 10]), 'term1_one': (True, [14, 12, 10, 9])}
+nested_nested_rank_counterexample_s92.json 21 7 {'term1_all': (True, [14, 12, 10]), 'term1_one': (True, [14, 12, 10, 9])}
+response_rule_counterexample_s122.json 12 4 {'term1_all': (True, [8, 7, 5]), 'term1_one': (True, [8, 7])}
+response_rule_counterexample_s131.json 12 4 {'term1_all': (True, [8, 6, 5]), 'term1_one': (True, [8, 6])}
+response_rule_counterexample_s132.json 12 4 {'term1_all': (True, [8, 6, 5]), 'term1_one': (True, [8, 6])}
+response_rule_counterexample_s133.json 12 4 {'term1_all': (True, [8, 7, 5]), 'term1_one': (True, [8, 7])}
+state_graph_fail_a_s111.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+state_graph_fail_a_s112.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+state_graph_fail_a_s113.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+state_graph_fail_b_s111.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+state_graph_fail_b_s112.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+state_graph_fail_b_s113.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+xy_counterexample.json 12 4 {'term1_all': (True, [8, 6]), 'term1_one': (True, [8, 6])}
+--- python3 term_rule.py hunt S 500 stage_records.json, S = 141..144 (four runs)
+{'instances': 46483, 'response non-descending': 1723, 'term1_all non-descending': 562, 'term1_one non-descending': 564} longest run by (rule, height): {('response', 4): 5, ('response', 5): 4, ('response', 6): 5, ('response', 7): 5, ('term1_all', 4): 5, ('term1_all', 5): 4, ('term1_all', 6): 5, ('term1_all', 7): 6, ('term1_one', 4): 5, ('term1_one', 5): 4, ('term1_one', 6): 5, ('term1_one', 7): 6}
+{'instances': 46942, 'response non-descending': 1704, 'term1_all non-descending': 534, 'term1_one non-descending': 535} longest run by (rule, height): {('response', 4): 6, ('response', 5): 3, ('response', 6): 5, ('response', 7): 5, ('term1_all', 4): 5, ('term1_all', 5): 4, ('term1_all', 6): 6, ('term1_all', 7): 6, ('term1_one', 4): 5, ('term1_one', 5): 4, ('term1_one', 6): 6, ('term1_one', 7): 6}
+{'instances': 45900, 'response non-descending': 1652, 'term1_all non-descending': 522, 'term1_one non-descending': 524} longest run by (rule, height): {('response', 4): 6, ('response', 5): 4, ('response', 6): 6, ('response', 7): 5, ('term1_all', 4): 5, ('term1_all', 5): 4, ('term1_all', 6): 6, ('term1_all', 7): 6, ('term1_one', 4): 5, ('term1_one', 5): 4, ('term1_one', 6): 6, ('term1_one', 7): 6}
+{'instances': 47077, 'response non-descending': 1652, 'term1_all non-descending': 528, 'term1_one non-descending': 528} longest run by (rule, height): {('response', 4): 6, ('response', 5): 4, ('response', 6): 5, ('response', 7): 6, ('term1_all', 4): 5, ('term1_all', 5): 4, ('term1_all', 6): 6, ('term1_all', 7): 6, ('term1_one', 4): 5, ('term1_one', 5): 4, ('term1_one', 6): 6, ('term1_one', 7): 6}
+    totals: 186402 instances; non-descending: response 6731, term1_all 2146, term1_one 2151
+--- python3 term_sat.py chain N  (N = 3..6)
+chain 3..6: max term1_all length 1, 2, 3, 4 (= H - 1)
+--- python3 term_sat.py pencil K  (term1_all)
+near-pencil on 4 points: |L| = 10, height 3, max term1_all length (k, s) = (5, 2.1)
+near-pencil on 5 points: |L| = 12, height 3, max term1_all length (k, s) = (6, 29.4)
+near-pencil on 6 points: |L| = 14, height 3, max term1_all length (k, s) = (7, 115.6)
+near-pencil on 7 points: |L| = 16, height 3, max term1_all length (k, s) = (8, 454.5)
+(K = 8: timeout at 580 s)
+--- python3 term_sat.py linear K 1 2  (term1_all)
+linear space on 5 points: |L| = 12, height 3, max term1_all length (k, s) = (5, 11.0)
+linear space on 5 points: |L| = 13, height 3, max term1_all length (k, s) = (6, 38.6)
+linear space on 6 points: |L| = 15, height 3, max term1_all length (k, s) = (6, 78.8)
+linear space on 6 points: |L| = 12, height 3, max term1_all length (k, s) = (5, 6.3)
+linear space on 7 points: |L| = 16, height 3, max term1_all length (k, s) = (6, 121.7)
+linear space on 7 points: |L| = 16, height 3, max term1_all length (k, s) = (7, 195.9)
+--- python3 term_sat.py pencil_m K / linear_m K 1 2  (term1m_all)
+near-pencil on 4 points: |L| = 10, height 3, max term1m_all length (k, s) = (5, 3.9)
+near-pencil on 5 points: |L| = 12, height 3, max term1m_all length (k, s) = (6, 18.7)
+near-pencil on 6 points: |L| = 14, height 3, max term1m_all length (k, s) = (7, 107.2)
+near-pencil on 7 points: |L| = 16, height 3, max term1m_all length (k, s) = (8, 396.7)
+linear space on 5 points: |L| = 12, height 3, max term1m_all length (k, s) = (5, 9.9)
+linear space on 5 points: |L| = 13, height 3, max term1m_all length (k, s) = (6, 29.9)
+linear space on 6 points: |L| = 15, height 3, max term1m_all length (k, s) = (6, 76.5)
+linear space on 6 points: |L| = 12, height 3, max term1m_all length (k, s) = (5, 5.6)
+linear space on 7 points: |L| = 16, height 3, max term1m_all length (k, s) = (6, 97.7)
+linear space on 7 points: |L| = 16, height 3, max term1m_all length (k, s) = (7, 163.8)
+--- depth=2 / depth=3 (with meets)
+near-pencil on 4 points: |L| = 10, height 3, max term2m_all length (k, s) = (4, 4.3)
+near-pencil on 5 points: |L| = 12, height 3, max term2m_all length (k, s) = (5, 20.1)
+near-pencil on 6 points: |L| = 14, height 3, max term2m_all length (k, s) = (6, 93.9)
+near-pencil on 7 points: |L| = 16, height 3, max term2m_all length (k, s) = (7, 537.3)
+linear space on 6 points: |L| = 15, height 3, max term2m_all length (k, s) = (6, 89.4)
+linear space on 6 points: |L| = 12, height 3, max term2m_all length (k, s) = (5, 8.8)
+near-pencil on 4 points: |L| = 10, height 3, max term3m_all length (k, s) = (4, 5.5)
+near-pencil on 5 points: |L| = 12, height 3, max term3m_all length (k, s) = (5, 28.7)
+near-pencil on 6 points: |L| = 14, height 3, max term3m_all length (k, s) = (6, 116.7)
+--- full closure: depth = |L| - 2 (with meets) saturates, so these are the exact ω-rule maxima
+near-pencil on 3 points: |L| = 8, height 3, max term6m_all length (k, s) = (2, 0.4)
+near-pencil on 4 points: |L| = 10, height 3, max term8m_all length (k, s) = (3, 6.3)
+near-pencil on 5 points: |L| = 12, height 3, max term10m_all length (k, s) = (4, 46.5)
+near-pencil on 6 points: |L| = 14, height 3, max term12m_all length (k, s) = (5, 433.7)
+linear space on 5 points: |L| = 12, height 3, max term11m_all length (k, s) = (4, 28.4)
+linear space on 5 points: |L| = 13, height 3, max term11m_all length (k, s) = (3, 241.9)
+--- python3 term_family.py 12
+k = 3: |L| = 8, height 3, monotone True, cut True, term1_all 3 (descending True), term1_one 3, (F,∨)-depth 2/3/4 [2, 2, 2], with meets depth 1/2/ω [3, 2, 2], response 1, existential maximal minimum 1
+k = 4: |L| = 10, height 3, monotone True, cut True, term1_all 4 (descending False), term1_one 4, (F,∨)-depth 2/3/4 [3, 1, 1], with meets depth 1/2/ω [4, 3, 1], response 1, existential maximal minimum 1
+k = 5: |L| = 12, height 3, monotone True, cut True, term1_all 6 (descending False), term1_one 6, (F,∨)-depth 2/3/4 [5, 2, 2], with meets depth 1/2/ω [6, 5, 2], response 1, existential maximal minimum 1
+k = 6: |L| = 14, height 3, monotone True, cut True, term1_all 7 (descending False), term1_one 7, (F,∨)-depth 2/3/4 [6, 3, 3], with meets depth 1/2/ω [7, 6, 1], response 1, existential maximal minimum 1
+k = 7: |L| = 16, height 3, monotone True, cut True, term1_all 8 (descending False), term1_one 8, (F,∨)-depth 2/3/4 [7, 4, 4], with meets depth 1/2/ω [8, 7, 2], response 1, existential maximal minimum 1
+k = 8: |L| = 18, height 3, monotone True, cut True, term1_all 9 (descending False), term1_one 9, (F,∨)-depth 2/3/4 [8, 5, 5], with meets depth 1/2/ω [9, 8, 1], response 1, existential maximal minimum 1
+k = 9: |L| = 20, height 3, monotone True, cut True, term1_all 10 (descending False), term1_one 10, (F,∨)-depth 2/3/4 [9, 6, 6], with meets depth 1/2/ω [10, 9, 2], response 1, existential maximal minimum 1
+k = 10: |L| = 22, height 3, monotone True, cut True, term1_all 11 (descending False), term1_one 11, (F,∨)-depth 2/3/4 [10, 7, 7], with meets depth 1/2/ω [11, 10, 1], response 1, existential maximal minimum 1
+k = 11: |L| = 24, height 3, monotone True, cut True, term1_all 12 (descending False), term1_one 12, (F,∨)-depth 2/3/4 [11, 8, 8], with meets depth 1/2/ω [12, 11, 2], response 1, existential maximal minimum 1
+k = 12: |L| = 26, height 3, monotone True, cut True, term1_all 13 (descending False), term1_one 13, (F,∨)-depth 2/3/4 [12, 9, 9], with meets depth 1/2/ω [13, 12, 1], response 1, existential maximal minimum 1

@@ -78,3 +78,11 @@
   maximum response-run length of a fixed lattice over all monotone F and cuts D; every satisfying model is decoded and
   re-simulated. `pencil_family.py KMAX`: the explicit height-3 near-pencil family with response-run length 2k − 1.
   Output `out_response_sat.txt`.
+
+## Round 26: term rules (§34.3z¹³³)
+
+- `term_rule.py pencil KMAX | records FILE | stored | hunt SEED SECONDS FILES...`: term rules — maximal separators
+  inside the depth-d closure of stage ∪ responses under F, ∨ (and ∧); depth None = full closure (ω).
+- `term_sat.py (pencil K | linear K SEED COUNT | chain N) [depth=D]`, family suffix `_m` for meets: exact maximum
+  term-rule run length of a fixed lattice (SAT, every model re-simulated). `term_family.py KMAX`: explicit near-pencil
+  family with term1 run length k + 1. Output `out_term_rule.txt`; full-closure witness `term_omega_witness_k5.json`.

@@ -1,0 +1,8 @@
+H=3 K=0: UNSAT with 7 terms (5 F, 0 lattice, 0 separator constants) after 5 rounds, 0.0s
+H=3 K=1: UNSAT with 31 terms (11 F, 4 lattice, 14 separator constants) after 8 rounds, 0.0s
+H=3 K=2: UNSAT with 37 terms (12 F, 3 lattice, 20 separator constants) after 6 rounds, 0.0s
+H=4 K=0: UNSAT with 20 terms (14 F, 4 lattice, 0 separator constants) after 14 rounds, 0.0s
+H=4 K=1: inconclusive, SAT at 358 terms (129 F, 73 lattice, 154 separator constants), 78 rounds, 191s
+H=4 K=2: UNSAT with 309 terms (109 F, 38 lattice, 160 separator constants) after 41 rounds, 64.3s
+H=5 K=0: UNSAT with 147 terms (85 F, 60 lattice, 0 separator constants) after 85 rounds, 4.1s
+H=5 K=1: no result within 190 s (run stopped)

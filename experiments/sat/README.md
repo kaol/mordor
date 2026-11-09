@@ -113,3 +113,10 @@ computation before it is reported; an unsat answer is only as trustworthy as the
 - `core_anatomy.py LEANFILE`: rows, ⊥-row share, orbit chains, no-witness sides and clause families of the generated
   certificates `lean/Mordor/CutHeight4.lean`, `CutHeight5.lean` (drat-trim cores). Output `out_core_anatomy.txt`
   (H = 5: 84 F-terms over 17 rows, 20 ⊥-row cells, 25 terms on orbits from ⊤).
+
+## Round 26: extremal-separator Skolem constants (§34.3z¹²⁹)
+
+- `sep_ground.py H maxterms per_round J K [seconds] [wlog|nowlog]`: `lattice_ground` plus, for K new cross pairs per
+  round, an upper (maximal) and a lower (minimal) separator constant with their extremality clauses over every term.
+  Sound but counterproductive: H = 3: 7 → 31–37 terms; H = 4: 20 → 309 terms (K = 2) or SAT at 358 (K = 1);
+  H = 5, K = 1: no result in 190 s against 4.1 s. Output `out_sep_ground.txt`.

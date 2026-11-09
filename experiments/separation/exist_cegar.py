@@ -231,5 +231,5 @@ if __name__ == '__main__':
         print(f"{name}: |L| = {L.n}, height {L.height}, max existential minimum {b} ({how})", flush=True)
         if wit and fam == 'pencil':
             import json
-            json.dump(dict(sets=L.S, F=wit[0], D=wit[1], exist_min=b, general=GENERAL),
-                      open(f"exist_witness_pencil{sys.argv[2]}{'_general' if GENERAL else ''}.json", 'w'))
+            json.dump(dict(sets=L.S, F=wit[0], D=wit[1], exist_min=b, general=GENERAL, respmax=RESPMAX),
+                      open(f"exist_witness_pencil{sys.argv[2]}{'_general' if GENERAL else '_respmax' if RESPMAX else ''}.json", 'w'))

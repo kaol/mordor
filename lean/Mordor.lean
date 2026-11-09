@@ -117,3 +117,4 @@ import Mordor.GapPotential
 import Mordor.GapMax
 import Mordor.ShortestRun
 import Mordor.ResponseRun
+import Mordor.GeneralRun

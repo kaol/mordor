@@ -103,3 +103,14 @@
   maximum-gap descent with each bad pair's maximal separators restricted to those outside D ('nonD'), to those
   creating no new bad pair ('good'), or both; existential and universal ('_forall') readings. Output
   `out_restrict_audit.txt`; smallest universal failures `restrict_fail_*_forall_s155.json`.
+
+## Round 26: exact existential minima; the maximal-separator conjectures fail (§34.3z¹³⁶)
+
+- `exist_cegar.py [--general] [--nodesc] (pencil K | linear K SEED COUNT | chain N | closure K M SEED COUNT) KMAX
+  [SECONDS]`: CEGAR (CaDiCaL outer, exact Python inner check) for the exact maximum of the existential minimum over
+  all monotone F and cuts D of a fixed lattice; `--nodesc` searches instead for an instance with no
+  maximum-gap-descending run; `--general` uses general separators. Witnesses `exist_witness_pencil{4..9}.json`.
+- `cycle_family.py KMAX`: the line-cycle family (existential minimum k − 1, no descending maximal run for k ≥ 4).
+- `nodesc_sweep.py [--general] [--all-heights] P NMAX SECONDS [SHARD NSHARDS]`: all closure systems on P points up to
+  point permutation; `max_sweep` for exact maxima. Minimal descent-free instance `descent_free_min6.json`.
+  Output `out_exist_cegar.txt`.

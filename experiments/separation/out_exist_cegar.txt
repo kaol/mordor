@@ -1,0 +1,168 @@
+=== maximal separators: exact maximum existential minimum
+--- python3 exist_cegar.py chain N 8 100 (N = 3..6)
+chain 3: |L| = 3, height 2, max existential minimum 1 (exact (2 blocks at k = 2, 0 s))
+chain 4: |L| = 4, height 3, max existential minimum 2 (exact (3 blocks at k = 3, 0 s))
+chain 5: |L| = 5, height 4, max existential minimum 3 (exact (4 blocks at k = 4, 0 s))
+chain 6: |L| = 6, height 5, max existential minimum 4 (exact (5 blocks at k = 5, 0 s))
+--- python3 exist_cegar.py pencil K 12 SECONDS
+near-pencil 4: |L| = 10, height 3, max existential minimum 3 (exact (34 blocks at k = 4, 0 s))
+near-pencil 3: |L| = 8, height 3, max existential minimum 2 (exact)
+near-pencil 5: |L| = 12, height 3, max existential minimum 4 (exact (89 blocks at k = 5, 0 s))
+near-pencil 6: |L| = 14, height 3, max existential minimum 5 (exact (364 blocks at k = 6, 1 s))
+near-pencil 7: |L| = 16, height 3, max existential minimum 6 (exact (2006 blocks at k = 7, 3 s))
+near-pencil 8: |L| = 18, height 3, max existential minimum 7 (exact (13726 blocks at k = 8, 25 s))
+near-pencil 9: |L| = 20, height 3, max existential minimum 8 (exact (109519 blocks at k = 9, 428 s))
+--- python3 exist_cegar.py linear K 1 2 12 260 (K = 5, 6, 7)
+linear space 5: |L| = 12, height 3, max existential minimum 3 (exact (37 blocks at k = 4, 0 s))
+linear space 5: |L| = 13, height 3, max existential minimum 3 (exact (64 blocks at k = 4, 0 s))
+linear space 6: |L| = 15, height 3, max existential minimum 3 (exact (82 blocks at k = 4, 1 s))
+linear space 6: |L| = 12, height 3, max existential minimum 3 (exact (36 blocks at k = 4, 0 s))
+linear space 7: |L| = 16, height 3, max existential minimum 3 (exact (72 blocks at k = 4, 0 s))
+linear space 7: |L| = 16, height 3, max existential minimum 3 (exact (80 blocks at k = 4, 0 s))
+--- python3 exist_cegar.py closure 5 10 SEED 4 8 120 (SEED = 4, 5)
+closure 5: |L| = 12, height 5, max existential minimum 4 (exact (47 blocks at k = 5, 0 s))
+closure 5: |L| = 14, height 5, max existential minimum 5 (exact (121 blocks at k = 6, 0 s))
+closure 5: |L| = 16, height 5, max existential minimum 5 (exact (179 blocks at k = 6, 1 s))
+closure 5: |L| = 14, height 5, max existential minimum 4 (exact (81 blocks at k = 5, 0 s))
+closure 5: |L| = 20, height 5, max existential minimum 6 (≥6, k = 7 undecided after 120.0 s (12031 blocks))
+closure 5: |L| = 19, height 5, max existential minimum 6 (exact (4782 blocks at k = 7, 38 s))
+closure 5: |L| = 16, height 5, max existential minimum 5 (exact (574 blocks at k = 6, 3 s))
+closure 5: |L| = 21, height 5, max existential minimum 6 (≥6, k = 7 undecided after 120.0 s (15265 blocks))
+
+=== general separators: exact maximum existential minimum (--general)
+chain 4: |L| = 4, height 3, max existential minimum 2 (exact (3 blocks at k = 3, 0 s))
+chain 5: |L| = 5, height 4, max existential minimum 3 (exact (5 blocks at k = 4, 0 s))
+chain 6: |L| = 6, height 5, max existential minimum 4 (exact (16 blocks at k = 5, 0 s))
+near-pencil 3: |L| = 8, height 3, max existential minimum 2 (exact (20 blocks at k = 3, 0 s))
+near-pencil 4: |L| = 10, height 3, max existential minimum 2 (exact (30 blocks at k = 3, 0 s))
+near-pencil 5: |L| = 12, height 3, max existential minimum 2 (exact (45 blocks at k = 3, 0 s))
+near-pencil 6: |L| = 14, height 3, max existential minimum 2 (exact (63 blocks at k = 3, 0 s))
+near-pencil 7: |L| = 16, height 3, max existential minimum 2 (exact (81 blocks at k = 3, 0 s))
+linear space 6: |L| = 15, height 3, max existential minimum 2 (exact (57 blocks at k = 3, 0 s))
+linear space 6: |L| = 12, height 3, max existential minimum 2 (exact (32 blocks at k = 3, 0 s))
+closure 5: |L| = 12, height 5, max existential minimum 4 (exact (175 blocks at k = 5, 0 s))
+closure 5: |L| = 14, height 5, max existential minimum 4 (exact (233 blocks at k = 5, 0 s))
+closure 5: |L| = 16, height 5, max existential minimum 4 (exact (263 blocks at k = 5, 1 s))
+closure 5: |L| = 14, height 5, max existential minimum 4 (exact (151 blocks at k = 5, 0 s))
+closure 5: |L| = 20, height 5, max existential minimum 4 (exact (1732 blocks at k = 5, 11 s))
+closure 5: |L| = 19, height 5, max existential minimum 4 (exact (1104 blocks at k = 5, 6 s))
+closure 5: |L| = 16, height 5, max existential minimum 4 (exact (443 blocks at k = 5, 2 s))
+closure 5: |L| = 21, height 5, max existential minimum 4 (exact (3461 blocks at k = 5, 20 s))
+
+=== python3 cycle_family.py 9
+k = 3: |L| = 8, height 3, monotone True, cut True, existential minimum 2 (k − 1 = 2), maximal-separator descent True, general-separator descent True
+k = 4: |L| = 10, height 3, monotone True, cut True, existential minimum 3 (k − 1 = 3), maximal-separator descent False, general-separator descent True
+k = 5: |L| = 12, height 3, monotone True, cut True, existential minimum 4 (k − 1 = 4), maximal-separator descent False, general-separator descent True
+k = 6: |L| = 14, height 3, monotone True, cut True, existential minimum 5 (k − 1 = 5), maximal-separator descent False, general-separator descent True
+k = 7: |L| = 16, height 3, monotone True, cut True, existential minimum 6 (k − 1 = 6), maximal-separator descent False, general-separator descent True
+k = 8: |L| = 18, height 3, monotone True, cut True, existential minimum 7 (k − 1 = 7), maximal-separator descent False, general-separator descent True
+k = 9: |L| = 20, height 3, monotone True, cut True, existential minimum 8 (k − 1 = 8), maximal-separator descent False, general-separator descent True
+
+=== descent-free search (--nodesc)
+near-pencil 3: |L| = 8, height 3, maximal separators: no descent-free instance (UNSAT) (13 blocks, 0 s)
+near-pencil 4: |L| = 10, height 3, maximal separators: FOUND an instance with no descending run (22 blocks, 0 s)
+near-pencil 4: |L| = 10, height 3, general separators: no descent-free instance (UNSAT) (22 blocks, 0 s)
+near-pencil 7: |L| = 16, height 3, general separators: no descent-free instance (UNSAT) (40 blocks, 0 s)
+linear space 7: |L| = 16, height 3, general separators: no descent-free instance (UNSAT) (39 blocks, 0 s)
+linear space 7: |L| = 16, height 3, general separators: no descent-free instance (UNSAT) (38 blocks, 0 s)
+linear space 7: |L| = 15, height 3, general separators: no descent-free instance (UNSAT) (41 blocks, 0 s)
+--- python3 exist_cegar.py --general --nodesc closure 5 10 SEED 12 0 40 (SEED = 1..3)
+closure 5: |L| = 15, height 5, general separators: no descent-free instance (UNSAT) (210 blocks, 2 s)
+closure 5: |L| = 17, height 5, general separators: no descent-free instance (UNSAT) (161 blocks, 2 s)
+closure 5: |L| = 17, height 4, general separators: no descent-free instance (UNSAT) (135 blocks, 2 s)
+closure 5: |L| = 20, height 5, general separators: no descent-free instance (UNSAT) (392 blocks, 7 s)
+closure 5: |L| = 11, height 5, general separators: no descent-free instance (UNSAT) (80 blocks, 0 s)
+closure 5: |L| = 18, height 5, general separators: no descent-free instance (UNSAT) (315 blocks, 5 s)
+closure 5: |L| = 22, height 5, general separators: no descent-free instance (UNSAT) (473 blocks, 13 s)
+closure 5: |L| = 15, height 5, general separators: no descent-free instance (UNSAT) (109 blocks, 1 s)
+closure 5: |L| = 15, height 5, general separators: no descent-free instance (UNSAT) (149 blocks, 1 s)
+closure 5: |L| = 19, height 5, general separators: no descent-free instance (UNSAT) (439 blocks, 8 s)
+closure 5: |L| = 17, height 5, general separators: no descent-free instance (UNSAT) (403 blocks, 6 s)
+closure 5: |L| = 22, height 5, general separators: no descent-free instance (UNSAT) (665 blocks, 20 s)
+closure 5: |L| = 11, height 5, general separators: no descent-free instance (UNSAT) (62 blocks, 0 s)
+closure 5: |L| = 14, height 5, general separators: no descent-free instance (UNSAT) (138 blocks, 1 s)
+closure 5: |L| = 18, height 5, general separators: no descent-free instance (UNSAT) (291 blocks, 4 s)
+closure 5: |L| = 14, height 5, general separators: no descent-free instance (UNSAT) (136 blocks, 1 s)
+closure 5: |L| = 13, height 5, general separators: no descent-free instance (UNSAT) (150 blocks, 1 s)
+closure 5: |L| = 9, height 4, general separators: no descent-free instance (UNSAT) (25 blocks, 0 s)
+closure 5: |L| = 10, height 4, general separators: no descent-free instance (UNSAT) (34 blocks, 0 s)
+closure 5: |L| = 20, height 5, general separators: no descent-free instance (UNSAT) (494 blocks, 11 s)
+closure 5: |L| = 15, height 5, general separators: no descent-free instance (UNSAT) (320 blocks, 3 s)
+closure 5: |L| = 15, height 5, general separators: no descent-free instance (UNSAT) (250 blocks, 3 s)
+closure 5: |L| = 17, height 5, general separators: no descent-free instance (UNSAT) (314 blocks, 4 s)
+closure 5: |L| = 21, height 5, general separators: no descent-free instance (UNSAT) (387 blocks, 8 s)
+closure 5: |L| = 18, height 5, general separators: no descent-free instance (UNSAT) (295 blocks, 4 s)
+closure 5: |L| = 20, height 5, general separators: no descent-free instance (UNSAT) (311 blocks, 6 s)
+closure 5: |L| = 18, height 5, general separators: no descent-free instance (UNSAT) (244 blocks, 4 s)
+closure 5: |L| = 18, height 5, general separators: no descent-free instance (UNSAT) (420 blocks, 9 s)
+closure 5: |L| = 14, height 4, general separators: no descent-free instance (UNSAT) (72 blocks, 0 s)
+closure 5: |L| = 28, height 5, general separators: undecided (744 blocks, 40 s)
+closure 5: |L| = 24, height 5, general separators: no descent-free instance (UNSAT) (838 blocks, 27 s)
+closure 5: |L| = 15, height 5, general separators: no descent-free instance (UNSAT) (226 blocks, 1 s)
+closure 5: |L| = 17, height 5, general separators: no descent-free instance (UNSAT) (205 blocks, 2 s)
+closure 5: |L| = 18, height 4, general separators: no descent-free instance (UNSAT) (148 blocks, 1 s)
+closure 5: |L| = 13, height 5, general separators: no descent-free instance (UNSAT) (134 blocks, 0 s)
+closure 5: |L| = 19, height 5, general separators: no descent-free instance (UNSAT) (358 blocks, 4 s)
+--- python3 exist_cegar.py --general --nodesc closure 6 14 SEED 10 0 50 (SEED = 1..3)
+closure 6: |L| = 27, height 6, general separators: no descent-free instance (UNSAT) (796 blocks, 42 s)
+closure 6: |L| = 30, height 6, general separators: no descent-free instance (UNSAT) (900 blocks, 44 s)
+closure 6: |L| = 29, height 5, general separators: no descent-free instance (UNSAT) (892 blocks, 39 s)
+closure 6: |L| = 27, height 6, general separators: no descent-free instance (UNSAT) (973 blocks, 37 s)
+closure 6: |L| = 31, height 6, general separators: undecided (959 blocks, 50 s)
+closure 6: |L| = 32, height 6, general separators: undecided (879 blocks, 50 s)
+closure 6: |L| = 44, height 6, general separators: undecided (402 blocks, 55 s)
+closure 6: |L| = 32, height 6, general separators: undecided (923 blocks, 50 s)
+closure 6: |L| = 37, height 6, general separators: undecided (660 blocks, 52 s)
+closure 6: |L| = 29, height 6, general separators: no descent-free instance (UNSAT) (843 blocks, 36 s)
+closure 6: |L| = 42, height 6, general separators: undecided (294 blocks, 50 s)
+closure 6: |L| = 27, height 5, general separators: no descent-free instance (UNSAT) (593 blocks, 23 s)
+closure 6: |L| = 31, height 6, general separators: undecided (861 blocks, 50 s)
+closure 6: |L| = 29, height 6, general separators: undecided (1022 blocks, 50 s)
+closure 6: |L| = 18, height 5, general separators: no descent-free instance (UNSAT) (332 blocks, 3 s)
+closure 6: |L| = 34, height 5, general separators: undecided (861 blocks, 50 s)
+closure 6: |L| = 38, height 6, general separators: undecided (599 blocks, 50 s)
+closure 6: |L| = 35, height 6, general separators: undecided (738 blocks, 50 s)
+closure 6: |L| = 34, height 6, general separators: undecided (765 blocks, 50 s)
+closure 6: |L| = 32, height 5, general separators: no descent-free instance (UNSAT) (837 blocks, 43 s)
+closure 6: |L| = 23, height 5, general separators: no descent-free instance (UNSAT) (498 blocks, 16 s)
+closure 6: |L| = 22, height 5, general separators: no descent-free instance (UNSAT) (287 blocks, 6 s)
+closure 6: |L| = 24, height 6, general separators: no descent-free instance (UNSAT) (1151 blocks, 45 s)
+closure 6: |L| = 27, height 6, general separators: no descent-free instance (UNSAT) (1136 blocks, 44 s)
+closure 6: |L| = 34, height 6, general separators: undecided (771 blocks, 50 s)
+closure 6: |L| = 33, height 6, general separators: undecided (794 blocks, 50 s)
+closure 6: |L| = 25, height 5, general separators: no descent-free instance (UNSAT) (385 blocks, 7 s)
+closure 6: |L| = 27, height 6, general separators: no descent-free instance (UNSAT) (1132 blocks, 40 s)
+closure 6: |L| = 25, height 6, general separators: no descent-free instance (UNSAT) (1089 blocks, 34 s)
+closure 6: |L| = 21, height 5, general separators: no descent-free instance (UNSAT) (291 blocks, 3 s)
+--- python3 nodesc_sweep.py [--general] 4 16 60 SHARD 4 (all closure systems on 4 points up to point permutation, height ≥ 3)
+maximal separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 0/4: 39 lattices, descent-free instances on 4 [(10, 4), (11, 3), (11, 4), (13, 4)], undecided 0, 3 s
+maximal separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 1/4: 43 lattices, descent-free instances on 4 [(6, 3), (11, 4), (12, 4), (14, 4)], undecided 0, 4 s
+maximal separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 2/4: 40 lattices, descent-free instances on 6 [(7, 3), (10, 3), (12, 3), (12, 4), (13, 4), (15, 4)], undecided 0, 4 s
+maximal separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 3/4: 40 lattices, descent-free instances on 7 [(8, 3), (9, 3), (9, 3), (9, 4), (10, 3), (12, 4), (16, 4)], undecided 0, 3 s
+general separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 0/4: 39 lattices, descent-free instances on 0 [], undecided 0, 3 s
+general separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 1/4: 43 lattices, descent-free instances on 0 [], undecided 0, 4 s
+general separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 2/4: 40 lattices, descent-free instances on 0 [], undecided 0, 3 s
+general separators, closure systems on 4 points, |L| ≤ 16, height ≥ 3, shard 3/4: 40 lattices, descent-free instances on 0 [], undecided 0, 4 s
+--- python3 nodesc_sweep.py --all-heights 4 6 30
+maximal separators, closure systems on 4 points, |L| ≤ 6, height ≥ 0, shard 0/1: 62 lattices, descent-free instances on 1 [(6, 3)], undecided 0, 0 s
+--- python3 -c "import exist_cegar as ec, nodesc_sweep as ns; ec.GENERAL = G; print(ns.max_sweep(4, 16, 60))"  (G = True, then False)
+general separators, 4-point closure systems, height 2 : (max existential minimum, exact) -> {(1, True): 17}
+general separators, 4-point closure systems, height 3 : (max existential minimum, exact) -> {(2, True): 64}
+general separators, 4-point closure systems, height 4 : (max existential minimum, exact) -> {(3, True): 98}
+maximal separators, 4-point closure systems, height 2 : (max existential minimum, exact) -> {(1, True): 17}
+maximal separators, 4-point closure systems, height 3 : (max existential minimum, exact) -> {(2, True): 55, (3, True): 9}
+maximal separators, 4-point closure systems, height 4 : (max existential minimum, exact) -> {(3, True): 62, (4, True): 36}
+--- python3 cycle_family.py tree descent_free_min6.json
+T = ['{0123}', '{}'], max gap 6, bad (x, y, F) [('{}', '{0123}', '{0}')]
+ choose ['{01}']
+  T = ['{0123}', '{01}', '{}'], max gap 4, bad (x, y, F) [('{01}', '{0123}', '{03}')]
+   choose ['{03}']
+    T = ['{0123}', '{01}', '{03}', '{0}', '{}'], max gap 4 (no drop), bad (x, y, F) [('{03}', '{0123}', '{02}')]
+ choose ['{02}']
+  T = ['{0123}', '{02}', '{}'], max gap 4, bad (x, y, F) [('{02}', '{0123}', '{01}')]
+   choose ['{01}']
+    T = ['{0123}', '{01}', '{02}', '{0}', '{}'], max gap 4 (no drop), bad (x, y, F) [('{01}', '{0123}', '{03}')]
+ choose ['{03}']
+  T = ['{0123}', '{03}', '{}'], max gap 4, bad (x, y, F) [('{03}', '{0123}', '{02}')]
+   choose ['{02}']
+    T = ['{0123}', '{02}', '{03}', '{0}', '{}'], max gap 4 (no drop), bad (x, y, F) [('{02}', '{0123}', '{01}')]

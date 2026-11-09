@@ -1,0 +1,13 @@
+=== dheight_ground.py (§34.3z¹⁴³): lattice ground theory + "D has height ≤ r"
+--- python3 dheight_ground.py 3 1 400 40 4 100; 4 1; 4 2; 5 2
+H=3, D-height ≤ 1: UNSAT with 7 terms (5 F, 0 lattice), 4 rounds, 0.0s
+H=4, D-height ≤ 1: UNSAT with 16 terms (13 F, 1 lattice), 7 rounds, 0.0s
+H=4, D-height ≤ 2: UNSAT with 19 terms (16 F, 1 lattice), 8 rounds, 0.0s
+H=5, D-height ≤ 2: UNSAT with 299 terms (252 F, 45 lattice), 24 rounds, 10.2s
+--- python3 dheight_ground.py 5 3 5000 40 4 300
+H=5, D-height ≤ 3: UNSAT with 290 terms (244 F, 44 lattice), 25 rounds, 48.7s
+--- python3 dheight_ground.py 6 1 5000 40 4 560
+H=6, D-height ≤ 1: UNSAT with 469 terms (379 F, 88 lattice), 32 rounds, 248.2s
+--- python3 dheight_ground.py 6 2 / 6 3 / 7 1 / 7 2 (560 s, then 2,400 s with timeout 2,500 s): no verdict.
+    6 2: still inside one solver call after 2,500 s (RSS ≈ 9 GB), killed by timeout; 6 3: killed by the
+    out-of-memory killer at ≈ 22 min; 7 1 (control) and 7 2: stopped without a verdict.

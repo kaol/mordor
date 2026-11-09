@@ -17,6 +17,7 @@ ChatGPT brief "Prove the normalized top-layer cell" (HEAD 41df0c3).
   `y ≰ q`.
 * `near_cell_of_atomic_over`, `dual_near_cell`: forced near-cells in an interval `[p, ⊤]` over `p ∈ R` (when `R ∩ [p, ⊤]` is
   atomic over `p`, e.g. every atom `p` at `r = 2`) and at a minimal non-member `c` (always, under ACC).
+* `orbit_entry_escapes` (§34.3z¹⁴³): in a witness-free cut, the `F a`-orbit of `⊤` enters `D` outside `↓a`.
 * `cut_of_atomic` (**the case `r = 1`**): a down-set `D ∋ ⊥`, `⊤ ∉ D`, all of whose elements are `⊥` or atoms (no
   element strictly between `⊥` and a member) has a witness for every monotone `F` under DCC — `D` is a bouquet with
   centre `⊥` (`FGTwo.cut_bouquet`). `cutMaps_of_R_atomic`: if `R(F)` consists of `⊥` and atoms, the Cut Lemma
@@ -157,5 +158,25 @@ theorem dual_near_cell [WellFoundedGT α] {c : α} (hc : c ∉ R F) (hmin : ∀ 
   · have h' : y.1 ≤ c ⊓ F x.1 y.1 := h
     rw [hyc] at h'
     exact absurd (h'.trans inf_le_right) (R_no_cross_cell hxR hc).2
+
+end Mordor.BottomMaxCell
+
+namespace Mordor.BottomMaxCell
+open Mordor
+
+/-- **Orbit entry escapes its row** (DCC). In a witness-free proper cut `D`, for every `a ∈ D` the orbit
+`⊤, F a ⊤, F a (F a ⊤), …` first enters `D` at an element `e` with `e ≰ a`. (`FGTwo.orbit_end` gives the entry;
+`FGTwo.sandwich` with the degenerate petal `r = a`, `InB = D` excludes `e ≤ a`.) For a principal cut `D = ↓a` this is
+the principal cut lemma; for a bouquet it is the petal argument of `cut_bouquet`. -/
+theorem orbit_entry_escapes {β : Type*} [Lattice β] [BoundedOrder β] [WellFoundedLT β] {F : β → β → β}
+    (hF : ∀ x x' y y', x ≤ x' → y ≤ y' → F x y ≤ F x' y') {D : Set β} (hD : ∀ ⦃x y⦄, x ≤ y → y ∈ D → x ∈ D)
+    (htop : ⊤ ∉ D) (nw : ∀ x ∈ D, ∀ y ∉ D, ¬ F x y ≤ x ∧ ¬ y ≤ F x y) {a : β} (ha : a ∈ D) :
+    ∃ n, (∀ k ≤ n, (F a)^[k] ⊤ ∉ D) ∧ F a ((F a)^[n] ⊤) ∈ D ∧ ¬ F a ((F a)^[n] ⊤) ≤ a := by
+  have nw' : ∀ x, x ∈ D → ∀ y, ¬ y ∈ D → ¬ F x y ≤ x ∧ ¬ y ≤ F x y := fun x hx y hy => nw x hx y hy
+  obtain ⟨n, hU, hend⟩ := Mordor.FGTwo.orbit_end (InD := (· ∈ D)) hF ha nw' ⊤ htop le_top
+  refine ⟨n, hU, hend, fun hle => ?_⟩
+  exact Mordor.FGTwo.sandwich (InD := (· ∈ D)) (InB := (· ∈ D)) (a := a) (r := a) hF
+    (fun x => ⟨fun h => Or.inr h, fun h => h.elim (fun h' => hD h' ha) id⟩) (fun x y hxy hy => hD hxy hy)
+    le_rfl (fun z hz _ => hz) nw' ⊤ htop le_top n hU hle
 
 end Mordor.BottomMaxCell

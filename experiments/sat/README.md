@@ -120,3 +120,7 @@ computation before it is reported; an unsat answer is only as trustworthy as the
   round, an upper (maximal) and a lower (minimal) separator constant with their extremality clauses over every term.
   Sound but counterproductive: H = 3: 7 → 31–37 terms; H = 4: 20 → 309 terms (K = 2) or SAT at 358 (K = 1);
   H = 5, K = 1: no result in 190 s against 4.1 s. Output `out_sep_ground.txt`.
+
+- `dheight_ground.py H r maxterms per_round J [seconds]` (§34.3z¹⁴³): `lattice_ground` plus "the cut D has height
+  ≤ r". UNSAT for H ≤ 5 (r ≤ 3) and H = 6, r = 1 (control); no verdict at H = 6, r = 2 within 2,500 s.
+  Output `out_dheight_ground.txt`.

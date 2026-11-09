@@ -1,0 +1,5 @@
+--- python3 wide_h6.py SEED 550 MIN_SIZE (seeds 101-104, min sizes 20, 30, 40, 25)
+seed 101: states tested by size bin {20: 3138, 30: 5960, 40: 7332, 50: 3705, 60: 145}; with shortest length ≥ 4 {20: 316, 30: 446, 40: 414, 50: 228}; longest shortest run by bin {20: 5, 30: 5, 40: 5, 50: 4, 60: 3}; skipped (work limit) 0; failures []
+seed 102: states tested by size bin {30: 6179, 40: 7131, 50: 3467, 60: 193}; with shortest length ≥ 4 {30: 464, 40: 497, 50: 126}; longest shortest run by bin {30: 4, 40: 4, 50: 4, 60: 3}; skipped (work limit) 0; failures []
+seed 103: states tested by size bin {40: 7324, 50: 4205, 60: 123}; with shortest length ≥ 4 {40: 653, 50: 205, 60: 25}; longest shortest run by bin {40: 5, 50: 4, 60: 4}; skipped (work limit) 0; failures []
+seed 104: states tested by size bin {20: 2081, 30: 6476, 40: 6389, 50: 4414, 60: 65}; with shortest length ≥ 4 {20: 103, 30: 341, 40: 441, 50: 178}; longest shortest run by bin {20: 4, 30: 5, 40: 4, 50: 4, 60: 3}; skipped (work limit) 0; failures []

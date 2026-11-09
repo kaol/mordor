@@ -54,3 +54,5 @@
 - `nested_rule.py records FILE | hunt SEED SECONDS VARIANT FILES...`: deterministic rules `nested` (prefer a maximal
   separator below the column), `nested_rank`, and `all` (the full process). Output `out_shortest_nested.txt`;
   smallest rule failures `nested_*_counterexample_s*.json`.
+- `wide_h6.py SEED SECONDS MIN_SIZE` (§34.3z¹²⁸): shortest-run descent on wide edge-height-6 closure-system lattices
+  (|L| 20–69), hill-climbing toward hard instances. Output `out_wide_h6.txt`.

@@ -96,3 +96,10 @@
   `forced_sat.py (pencil K | linear K SEED COUNT) [depth=D]`: exact maximum length of a forced run, a lower bound for
   every policy choosing nonempty sets of C-maximal separators. Output `out_look_rule.txt`; witnesses
   `look1_witness_k5.json`, `look2_witness_k{5,6}.json`, `term1m_witness_k{4,5,6}.json`.
+
+## Round 26: restricted existential descent (§34.3z¹³⁵)
+
+- `restrict_audit.py stored | records FILE | branching FILE | trace FILE MODE | hunt SEED SECONDS FILES...`:
+  maximum-gap descent with each bad pair's maximal separators restricted to those outside D ('nonD'), to those
+  creating no new bad pair ('good'), or both; existential and universal ('_forall') readings. Output
+  `out_restrict_audit.txt`; smallest universal failures `restrict_fail_*_forall_s155.json`.

@@ -1,0 +1,69 @@
+--- python3 restrict_audit.py stored
+gapmax_lookahead_counterexample_s71.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+gapmax_lookahead_counterexample_s72.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+look1_witness_k5.json 12 3 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+look2_witness_k5.json 12 3 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+look2_witness_k6.json 14 3 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+nested_all_counterexample_s93.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+nested_all_counterexample_s94.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+nested_nested_counterexample_s91.json 21 7 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+nested_nested_rank_counterexample_s92.json 21 7 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': True, 'both_forall': True}
+response_rule_counterexample_s122.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': True, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+response_rule_counterexample_s131.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': True, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+response_rule_counterexample_s132.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': True, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+response_rule_counterexample_s133.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': True, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+state_graph_fail_a_s111.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+state_graph_fail_a_s112.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+state_graph_fail_a_s113.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+state_graph_fail_b_s111.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+state_graph_fail_b_s112.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+state_graph_fail_b_s113.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+term1m_witness_k4.json 10 3 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+term1m_witness_k5.json 12 3 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+term1m_witness_k6.json 14 3 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+term_omega_witness_k5.json 12 3 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': True, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+xy_counterexample.json 12 4 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': True, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+--- python3 restrict_audit.py records stage_records.json
+greedy_maximal 5 27 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+greedy_maximal 6 24 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': True, 'both_forall': True}
+greedy_maximal 7 68 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': True, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+existential_maximal 3 10 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': True, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+existential_maximal 4 12 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+existential_maximal 5 16 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': True, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+existential_maximal 6 27 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+existential_maximal 7 21 {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': True, 'nonD_forall': True, 'good_forall': True, 'both_forall': True}
+--- python3 restrict_audit.py branching stage_records.json
+reachable non-goal states 263: mean choice combinations, all 1.69, 'both' 1.39; 'both' unique in 186 (70.7 %)
+--- existential-only hunt (earlier version of the script, before the _forall columns), seeds 151-154, 4 x 520 s
+{'instances': 45878, ('all', True): 45878, ('both', True): 45878, ('good', True): 45878, ('nonD', True): 45878}
+{'instances': 46813, ('all', True): 46813, ('both', True): 46813, ('good', True): 46813, ('nonD', True): 46813}
+{'instances': 46042, ('all', True): 46042, ('both', True): 46042, ('good', True): 46042, ('nonD', True): 46042}
+{'instances': 45814, ('all', True): 45814, ('both', True): 45814, ('good', True): 45814, ('nonD', True): 45814}
+--- python3 restrict_audit.py hunt S 520 stage_records.json, S = 155..158
+{'instances': 43249, ('all', True): 43249, ('all_forall', False): 18242, ('all_forall', True): 25007, ('both', True): 43249, ('both_forall', False): 18200, ('both_forall', True): 25049, ('good', True): 43249, ('good_forall', False): 18200, ('good_forall', True): 25049, ('nonD', True): 43249, ('nonD_forall', False): 18242, ('nonD_forall', True): 25007}
+smallest 'all_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'nonD_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'good_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'both_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+{'instances': 43387, ('all', True): 43387, ('all_forall', False): 18392, ('all_forall', True): 24995, ('both', True): 43387, ('both_forall', False): 18342, ('both_forall', True): 25045, ('good', True): 43387, ('good_forall', False): 18342, ('good_forall', True): 25045, ('nonD', True): 43387, ('nonD_forall', False): 18392, ('nonD_forall', True): 24995}
+smallest 'all_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'nonD_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'good_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'both_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+{'instances': 42869, ('all', True): 42869, ('all_forall', False): 18319, ('all_forall', True): 24550, ('both', True): 42869, ('both_forall', False): 18279, ('both_forall', True): 24590, ('good', True): 42869, ('good_forall', False): 18279, ('good_forall', True): 24590, ('nonD', True): 42869, ('nonD_forall', False): 18319, ('nonD_forall', True): 24550}
+smallest 'all_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'nonD_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'good_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'both_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+{'instances': 43402, ('all', True): 43402, ('all_forall', False): 18379, ('all_forall', True): 25023, ('both', True): 43402, ('both_forall', False): 18336, ('both_forall', True): 25066, ('good', True): 43402, ('good_forall', False): 18336, ('good_forall', True): 25066, ('nonD', True): 43402, ('nonD_forall', False): 18379, ('nonD_forall', True): 25023}
+smallest 'all_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'nonD_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'good_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+smallest 'both_forall' failure: |L| = 12, height 4, audit {'all': True, 'nonD': True, 'good': True, 'both': True, 'all_forall': False, 'nonD_forall': False, 'good_forall': False, 'both_forall': False}
+    totals: 172907 instances; existential descent True in every mode for all; universal failures all 73332 (42.41 %), nonD 73332, good 73157 (42.31 %), both 73157
+--- python3 restrict_audit.py trace state_graph_fail_a_s111.json both
+height 4 |L| 12 D ['0', '10', '100', '1000', '110', '1010', '1100']
+  stage max gap, bad pairs (x, y, F), added separators: (8, [('0', '1111', '1000')], [('1011', 'U')])
+  stage max gap, bad pairs (x, y, F), added separators: (7, [('0', '1011', '1000')], [('1110', 'U')])
+  stage max gap, bad pairs (x, y, F), added separators: (5, [('1010', '1110', '1100')], [('1100', 'D')])
+  next max gap 5 bad [('1100', '1011')]

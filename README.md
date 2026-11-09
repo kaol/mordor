@@ -86,15 +86,54 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     (`SeparatorRank`).
   - So are bounded meet and join supports, fresh tokens, fan collapse, and a generic potential-parent stage bound
     (`SeparatorAncestry`).
-  - Search (`experiments/separation/`): f(H) = H − 1 is refuted by an exact height-4 instance, which needs 4 stages
-    under every choice. Rank-only potentials, scalar or multiset, fail on that instance. The gap potential
-    rank y − rank x survives every test (about 2.9 · 10⁶ mutated hard instances).
+  - Search (`experiments/separation/`): f(H) = H − 1 is refuted for maximal separators by an exact height-4 instance,
+    which needs 4 stages under every choice. Rank-only potentials, scalar or multiset, fail on that instance. The gap
+    potential rank y − rank x survived the mutation tests of these rounds; exact search later refuted it for maximal
+    separators (§34.3z¹³⁶, below).
+
+**Later (§34.3z¹²⁴–¹³⁹): what the separator process can and cannot do.**
+- **Proved in Lean.**
+  - The crossing-interval order is well-founded (`IntervalRefinement`).
+  - Interface traces, patching and pinning, and the infinite-antichain obstruction `atom_family_block`
+    (`InterfaceTrace`).
+  - Gap-parent and maximum-gap-drop runs force a witness within 2H + 1 stages (`GapPotential.cut_of_gap_parent`,
+    `MaxGap.cut_of_max_gap_drop`).
+  - The finite state graph, distance and optimal successors of the process (`ShortestRun`).
+  - The response run transfers to finite lattices, so a uniform finite response bound would give Cut
+    (`ResponseRun.cut_of_resp_bound`).
+  - The gap implications hold for **any** sequence of finite meet-closed stages, and for runs with general
+    (non-maximal) separators; a terminating general run gives a witness (`GeneralRun`, §34.3z¹³⁶).
+- **Refuted by exact finite search** (SAT/CEGAR on fixed lattices, explicit families verified by simulation).
+  - Every deterministic rule tested has run length growing with width at edge-height 3, where Cut is a theorem:
+    - the response rule, 2k − 1 on near-pencils (§34.3z¹³²);
+    - term-closure rules of depth ≤ 3, with or without meets, and the full closure (§34.3z¹³³);
+    - lookahead rules (§34.3z¹³⁴);
+    - SAT witnesses are *forced* runs, so no selection policy over closure-maximal separators helps.
+  - **The maximal-separator conjectures fail at edge-height 3** (§34.3z¹³⁶): the existential minimum is k − 1 on
+    near-pencils (k = 3..9). The line-cycle family and a minimal 6-element instance (M₃ with an extra bottom, three
+    coatoms in a cycle) have no maximum-gap-descending maximal run. This refutes the finite forms of ∃-max-gap
+    descent, ∃-gap-RP and shortest-run descent.
+  - No local or bounded-lookahead progress lemma exists. A legal first move can cost a number of further stages that
+    grows with width (§34.3z¹³⁸–¹³⁹).
+- **Surviving, with exact evidence.** Restrict each bad pair's separator to the response F(x, y) or a maximal
+  separator.
+  - No instance without a descending run exists on any of the 162 closure systems on 4 points, nor on any decided
+    5- or 6-point lattice.
+  - The exact worst-case shortest run is **H − 1** on all 179 four-point closure systems and on the height-5
+    lattices tested; chains attain H − 1.
+  - Along some shortest run the lexicographic potential (−min rank x, max rank y) decreases in all 1,194,594 audited
+    instances (§34.3z¹³⁷).
 
 **Open frontier now.** Chain-finite Cut, equivalently join-closure of R(F) (`Frontier.lean`), for cuts where **both**
-Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first open case. The current concrete target is
-the **gap rank-parent conjecture** (§34.3z¹²³): some choice of maximal separators gives every non-stuck bad pair a
-causal parent with a strictly larger rank y − rank x. By `potential_parent_stage_bound` and `cut_of_terminal_run`
-it would prove Cut at every finite edge-height. Also still open:
+Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first open case. The concrete targets are the
+existential general-separator conjectures:
+- **GSB(H):** every instance of edge-height H has a response-or-maximal run of at most H − 1 stages;
+- **GD(H):** some such run has strictly decreasing maximum gap.
+
+Through `cut_of_terminal_grun` and `cut_of_max_gap_drop_general`, either one at H = 6, in the witness-free setting,
+gives Cut at edge-height 6. The finite tests are evidence only: transferring an existential run from finite lattices
+is blocked by the stuck test (§34.3z¹³²), and §34.3z¹³⁹ shows that a proof must plan the run globally. Also still
+open:
 - the poset form of FG∞ at k = 3 (max-only CLL);
 - Ω × Ω × Ω;
 - products with a factor that is not end-finite.
@@ -115,7 +154,8 @@ it would prove Cut at every finite edge-height. Also still open:
 | `lean/` | Round 26: Lean 4 / Mathlib proofs of the log's proved core (Mathlib is a lake dependency, not committed) |
 | `data/gpu-2026-10/` | Round 25: results.jsonl and batch.log of the first GPU run |
 | `experiments/finite_support/`, `experiments/asyncgrid/`, `experiments/infcapture/` | Round 26, §34.3z⁹⁷–¹¹⁵: z3 orbit and support profiles of the crossing case, the asynchronous-grid label abstraction (`reduced_grid.py`), good-word compatibility, grid refinement, dominated and capturing rows |
-| `experiments/separation/` | Round 26, §34.3z¹²⁰–¹²³: the extremal-separator process on finite lattices (bitset search, replayable records), rank, ancestry and potential audits |
+| `experiments/separation/` | Round 26, §34.3z¹²⁰–¹³⁹: the extremal-separator process on finite lattices (bitset search, replayable records), rank, ancestry and potential audits; response, term and lookahead rules with exact SAT maxima; exact CEGAR for existential minima and descent-free instances (`exist_cegar.py`, `nodesc_sweep.py`); the line-cycle family; restricted, local and lookahead progress audits |
+| `experiments/intervals/` | Round 26, §34.3z¹²⁴–¹²⁶: anchor envelopes, safe selection, Veinott and antichain-pin experiments |
 | `experiments/dialgebra/` | Round 24: thin-model dialgebra censuses (transposition, failure zone, D5), the Cut Lemma transposition, orbit-laxity z3 searches |
 | `data/` | Machine-experiment results (JSON) |
 

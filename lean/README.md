@@ -49,6 +49,12 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/FiniteQuotient.lean` | §34.3z¹¹⁹ | `faithful_image_impossible`, `finite_cut_faithful_quotient_impossible`; half-filtration `separating_family_witness` (and dual); the ω + 1 obstruction |
 | `Mordor/ExtremalSeparators.lean`, `Mordor/SeparatorStages.lean` | §34.3z¹²⁰–¹²¹ | maximal/minimal separators (⊓-/⊔-irreducible), the aggregation criterion; the separator process (`Step`, `Run`), persistence, strict growth, the causal chain, `cut_of_terminal_run`, `exists_run` |
 | `Mordor/SeparatorRank.lean`, `Mordor/SeparatorAncestry.lean` | §34.3z¹²²–¹²³ | closure-rank drop, `rank_parent_stage_bound`, the causal fork, `contained_branch_height6` (via `cut_height5`; `bv_decide` trust); separator tokens, fresh tokens, minimal meet/join supports ≤ H, fan collapse, `potential_parent_stage_bound` |
+| `Mordor/IntervalRefinement.lean` | §34.3z¹²⁴ | the crossing-interval order and its well-foundedness (`intervalLT_wellFounded`, Dershowitz–Manna refinement), anchor envelopes |
+| `Mordor/InterfaceTrace.lean` | §34.3z¹²⁵–¹²⁶ | low/high traces, `patch_mono`, `patch_no_witness`, external/internal/general pins, `atom_family_block` |
+| `Mordor/GapPotential.lean`, `Mordor/GapMax.lean` | §34.3z¹²⁵–¹²⁷ | `height` (edge-height rank), `cut_of_gap_parent`; `parent_iff_max_drop`, `cut_of_max_gap_drop`, `nested_child_gap` |
+| `Mordor/ShortestRun.lean` | §34.3z¹³⁰ | `Goal`, the reachable state graph, `dist`, `optimal_successor`, `maxSep_restrict` |
+| `Mordor/ResponseRun.lean` | §34.3z¹³¹ | the response run, sub-lattice transfer (`resp_transfer`), `cut_of_resp_bound` |
+| `Mordor/GeneralRun.lean` | §34.3z¹³⁶ | `Closed` stage sequences; `cut_of_gap_parent_closed`, `cut_of_max_gap_drop_closed`; general-separator runs `GStep`/`GRun`, `run_grun`, `cut_of_terminal_grun`, `cut_of_max_gap_drop_general` |
 
 The table lists the headline files; the other files under `Mordor/` (about 120 in all) are documented in their module
 docstrings and in the log section each one cites.

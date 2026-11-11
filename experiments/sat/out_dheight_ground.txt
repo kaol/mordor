@@ -11,3 +11,4 @@ H=6, D-height ≤ 1: UNSAT with 469 terms (379 F, 88 lattice), 32 rounds, 248.2s
 --- python3 dheight_ground.py 6 2 / 6 3 / 7 1 / 7 2 (560 s, then 2,400 s with timeout 2,500 s): no verdict.
     6 2: still inside one solver call after 2,500 s (RSS ≈ 9 GB), killed by timeout; 6 3: killed by the
     out-of-memory killer at ≈ 22 min; 7 1 (control) and 7 2: stopped without a verdict.
+--- external run (user, cc50ca4): python3 dheight_ground.py 7 1 1000000 40 4 1e9 → UNSAT (details pending)

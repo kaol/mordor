@@ -58,6 +58,7 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/OrbitHeight.lean` | §34.3z¹⁴⁰ | `escape`, `orbitHeight_one`, `risingEscape_zero`; `TightUPC ⇒ RisingEscape ⇒ TightStep ⇒ OrbitHeightInv ⇒ ⊤ ∈ R_H`, `cutMaps_of_tightUPC`; `join_mem_of_top_mem`; §34.3z¹⁴¹: `upc_of_le_diag` (diagonal upper principal cut), `le_diag_of_a`, `TightIC`, `DiagTop ⇒ TightIC ⇒ Cut`, `tightIC_one_of_a_bot` |
 | `Mordor/InterfaceExtraction.lean` | §34.3z¹⁴⁰ | `cycle_lower_witness`, `cycle_impossible`: separator cycles force a lower witness (via `atom_family_block`) |
 | `Mordor/BottomMaxCell.lean` | §34.3z¹⁴² | `R_no_cross_cell` (no cell across R), `common_column`, `cut_of_atomic` (atomic cuts are bouquets), `cutMaps_of_R_atomic`, `cutMaps_of_R_height_le_one`, `near_cell_of_atomic_over`, `dual_near_cell`, `orbit_entry_escapes` (§34.3z¹⁴³) |
+| `Mordor/RankTwoIncidence.lean` | §34.3z¹⁴⁴ | `IsRankTwo`, `IsBlock`, `exists_block_above`, `block_meet`, `cut_of_finitely_many_blocks`, `cut_of_common_centre`, `petal_entry_escapes` (isolated petals) |
 
 The table lists the headline files; the other files under `Mordor/` (about 120 in all) are documented in their module
 docstrings and in the log section each one cites.

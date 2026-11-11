@@ -8,7 +8,9 @@ with centre s; relay at u; the chosen end case; witness-freeness for all x ∈ D
 Option 'nearcell': also require the near-cell of BottomMaxCell.near_cell_of_atomic_over at the private seed p
 (some x ∈ {p, a}, y ∉ D, p < y, y ≤ p ⊔ F(x, y), y ≰ F(x, y)) together with witness-freeness at that column y.
 Option 'global': witness-freeness at every column (then UNSAT by the finite Cut Lemma: a control).
-Option 'forest': D is a star forest.
+Option 'forest': D is a star forest. Option 'orbit=K': u is the K-th value of the F(⊥, ·)-orbit of ⊤, every orbit value
+up to u lies outside D and carries witness-freeness. Option 'rows=K': witness-freeness along the first K values of
+the ⊤-orbits of F(s, ·), F(a, ·), F(b, ·).
 Options 'updown' / 'join': witness-freeness at columns ≤ u or ≤ v = F(a, u) / at columns ≤ u ⊔ v.
 Options 'interval' / 'two': witness-freeness only at columns in [w, u] / at the two columns w, u.
 Every model is decoded and checked in Python.
@@ -37,6 +39,8 @@ class Enc:
         for l in lits: self.cl([-o, l])
         self.cl([o] + [-l for l in lits])
 
+ROWS = 0           # 'rows=K': witness-freeness along the first K values of the ⊤-orbits of F(s, ·), F(a, ·), F(b, ·)
+ORBIT = 0          # 'orbit=K': u is the K-th value of the F(⊥, ·)-orbit of ⊤ (all earlier values ∉ D, witness-free)
 FOREST = False     # 'forest': D is a star forest (no block contains two points shared with other blocks)
 COLS = 'down'      # columns carrying witness-freeness: 'down' (y ≤ u), 'interval' ([w, u]), 'two' ({w, u}),
                    # 'updown' (y ≤ u or y ≤ v = F(a, u)), 'join' (y ≤ u ⊔ v)
@@ -72,6 +76,30 @@ def build(L, case, nearcell, glob):
                         if n2 == m or not le[q][n2]: continue
                         E.cl([-blk(m), -blk(n1), -blk(n2)])
     S_, A, B, U = E.onehot('s'), E.onehot('a'), E.onehot('b'), E.onehot('u')
+    if ORBIT:                                   # u = k-th value of the F(⊥, ·)-orbit of ⊤, all values up to u ∉ D
+        C = [E.onehot(('c', j)) for j in range(ORBIT + 1)]
+        E.cl([C[0](top)])
+        for j in range(ORBIT):
+            for c in range(n):
+                for e in range(n): E.cl([-C[j](c), -f(bot, c, e), C[j + 1](e)])
+        for j in range(ORBIT + 1):
+            for c in range(n):
+                E.cl([-C[j](c), -d(c)])
+                for x in range(n): E.S.add_clause([-C[j](c), -d(x), -E.v('fle', x, c, x)]); E.S.add_clause([-C[j](c), -d(x), -E.v('yle', x, c)])
+        for e in range(n): E.cl([-U(e), C[ORBIT](e)]); E.cl([U(e), -C[ORBIT](e)])
+    if ROWS:                                    # witness-freeness along the ⊤-orbits of the rows s, a, b (ROWS steps)
+        for nmr, R in (('s', S_), ('a', A), ('b', B)):
+            Cr = [E.onehot(('r', nmr, j)) for j in range(ROWS + 1)]
+            E.cl([Cr[0](top)])
+            for j in range(ROWS):
+                for r in range(n):
+                    for c in range(n):
+                        for e in range(n): E.cl([-R(r), -Cr[j](c), -f(r, c, e), Cr[j + 1](e)])
+            for j in range(ROWS + 1):
+                for c in range(n):
+                    for x in range(n):
+                        E.S.add_clause([-Cr[j](c), -d(x), d(c), -E.v('fle', x, c, x)])
+                        E.S.add_clause([-Cr[j](c), -d(x), d(c), -E.v('yle', x, c)])
     for e in range(n):
         if rk[e] != 1: E.cl([-S_(e)])
         E.cl([-S_(e), d(e)])
@@ -188,6 +216,10 @@ if __name__ == '__main__':
     args = sys.argv[1:]; case = args.pop(0)
     nearcell = 'nearcell' in args; glob = 'global' in args
     FOREST = 'forest' in args
+    for x in args:
+        if x.startswith('orbit='): ORBIT = int(x.split('=')[1])
+        if x.startswith('rows='): ROWS = int(x.split('=')[1])
+    args = [x for x in args if not x.startswith('orbit=') and not x.startswith('rows=')]
     for c in ('interval', 'two', 'updown', 'join'):
         if c in args: COLS = c
     args = [x for x in args if x not in ('nearcell', 'global', 'interval', 'two', 'updown', 'join', 'forest')]
@@ -201,7 +233,7 @@ if __name__ == '__main__':
             if best is None or L.n < best[0].n: best = (L, F, D, pick)
         else: T['UNSAT'] += 1
         E.S.delete()
-    print(f"case {case}{' (star forest)' if FOREST else ''}{' + near-cell' if nearcell else ''}{' (global witness-freeness)' if glob else f' (witness-free columns: {COLS})'}: {dict(T)}", flush=True)
+    print(f"case {case}{f' (u = orbit value {ORBIT})' if ORBIT else ''}{f' (row orbits {ROWS})' if ROWS else ''}{' (star forest)' if FOREST else ''}{' + near-cell' if nearcell else ''}{' (global witness-freeness)' if glob else f' (witness-free columns: {COLS})'}: {dict(T)}", flush=True)
     if best:
         L, F, D, pick = best; w = max(s.bit_length() for s in L.S)
         nm = lambda i: '{' + ''.join(str(j) for j in range(w) if L.S[i] >> j & 1) + '}'

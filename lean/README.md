@@ -59,6 +59,7 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/InterfaceExtraction.lean` | §34.3z¹⁴⁰ | `cycle_lower_witness`, `cycle_impossible`: separator cycles force a lower witness (via `atom_family_block`) |
 | `Mordor/BottomMaxCell.lean` | §34.3z¹⁴² | `R_no_cross_cell` (no cell across R), `common_column`, `cut_of_atomic` (atomic cuts are bouquets), `cutMaps_of_R_atomic`, `cutMaps_of_R_height_le_one`, `near_cell_of_atomic_over`, `dual_near_cell`, `orbit_entry_escapes` (§34.3z¹⁴³) |
 | `Mordor/RankTwoIncidence.lean` | §34.3z¹⁴⁴ | `IsRankTwo`, `IsBlock`, `exists_block_above`, `block_meet`, `cut_of_finitely_many_blocks`, `cut_of_common_centre`, `petal_entry_escapes` (isolated petals) |
+| `Mordor/RelayDescent.lean` | §34.3z¹⁴⁶ | `IsRelay`, `Setting`, `petal_l4`, `relay_normal_form`, `relay_meet_update`, `relay_descends`, `relay_bot_value`, `relay_centre_value`, `no_private_seed`, `relay_descends_terminal` |
 
 The table lists the headline files; the other files under `Mordor/` (about 120 in all) are documented in their module
 docstrings and in the log section each one cites.

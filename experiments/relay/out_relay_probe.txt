@@ -1,0 +1,37 @@
+--- python3 relay_probe.py terminal sweep 4 16  (witness-free columns ≤ u)
+case terminal (witness-free columns: down): {'UNSAT': 123, 'SAT': 39}
+smallest model: |L| = 7, height 4, D = ['{}', '{0}', '{01}', '{02}'], s = {0}, a = {01}, b = {02}, u = {012}
+--- python3 relay_probe.py seed sweep 4 16
+case seed (witness-free columns: down): {'UNSAT': 162}
+--- python3 relay_probe.py seed closure 5 10 1 15
+case seed: {'UNSAT': 15}
+--- python3 relay_probe.py seed closure 5 10 2 15
+case seed: {'UNSAT': 15}
+--- python3 relay_probe.py seed closure 5 10 3 15
+case seed: {'UNSAT': 15}
+--- python3 relay_probe.py seed closure 6 12 1 8
+case seed: {'UNSAT': 8}
+--- python3 relay_probe.py seed two|interval sweep 4 16 / closure 5 10 1 15
+case seed (witness-free columns: interval): {'UNSAT': 162}
+case seed (witness-free columns: interval): {'UNSAT': 15}
+case seed (witness-free columns: two): {'UNSAT': 162}
+case seed (witness-free columns: two): {'UNSAT': 15}
+--- python3 relay_probe.py terminal global sweep 4 16  (control)
+case terminal (global witness-freeness): {'UNSAT': 162}
+--- python3 relay_probe.py terminal closure 5 10 1 15
+case terminal: {'SAT': 15}
+smallest model: |L| = 11, height 5, D = ['{}', '{2}', '{4}', '{12}', '{23}', '{24}'], s = {2}, a = {24}, b = {23}, u = {024}
+--- python3 relay_probe.py terminal updown|join (sweep 4 16 / closure 5 10 1 15)
+case terminal (witness-free columns: join): {'UNSAT': 162}
+case terminal (witness-free columns: join): {'SAT': 8, 'UNSAT': 7}
+smallest model: |L| = 15, height 5, D = ['{}', '{0}', '{1}', '{3}', '{4}', '{01}', '{03}', '{14}'], s = {0}, a = {03}, b = {01}, u = {034}
+case terminal (witness-free columns: updown): {'UNSAT': 123, 'SAT': 39}
+smallest model: |L| = 7, height 4, D = ['{}', '{0}', '{01}', '{02}'], s = {0}, a = {01}, b = {02}, u = {012}
+case terminal (witness-free columns: updown): {'SAT': 15}
+smallest model: |L| = 11, height 5, D = ['{}', '{2}', '{4}', '{12}', '{23}', '{24}'], s = {2}, a = {24}, b = {23}, u = {1234}
+--- python3 relay_probe.py terminal forest join (sweep 4 16 / closure 5 10 SEED 15, SEED 1, 2)
+case terminal (star forest) (witness-free columns: join): {'UNSAT': 162}
+case terminal (star forest) (witness-free columns: join): {'SAT': 8, 'UNSAT': 7}
+smallest model: |L| = 15, height 5, D = ['{}', '{0}', '{1}', '{3}', '{4}', '{01}', '{03}'], s = {0}, a = {03}, b = {01}, u = {034}
+case terminal (star forest) (witness-free columns: join): {'UNSAT': 4, 'SAT': 11}
+smallest model: |L| = 13, height 5, D = ['{}', '{0}', '{3}', '{03}', '{13}', '{23}'], s = {3}, a = {03}, b = {23}, u = {023}

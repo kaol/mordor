@@ -139,6 +139,20 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
   exists (`BottomMaxCell.R_no_cross_cell`). Proved there: **the Cut Lemma holds for F whenever R(F) has height ≤ 1**
   (`cutMaps_of_R_atomic`, a bouquet with centre ⊥); forced near-cells over atoms and below minimal non-members.
 
+- **Rank-two cuts (§34.3z¹⁴²–¹⁵¹).**
+  - **Cut holds whenever R(F) has height ≤ 1** (`BottomMaxCell.cutMaps_of_R_atomic`: an atomic cut is a bouquet
+    with centre ⊥).
+  - For height 2, Lean proves the incidence structure (blocks meet in ⊥ or one point) and isolated petals
+    (`RankTwoIncidence`).
+  - In a star of blocks it also proves that the bouquet induction fails only at a *relay* (`RelayDescent`). Every
+    relay descends to a rigid terminal form F(⊥, u) = s, F(s, u) = F(b, u) = a ≤ u, u ⊓ F(a, u) = a, and the
+    "private seed" alternative is impossible.
+  - At edge-height 6, `cut_height5` on intervals gives escape cells below every proper non-member and above every
+    nonzero member (`ClippedIntervalCut`).
+  - Partial models show that the remaining contradictions need full intervals or the infinite cross-closure. Several
+    proposed intermediate statements (normalized BottomMaxCell, "no escape", escape ladders) turned out equivalent
+    to Cut itself.
+
 **Open frontier now.** Chain-finite Cut, equivalently join-closure of R(F) (`Frontier.lean`), for cuts where **both**
 Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first open case. The sharpest concrete target is now a
 choice-free one (§34.3z¹⁴⁰): the **tight-stage upper principal cut**. At a stage where R_k has height exactly k and

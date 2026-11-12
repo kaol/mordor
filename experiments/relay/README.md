@@ -15,3 +15,5 @@ chosen end case of `relay_meet_update`, and witness-freeness only on the chosen 
 all of D). Output `out_rowgen.txt`; models `named_uwvt_min22.json`, `bd_min22.json`, `rowgen_blocks_min15.json`.
 
 §34.3z¹⁴⁹: options `pj=all|D|s` (joins of atoms below u ⊔ v) and `sv` (the interval [s, F(a, u)]). Output `out_minimize.txt`.
+
+§34.3z¹⁵¹: `top2_probe.py [forest] …`: two top escapes at distinct coatoms outside D, witness-freeness at y, y′, y ⊓ y′, y ⊔ y′. Output `out_top2.txt`.

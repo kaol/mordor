@@ -1,0 +1,9 @@
+--- python3 top2_probe.py sweep 4 16
+two top escapes: {'UNSAT': 115, 'SAT': 64}
+smallest: |L| = 5, height 2, D = ['{}'], c1 = {1}, c2 = {2}, x1 = {}, y1 = {1}, x2 = {}, y2 = {2}
+--- python3 top2_probe.py forest sweep 4 16
+two top escapes (star forest): {'UNSAT': 115, 'SAT': 64}
+smallest: |L| = 5, height 2, D = ['{}'], c1 = {1}, c2 = {2}, x1 = {}, y1 = {1}, x2 = {}, y2 = {2}
+--- python3 top2_probe.py forest closure 5 10 1 10
+two top escapes (star forest): {'UNSAT': 1, 'SAT': 9}
+smallest: |L| = 11, height 5, D = ['{}', '{2}', '{4}', '{04}'], c1 = {024}, c2 = {1234}, x1 = {2}, y1 = {24}, x2 = {4}, y2 = {12}

@@ -66,6 +66,8 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/ColumnOrbitCell.lean` | §34.3z¹⁵³–¹⁵⁴ | `colOrb_dichotomy` (column orbit y ↦ m ⊔ F(m,y) from ⊤: cell unless its limit y* > m has F(m,y*) ∥ m), `ic_of_colOrb_eq`; `old_top_no_cell`, `tightIC_witness_new` (TightIC witnesses are new tops), `tightIC_succ_of_upper` (upper cells transfer to the next tight stage) |
 | `Mordor/TightTransfer.lean` | §34.3z¹⁵⁵ | `Targets` (cell-target family E_{k+1}), `mem_targets_of_cell`, `target_new`, `TightTransfer` (conjecture as a Prop), `tightIC_step_of_transfer`, `single_prev_bound`, `single_target_eq`, `single_top_reduction` (singleton TightIC = lower transfer for {m}) |
 | `Mordor/SingletonLowerTransfer.lean` | §34.3z¹⁵⁶ | `SingletonLower` (conjecture as a Prop), `singleton_tightIC_of_lower`, `mem_succ_of_b`, `bentry_iff` (BEntry ⟺ b(m) ∈ R_k), `floor_le_row`, `feeder_identity_of_below`, `feeder_identity_one` |
+| `Mordor/IntervalOrbit.lean` | §34.3z¹⁵⁷ | `restr`, `Rk_restr` (orbit of an invariant interval inside the shifted global orbit), `diag_pre_mem`, `top_mem_of_diag_post`, `DiagGood`, `cutMaps_of_diagGood`, `feeder_identity_of_diagGood` |
+| `Mordor/HeightInduction.lean` | §34.3z¹⁵⁷ | `OHAt`, `noChain_Icc_bot/top`, `diagGood_of_lower`, `feeder_identity_of_lower`, `top_mem_of_good_post`, `top_mem_of_diag_fixed`, `top_mem_of_a_bot`, `top_mem_of_b_top`, `top_mem_of_good_rise`, `top_mem_reduction` (only rigid maps remain), `Rise` (conjecture), `ohAt_of_riseAt`, `cutMaps_of_riseAt` |
 
 The table lists the headline files; the other files under `Mordor/` (about 120 in all) are documented in their module
 docstrings and in the log section each one cites.

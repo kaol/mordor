@@ -153,6 +153,18 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     proposed intermediate statements (normalized BottomMaxCell, "no escape", escape ladders) turned out equivalent
     to Cut itself.
 
+- **Tight stages and height induction (§34.3z¹⁵²–¹⁵⁷).**
+  - Interval cells are located by the column orbit y ↦ m ⊔ F(m, y) (`ColumnOrbitCell`).
+  - Old tops never carry cells, and upper witnesses transfer between tight stages (`TightTransfer`,
+    `SingletonLowerTransfer`).
+  - The orbit of an F-invariant interval runs inside the shifted global orbit (`IntervalOrbit`). Consequences:
+    - given the orbit-height property at lower heights, every diagonal pre-fixed point c ≠ ⊤ enters by stage h(c);
+    - feeder identity holds;
+    - the orbit-height property, and Cut with it, at edge-height H reduces to *rigid* maps: a(⊥) = ⊥, b(⊤) = ⊤, and
+      the diagonal fixes only ⊥ and ⊤ (`HeightInduction.top_mem_reduction`).
+  - `cutMaps_of_riseAt`: the **Rise conjecture** (a rigid map has a good x < a(x)) at all heights ≤ H gives Cut at
+    edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices.
+
 **Open frontier now.** Chain-finite Cut, equivalently join-closure of R(F) (`Frontier.lean`), for cuts where **both**
 Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first open case. The sharpest concrete target is now a
 choice-free one (§34.3z¹⁴⁰): the **tight-stage upper principal cut**. At a stage where R_k has height exactly k and

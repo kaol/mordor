@@ -129,3 +129,5 @@ import Mordor.TightStageEntry
 import Mordor.ColumnOrbitCell
 import Mordor.TightTransfer
 import Mordor.SingletonLowerTransfer
+import Mordor.IntervalOrbit
+import Mordor.HeightInduction

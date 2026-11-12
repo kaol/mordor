@@ -1,0 +1,304 @@
+# Feeder identity, diagonal goodness, height induction and the Rise conjecture (log §34.3z¹⁵⁷).
+# Exact: SAT/UNSAT with every model re-checked in Python. Random: counts, not proofs.
+--- feeder.py 
+feeder : {'none': 184}
+--- feeder.py next
+feeder next: {'none': 184}
+--- feeder.py next top
+feeder next top: {'none': 184}
+--- feeder.py nobound
+feeder nobound: {'none': 184}
+--- feeder.py nobound next top
+feeder nobound next top: {'none': 184}
+--- feeder.py top
+feeder top: {'none': 184}
+--- feeder.py ctl nobound closure 5 10 1 10
+feeder ctl nobound: {'counterexample': 10}; smallest |L| = 11, k = 1
+--- feeder.py ctl nobound sweep 4 16
+feeder ctl nobound: {'none': 5, 'counterexample': 179}; smallest |L| = 3, k = 1
+--- feeder.py ctl sweep 4 16
+feeder ctl: {'none': 5, 'counterexample': 179}; smallest |L| = 3, k = 1
+--- feeder.py nobound closure 5 10 1 10
+feeder nobound: {'none': 10}
+--- feeder.py nobound closure 5 14 3 20
+feeder nobound: {'none': 20}
+--- feeder.py nobound closure 6 10 4 8
+feeder nobound: {'none': 8}
+--- feeder.py base nobound closure 5 10 1 10
+feeder base nobound: {'none': 10}
+--- feeder.py base nobound ctl sweep 4 16
+feeder base nobound ctl: {'none': 5, 'counterexample': 179}; smallest |L| = 3, k = 1
+--- feeder.py base nobound sweep 4 16
+feeder base nobound: {'none': 184}
+--- feeder.py base nobound nocover
+feeder base nobound nocover: {'none': 184}
+--- feeder.py base nobound off=-1
+feeder base nobound off=-1: {'none': 5, 'counterexample': 179}; smallest |L| = 3, k = 1
+--- feeder.py base nobound off=1
+feeder base nobound off=1: {'none': 184}
+--- feeder.py base nobound off=2
+feeder base nobound off=2: {'none': 184}
+--- feeder.py nobound nocover
+feeder nobound nocover: {'none': 184}
+--- feeder.py nobound off=1
+feeder nobound off=1: {'none': 184}
+--- feeder.py base nobound nolow nocover
+feeder base nobound nolow nocover: {'none': 184}
+--- feeder.py nobound nolow
+feeder nobound nolow: {'none': 184}
+--- feeder.py nobound nolow nocover
+feeder nobound nolow nocover: {'none': 184}
+--- lemma_d.py  closure 5 10 1 10
+lemma D : {'violation': 10}; smallest |L| = 11, h(m') = 2
+--- lemma_d.py  sweep 4 16
+lemma D : {'none': 16, 'violation': 168}; smallest |L| = 4, h(m') = 2
+--- lemma_d.py base closure 5 10 1 10
+lemma D base: {'violation': 10}; smallest |L| = 11, h(m') = 2
+--- lemma_d.py base off=1 sweep 4 16
+lemma D base off=1: {'none': 65, 'violation': 119}; smallest |L| = 6, h(m') = 2
+--- lemma_d.py base sweep 4 16
+lemma D base: {'none': 16, 'violation': 168}; smallest |L| = 4, h(m') = 2
+--- lemma_d.py off=1 sweep 4 16
+lemma D off=1: {'none': 65, 'violation': 119}; smallest |L| = 6, h(m') = 2
+--- lemma_d.py aval sweep 4 16
+lemma D aval: {'none': 69, 'violation': 115}; smallest |L| = 6, h(m') = 3
+--- lemma_d.py base bval closure 5 14 3 20
+lemma D base bval: {'violation': 20}; smallest |L| = 14, h(m') = 2
+--- lemma_d.py base bval off=1 sweep 4 16
+lemma D base bval off=1: {'none': 129, 'violation': 55}; smallest |L| = 8, h(m') = 2
+--- lemma_d.py base bval sweep 4 16
+lemma D base bval: {'none': 53, 'violation': 131}; smallest |L| = 6, h(m') = 2
+--- lemma_d.py bval closure 5 10 1 10
+lemma D bval: {'violation': 10}; smallest |L| = 11, h(m') = 2
+--- lemma_d.py bval sweep 4 16
+lemma D bval: {'none': 53, 'violation': 131}; smallest |L| = 6, h(m') = 2
+--- good_b.py V1 base closure 5 10 1 10
+good_b V1 base: {'none': 10}
+--- good_b.py V1 base sweep 4 16
+good_b V1 base: {'none': 184}
+--- good_b.py V1 closure 5 10 1 10
+good_b V1: {'none': 10}
+--- good_b.py V1 sweep 4 16
+good_b V1: {'none': 184}
+--- good_b.py V2 base sweep 4 16
+good_b V2 base: {'none': 184}
+--- good_b.py V2 sweep 4 16
+good_b V2: {'none': 184}
+--- good_b.py V3 sweep 4 16
+good_b V3: {'none': 184}
+--- good_b.py V5 sweep 4 16
+good_b V5: {'none': 109, 'violation': 75}; smallest |L| = 6
+--- rise_sat.py  closure 5 10 1 10
+rise: {'none': 10}
+--- rise_sat.py  closure 5 14 3 20
+rise: {'none': 20}
+--- rise_sat.py  closure 6 10 4 10
+rise: {'none': 10}
+--- rise_sat.py  sweep 4 16
+rise: {'none': 183}
+--- rise_sat.py ctl closure 5 10 1 10
+rise ctl: {'model': 10}; smallest |L| = 11
+--- rise_sat.py ctl sweep 4 16
+rise ctl: {'model': 183}; smallest |L| = 2
+--- rise_sat.py both closure 5 10 1 10
+both: {'none': 10}
+--- rise_sat.py both sweep 4 16
+both: {'none': 183}
+--- rise_sat.py local closure 5 10 1 10
+local: {'model': 10}; smallest |L| = 11
+--- rise_sat.py local sweep 4 16
+local: {'model': 183}; smallest |L| = 2
+--- rise_sat.py closure 5 20 34 30
+rise: {'none': 30}
+--- rise_sat.py closure 6 14 31 12
+rise: {'none': 12}
+--- rise_sat.py closure 6 20 32 8
+(no result within 590 s)
+--- rise_sat.py closure 7 10 33 6
+rise: {'none': 6}
+--- rise_sat.py ctl6
+rise ctl: {'model': 4}; smallest |L| = 20
+--- fixed_entry.py fe_1 250
+feeder configurations 28103
+instances 396946
+('a-values of orbit elements: some τ > h', False) 396928
+('a-values of orbit elements: some τ > h', True) 18
+('all orbit elements: some τ > h', False) 363992
+('all orbit elements: some τ > h', True) 32954
+('b-values: some τ > h', False) 396780
+('b-values: some τ > h', True) 166
+smallest b-value with τ > h: |L| = 7
+--- fixed_entry.py fe_2 250
+feeder configurations 27498
+instances 397562
+('a-values of orbit elements: some τ > h', False) 397537
+('a-values of orbit elements: some τ > h', True) 25
+('all orbit elements: some τ > h', False) 364992
+('all orbit elements: some τ > h', True) 32570
+('b-values: some τ > h', False) 397394
+('b-values: some τ > h', True) 168
+smallest b-value with τ > h: |L| = 8
+--- fixed_entry.py fe_3 250
+feeder configurations 28139
+instances 399888
+('a-values of orbit elements: some τ > h', False) 399878
+('a-values of orbit elements: some τ > h', True) 10
+('all orbit elements: some τ > h', False) 366575
+('all orbit elements: some τ > h', True) 33313
+('b-values: some τ > h', False) 399741
+('b-values: some τ > h', True) 147
+smallest b-value with τ > h: |L| = 7
+--- feeder_mine.py fm_1 180
+configurations 64282
+('a-gen: some x with F(x, t) ≤ x', False) 20999
+('a-gen: some x with t ≤ a(x)', False) 20999
+('a-gen: some x ≥ mp', False) 20999
+('b-gen: mp itself (b(mp) ∈ R_{k−1})', True) 44235
+('b-gen: some g with b(g) = mp', False) 44235
+('b-gen: some g ≥ t', False) 44235
+('generators (a, b)', False, True) 43283
+('generators (a, b)', True, False) 20047
+('generators (a, b)', True, True) 952
+('mp ∈ R_{k−1}', False) 64282
+--- feeder_mine.py fm_2 180
+configurations 63403
+('a-gen: some x with F(x, t) ≤ x', False) 20938
+('a-gen: some x with t ≤ a(x)', False) 20938
+('a-gen: some x ≥ mp', False) 20938
+('b-gen: mp itself (b(mp) ∈ R_{k−1})', True) 43412
+('b-gen: some g with b(g) = mp', False) 43412
+('b-gen: some g ≥ t', False) 43412
+('generators (a, b)', False, True) 42465
+('generators (a, b)', True, False) 19991
+('generators (a, b)', True, True) 947
+('mp ∈ R_{k−1}', False) 63403
+--- lemma_t_mine.py lt2_1 180
+configurations (m′, c) 2687257
+('all z < c in R_{h(c)−1}', False) 376
+('all z < c in R_{h(c)−1}', True) 2686881
+('all z < c in R_{j−2}', False) 301
+('all z < c in R_{j−2}', True) 2686956
+('b(c) < c', False) 2598173
+('b(c) < c', True) 89084
+('c ∈ R_{j−1}', True) 2687257
+('τ(c) ≤ h(c)', True) 2687257
+--- lemma_t_mine.py lt2_2 180
+configurations (m′, c) 2665332
+('all z < c in R_{h(c)−1}', False) 399
+('all z < c in R_{h(c)−1}', True) 2664933
+('all z < c in R_{j−2}', False) 324
+('all z < c in R_{j−2}', True) 2665008
+('b(c) < c', False) 2578694
+('b(c) < c', True) 86638
+('c ∈ R_{j−1}', True) 2665332
+('τ(c) ≤ h(c)', True) 2665332
+--- lag_mine.py lag_1 130
+pairs 5961322
+('lag(c) ≤ 0', True) 5961322
+('lag(c) ≤ lag(m′)', False) 5238515
+('lag(c) ≤ lag(m′)', True) 722807
+('lag(c) ≤ max(lag(m′), 0)', True) 5961322
+('lag(m′) ≤ 0 and lag(c) > 0', False) 5961322
+('τ(c) ≤ τ(m′)', True) 5961322
+--- lag_mine.py lag_2 130
+pairs 6030437
+('lag(c) ≤ 0', True) 6030437
+('lag(c) ≤ lag(m′)', False) 5298673
+('lag(c) ≤ lag(m′)', True) 731764
+('lag(c) ≤ max(lag(m′), 0)', True) 6030437
+('lag(m′) ≤ 0 and lag(c) > 0', False) 6030437
+('τ(c) ≤ τ(m′)', True) 6030437
+--- lag_mine.py lag_3 130
+orbit elements 2784263
+pairs 5717831
+('G1: F(c,c) ≤ c ⇒ good', True) 1751957
+('G2: lower cell at c ⇒ good', True) 1307185
+('G3: upper cell at c ⇒ good', False) 6616
+('G3: upper cell at c ⇒ good', True) 1382106
+('lag(c) ≤ 0', True) 5717831
+('lag(c) ≤ lag(m′)', False) 5024649
+('lag(c) ≤ lag(m′)', True) 693182
+('lag(c) ≤ max(lag(m′), 0)', True) 5717831
+('lag(m′) ≤ 0 and lag(c) > 0', False) 5717831
+('τ(c) ≤ τ(m′)', True) 5717831
+--- lag_mine.py lag_4 130
+orbit elements 2763546
+pairs 5687546
+('G1: F(c,c) ≤ c ⇒ good', True) 1738575
+('G2: lower cell at c ⇒ good', True) 1297464
+('G3: upper cell at c ⇒ good', False) 6633
+('G3: upper cell at c ⇒ good', True) 1371299
+('lag(c) ≤ 0', True) 5687546
+('lag(c) ≤ lag(m′)', False) 5000528
+('lag(c) ≤ lag(m′)', True) 687018
+('lag(c) ≤ max(lag(m′), 0)', True) 5687546
+('lag(m′) ≤ 0 and lag(c) > 0', False) 5687546
+('τ(c) ≤ τ(m′)', True) 5687546
+--- g1_mine.py g1_3 130
+b(c) = c cases 87493
+('c ≤ a(x) for some x ∈ R_{h(c)−1} with x < c', True) 87493
+('chain: every x_i ∈ R_i', False) 4737
+('chain: every x_i ∈ R_i', True) 82756
+('good', True) 87493
+('last Kleene x_n good', True) 87493
+('some diag-pre-fixed z < c with c ≤ F(z, c)', False) 15747
+('some diag-pre-fixed z < c with c ≤ F(z, c)', True) 71746
+('some x < c in R_{h(c)−1} with c ≤ F(x, c)', True) 87493
+('some z < c with z good and c ≤ F(z, c)', True) 87493
+('x_n diag-pre-fixed', False) 43170
+('x_n diag-pre-fixed', True) 44323
+('x_n ∈ R_{h(c)−1}', True) 87493
+--- g1_mine.py g1_4 130
+b(c) = c cases 86258
+('c ≤ a(x) for some x ∈ R_{h(c)−1} with x < c', True) 86258
+('chain: every x_i ∈ R_i', False) 4684
+('chain: every x_i ∈ R_i', True) 81574
+('good', True) 86258
+('last Kleene x_n good', False) 3
+('last Kleene x_n good', True) 86255
+('some diag-pre-fixed z < c with c ≤ F(z, c)', False) 15523
+('some diag-pre-fixed z < c with c ≤ F(z, c)', True) 70735
+('some x < c in R_{h(c)−1} with c ≤ F(x, c)', True) 86258
+('some z < c with z good and c ≤ F(z, c)', True) 86258
+('x_n diag-pre-fixed', False) 42823
+('x_n diag-pre-fixed', True) 43435
+('x_n ∈ R_{h(c)−1}', True) 86258
+--- g1star.py gs_1 130 (⊥ always allowed)
+cases 90825
+('G1*', False) 8924
+('G1*', True) 81901
+('some witness z < c', False) 209
+('some witness z < c', True) 81692
+('witness z = ⊥ possible', False) 45345
+('witness z = ⊥ possible', True) 36556
+smallest G1* failure |L| = 4
+--- g1star.py gs_2 130 (⊥ always allowed)
+cases 91600
+('G1*', False) 9002
+('G1*', True) 82598
+('some witness z < c', False) 210
+('some witness z < c', True) 82388
+('witness z = ⊥ possible', False) 45653
+('witness z = ⊥ possible', True) 36945
+smallest G1* failure |L| = 4
+--- g1star.py gs_r 130 (⊥ always allowed)
+--- rigid.py rg_1 130
+instances 217380
+rigid 23426
+('either', True) 23426
+('good diagonal post-fixed m ∉ {⊥, ⊤}', False) 1505
+('good diagonal post-fixed m ∉ {⊥, ⊤}', True) 21921
+('good x with x < a(x)', True) 23426
+('⊤ ∈ R_H', True) 23426
+--- rigid.py rg_2 130
+instances 214860
+rigid 23200
+('either', True) 23200
+('good diagonal post-fixed m ∉ {⊥, ⊤}', False) 1477
+('good diagonal post-fixed m ∉ {⊥, ⊤}', True) 21723
+('good x with x < a(x)', True) 23200
+('⊤ ∈ R_H', True) 23200
+--- rigid.py rg_D4 130
+--- rigid.py rg_D5 130
+--- rigid.py rg_blocks4 130
+--- rigid.py rg_blocks5 130

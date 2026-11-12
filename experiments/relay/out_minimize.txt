@@ -1,0 +1,35 @@
+=== §34.3z¹⁴⁹: minimizing the columns of ↓(u ⊔ v) needed at K = 2 (terminal forest named:u,w,v,t orbit=2 rows=1)
+--- pj_all_1
+case terminal (u = orbit value 2) (row orbits 1) (atom joins all) (star forest) (witness-free columns: named:u,w,v,t): {'UNSAT': 5, 'SAT': 1}
+smallest model: |L| = 27, height 6, D = ['{}', '{0}', '{1}', '{3}', '{4}', '{5}', '{13}', '{34}'], s = {3}, a = {34}, b = {13}, u = {134}
+--- pj_all_2
+case terminal (u = orbit value 2) (row orbits 1) (atom joins all) (star forest) (witness-free columns: named:u,w,v,t): {'UNSAT': 5, 'SAT': 1}
+smallest model: |L| = 25, height 6, D = ['{}', '{0}', '{1}', '{4}', '{5}', '{04}', '{14}', '{45}'], s = {4}, a = {45}, b = {14}, u = {045}
+--- pj_D_1
+case terminal (u = orbit value 2) (row orbits 1) (atom joins D) (star forest) (witness-free columns: named:u,w,v,t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{2}', '{3}', '{4}', '{5}', '{24}', '{25}'], s = {2}, a = {24}, b = {25}, u = {234}
+--- pj_D_2
+case terminal (u = orbit value 2) (row orbits 1) (atom joins D) (star forest) (witness-free columns: named:u,w,v,t): {'SAT': 3, 'UNSAT': 3}
+smallest model: |L| = 25, height 6, D = ['{}', '{0}', '{1}', '{4}', '{04}', '{14}', '{24}', '{34}'], s = {4}, a = {04}, b = {14}, u = {014}
+--- pj_s_1
+case terminal (u = orbit value 2) (row orbits 1) (atom joins s) (star forest) (witness-free columns: named:u,w,v,t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{3}', '{4}', '{5}', '{12}', '{24}', '{25}'], s = {2}, a = {24}, b = {25}, u = {234}
+--- pj_s_2
+case terminal (u = orbit value 2) (row orbits 1) (atom joins s) (star forest) (witness-free columns: named:u,w,v,t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 25, height 6, D = ['{}', '{0}', '{1}', '{4}', '{5}', '{04}', '{14}', '{34}', '{45}'], s = {4}, a = {04}, b = {34}, u = {014}
+--- v1_1
+case terminal (u = orbit value 2) (row orbits 1) (atom joins all) (star forest) (witness-free columns: named:u,w,v,t): {'UNSAT': 5, 'SAT': 1}
+smallest model: |L| = 27, height 6, D = ['{}', '{0}', '{1}', '{3}', '{4}', '{5}', '{03}', '{34}'], s = {3}, a = {34}, b = {03}, u = {134}
+--- v1_2
+case terminal (u = orbit value 2) (row orbits 1) (atom joins all) (star forest) (witness-free columns: named:u,w,v,t): {'UNSAT': 5, 'SAT': 1}
+smallest model: |L| = 25, height 6, D = ['{}', '{0}', '{4}', '{5}', '{04}', '{24}', '{45}'], s = {4}, a = {04}, b = {24}, u = {045}
+--- v2_1
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u,w,v,t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{3}', '{4}', '{5}', '{14}', '{24}', '{45}'], s = {4}, a = {24}, b = {45}, u = {234}
+--- v2_2
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u,w,v,t): {'SAT': 1, 'UNSAT': 5}
+smallest model: |L| = 40, height 6, D = ['{}', '{0}', '{1}', '{2}', '{4}', '{5}', '{02}', '{04}', '{05}'], s = {0}, a = {04}, b = {02}, u = {014}
+--- v2_7
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u,w,v,t): {'SAT': 1, 'UNSAT': 2}
+smallest model: |L| = 35, height 6, D = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{23}', '{35}', '{36}'], s = {3}, a = {35}, b = {36}, u = {345}
+(pj_X_SEED: + pj=X, closure 6 12 SEED 6; v1: + botdown pj=all; v2: + botdown sv; v2_7: closure 7 14 1 3)

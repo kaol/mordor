@@ -13,3 +13,5 @@ chosen end case of `relay_meet_update`, and witness-freeness only on the chosen 
 §34.3z¹⁴⁸: `relay_probe.py … named:u,w,v,t [botdown]` (witness-freeness only at named columns, t = u ⊔ v);
 `rowgen_probe.py [anycut] (blocks | D) …` (witness localization in the closure of ⊤ under the rows of ⊥ + blocks, or of
 all of D). Output `out_rowgen.txt`; models `named_uwvt_min22.json`, `bd_min22.json`, `rowgen_blocks_min15.json`.
+
+§34.3z¹⁴⁹: options `pj=all|D|s` (joins of atoms below u ⊔ v) and `sv` (the interval [s, F(a, u)]). Output `out_minimize.txt`.

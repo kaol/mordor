@@ -9,7 +9,8 @@ Option 'nearcell': also require the near-cell of BottomMaxCell.near_cell_of_atom
 (some x ∈ {p, a}, y ∉ D, p < y, y ≤ p ⊔ F(x, y), y ≰ F(x, y)) together with witness-freeness at that column y.
 Option 'global': witness-freeness at every column (then UNSAT by the finite Cut Lemma: a control).
 Option 'named:u,w,v,t': witness-freeness only at the named columns (t = u ⊔ v); 'botdown': in addition
-F(⊥, y) ≠ ⊥ for every y ∉ D below u ⊔ v (the bottom row's lower half only).
+F(⊥, y) ≠ ⊥ for every y ∉ D below u ⊔ v (the bottom row's lower half only); 'pj=all|D|s': also the joins p ⊔ q ≤ u ⊔ v of atoms (all atoms /
+points of D / one of them the centre s); 'sv': also every column of [s, F(a, u)].
 Option 'forest': D is a star forest. Option 'orbit=K': u is the K-th value of the F(⊥, ·)-orbit of ⊤, every orbit value
 up to u lies outside D and carries witness-freeness. Option 'rows=K': witness-freeness along the first K values of
 the ⊤-orbits of F(s, ·), F(a, ·), F(b, ·).
@@ -41,6 +42,8 @@ class Enc:
         for l in lits: self.cl([-o, l])
         self.cl([o] + [-l for l in lits])
 
+SV = False         # 'sv': with named columns, also every column in the interval [s, F(a, u)]
+PJ = None          # 'pj=all|D|s': with named columns, also the joins p ⊔ q ≤ u ⊔ v of atoms (all / points of D / with s)
 BOTDOWN = False    # 'botdown': with named columns, also F(⊥, y) ≠ ⊥ for every y ∉ D below u ⊔ v
 ROWS = 0           # 'rows=K': witness-freeness along the first K values of the ⊤-orbits of F(s, ·), F(a, ·), F(b, ·)
 ORBIT = 0          # 'orbit=K': u is the K-th value of the F(⊥, ·)-orbit of ⊤ (all earlier values ∉ D, witness-free)
@@ -145,6 +148,21 @@ def build(L, case, nearcell, glob):
                           [y for y in range(n) if le[y][join[u][v]]] if COLS == 'join' else sorted({u, w}))
                     for y in ys:
                         for x in range(n): nw(x, y, [-U(u), -A(a), -f(a, u, v)])
+                    if SV:                              # the interval [s, v]
+                        for sc in range(n):
+                            for y in range(n):
+                                if le[sc][y] and le[y][v]:
+                                    for x in range(n): nw(x, y, [-U(u), -A(a), -f(a, u, v), -S_(sc)])
+                    if PJ:                              # joins of atoms below u ⊔ v
+                        tt = join[u][v]; ats = [e for e in range(n) if rk[e] == 1 and le[e][tt]]
+                        for p_, q_ in itertools.combinations_with_replacement(ats, 2):
+                            y = join[p_][q_]
+                            if not le[y][tt]: continue
+                            if PJ == 'all': conds = [[]]
+                            elif PJ == 'D': conds = [[-d(p_), -d(q_)]]
+                            else: conds = [[-S_(p_)], [-S_(q_)]]          # 's': one of them is the centre
+                            for cnd in conds:
+                                for x in range(n): nw(x, y, [-U(u), -A(a), -f(a, u, v)] + cnd)
                     if BOTDOWN:                         # only F(⊥, y) ≰ ⊥ on every column y ≤ u ⊔ v
                         for y in range(n):
                             if le[y][join[u][v]]: E.cl([-U(u), -A(a), -f(a, u, v), d(y), -fle(bot, y, bot)])
@@ -225,17 +243,18 @@ def lattices(args):
 if __name__ == '__main__':
     args = sys.argv[1:]; case = args.pop(0)
     nearcell = 'nearcell' in args; glob = 'global' in args
-    FOREST = 'forest' in args; BOTDOWN = 'botdown' in args
+    FOREST = 'forest' in args; BOTDOWN = 'botdown' in args; SV = 'sv' in args
     for x in args:
         if x.startswith('orbit='): ORBIT = int(x.split('=')[1])
         if x.startswith('rows='): ROWS = int(x.split('=')[1])
-    args = [x for x in args if not x.startswith('orbit=') and not x.startswith('rows=')]
+        if x.startswith('pj='): PJ = x.split('=')[1]
+    args = [x for x in args if not x.startswith('orbit=') and not x.startswith('rows=') and not x.startswith('pj=')]
     for c in ('interval', 'two', 'updown', 'join'):
         if c in args: COLS = c
     for x in args:
         if x.startswith('named:'): COLS = x
     args = [x for x in args if not x.startswith('named:')]
-    args = [x for x in args if x not in ('nearcell', 'global', 'interval', 'two', 'updown', 'join', 'forest', 'botdown')]
+    args = [x for x in args if x not in ('nearcell', 'global', 'interval', 'two', 'updown', 'join', 'forest', 'botdown', 'sv')]
     T = collections.Counter(); best = None
     for L in lattices(args):
         if L.height < 3: continue
@@ -246,7 +265,7 @@ if __name__ == '__main__':
             if best is None or L.n < best[0].n: best = (L, F, D, pick)
         else: T['UNSAT'] += 1
         E.S.delete()
-    print(f"case {case}{f' (u = orbit value {ORBIT})' if ORBIT else ''}{f' (row orbits {ROWS})' if ROWS else ''}{' (star forest)' if FOREST else ''}{' + near-cell' if nearcell else ''}{' (global witness-freeness)' if glob else f' (witness-free columns: {COLS})'}: {dict(T)}", flush=True)
+    print(f"case {case}{f' (u = orbit value {ORBIT})' if ORBIT else ''}{f' (row orbits {ROWS})' if ROWS else ''}{f' (atom joins {PJ})' if PJ else ''}{' (star forest)' if FOREST else ''}{' + near-cell' if nearcell else ''}{' (global witness-freeness)' if glob else f' (witness-free columns: {COLS})'}: {dict(T)}", flush=True)
     if best:
         L, F, D, pick = best; w = max(s.bit_length() for s in L.S)
         nm = lambda i: '{' + ''.join(str(j) for j in range(w) if L.S[i] >> j & 1) + '}'

@@ -12,6 +12,7 @@ Options:
   lower    : some m' ∈ S, m' ⋖ m, with F(m', m) ≤ m' (the lower-transfer hypothesis)
   notop    : drop the 'top' constraint
   tighthist: the abstract history is index-tight: step^i(S₀) has ranks ≤ k − 1 − d + i (S₀ ≤ k − 1 − d)
+  rank=R   : only try m of rank R (rank=1 with orbit: the stage-1 singleton case, §34.3z¹⁵⁶)
   nonoic   : control, drop the 'noic' constraint (should be SAT)
   multi    : allow several rank-k elements in S' (none of them may have a cell; m is one of them, still new)
   S-tight  : every element of S has rank ≤ k − 1 (automatic from tight + m ∉ S; kept explicit)
@@ -95,14 +96,15 @@ def query(L, m, opt):
     return S, F
 
 if __name__ == '__main__':
-    opt = [a for a in sys.argv[1:] if a in ('orbit', 'lower', 'notop', 'nonoic', 'multi', 'tighthist') or a.startswith('depth=')]
+    opt = [a for a in sys.argv[1:] if a in ('orbit', 'lower', 'notop', 'nonoic', 'multi', 'tighthist') or a.startswith('depth=') or a.startswith('rank=')]
     args = [a for a in sys.argv[1:] if a not in opt]
     C = collections.Counter(); best = None
     for L in lattices(args):
         if L.height < 3: continue
         hit = None
         for m in range(L.n):
-            if 1 <= L.rank[m] < L.height:
+            R0 = next((int(o[5:]) for o in opt if o.startswith('rank=')), None)
+            if 1 <= L.rank[m] < L.height and (R0 is None or L.rank[m] == R0):
                 res = query(L, m, opt)
                 if res: hit = (m, res); break
         C['SAT' if hit else 'UNSAT'] += 1

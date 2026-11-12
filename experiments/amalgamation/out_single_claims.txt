@@ -1,0 +1,243 @@
+# Singleton lower transfer: exact intermediate lemmas (log §34.3z¹⁵⁶). SAT = counterexample (re-checked in Python).
+--- python3 single_lower_mine.py 1 260
+configurations 71
+lower-only 71
+('F(feeder,⊤) ≤ m', False) 38
+('F(feeder,⊤) ≤ m', True) 33
+('F(m,m) ≤ m', False) 5
+('F(m,m) ≤ m', True) 66
+('F(m,⊤) ≥ all lower feeders', True) 71
+('GFP(m)', True) 71
+('IC(m)', True) 71
+('a(feeder) ≤ m', True) 71
+('a(m) ∈ R_{k+1}', False) 23
+('a(m) ∈ R_{k+1}', True) 48
+('a(m) ≤ m', False) 23
+('a(m) ≤ m', True) 48
+('b(m) = a feeder', True) 71
+('b(m) = ⊥', False) 10
+('b(m) = ⊥', True) 61
+('b(m) ∈ R_{k−1}', False) 71
+('b(⊤) ≤ m', False) 71
+('k', 0) 61
+('k', 1) 10
+('lower cell at a cover', False) 19
+('lower cell at a cover', True) 52
+('m = a(x) for some x ∈ R_k', False) 71
+('m ⊔ F(m,⊤) is a cell column', False) 3
+('m ⊔ F(m,⊤) is a cell column', True) 68
+('upper cell (m < a(m))', False) 48
+('upper cell (m < a(m))', True) 23
+('w ≥ all lower feeders', True) 71
+('y* is a cover of m', False) 57
+('y* is a cover of m', True) 14
+('|lower feeders|', 1) 71
+--- python3 single_lower_mine.py 2 260
+configurations 54
+lower-only 54
+('F(feeder,⊤) ≤ m', False) 33
+('F(feeder,⊤) ≤ m', True) 21
+('F(m,m) ≤ m', False) 5
+('F(m,m) ≤ m', True) 49
+('F(m,⊤) ≥ all lower feeders', True) 54
+('GFP(m)', True) 54
+('IC(m)', True) 54
+('a(feeder) ≤ m', True) 54
+('a(m) ∈ R_{k+1}', False) 15
+('a(m) ∈ R_{k+1}', True) 39
+('a(m) ≤ m', False) 15
+('a(m) ≤ m', True) 39
+('b(m) = a feeder', True) 54
+('b(m) = ⊥', False) 5
+('b(m) = ⊥', True) 49
+('b(m) ∈ R_{k−1}', False) 54
+('b(⊤) ≤ m', False) 54
+('k', 0) 49
+('k', 1) 5
+('lower cell at a cover', False) 13
+('lower cell at a cover', True) 41
+('m = a(x) for some x ∈ R_k', False) 54
+('m ⊔ F(m,⊤) is a cell column', False) 2
+('m ⊔ F(m,⊤) is a cell column', True) 52
+('upper cell (m < a(m))', False) 39
+('upper cell (m < a(m))', True) 15
+('w ≥ all lower feeders', True) 54
+('y* is a cover of m', False) 47
+('y* is a cover of m', True) 7
+('|lower feeders|', 1) 54
+--- python3 single_lower_mine.py 3 260
+configurations 75
+lower-only 75
+('F(feeder,⊤) ≤ m', False) 31
+('F(feeder,⊤) ≤ m', True) 44
+('F(m,m) ≤ m', False) 16
+('F(m,m) ≤ m', True) 59
+('F(m,⊤) ≥ all lower feeders', True) 75
+('GFP(m)', True) 75
+('IC(m)', True) 75
+('a(feeder) ≤ m', True) 75
+('a(m) ∈ R_{k+1}', False) 33
+('a(m) ∈ R_{k+1}', True) 42
+('a(m) ≤ m', False) 33
+('a(m) ≤ m', True) 42
+('b(m) = a feeder', True) 75
+('b(m) = ⊥', False) 11
+('b(m) = ⊥', True) 64
+('b(m) ∈ R_{k−1}', False) 75
+('b(⊤) ≤ m', False) 75
+('k', 0) 64
+('k', 1) 11
+('lower cell at a cover', False) 26
+('lower cell at a cover', True) 49
+('m = a(x) for some x ∈ R_k', False) 75
+('m ⊔ F(m,⊤) is a cell column', True) 75
+('upper cell (m < a(m))', False) 42
+('upper cell (m < a(m))', True) 33
+('w ≥ all lower feeders', True) 75
+('y* is a cover of m', False) 56
+('y* is a cover of m', True) 19
+('|lower feeders|', 1) 75
+--- python3 single_lower_mine.py 4 260
+configurations 74
+lower-only 74
+('F(feeder,⊤) ≤ m', False) 44
+('F(feeder,⊤) ≤ m', True) 30
+('F(m,m) ≤ m', False) 9
+('F(m,m) ≤ m', True) 65
+('F(m,⊤) ≥ all lower feeders', True) 74
+('GFP(m)', True) 74
+('IC(m)', True) 74
+('a(feeder) ≤ m', True) 74
+('a(m) ∈ R_{k+1}', False) 19
+('a(m) ∈ R_{k+1}', True) 55
+('a(m) ≤ m', False) 19
+('a(m) ≤ m', True) 55
+('b(m) = a feeder', True) 74
+('b(m) = ⊥', False) 9
+('b(m) = ⊥', True) 65
+('b(m) ∈ R_{k−1}', False) 74
+('b(⊤) ≤ m', False) 74
+('k', 0) 65
+('k', 1) 9
+('lower cell at a cover', False) 17
+('lower cell at a cover', True) 57
+('m = a(x) for some x ∈ R_k', False) 74
+('m ⊔ F(m,⊤) is a cell column', False) 2
+('m ⊔ F(m,⊤) is a cell column', True) 72
+('upper cell (m < a(m))', False) 55
+('upper cell (m < a(m))', True) 19
+('w ≥ all lower feeders', True) 74
+('y* is a cover of m', False) 64
+('y* is a cover of m', True) 10
+('|lower feeders|', 1) 74
+--- single_local.py orbit rank=1 closure 6 14 11 30
+single_local orbit rank=1: {'UNSAT': 30}
+--- single_local.py orbit rank=1 closure 7 14 13 20
+single_local orbit rank=1: {'UNSAT': 20}
+--- single_local.py orbit rank=1 lower closure 6 20 12 30
+single_local orbit rank=1 lower: {'UNSAT': 30}
+--- single_local.py orbit rank=1 nonoic closure 6 14 11 10
+single_local orbit rank=1 nonoic: {'SAT': 10}
+smallest: |L| = 18, height 5, m = {0}, S = ['{}'], step S = ['{}', '{0}']
+--- single_local.py orbit rank=2 closure 6 14 14 20
+single_local orbit rank=2: {'UNSAT': 20}
+--- single_local.py orbit rank=2 nonoic closure 6 14 14 20
+single_local orbit rank=2 nonoic: {'SAT': 20}
+smallest: |L| = 17, height 6, m = {01}, S = ['{}', '{0}', '{1}'], step S = ['{}', '{0}', '{1}', '{4}', '{01}']
+--- single_claims.py a_feeder_le sweep 4 16
+claim a_feeder_le: {'none': 179}
+--- single_claims.py bentry sweep 4 16
+claim bentry: {'none': 179}
+--- single_claims.py bm_eq_feeder sweep 4 16
+claim bm_eq_feeder: {'none': 179}
+--- single_claims.py bm_le_meet sweep 4 16
+claim bm_le_meet: {'none': 92, 'counterexample': 87}; smallest counterexample |L| = 6, rank(m) = 2
+--- single_claims.py bm_le_x sweep 4 16
+claim bm_le_x: {'none': 92, 'counterexample': 87}; smallest counterexample |L| = 6, rank(m) = 2
+--- single_claims.py fmm_in sweep 4 16
+claim fmm_in: {'none': 119, 'counterexample': 60}; smallest counterexample |L| = 7, rank(m) = 2
+--- single_claims.py fmm_le sweep 4 16
+claim fmm_le: {'none': 17, 'counterexample': 162}; smallest counterexample |L| = 4, rank(m) = 1
+--- single_claims.py fmm_le_B sweep 4 16
+claim fmm_le_B: {'none': 119, 'counterexample': 60}; smallest counterexample |L| = 7, rank(m) = 2
+--- single_claims.py gfp sweep 4 16
+claim gfp: {'none': 179}
+--- single_claims.py meet_pre sweep 4 16
+claim meet_pre: {'none': 92, 'counterexample': 87}; smallest counterexample |L| = 6, rank(m) = 2
+--- single_claims.py top_ge_bm sweep 4 16
+claim top_ge_bm: {'none': 179}
+--- single_claims.py w_ge_bm sweep 4 16
+claim w_ge_bm: {'none': 179}
+--- single_claims.py a_feeder_le closure 5 10 1 10
+claim a_feeder_le: {'none': 10}
+--- single_claims.py bentry closure 5 10 1 10
+claim bentry: {'none': 10}
+--- single_claims.py bm_eq_feeder closure 5 10 1 10
+claim bm_eq_feeder: {'none': 10}
+--- single_claims.py gfp closure 5 10 1 10
+claim gfp: {'none': 10}
+--- single_claims.py a_feeder_le closure 5 14 3 20
+claim a_feeder_le: {'none': 20}
+--- single_claims.py bentry closure 5 14 3 20
+claim bentry: {'none': 20}
+--- single_claims.py bm_eq_feeder closure 5 14 3 20
+claim bm_eq_feeder: {'none': 20}
+--- single_claims.py gfp closure 5 14 3 20
+claim gfp: {'none': 20}
+--- single_claims.py a_feeder_le closure 6 12 21 8
+claim a_feeder_le: {'none': 8}
+--- single_claims.py bentry closure 6 12 21 8
+claim bentry: {'none': 8}
+--- single_claims.py bm_eq_feeder closure 6 12 21 8
+claim bm_eq_feeder: {'none': 8}
+--- single_claims.py gfp closure 6 12 21 8
+claim gfp: {'none': 8}
+--- single_claims.py a_feeder_le ahead sweep 4 16
+claim a_feeder_le ahead: {'none': 140, 'counterexample': 39}; smallest counterexample |L| = 7, rank(m) = 3
+--- single_claims.py bentry ahead sweep 4 16
+claim bentry ahead: {'none': 134, 'counterexample': 45}; smallest counterexample |L| = 7, rank(m) = 3
+--- single_claims.py bm_eq_feeder ahead sweep 4 16
+claim bm_eq_feeder ahead: {'none': 140, 'counterexample': 39}; smallest counterexample |L| = 7, rank(m) = 3
+--- single_claims.py gfp ahead sweep 4 16
+claim gfp ahead: {'none': 140, 'counterexample': 39}; smallest counterexample |L| = 7, rank(m) = 3
+--- single_claims.py a_feeder_le ahead closure 5 10 1 10
+claim a_feeder_le ahead: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 3
+--- single_claims.py bentry ahead closure 5 10 1 10
+claim bentry ahead: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 3
+--- single_claims.py bm_eq_feeder ahead closure 5 10 1 10
+claim bm_eq_feeder ahead: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 3
+--- single_claims.py gfp ahead closure 5 10 1 10
+claim gfp ahead: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 3
+--- controls (configurations exist): single_claims.py fmm_le / fmm_le_B closure 5 10 1 10
+claim fmm_le: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 1
+claim fmm_le_B: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 2
+--- single_claims.py C_a_feeder_le sweep 4 16
+/home/user/mordor/experiments/amalgamation/single_claims.py:14: SyntaxWarning: invalid escape sequence '\ '
+  C claims (multi-top transfer, Programme C: uniqueness of m dropped, m any target of rank K in R_K \ R_{K−1}):
+claim C_a_feeder_le: {'none': 28, 'counterexample': 151}; smallest counterexample |L| = 5, rank(m) = 1
+--- single_claims.py C_bm_eq_feeder sweep 4 16
+/home/user/mordor/experiments/amalgamation/single_claims.py:14: SyntaxWarning: invalid escape sequence '\ '
+  C claims (multi-top transfer, Programme C: uniqueness of m dropped, m any target of rank K in R_K \ R_{K−1}):
+claim C_bm_eq_feeder: {'none': 179}
+--- single_claims.py C_a_feeder_le closure 5 10 1 10
+/home/user/mordor/experiments/amalgamation/single_claims.py:14: SyntaxWarning: invalid escape sequence '\ '
+  C claims (multi-top transfer, Programme C: uniqueness of m dropped, m any target of rank K in R_K \ R_{K−1}):
+claim C_a_feeder_le: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 1
+--- single_claims.py C_bm_eq_feeder closure 5 10 1 10
+/home/user/mordor/experiments/amalgamation/single_claims.py:14: SyntaxWarning: invalid escape sequence '\ '
+  C claims (multi-top transfer, Programme C: uniqueness of m dropped, m any target of rank K in R_K \ R_{K−1}):
+claim C_bm_eq_feeder: {'none': 10}
+--- python3 entry_height.py 1 180
+('index-tight stage; all earlier stages index-tight', False) 13
+('index-tight stage; all earlier stages index-tight', True) 1161
+('some new element of height < k', False, False) 9
+('some new element of height < k', False, True) 1136
+('some new element of height < k', True, False) 4
+('some new element of height < k', True, True) 25
+--- python3 entry_height.py 2 180
+('index-tight stage; all earlier stages index-tight', False) 7
+('index-tight stage; all earlier stages index-tight', True) 1091
+('some new element of height < k', False, False) 5
+('some new element of height < k', False, True) 1072
+('some new element of height < k', True, False) 2
+('some new element of height < k', True, True) 19

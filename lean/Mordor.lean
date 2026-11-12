@@ -128,3 +128,4 @@ import Mordor.ClippedIntervalCut
 import Mordor.TightStageEntry
 import Mordor.ColumnOrbitCell
 import Mordor.TightTransfer
+import Mordor.SingletonLowerTransfer

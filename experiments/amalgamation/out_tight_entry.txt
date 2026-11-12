@@ -1,0 +1,29 @@
+--- python3 tight_probe.py aentry closure 5 10 1 10
+aentry : lattices with a model: {'SAT': 10}
+smallest: |L| = 11, height 5, tight stage k = 2, T_k = [('{12}', 'stage', 2, 'a', '{}', 'b', '{2}', 'diag', False), ('{23}', 'stage', 1, 'a', '{12}', 'b', '{}', 'diag', False), ('{04}', 'stage', 1, 'a', '{24}', 'b', '{}', 'diag', False), ('{24}', 'stage', 2, 'a', '{1234}', 'b', '{2}', 'diag', True)]
+--- python3 tight_probe.py aentry noic sweep 4 16
+aentry noic: lattices with a model: {'UNSAT': 179}
+--- python3 tight_probe.py aentry sweep 4 16
+aentry : lattices with a model: {'UNSAT': 85, 'SAT': 94}
+smallest: |L| = 6, height 4, tight stage k = 2, T_k = [('{01}', 'stage', 2, 'a', '{0}', 'b', '{0}', 'diag', False)]
+--- python3 tight_probe.py fibre bonly sweep 4 16
+fibre bonly: lattices with a model: {'UNSAT': 132, 'SAT': 47}
+smallest: |L| = 7, height 4, tight stage k = 2, T_k = [('{01}', 'stage', 2, 'a', '{}', 'b', '{0}', 'diag', False), ('{02}', 'stage', 1, 'a', '{01}', 'b', '{}', 'diag', False), ('{03}', 'stage', 2, 'a', '{}', 'b', '{02}', 'diag', False)]
+--- python3 tight_probe.py fibre closure 5 10 1 10
+fibre : lattices with a model: {'SAT': 10}
+smallest: |L| = 11, height 5, tight stage k = 2, T_k = [('{12}', 'stage', 2, 'a', '{1234}', 'b', '{2}', 'diag', False), ('{23}', 'stage', 1, 'a', '{2}', 'b', '{}', 'diag', False), ('{04}', 'stage', 2, 'a', '{}', 'b', '{23}', 'diag', False), ('{24}', 'stage', 1, 'a', '{}', 'b', '{}', 'diag', False)]
+--- python3 tight_probe.py fibre sweep 4 16
+fibre : lattices with a model: {'UNSAT': 107, 'SAT': 72}
+smallest: |L| = 7, height 4, tight stage k = 2, T_k = [('{01}', 'stage', 2, 'a', '{012}', 'b', '{012}', 'diag', True), ('{02}', 'stage', 2, 'a', '{01}', 'b', '{0123}', 'diag', False)]
+--- python3 tight_probe.py fibre minfibre bonly closure 5 10 2 10
+fibre minfibre bonly: lattices with a model: {'SAT': 10}
+smallest: |L| = 9, height 4, tight stage k = 2, T_k = [('{02}', 'stage', 2, 'a', '{}', 'b', '{0}', 'diag', False), ('{04}', 'stage', 1, 'a', '{}', 'b', '{}', 'diag', False)]
+--- python3 tight_probe.py fibre minfibre bonly sweep 4 16
+fibre minfibre bonly: lattices with a model: {'UNSAT': 95, 'SAT': 84}
+smallest: |L| = 6, height 4, tight stage k = 2, T_k = [('{01}', 'stage', 2, 'a', '{0}', 'b', '{0}', 'diag', False), ('{02}', 'stage', 1, 'a', '{}', 'b', '{}', 'diag', False)]
+--- python3 tight_probe.py fibre minfibre closure 5 10 1 10
+fibre minfibre: lattices with a model: {'SAT': 10}
+smallest: |L| = 11, height 5, tight stage k = 1, T_k = [('{2}', 'stage', 1, 'a', '{4}', 'b', '{}', 'diag', False), ('{4}', 'stage', 1, 'a', '{24}', 'b', '{4}', 'diag', True)]
+--- python3 tight_probe.py fibre minfibre sweep 4 16
+fibre minfibre: lattices with a model: {'UNSAT': 28, 'SAT': 151}
+smallest: |L| = 5, height 3, tight stage k = 1, T_k = [('{0}', 'stage', 1, 'a', '{01}', 'b', '{0}', 'diag', True), ('{1}', 'stage', 1, 'a', '{0}', 'b', '{}', 'diag', False)]

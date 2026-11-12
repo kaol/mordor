@@ -20,3 +20,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 
 - §34.3z¹⁵²: `tight_probe.py (aentry [noic] | fibre [bonly] [minfibre]) …`: exact tight-stage entry routes and the maximal/minimal b-fibre conjectures (both refuted). Output `out_tight_entry.txt`.
 - §34.3z¹⁵³: `tight_probe.py gfp [single] [noic] [some] …`: exact Tight-GFP (some top has y* = m or F(m, y*) = y*; no counterexample found); `single_top.py SEED SECONDS`, `gfp_top.py SEED SECONDS`: random single-top and column-orbit statistics. Output `out_gfp.txt`.
+- §34.3z¹⁵⁴: `tight_probe.py old [single] [some] …` (New-top: some tight-stage top is new; no counterexample) and `tight_probe.py transfer [noic] [some] …` (consecutive tight stages: some cell target has a cell; no counterexample); `ic_entry.py`, `gfp_fail.py`, `layer_transfer.py SEED SECONDS`: random entry-stage, GFP-failure and transfer statistics. Output `out_transfer.txt`.

@@ -1,0 +1,178 @@
+# Old tops, New-top and layer transfer (log §34.3z¹⁵⁴). Exact results are SAT/UNSAT of tight_probe.py, every model
+# re-simulated with rstages.stages; random results are counts, not proofs.
+--- python3 ic_entry.py 1 250
+tight stages 1659
+('single top: new', True) 1397
+('some new top has IC', True) 1659
+('some top new', True) 1659
+('top: (IC, GFP, new, diag)', False, False, False, False) 30
+('top: (IC, GFP, new, diag)', False, False, True, False) 297
+('top: (IC, GFP, new, diag)', True, False, True, False) 27
+('top: (IC, GFP, new, diag)', True, True, True, False) 184
+('top: (IC, GFP, new, diag)', True, True, True, True) 1499
+--- python3 ic_entry.py 2 250
+tight stages 1543
+('single top: new', True) 1319
+('some new top has IC', True) 1543
+('some top new', True) 1543
+('top: (IC, GFP, new, diag)', False, False, False, False) 18
+('top: (IC, GFP, new, diag)', False, False, True, False) 253
+('top: (IC, GFP, new, diag)', True, False, True, False) 23
+('top: (IC, GFP, new, diag)', True, True, True, False) 169
+('top: (IC, GFP, new, diag)', True, True, True, True) 1408
+--- python3 gfp_fail.py 1 270
+GFP-failing tops 377
+('F(m,m) ≤ m', False) 43
+('F(m,m) ≤ m', True) 334
+('IC(m)', False) 348
+('IC(m)', True) 29
+('a(m) ≤ m ⊓ w', False) 229
+('a(m) ≤ m ⊓ w', True) 148
+('b(w) ∈ R_k', False) 54
+('b(w) ∈ R_k', True) 323
+('b(y*) ∈ R_k', False) 223
+('b(y*) ∈ R_k', True) 154
+('b(y*) ≤ m', False) 377
+('m ⊓ w = b(m)?', False) 37
+('m ⊓ w = b(m)?', True) 340
+('rank w vs k', -1) 11
+('rank w vs k', 0) 274
+('rank w vs k', 1) 92
+('some other top ≤ w', False) 11
+('some other top ≤ w', True) 366
+('some other top ≤ y*', True) 377
+('w ∈ R_k', False) 92
+('w ∈ R_k', True) 285
+('w ∈ R_k+1', False) 7
+('w ∈ R_k+1', True) 370
+('y* = m ⊔ some other top', False) 41
+('y* = m ⊔ some other top', True) 336
+('y* covers m', False) 130
+('y* covers m', True) 247
+('y* ∈ R_k+1', False) 147
+('y* ∈ R_k+1', True) 230
+('|T_k|', 2) 165
+('|T_k|', 3) 170
+('|T_k|', 4) 38
+('|T_k|', 5) 4
+--- python3 gfp_fail.py 2 270
+GFP-failing tops 310
+('F(m,m) ≤ m', False) 33
+('F(m,m) ≤ m', True) 277
+('IC(m)', False) 286
+('IC(m)', True) 24
+('a(m) ≤ m ⊓ w', False) 169
+('a(m) ≤ m ⊓ w', True) 141
+('b(w) ∈ R_k', False) 39
+('b(w) ∈ R_k', True) 271
+('b(y*) ∈ R_k', False) 175
+('b(y*) ∈ R_k', True) 135
+('b(y*) ≤ m', False) 310
+('m ⊓ w = b(m)?', False) 37
+('m ⊓ w = b(m)?', True) 273
+('rank w vs k', -1) 4
+('rank w vs k', 0) 229
+('rank w vs k', 1) 77
+('some other top ≤ w', False) 7
+('some other top ≤ w', True) 303
+('some other top ≤ y*', True) 310
+('w ∈ R_k', False) 80
+('w ∈ R_k', True) 230
+('w ∈ R_k+1', False) 2
+('w ∈ R_k+1', True) 308
+('y* = m ⊔ some other top', False) 30
+('y* = m ⊔ some other top', True) 280
+('y* covers m', False) 95
+('y* covers m', True) 215
+('y* ∈ R_k+1', False) 121
+('y* ∈ R_k+1', True) 189
+('|T_k|', 2) 137
+('|T_k|', 3) 124
+('|T_k|', 4) 45
+('|T_k|', 6) 4
+--- python3 gfp_fail.py 3 270
+GFP-failing tops 359
+('F(m,m) ≤ m', False) 33
+('F(m,m) ≤ m', True) 326
+('IC(m)', False) 342
+('IC(m)', True) 17
+('a(m) ≤ m ⊓ w', False) 197
+('a(m) ≤ m ⊓ w', True) 162
+('b(w) ∈ R_k', False) 49
+('b(w) ∈ R_k', True) 310
+('b(y*) ∈ R_k', False) 223
+('b(y*) ∈ R_k', True) 136
+('b(y*) ≤ m', False) 359
+('m ⊓ w = b(m)?', False) 36
+('m ⊓ w = b(m)?', True) 323
+('rank w vs k', -1) 9
+('rank w vs k', 0) 256
+('rank w vs k', 1) 94
+('some other top ≤ w', False) 10
+('some other top ≤ w', True) 349
+('some other top ≤ y*', False) 2
+('some other top ≤ y*', True) 357
+('w ∈ R_k', False) 95
+('w ∈ R_k', True) 264
+('w ∈ R_k+1', False) 2
+('w ∈ R_k+1', True) 357
+('y* = m ⊔ some other top', False) 47
+('y* = m ⊔ some other top', True) 312
+('y* covers m', False) 119
+('y* covers m', True) 240
+('y* ∈ R_k+1', False) 152
+('y* ∈ R_k+1', True) 207
+('|T_k|', 2) 150
+('|T_k|', 3) 164
+('|T_k|', 4) 41
+('|T_k|', 5) 4
+lonely failures 2 smallest |L| 13
+--- python3 layer_transfer.py 1 250
+tight stages k ≥ 2 57
+('lower-only target has IC', False) 6
+('lower-only target has IC', True) 23
+('no upper target: some lower target has IC', True) 21
+('some target has IC', True) 41
+('stage k−1 not tight: max height of R_{k−1} − (k−1)', 1) 16
+('targets: upper present', False) 21
+('targets: upper present', True) 20
+--- python3 layer_transfer.py 2 250
+tight stages k ≥ 2 51
+('lower-only target has IC', False) 11
+('lower-only target has IC', True) 19
+('no upper target: some lower target has IC', True) 15
+('some target has IC', True) 35
+('stage k−1 not tight: max height of R_{k−1} − (k−1)', 1) 16
+('targets: upper present', False) 15
+('targets: upper present', True) 20
+--- python3 layer_transfer.py 3 250
+tight stages k ≥ 2 57
+('lower-only target has IC', False) 9
+('lower-only target has IC', True) 22
+('no upper target: some lower target has IC', True) 20
+('some target has IC', True) 36
+('stage k−1 not tight: max height of R_{k−1} − (k−1)', 1) 21
+('targets: upper present', False) 20
+('targets: upper present', True) 16
+--- python3 tight_probe.py old sweep 4 16
+old : lattices with a model: {'UNSAT': 179}
+--- python3 tight_probe.py old single sweep 4 16
+old single: lattices with a model: {'UNSAT': 179}
+--- python3 tight_probe.py old closure 5 10 1 10
+old : lattices with a model: {'UNSAT': 10}
+--- python3 tight_probe.py old closure 5 14 3 20
+old : lattices with a model: {'UNSAT': 20}
+--- python3 tight_probe.py old some sweep 4 16   (control)
+old some: lattices with a model: {'UNSAT': 95, 'SAT': 84}
+smallest: |L| = 6, height 4, tight stage k = 2, T_k = [('{01}', 'stage', 2, 'a', '{}', 'b', '{0}', 'diag', False, 'y*', '{01}', 'F(m,y*)', '{0}'), ('{02}', 'stage', 1, 'a', '{}', 'b', '{}', 'diag', False, 'y*', '{012}', 'F(m,y*)', '{01}')]
+--- python3 tight_probe.py transfer sweep 4 16
+transfer : lattices with a model: {'UNSAT': 179}
+--- python3 tight_probe.py transfer closure 5 10 1 10
+transfer : lattices with a model: {'UNSAT': 10}
+--- python3 tight_probe.py transfer closure 5 14 3 20
+transfer : lattices with a model: {'UNSAT': 20}
+--- python3 tight_probe.py transfer closure 6 10 4 8
+transfer : lattices with a model: {'UNSAT': 8}
+--- python3 tight_probe.py transfer some sweep 4 16   (control)
+transfer some: lattices with a model: {'UNSAT': 95, 'SAT': 84}
+smallest: |L| = 6, height 4, tight stage k = 2, T_k = [('{01}', 'stage', 2, 'a', '{02}', 'b', '{0}', 'diag', False, 'y*', '{012}', 'F(m,y*)', '{02}'), ('{02}', 'stage', 2, 'a', '{012}', 'b', '{02}', 'diag', True, 'y*', '{012}', 'F(m,y*)', '{012}')]

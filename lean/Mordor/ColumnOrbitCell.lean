@@ -13,9 +13,18 @@ For `m` fix the column map `g y = m ⊔ F m y` and its descending orbit from the
   `F m y*` is **incomparable** to `m`. In the case `m ≤ F m y*` one gets `F m y* = y*`, an upper cell.
 
 So `GFP(m)` (`y* = m` or `F m y* = y*`) implies `IC(m)`; the converse fails per element (log §34.3z¹⁵³).
+
+**Old tops (§34.3z¹⁵⁴).** At a tight stage `k + 1`, a top element `m` that already lies in `R_k` has no interval
+cell (`old_top_no_cell`): a cell `(m, y)` would put `y > m` into `R_{k+1}`, above the height bound. So every
+TightIC witness is a *new* top element (`tightIC_witness_new`).
+
+**Upper transfer (§34.3z¹⁵⁴).** If the TightIC witness at stage `k` is an upper cell `(m, y)` (`y ≤ F m y`) and
+stage `k + 1` is tight, then `y` is a top element of stage `k + 1`, it is diagonal (`y ≤ F m y ≤ F y y`), and so
+it has an interval cell (`tightIC_succ_of_upper`). Only lower cells fail to transfer.
 -/
 
 namespace Mordor.OrbitHeight
+open Mordor Mordor.Ground Mordor.GapPotential
 
 set_option linter.unusedSectionVars false
 
@@ -85,5 +94,32 @@ theorem colOrb_dichotomy [WellFoundedLT α] {m : α} (ht : m ≠ ⊤) :
   by_cases hlo : F m (colOrb F m n) ≤ m
   · exact Or.inl ⟨_, hlt, Or.inl hlo⟩
   exact Or.inr ⟨n, hlt, hfix, fun z hz => post_le_colOrb hz n, hup, hlo⟩
+
+/-- **Old tops have no cell.** -/
+theorem old_top_no_cell {H : ℕ} (hn : NoChain α (H + 1)) {k : ℕ}
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m : α} (hm : m ∈ Rk F k) (hmk : height H m = k + 1) :
+    ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y) := by
+  rintro ⟨y, hmy, hw⟩
+  have hy := hall y (mem_succ_of_cell hm le_rfl hw)
+  have := height_strictMono hn hmy
+  omega
+
+/-- **TightIC witnesses are new.** A top element of a tight stage `k + 1` with an interval cell is not in `R_k`. -/
+theorem tightIC_witness_new {H : ℕ} (hn : NoChain α (H + 1)) {k : ℕ}
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m : α} (hmk : height H m = k + 1)
+    (hic : ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : m ∉ Rk F k :=
+  fun hm => old_top_no_cell hn hall hm hmk hic
+
+/-- **Upper transfer.** An upper cell at a top of stage `k` gives an interval cell at a top of the tight
+stage `k + 1`. -/
+theorem tightIC_succ_of_upper [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) {k : ℕ}
+    (htop : (⊤ : α) ∉ Rk F (k + 2)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m y : α}
+    (hm : m ∈ Rk F k) (hmk : height H m = k) (hmy : m < y) (hup : y ≤ F m y) :
+    ∃ t ∈ Rk F (k + 1), height H t = k + 1 ∧ ∃ z, t < z ∧ (F t z ≤ t ∨ z ≤ F t z) := by
+  have hy : y ∈ Rk F (k + 1) := mem_succ_of_cell hm le_rfl (Or.inr hup)
+  have h1 := height_strictMono hn hmy
+  have h2 := hall y hy
+  have hyt : y ≠ ⊤ := fun h => htop (h ▸ Rk_mono (Nat.le_succ _) hy)
+  exact ⟨y, hy, by omega, upc_of_le_diag (hup.trans (F.mono hmy.le y)) hyt⟩
 
 end Mordor.OrbitHeight

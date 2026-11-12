@@ -12,6 +12,11 @@ Models are decoded and re-simulated with rstages.stages.
   gfp    : counterexample to Tight-GFP (§34.3z¹⁵³): no m ∈ T_k satisfies GFP(m), i.e. for every m ∈ T_k the greatest
            fixed point y* of y ↦ m ⊔ F(m, y) has y* ≠ m and F(m, y*) ≠ y* ('single': |T_k| = 1; 'noic': and no
            element of T_k has an interval cell; 'some': sanity control, only some m ∈ T_k fails GFP).
+  old    : a tight stage all of whose top elements are old (T_k ⊆ R_{k−1}) ('single': |T_k| = 1; 'some': control, some top old) (§34.3z¹⁵⁴).
+  transfer: consecutive tight stages k − 1, k (k ≥ 2) where no cell target t ∈ T_k of a top m' ∈ T_{k−1}
+           (m' < t, F(m', t) ≤ m' or t ≤ F(m', t)) has an interval cell (§34.3z¹⁵⁴; 'noic': no top of T_k has one; 'some': control, some target lacks a cell).
+  python3 tight_probe.py transfer [noic] (sweep P NMAX | closure K M SEED COUNT)
+  python3 tight_probe.py old [single] (sweep P NMAX | closure K M SEED COUNT)
   python3 tight_probe.py gfp [single] [noic] (sweep P NMAX | closure K M SEED COUNT)
   python3 tight_probe.py (aentry [noic] | fibre [bonly] [minfibre]) (sweep P NMAX | closure K M SEED COUNT)
 """
@@ -63,7 +68,35 @@ def query(L, k, mode, opt):
             for g in range(n):
                 o = E.v('be', m, j, g); E.iff_and(o, [-r(j, m), r(j + 1, m), E.v('B', m, g), r(j, g)]); lits.append(o)
         o = E.v('bent', m); E.iff_or(o, lits); return o
-    if mode == 'gfp':
+    if mode == 'transfer':
+        if k < 2: return None
+        P = [z for z in range(n) if rk[z] == k - 1]
+        for z in range(n):
+            if rk[z] > k - 1: E.S.add_clause([-r(k - 1, z)])
+        E.S.add_clause([r(k - 1, z) for z in P])
+        for t in T:
+            lits = []
+            for mp in P:
+                if not le[mp][t]: continue
+                c = E.v('cellor', mp, t); E.iff_or(c, [fle(mp, t, mp), yle(mp, t)])
+                o = E.v('tgt', mp, t); E.iff_and(o, [r(k - 1, mp), c]); lits.append(o)
+            if 'some' in opt:                  # control: some target lacks a cell
+                tg = E.v('tg', t); E.iff_or(tg, lits); pk = E.v('pick', t); E.iff_and(pk, [tg, -ic(t)])
+            else:
+                for o in lits: E.S.add_clause([-o, -ic(t)])
+            if 'noic' in opt: E.S.add_clause([-r(k, t), -ic(t)])
+        E.S.add_clause([r(k, t) for t in T])
+        if 'some' in opt: E.S.add_clause([E.v('pick', t) for t in T])
+    elif mode == 'old':
+        if 'some' in opt:                      # control: some top old
+            for m in T: E.v('pick', m); E.iff_and(E.vars[('pick', m)], [r(k, m), r(k - 1, m)])
+            E.S.add_clause([E.vars[('pick', m)] for m in T])
+        else:
+            for m in T: E.S.add_clause([-r(k, m), r(k - 1, m)])
+            E.S.add_clause([r(k, m) for m in T])
+        if 'single' in opt:
+            for m, m2 in itertools.combinations(T, 2): E.S.add_clause([-r(k, m), -r(k, m2)])
+    elif mode == 'gfp':
         jn = L.join
         for m in T:
             ys = [E.v('ys', m, y) for y in range(n) if le[m][y]]
@@ -125,6 +158,17 @@ if __name__ == '__main__':
             res = query(L, k, mode, opt)
             if res:
                 st = stages(L, res); hit = (k, res, st)
+                if mode == 'transfer':                # re-simulate: consecutive tight stages, no target has IC
+                    for j in (k - 1, k):
+                        assert (st[L.top] is None or st[L.top] > j + 1) and max(L.rank[z] for z in range(L.n) if st[z] is not None and st[z] <= j) == j
+                    P = [z for z in range(L.n) if st[z] is not None and st[z] <= k - 1 and L.rank[z] == k - 1]
+                    for t in range(L.n):
+                        if any(L.le[mp][t] and mp != t and (L.le[res[mp][t]][mp] or L.le[t][res[mp][t]]) for mp in P):
+                            assert st[t] <= k and L.rank[t] == k and ('some' in opt or not ic_py(L, res, t))
+                if mode == 'old':                     # re-simulate: tight stage, every top old
+                    Tk = [m for m in range(L.n) if st[m] is not None and st[m] <= k and L.rank[m] == k]
+                    assert (st[L.top] is None or st[L.top] > k + 1) and all(L.rank[z] <= k for z in range(L.n) if st[z] is not None and st[z] <= k)
+                    assert Tk and (any if 'some' in opt else all)(st[m] < k for m in Tk)
                 if mode == 'gfp':                     # re-simulate: tight stage, no top satisfies GFP
                     Tk = [m for m in range(L.n) if st[m] is not None and st[m] <= k and L.rank[m] == k]
                     assert (st[L.top] is None or st[L.top] > k + 1) and all(L.rank[z] <= k for z in range(L.n) if st[z] is not None and st[z] <= k) and Tk

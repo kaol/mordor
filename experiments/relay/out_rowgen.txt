@@ -1,0 +1,57 @@
+=== §34.3z¹⁴⁸ named-column minimization (relay_probe.py terminal forest named:SET orbit=2 rows=1 closure 6 12 1 6)
+--- named:u,w,t
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u,w,t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{4}', '{5}', '{12}', '{24}', '{25}'], s = {2}, a = {24}, b = {25}, u = {234}
+--- named:u,w,v,t
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u,w,v,t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{3}', '{4}', '{5}', '{24}', '{45}'], s = {4}, a = {24}, b = {45}, u = {234}
+--- named:u,t
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u,t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{4}', '{5}', '{12}', '{24}', '{25}'], s = {2}, a = {24}, b = {25}, u = {234}
+--- named:u,v,t
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u,v,t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{3}', '{4}', '{5}', '{24}', '{25}'], s = {2}, a = {24}, b = {25}, u = {234}
+--- named:t
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{4}', '{5}', '{12}', '{24}', '{25}'], s = {2}, a = {24}, b = {25}, u = {234}
+--- + botdown (F(⊥, y) ≠ ⊥ below u ⊔ v)
+--- bd_u,w,v,t
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u,w,v,t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{3}', '{4}', '{5}', '{24}', '{25}'], s = {2}, a = {24}, b = {25}, u = {234}
+--- bd_u,t
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u,t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{3}', '{4}', '{14}', '{24}'], s = {4}, a = {24}, b = {14}, u = {124}
+--- bd_t
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:t): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{3}', '{4}', '{14}', '{24}'], s = {4}, a = {24}, b = {14}, u = {124}
+--- bd_u
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u): {'SAT': 2, 'UNSAT': 4}
+smallest model: |L| = 22, height 6, D = ['{}', '{1}', '{2}', '{3}', '{4}', '{5}', '{12}', '{24}', '{25}'], s = {2}, a = {24}, b = {25}, u = {234}
+--- bd2
+case terminal (u = orbit value 2) (row orbits 1) (star forest) (witness-free columns: named:u,w,v,t): {'SAT': 3, 'UNSAT': 3}
+smallest model: |L| = 25, height 6, D = ['{}', '{0}', '{1}', '{4}', '{5}', '{04}', '{14}', '{24}', '{34}'], s = {4}, a = {14}, b = {04}, u = {014}
+--- bd3
+case terminal (u = orbit value 3) (row orbits 1) (star forest) (witness-free columns: named:u,w,v,t): {'UNSAT': 6}
+(bd2: seed 2; bd3: orbit=3)
+=== rowgen_probe.py: witness localization in the row-generated closure
+--- rg_blocks4
+rows blocks: {'UNSAT': 179}
+--- rg_blocks5
+rows blocks: {'UNSAT': 7, ('SAT', 'stars with ≥2 blocks', 1): 8}
+smallest: |L| = 15, height 5, D = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}'], least W = ['{01234}', '{0123}', '{0134}', '{01}', '{034}', '{03}', '{0}', '{34}', '{3}', '{}']
+--- rg_D4
+rows D: {'UNSAT': 179}
+--- rg_D5
+rows D: {'UNSAT': 15}
+--- ra4 (anycut)
+rows D (any cut): {'UNSAT': 179}
+--- ra5_1 (anycut)
+rows D (any cut): {'UNSAT': 12}
+--- ra5_2 (anycut)
+rows D (any cut): {'UNSAT': 12}
+--- ra5_3 (anycut)
+rows D (any cut): {'UNSAT': 12}
+--- ra6 (anycut)
+rows D (any cut): {'UNSAT': 4}
+--- rab4 (anycut)
+rows blocks (any cut): {'UNSAT': 179}

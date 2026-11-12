@@ -9,3 +9,7 @@ chosen end case of `relay_meet_update`, and witness-freeness only on the chosen 
 §34.3z¹⁴⁷: options `orbit=K` (u is the K-th value of the F(⊥, ·)-orbit of ⊤, witness-free along it) and `rows=R`
 (witness-freeness along the first R values of the ⊤-orbits of F(s, ·), F(a, ·), F(b, ·)). Output
 `out_relay_orbit.txt`; models `orbit_terminal_min27.json`, `orbit1_rows_min25.json`.
+
+§34.3z¹⁴⁸: `relay_probe.py … named:u,w,v,t [botdown]` (witness-freeness only at named columns, t = u ⊔ v);
+`rowgen_probe.py [anycut] (blocks | D) …` (witness localization in the closure of ⊤ under the rows of ⊥ + blocks, or of
+all of D). Output `out_rowgen.txt`; models `named_uwvt_min22.json`, `bd_min22.json`, `rowgen_blocks_min15.json`.

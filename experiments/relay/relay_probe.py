@@ -8,6 +8,8 @@ with centre s; relay at u; the chosen end case; witness-freeness for all x ∈ D
 Option 'nearcell': also require the near-cell of BottomMaxCell.near_cell_of_atomic_over at the private seed p
 (some x ∈ {p, a}, y ∉ D, p < y, y ≤ p ⊔ F(x, y), y ≰ F(x, y)) together with witness-freeness at that column y.
 Option 'global': witness-freeness at every column (then UNSAT by the finite Cut Lemma: a control).
+Option 'named:u,w,v,t': witness-freeness only at the named columns (t = u ⊔ v); 'botdown': in addition
+F(⊥, y) ≠ ⊥ for every y ∉ D below u ⊔ v (the bottom row's lower half only).
 Option 'forest': D is a star forest. Option 'orbit=K': u is the K-th value of the F(⊥, ·)-orbit of ⊤, every orbit value
 up to u lies outside D and carries witness-freeness. Option 'rows=K': witness-freeness along the first K values of
 the ⊤-orbits of F(s, ·), F(a, ·), F(b, ·).
@@ -39,6 +41,7 @@ class Enc:
         for l in lits: self.cl([-o, l])
         self.cl([o] + [-l for l in lits])
 
+BOTDOWN = False    # 'botdown': with named columns, also F(⊥, y) ≠ ⊥ for every y ∉ D below u ⊔ v
 ROWS = 0           # 'rows=K': witness-freeness along the first K values of the ⊤-orbits of F(s, ·), F(a, ·), F(b, ·)
 ORBIT = 0          # 'orbit=K': u is the K-th value of the F(⊥, ·)-orbit of ⊤ (all earlier values ∉ D, witness-free)
 FOREST = False     # 'forest': D is a star forest (no block contains two points shared with other blocks)
@@ -135,11 +138,16 @@ def build(L, case, nearcell, glob):
             for a in range(n):
                 for v in range(n):
                     w = meet[u][v]
-                    ys = ([y for y in range(n) if le[w][y] and le[y][u]] if COLS == 'interval' else
+                    named = {'u': u, 'w': w, 'v': v, 't': join[u][v]}
+                    ys = (sorted({named[k] for k in COLS[6:].split(',')}) if COLS.startswith('named:') else
+                          [y for y in range(n) if le[w][y] and le[y][u]] if COLS == 'interval' else
                           [y for y in range(n) if le[y][u] or le[y][v]] if COLS == 'updown' else
                           [y for y in range(n) if le[y][join[u][v]]] if COLS == 'join' else sorted({u, w}))
                     for y in ys:
                         for x in range(n): nw(x, y, [-U(u), -A(a), -f(a, u, v)])
+                    if BOTDOWN:                         # only F(⊥, y) ≰ ⊥ on every column y ≤ u ⊔ v
+                        for y in range(n):
+                            if le[y][join[u][v]]: E.cl([-U(u), -A(a), -f(a, u, v), d(y), -fle(bot, y, bot)])
     for u in range(n):                                                  # relay at u
         E.cl([-U(u), -d(u)])
         for s in range(n): E.cl([-U(u), -S_(s), fle(bot, u, s)])
@@ -196,7 +204,9 @@ def check(L, F, D, pick, case):
     w = L.meet[u][F[a][u]]
     for y in range(n):
         v = F[a][u]
-        inc = (le[y][u] if COLS == 'down' else (le[w][y] and le[y][u]) if COLS == 'interval' else
+        named = {'u': u, 'w': w, 'v': v, 't': L.join[u][v]}
+        inc = (y in {named[k] for k in COLS[6:].split(',')} if COLS.startswith('named:') else
+               le[y][u] if COLS == 'down' else (le[w][y] and le[y][u]) if COLS == 'interval' else
                (le[y][u] or le[y][v]) if COLS == 'updown' else le[y][L.join[u][v]] if COLS == 'join' else y in (u, w))
         if inc and not D[y]:
             for x in range(n):
@@ -215,14 +225,17 @@ def lattices(args):
 if __name__ == '__main__':
     args = sys.argv[1:]; case = args.pop(0)
     nearcell = 'nearcell' in args; glob = 'global' in args
-    FOREST = 'forest' in args
+    FOREST = 'forest' in args; BOTDOWN = 'botdown' in args
     for x in args:
         if x.startswith('orbit='): ORBIT = int(x.split('=')[1])
         if x.startswith('rows='): ROWS = int(x.split('=')[1])
     args = [x for x in args if not x.startswith('orbit=') and not x.startswith('rows=')]
     for c in ('interval', 'two', 'updown', 'join'):
         if c in args: COLS = c
-    args = [x for x in args if x not in ('nearcell', 'global', 'interval', 'two', 'updown', 'join', 'forest')]
+    for x in args:
+        if x.startswith('named:'): COLS = x
+    args = [x for x in args if not x.startswith('named:')]
+    args = [x for x in args if x not in ('nearcell', 'global', 'interval', 'two', 'updown', 'join', 'forest', 'botdown')]
     T = collections.Counter(); best = None
     for L in lattices(args):
         if L.height < 3: continue

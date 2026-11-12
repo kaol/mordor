@@ -22,8 +22,8 @@ Assuming `OHAt H'` for every `H' < H` (in the same universe):
   diagonal post-fixed point).
 * `top_mem_reduction`: so `OHAt H` (hence Cut at edge-height `H`) reduces, given the lower heights, to the
   **rigid** maps: `a ⊥ = ⊥`, `b ⊤ = ⊤`, and the diagonal `x ↦ F x x` fixes only `⊥` and `⊤`.
-* `Rise F H` (**conjecture**, exact evidence §34.3z¹⁵⁷): `b ⊤ ≠ ⊤`, or a diagonal fixed point `∉ {⊥, ⊤}`, or a good
-  `x < a x`. `top_mem_of_rise`; `ohAt_of_riseAt`: Rise at every height `≤ H` gives `OHAt H` by strong induction;
+* `Rise F H` (**conjecture**, exact evidence §34.3z¹⁵⁷): `⊥ = ⊤` (the degenerate lattice), or `b ⊤ ≠ ⊤`, or a
+  diagonal fixed point `∉ {⊥, ⊤}`, or a good `x < a x`. `top_mem_of_rise`; `ohAt_of_riseAt`: Rise at every height `≤ H` gives `OHAt H` by strong induction;
   `cutMaps_of_riseAt`: hence Cut at edge-height `H`.
 -/
 
@@ -145,11 +145,12 @@ theorem top_mem_reduction {H : ℕ} (IH : ∀ H' < H, OHAt.{u} H') (hn : NoChain
 
 /-- **Rise** (conjecture): one of the three reductions applies. -/
 def Rise (F : α →o α →o α) (H : ℕ) : Prop :=
-  b F ⊤ ≠ ⊤ ∨ (∃ c, F c c = c ∧ c ≠ ⊥ ∧ c ≠ ⊤) ∨ ∃ x j, x ∈ Rk F j ∧ j ≤ height H x ∧ x < a F x
+  (⊥ : α) = ⊤ ∨ b F ⊤ ≠ ⊤ ∨ (∃ c, F c c = c ∧ c ≠ ⊥ ∧ c ≠ ⊤) ∨ ∃ x j, x ∈ Rk F j ∧ j ≤ height H x ∧ x < a F x
 
 theorem top_mem_of_rise {H : ℕ} (IH : ∀ H' < H, OHAt.{u} H') (hn : NoChain α (H + 1)) (h : Rise F H) :
     (⊤ : α) ∈ Rk F H := by
-  rcases h with hb | ⟨c, hc, h1, h2⟩ | ⟨x, j, hx, hj, hlt⟩
+  rcases h with h0 | hb | ⟨c, hc, h1, h2⟩ | ⟨x, j, hx, hj, hlt⟩
+  · exact h0 ▸ bot_mem_Rk H
   · exact top_mem_of_b_top IH hn hb
   · exact top_mem_of_diag_fixed IH hn hc h1 h2
   · exact top_mem_of_good_rise IH hn hx hj hlt
@@ -168,5 +169,156 @@ theorem ohAt_of_riseAt {H : ℕ} (h : ∀ H' ≤ H, RiseAt.{u} H') : OHAt.{u} H 
 /-- **Rise gives Cut.** -/
 theorem cutMaps_of_riseAt {H : ℕ} (h : ∀ H' ≤ H, RiseAt.{u} H') (hn : NoChain α (H + 1)) : CutMaps F :=
   cutMaps_of_top_mem (ohAt_of_riseAt h α F hn)
+
+/-! ### Base cases: Rise at edge-height `≤ 2` (§34.3z¹⁵⁸) -/
+
+theorem noChain_mono {n m : ℕ} (hn : NoChain α n) (h : n ≤ m) : NoChain α m :=
+  fun x hx => hn x (chainTo_mono' m n x hx h)
+
+/-- **Rise on lattices of height `≤ 2`.** If `a ⊥ = ⊥` and `b ⊤ = ⊤`, then `v = F ⊥ ⊤` is an atom with
+`F ⊥ v = ⊥` (so `v ∈ R₁`) and `F v ⊤ = ⊤` (so `v < a v`). -/
+theorem rise_of_noChain3 {H : ℕ} (hH : 1 ≤ H) (hn : NoChain α 3) : Rise F H := by
+  by_cases h0 : (⊥ : α) = ⊤
+  · exact Or.inl h0
+  by_cases hbt : b F ⊤ = ⊤
+  swap
+  · exact Or.inr (Or.inl hbt)
+  refine Or.inr (Or.inr (Or.inr ?_))
+  by_cases ha : a F ⊥ = ⊥
+  swap
+  · exact ⟨⊥, 0, bot_mem_Rk 0, Nat.zero_le _, bot_lt_iff_ne_bot.2 ha⟩
+  set v := F ⊥ ⊤ with hvdef
+  have hv0 : v ≠ ⊥ := fun e => h0 (by
+    have : b F ⊤ ≤ ⊥ := b_le (by rw [← hvdef, e])
+    rw [hbt] at this; exact (le_bot_iff.1 this).symm)
+  have hvt : v ≠ ⊤ := fun e => h0 (by
+    have : (⊤ : α) ≤ a F ⊥ := le_a (by rw [← hvdef, e])
+    rw [ha] at this; exact (le_bot_iff.1 this).symm)
+  -- in height ≤ 2, `⊥ < z < v` and `v < w < ⊤` are impossible
+  have hatom : ∀ z, z < v → z = ⊥ := fun z hz => by
+    by_contra hz0
+    exact hn ⊤ ⟨v, lt_top_iff_ne_top.2 hvt, ⟨z, hz, ⟨⊥, bot_lt_iff_ne_bot.2 hz0, trivial⟩⟩⟩
+  have hcoatom : ∀ w, v < w → w = ⊤ := fun w hw => by
+    by_contra hwt
+    exact hn ⊤ ⟨w, lt_top_iff_ne_top.2 hwt, ⟨v, hw, ⟨⊥, bot_lt_iff_ne_bot.2 hv0, trivial⟩⟩⟩
+  have hFv : F ⊥ v = ⊥ := by
+    have hle : F ⊥ v ≤ v := (F ⊥).mono le_top
+    rcases eq_or_lt_of_le hle with e | hlt
+    · exact absurd (le_bot_iff.1 (ha ▸ le_a e.symm.le)) hv0
+    · exact hatom _ hlt
+  have hvR : v ∈ Rk F 1 := mem_succ_of_b (show b F v ∈ Rk F 0 from b_le (le_of_eq hFv))
+  have hvlt : v < F v ⊤ := by
+    have hle : v ≤ F v ⊤ := F.mono bot_le ⊤
+    refine lt_of_le_of_ne hle fun e => hvt ?_
+    have : b F ⊤ ≤ v := b_le e.symm.le
+    rw [hbt] at this; exact top_le_iff.1 this
+  have htop : F v ⊤ = ⊤ := hcoatom _ hvlt
+  exact ⟨v, 1, hvR, one_le_height_of_ne_bot hv0 hH, lt_of_lt_of_le (lt_top_iff_ne_top.2 hvt) (le_a htop.ge)⟩
+
+theorem riseAt_zero : RiseAt.{u} 0 := fun β _ G hn => Or.inl (by
+  by_contra h
+  exact hn ⊤ ⟨⊥, bot_lt_iff_ne_bot.2 (Ne.symm h), trivial⟩)
+
+theorem riseAt_le_two {H : ℕ} (hH : H ≤ 2) : RiseAt.{u} H := by
+  rcases Nat.eq_zero_or_pos H with rfl | hpos
+  · exact riseAt_zero
+  · exact fun β _ G hn => rise_of_noChain3 hpos (noChain_mono hn (by omega))
+
+/-- **Rise on lattices of height `≤ 3`.** With `a ⊥ = ⊥`, `b ⊤ = ⊤` and `v = F ⊥ ⊤`:
+* if `F v ⊤ = ⊤`: either `F ⊥ v = ⊥` (so `v ∈ R₁` rises), or `p = F ⊥ v` is a good atom and either `v ∈ R₂` (via
+  `F p v ≤ p` or `v ≤ F p v`) or `F p ⊤ ≥ v ⊔ F p v = ⊤` (so `p` rises);
+* if `w = F v ⊤ < ⊤`: then `⊥ < v < w < ⊤`, `w` rises, and `w ∈ R₂` because `F ⊥ w ∈ {⊥, v}` and
+  `F v w ∈ {v, w}`. -/
+theorem rise_of_noChain4 {H : ℕ} (hH : 2 ≤ H) (hn : NoChain α 4) : Rise F H := by
+  by_cases h0 : (⊥ : α) = ⊤
+  · exact Or.inl h0
+  by_cases hbt : b F ⊤ = ⊤
+  swap
+  · exact Or.inr (Or.inl hbt)
+  refine Or.inr (Or.inr (Or.inr ?_))
+  by_cases ha : a F ⊥ = ⊥
+  swap
+  · exact ⟨⊥, 0, bot_mem_Rk 0, Nat.zero_le _, bot_lt_iff_ne_bot.2 ha⟩
+  have chain4 : ∀ x₁ x₂ x₃ : α, ⊥ < x₁ → x₁ < x₂ → x₂ < x₃ → x₃ < ⊤ → False := fun x₁ x₂ x₃ h1 h2 h3 h4 =>
+    hn ⊤ ⟨x₃, h4, ⟨x₂, h3, ⟨x₁, h2, ⟨⊥, h1, trivial⟩⟩⟩⟩
+  have hbtop : ∀ z, F z ⊤ ≤ z → z = ⊤ := fun z hz => top_le_iff.1 (hbt ▸ b_le hz)
+  have habot : ∀ z, z ≤ F ⊥ z → z = ⊥ := fun z hz => le_bot_iff.1 (ha ▸ le_a hz)
+  have hR1 : ∀ z, F ⊥ z = ⊥ → z ∈ Rk F 1 := fun z hz => mem_succ_of_b (show b F z ∈ Rk F 0 from b_le hz.le)
+  have hR2b : ∀ {y p : α}, p ∈ Rk F 1 → F p y ≤ p → y ∈ Rk F 2 := fun hp h =>
+    mem_succ_of_b (Rk_down 1 (b_le h) hp)
+  have hR2a : ∀ {y p : α}, p ∈ Rk F 1 → y ≤ F p y → y ∈ Rk F 2 := fun {y p} hp h => by
+    rw [Rk_succ]; exact ⟨a F p, le_a h, Or.inr (Or.inl ⟨p, hp, rfl⟩)⟩
+  have hgood1 : ∀ {z : α}, z ≠ ⊥ → 1 ≤ height H z := fun hz => one_le_height_of_ne_bot hz (by omega)
+  have hgood2 : ∀ {p z : α}, ⊥ < p → p < z → 2 ≤ height H z := fun {p z} hp hz => le_height hH ⟨p, hz, ⟨⊥, hp, trivial⟩⟩
+  set v := F ⊥ ⊤ with hvdef
+  have hv0 : v ≠ ⊥ := fun e => h0 (hbtop ⊥ (by rw [← hvdef, e]))
+  have hvt : v ≠ ⊤ := fun e => h0 (habot ⊤ (by rw [← hvdef, e])).symm
+  have hFbv : F ⊥ v < v := lt_of_le_of_ne ((F ⊥).mono le_top) fun e => hv0 (habot v e.symm.le)
+  by_cases hA : F v ⊤ = ⊤
+  · have hvrise : v < a F v := lt_of_lt_of_le (lt_top_iff_ne_top.2 hvt) (le_a hA.ge)
+    by_cases hp0 : F ⊥ v = ⊥
+    · exact ⟨v, 1, hR1 v hp0, hgood1 hv0, hvrise⟩
+    set p := F ⊥ v with hpdef
+    have hpb : ⊥ < p := bot_lt_iff_ne_bot.2 hp0
+    have hpR : p ∈ Rk F 1 := hR1 p (by
+      have hle : F ⊥ p ≤ p := (F ⊥).mono hFbv.le
+      rcases eq_or_lt_of_le hle with e | hlt
+      · exact absurd (habot p e.symm.le) hp0
+      · by_contra hz; exact chain4 _ _ _ (bot_lt_iff_ne_bot.2 hz) hlt hFbv (lt_top_iff_ne_top.2 hvt))
+    by_cases h1 : F p v ≤ p
+    · exact ⟨v, 2, hR2b hpR h1, hgood2 hpb hFbv, hvrise⟩
+    by_cases h2 : v ≤ F p v
+    · exact ⟨v, 2, hR2a hpR h2, hgood2 hpb hFbv, hvrise⟩
+    -- `w' = F p v` lies above `p`, is not below `p` and not above `v`; then `F p ⊤ = ⊤`
+    have hpw : p ≤ F p v := F.mono bot_le v
+    have hFpt : F p ⊤ = ⊤ := by
+      by_contra hne
+      have hvle : v ≤ F p ⊤ := F.mono bot_le ⊤
+      have hwle : F p v ≤ F p ⊤ := (F p).mono le_top
+      rcases eq_or_lt_of_le hvle with e | hlt
+      · -- `F p v ≤ v`, so `F p v ∈ [p, v]`, impossible
+        have hwv : F p v ≤ v := e ▸ hwle
+        rcases eq_or_lt_of_le hpw with e' | hlt'
+        · exact h1 e'.symm.le
+        rcases eq_or_lt_of_le hwv with e'' | hlt''
+        · exact h2 e''.symm.le
+        · exact chain4 _ _ _ hpb hlt' hlt'' (lt_top_iff_ne_top.2 hvt)
+      · exact chain4 _ _ _ hpb hFbv hlt (lt_top_iff_ne_top.2 hne)
+    exact ⟨p, 1, hpR, hgood1 hp0, lt_of_lt_of_le (hFbv.trans (lt_top_iff_ne_top.2 hvt)) (le_a hFpt.ge)⟩
+  · set w := F v ⊤ with hwdef
+    have hvw : v < w := lt_of_le_of_ne (F.mono bot_le ⊤) fun e => hvt (hbtop v (by rw [← hwdef, ← e]))
+    have hwt : w < ⊤ := lt_top_iff_ne_top.2 hA
+    have hvatom : ∀ z, z < v → z = ⊥ := fun z hz => by
+      by_contra hz0; exact chain4 _ _ _ (bot_lt_iff_ne_bot.2 hz0) hz hvw hwt
+    have hvR : v ∈ Rk F 1 := hR1 v (hvatom _ hFbv)
+    have hwrise : w < a F w := by
+      have hle : w ≤ F w ⊤ := F.mono hvw.le ⊤
+      have hlt : w < F w ⊤ := lt_of_le_of_ne hle fun e => hA (hbtop w (by rw [← e]))
+      have htop : F w ⊤ = ⊤ := by
+        by_contra hne; exact chain4 _ _ _ (bot_lt_iff_ne_bot.2 hv0) hvw hlt (lt_top_iff_ne_top.2 hne)
+      exact lt_of_lt_of_le hwt (le_a htop.ge)
+    have hwR : w ∈ Rk F 2 := by
+      have hle : F ⊥ w ≤ v := (F ⊥).mono le_top
+      rcases eq_or_lt_of_le hle with e | hlt
+      · have h1 : v ≤ F v w := e ▸ F.mono bot_le w
+        have h2 : F v w ≤ w := (F v).mono le_top
+        rcases eq_or_lt_of_le h1 with e' | hlt'
+        · exact hR2b hvR e'.symm.le
+        rcases eq_or_lt_of_le h2 with e'' | hlt''
+        · exact hR2a hvR e''.symm.le
+        · exact absurd (chain4 _ _ _ (bot_lt_iff_ne_bot.2 hv0) hlt' hlt'' hwt) id
+      · exact Rk_mono (by omega) (hR1 w (hvatom _ hlt))
+    exact ⟨w, 2, hwR, hgood2 (bot_lt_iff_ne_bot.2 hv0) hvw, hwrise⟩
+
+theorem riseAt_le_three {H : ℕ} (hH : H ≤ 3) : RiseAt.{u} H := by
+  rcases Nat.lt_or_ge H 3 with h | h
+  · exact riseAt_le_two (by omega)
+  · exact fun β _ G hn => rise_of_noChain4 (by omega) (noChain_mono hn (by omega))
+
+/-- **The orbit-height property at edge-height 3.** -/
+theorem ohAt_three : OHAt.{u} 3 := ohAt_of_riseAt fun _ h => riseAt_le_three h
+
+/-- **The orbit-height property at edge-height 2**: `⊤ ∈ R₂` for every monotone map on a lattice of height `≤ 2`. -/
+theorem ohAt_two : OHAt.{u} 2 := ohAt_of_riseAt fun _ h => riseAt_le_two h
 
 end Mordor.OrbitHeight

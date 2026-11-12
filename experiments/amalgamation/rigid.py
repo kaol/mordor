@@ -26,6 +26,13 @@ if __name__ == '__main__':
         A = [a_of(L, F, x) for x in range(n)]
         gr = [x for x in range(n) if st[x] is not None and st[x] <= rk[x] and le[x][A[x]] and A[x] != x]
         T[('good x with x < a(x)', bool(gr))] += 1
+        x = L.bot; chain = [x]                       # column-⊤ Kleene chain (b(⊤) = ⊤ ⇒ it reaches ⊤)
+        while F[x][L.top] != L.top: x = F[x][L.top]; chain.append(x)
+        xn = chain[-1]
+        T[('column-⊤ chain: last x_n good', st[xn] is not None and st[xn] <= rk[xn])] += 1
+        T[('column-⊤ chain: every x_i ∈ R_i', all(st[c] is not None and st[c] <= i for i, c in enumerate(chain)))] += 1
+        T[('column-⊤ chain: every x_i good', all(st[c] is not None and st[c] <= rk[c] for c in chain))] += 1
+        T[('column-⊤ chain: v = x_1 good', len(chain) > 1 and st[chain[1]] is not None and st[chain[1]] <= rk[chain[1]])] += 1
         gp = gp or gr
         T[('either', bool(gp))] += 1
         if not gp and (ex is None or n < ex[0]): ex = (n, L.S, F)

@@ -1,0 +1,245 @@
+# Base cases of the height induction and the limits of shallow Rise witnesses (log §34.3z¹⁵⁸).
+# Exact: SAT/UNSAT with models re-checked in Python. Random: counts.
+--- rigid.py rg_3 130 (column-⊤ Kleene chain)
+instances 213584
+rigid 23267
+('column-⊤ chain: every x_i good', True) 23267
+('column-⊤ chain: every x_i ∈ R_i', False) 2102
+('column-⊤ chain: every x_i ∈ R_i', True) 21165
+('column-⊤ chain: last x_n good', True) 23267
+('column-⊤ chain: v = x_1 good', True) 23267
+('either', True) 23267
+('good diagonal post-fixed m ∉ {⊥, ⊤}', False) 1531
+('good diagonal post-fixed m ∉ {⊥, ⊤}', True) 21736
+('good x with x < a(x)', True) 23267
+('⊤ ∈ R_H', True) 23267
+--- rigid.py rg_4 130 (column-⊤ Kleene chain)
+instances 215195
+rigid 23187
+('column-⊤ chain: every x_i good', True) 23187
+('column-⊤ chain: every x_i ∈ R_i', False) 2072
+('column-⊤ chain: every x_i ∈ R_i', True) 21115
+('column-⊤ chain: last x_n good', True) 23187
+('column-⊤ chain: v = x_1 good', True) 23187
+('either', True) 23187
+('good diagonal post-fixed m ∉ {⊥, ⊤}', False) 1526
+('good diagonal post-fixed m ∉ {⊥, ⊤}', True) 21661
+('good x with x < a(x)', True) 23187
+('⊤ ∈ R_H', True) 23187
+--- kleene_top.py kt_1 130
+instances 204456
+('column ⊤: chain good', False) 2
+('column ⊤: chain good', True) 204454
+('other column: chain good', False) 287
+('other column: chain good', True) 2832264
+smallest column-⊤ failure |L| = 11
+--- kleene_top.py kt_2 130
+instances 201138
+('column ⊤: chain good', False) 1
+('column ⊤: chain good', True) 201137
+('other column: chain good', False) 225
+('other column: chain good', True) 2787053
+smallest column-⊤ failure |L| = 12
+--- rise_sat.py kc closure 5 10 1 10
+kc: {'model': 10}; smallest |L| = 11
+--- rise_sat.py kc closure 6 10 4 10
+kc: {'model': 10}; smallest |L| = 15
+--- rise_sat.py kc sweep 4 16
+kc: {'none': 118, 'model': 65}; smallest |L| = 6
+--- rise_sat.py kclast closure 5 14 3 20
+kclast: {'model': 20}; smallest |L| = 14
+--- rise_sat.py kclast sweep 4 16
+kclast: {'none': 118, 'model': 65}; smallest |L| = 6
+--- rise_sat.py ctl hmax=3 sweep 4 16
+rise ctl: {'model': 85}; smallest |L| = 2
+--- rise_sat.py kc hmax=3 sweep 4 16
+kc: {'none': 85}
+--- rise_sat.py kclast hmax=3 closure 5 10 41 60
+kclast: {}
+--- rise_sat.py kclast hmax=3 closure 6 8 42 40
+kclast: {}
+--- rise_sat.py kclast hmax=3 sweep 4 16
+kclast: {'none': 85}
+--- rise_sat.py kclast hmax=3 sweep 5 12
+(no result within 590 s)
+--- rise_sat.py ctl h3 5 4 1 3
+rise ctl: {'model': 3}; smallest |L| = 11
+--- rise_sat.py kc h3 5 6 3 15
+kc: {'none': 15}
+--- rise_sat.py kclast h3 5 4 1 15
+kclast: {'none': 15}
+--- rise_sat.py kclast h3 6 6 2 10
+kclast: {'none': 10}
+--- rise_sat.py kclast h3 7 8 5 6
+kclast: {'none': 6}
+--- rise_sat.py rise h3 6 9 4 8
+                     ~~~^^^
+--- rise_witness.py rw_1 130
+('rigid, height', 3) 485
+('rigid, height', 4) 7391
+('rigid, height', 5) 11361
+('rigid, height', 6) 4169
+(3, 'F(v,v)', False) 426
+(3, 'F(v,v)', True) 59
+(3, 'F(⊥,v)', False) 481
+(3, 'F(⊥,v)', True) 4
+(3, 'b(F(⊥,v))', False) 485
+(3, 'b(v)', False) 484
+(3, 'b(v)', True) 1
+(3, 'b(x_n)', False) 484
+(3, 'b(x_n)', True) 1
+(3, 'some chain element', True) 485
+(3, 'some element of R_1', False) 5
+(3, 'some element of R_1', True) 480
+(3, 'v = F(⊥,⊤)', False) 21
+(3, 'v = F(⊥,⊤)', True) 464
+(3, 'v or b(v) or x_n', True) 485
+(3, 'x_n (column-⊤ chain)', True) 485
+(4, 'F(v,v)', False) 5922
+(4, 'F(v,v)', True) 1469
+(4, 'F(⊥,v)', False) 7145
+(4, 'F(⊥,v)', True) 246
+(4, 'b(F(⊥,v))', False) 7391
+(4, 'b(v)', False) 7297
+(4, 'b(v)', True) 94
+(4, 'b(x_n)', False) 7299
+(4, 'b(x_n)', True) 92
+(4, 'some chain element', True) 7391
+(4, 'some element of R_1', False) 101
+(4, 'some element of R_1', True) 7290
+(4, 'v = F(⊥,⊤)', False) 931
+(4, 'v = F(⊥,⊤)', True) 6460
+(4, 'v or b(v) or x_n', True) 7391
+(4, 'x_n (column-⊤ chain)', True) 7391
+(5, 'F(v,v)', False) 8455
+(5, 'F(v,v)', True) 2906
+(5, 'F(⊥,v)', False) 10664
+(5, 'F(⊥,v)', True) 697
+(5, 'b(F(⊥,v))', False) 11356
+(5, 'b(F(⊥,v))', True) 5
+(5, 'b(v)', False) 11162
+(5, 'b(v)', True) 199
+(5, 'b(x_n)', False) 11163
+(5, 'b(x_n)', True) 198
+(5, 'some chain element', True) 11361
+(5, 'some element of R_1', False) 62
+(5, 'some element of R_1', True) 11299
+(5, 'v = F(⊥,⊤)', False) 1473
+(5, 'v = F(⊥,⊤)', True) 9888
+(5, 'v or b(v) or x_n', True) 11361
+(5, 'x_n (column-⊤ chain)', True) 11361
+(6, 'F(v,v)', False) 2978
+(6, 'F(v,v)', True) 1191
+(6, 'F(⊥,v)', False) 3723
+(6, 'F(⊥,v)', True) 446
+(6, 'b(F(⊥,v))', False) 4160
+(6, 'b(F(⊥,v))', True) 9
+(6, 'b(v)', False) 4095
+(6, 'b(v)', True) 74
+(6, 'b(x_n)', False) 4088
+(6, 'b(x_n)', True) 81
+(6, 'some chain element', True) 4169
+(6, 'some element of R_1', False) 7
+(6, 'some element of R_1', True) 4162
+(6, 'v = F(⊥,⊤)', False) 541
+(6, 'v = F(⊥,⊤)', True) 3628
+(6, 'v or b(v) or x_n', True) 4169
+(6, 'x_n (column-⊤ chain)', True) 4169
+--- rise_witness.py rw_2 130
+('rigid, height', 2) 4
+('rigid, height', 3) 479
+('rigid, height', 4) 7061
+('rigid, height', 5) 11282
+('rigid, height', 6) 4220
+(2, 'F(v,v)', False) 4
+(2, 'F(⊥,v)', False) 4
+(2, 'b(F(⊥,v))', False) 4
+(2, 'b(v)', False) 4
+(2, 'b(x_n)', False) 4
+(2, 'some chain element', True) 4
+(2, 'some element of R_1', True) 4
+(2, 'v = F(⊥,⊤)', True) 4
+(2, 'v or b(v) or x_n', True) 4
+(2, 'x_n (column-⊤ chain)', True) 4
+(3, 'F(v,v)', False) 416
+(3, 'F(v,v)', True) 63
+(3, 'F(⊥,v)', False) 473
+(3, 'F(⊥,v)', True) 6
+(3, 'b(F(⊥,v))', False) 479
+(3, 'b(v)', False) 474
+(3, 'b(v)', True) 5
+(3, 'b(x_n)', False) 474
+(3, 'b(x_n)', True) 5
+(3, 'some chain element', True) 479
+(3, 'some element of R_1', False) 4
+(3, 'some element of R_1', True) 475
+(3, 'v = F(⊥,⊤)', False) 18
+(3, 'v = F(⊥,⊤)', True) 461
+(3, 'v or b(v) or x_n', True) 479
+(3, 'x_n (column-⊤ chain)', True) 479
+(4, 'F(v,v)', False) 5618
+(4, 'F(v,v)', True) 1443
+(4, 'F(⊥,v)', False) 6836
+(4, 'F(⊥,v)', True) 225
+(4, 'b(F(⊥,v))', False) 7061
+(4, 'b(v)', False) 6978
+(4, 'b(v)', True) 83
+(4, 'b(x_n)', False) 6980
+(4, 'b(x_n)', True) 81
+(4, 'some chain element', True) 7061
+(4, 'some element of R_1', False) 105
+(4, 'some element of R_1', True) 6956
+(4, 'v = F(⊥,⊤)', False) 934
+(4, 'v = F(⊥,⊤)', True) 6127
+(4, 'v or b(v) or x_n', True) 7061
+(4, 'x_n (column-⊤ chain)', True) 7061
+(5, 'F(v,v)', False) 8433
+(5, 'F(v,v)', True) 2849
+(5, 'F(⊥,v)', False) 10514
+(5, 'F(⊥,v)', True) 768
+(5, 'b(F(⊥,v))', False) 11273
+(5, 'b(F(⊥,v))', True) 9
+(5, 'b(v)', False) 11058
+(5, 'b(v)', True) 224
+(5, 'b(x_n)', False) 11053
+(5, 'b(x_n)', True) 229
+(5, 'some chain element', True) 11282
+(5, 'some element of R_1', False) 53
+(5, 'some element of R_1', True) 11229
+(5, 'v = F(⊥,⊤)', False) 1484
+(5, 'v = F(⊥,⊤)', True) 9798
+(5, 'v or b(v) or x_n', True) 11282
+(5, 'x_n (column-⊤ chain)', True) 11282
+(6, 'F(v,v)', False) 3112
+(6, 'F(v,v)', True) 1108
+(6, 'F(⊥,v)', False) 3765
+(6, 'F(⊥,v)', True) 455
+(6, 'b(F(⊥,v))', False) 4212
+(6, 'b(F(⊥,v))', True) 8
+(6, 'b(v)', False) 4124
+(6, 'b(v)', True) 96
+(6, 'b(x_n)', False) 4120
+(6, 'b(x_n)', True) 100
+(6, 'some chain element', True) 4220
+(6, 'some element of R_1', False) 10
+(6, 'some element of R_1', True) 4210
+(6, 'v = F(⊥,⊤)', False) 485
+(6, 'v = F(⊥,⊤)', True) 3735
+(6, 'v or b(v) or x_n', True) 4220
+(6, 'x_n (column-⊤ chain)', True) 4220
+--- python3 h3_case.py 5 5 7 20
+SAT 20
+('b(w) ∈ R_1', True) 20
+('b(w)', 0) 20
+('w ∈ R_2', True) 20
+('w ≤ a(x), x ∈ R_1', True) 20
+--- rise_sat.py shallow=1 hmax=4 sweep 4 16
+shallow: {'none': 21, 'model': 162}; smallest |L| = 4
+--- rise_sat.py shallow=2 closure 5 10 1 10
+shallow: {'model': 10}; smallest |L| = 11
+--- rise_sat.py shallow=2 hmax=4 sweep 4 16
+shallow: {'none': 85, 'model': 98}; smallest |L| = 5
+--- rise_sat.py shallow=3 closure 5 10 1 10
+shallow: {'model': 9, 'none': 1}; smallest |L| = 11
+--- rise_sat.py shallow=3 hmax=4 sweep 4 16
+shallow: {'none': 183}

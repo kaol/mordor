@@ -1,0 +1,118 @@
+# Lower transfer, singleton tops, history depth and offset-1 TightIC (log §34.3z¹⁵⁵).
+# Exact SAT/UNSAT; every model re-checked in Python (single_local.py asserts; tight_probe.py re-simulates).
+--- sl_plain (sweep 4 16)
+single_local : {'UNSAT': 26, 'SAT': 136}
+smallest: |L| = 5, height 3, m = {01}, S = ['{}'], step S = ['{}', '{0}', '{01}']
+--- sl_lower (sweep 4 16)
+single_local lower: {'UNSAT': 38, 'SAT': 124}
+smallest: |L| = 6, height 3, m = {01}, S = ['{}', '{1}'], step S = ['{}', '{0}', '{1}', '{01}']
+--- sl_notop (sweep 4 16)
+single_local notop: {'UNSAT': 11, 'SAT': 151}
+smallest: |L| = 5, height 3, m = {01}, S = ['{}', '{0}'], step S = ['{}', '{0}', '{2}', '{01}']
+--- sl_orbit (sweep 4 16)
+single_local orbit: {'UNSAT': 162}
+--- sl_depth=1 (sweep 4 16)
+single_local depth=1: {'UNSAT': 115, 'SAT': 47}
+smallest: |L| = 6, height 4, m = {012}, S = ['{}', '{0}'], step S = ['{}', '{0}', '{01}', '{012}']
+--- sl_depth=1_lower (sweep 4 16)
+single_local depth=1 lower: {'UNSAT': 123, 'SAT': 39}
+smallest: |L| = 7, height 4, m = {012}, S = ['{}', '{0}', '{02}'], step S = ['{}', '{0}', '{01}', '{02}', '{012}']
+--- sl_depth=2 (sweep 4 16)
+single_local depth=2: {'UNSAT': 162}
+--- sl_depth=2_lower (sweep 4 16)
+single_local depth=2 lower: {'UNSAT': 162}
+--- sl2_depth=1_lower_closure_5_10_1_10
+single_local depth=1 lower: {'SAT': 10}
+smallest: |L| = 11, height 5, m = {024}, S = ['{}', '{2}', '{4}', '{04}', '{24}'], step S = ['{}', '{2}', '{4}', '{12}', '{23}', '{04}', '{24}', '{024}']
+--- sl2_depth=2_closure_5_10_1_10
+single_local depth=2: {'SAT': 6, 'UNSAT': 4}
+smallest: |L| = 15, height 5, m = {0123}, S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}', '{14}', '{34}', '{034}'], step S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}', '{14}', '{34}', '{013}', '{034}', '{0123}']
+--- sl2_depth=2_closure_5_14_3_20
+single_local depth=2: {'SAT': 12, 'UNSAT': 8}
+smallest: |L| = 15, height 5, m = {0123}, S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{03}', '{14}', '{24}', '{034}'], step S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}', '{14}', '{24}', '{013}', '{034}', '{0123}']
+--- sl2_depth=2_multi_sweep_4_16
+single_local depth=2 multi: {'UNSAT': 162}
+--- sl2_depth=2_nonoic_sweep_4_16
+single_local depth=2 nonoic: {'UNSAT': 162}
+--- sl2_depth=3_sweep_4_16
+single_local depth=3: {'UNSAT': 162}
+--- sl3_depth=1_nonoic_sweep_4_16
+single_local depth=1 nonoic: {'UNSAT': 64, 'SAT': 98}
+smallest: |L| = 5, height 4, m = {01}, S = ['{}', '{0}'], step S = ['{}', '{0}', '{01}']
+--- sl3_depth=3_closure_5_10_1_10
+single_local depth=3: {'UNSAT': 10}
+--- sl3_depth=3_closure_5_14_3_20
+single_local depth=3: {'UNSAT': 20}
+--- sl3_depth=3_nonoic_closure_5_10_1_10
+single_local depth=3 nonoic: {'UNSAT': 10}
+--- sl3_orbit_closure_5_10_1_10
+single_local orbit: {'UNSAT': 10}
+--- sl3_orbit_closure_5_14_3_20
+single_local orbit: {'UNSAT': 20}
+--- sl4_depth=1_tighthist_closure_5_10_1_10
+single_local depth=1 tighthist: {'SAT': 10}
+smallest: |L| = 11, height 5, m = {024}, S = ['{}', '{2}', '{4}', '{04}', '{24}'], step S = ['{}', '{2}', '{4}', '{12}', '{23}', '{04}', '{24}', '{024}']
+--- sl4_depth=2_tighthist_closure_5_10_1_10
+single_local depth=2 tighthist: {'SAT': 6, 'UNSAT': 4}
+smallest: |L| = 15, height 5, m = {0123}, S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{03}', '{14}', '{34}', '{034}'], step S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}', '{14}', '{34}', '{013}', '{034}', '{0123}']
+--- sl4_depth=2_tighthist_closure_5_14_3_20
+single_local depth=2 tighthist: {'SAT': 12, 'UNSAT': 8}
+smallest: |L| = 15, height 5, m = {0123}, S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{03}', '{14}', '{24}', '{034}'], step S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}', '{14}', '{24}', '{013}', '{034}', '{0123}']
+--- sl4_depth=2_tighthist_nonoic_closure_5_10_1_10
+single_local depth=2 tighthist nonoic: {'SAT': 9, 'UNSAT': 1}
+smallest: |L| = 11, height 5, m = {234}, S = ['{}', '{2}', '{4}', '{12}', '{23}', '{04}', '{24}'], step S = ['{}', '{2}', '{4}', '{12}', '{23}', '{04}', '{24}', '{234}']
+--- sl4_orbit_nonoic_closure_5_10_1_10
+single_local orbit nonoic: {'SAT': 10}
+smallest: |L| = 11, height 5, m = {2}, S = ['{}'], step S = ['{}', '{2}']
+--- sl4_orbit_nonoic_sweep_4_16
+single_local orbit nonoic: {'SAT': 162}
+smallest: |L| = 4, height 3, m = {0}, S = ['{}'], step S = ['{}', '{0}']
+--- sl5_depth=1_tighthist_lower_nonoic_closure_5_10_1_10
+single_local depth=1 tighthist lower nonoic: {'SAT': 10}
+smallest: |L| = 11, height 5, m = {12}, S = ['{}', '{2}', '{4}'], step S = ['{}', '{2}', '{4}', '{12}']
+--- sl5_depth=2_lower_closure_5_10_1_10
+single_local depth=2 lower: {'SAT': 5, 'UNSAT': 5}
+smallest: |L| = 15, height 5, m = {0123}, S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}', '{14}', '{34}', '{013}'], step S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}', '{14}', '{34}', '{013}', '{034}', '{0123}']
+--- sl5_depth=2_tighthist_lower_closure_5_10_1_10
+single_local depth=2 tighthist lower: {'SAT': 5, 'UNSAT': 5}
+smallest: |L| = 15, height 5, m = {0123}, S = ['{}', '{0}', '{1}', '{2}', '{3}', '{01}', '{03}', '{013}'], step S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}', '{14}', '{34}', '{013}', '{034}', '{0123}']
+--- sl5_depth=2_tighthist_lower_closure_5_14_3_20
+single_local depth=2 tighthist lower: {'SAT': 12, 'UNSAT': 8}
+smallest: |L| = 15, height 5, m = {0123}, S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}', '{013}'], step S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{01}', '{03}', '{14}', '{013}', '{034}', '{0123}']
+--- sl5_depth=2_tighthist_lower_closure_6_10_4_6
+single_local depth=2 tighthist lower: {'UNSAT': 2, 'SAT': 4}
+smallest: |L| = 16, height 6, m = {0145}, S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{23}', '{04}', '{05}', '{045}'], step S = ['{}', '{0}', '{1}', '{2}', '{3}', '{4}', '{13}', '{23}', '{04}', '{05}', '{035}', '{045}', '{0145}']
+--- sl5_depth=2_tighthist_lower_nonoic_closure_5_10_1_10
+single_local depth=2 tighthist lower nonoic: {'SAT': 9, 'UNSAT': 1}
+smallest: |L| = 11, height 5, m = {234}, S = ['{}', '{2}', '{4}', '{12}', '{23}', '{04}', '{24}'], step S = ['{}', '{2}', '{4}', '{12}', '{23}', '{04}', '{24}', '{234}']
+--- ae_aentry_single_closure_5_10_1_10
+aentry single: lattices with a model: {'SAT': 10}
+smallest: |L| = 11, height 5, tight stage k = 2, T_k = [('{12}', 'stage', 2, 'a', '{1234}', 'b', '{2}', 'diag', False, 'y*', '{1234}', 'F(m,y*)', '{1234}')]
+--- ae_aentry_single_closure_5_14_3_20
+aentry single: lattices with a model: {'SAT': 20}
+smallest: |L| = 14, height 5, tight stage k = 2, T_k = [('{01}', 'stage', 2, 'a', '{0}', 'b', '{0}', 'diag', False, 'y*', '{01}', 'F(m,y*)', '{0}')]
+--- ae_aentry_single_sweep_4_16
+aentry single: lattices with a model: {'UNSAT': 92, 'SAT': 87}
+smallest: |L| = 6, height 4, tight stage k = 2, T_k = [('{01}', 'stage', 2, 'a', '{0}', 'b', '{0}', 'diag', False, 'y*', '{01}', 'F(m,y*)', '{0}')]
+--- ao_aentry_aonly_sweep_4_16
+aentry aonly: lattices with a model: {'UNSAT': 111, 'SAT': 68}
+smallest: |L| = 7, height 4, tight stage k = 2, T_k = [('{01}', 'stage', 2, 'a', '{012}', 'b', '{012}', 'diag', True, 'y*', '{012}', 'F(m,y*)', '{012}'), ('{02}', 'stage', 2, 'a', '{01}', 'b', '{012}', 'diag', False, 'y*', '{012}', 'F(m,y*)', '{01}')]
+--- ao_aentry_single_aonly_closure_5_10_1_10
+aentry single aonly: lattices with a model: {'UNSAT': 10}
+--- ao_aentry_single_aonly_closure_5_14_3_20
+aentry single aonly: lattices with a model: {'UNSAT': 20}
+--- ao_aentry_single_aonly_sweep_4_16
+aentry single aonly: lattices with a model: {'UNSAT': 179}
+--- of_offset_closure_5_10_1_10
+offset : lattices with a model: {'SAT': 10}
+smallest: |L| = 11, height 5, tight stage k = 1, T_k = [('{2}', 'stage', 1, 'a', '{12}', 'b', '{}', 'diag', False, 'y*', '{12}', 'F(m,y*)', '{12}'), ('{4}', 'stage', 1, 'a', '{1234}', 'b', '{}', 'diag', False, 'y*', '{1234}', 'F(m,y*)', '{1234}')]
+--- of_offset_single_closure_5_10_1_10
+offset single: lattices with a model: {'SAT': 10}
+smallest: |L| = 11, height 5, tight stage k = 1, T_k = [('{2}', 'stage', 1, 'a', '{12}', 'b', '{}', 'diag', False, 'y*', '{12}', 'F(m,y*)', '{12}'), ('{4}', 'stage', 1, 'a', '{1234}', 'b', '{}', 'diag', False, 'y*', '{1234}', 'F(m,y*)', '{1234}')]
+--- of_offset_single_sweep_4_16
+offset single: lattices with a model: {'UNSAT': 43, 'SAT': 136}
+smallest: |L| = 5, height 3, tight stage k = 1, T_k = [('{0}', 'stage', 1, 'a', '{0}', 'b', '{}', 'diag', True, 'y*', '{0}', 'F(m,y*)', '{0}')]
+--- of_offset_sweep_4_16
+offset : lattices with a model: {'UNSAT': 43, 'SAT': 136}
+smallest: |L| = 5, height 3, tight stage k = 1, T_k = [('{0}', 'stage', 1, 'a', '{0}', 'b', '{}', 'diag', True, 'y*', '{0}', 'F(m,y*)', '{0}')]
+# Note: the offset rows print the height-k layer; the offset witnesses are the height-(k+1) elements (see tight_offset_min5.json).

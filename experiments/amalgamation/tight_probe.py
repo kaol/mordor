@@ -4,7 +4,8 @@ Built on amalg_sat.Enc (F one-hot monotone, A = a as gfp, B = b as lfp, r[k][z] 
 every z ∈ R_k has height ≤ k and ⊤ ∉ R_{k+1}. T_k = elements of R_k of height k. IC(m): some y > m has
 F(m, y) ≤ m or y ≤ F(m, y).
   aentry : does some m ∈ T_k first enter by an a-entry m = a(x), x ∥ m, with m non-diagonal (m ≰ F(m, m))?
-           (with 'noic': and no element of T_k has an interval cell — a TightIC counterexample in that branch)
+           (with 'noic': and no element of T_k has an interval cell — a TightIC counterexample in that branch;
+           'single': |T_k| = 1; 'aonly': no top is b-entered)
   fibre  : counterexample to Maximal-fibre TightIC: every m ∈ T_k with b(m) maximal in B_k = {b(m') : m' ∈ T_k}
            lacks an interval cell ('bonly': additionally every element of T_k first enters by a b-entry).
 Models are decoded and re-simulated with rstages.stages.
@@ -15,6 +16,9 @@ Models are decoded and re-simulated with rstages.stages.
   old    : a tight stage all of whose top elements are old (T_k ⊆ R_{k−1}) ('single': |T_k| = 1; 'some': control, some top old) (§34.3z¹⁵⁴).
   transfer: consecutive tight stages k − 1, k (k ≥ 2) where no cell target t ∈ T_k of a top m' ∈ T_{k−1}
            (m' < t, F(m', t) ≤ m' or t ≤ F(m', t)) has an interval cell (§34.3z¹⁵⁴; 'noic': no top of T_k has one; 'some': control, some target lacks a cell).
+  offset : offset-1 TightIC counterexample (§34.3z¹⁵⁵): stage k with every z ∈ R_k of height ≤ k + 1, ⊤ ∉ R_{k+1},
+           some element of height k + 1 in R_k, and none of them has an interval cell ('single': exactly one)
+  python3 tight_probe.py offset [single] (sweep P NMAX | closure K M SEED COUNT)
   python3 tight_probe.py transfer [noic] (sweep P NMAX | closure K M SEED COUNT)
   python3 tight_probe.py old [single] (sweep P NMAX | closure K M SEED COUNT)
   python3 tight_probe.py gfp [single] [noic] (sweep P NMAX | closure K M SEED COUNT)
@@ -49,6 +53,19 @@ def helpers(E, L):
 
 def query(L, k, mode, opt):
     E = Enc(L, k + 1); n = L.n; le = L.le; rk = L.rank; r = lambda j, z: E.v('r', j, z)
+    if mode == 'offset':
+        fle, yle, ic = helpers(E, L)
+        E.S.add_clause([-r(k + 1, L.top)])
+        T1 = [z for z in range(n) if rk[z] == k + 1]
+        if not T1 or k + 1 >= L.height: E.S.delete(); return None
+        for z in range(n):
+            if rk[z] > k + 1: E.S.add_clause([-r(k, z)])
+        for t in T1: E.S.add_clause([-r(k, t), -ic(t)])
+        E.S.add_clause([r(k, t) for t in T1])
+        if 'single' in opt:
+            for t, t2 in itertools.combinations(T1, 2): E.S.add_clause([-r(k, t), -r(k, t2)])
+        if not E.S.solve(): E.S.delete(); return False
+        F = E.decode(); E.S.delete(); return F
     fle, yle, ic = helpers(E, L)
     E.S.add_clause([-r(k + 1, L.top)])
     for z in range(n):
@@ -124,6 +141,10 @@ def query(L, k, mode, opt):
         E.S.add_clause(sel)
         if 'noic' in opt:
             for m in T: E.S.add_clause([-r(k, m), -ic(m)])
+        if 'single' in opt:                     # §34.3z¹⁵⁵: the a-entered top is the only top
+            for m, m2 in itertools.combinations(T, 2): E.S.add_clause([-r(k, m), -r(k, m2)])
+        if 'aonly' in opt:                      # and no top first enters by a b-entry
+            for m in T: E.S.add_clause([-r(k, m), -bent(m)])
     else:
         for m in T:
             if 'bonly' in opt: E.S.add_clause([-r(k, m), bent(m)])
@@ -148,8 +169,8 @@ def lattices(args):
         for _ in range(cnt): yield ss.Lat(ss.closure_system(k, m, rng))
 
 if __name__ == '__main__':
-    mode = sys.argv[1]; opt = [a for a in sys.argv[2:] if a in ('noic', 'bonly', 'minfibre', 'single', 'some')]
-    args = [a for a in sys.argv[2:] if a not in ('noic', 'bonly', 'minfibre', 'single', 'some')]
+    mode = sys.argv[1]; opt = [a for a in sys.argv[2:] if a in ('noic', 'bonly', 'minfibre', 'single', 'some', 'aonly')]
+    args = [a for a in sys.argv[2:] if a not in ('noic', 'bonly', 'minfibre', 'single', 'some', 'aonly')]
     T = collections.Counter(); best = None
     for L in lattices(args):
         if L.height < 2: continue
@@ -158,6 +179,11 @@ if __name__ == '__main__':
             res = query(L, k, mode, opt)
             if res:
                 st = stages(L, res); hit = (k, res, st)
+                if mode == 'offset':                  # re-simulate
+                    T1 = [z for z in range(L.n) if st[z] is not None and st[z] <= k and L.rank[z] == k + 1]
+                    assert (st[L.top] is None or st[L.top] > k + 1) and T1 and all(L.rank[z] <= k + 1 for z in range(L.n) if st[z] is not None and st[z] <= k)
+                    assert not any(ic_py(L, res, t) for t in T1)
+                    if 'single' in opt: assert len(T1) == 1
                 if mode == 'transfer':                # re-simulate: consecutive tight stages, no target has IC
                     for j in (k - 1, k):
                         assert (st[L.top] is None or st[L.top] > j + 1) and max(L.rank[z] for z in range(L.n) if st[z] is not None and st[z] <= j) == j

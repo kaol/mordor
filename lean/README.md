@@ -61,6 +61,7 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/RankTwoIncidence.lean` | §34.3z¹⁴⁴ | `IsRankTwo`, `IsBlock`, `exists_block_above`, `block_meet`, `cut_of_finitely_many_blocks`, `cut_of_common_centre`, `petal_entry_escapes` (isolated petals) |
 | `Mordor/RelayDescent.lean` | §34.3z¹⁴⁶ | `IsRelay`, `Setting`, `petal_l4`, `relay_normal_form`, `relay_meet_update`, `relay_descends`, `relay_bot_value`, `relay_centre_value`, `no_private_seed`, `relay_descends_terminal` |
 | `Mordor/TerminalRelayOrbit.lean` | §34.3z¹⁴⁸ | `orbit_anti`, `bot_orbit_anti`, `pred_row_bounds`, `pred_join_bound`, `orbit_join_bound` (predecessor inequalities) |
+| `Mordor/ClippedIntervalCut.lean` | §34.3z¹⁵⁰ | `noChain_Iic`, `noChain_Ici`, `clipped_escape`, `lifted_escape` (interval Cut at height 6 via `cut_height5`; `bv_decide` trust), `top_escape`, `terminal_join_lt_top` |
 
 The table lists the headline files; the other files under `Mordor/` (about 120 in all) are documented in their module
 docstrings and in the log section each one cites.

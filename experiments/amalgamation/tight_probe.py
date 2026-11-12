@@ -9,6 +9,10 @@ F(m, y) ≤ m or y ≤ F(m, y).
            lacks an interval cell ('bonly': additionally every element of T_k first enters by a b-entry).
 Models are decoded and re-simulated with rstages.stages.
   'minfibre': the same with b(m) minimal in B_k.
+  gfp    : counterexample to Tight-GFP (§34.3z¹⁵³): no m ∈ T_k satisfies GFP(m), i.e. for every m ∈ T_k the greatest
+           fixed point y* of y ↦ m ⊔ F(m, y) has y* ≠ m and F(m, y*) ≠ y* ('single': |T_k| = 1; 'noic': and no
+           element of T_k has an interval cell; 'some': sanity control, only some m ∈ T_k fails GFP).
+  python3 tight_probe.py gfp [single] [noic] (sweep P NMAX | closure K M SEED COUNT)
   python3 tight_probe.py (aentry [noic] | fibre [bonly] [minfibre]) (sweep P NMAX | closure K M SEED COUNT)
 """
 import sys, itertools, random, collections, json
@@ -16,6 +20,7 @@ sys.path.insert(0, '../separation')
 import separator_stages as ss
 from amalg_sat import Enc
 from rstages import stages, a_of, b_of
+from gfp_top import ystar, gfp_ok, ic as ic_py
 
 def helpers(E, L):
     n = L.n; le = L.le
@@ -58,7 +63,28 @@ def query(L, k, mode, opt):
             for g in range(n):
                 o = E.v('be', m, j, g); E.iff_and(o, [-r(j, m), r(j + 1, m), E.v('B', m, g), r(j, g)]); lits.append(o)
         o = E.v('bent', m); E.iff_or(o, lits); return o
-    if mode == 'aentry':
+    if mode == 'gfp':
+        jn = L.join
+        for m in T:
+            ys = [E.v('ys', m, y) for y in range(n) if le[m][y]]
+            E.S.add_clause(ys)
+            for p, q in itertools.combinations(ys, 2): E.S.add_clause([-p, -q])
+            for y in range(n):
+                if not le[m][y]: continue
+                Y = E.v('ys', m, y)
+                E.S.add_clause([-Y] + [E.v('f', m, y, w) for w in range(n) if jn[m][w] == y])   # fixed point
+                for z in range(n):                                                             # post-fixed z ≤ y*
+                    if le[z][y]: continue
+                    for w in range(n):
+                        if le[z][jn[m][w]]: E.S.add_clause([-Y, -E.v('f', m, z, w)])
+                fail = [-r(k, m)] if 'some' not in opt else [-E.v('pick', m)]
+                E.S.add_clause(fail + [-Y] + ([] if y == m else [-E.v('f', m, y, y)]))   # ¬GFP(m)
+            if 'some' in opt: E.S.add_clause([-E.v('pick', m), r(k, m)])
+            if 'noic' in opt: E.S.add_clause([-r(k, m), -ic(m)])
+        E.S.add_clause([r(k, m) for m in T] if 'some' not in opt else [E.v('pick', m) for m in T])
+        if 'single' in opt:
+            for m, m2 in itertools.combinations(T, 2): E.S.add_clause([-r(k, m), -r(k, m2)])
+    elif mode == 'aentry':
         sel = []
         for m in T:
             o = E.v('pick', m); E.iff_and(o, [r(k, m), aent(m), -yle(m, m)]); sel.append(o)
@@ -89,8 +115,8 @@ def lattices(args):
         for _ in range(cnt): yield ss.Lat(ss.closure_system(k, m, rng))
 
 if __name__ == '__main__':
-    mode = sys.argv[1]; opt = [a for a in sys.argv[2:] if a in ('noic', 'bonly', 'minfibre')]
-    args = [a for a in sys.argv[2:] if a not in ('noic', 'bonly', 'minfibre')]
+    mode = sys.argv[1]; opt = [a for a in sys.argv[2:] if a in ('noic', 'bonly', 'minfibre', 'single', 'some')]
+    args = [a for a in sys.argv[2:] if a not in ('noic', 'bonly', 'minfibre', 'single', 'some')]
     T = collections.Counter(); best = None
     for L in lattices(args):
         if L.height < 2: continue
@@ -98,14 +124,21 @@ if __name__ == '__main__':
         for k in range(1, L.height):
             res = query(L, k, mode, opt)
             if res:
-                st = stages(L, res); hit = (k, res, st); break
+                st = stages(L, res); hit = (k, res, st)
+                if mode == 'gfp':                     # re-simulate: tight stage, no top satisfies GFP
+                    Tk = [m for m in range(L.n) if st[m] is not None and st[m] <= k and L.rank[m] == k]
+                    assert (st[L.top] is None or st[L.top] > k + 1) and all(L.rank[z] <= k for z in range(L.n) if st[z] is not None and st[z] <= k) and Tk
+                    G = [gfp_ok(L, res, m) for m in Tk]; assert not all(G) if 'some' in opt else not any(G)
+                    if 'noic' in opt: assert not any(ic_py(L, res, m) for m in Tk)
+                    if 'single' in opt: assert len(Tk) == 1
+                break
         T['SAT' if hit else 'UNSAT'] += 1
         if hit and (best is None or L.n < best[0].n): best = (L, hit)
     print(f"{mode} {' '.join(opt)}: lattices with a model: {dict(T)}", flush=True)
     if best:
         L, (k, F, st) = best; w_ = max(x.bit_length() for x in L.S)
         nm = lambda i: '{' + ''.join(str(j) for j in range(w_) if L.S[i] >> j & 1) + '}'
-        Tk = [m for m in range(L.n) if st[m] <= k and L.rank[m] == k]
-        info = [(nm(m), 'stage', st[m], 'a', nm(a_of(L, F, m)), 'b', nm(b_of(L, F, m)), 'diag', L.le[m][F[m][m]]) for m in Tk]
+        Tk = [m for m in range(L.n) if st[m] is not None and st[m] <= k and L.rank[m] == k]
+        info = [(nm(m), 'stage', st[m], 'a', nm(a_of(L, F, m)), 'b', nm(b_of(L, F, m)), 'diag', L.le[m][F[m][m]], 'y*', nm(ystar(L, F, m)), 'F(m,y*)', nm(F[m][ystar(L, F, m)])) for m in Tk]
         print(f"smallest: |L| = {L.n}, height {L.height}, tight stage k = {k}, T_k = {info}", flush=True)
         json.dump(dict(sets=L.S, F=F, k=k), open(f"tight_{mode}{'_' + '_'.join(opt) if opt else ''}_min{L.n}.json", 'w'))

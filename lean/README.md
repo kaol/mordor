@@ -63,6 +63,7 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/TerminalRelayOrbit.lean` | §34.3z¹⁴⁸ | `orbit_anti`, `bot_orbit_anti`, `pred_row_bounds`, `pred_join_bound`, `orbit_join_bound` (predecessor inequalities) |
 | `Mordor/ClippedIntervalCut.lean` | §34.3z¹⁵⁰ | `noChain_Iic`, `noChain_Ici`, `clipped_escape`, `lifted_escape` (interval Cut at height 6 via `cut_height5`; `bv_decide` trust), `top_escape`, `terminal_join_lt_top` |
 | `Mordor/TightStageEntry.lean` | §34.3z¹⁵² | `tight_entry_split` (first-entry a/b split of the tight top layer), `tightIC_of_aentry_le` |
+| `Mordor/ColumnOrbitCell.lean` | §34.3z¹⁵³ | `colOrb_dichotomy` (column orbit y ↦ m ⊔ F(m,y) from ⊤: cell unless its limit y* > m has F(m,y*) ∥ m), `ic_of_colOrb_eq` |
 
 The table lists the headline files; the other files under `Mordor/` (about 120 in all) are documented in their module
 docstrings and in the log section each one cites.

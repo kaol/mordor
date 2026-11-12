@@ -19,3 +19,4 @@ a(x) = gfp_y F(x, y), b(y) = lfp_x F(x, y), R_0 = ↓⊥, R_{k+1} = ↓(R_k ∪ 
 Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lean: `lean/Mordor/OrbitHeight.lean`.
 
 - §34.3z¹⁵²: `tight_probe.py (aentry [noic] | fibre [bonly] [minfibre]) …`: exact tight-stage entry routes and the maximal/minimal b-fibre conjectures (both refuted). Output `out_tight_entry.txt`.
+- §34.3z¹⁵³: `tight_probe.py gfp [single] [noic] [some] …`: exact Tight-GFP (some top has y* = m or F(m, y*) = y*; no counterexample found); `single_top.py SEED SECONDS`, `gfp_top.py SEED SECONDS`: random single-top and column-orbit statistics. Output `out_gfp.txt`.

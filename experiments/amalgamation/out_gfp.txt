@@ -1,0 +1,32 @@
+# Column orbit criterion and Tight-GFP (log §34.3z¹⁵³). Exact results are SAT/UNSAT of tight_probe.py gfp,
+# models re-simulated with rstages.stages; random results are counts, not proofs.
+--- python3 single_top.py 2 270
+{'single non-diagonal stages': 52, ('F(m,m) ≤ m', False): 3, ('F(m,m) ≤ m', True): 49, ('TightIC (all tops) holds', True): 52, ('cell kinds', ('lower', 'upper')): 2, ('cell kinds', ('lower',)): 39, ('cell kinds', ('upper',)): 11, ('entry', 'b'): 52, ('gfp', 'reaches m: lower cell'): 39, ('gfp', 'y* > m, m ≤ F(m,y*): upper cell'): 13, ('m ⊔ F(m,⊤)', False): 2, ('m ⊔ F(m,⊤)', True): 50, ('m ⊔ F(⊥,⊤)', False): 24, ('m ⊔ F(⊥,⊤)', True): 28, ('m ⊔ a(m)', False): 39, ('m ⊔ a(m)', True): 13, ('m ⊔ b(⊤)', False): 24, ('m ⊔ b(⊤)', True): 28, ('some cover of m works', False): 1, ('some cover of m works', True): 51, ('⊤', False): 52}
+--- python3 single_top.py 3 270
+{'single non-diagonal stages': 70, ('F(m,m) ≤ m', False): 8, ('F(m,m) ≤ m', True): 62, ('TightIC (all tops) holds', True): 70, ('cell kinds', ('lower', 'upper')): 7, ('cell kinds', ('lower',)): 44, ('cell kinds', ('upper',)): 19, ('entry', 'b'): 70, ('gfp', 'reaches m: lower cell'): 44, ('gfp', 'y* > m, m ≤ F(m,y*): upper cell'): 26, ('m ⊔ F(m,⊤)', True): 70, ('m ⊔ F(⊥,⊤)', False): 39, ('m ⊔ F(⊥,⊤)', True): 31, ('m ⊔ a(m)', False): 44, ('m ⊔ a(m)', True): 26, ('m ⊔ b(⊤)', False): 20, ('m ⊔ b(⊤)', True): 50, ('some cover of m works', True): 70, ('⊤', False): 70}
+--- python3 single_top.py 4 270
+{'single non-diagonal stages': 72, ('F(m,m) ≤ m', False): 5, ('F(m,m) ≤ m', True): 67, ('TightIC (all tops) holds', True): 72, ('cell kinds', ('lower', 'upper')): 2, ('cell kinds', ('lower',)): 56, ('cell kinds', ('upper',)): 14, ('entry', 'b'): 72, ('gfp', 'reaches m: lower cell'): 56, ('gfp', 'y* > m, m ≤ F(m,y*): upper cell'): 16, ('m ⊔ F(m,⊤)', False): 2, ('m ⊔ F(m,⊤)', True): 70, ('m ⊔ F(⊥,⊤)', False): 32, ('m ⊔ F(⊥,⊤)', True): 40, ('m ⊔ a(m)', False): 56, ('m ⊔ a(m)', True): 16, ('m ⊔ b(⊤)', False): 27, ('m ⊔ b(⊤)', True): 45, ('some cover of m works', True): 72, ('⊤', False): 72}
+--- python3 single_top.py 5 270
+{'single non-diagonal stages': 55, ('F(m,m) ≤ m', False): 4, ('F(m,m) ≤ m', True): 51, ('TightIC (all tops) holds', True): 55, ('cell kinds', ('lower', 'upper')): 4, ('cell kinds', ('lower',)): 38, ('cell kinds', ('upper',)): 13, ('entry', 'b'): 55, ('gfp', 'reaches m: lower cell'): 38, ('gfp', 'y* > m, m ≤ F(m,y*): upper cell'): 17, ('m ⊔ F(m,⊤)', False): 1, ('m ⊔ F(m,⊤)', True): 54, ('m ⊔ F(⊥,⊤)', False): 24, ('m ⊔ F(⊥,⊤)', True): 31, ('m ⊔ a(m)', False): 38, ('m ⊔ a(m)', True): 17, ('m ⊔ b(⊤)', False): 20, ('m ⊔ b(⊤)', True): 35, ('some cover of m works', True): 55, ('⊤', False): 55}
+--- python3 gfp_top.py 1 250   (tight stages include k = 0)
+{'tight stages': 146840, ('GFP at some top', True): 146840, ('IC at some top', True): 146840, ('per top: (IC, GFP)', False, False): 324, ('per top: (IC, GFP)', True, False): 27, ('per top: (IC, GFP)', True, True): 146864} smallest IC-but-no-GFP: None
+--- python3 gfp_top.py 2 250   (tight stages include k = 0)
+{'tight stages': 144588, ('GFP at some top', True): 144588, ('IC at some top', True): 144588, ('per top: (IC, GFP)', False, False): 269, ('per top: (IC, GFP)', True, False): 23, ('per top: (IC, GFP)', True, True): 144622} smallest IC-but-no-GFP: None
+--- python3 tight_probe.py gfp sweep 4 16
+gfp : lattices with a model: {'UNSAT': 179}
+--- python3 tight_probe.py gfp single sweep 4 16
+gfp single: lattices with a model: {'UNSAT': 179}
+--- python3 tight_probe.py gfp closure 5 10 1 10
+gfp : lattices with a model: {'UNSAT': 10}
+--- python3 tight_probe.py gfp single closure 5 10 1 10
+gfp single: lattices with a model: {'UNSAT': 10}
+--- python3 tight_probe.py gfp closure 5 10 2 30
+gfp : lattices with a model: {'UNSAT': 30}
+--- python3 tight_probe.py gfp closure 5 14 3 20
+gfp : lattices with a model: {'UNSAT': 20}
+--- python3 tight_probe.py gfp closure 6 10 4 12
+gfp : lattices with a model: {'UNSAT': 12}
+--- python3 tight_probe.py gfp some sweep 4 16   (sanity control: some top fails GFP)
+gfp some: lattices with a model: {'UNSAT': 28, 'SAT': 151}
+smallest: |L| = 5, height 3, tight stage k = 1, T_k = [('{0}', 'stage', 1, 'a', '{01}', 'b', '{}', 'diag', False, 'y*', '{01}', 'F(m,y*)', '{01}'), ('{1}', 'stage', 1, 'a', '{0}', 'b', '{}', 'diag', False, 'y*', '{01}', 'F(m,y*)', '{0}')]
+--- python3 tight_probe.py gfp single closure 6 14 5 12: no result within 590 s (timed out)

@@ -80,4 +80,60 @@ theorem oh_mono (O : OHCx F M H) {a b x1 y1 x2 y2 : α} (ha : a = F x1 y1) (hb :
     · simp [h2]
   · simp [h1]
 
+/-! ### Rigid maps with the lower heights (§34.3z¹⁶⁰)
+
+`OHCxR` adds the rigid hypotheses (`a ⊥ = ⊥`, `b ⊤ = ⊤`, no interior diagonal fixed point) and the two lower-height
+consequences used by `oh_ground.py rigid ih`: `diag` (`OrbitHeight.diagGood_of_lower`) and `post`
+(`OrbitHeight.top_mem_of_good_post`). Its fields are hypotheses here; `OHRigid.ohCxR_of_orbit` proves them for the true
+orbit `M k := R_k` of a rigid map, given `OHAt` below `H`. -/
+
+/-- A rigid orbit-height counterexample with the lower-height consequences. -/
+structure OHCxR (F : α → α → α) (M : ℕ → Set α) (H : ℕ) : Prop extends OHCx F M H where
+  rigA : ∀ y, y ≤ F ⊥ y → y ≤ ⊥
+  rigB : ∀ x, F x ⊤ ≤ x → ⊤ ≤ x
+  rigD : ∀ c, F c c ≤ c → c ≤ F c c → c ≤ ⊥ ∨ ⊤ ≤ c
+  diag : ∀ k c, F c c ≤ c → ¬ ⊤ ≤ c → ¬ chainTo c (k + 1) → c ∈ M k
+  post : ∀ j c, c ≤ F c c → ¬ c ≤ ⊥ → c ∈ M j → chainTo c j → ⊤ ∈ M H
+
+theorem oh_rigA (R : OHCxR F M H) {z y a : α} (hz : z = ⊥) (ha : a = F z y) :
+    (!decide (y ≤ a) || decide (y ≤ z)) = true := by
+  by_cases h : y ≤ a
+  · simp [hz ▸ R.rigA y (hz ▸ ha ▸ h)]
+  · simp [h]
+theorem oh_rigB (R : OHCxR F M H) {w x a : α} (hw : w = ⊤) (ha : a = F x w) :
+    (!decide (a ≤ x) || decide (w ≤ x)) = true := by
+  by_cases h : a ≤ x
+  · simp [hw ▸ R.rigB x (hw ▸ ha ▸ h)]
+  · simp [h]
+theorem oh_rigD (R : OHCxR F M H) {z w c a : α} (hz : z = ⊥) (hw : w = ⊤) (ha : a = F c c) :
+    (!decide (a ≤ c) || !decide (c ≤ a) || decide (c ≤ z) || decide (w ≤ c)) = true := by
+  by_cases h1 : a ≤ c
+  · by_cases h2 : c ≤ a
+    · rcases R.rigD c (ha ▸ h1) (ha ▸ h2) with h | h
+      · simp [hz, h]
+      · simp [hw, h]
+    · simp [h2]
+  · simp [h1]
+theorem oh_diag (R : OHCxR F M H) {w c a : α} (hw : w = ⊤) (ha : a = F c c) (k k' : ℕ) (hk : k' = k + 1) :
+    (!decide (a ≤ c) || decide (w ≤ c) || decide (chainTo c k') || decide (c ∈ M k)) = true := by
+  subst hk
+  by_cases h1 : a ≤ c
+  · by_cases h2 : w ≤ c
+    · simp [h2]
+    · by_cases h3 : chainTo c (k + 1)
+      · simp [h3]
+      · simp [R.diag k c (ha ▸ h1) (hw ▸ h2) h3]
+  · simp [h1]
+theorem oh_post (R : OHCxR F M H) {z w c a : α} (hz : z = ⊥) (hw : w = ⊤) (ha : a = F c c) (j : ℕ) :
+    (!decide (c ≤ a) || decide (c ≤ z) || !decide (c ∈ M j) || !decide (chainTo c j) || decide (w ∈ M H)) = true := by
+  by_cases h1 : c ≤ a
+  · by_cases h2 : c ≤ z
+    · simp [h2]
+    · by_cases h3 : c ∈ M j
+      · by_cases h4 : chainTo c j
+        · simp [hw ▸ R.post j c (ha ▸ h1) (hz ▸ h2) h3 h4]
+        · simp [h4]
+      · simp [h3]
+  · simp [h1]
+
 end Mordor.Ground

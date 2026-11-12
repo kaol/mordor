@@ -134,3 +134,5 @@ import Mordor.HeightInduction
 import Mordor.RiseHeight4
 import Mordor.GroundOH
 import Mordor.OHHeight4
+import Mordor.OHRigid
+import Mordor.OHHeight4R

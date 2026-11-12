@@ -1,0 +1,31 @@
+# Route A at H = 5 (log §34.3z¹⁶⁰): ablations of oh_ground.py. UNSAT = proof; "cap"/"stopped" = inconclusive.
+# H = 4 calibration (terms / clauses):
+  baseline (eager)                         UNSAT 65 / 60538      (reproduces the certified run)
+  rigid                                    UNSAT 57 / 46107
+  lazyall                                  UNSAT 60 / 29892
+  lazyall rigid                            UNSAT 60 / 26138
+  lazyall firable                          UNSAT 57 / 32031
+  lazyall rigid firable                    UNSAT 51 / 20825      (best)
+  lazyall rigid firable, batch 8           UNSAT 140 / 235415
+  ih lazyd=1                               UNSAT 138 / 364356
+  rigid ih lazyd=1                         UNSAT 118 / 272574
+  rigid ih lazyd=2                         UNSAT 170 / 502221
+  lazyall rigid ih lazyd=1                 UNSAT 147 / 265571 -> drat-trim core 362 clauses, 46 terms
+                                           (rigA x4, rigB x5, no diag/post) -> lean/Mordor/OHHeight4R.lean
+                                           core without rigA, without rigB, without both: SAT (both families do work)
+  ih eagerd                                cap 300
+  prio=1 / 2 / 3                           UNSAT 69 (61 with rigid) / 69 / 69;  prio=4: cap 400
+  kleene=1                                 UNSAT 80;  kleene konly: no termination within 300 s
+  seed=1                                   UNSAT 57;  seed=2: cap 600;  firable seed=1 / 2: UNSAT 173 / 275
+  fit (any combination)                    cap (fails at H = 3)
+# H = 5 (all inconclusive):
+  baseline, eager transitivity             stopped: 457 terms, 11.4 M clauses, 413 s
+  rigid                                    stopped: 617 terms, 17.0 M clauses, 435 s (memory 12 GB)
+  rigid ih lazyd=2                         stopped: 478 terms, 11.2 M clauses
+  lazyall rigid                            stopped: 770 terms, 12.9 M clauses, 997 s; 130 k candidate pairs
+  lazyall rigid ih lazyd=2                 stopped: 1323 terms, 5.2 M clauses; 365 k candidate pairs
+  lazyall rigid firable                    stopped: 454 terms, 7.4 M clauses
+  lazyall rigid firable ih lazyd=1         stopped: 979 terms, 3.4 M clauses, 161 k candidate pairs; then >10 min in one solve
+  lazyall rigid (firable) kleene=1         stopped: 388 / 685 terms
+# Certificate term depth (drat-trim cores): H = 2: 24 clauses, rule terms depth <= 2; H = 3: 84, depth <= 4;
+#   H = 4: 407, depth <= 4 (39 of the depth-4 terms out of ~2*10^6 F-terms of depth <= 4).

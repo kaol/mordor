@@ -20,6 +20,9 @@ instantiated on terms of the matching shape:
 'kleene=K': for the K best relevant pairs (x, y) add the whole column chain of y (⊥, F(⊥,y), …, H+1 steps ↑ b(y))
 and row chain of x (⊤, F(x,⊤), …, ↓ a(x)) — the orbit needs Kleene depth ~H per stage; 'konly': no single terms.
 'seed=1': start from the boundary orbits u_i = F(u_{i−1}, ⊤), d_j = F(⊥, d_{j−1}); 'seed=2': also all F(p, q) over them.
+'case=n,m': fix the boundary-orbit case (u_n = ⊤ first at n, d_m = ⊥ first at m; unit clauses tagged 'case', search
+guidance only — never used in a certificate). 'preset=FILE': start with the pickled term expressions; 'nogrow': only
+saturate the lazy families over the fixed term set (no new terms). 'terms=FILE' (with UNSAT): save term expressions.
 'fit': add the tightest candidate first (fewest model values between the monotonicity bounds), as cut_ground.py.
   python3 oh_ground.py H [CAP] [BATCH] [rigid] [ih] [lazyd=N|eagerd] [fit] [dump PREFIX]     (dump: PREFIX.cnf and PREFIX.pkl on UNSAT)
 """
@@ -27,6 +30,12 @@ import sys, time, itertools, pickle
 import numpy as np
 KEEP = 'dump' in sys.argv
 LAZYALL = 'lazyall' in sys.argv
+CASE = next((tuple(int(v) for v in a[5:].split(',')) for a in sys.argv if a.startswith('case=')), None)
+NOGROW = 'nogrow' in sys.argv
+SUBCASE = next((tuple(int(v) for v in a[8:].split(',')) for a in sys.argv if a.startswith('subcase=')), None)
+PRESET = []
+_pre = next((a[7:] for a in sys.argv if a.startswith('preset=')), None)
+if _pre: PRESET = pickle.load(open(_pre, 'rb'))
 SEED = next((int(a[5:]) for a in sys.argv if a.startswith('seed=')), 0)
 KLEENE = next((int(a[7:]) for a in sys.argv if a.startswith('kleene=')), 0)
 KLEENE_ONLY = 'konly' in sys.argv
@@ -87,12 +96,22 @@ class OH:
             self.add([-self.M(k, x), -self.le(t, x), self.M(k + 1, y)], ('brule', k, t))
             self.add([-self.M(k, x), -self.le(y, t), self.M(k + 1, y)], ('arule', k, t))
         return t
+    def add_expr(self, e):
+        if e == 0 or e == 1: return e
+        return self.add_F(self.add_expr(e[0]), self.add_expr(e[1]))
+    def expr(self, t):
+        return t if t in (0, 1) else (self.expr(self.terms[t][0]), self.expr(self.terms[t][1]))
     def model(self):
         m = set(l for l in self.S.get_model() if l > 0)
         return lambda key: self.v.get(key) in m
 
-def run(H, cap=400, batch=4, verbose=True, ih=False, fit=False, rigid=False, lazyd=0, eagerd=False):
+def run(H, cap=400, batch=4, verbose=True, ih=False, fit=False, rigid=False, lazyd=0, eagerd=False,
+        extra=None, tmax=None, preset=None):
+    """extra: clauses over term expressions, each a list of (e1, e2, positive) meaning [±le(e1, e2)] (oh_cube.py);
+    tmax: time budget in seconds (returns (False, G) when exceeded)."""
     G = OH(H, ih, rigid); t0 = time.time(); rounds = 0
+    for cl in (extra or []):
+        G.add([(G.le(G.add_expr(a), G.add_expr(b)) if pos else -G.le(G.add_expr(a), G.add_expr(b))) for a, b, pos in cl], ('case',))
     G.add_F(0, 1)
     if SEED:                                            # boundary orbits u_i, d_j and all F(p, q) over them
         B = [0, 1]; u = 0; d = 1
@@ -102,12 +121,29 @@ def run(H, cap=400, batch=4, verbose=True, ih=False, fit=False, rigid=False, laz
         if SEED >= 2:
             for p_ in B:
                 for q_ in B: G.add_F(p_, q_)
+    if CASE:                                            # boundary-orbit case: u reaches ⊤ at step n, d reaches ⊥ at step m
+        n_, m_ = CASE; us = [0]; ds = [1]
+        for _ in range(H): us.append(G.add_F(us[-1], 1)); ds.append(G.add_F(0, ds[-1]))
+        for i in range(1, H + 1):
+            G.add([G.le(1, us[i])] if i >= n_ else [-G.le(1, us[i])], ('case',))
+            G.add([G.le(ds[i], 0)] if i >= m_ else [-G.le(ds[i], 0)], ('case',))
+        if SUBCASE:                                     # p = F(⊥, u₂) ∈ [d₂, v], q = F(d₂, ⊤) ∈ [v, u₂]: low / high / strictly between
+            v_, u2, d2 = us[1], us[2], ds[2]
+            p_ = G.add_F(0, u2); q_ = G.add_F(d2, 1)
+            for (z, lo, hi, w) in ((p_, d2, v_, SUBCASE[0]), (q_, v_, u2, SUBCASE[1])):
+                if w == 0: G.add([G.le(z, lo)], ('case',))
+                elif w == 1: G.add([G.le(hi, z)], ('case',))
+                else: G.add([-G.le(z, lo)], ('case',)); G.add([-G.le(hi, z)], ('case',))
+    for e in (PRESET if preset is None else preset): G.add_expr(e)
     if eagerd: G.add_F(0, 0); G.add_F(1, 1)
     while True:
         rounds += 1
         if not G.S.solve():
             if verbose: print(f"H={H}: UNSAT with {len(G.terms)} terms ({len(G.F)} F-terms), {G.ncl} clauses, {rounds} rounds, {time.time()-t0:.1f}s", flush=True)
             return True, G
+        if tmax is not None and time.time() - t0 > tmax:
+            if verbose: print(f"H={H}: budget {tmax}s exceeded at {len(G.terms)} terms", flush=True)
+            return False, G
         if len(G.terms) >= cap:
             if verbose: print(f"H={H}: SAT at cap {cap} terms (inconclusive), {time.time()-t0:.1f}s", flush=True)
             return False, G
@@ -171,6 +207,9 @@ def run(H, cap=400, batch=4, verbose=True, ih=False, fit=False, rigid=False, laz
         cand = [key(x, y) + (int(x), int(y)) for x, y in zip(xs.tolist(), ys.tolist()) if (x, y) not in G.F]
         if verbose and rounds % 5 == 0:
             print(f"  round {rounds}: {n} terms, {G.ncl} clauses, {len(cand)} candidates, {time.time()-t0:.0f}s", flush=True)
+        if NOGROW:
+            if verbose: print(f"H={H}: SAT over the fixed term set ({len(G.terms)} terms)", flush=True)
+            return False, G
         if not cand and not lazyd and not eagerd:
             if verbose: print(f"H={H}: SAT with no new candidate terms ({len(G.terms)} terms)", flush=True)
             return False, G
@@ -227,6 +266,8 @@ if __name__ == '__main__':
     lz = next((int(a[6:]) for a in sys.argv if a.startswith('lazyd=')), 0)
     ok, G = run(H, cap, batch, ih='ih' in sys.argv, fit='fit' in sys.argv, rigid='rigid' in sys.argv, lazyd=lz,
                 eagerd='eagerd' in sys.argv)
+    tf = next((a[6:] for a in sys.argv if a.startswith('terms=')), None)
+    if ok and tf: pickle.dump([G.expr(t) for t in range(2, len(G.terms))], open(tf, 'wb')); print('terms saved', tf)
     if ok and 'dump' in sys.argv:
         pre = sys.argv[sys.argv.index('dump') + 1]
         with open(pre + '.cnf', 'w') as fh:

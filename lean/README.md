@@ -68,6 +68,9 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/SingletonLowerTransfer.lean` | §34.3z¹⁵⁶ | `SingletonLower` (conjecture as a Prop), `singleton_tightIC_of_lower`, `mem_succ_of_b`, `bentry_iff` (BEntry ⟺ b(m) ∈ R_k), `floor_le_row`, `feeder_identity_of_below`, `feeder_identity_one` |
 | `Mordor/IntervalOrbit.lean` | §34.3z¹⁵⁷ | `restr`, `Rk_restr` (orbit of an invariant interval inside the shifted global orbit), `diag_pre_mem`, `top_mem_of_diag_post`, `DiagGood`, `cutMaps_of_diagGood`, `feeder_identity_of_diagGood` |
 | `Mordor/HeightInduction.lean` | §34.3z¹⁵⁷ | `OHAt`, `noChain_Icc_bot/top`, `diagGood_of_lower`, `feeder_identity_of_lower`, `top_mem_of_good_post`, `top_mem_of_diag_fixed`, `top_mem_of_a_bot`, `top_mem_of_b_top`, `top_mem_of_good_rise`, `top_mem_reduction` (only rigid maps remain), `Rise` (conjecture), `ohAt_of_riseAt`, `cutMaps_of_riseAt`; base cases (§34.3z¹⁵⁸) `rise_of_noChain3`, `rise_of_noChain4`, **`ohAt_two`, `ohAt_three`** (⊤ ∈ R_H at edge-height ≤ 3) |
+| `Mordor/RiseHeight4.lean` | §34.3z¹⁵⁹ | boundary orbits `uSeq`/`dSeq` (strictness, endpoints, `exists_last_u`), `grid_bounds`, `top_mem_of_lastIC`, `rise_of_lastIC`, `top_mem_of_tightIC_last` |
+| `Mordor/GroundOH.lean` | §34.3z¹⁵⁹ | `OHCx` (orbit-height counterexample) and its ground clause lemmas |
+| `Mordor/OHHeight4.lean` | §34.3z¹⁵⁹ | machine-generated (`experiments/sat/oh_lean.py`): `ohcore4` (407-clause drat-trim core, 40 terms, **`bv_decide`**: adds `Lean.ofReduceBool`, `Lean.trustCompiler`), **`ohAt_4'`** (⊤ ∈ R₄ at edge-height ≤ 4) |
 
 The table lists the headline files; the other files under `Mordor/` (about 120 in all) are documented in their module
 docstrings and in the log section each one cites.

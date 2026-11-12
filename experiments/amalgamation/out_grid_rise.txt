@@ -1,0 +1,25 @@
+# BoundaryGridRise (log §34.3z¹⁵⁹): SAT = rigid map with no good riser in the candidate set.
+--- grid_rise.py grid+ closure 5 10 1 10
+grid+: {('counterexample', 4): 1, ('counterexample', 5): 9}; smallest |L| = 11, height 5
+--- grid_rise.py grid+ sweep 4 16
+grid+: {('counterexample', 4): 65, ('none', 1): 4, ('none', 2): 17, ('none', 3): 64, ('none', 4): 33}; smallest |L| = 6, height 4
+--- grid_rise.py grid0 closure 5 10 1 10
+grid0: {('counterexample', 4): 1, ('counterexample', 5): 9}; smallest |L| = 11, height 5
+--- grid_rise.py grid0 sweep 4 16
+grid0: {('counterexample', 4): 65, ('none', 1): 4, ('none', 2): 17, ('none', 3): 64, ('none', 4): 33}; smallest |L| = 6, height 4
+--- grid_rise.py grid closure 5 10 1 10
+grid: {('counterexample', 4): 1, ('counterexample', 5): 9}; smallest |L| = 11, height 5
+--- grid_rise.py grid sweep 4 16
+grid: {('counterexample', 4): 65, ('none', 1): 4, ('none', 2): 17, ('none', 3): 64, ('none', 4): 33}; smallest |L| = 6, height 4
+--- grid_rise.py beta closure 5 10 1 10
+beta: {('counterexample', 4): 1, ('counterexample', 5): 9}; smallest |L| = 11, height 5
+--- grid_rise.py beta sweep 4 16
+beta: {('counterexample', 4): 61, ('none', 1): 4, ('none', 2): 17, ('none', 3): 64, ('none', 4): 37}; smallest |L| = 7, height 4
+--- grid_rise.py betaonly sweep 4 16
+betaonly: {('counterexample', 2): 11, ('counterexample', 3): 55, ('counterexample', 4): 94, ('none', 1): 4, ('none', 2): 6, ('none', 3): 9, ('none', 4): 4}; smallest |L| = 4, height 2
+--- grid_rise.py ideal closure 5 10 1 10
+ideal: {('counterexample', 4): 1, ('counterexample', 5): 9}; smallest |L| = 11, height 5
+--- grid_rise.py ideal sweep 4 16
+ideal: {('counterexample', 4): 64, ('none', 1): 4, ('none', 2): 17, ('none', 3): 64, ('none', 4): 34}; smallest |L| = 7, height 4
+--- grid_rise.py idealonly sweep 4 16
+idealonly: {('counterexample', 2): 11, ('counterexample', 3): 55, ('counterexample', 4): 93, ('none', 1): 4, ('none', 2): 6, ('none', 3): 9, ('none', 4): 5}; smallest |L| = 4, height 2

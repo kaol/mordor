@@ -1,0 +1,26 @@
+# Orbit-height ground theory OH_H (log §34.3z¹⁵⁹). UNSAT = proof (all clauses are sound instances); SAT at cap = inconclusive.
+--- python3 oh_ground.py 1 300 4
+H=1: UNSAT with 3 terms (1 F-terms), 52 clauses, 1 rounds, 0.0s
+--- python3 oh_ground.py 2 300 4
+H=2: UNSAT with 6 terms (4 F-terms), 263 clauses, 3 rounds, 0.0s
+--- python3 oh_ground.py 3 300 4
+H=3: UNSAT with 20 terms (18 F-terms), 3695 clauses, 7 rounds, 0.0s
+--- python3 oh_ground.py 4 300 4
+H=4: UNSAT with 65 terms (63 F-terms), 60538 clauses, 18 rounds, 0.2s
+--- H = 4 certificate: python3 oh_ground.py 4 300 4 dump PREFIX (65 terms, 60538 clauses);
+    drat_certify.py (Glucose4 + drat-trim): s VERIFIED, core 407 clauses -> certs/oh4_core.cnf -> oh_lean.py -> lean/Mordor/OHHeight4.lean (40 terms)
+--- python3 oh_ground.py 5 900 8   (stopped at round 60: 457 terms, 11447205 clauses, 413 s; inconclusive)
+  round 5: 17 terms, 3950 clauses, 53 candidates, 0s
+  round 10: 57 terms, 44551 clauses, 285 candidates, 0s
+  round 15: 97 terms, 205637 clauses, 67 candidates, 1s
+  round 20: 137 terms, 494898 clauses, 91 candidates, 3s
+  round 25: 177 terms, 973845 clauses, 625 candidates, 8s
+  round 30: 217 terms, 1620092 clauses, 960 candidates, 16s
+  round 35: 257 terms, 2314809 clauses, 16396 candidates, 23s
+  round 40: 297 terms, 3690501 clauses, 21436 candidates, 39s
+  round 45: 337 terms, 4829002 clauses, 26476 candidates, 52s
+  round 50: 377 terms, 7195038 clauses, 1786 candidates, 147s
+  round 55: 417 terms, 9271644 clauses, 3556 candidates, 241s
+  round 60: 457 terms, 11447205 clauses, 6708 candidates, 413s
+--- python3 oh_ground.py 4 300 {1,2} fit / 4 300 1 fit ih / 3 100 1 fit: SAT at cap (inconclusive) — the 'fit' heuristic fails here
+--- python3 oh_ground.py 4 300 {2,4} ih: SAT at cap (inconclusive) — the IH clauses divert the shallowest-first search

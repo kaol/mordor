@@ -164,7 +164,8 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
       the diagonal fixes only ⊥ and ⊤ (`HeightInduction.top_mem_reduction`).
   - `cutMaps_of_riseAt`: the **Rise conjecture** (a rigid map has a good x < a(x)) at all heights ≤ H gives Cut at
     edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices.
-  - The orbit-height property is proved outright at edge-height ≤ 3 (`ohAt_three`, §34.3z¹⁵⁸). Rise witnesses can need
+  - The orbit-height property is proved outright at edge-height ≤ 3 (`ohAt_three`, §34.3z¹⁵⁸), and at edge-height 4 by a `bv_decide`
+    certificate over 40 ground terms (`OHHeight4.ohAt_4'`, §34.3z¹⁵⁹, trusting `Lean.ofReduceBool` as `cut_height5` does). Rise witnesses can need
     to enter as late as stage H − 1, so for rigid maps Rise is close to the orbit-height property itself.
 
 **Open frontier now.** Chain-finite Cut, equivalently join-closure of R(F) (`Frontier.lean`), for cuts where **both**

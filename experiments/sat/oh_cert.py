@@ -8,14 +8,15 @@
 2. For each leaf: ground refutation (rigid, lazyall, firable; starting from the leaf's cached terms, growing if needed)
    of the theory plus the leaf's literals, drat-trim core, provenance tags.
 3. Lean: one global term table, one `bv_decide` theorem per leaf (the literals are hypotheses), and the case tree.
-  python3 oh_cert.py H CACHE_DIR OUT_DIR [seed]      (seed: add the H = 5 hand-run leaves to the cache first)
+  DRAT_TRIM=path/to/drat-trim python3 oh_cert.py H CACHE_DIR OUT_DIR [seed] [seeddir=DIR]
+  (seed: add the H = 5 hand-run leaves from oh5_work/seed — or seeddir — to the cache first)
 """
 import sys, os, pickle, subprocess, time, hashlib
 sys.argv += ['lazyall', 'rigid', 'firable']
 import oh_ground as og
 import oh_cube as oc
-S = '/tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad'
-TRIM = os.path.join(S, 'drat-trim', 'drat-trim')
+S = next((a[8:] for a in sys.argv if a.startswith('seeddir=')), os.path.join(os.path.dirname(os.path.abspath(__file__)), 'oh5_work', 'seed'))
+TRIM = os.environ.get('DRAT_TRIM', 'drat-trim')
 
 def seed_h5(cache):
     oc.CACHE = cache; H = 5; us, ds = oc.u_d(H)

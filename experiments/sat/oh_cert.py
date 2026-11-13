@@ -101,6 +101,11 @@ def certify_leaf(H, lits, terms, idx, work):
         for c in G.clauses: fh.write(" ".join(map(str, c)) + " 0\n")
     r = subprocess.run([sys.executable, 'drat_certify.py', cnf, TRIM, core], capture_output=True, text=True)
     if 's VERIFIED' not in r.stdout: raise RuntimeError(f'leaf {idx}: drat-trim failed\n{r.stdout}')
+    for it in range(3):                             # iterate core extraction (drat-trim cores are not minimal)
+        nxt = core + f'.{it}'
+        r2 = subprocess.run([sys.executable, 'drat_certify.py', core, TRIM, nxt], capture_output=True, text=True)
+        if 's VERIFIED' not in r2.stdout: break
+        os.replace(nxt, core); os.remove(core.rsplit('.', 1)[0] + '.drat') if os.path.exists(core.rsplit('.', 1)[0] + '.drat') else None
     tagof = {}
     for c, tg in zip(G.clauses, G.tags): tagof.setdefault(tuple(sorted(c)), tg)
     cl = [tuple(sorted(map(int, l.split()[:-1]))) for l in open(core) if l.strip() and not l.startswith(('p', 'c'))]

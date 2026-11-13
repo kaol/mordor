@@ -20,4 +20,10 @@ When all four report `all cases refuted`:
     python3 oh_cert_lean.py /tmp/cert5 ../../lean/Mordor chunk=12
     # add the generated imports (OHCube5Terms, OHCube5L*, OHCube5) to lean/Mordor.lean, then `lake build`
 
+Lean cost: H = 5 leaf cores are large (e.g. the root case (3, 2): 3012 clauses, 1931 after iterated core
+extraction, which `oh_cert.py` now does). Elaborating such a leaf overflows the default stack; use
+`ulimit -s unlimited` and `lake env lean --tstack=1000000 …` (for `lake build`, add `moreLeanArgs := #["--tstack=1000000"]`
+to the Mordor lean_lib). With 3012 clauses, `bv_decide` did not finish within 28 min on a shared core here; expect
+tens of minutes per large leaf on a dedicated core.
+
 The result is `OrbitHeight.ohAt_5c : OHAt 5` (a `bv_decide` certificate: `Lean.ofReduceBool`, `Lean.trustCompiler`).

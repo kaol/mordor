@@ -73,6 +73,7 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/OHHeight4.lean` | §34.3z¹⁵⁹ | machine-generated (`experiments/sat/oh_lean.py`): `ohcore4` (407-clause drat-trim core, 40 terms, **`bv_decide`**: adds `Lean.ofReduceBool`, `Lean.trustCompiler`), **`ohAt_4'`** (⊤ ∈ R₄ at edge-height ≤ 4) |
 | `Mordor/OHRigid.lean` | §34.3z¹⁶⁰ | `top_mem_or_ohCxR` (with the lower heights: ⊤ ∈ R_H or the true orbit is a rigid counterexample `OHCxR` with `diag`/`post`), `ohAt_lt_five` |
 | `Mordor/OHHeight4R.lean` | §34.3z¹⁶⁰ | machine-generated rigid certificate (362-clause core, 46 terms, **`bv_decide`**): `ohAt_4R`, a second proof of OHAt 4 from OHAt ≤ 3 |
+| `Mordor/OHCube4Terms.lean`, `OHCube4L0.lean`, `OHCube4.lean` | §34.3z¹⁶¹ | machine-generated cube-and-conquer certificate (25 leaves, **`bv_decide`**): `ohAt_4c`, a third proof of OHAt 4 |
 
 The table lists the headline files; the other files under `Mordor/` (about 120 in all) are documented in their module
 docstrings and in the log section each one cites.

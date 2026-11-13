@@ -136,3 +136,6 @@ import Mordor.GroundOH
 import Mordor.OHHeight4
 import Mordor.OHRigid
 import Mordor.OHHeight4R
+import Mordor.OHCube4Terms
+import Mordor.OHCube4L0
+import Mordor.OHCube4

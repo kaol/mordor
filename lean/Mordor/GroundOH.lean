@@ -80,6 +80,10 @@ theorem oh_mono (O : OHCx F M H) {a b x1 y1 x2 y2 : α} (ha : a = F x1 y1) (hb :
     · simp [h2]
   · simp [h1]
 
+/-- Case literals of cube-and-conquer certificates as Boolean atoms. -/
+theorem oh_lit_pos {x y : α} (h : x ≤ y) : decide (x ≤ y) = true := by simpa using h
+theorem oh_lit_neg {x y : α} (h : ¬ x ≤ y) : (!decide (x ≤ y)) = true := by simpa using h
+
 /-! ### Rigid maps with the lower heights (§34.3z¹⁶⁰)
 
 `OHCxR` adds the rigid hypotheses (`a ⊥ = ⊥`, `b ⊤ = ⊤`, no interior diagonal fixed point) and the two lower-height

@@ -106,10 +106,10 @@ class OH:
         return lambda key: self.v.get(key) in m
 
 def run(H, cap=400, batch=4, verbose=True, ih=False, fit=False, rigid=False, lazyd=0, eagerd=False,
-        extra=None, tmax=None, preset=None):
+        extra=None, tmax=None, preset=None, prebuilt=None):
     """extra: clauses over term expressions, each a list of (e1, e2, positive) meaning [±le(e1, e2)] (oh_cube.py);
     tmax: time budget in seconds (returns (False, G) when exceeded)."""
-    G = OH(H, ih, rigid); t0 = time.time(); rounds = 0
+    G = prebuilt if prebuilt is not None else OH(H, ih, rigid); t0 = time.time(); rounds = 0
     for cl in (extra or []):
         G.add([(G.le(G.add_expr(a), G.add_expr(b)) if pos else -G.le(G.add_expr(a), G.add_expr(b))) for a, b, pos in cl], ('case',))
     G.add_F(0, 1)

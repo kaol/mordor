@@ -237,7 +237,7 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     `depthOne_shadow_upCell` proves the lift in the comparable case (32/33). At depth 2 the witness y has b(y) = z
     and is a z-shadow (24/24, comparable 22/24): the same mechanism one level up. Sibling-shadow configurations
     propagate upward (`climb_step`, `climb_next_config`). Inside the shadow interval the climb reaches stage k in
-    only 6 of 19 depth-two cases; the needed shadow columns lie outside it (§34.3z¹⁸⁰–¹⁸²).
+    only 6 of 19 depth-two cases. Allowing larger shadow columns raises this to 14 of 19 (§34.3z¹⁸⁰–¹⁸²).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

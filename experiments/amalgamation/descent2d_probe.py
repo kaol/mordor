@@ -108,6 +108,28 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer') 
                     else: outs.append('break: ' + ('upper' if not le[F[x_][y]][x_] else 'endpoint' if prev is None else 'early shadow'))
                 return 'no continuation: ' + ','.join(sorted(set(outs))) if outs else ('upper cell only' if ud else 'totinc')
             C[('climb (search) from depth', i, 'result', climb(r, z, u_prev, h[z]))] += 1
+            def climbx(pc, cc, uc, lvl):                 # shadow-interval extension: any u'' ≥ uc with F(pc, u'') = cc, m ≰ u''
+                if inR(cc, lvl - 1): return 'column early'
+                U = [uu for uu in range(n) if le[uc][uu] and not le[m][uu] and F[pc][uu] == cc]
+                best = None
+                for uu in U:
+                    vs = [v for v in range(n) if le[cc][v] and v != cc and le[v][uu] and le[F[cc][v]][v]]
+                    ud = [v for v in range(n) if le[cc][v] and v != cc and le[v][uu] and le[v][F[cc][v]]]
+                    if lvl == k:
+                        if vs or ud: return 'UpCell at stage k'
+                        best = best or 'stage k, totinc'; continue
+                    for v in vs:
+                        x_, u_ = cc, v; prev = None
+                        while True:
+                            g = F[x_][u_]
+                            if le[g][x_] or le[u_][g]: break
+                            prev, u_ = u_, g
+                        y = u_
+                        if le[F[x_][y]][x_] and prev is not None and not inR(y, lvl):
+                            if climbx(cc, y, prev, lvl + 1) == 'UpCell at stage k': return 'UpCell at stage k'
+                    best = best or 'stalled'
+                return best or 'stalled'
+            C[('climb (extended intervals) from depth', i, 'result', climbx(r, z, u_prev, h[z]))] += 1
         if i >= 2:
             ab = [y for y in wit if le[z][y]]
             C[('depth ≥ 2', 'z new at its stage', st[z] is not None and not inR(z, st[z] - 1) if st[z] else None, 'h(z) = k − i + 1', h[z] == k - i + 1)] += 1

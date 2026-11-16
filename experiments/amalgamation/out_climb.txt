@@ -111,3 +111,15 @@
 ('d5', "('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', True, 'some witness with b(y) = b^[i] m′', False)") 24
 ('d5', "('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', True, 'some witness with b(y) = b^[i] m′', True)") 33
 ('d5', 'configurations') 267
+
+== extended-interval climb (§34.3z¹⁸² addendum), d6 runs, summed
+('climb (extended intervals) from depth', 1, 'result', 'UpCell at stage k') 27
+('climb (extended intervals) from depth', 1, 'result', 'column early') 1
+('climb (extended intervals) from depth', 2, 'result', 'UpCell at stage k') 14
+('climb (extended intervals) from depth', 2, 'result', 'stalled') 5
+('climb (search) from depth', 1, 'result', 'UpCell at stage k') 26
+('climb (search) from depth', 1, 'result', 'column early') 1
+('climb (search) from depth', 1, 'result', 'stage k, totinc') 1
+('climb (search) from depth', 2, 'result', 'UpCell at stage k') 6
+('climb (search) from depth', 2, 'result', 'no continuation: break: endpoint') 9
+('climb (search) from depth', 2, 'result', 'totinc') 4

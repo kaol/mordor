@@ -177,7 +177,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     uniqueness-free configuration some top z ≠ m lies in R_{k+1}.
   - **Proved reductions** (each implies the next):
 
-    DescentWitness ⇒ CanonicalTopParent ⇒ TopParent ⇒ SecondEntry.
+    DescentWitness ⇒ UpCell ⇒ CanonicalTopParent ⇒ TopParent ⇒ SecondEntry.
+
+    `singletonLower_of_upCell` packages this: UpCell in every no-cell configuration gives `SingletonLower`
+    (§34.3z¹⁷²). UpCell says that some x ∈ R_k of height k has a cell at a column z > x with m ≰ z.
 
     - `DescentWitness` (`LateParent`, §34.3z¹⁶⁹): some top row x ∈ R_k and column v ≱ m such that the row x stays
       above x on its pre-fixed columns in (x, v].
@@ -197,8 +200,8 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
       (`late_b_parent_not_le`).
     - The raw feeder orbit from w ends exactly at a(m′) ≤ w (`rawOrbit_terminal`). In the residual case
       m′ ≰ a(m′), so the feeder descent must drop (`feeder_descent_leaves`, §34.3z¹⁷¹).
-  - **Status.** DescentWitness, hence SecondEntry in the residual case, has no counterexample (60 rank-3 closure
-    systems, 179 sweep lattices) but is unproved.
+  - **Status.** UpCell, the weakest of these targets, has no counterexample: 80 rank-3 and 30 rank-4 closure
+    systems (|L| up to 23), and 179 sweep lattices. It is unproved. DescentWitness has no counterexample either.
 
     Refuted on the way, each with a stored minimal model in `experiments/amalgamation/`:
     - every localized side entry;
@@ -208,8 +211,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     - the four drop-transfer selectors, |L| = 13–14;
     - configuration-free TopParent, |L| = 11.
 
-    The missing step: after the forced drop, find another top row with a descent witness. No fixed order relation
-    to r, a(m′) or w selects it.
+    The missing step: after the forced drop, find another top row with an upward cell away from m. The witness rows
+    are incomparable with m′, and no fixed order relation to r, a(m′) or w selects them. A proof must link
+    incomparable tops through their entry routes into R_k.
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and
@@ -239,7 +243,7 @@ choice-free one (§34.3z¹⁴⁰): the **tight-stage upper principal cut**. At a
 ⊤ ∉ R_{k+1}, some element m ∈ R_k of height k has a witness cell x ≤ m < y. By `OrbitHeight.cutMaps_of_tightUPC`
 it gives Cut at every finite edge-height. The statement is false for an arbitrary m, so a proof must use the
 orbit. Inside that programme, singleton lower transfer is reduced to **DescentWitness** in the residual no-cell
-configuration (see above). The existential general-separator conjectures remain as an alternative:
+configuration, and to UpCell (`singletonLower_of_upCell`; see above). The existential general-separator conjectures remain as an alternative:
 - **GSB(H):** every instance of edge-height H has a response-or-maximal run of at most H − 1 stages;
 - **GD(H):** some such run has strictly decreasing maximum gap.
 

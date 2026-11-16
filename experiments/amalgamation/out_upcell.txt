@@ -1,0 +1,30 @@
+== single_claims.py upcell multi nopostlayer rmin=3 closure 5 10 1 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi nopostlayer rmin=3 closure 5 10 2 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi nopostlayer rmin=3 closure 5 10 3 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi nopostlayer rmin=3 closure 5 11 4 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi nopostlayer rmin=3 closure 5 11 5 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi nopostlayer rmin=3 closure 6 11 6 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi nopostlayer rmin=3 closure 6 12 10 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi nopostlayer rmin=3 closure 6 12 9 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi nopostlayer rmin=4 closure 6 12 10 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi nopostlayer rmin=4 closure 6 12 9 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi nopostlayer rmin=4 closure 6 13 11 10
+claim upcell: {'none': 10}
+== single_claims.py upcell multi sweep 4 16
+claim upcell: {'none': 179}
+== single_claims.py noic_fi multi nopostlayer rmin=4 closure 6 12 10 10
+claim noic_fi: {'counterexample': 6, 'none': 4}; smallest counterexample |L| = 22, rank(m) = 4
+== single_claims.py noic_fi multi nopostlayer rmin=4 closure 6 12 9 10
+claim noic_fi: {'counterexample': 4, 'none': 6}; smallest counterexample |L| = 18, rank(m) = 4
+== single_claims.py noic_fi multi nopostlayer rmin=4 closure 6 13 11 10
+claim noic_fi: {'counterexample': 5, 'none': 5}; smallest counterexample |L| = 23, rank(m) = 4

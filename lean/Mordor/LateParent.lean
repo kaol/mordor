@@ -31,6 +31,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁷¹ (raw feeder orbit): `feeder_a_le_y`, `feeder_a_le_w` (`a m' ≤ w`), `a_le_iter`, `exists_iter_fix`,
   `rawOrbit_terminal` (the raw feeder orbit from `w` or `r` ends at `a m'`), `a_le_drop` (`a m' ≤ r`),
   `canonical_of_feeder_lt_a`, **`feeder_descent_leaves`**.
+* §34.3z¹⁷²: `UpCell` (a top row with a cell above itself away from `m`), `upCell_of_descentWitness`,
+  `canonical_of_upCell`, `secondEntry_of_canonical`, **`singletonLower_of_upCell`** (UpCell in every no-cell
+  configuration ⟹ `SingletonLower`).
 -/
 
 namespace Mordor.OrbitHeight
@@ -366,5 +369,57 @@ theorem feeder_descent_leaves {k H : ℕ} (hn : NoChain α (H + 1))
     · exact Or.inl (canonical_of_feeder_lt_a hn hall hm' hm'k hm'm hmax hmw hlt)
   · obtain ⟨n, hfix⟩ := exists_iter_fix (x := m') hn H (height_le _) (feeder_le_side hm'm hy)
     exact Or.inr (Or.inr ⟨n, rawOrbit_terminal (feeder_a_le_w hm'm hmax) hfix, hfix, hle⟩)
+
+/-! ### UpCell: the weakest row-cell target, and the packaged reduction of `SingletonLower` (§34.3z¹⁷²) -/
+
+/-- **UpCell**: some top row `x ∈ T_k` has a cell at a column strictly above `x` and not above `m`. -/
+def UpCell (F : α →o α →o α) (H k : ℕ) (m : α) : Prop :=
+  ∃ x ∈ Rk F k, height H x = k ∧ ∃ z, x < z ∧ ¬ m ≤ z ∧ (F x z ≤ x ∨ z ≤ F x z)
+
+/-- DescentWitness gives UpCell (`row_cell_of_above`). -/
+theorem upCell_of_descentWitness {k H : ℕ} (hn : NoChain α (H + 1)) {m : α} (h : DescentWitness F H k m) :
+    UpCell F H k m := by
+  obtain ⟨x, hx, hxk, v, hxv, hFv, hmv, habove⟩ := h
+  obtain ⟨z, hz1, hz2, hz3⟩ := row_cell_of_above hn habove H (height_le _) hxv le_rfl hFv
+  exact ⟨x, hx, hxk, z, hz1, fun h => hmv (h.trans hz2), hz3⟩
+
+/-- UpCell gives CanonicalTopParent (the two cell types are the two mechanisms). -/
+theorem canonical_of_upCell {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m : α} (h : UpCell F H k m) : CanonicalTopParent F H k m := by
+  obtain ⟨x, hx, hxk, z, hz1, hmz, hz3⟩ := h
+  have hzR := mem_succ_of_cell hx le_rfl hz3
+  have := height_strictMono hn hz1; have := hall z hzR
+  have hz : height H z = k + 1 := by omega
+  have hzm : z ≠ m := fun e => hmz (e ▸ le_rfl)
+  rcases hz3 with h | h
+  · have hb : b F z ≤ x := b_le h
+    exact Or.inr ⟨z, hzm, hz, Rk_down k hb hx, hb.trans hz1.le⟩
+  · have hle : z ≤ a F x := le_a h
+    have e : z = a F x := by
+      by_contra hne
+      have := height_strictMono hn (lt_of_le_of_ne hle hne)
+      have := hall _ (mem_succ_of_a hx le_rfl); omega
+    exact Or.inl ⟨x, hx, hxk, e ▸ hzm, e ▸ hz⟩
+
+/-- CanonicalTopParent gives SecondEntry directly (no `OHAt`). -/
+theorem secondEntry_of_canonical {k H : ℕ} {m : α} (h : CanonicalTopParent F H k m) : SecondEntry F H k m := by
+  rcases h with ⟨y, hy, -, hm, hay⟩ | ⟨z, hzm, hz, hb, -⟩
+  · exact ⟨a F y, hm, hay, mem_succ_of_a hy le_rfl⟩
+  · exact ⟨z, hzm, hz, mem_succ_of_b hb⟩
+
+/-- **The packaged reduction of `SingletonLower`.** If, in every uniqueness-free singleton configuration whose top
+`m` has no interval cell, some top row of `R_k` has a cell above itself away from `m` (UpCell), then
+`SingletonLower F H` holds. (By `upCell_of_descentWitness`, DescentWitness suffices.) -/
+theorem singletonLower_of_upCell {H : ℕ} (hn : NoChain α (H + 1))
+    (hup : ∀ k, (⊤ : α) ∉ Rk F (k + 2) → (∀ z ∈ Rk F k, height H z ≤ k) →
+      (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → ∀ m, m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k →
+      ∀ m' ∈ Rk F k, height H m' = k → m' < m → F m' m ≤ m' →
+      (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) → UpCell F H k m) :
+    SingletonLower F H := by
+  intro k htop hk hall m huniq hm hmk hnew m' hm' hm'k hlt hlo
+  by_contra hno
+  obtain ⟨z, hzm, hz, hzR⟩ :=
+    secondEntry_of_canonical (canonical_of_upCell hn hall (hup k htop hk hall m hm hmk hnew m' hm' hm'k hlt hlo hno))
+  exact hzm (huniq z hzR hz)
 
 end Mordor.OrbitHeight

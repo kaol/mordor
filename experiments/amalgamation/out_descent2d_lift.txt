@@ -1,0 +1,38 @@
+== descent2d_probe.py (§34.3z¹⁸¹: depth-one origin, depth-two climb); same seeds as out_descent2d.txt; summed
+('depth 0: UpCell of the feeder (proved)', True) 209
+('depth ≥ 1 U-cell', 'z = a(r)', True, 'z ≤ a(r)', True) 5
+('depth ≥ 1 final column', 'type', 'L', 'h(z) − h(r)', 1, 'stage status', 'early') 1
+('depth ≥ 1 final column', 'type', 'L', 'h(z) − h(r)', 1, 'stage status', 'on time') 52
+('depth ≥ 1 final column', 'type', 'U', 'h(z) − h(r)', 1, 'stage status', 'on time') 5
+('depth ≥ 2 climb', 'best witness y (b(y) = z) status', 'shadow, comparable') 22
+('depth ≥ 2 climb', 'best witness y (b(y) = z) status', 'shadow, totinc') 2
+('depth ≥ 2 witness y ≥ z', 'b(y) = z', False, 'b(y) vs z', '>', 'y = a(z)', False, 'y new', True) 2
+('depth ≥ 2 witness y ≥ z', 'b(y) = z', True, 'b(y) vs z', '=', 'y = a(z)', False, 'y new', True) 24
+('depth ≥ 2 witness y ≥ z', 'y is a path column', False, 'y = u_prev', False, 'y ≤ some path column', False) 3
+('depth ≥ 2 witness y ≥ z', 'y is a path column', False, 'y = u_prev', False, 'y ≤ some path column', True) 11
+('depth ≥ 2 witness y ≥ z', 'y is a path column', True, 'y = u_prev', True, 'y ≤ some path column', True) 12
+('depth ≥ 2', 'a(z) a top of R_k ≠ m with UpCell', False) 24
+('depth ≥ 2', 'some witness y ≥ z with b(y) = z', True, 'some witness y ≥ z', True) 24
+('depth ≥ 2', 'z new at its stage', True, 'h(z) = k − i + 1', True) 24
+('depth-1 L new column', 'origin', 'shadow z = F(b m′, u)', 'siblingShadow_upCell applies', False, 'z has UpCell', True) 1
+('depth-1 L new column', 'origin', 'shadow z = F(b m′, u)', 'siblingShadow_upCell applies', True, 'z has UpCell', True) 32
+('depth-1 L, column a top of R_k', 'new', False, 'b(z) = b(m′)', False, 'z has UpCell', False) 1
+('depth-1 L, column a top of R_k', 'new', True, 'b(z) = b(m′)', True, 'z has UpCell', True) 33
+('final row', 'h = k − depth', True, 'new at its stage', True) 267
+('final', 'depth', 0, 'type', 'L') 106
+('final', 'depth', 0, 'type', 'U') 103
+('final', 'depth', 1, 'type', 'L') 34
+('final', 'depth', 2, 'type', 'L') 19
+('final', 'depth', 2, 'type', 'U') 5
+('path', 'same-row steps', 0, 'source steps (before the final one)', 0) 147
+('path', 'same-row steps', 0, 'source steps (before the final one)', 1) 21
+('path', 'same-row steps', 0, 'source steps (before the final one)', 2) 18
+('path', 'same-row steps', 1, 'source steps (before the final one)', 0) 60
+('path', 'same-row steps', 1, 'source steps (before the final one)', 1) 13
+('path', 'same-row steps', 1, 'source steps (before the final one)', 2) 6
+('path', 'same-row steps', 2, 'source steps (before the final one)', 0) 2
+('witness rows vs final', 'some witness ≥ r', False, 'some witness ≥ z', False, 'some witness with b(y) = b^[i] m′', False) 1
+('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', False, 'some witness with b(y) = b^[i] m′', False) 209
+('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', True, 'some witness with b(y) = b^[i] m′', False) 24
+('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', True, 'some witness with b(y) = b^[i] m′', True) 33
+configurations 267

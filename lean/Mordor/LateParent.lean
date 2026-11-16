@@ -46,6 +46,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁸⁰: `dropNode_source_lt`, `chainExit_not_D` (the D-exit is impossible), `CellState`, **`cellState_cell`**
   (two-dimensional descent yields a genuine cell), **`dropNode_cell`**, `feeder_cell_dichotomy`,
   `depthOne_lowerCell_sibling`.
+* §34.3z¹⁸¹: **`depthOne_shadow_upCell`** (the depth-one lift, comparable case).
 -/
 
 namespace Mordor.OrbitHeight
@@ -800,5 +801,17 @@ theorem depthOne_lowerCell_sibling {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H'
   have hzh : height H z = j + 2 := by omega
   obtain ⟨h1, h2⟩ := sibling_of_shadow IH hn hzh hznew hrh hrz hL
   exact ⟨hzR, hzh, h1, h2⟩
+
+/-- **Depth-one lift, comparable case.** With `OHAt` below `j + 1` and `R_{j+2}` tight: let `q ∈ R_{j+1}` have height
+`j + 1` (the feeder's source at stage `k = j + 2`), and let `z = F q u` be a shadow of a column `u` with `m ≰ u`, new at
+stage `j + 2`, carrying a lower cell `F q z ≤ q` with `q < z`. If some column of `(z, u]` is comparable with its
+row-`z` value, then UpCell holds at stage `j + 2`, witnessed by `z` (a same-source sibling of the feeder). -/
+theorem depthOne_shadow_upCell {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H') (hn : NoChain α (H + 1))
+    (hk : ∀ z ∈ Rk F (j + 2), height H z ≤ j + 2) {m q z u : α} (hq : q ∈ Rk F (j + 1))
+    (hqh : height H q = j + 1) (hqz : q < z) (hL : F q z ≤ q) (hznew : z ∉ Rk F (j + 1)) (hqu : F q u = z)
+    (hmu : ¬ m ≤ u) (hcase : ∃ y, z < y ∧ y ≤ u ∧ (F z y ≤ y ∨ y ≤ F z y)) : UpCell F H (j + 2) m := by
+  obtain ⟨hzR, hzh, -, hqzq⟩ := depthOne_lowerCell_sibling IH hn hk hq hqh hqz hL hznew
+  have hcov : q ⋖ z := covBy_of_height hn hqz (by omega)
+  exact siblingShadow_upCell hn hk hq hzR hzh hcov hqzq hqu hmu hcase
 
 end Mordor.OrbitHeight

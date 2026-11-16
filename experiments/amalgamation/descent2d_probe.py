@@ -29,15 +29,17 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer') 
         mp = B(m); w = F[m][ystar(L, F, m)]
         ups = lambda y: [z for z in range(n) if le[y][z] and z != y and not le[m][z] and (le[F[y][z]][y] or le[z][F[y][z]])]
         r, e, i, rows, cols = mp, w, 0, 0, 0
+        origin, u_prev = 'start', None
+        path = [(r, e)]                       # how the current column arose: 'start' / 'path' (row value) / 'shadow'
         while True:
             t = F[r][e]
             if le[t][r]: typ = 'L'; z = e; break
             if le[e][t]: typ = 'U'; z = e; break
-            if le[r][t]: e = t; cols += 1; continue
+            if le[r][t]: u_prev = e; e = t; cols += 1; origin = 'path' if i == 0 else 'shadow'; path.append((r, e)); continue
             q = B(r); assert le[q][r] and q != r              # dropNode_source_lt
             e2 = F[q][e]
-            if le[e2][q]: typ = 'L'; r = q; z = e; i += 1; break
-            r, e, i = q, e2, i + 1; rows += 1
+            if le[e2][q]: typ = 'L'; r = q; z = e; i += 1; origin = 'feeder path (F(b m′, e) ≤ b m′ at e)' if i == 1 else origin; break
+            u_prev = e; r, e, i = q, e2, i + 1; rows += 1; origin = 'shadow'; path.append((r, e))
         assert le[r][z] and r != z and (le[F[r][z]][r] or le[z][F[r][z]])    # cellState_cell
         C['configurations'] += 1
         C[('final', 'depth', i, 'type', typ)] += 1
@@ -52,10 +54,33 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer') 
             C[('depth ≥ 1 final column', 'type', typ, 'h(z) − h(r)', h[z] - h[r], 'stage status', stat)] += 1
             if typ == 'L' and i == 1 and h[z] == k and inR(z, k):
                 newz = not inR(z, k - 1)
+                if newz:
+                    sub = 'shadow z = F(b m′, u)' if origin == 'shadow' else origin
+                    comp = None
+                    if origin == 'shadow':
+                        assert F[r][u_prev] == z
+                        comp = any(le[z][y] and y != z and le[y][u_prev] and (le[F[z][y]][y] or le[y][F[z][y]]) for y in range(n))
+                    C[('depth-1 L new column', 'origin', sub, 'siblingShadow_upCell applies', comp, 'z has UpCell', bool(ups(z)))] += 1
                 C[('depth-1 L, column a top of R_k', 'new', newz, 'b(z) = b(m′)', B(z) == mp if False else B(z) == B(mp), 'z has UpCell', bool(ups(z)))] += 1
             if typ == 'U':
                 C[('depth ≥ 1 U-cell', 'z = a(r)', a_of(L, F, r) == z, 'z ≤ a(r)', le[z][a_of(L, F, r)])] += 1
         wit = [y for y in range(n) if inR(y, k) and h[y] == k and ups(y)]
+        if i >= 2:
+            ab = [y for y in wit if le[z][y]]
+            C[('depth ≥ 2', 'z new at its stage', st[z] is not None and not inR(z, st[z] - 1) if st[z] else None, 'h(z) = k − i + 1', h[z] == k - i + 1)] += 1
+            pcols = [ee for _, ee in path]
+            def shadow_ok(y):       # y = F(z, u) for some u > y, m ≰ u, with a comparable column of row y in (y, u]
+                for uu in range(n):
+                    if le[y][uu] and uu != y and not le[m][uu] and F[z][uu] == y:
+                        if any(le[y][v] and v != y and le[v][uu] and (le[F[y][v]][v] or le[v][F[y][v]]) for v in range(n)): return 'shadow, comparable'
+                        return 'shadow, totinc'
+                return 'not a shadow of z'
+            C[('depth ≥ 2 climb', 'best witness y (b(y) = z) status', min([shadow_ok(y) for y in ab if B(y) == z] or ['none']))] += 1
+            for y in ab:
+                C[('depth ≥ 2 witness y ≥ z', 'y is a path column', y in pcols, 'y = u_prev', y == u_prev, 'y ≤ some path column', any(le[y][ee] for ee in pcols))] += 1
+                C[('depth ≥ 2 witness y ≥ z', 'b(y) = z', B(y) == z, 'b(y) vs z', rel(B(y), z), 'y = a(z)', a_of(L, F, z) == y, 'y new', not inR(y, k - 1))] += 1
+            C[('depth ≥ 2', 'some witness y ≥ z with b(y) = z', any(B(y) == z for y in ab), 'some witness y ≥ z', bool(ab))] += 1
+            C[('depth ≥ 2', 'a(z) a top of R_k ≠ m with UpCell', a_of(L, F, z) in wit and a_of(L, F, z) != m)] += 1
         C[('witness rows vs final', 'some witness ≥ r', any(le[r][y] for y in wit), 'some witness ≥ z', any(le[z][y] for y in wit),
            'some witness with b(y) = b^[i] m′', any(B(y) == r for y in wit))] += 1
         break

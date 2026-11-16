@@ -1,0 +1,85 @@
+== single_claims.py soleB multi sweep 4 16
+claim soleB: {'none': 28, 'counterexample': 151}; smallest counterexample |L| = 5, rank(m) = 1
+== soleB multi closure 5 10 1 10
+claim soleB: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 1
+== soleB multi closure 5 11 2 10
+claim soleB: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 1
+== soleA multi sweep 4 16
+claim soleA: {'none': 28, 'counterexample': 151}; smallest counterexample |L| = 5, rank(m) = 1
+== soleA multi closure 5 10 1 10
+claim soleA: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 1
+== soleA multi closure 5 11 2 10
+claim soleA: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 1
+== side multi post sweep 4 16 (sanity check of secondEntry_of_diag_fixed_feeder)
+claim side: {'none': 179}
+== side multi post closure 5 10 1 10
+claim side: {'none': 10}
+== noic_fi multi post sweep 4 16
+claim noic_fi: {'none': 28, 'counterexample': 151}; smallest counterexample |L| = 5, rank(m) = 1
+== noic_fi multi strictpre sweep 4 16
+claim noic_fi: {'none': 95, 'counterexample': 84}; smallest counterexample |L| = 6, rank(m) = 2
+== noic_fi multi nopostlayer sweep 4 16 (remaining case inhabited)
+claim noic_fi: {'none': 95, 'counterexample': 84}; smallest counterexample |L| = 6, rank(m) = 2
+== soleB multi nopostlayer sweep 4 16
+claim soleB: {'none': 95, 'counterexample': 84}; smallest counterexample |L| = 6, rank(m) = 2
+== soleA multi nopostlayer sweep 4 16
+claim soleA: {'none': 95, 'counterexample': 84}; smallest counterexample |L| = 6, rank(m) = 2
+== sibling multi sweep 4 16
+claim sibling: {'none': 107, 'counterexample': 72}; smallest counterexample |L| = 7, rank(m) = 2
+== sibling multi nopostlayer sweep 4 16
+claim sibling: {'none': 107, 'counterexample': 72}; smallest counterexample |L| = 7, rank(m) = 2
+== sibling multi nopostlayer closure 5 10 1 10
+claim sibling: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 2
+== topparent multi sweep 4 16
+claim topparent: {'none': 179}
+== topparent multi closure 5 11 2 10
+claim topparent: {'none': 10}
+== topparent multi nopostlayer sweep 4 16
+claim topparent: {'none': 179}
+== topparent multi nopostlayer closure 5 10 1 10
+claim topparent: {'none': 10}
+== top_parent.py sweep 4 16 (configuration-free)
+top_parent: {'none': 184}
+== top_parent.py closure 5 10 1 10
+top_parent: {'counterexample': 8, 'none': 2}; smallest |L| = 15, rank(z) = 3, parents' ranks [1]
+== witness_probe.py layer sweep 4 16
+models 84
+('A-top', 'h(x) − (K−1)', 0) 60
+('A-top', 'x diag-post', False) 60
+('A-top', 'x vs m′', '=') 45
+('A-top', 'x vs m′', '∥') 15
+('A-top', 'x vs z', '<') 48
+('A-top', 'x vs z', '∥') 12
+('B-top', 'b z = b of an R-element ≠ itself', False) 65
+('B-top', 'b z diag-post', False) 65
+('B-top', 'b z diag-pre', True) 65
+('B-top', 'b z vs m′', '=') 62
+('B-top', 'b z vs m′', '∥') 3
+('B-top', 'b z vs z', '<') 47
+('B-top', 'b z vs z', '∥') 18
+('B-top', 'h(b z) − (K−1)', 0) 65
+('feeder F(m′,m′) < m′', True) 84
+('post-fixed elements of R_{K−1} (any height) exist', True) 84
+('some second A-entry', False) 32
+('some second A-entry', True) 52
+('some second B-entry', False) 38
+('some second B-entry', True) 46
+('top', 'route', 'A') 48
+('top', 'route', 'B') 61
+('top', 'route', 'BA') 4
+('tops of R_{K−1}: all strictly diag-pre', False) 4
+('tops of R_{K−1}: all strictly diag-pre', True) 80
+== check_second.py
+single_claim_below_w_multi_min8.json: |L| 8, K 2, no cell True; post-fixed tops of R_K−1 ['{1}']; theorem replay (x, z, z a second top) [('{1}', '{12}', True)]; second tops and parents {'{12}': [('B', '{1}')]}
+single_claim_noic_fi_multi_min5.json: |L| 5, K 1, no cell True; post-fixed tops of R_K−1 ['{}']; theorem replay (x, z, z a second top) [('{}', '{1}', True)]; second tops and parents {'{1}': [('A', '{}')]}
+single_claim_noic_fi_multi_nopostlayer_min6.json: |L| 6, K 2, no cell True; post-fixed tops of R_K−1 []; theorem replay (x, z, z a second top) []; second tops and parents {'{02}': [('A', '{0}')]}
+single_claim_noic_fi_multi_post_min5.json: |L| 5, K 1, no cell True; post-fixed tops of R_K−1 ['{}']; theorem replay (x, z, z a second top) [('{}', '{1}', True)]; second tops and parents {'{1}': [('A', '{}')]}
+single_claim_noic_fi_multi_strictpre_min6.json: |L| 6, K 2, no cell True; post-fixed tops of R_K−1 []; theorem replay (x, z, z a second top) []; second tops and parents {'{02}': [('A', '{0}')]}
+single_claim_sibling_multi_min7.json: |L| 7, K 2, no cell True; post-fixed tops of R_K−1 ['{1}']; theorem replay (x, z, z a second top) [('{1}', '{01}', True)]; second tops and parents {'{01}': [('A', '{1}')]}
+single_claim_sibling_multi_nopostlayer_min7.json: |L| 7, K 2, no cell True; post-fixed tops of R_K−1 []; theorem replay (x, z, z a second top) []; second tops and parents {'{01}': [('B', '{1}')]}
+single_claim_side_multi_min7.json: |L| 7, K 2, no cell True; post-fixed tops of R_K−1 ['{1}']; theorem replay (x, z, z a second top) [('{1}', '{12}', True)]; second tops and parents {'{12}': [('B', '{1}'), ('A', '{0}')]}
+single_claim_side_w_multi_min5.json: |L| 5, K 1, no cell True; post-fixed tops of R_K−1 ['{}']; theorem replay (x, z, z a second top) [('{}', '{0}', True)]; second tops and parents {'{0}': [('B', '{}')]}
+single_claim_soleA_multi_min5.json: |L| 5, K 1, no cell True; post-fixed tops of R_K−1 ['{}']; theorem replay (x, z, z a second top) [('{}', '{1}', True)]; second tops and parents {'{1}': [('B', '{}')]}
+single_claim_soleA_multi_nopostlayer_min6.json: |L| 6, K 2, no cell True; post-fixed tops of R_K−1 []; theorem replay (x, z, z a second top) []; second tops and parents {'{02}': [('B', '{0}')]}
+single_claim_soleB_multi_min5.json: |L| 5, K 1, no cell True; post-fixed tops of R_K−1 ['{}']; theorem replay (x, z, z a second top) [('{}', '{1}', True)]; second tops and parents {'{1}': [('A', '{}')]}
+single_claim_soleB_multi_nopostlayer_min6.json: |L| 6, K 2, no cell True; post-fixed tops of R_K−1 []; theorem replay (x, z, z a second top) []; second tops and parents {'{02}': [('A', '{0}')]}

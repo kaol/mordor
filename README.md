@@ -172,6 +172,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     The side-entry dichotomy ((A) w ≤ a(x), x ∈ R_k, or (B) b(w) ∈ R_k) is equivalent to False under these hypotheses
     (`SideEntry`, §34.3z¹⁶⁴). Without uniqueness, every localized side entry fails (|L| = 5, 7, 8), so a proof must use
     uniqueness across the whole height-(k+1) layer.
+    SecondEntry (a second top in R_{k+1}) holds whenever some height-k element of R_k is diagonal post-fixed, with no
+    uniqueness, feeder identity or OHAt (`SecondEntry.secondEntry_of_post_layer`, §34.3z¹⁶⁵). The open case has no
+    post-fixed top in R_k.
   - `cutMaps_of_riseAt`: the **Rise conjecture** (a rigid map has a good x < a(x)) at all heights ≤ H gives Cut at
     edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices. Rise witnesses can need
     to enter as late as stage H − 1, so for rigid maps Rise is close to the orbit-height property itself.

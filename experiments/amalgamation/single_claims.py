@@ -25,7 +25,8 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
   'ahead': index-sensitivity test, m placed at stage J = K − 1 (one ahead): R_J ranks ≤ K with unique rank-K
            element m ∉ R_{J−1}, R_{J−1} ranks ≤ K − 1, ⊤ ∉ R_{J+1}, feeders/entries from R_{J−1}.
   §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
-  flags: notop (drop ⊤ ∉ R_{K+1}), multi (drop uniqueness of m)
+  §34.3z¹⁶⁵ (with 'multi'): topparent  some rank-K top z ≠ m has an A- or B-parent of rank K − 1;  sibling  the row m′ has a cell at a rank-K column z ≠ m;  soleB  m is the only B-entry of rank K;  soleA  no A-entry z ≠ m of rank K
+  flags: notop (drop ⊤ ∉ R_{K+1}), multi (drop uniqueness of m), post / strictpre (lower feeders diagonal post-fixed / not), nopostlayer (no rank-(K−1) element of R_{K−1} post-fixed)
   python3 single_claims.py CLAIM [ahead] [notop] [multi] (sweep P NMAX | closure K M SEED COUNT)
 """
 import sys, collections, itertools
@@ -36,7 +37,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -72,7 +73,34 @@ def query(L, m, claim, ahead=False):
         for p in feeders:
             o = E.v('low', p); E.iff_and(o, [r(K - 1, p), fle(p, m, p)]); low[p] = o
         E.S.add_clause(list(low.values()))
-        if claim == 'below_w':         # §34.3z¹⁶⁴: noic_fi plus no on-time height-K element of R_K below w (below_d: below D-limit)
+        for p in feeders:                            # §34.3z¹⁶⁵ flags: post (every lower feeder diagonal post-fixed) / strictpre (none is)
+            if 'post' in sys.argv: E.S.add_clause([-low[p], yle(p, p)])
+            if 'strictpre' in sys.argv: E.S.add_clause([-low[p], -yle(p, p)])
+        if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
+            for x in range(n):
+                if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
+        if claim == 'topparent':                   # §34.3z¹⁶⁵: noic_fi and no rank-K top z ≠ m has a fixed-edge parent of rank K − 1 in R_{K−1}
+            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
+            E.S.add_clause([-ic(m)])
+            for z in range(n):
+                if z == m or rk[z] != K: continue
+                for g in range(n):
+                    if rk[g] == K - 1: E.S.add_clause([-B(z, g), -r(K - 1, g)]); E.S.add_clause([-r(K - 1, g), -A(g, z)])
+        elif claim == 'sibling':                     # §34.3z¹⁶⁵: noic_fi and the row m′ has no cell at any rank-K column z ≠ m
+            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
+            E.S.add_clause([-ic(m)])
+            for p in feeders:
+                for z in range(n):
+                    if z != m and rk[z] == K: E.S.add_clause([-E.v('fi', p), -fle(p, z, p)]); E.S.add_clause([-E.v('fi', p), -yle(p, z)])
+        elif claim in ('soleB', 'soleA'):            # §34.3z¹⁶⁵: noic_fi with m the sole B-entry (soleB) / no A-entry z ≠ m (soleA) at rank K
+            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
+            E.S.add_clause([-ic(m)])
+            for z in range(n):
+                if z == m or rk[z] != K: continue
+                for g in range(n):
+                    if claim == 'soleB': E.S.add_clause([-B(z, g), -r(K - 1, g)])
+                    else: E.S.add_clause([-r(K - 1, g), -A(g, z)])
+        elif claim == 'below_w':         # §34.3z¹⁶⁴: noic_fi plus no on-time height-K element of R_K below w (below_d: below D-limit)
             for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
             E.S.add_clause([-ic(m)])
             for y, Y in ys_block(E, L, m, f):
@@ -145,7 +173,12 @@ def query(L, m, claim, ahead=False):
         y = ystar(L, F, m)
         from gfp_top import ic as ic_py
         wv = F[m][y]; side = [z for z in range(n) if le[bm][z] and z != bm and le[z][wv] and inR(z, K)]
-        viol = {'below_w': (bm in low) and not ic_py(L, F, m) and not any(le[z][wv] and rk[z] == K and inR(z, K) for z in range(n)),
+        tops = [z for z in range(n) if z != m and rk[z] == K]
+        viol = {'topparent': (bm in low) and not ic_py(L, F, m) and not any((inR(b_of(L, F, z), K - 1) and rk[b_of(L, F, z)] == K - 1) or any(inR(x, K - 1) and rk[x] == K - 1 and a_of(L, F, x) == z for x in range(n)) for z in tops),
+                'sibling': (bm in low) and not ic_py(L, F, m) and not any(le[F[bm][z]][bm] or le[z][F[bm][z]] for z in tops),
+                'soleB': (bm in low) and not ic_py(L, F, m) and not any(inR(b_of(L, F, z), K - 1) for z in tops),
+                'soleA': (bm in low) and not ic_py(L, F, m) and not any(inR(x, K - 1) and a_of(L, F, x) == z for z in tops for x in range(n)),
+                'below_w': (bm in low) and not ic_py(L, F, m) and not any(le[z][wv] and rk[z] == K and inR(z, K) for z in range(n)),
                 'side': (bm in low) and not ic_py(L, F, m) and not side, 'side_w': (bm in low) and not ic_py(L, F, m) and not inR(wv, K),
                 'feeder_post': any(not le[p][F[p][p]] for p in low), 'noic_fi': (bm in low) and not ic_py(L, F, m), 'bm_eq_feeder': any(bm != p for p in low), 'C_bm_eq_feeder': any(bm != p for p in low),
                 'C_a_feeder_le': any(not le[a_of(L, F, p)][m] for p in low), 'a_feeder_le': any(not le[a_of(L, F, p)][m] for p in low),
@@ -161,7 +194,7 @@ def query(L, m, claim, ahead=False):
 
 if __name__ == '__main__':
     claim = sys.argv[1]; ahead = 'ahead' in sys.argv; C = collections.Counter(); best = None
-    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi')]):
+    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer')]):
         if L.height < 2: continue
         hit = None
         for m in range(L.n):
@@ -172,4 +205,4 @@ if __name__ == '__main__':
         if hit and (best is None or L.n < best[0].n): best = (L, hit)
     print(f"claim {claim}{' ahead' if ahead else ''}: {dict(C)}" + (f"; smallest counterexample |L| = {best[0].n}, rank(m) = {best[0].rank[best[1][0]]}" if best else ''), flush=True)
     if best:
-        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi') if f in sys.argv)}_min{best[0].n}.json", 'w'))
+        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer') if f in sys.argv)}_min{best[0].n}.json", 'w'))

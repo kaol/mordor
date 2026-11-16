@@ -3,6 +3,8 @@
 mode 'ahead': the one-stage-ahead no-cell models (single_claims.py noic_fi ahead; m ∈ R_J, J = h(m) − 1). For every
   A-route witness x ∈ R_J with w ≤ a(x) record height, entry stage and route, maximality in R_J, the relation to m′, m,
   w, d*, and whether the witnesses have a least element / a canonical minimal one.
+mode 'layer': as 'multi' with no diagonal post-fixed top of R_{K−1} (the case left by SecondEntry.lean): route and
+  B-fibre / A-parent provenance of every second top.
 mode 'multi': the index-tight no-cell models with uniqueness of m dropped (single_claims.py noic_fi multi; m ∈ R_K,
   K = h(m)). Record every second on-time element z ≠ m of height K in R_K: its route and its relation to m′, m, w, y*.
 A universal claim is refuted by any model where it fails; 'True' counts are per model (one SAT model per lattice).
@@ -10,7 +12,8 @@ A universal claim is refuted by any model where it fails; 'True' counts are per 
 """
 import sys, collections
 mode = sys.argv[1]; args = sys.argv[2:]
-if mode == 'multi': sys.argv.append('multi')
+if mode in ('multi', 'layer'): sys.argv.append('multi')
+if mode == 'layer': sys.argv.append('nopostlayer')
 sys.path.insert(0, '../separation')
 from rstages import stages, a_of, b_of
 from gfp_top import ystar
@@ -62,6 +65,25 @@ for L in lattices(args):
             C[('some witness ≤ m′', any(le[x][mp] for x in X))] += 1
             C[('some witness ≤ m', any(le[x][m] for x in X))] += 1
             C[('some witness ≤ w', any(le[x][w] for x in X))] += 1
+        elif mode == 'layer':                    # remaining case: no post-fixed top of R_{K−1}; B-fibre / A-parent provenance of the tops
+            Z = [z for z in range(n) if z != m and h[z] == K and inR(z, K)]
+            R1 = [x for x in range(n) if inR(x, K - 1)]
+            C[('feeder F(m′,m′) < m′', le[F[mp][mp]][mp] and F[mp][mp] != mp)] += 1
+            C[('some second B-entry', any(inR(B(z), K - 1) for z in Z))] += 1
+            C[('some second A-entry', any(A(x) == z for z in Z for x in R1))] += 1
+            for z in Z:
+                bz = B(z); par = [x for x in R1 if A(x) == z]
+                C[('top', 'route', ('B' if inR(bz, K - 1) else '') + ('A' if par else ''))] += 1
+                if inR(bz, K - 1):
+                    C[('B-top', 'h(b z) − (K−1)', h[bz] - (K - 1))] += 1; C[('B-top', 'b z vs z', rel(bz, z))] += 1
+                    C[('B-top', 'b z vs m′', rel(bz, mp))] += 1; C[('B-top', 'b z = b of an R-element ≠ itself', any(B(y) == bz and y != bz for y in R1))] += 1
+                    C[('B-top', 'b z diag-pre', le[F[bz][bz]][bz])] += 1; C[('B-top', 'b z diag-post', le[bz][F[bz][bz]])] += 1
+                for x in par:
+                    C[('A-top', 'h(x) − (K−1)', h[x] - (K - 1))] += 1; C[('A-top', 'x vs z', rel(x, z))] += 1
+                    C[('A-top', 'x diag-post', le[x][F[x][x]])] += 1; C[('A-top', 'x vs m′', rel(x, mp))] += 1
+            tops1 = [x for x in R1 if h[x] == K - 1]
+            C[('tops of R_{K−1}: all strictly diag-pre', all(le[F[x][x]][x] and F[x][x] != x for x in tops1))] += 1
+            C[('post-fixed elements of R_{K−1} (any height) exist', any(le[x][F[x][x]] for x in R1))] += 1
         else:
             Z = [z for z in range(n) if z != m and h[z] == K and inR(z, K)]
             C[('second elements', len(Z))] += 1

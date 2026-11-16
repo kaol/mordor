@@ -162,39 +162,54 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     - feeder identity holds;
     - the orbit-height property, and Cut with it, at edge-height H reduces to *rigid* maps: a(⊥) = ⊥, b(⊤) = ⊤, and
       the diagonal fixes only ⊥ and ⊤ (`HeightInduction.top_mem_reduction`).
-  - Feeder identity holds unconditionally at stages k ≤ 4 on every lattice of finite edge-height, and in singleton
-    lower transfer the incomparable column output meets m exactly in the feeder, w ⊓ m = m′ (`FeederStage`,
-    §34.3z¹⁶²). A 7-element one-stage-ahead model satisfies both but has no cell, so a proof must also use the index
-    bound (no early elements).
-    Also b(y) ≰ m for all y > m (`strict_upper_b_not_le`). With m unique on time, the no-cell configuration
-    descends to a no-cell column fixed point d* of the feeder row inside (m′, w] (`side_interval_maps`, §34.3z¹⁶³).
-    Uniqueness of m is essential at |L| = 5, while ⊤ ∉ R_{k+2} is not.
-    The side-entry dichotomy ((A) w ≤ a(x), x ∈ R_k, or (B) b(w) ∈ R_k) is equivalent to False under these hypotheses
-    (`SideEntry`, §34.3z¹⁶⁴). Without uniqueness, every localized side entry fails (|L| = 5, 7, 8), so a proof must use
-    uniqueness across the whole height-(k+1) layer.
-    SecondEntry (a second top in R_{k+1}) holds whenever some height-k element of R_k is diagonal post-fixed, with no
-    uniqueness, feeder identity or OHAt (`SecondEntry.secondEntry_of_post_layer`, §34.3z¹⁶⁵). The open case has no
-    post-fixed top in R_k.
-    TopParent (a second top with a parent of height k) differs from SecondEntry only through late elements, and is
-    SecondEntry itself at k = 1 (`ParentAncestry`, §34.3z¹⁶⁶). It has no counterexample at rank 3 (40 closure
-    systems), while the configuration-free version fails at |L| = 11.
-    The A-parents of a top form an up-set of R_k, so TopParent can fail only if every A-parent of every second top is
-    isolated from T_k (`LateParent`, §34.3z¹⁶⁷). The B-side is open, and "every second top has an on-time parent" is
-    false at |L| = 13.
-    Late B-parents are incomparable with their top (proved). TopParent reduces to CanonicalTopParent: some top of
-    R_k has a(y) a second top, or some second top z has b(z) ≤ z. CanonicalTopParent has no counterexample (60
-    rank-3 closure systems), while "late B-parents lie below T_k" fails at |L| = 14 (§34.3z¹⁶⁸).
-    Both canonical mechanisms are the two cell types of one row descent. DescentWitness (a top row that stays above
-    itself on a pre-fixed interval missing m) implies CanonicalTopParent. The feeder row does this unless it "drops"
-    (`canonical_of_feeder_descent`, 35/46 rank-3 configurations). DescentWitness has no counterexample (§34.3z¹⁶⁹).
-    When the feeder row drops, r = F(m′, q) is incomparable with m′ or gives mechanism B (proved). The replacement
-    row lies below r or beside r with v = a(r), but "some top below r" is false at |L| = 14 (§34.3z¹⁷⁰).
-    The raw feeder orbit ends exactly at a(m′) ≤ w, and m′ < a(m′) gives mechanism A, so the residual case has a
-    forced drop (`feeder_descent_leaves`). Four selectors for the replacement row are false at |L| = 13–14
-    (§34.3z¹⁷¹).
+  - Feeder identity holds unconditionally at stages k ≤ 4 on every lattice of finite edge-height (`FeederStage`,
+    §34.3z¹⁶²).
   - `cutMaps_of_riseAt`: the **Rise conjecture** (a rigid map has a good x < a(x)) at all heights ≤ H gives Cut at
     edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices. Rise witnesses can need
     to enter as late as stage H − 1, so for rigid maps Rise is close to the orbit-height property itself.
+- **Singleton lower transfer, the no-cell case (§34.3z¹⁶²–¹⁷¹, Lean, no certificates).**
+  - **The configuration.** R_k and R_{k+1} are index-tight; m ∈ R_{k+1} ∖ R_k has height k + 1 and no interval cell;
+    its feeder m′ = b(m) ∈ R_k has height k, with F(m′, m) ≤ m′. The column orbit gives y* = m ⊔ w with
+    w = F(m, y*) ∥ m and w ⊓ m = m′ (`single_lower_meet`).
+  - **Uniqueness is used globally.** SingletonLower asks that m be the only height-(k + 1) element of R_{k+1}. Under
+    that hypothesis every localized side entry is equivalent to False (`SideEntry`, §34.3z¹⁶⁴). Without it, each
+    localized form fails (|L| = 5, 7, 8). The remaining statement is therefore **SecondEntry**: in the
+    uniqueness-free configuration some top z ≠ m lies in R_{k+1}.
+  - **Proved reductions** (each implies the next):
+
+    DescentWitness ⇒ CanonicalTopParent ⇒ TopParent ⇒ SecondEntry.
+
+    - `DescentWitness` (`LateParent`, §34.3z¹⁶⁹): some top row x ∈ R_k and column v ≱ m such that the row x stays
+      above x on its pre-fixed columns in (x, v].
+    - `CanonicalTopParent` (§34.3z¹⁶⁸): some y ∈ R_k of height k has a(y) a second top, or some second top z has
+      b(z) ∈ R_k and b(z) ≤ z. These are the two cell types of one row descent (`canonical_of_row_descent`).
+    - `TopParent` (§34.3z¹⁶⁶): a second top with a fixed-edge parent of height k. It differs from SecondEntry only
+      through late elements, and at k = 1 it *is* SecondEntry.
+  - **Proved cases of SecondEntry or CanonicalTopParent.**
+    - Some height-k element of R_k is diagonal post-fixed (`secondEntry_of_post_layer`, §34.3z¹⁶⁵). This covers
+      k = 0 and needs no uniqueness, feeder identity or OHAt.
+    - The feeder row stays above m′ on (m′, w] (`canonical_of_feeder_descent`); this holds in 35/46 rank-3
+      configurations.
+    - m′ < a(m′) (mechanism A), or a feeder drop with output r = F(m′, q) ≤ m′ (mechanism B).
+  - **Structure of the residual case.**
+    - A-parents of a top form an up-set of R_k (`a_parent_up`), and a maximum-height A-parent equals its A-normal
+      form a^[i](q) with q terminal (`max_a_parent_normal`). Late B-parents are incomparable with their top
+      (`late_b_parent_not_le`).
+    - The raw feeder orbit from w ends exactly at a(m′) ≤ w (`rawOrbit_terminal`). In the residual case
+      m′ ≰ a(m′), so the feeder descent must drop (`feeder_descent_leaves`, §34.3z¹⁷¹).
+  - **Status.** DescentWitness, hence SecondEntry in the residual case, has no counterexample (60 rank-3 closure
+    systems, 179 sweep lattices) but is unproved.
+
+    Refuted on the way, each with a stored minimal model in `experiments/amalgamation/`:
+    - every localized side entry;
+    - StrongTopParent (every second top has an on-time parent), |L| = 13;
+    - domination of late B-parents, |L| = 14;
+    - a top below the drop output, |L| = 14;
+    - the four drop-transfer selectors, |L| = 13–14;
+    - configuration-free TopParent, |L| = 11.
+
+    The missing step: after the forced drop, find another top row with a descent witness. No fixed order relation
+    to r, a(m′) or w selects it.
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and
@@ -205,11 +220,13 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
       lower-height consequences. `OHRigid.top_mem_or_ohCxR` reduces every map to that theory, using only the true orbit.
     - `OHCube4.ohAt_4c` (§34.3z¹⁶¹): a 25-leaf cube-and-conquer case tree on the boundary orbits
       u = (x ↦ F(x, ⊤))ⁿ(⊥) and d = (y ↦ F(⊥, y))ⁿ(⊤).
-  - **H = 5: in progress** (`experiments/sat/oh5_work/`, resume instructions there).
+  - **H = 5: paused** (`experiments/sat/oh5_work/`, resume instructions there). Larger certificate campaigns were
+    set aside in favour of the structural programme above.
     - In a rigid map u₁ = d₁ = F(⊥, ⊤), so the case split runs over (n, m), with n + m ≤ 7: u reaches ⊤ after n steps
       and d reaches ⊥ after m.
     - 9 of the 10 cases are refuted by the ground search.
-    - The last case, (3, 3), is split 3 × 3; 5 of its 9 sub-cases are refuted and 4 are running in `oh_cube.py`.
+    - The last case, (3, 3), is split 3 × 3. 5 of its 9 sub-cases are refuted; 4 are unfinished after multi-day
+      `oh_cube.py` runs.
     - The certificate pipeline (`oh_cert.py`, `oh_cert_lean.py`) is validated at H = 4.
     - At H = 5 single leaves have cores of about 2 000 clauses, which makes `bv_decide` expensive.
   - Cut at edge-height ≤ 5 is already known (`cut_height5`). The value of OHAt 5 and OHAt 6 is the stronger orbit
@@ -221,7 +238,8 @@ Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first o
 choice-free one (§34.3z¹⁴⁰): the **tight-stage upper principal cut**. At a stage where R_k has height exactly k and
 ⊤ ∉ R_{k+1}, some element m ∈ R_k of height k has a witness cell x ≤ m < y. By `OrbitHeight.cutMaps_of_tightUPC`
 it gives Cut at every finite edge-height. The statement is false for an arbitrary m, so a proof must use the
-orbit. The existential general-separator conjectures remain as an alternative:
+orbit. Inside that programme, singleton lower transfer is reduced to **DescentWitness** in the residual no-cell
+configuration (see above). The existential general-separator conjectures remain as an alternative:
 - **GSB(H):** every instance of edge-height H has a response-or-maximal run of at most H − 1 stages;
 - **GD(H):** some such run has strictly decreasing maximum gap.
 

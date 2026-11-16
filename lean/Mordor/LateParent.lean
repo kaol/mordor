@@ -47,6 +47,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   (two-dimensional descent yields a genuine cell), **`dropNode_cell`**, `feeder_cell_dichotomy`,
   `depthOne_lowerCell_sibling`.
 * §34.3z¹⁸¹: **`depthOne_shadow_upCell`** (the depth-one lift, comparable case).
+* §34.3z¹⁸²: `row_cell_of_above_shadow` (descent with shadow tracking), **`climb_step`**, **`climb_next_config`** (a
+  sibling-shadow configuration whose cell is a new lower-cell shadow gives a sibling-shadow configuration one
+  stage higher).
 -/
 
 namespace Mordor.OrbitHeight
@@ -813,5 +816,51 @@ theorem depthOne_shadow_upCell {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H') (h
   obtain ⟨hzR, hzh, -, hqzq⟩ := depthOne_lowerCell_sibling IH hn hk hq hqh hqz hL hznew
   have hcov : q ⋖ z := covBy_of_height hn hqz (by omega)
   exact siblingShadow_upCell hn hk hq hzR hzh hcov hqzq hqu hmu hcase
+
+/-! ### Climbing through sibling shadows (§34.3z¹⁸²) -/
+
+/-- **Row descent with shadow tracking.** As `row_cell_of_above`, and moreover the cell column `z` is the starting
+column `u` itself or a row value `z = F x u'` of a row-pre-fixed column `u' ∈ (x, u]`. -/
+theorem row_cell_of_above_shadow {H : ℕ} (hn : NoChain α (H + 1)) {x v : α}
+    (habove : ∀ u, x < u → u ≤ v → F x u ≤ u → x ≤ F x u) :
+    ∀ (n : ℕ) {u : α}, height H u ≤ n → x < u → u ≤ v → F x u ≤ u →
+      ∃ z, x < z ∧ z ≤ u ∧ (F x z ≤ x ∨ z ≤ F x z) ∧
+        (z = u ∨ ∃ u', z = F x u' ∧ x < u' ∧ u' ≤ u ∧ F x u' ≤ u')
+  | 0, u, hu, hxu, _, _ => by have := height_strictMono hn hxu; omega
+  | n + 1, u, hu, hxu, huv, hFu => by
+      by_cases h1 : F x u ≤ x
+      · exact ⟨u, hxu, le_rfl, Or.inl h1, Or.inl rfl⟩
+      by_cases h2 : u ≤ F x u
+      · exact ⟨u, hxu, le_rfl, Or.inr h2, Or.inl rfl⟩
+      have hxg : x < F x u := lt_of_le_not_ge (habove u hxu huv hFu) h1
+      have hgu : F x u < u := lt_of_le_not_ge hFu h2
+      have := height_strictMono hn hgu
+      obtain ⟨z, hz1, hz2, hz3, hz4⟩ :=
+        row_cell_of_above_shadow hn habove n (by omega) hxg (hgu.le.trans huv) ((F x).mono hFu)
+      refine ⟨z, hz1, hz2.trans hgu.le, hz3, Or.inr ?_⟩
+      rcases hz4 with e | ⟨u', e, h1', h2', h3'⟩
+      · exact ⟨u, e, hxu, le_rfl, hFu⟩
+      · exact ⟨u', e, h1', h2'.trans hgu.le, h3'⟩
+
+/-- **The climb step.** A sibling-shadow configuration at stage `j + 1` (`p ∈ R_j` of height `j`, a top `c ∈ R_{j+1}`
+of height `j + 1`, `p ⋖ c`, `F p c = p`, `F p u = c`) with a row-`c` pre-fixed column `v ∈ (c, u]` yields a cell of
+the row `c` at some `y ∈ (c, v]`, where `y = v` or `y = F c u'` for a row-`c` pre-fixed column `u' ∈ (c, v]`. -/
+theorem climb_step {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {p c u v : α} (hp : p ∈ Rk F j) (hck : height H c = j + 1) (hcov : p ⋖ c) (hpc : F p c = p)
+    (hpu : F p u = c) (hcv : c < v) (hvu : v ≤ u) (hFv : F c v ≤ v) :
+    ∃ y, c < y ∧ y ≤ v ∧ (F c y ≤ c ∨ y ≤ F c y) ∧ (y = v ∨ ∃ u', y = F c u' ∧ c < u' ∧ u' ≤ v ∧ F c u' ≤ u') :=
+  row_cell_of_above_shadow hn (fun z hcz hzv _ =>
+      (source_row_const hn hk hp hck hcov hpc hpu hcz (hzv.trans hvu)).symm.le.trans ((F.mono hcov.le) z))
+    H (height_le _) hcv le_rfl hFv
+
+/-- **The next configuration.** If the climb step yields a *lower* cell at a shadow `y = F c u'` that is new at
+stage `j + 2` (with `OHAt` below `j + 1` and `R_{j+2}` tight), then `(c, y, u')` is a sibling-shadow configuration
+one stage higher: `y ∈ R_{j+2}`, `h(y) = j + 2`, `c ⋖ y`, `F c y = c`, `F c u' = y`. -/
+theorem climb_next_config {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H') (hn : NoChain α (H + 1))
+    (hk2 : ∀ z ∈ Rk F (j + 2), height H z ≤ j + 2) {c y u' : α} (hc : c ∈ Rk F (j + 1))
+    (hck : height H c = j + 1) (hcy : c < y) (hL : F c y ≤ c) (hynew : y ∉ Rk F (j + 1)) (hy : y = F c u') :
+    y ∈ Rk F (j + 2) ∧ height H y = j + 2 ∧ c ⋖ y ∧ F c y = c ∧ F c u' = y := by
+  obtain ⟨hyR, hyh, -, hcyc⟩ := depthOne_lowerCell_sibling IH hn hk2 hc hck hcy hL hynew
+  exact ⟨hyR, hyh, covBy_of_height hn hcy (by omega), hcyc, hy.symm⟩
 
 end Mordor.OrbitHeight

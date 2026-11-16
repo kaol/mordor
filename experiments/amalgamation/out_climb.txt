@@ -1,0 +1,113 @@
+== descent2d_probe.py (§34.3z¹⁸²): d4 = path-column shadow data, d5 = climb simulation (greedy and exhaustive); same seeds as out_descent2d.txt; summed per run
+('d4', "('depth 0: UpCell of the feeder (proved)', True)") 131
+('d4', "('depth ≥ 1 U-cell', 'z = a(r)', True, 'z ≤ a(r)', True)") 5
+('d4', "('depth ≥ 1 final column', 'type', 'L', 'h(z) − h(r)', 1, 'stage status', 'early')") 1
+('d4', "('depth ≥ 1 final column', 'type', 'L', 'h(z) − h(r)', 1, 'stage status', 'on time')") 46
+('d4', "('depth ≥ 1 final column', 'type', 'U', 'h(z) − h(r)', 1, 'stage status', 'on time')") 5
+('d4', "('depth ≥ 2 climb', 'best witness y (b(y) = z) status', 'shadow, comparable')") 22
+('d4', "('depth ≥ 2 climb', 'best witness y (b(y) = z) status', 'shadow, totinc')") 2
+('d4', "('depth ≥ 2 witness y ≥ z', 'b(y) = z', False, 'b(y) vs z', '>', 'y = a(z)', False, 'y new', True)") 2
+('d4', "('depth ≥ 2 witness y ≥ z', 'b(y) = z', True, 'b(y) vs z', '=', 'y = a(z)', False, 'y new', True)") 24
+('d4', "('depth ≥ 2 witness y ≥ z', 'y is a path column', False, 'y = u_prev', False, 'y ≤ some path column', False)") 3
+('d4', "('depth ≥ 2 witness y ≥ z', 'y is a path column', False, 'y = u_prev', False, 'y ≤ some path column', True)") 11
+('d4', "('depth ≥ 2 witness y ≥ z', 'y is a path column', True, 'y = u_prev', True, 'y ≤ some path column', True)") 12
+('d4', "('depth ≥ 2', 'a(z) a top of R_k ≠ m with UpCell', False)") 24
+('d4', "('depth ≥ 2', 'some witness y ≥ z with b(y) = z', True, 'some witness y ≥ z', True)") 24
+('d4', "('depth ≥ 2', 'z new at its stage', True, 'h(z) = k − i + 1', True)") 24
+('d4', "('depth ≥ 2: F(z, path column)', 'path index from end', 0, 'column ≥ z', True, 'value', 'h−k=-1')") 7
+('d4', "('depth ≥ 2: F(z, path column)', 'path index from end', 0, 'column ≥ z', True, 'value', 'h−k=-2')") 17
+('d4', "('depth ≥ 2: F(z, path column)', 'path index from end', 1, 'column ≥ z', True, 'value', 'h−k=-1')") 12
+('d4', "('depth ≥ 2: F(z, path column)', 'path index from end', 1, 'column ≥ z', True, 'value', 'h−k=1')") 2
+('d4', "('depth ≥ 2: F(z, path column)', 'path index from end', 1, 'column ≥ z', True, 'value', 'witness y')") 10
+('d4', "('depth ≥ 2: F(z, path column)', 'path index from end', 2, 'column ≥ z', True, 'value', 'h−k=1')") 10
+('d4', "('depth ≥ 2: F(z, path column)', 'path index from end', 2, 'column ≥ z', True, 'value', 'h−k=2')") 2
+('d4', "('depth ≥ 2: F(z, path column)', 'path index from end', 2, 'column ≥ z', True, 'value', 'witness y')") 12
+('d4', "('depth ≥ 2: F(z, path column)', 'path index from end', 3, 'column ≥ z', True, 'value', 'h−k=1')") 6
+('d4', "('depth ≥ 2: F(z, w) is a witness y', False, 'F(z, w) vs z', '>')") 18
+('d4', "('depth ≥ 2: F(z, w) is a witness y', True, 'F(z, w) vs z', '>')") 6
+('d4', "('depth ≥ 2: some path column u′ with F(z, u′) a witness y', False)") 3
+('d4', "('depth ≥ 2: some path column u′ with F(z, u′) a witness y', True)") 21
+('d4', "('depth-1 L new column', 'origin', 'shadow z = F(b m′, u)', 'siblingShadow_upCell applies', False, 'z has UpCell', True)") 1
+('d4', "('depth-1 L new column', 'origin', 'shadow z = F(b m′, u)', 'siblingShadow_upCell applies', True, 'z has UpCell', True)") 26
+('d4', "('depth-1 L, column a top of R_k', 'new', False, 'b(z) = b(m′)', False, 'z has UpCell', False)") 1
+('d4', "('depth-1 L, column a top of R_k', 'new', True, 'b(z) = b(m′)', True, 'z has UpCell', True)") 27
+('d4', "('final row', 'h = k − depth', True, 'new at its stage', True)") 183
+('d4', "('final', 'depth', 0, 'type', 'L')") 73
+('d4', "('final', 'depth', 0, 'type', 'U')") 58
+('d4', "('final', 'depth', 1, 'type', 'L')") 28
+('d4', "('final', 'depth', 2, 'type', 'L')") 19
+('d4', "('final', 'depth', 2, 'type', 'U')") 5
+('d4', "('path', 'same-row steps', 0, 'source steps (before the final one)', 0)") 80
+('d4', "('path', 'same-row steps', 0, 'source steps (before the final one)', 1)") 15
+('d4', "('path', 'same-row steps', 0, 'source steps (before the final one)', 2)") 18
+('d4', "('path', 'same-row steps', 1, 'source steps (before the final one)', 0)") 49
+('d4', "('path', 'same-row steps', 1, 'source steps (before the final one)', 1)") 13
+('d4', "('path', 'same-row steps', 1, 'source steps (before the final one)', 2)") 6
+('d4', "('path', 'same-row steps', 2, 'source steps (before the final one)', 0)") 2
+('d4', "('witness rows vs final', 'some witness ≥ r', False, 'some witness ≥ z', False, 'some witness with b(y) = b^[i] m′', False)") 1
+('d4', "('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', False, 'some witness with b(y) = b^[i] m′', False)") 131
+('d4', "('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', True, 'some witness with b(y) = b^[i] m′', False)") 24
+('d4', "('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', True, 'some witness with b(y) = b^[i] m′', True)") 27
+('d4', 'configurations') 183
+('d5', "('climb (search) from depth', 1, 'result', 'UpCell at stage k')") 26
+('d5', "('climb (search) from depth', 1, 'result', 'column early')") 1
+('d5', "('climb (search) from depth', 1, 'result', 'stage k, totinc')") 1
+('d5', "('climb (search) from depth', 2, 'result', 'UpCell at stage k')") 6
+('d5', "('climb (search) from depth', 2, 'result', 'no continuation: break: endpoint')") 9
+('d5', "('climb (search) from depth', 2, 'result', 'totinc')") 4
+('d5', "('climb from depth', 1, 'result', 'UpCell at stage k')") 32
+('d5', "('climb from depth', 1, 'result', 'column early')") 1
+('d5', "('climb from depth', 1, 'result', 'stage k, totinc')") 1
+('d5', "('climb from depth', 2, 'result', 'UpCell at stage k')") 6
+('d5', "('climb from depth', 2, 'result', 'endpoint cell (break)')") 9
+('d5', "('climb from depth', 2, 'result', 'totinc (break)')") 4
+('d5', "('depth 0: UpCell of the feeder (proved)', True)") 209
+('d5', "('depth ≥ 1 U-cell', 'z = a(r)', True, 'z ≤ a(r)', True)") 5
+('d5', "('depth ≥ 1 final column', 'type', 'L', 'h(z) − h(r)', 1, 'stage status', 'early')") 1
+('d5', "('depth ≥ 1 final column', 'type', 'L', 'h(z) − h(r)', 1, 'stage status', 'on time')") 52
+('d5', "('depth ≥ 1 final column', 'type', 'U', 'h(z) − h(r)', 1, 'stage status', 'on time')") 5
+('d5', "('depth ≥ 2 climb', 'best witness y (b(y) = z) status', 'shadow, comparable')") 22
+('d5', "('depth ≥ 2 climb', 'best witness y (b(y) = z) status', 'shadow, totinc')") 2
+('d5', "('depth ≥ 2 witness y ≥ z', 'b(y) = z', False, 'b(y) vs z', '>', 'y = a(z)', False, 'y new', True)") 2
+('d5', "('depth ≥ 2 witness y ≥ z', 'b(y) = z', True, 'b(y) vs z', '=', 'y = a(z)', False, 'y new', True)") 24
+('d5', "('depth ≥ 2 witness y ≥ z', 'y is a path column', False, 'y = u_prev', False, 'y ≤ some path column', False)") 3
+('d5', "('depth ≥ 2 witness y ≥ z', 'y is a path column', False, 'y = u_prev', False, 'y ≤ some path column', True)") 11
+('d5', "('depth ≥ 2 witness y ≥ z', 'y is a path column', True, 'y = u_prev', True, 'y ≤ some path column', True)") 12
+('d5', "('depth ≥ 2', 'a(z) a top of R_k ≠ m with UpCell', False)") 24
+('d5', "('depth ≥ 2', 'some witness y ≥ z with b(y) = z', True, 'some witness y ≥ z', True)") 24
+('d5', "('depth ≥ 2', 'z new at its stage', True, 'h(z) = k − i + 1', True)") 24
+('d5', "('depth ≥ 2: F(z, path column)', 'path index from end', 0, 'column ≥ z', True, 'value', 'h−k=-1')") 7
+('d5', "('depth ≥ 2: F(z, path column)', 'path index from end', 0, 'column ≥ z', True, 'value', 'h−k=-2')") 17
+('d5', "('depth ≥ 2: F(z, path column)', 'path index from end', 1, 'column ≥ z', True, 'value', 'h−k=-1')") 12
+('d5', "('depth ≥ 2: F(z, path column)', 'path index from end', 1, 'column ≥ z', True, 'value', 'h−k=1')") 2
+('d5', "('depth ≥ 2: F(z, path column)', 'path index from end', 1, 'column ≥ z', True, 'value', 'witness y')") 10
+('d5', "('depth ≥ 2: F(z, path column)', 'path index from end', 2, 'column ≥ z', True, 'value', 'h−k=1')") 10
+('d5', "('depth ≥ 2: F(z, path column)', 'path index from end', 2, 'column ≥ z', True, 'value', 'h−k=2')") 2
+('d5', "('depth ≥ 2: F(z, path column)', 'path index from end', 2, 'column ≥ z', True, 'value', 'witness y')") 12
+('d5', "('depth ≥ 2: F(z, path column)', 'path index from end', 3, 'column ≥ z', True, 'value', 'h−k=1')") 6
+('d5', "('depth ≥ 2: F(z, w) is a witness y', False, 'F(z, w) vs z', '>')") 18
+('d5', "('depth ≥ 2: F(z, w) is a witness y', True, 'F(z, w) vs z', '>')") 6
+('d5', "('depth ≥ 2: some path column u′ with F(z, u′) a witness y', False)") 3
+('d5', "('depth ≥ 2: some path column u′ with F(z, u′) a witness y', True)") 21
+('d5', "('depth-1 L new column', 'origin', 'shadow z = F(b m′, u)', 'siblingShadow_upCell applies', False, 'z has UpCell', True)") 1
+('d5', "('depth-1 L new column', 'origin', 'shadow z = F(b m′, u)', 'siblingShadow_upCell applies', True, 'z has UpCell', True)") 32
+('d5', "('depth-1 L, column a top of R_k', 'new', False, 'b(z) = b(m′)', False, 'z has UpCell', False)") 1
+('d5', "('depth-1 L, column a top of R_k', 'new', True, 'b(z) = b(m′)', True, 'z has UpCell', True)") 33
+('d5', "('final row', 'h = k − depth', True, 'new at its stage', True)") 267
+('d5', "('final', 'depth', 0, 'type', 'L')") 106
+('d5', "('final', 'depth', 0, 'type', 'U')") 103
+('d5', "('final', 'depth', 1, 'type', 'L')") 34
+('d5', "('final', 'depth', 2, 'type', 'L')") 19
+('d5', "('final', 'depth', 2, 'type', 'U')") 5
+('d5', "('path', 'same-row steps', 0, 'source steps (before the final one)', 0)") 147
+('d5', "('path', 'same-row steps', 0, 'source steps (before the final one)', 1)") 21
+('d5', "('path', 'same-row steps', 0, 'source steps (before the final one)', 2)") 18
+('d5', "('path', 'same-row steps', 1, 'source steps (before the final one)', 0)") 60
+('d5', "('path', 'same-row steps', 1, 'source steps (before the final one)', 1)") 13
+('d5', "('path', 'same-row steps', 1, 'source steps (before the final one)', 2)") 6
+('d5', "('path', 'same-row steps', 2, 'source steps (before the final one)', 0)") 2
+('d5', "('witness rows vs final', 'some witness ≥ r', False, 'some witness ≥ z', False, 'some witness with b(y) = b^[i] m′', False)") 1
+('d5', "('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', False, 'some witness with b(y) = b^[i] m′', False)") 209
+('d5', "('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', True, 'some witness with b(y) = b^[i] m′', False)") 24
+('d5', "('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', True, 'some witness with b(y) = b^[i] m′', True)") 33
+('d5', 'configurations') 267

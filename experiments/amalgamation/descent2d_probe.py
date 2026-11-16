@@ -65,6 +65,49 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer') 
             if typ == 'U':
                 C[('depth ≥ 1 U-cell', 'z = a(r)', a_of(L, F, r) == z, 'z ≤ a(r)', le[z][a_of(L, F, r)])] += 1
         wit = [y for y in range(n) if inR(y, k) and h[y] == k and ups(y)]
+        # §34.3z¹⁸²: simulate the climb from the final cell (shadow configurations, climb_step / climb_next_config)
+        if i >= 1 and typ == 'L' and origin == 'shadow' and u_prev is not None:
+            pc, cc, uc, lvl, res = r, z, u_prev, h[z], None
+            while True:
+                if inR(cc, lvl - 1): res = 'column early'; break
+                vs = [v for v in range(n) if le[cc][v] and v != cc and le[v][uc] and le[F[cc][v]][v]]
+                ups_direct = [v for v in range(n) if le[cc][v] and v != cc and le[v][uc] and le[v][F[cc][v]]]
+                if lvl == k:
+                    res = 'UpCell at stage k' if (vs or ups_direct) else 'stage k, totinc'; break
+                if not vs:
+                    res = 'upper cell only (break)' if ups_direct else 'totinc (break)'; break
+                v = max(vs, key=lambda q: h[q])
+                x_, u_ = cc, v; prev = None                    # row_cell_of_above_shadow descent from v
+                while True:
+                    g = F[x_][u_]
+                    if le[g][x_] or le[u_][g]: break
+                    prev, u_ = u_, g
+                y = u_; lower = le[F[x_][y]][x_]
+                if not lower: res = 'upper cell (break)'; break
+                if prev is None: res = 'endpoint cell (break)'; break
+                if inR(y, lvl): res = 'early shadow (break)'; break
+                pc, cc, uc, lvl = cc, y, prev, lvl + 1
+            C[('climb from depth', i, 'result', res)] += 1
+            def climb(pc, cc, uc, lvl, depth=0):          # search over all choices of v at every level
+                if inR(cc, lvl - 1): return 'column early'
+                vs = [v for v in range(n) if le[cc][v] and v != cc and le[v][uc] and le[F[cc][v]][v]]
+                ud = [v for v in range(n) if le[cc][v] and v != cc and le[v][uc] and le[v][F[cc][v]]]
+                if lvl == k: return 'UpCell at stage k' if (vs or ud) else 'stage k, totinc'
+                outs = []
+                for v in vs:
+                    x_, u_ = cc, v; prev = None
+                    while True:
+                        g = F[x_][u_]
+                        if le[g][x_] or le[u_][g]: break
+                        prev, u_ = u_, g
+                    y = u_
+                    if le[F[x_][y]][x_] and prev is not None and not inR(y, lvl):
+                        res2 = climb(cc, y, prev, lvl + 1, depth + 1)
+                        if res2 == 'UpCell at stage k': return res2
+                        outs.append(res2)
+                    else: outs.append('break: ' + ('upper' if not le[F[x_][y]][x_] else 'endpoint' if prev is None else 'early shadow'))
+                return 'no continuation: ' + ','.join(sorted(set(outs))) if outs else ('upper cell only' if ud else 'totinc')
+            C[('climb (search) from depth', i, 'result', climb(r, z, u_prev, h[z]))] += 1
         if i >= 2:
             ab = [y for y in wit if le[z][y]]
             C[('depth ≥ 2', 'z new at its stage', st[z] is not None and not inR(z, st[z] - 1) if st[z] else None, 'h(z) = k − i + 1', h[z] == k - i + 1)] += 1
@@ -75,6 +118,13 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer') 
                         if any(le[y][v] and v != y and le[v][uu] and (le[F[y][v]][v] or le[v][F[y][v]]) for v in range(n)): return 'shadow, comparable'
                         return 'shadow, totinc'
                 return 'not a shadow of z'
+            wy = [y for y in ab if B(y) == z]
+            for idx, (rr, ee) in enumerate(path):
+                val = F[z][ee]
+                tag = 'witness y' if val in wy else ('top of R_k' if inR(val, k) and h[val] == k else f'h−k={h[val] - k}')
+                C[('depth ≥ 2: F(z, path column)', 'path index from end', len(path) - 1 - idx, 'column ≥ z', le[z][ee], 'value', tag)] += 1
+            C[('depth ≥ 2: some path column u′ with F(z, u′) a witness y', any(F[z][ee] in wy for _, ee in path))] += 1
+            C[('depth ≥ 2: F(z, w) is a witness y', F[z][w] in wy, 'F(z, w) vs z', rel(F[z][w], z))] += 1
             C[('depth ≥ 2 climb', 'best witness y (b(y) = z) status', min([shadow_ok(y) for y in ab if B(y) == z] or ['none']))] += 1
             for y in ab:
                 C[('depth ≥ 2 witness y ≥ z', 'y is a path column', y in pcols, 'y = u_prev', y == u_prev, 'y ≤ some path column', any(le[y][ee] for ee in pcols))] += 1

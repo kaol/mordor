@@ -46,3 +46,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z¹⁷⁹: `chain_probe.py [rmin=R] …` (replays `dropChain_exit` from every feeder drop: exit depth and type, and witness relations; the column-localization failure is `chain_rescue_fail_min19.json`). Output `out_chain.txt`.
 - §34.3z¹⁸⁰: `descent2d_probe.py [rmin=R] …` (replays `cellState_cell` from the feeder state (m′, w): path, final depth and orientation, column status, lift data). Output `out_descent2d.txt`.
 - §34.3z¹⁸¹: `descent2d_probe.py` adds the depth-one origin (shadow vs feeder path) and the depth-two climb (witness y with b(y) = z as a z-shadow). Output `out_descent2d_lift.txt`.
+- §34.3z¹⁸²: `descent2d_probe.py` adds the climb simulation (`climb_step` / `climb_next_config`, greedy and exhaustive). Output `out_climb.txt`.

@@ -1,0 +1,101 @@
+== single_claims.py bdom multi nopostlayer rmin=3 closure 5 10 1 10
+claim bdom: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 17, rank(m) = 3
+== single_claims.py bdom multi nopostlayer rmin=3 closure 5 10 2 10
+claim bdom: {'none': 7, 'counterexample': 3}; smallest counterexample |L| = 14, rank(m) = 3
+== single_claims.py bdom multi nopostlayer rmin=3 closure 5 10 3 10
+claim bdom: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py bdom multi nopostlayer rmin=3 closure 5 11 4 10
+claim bdom: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 14, rank(m) = 3
+== single_claims.py bdom multi nopostlayer rmin=3 closure 5 11 5 10
+claim bdom: {'counterexample': 4, 'none': 6}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py bdom multi nopostlayer rmin=3 closure 6 11 6 10
+claim bdom: {'none': 2, 'counterexample': 8}; smallest counterexample |L| = 18, rank(m) = 3
+== single_claims.py mech multi nopostlayer rmin=3 closure 5 10 1 10
+claim mech: {'none': 10}
+== single_claims.py mech multi nopostlayer rmin=3 closure 5 10 2 10
+claim mech: {'none': 10}
+== single_claims.py mech multi nopostlayer rmin=3 closure 5 10 3 10
+claim mech: {'none': 10}
+== single_claims.py mech multi nopostlayer rmin=3 closure 5 11 4 10
+claim mech: {'none': 10}
+== single_claims.py mech multi nopostlayer rmin=3 closure 5 11 5 10
+claim mech: {'none': 10}
+== single_claims.py mech multi nopostlayer rmin=3 closure 6 11 6 10
+claim mech: {'none': 10}
+== single_claims.py mech multi nopostlayer sweep 4 16
+claim mech: {'none': 179}
+== single_claims.py mech multi sweep 4 16
+claim mech: {'none': 179}
+== late_probe.py config rmin=3 closure (seeds 5 10 1–3, 5 11 4–5, 6 11 6), summed
+('B-up: y ≥ B-parent in R_{K−1} has a fixed edge at z', False) 1
+('B-up: y ≥ B-parent in R_{K−1} has a fixed edge at z', True) 7
+('a(y), y ∈ T_k', 'height 0 vs K−1 = 2') 82
+('a(y), y ∈ T_k', 'height 1 vs K−1 = 2') 45
+('a(y), y ∈ T_k', 'height 2 vs K−1 = 2') 8
+('a(y), y ∈ T_k', 'second top') 30
+('compensation', 'F(y,z)=y', 'a(y)', 'low') 1
+('compensation', 'neither', 'a(y)', 'low') 4
+('compensation', 'neither', 'a(y)', 'second top') 3
+('late B-parent x', 'x ≤ z', False) 5
+('late', 'A', 'x below some top', False) 1
+('late', 'A', 'x below some top', True) 2
+('late', 'A-normal (depth, terminal)', 0, 'B') 3
+('late', 'B', 'x below some top', True) 5
+('late', 'B-source diag', 'fixed') 4
+('late', 'B-source diag', 'pre') 4
+('late', 'B-source vs x', '∥') 8
+('late', 'edge', 'A') 3
+('late', 'edge', 'B') 5
+('late', 'h', 1) 8
+('late', 'own entry', 'B') 8
+('late', 'some top y ≥ x of R_{K−1} has a fixed edge at z', False) 5
+('late', 'some top y ≥ x of R_{K−1} has a fixed edge at z', True) 3
+('late', 'stage', 2) 8
+('late', 'x below some top of R_{K−1}', False) 1
+('late', 'x below some top of R_{K−1}', True) 7
+('late', 'x diag', 'neither') 8
+('late', 'x vs m', '<') 7
+('late', 'x vs m', '∥') 1
+('late', 'x vs m′', '<') 6
+('late', 'x vs m′', '∥') 2
+('late', 'x vs z', '<') 2
+('late', 'x vs z', '∥') 6
+('mechanism', 'a(y) second top, y ∈ T_k', False, 'b(z) ≤ z', True, 'on-time B-parent ∥ z', False) 11
+('mechanism', 'a(y) second top, y ∈ T_k', False, 'b(z) ≤ z', True, 'on-time B-parent ∥ z', True) 12
+('mechanism', 'a(y) second top, y ∈ T_k', True, 'b(z) ≤ z', False, 'on-time B-parent ∥ z', False) 9
+('mechanism', 'a(y) second top, y ∈ T_k', True, 'b(z) ≤ z', False, 'on-time B-parent ∥ z', True) 5
+('mechanism', 'a(y) second top, y ∈ T_k', True, 'b(z) ≤ z', True, 'on-time B-parent ∥ z', False) 6
+('mechanism', 'a(y) second top, y ∈ T_k', True, 'b(z) ≤ z', True, 'on-time B-parent ∥ z', True) 3
+('model', 'second tops with a late parent', 0) 39
+('model', 'second tops with a late parent', 1) 6
+('model', 'second tops with a late parent', 2) 1
+('model', 'some second top with on-time parent', True) 46
+('on-time', 'A-lift', 'same') 5
+('on-time', 'A-normal (depth, terminal)', 0, 'B') 25
+('on-time', 'A-normal (depth, terminal)', 1, 'B') 5
+('on-time', 'B-source diag', 'fixed') 39
+('on-time', 'B-source diag', 'pre') 56
+('on-time', 'B-source vs x', '<') 92
+('on-time', 'B-source vs x', '∥') 3
+('on-time', 'edge', 'A') 30
+('on-time', 'edge', 'B') 66
+('on-time', 'h', 2) 96
+('on-time', 'own entry', 'A') 1
+('on-time', 'own entry', 'AB') 7
+('on-time', 'own entry', 'B') 88
+('on-time', 'stage', 2) 96
+('on-time', 'x diag', 'neither') 6
+('on-time', 'x diag', 'pre') 90
+('on-time', 'x vs m', '<') 73
+('on-time', 'x vs m', '∥') 23
+('on-time', 'x vs m′', '=') 70
+('on-time', 'x vs m′', '∥') 26
+('on-time', 'x vs z', '<') 60
+('on-time', 'x vs z', '∥') 36
+('terminal root', 'b(q) diag', 'fixed') 2
+('terminal root', 'b(q) diag', 'pre') 1
+('terminal root', 'b(q) vs m′', '<') 3
+('terminal root', 'b(q) vs q', '∥') 3
+('top', 'has on-time parent', False) 4
+('top', 'has on-time parent', True) 86
+models 46

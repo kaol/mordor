@@ -66,6 +66,29 @@ def analyse(L, F, m, C, config=True):
             if config:
                 mp = B(m); C[(tag, 'x vs m′', rel(x, mp))] += 1; C[(tag, 'x vs m', rel(x, m))] += 1
     C[('model', 'some second top with on-time parent', anytop)] += 1
+    # §34.3z¹⁶⁸: which mechanism gives TopParent
+    Tk = [y for y in range(n) if inR(y, K - 1) and h[y] == K - 1]
+    mech_a = any(A(y) != m and h[A(y)] == K for y in Tk)                       # topParent_of_a_top
+    mech_bl = any(inR(B(z), K - 1) and le[B(z)][z] for z in tops)              # topParent_of_b_le
+    mech_bi = any(F[y][z] == y and not le[y][z] for z in tops for y in Tk)     # on-time B-parent incomparable with z
+    C[('mechanism', 'a(y) second top, y ∈ T_k', mech_a, 'b(z) ≤ z', mech_bl, 'on-time B-parent ∥ z', mech_bi)] += 1
+    for y in Tk: C[('a(y), y ∈ T_k', 'm' if A(y) == m else 'second top' if h[A(y)] == K else f'height {h[A(y)]} vs K−1 = {K - 1}')] += 1
+    if config:
+        for z in tops:
+            for x in range(n):
+                if not (inR(x, K - 1) and h[x] < K - 1): continue
+                if F[x][z] == x:                                             # late B-parent: compensation analysis
+                    C[('late B-parent x', 'x ≤ z', le[x][z])] += 1
+                    for y in Tk:
+                        if le[x][y]:
+                            c = 'F(y,z)=y' if F[y][z] == y else 'F(y,z)=z' if F[y][z] == z else 'neither'
+                            ay = A(y); ca = 'm' if ay == m else 'second top' if h[ay] == K else 'low'
+                            C[('compensation', c, 'a(y)', ca)] += 1
+                if F[x][z] == z:                                             # late A-parent: terminal root
+                    i, q, kind = normal(x)
+                    if kind == 'B':
+                        pq = B(q); C[('terminal root', 'b(q) vs m′', rel(pq, B(m)))] += 1; C[('terminal root', 'b(q) diag', diag(L, F, pq))] += 1
+                        C[('terminal root', 'b(q) vs q', rel(pq, q))] += 1
     C[('model', 'second tops with a late parent', sum(1 for z in tops if any(h[x] < K - 1 for x in range(n) if inR(x, K - 1) and (F[x][z] == x or F[x][z] == z))))] += 1
 
 C = collections.Counter()

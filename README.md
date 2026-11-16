@@ -217,7 +217,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
 
     The witness can be taken *feeder-like*: b(x) ∈ R_{k−1} with b(x) < x, as for m′ (`feeder_b_lt`). This
     BComparableUpCell has no counterexample at rank 3 or 4. The common-source version b(x) = b(m′) is false at
-    |L| = 11 (§34.3z¹⁷³).
+    |L| = 11 (§34.3z¹⁷³). The witness can even be taken new at stage k, so its source is covered:
+    b(x) ⋖ x (`strictBTop_has_cover_source`). Every drop of such a row casts an incomparable "shadow"
+    F(b(x), u) above b(x) (`cross_shadow`). That shadow's entry history is not uniform (|L| = 14–24; §34.3z¹⁷⁴).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

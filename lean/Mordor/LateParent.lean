@@ -34,6 +34,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁷²: `UpCell` (a top row with a cell above itself away from `m`), `upCell_of_descentWitness`,
   `canonical_of_upCell`, `secondEntry_of_canonical`, **`singletonLower_of_upCell`** (UpCell in every no-cell
   configuration ⟹ `SingletonLower`).
+* §34.3z¹⁷³: `noUpCell_forces_incomparable_drop`, `topRow_normalForm`, `topRow_terminal_B`, `feeder_b_lt`.
+* §34.3z¹⁷⁴: `covBy_of_height`, `height_bot_eq_zero`, `strictBTop_has_cover_source(_one)`, **`cross_shadow`**,
+  `source_meet`, `source_meet_lt`, `feeder_new`, `feeder_cover_source`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -470,5 +473,83 @@ theorem feeder_b_lt {m' m : α} (hm'm : m' ≤ m) (hlo : F m' m ≤ m') (hnp : �
   have hpre : F m' m' ≤ m' := ((F m').mono hm'm).trans hlo
   refine lt_of_le_of_ne (b_le hpre) fun e => hnp ?_
   have := col_b (F := F) m'; rw [e] at this; exact this.ge
+
+/-! ### Cover sources and cross-evaluation shadows (§34.3z¹⁷⁴) -/
+
+/-- Height difference one makes a strict relation a cover. -/
+theorem covBy_of_height {H : ℕ} (hn : NoChain α (H + 1)) {p x : α} (hpx : p < x)
+    (hh : height H x = height H p + 1) : p ⋖ x :=
+  ⟨hpx, fun y h1 h2 => by
+    have := height_strictMono hn h1; have := height_strictMono hn h2; omega⟩
+
+theorem height_bot_eq_zero {H : ℕ} : height H (⊥ : α) = 0 := by
+  rcases hh : height H (⊥ : α) with _ | j
+  · rfl
+  · have hc := chainTo_height (H := H) (⊥ : α)
+    rw [hh] at hc
+    obtain ⟨y, hy, -⟩ := hc
+    exact absurd hy not_lt_bot
+
+/-- **Cover source of a strict B-top** (A1). With `OHAt` below `j + 1`: a top `x` of height `j + 2` that is *new* at
+stage `j + 2` (`x ∉ R_{j+1}`) and whose B-source `p = b x` lies below it has `h(p) = j + 1`, so `p ⋖ x`. Neither
+tightness of `R_{j+1}` nor `p ∈ R_{j+1}` is needed; newness of `x` is (an early top need not cover its source). -/
+theorem strictBTop_has_cover_source {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H') (hn : NoChain α (H + 1))
+    {x : α} (hxk : height H x = j + 2) (hnew : x ∉ Rk F (j + 1)) (hlt : b F x < x) :
+    height H (b F x) = j + 1 ∧ b F x ⋖ x := by
+  have hlow := height_strictMono hn hlt
+  have hp : height H (b F x) = j + 1 := by
+    by_contra hne
+    have hpj : height H (b F x) ≤ j := by omega
+    have hpnew : b F x ∉ Rk F j := fun h => hnew (mem_succ_of_b h)
+    exact late_not_pre IH hn hpj hpnew (((F (b F x)).mono hlt.le).trans (col_b x).le)
+  exact ⟨hp, covBy_of_height hn hlt (by omega)⟩
+
+/-- The base case: a height-`1` top with B-source in `R_0` is covered by its source `⊥`. -/
+theorem strictBTop_has_cover_source_one {H : ℕ} (hn : NoChain α (H + 1)) {x : α} (hxk : height H x = 1)
+    (hb : b F x ∈ Rk F 0) : b F x = ⊥ ∧ (⊥ : α) ⋖ x := by
+  have hb0 : b F x = ⊥ := le_bot_iff.1 hb
+  refine ⟨hb0, covBy_of_height hn (bot_lt_iff_ne_bot.2 fun e => by
+    rw [e, height_bot_eq_zero] at hxk; omega) (by rw [height_bot_eq_zero, hxk])⟩
+
+/-- **Cross-evaluation shadow** (A2). Let `p ⋖ x` with `F p x = p`, `p ∈ R_j`, `h(x) = j + 1`, `R_{j+1}` tight, and
+let `u` be a drop column of the row `x`: `x < u`, `F x u ≤ u`, `x ≰ r = F x u`. Then the shadow `c = F p u`
+satisfies `p < c ≤ r ≤ u` and `c ∥ x` (`r ≰ x` is not needed). -/
+theorem cross_shadow {j H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {p x u : α} (hp : p ∈ Rk F j) (hxk : height H x = j + 1) (hcov : p ⋖ x) (hpx : F p x = p) (hxu : x < u)
+    (hFu : F x u ≤ u) (hr1 : ¬ x ≤ F x u) :
+    p < F p u ∧ F p u ≤ F x u ∧ F x u ≤ u ∧ ¬ F p u ≤ x ∧ ¬ x ≤ F p u := by
+  have hlo : p ≤ F p u := hpx.symm.le.trans ((F p).mono hxu.le)
+  have hhi : F p u ≤ F x u := (F.mono hcov.le) u
+  have hne : F p u ≠ p := fun e => by
+    have huR := mem_succ_of_cell hp le_rfl (Or.inl e.le)
+    have := height_strictMono hn hxu; have := hk1 u huR; omega
+  refine ⟨lt_of_le_of_ne hlo (Ne.symm hne), hhi, hFu, fun hcx => ?_, fun hxc => hr1 (hxc.trans hhi)⟩
+  rcases hcov.eq_or_eq hlo hcx with e | e
+  · exact hne e
+  · exact hr1 (e ▸ hhi)
+
+/-- **Source meet** (Programme B). For two rows `x, y` of `R_k` with B-sources in `R_j`: the meet column `d = x ⊓ y`
+lies in `R_k`, its B-source `s = b d ≤ b x ⊓ b y` lies in `R_j`, and `F s d = s`; if the sources are incomparable,
+`s` is strictly below both. -/
+theorem source_meet {j k : ℕ} {x y : α} (hx : x ∈ Rk F k) (hbx : b F x ∈ Rk F j) :
+    x ⊓ y ∈ Rk F k ∧ b F (x ⊓ y) ≤ b F x ⊓ b F y ∧ b F (x ⊓ y) ∈ Rk F j ∧ F (b F (x ⊓ y)) (x ⊓ y) = b F (x ⊓ y) :=
+  ⟨Rk_down k inf_le_left hx, le_inf ((b F).mono inf_le_left) ((b F).mono inf_le_right),
+    Rk_down j ((b F).mono inf_le_left) hbx, col_b _⟩
+
+theorem source_meet_lt {x y : α} (hpq : ¬ b F x ≤ b F y) (hqp : ¬ b F y ≤ b F x) :
+    b F (x ⊓ y) < b F x ∧ b F (x ⊓ y) < b F y := by
+  have h1 : b F (x ⊓ y) ≤ b F x := (b F).mono inf_le_left
+  have h2 : b F (x ⊓ y) ≤ b F y := (b F).mono inf_le_right
+  exact ⟨lt_of_le_of_ne h1 fun e => hpq (e ▸ h2), lt_of_le_of_ne h2 fun e => hqp (e ▸ h1)⟩
+
+/-- **The feeder is new at its stage**: `m' ∈ R_j` with `F m' m ≤ m'` would put `m` into `R_{j+1}`. -/
+theorem feeder_new {j : ℕ} {m' m : α} (hlo : F m' m ≤ m') (hm : m ∉ Rk F (j + 1)) : m' ∉ Rk F j := fun h =>
+  hm (mem_succ_of_cell h le_rfl (Or.inl hlo))
+
+/-- **The feeder covers its own B-source** (OHAt below `j + 1`, feeder not diagonal post-fixed). -/
+theorem feeder_cover_source {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H') (hn : NoChain α (H + 1)) {m' m : α}
+    (hm'k : height H m' = j + 2) (hm'm : m' ≤ m) (hlo : F m' m ≤ m') (hnp : ¬ m' ≤ F m' m')
+    (hm : m ∉ Rk F (j + 2)) : height H (b F m') = j + 1 ∧ b F m' ⋖ m' :=
+  strictBTop_has_cover_source IH hn hm'k (feeder_new hlo hm) (feeder_b_lt hm'm hlo hnp)
 
 end Mordor.OrbitHeight

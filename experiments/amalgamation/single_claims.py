@@ -27,6 +27,7 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
   §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
   §34.3z¹⁷³ (with 'multi'): bcup   some top x with b(x) ∈ R_{K−2}, b(x) < x has an upward cell away from m
                             sibup  some top x ≠ m′ with b(x) = b(m′) has an upward cell away from m
+  §34.3z¹⁷⁴ (with 'multi'): bcupnew  as bcup with x new at stage K − 1 (x ∉ R_{K−2}; then b(x) ⋖ x)
   §34.3z¹⁷² (with 'multi'): upcell  some top row x of R_{K−1} has a cell at a column z > x with m ≰ z
   §34.3z¹⁷¹ (with 'multi'), at the immediate feeder drop r = F(m′, w), m′ ≰ r:
             abovea    h(a(m′)) ≤ K − 1 ⇒ some top x ≥ a(m′) is a descent-witness row
@@ -51,7 +52,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -93,7 +94,7 @@ def query(L, m, claim, ahead=False):
         if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
             for x in range(n):
                 if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
-        if claim in ('bcup', 'sibup'):             # §34.3z¹⁷³: UpCell restricted to tops x with b(x) ∈ R_{K−2}, b(x) < x (bcup)
+        if claim in ('bcupnew', 'bcup', 'sibup'):  # §34.3z¹⁷³: UpCell restricted to tops x with b(x) ∈ R_{K−2}, b(x) < x (bcup)
             if K < 2: E.S.delete(); return None
             for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)   # / with b(x) = b(m′), x ≠ m′ (sibup)
             E.S.add_clause([-ic(m)])
@@ -102,8 +103,9 @@ def query(L, m, claim, ahead=False):
                 if k_ in E.vars: return E.vars[k_]
                 terms = []
                 for g in range(n):
-                    if claim == 'bcup':
-                        if le[g][x] and g != x: t_ = E.v('admt', x, g); E.iff_and(t_, [B(x, g), r(K - 2, g)]); terms.append(t_)
+                    if claim in ('bcup', 'bcupnew'):     # bcupnew: also x new at stage K − 1 (x ∉ R_{K−2}), so b(x) ⋖ x
+                        if le[g][x] and g != x:
+                            t_ = E.v('admt', x, g); E.iff_and(t_, [B(x, g), r(K - 2, g)] + ([-r(K - 2, x)] if claim == 'bcupnew' else [])); terms.append(t_)
                     else:
                         for p in feeders:
                             if x == p: continue
@@ -342,7 +344,8 @@ def query(L, m, claim, ahead=False):
         am = a_of(L, F, bm)
         upc = lambda x: any(le[x][z] and z != x and not le[m][z] and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n))
         Tq2 = [x for x in range(n) if inR(x, K - 1) and rk[x] == K - 1]
-        viol = {'bcup': (bm in low) and not ic_py(L, F, m) and not any(inR(b_of(L, F, x), K - 2) and le[b_of(L, F, x)][x] and b_of(L, F, x) != x and upc(x) for x in Tq2),
+        viol = {'bcupnew': (bm in low) and not ic_py(L, F, m) and not any(not inR(x, K - 2) and inR(b_of(L, F, x), K - 2) and le[b_of(L, F, x)][x] and b_of(L, F, x) != x and upc(x) for x in Tq2),
+                'bcup': (bm in low) and not ic_py(L, F, m) and not any(inR(b_of(L, F, x), K - 2) and le[b_of(L, F, x)][x] and b_of(L, F, x) != x and upc(x) for x in Tq2),
                 'sibup': (bm in low) and not ic_py(L, F, m) and not any(x != bm and b_of(L, F, x) == b_of(L, F, bm) and upc(x) for x in Tq2),
                 'upcell': (bm in low) and not ic_py(L, F, m) and not any(inR(x, K - 1) and rk[x] == K - 1 and le[x][z] and z != x and not le[m][z] and (le[F[x][z]][x] or le[z][F[x][z]]) for x in range(n) for z in range(n)),
                 'abovea': idrop and rk[am] <= K - 1 and not any(le[am][x] and dw(x, v) for x in Tq for v in range(n)),

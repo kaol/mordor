@@ -25,6 +25,7 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
   'ahead': index-sensitivity test, m placed at stage J = K − 1 (one ahead): R_J ranks ≤ K with unique rank-K
            element m ∉ R_{J−1}, R_{J−1} ranks ≤ K − 1, ⊤ ∉ R_{J+1}, feeders/entries from R_{J−1}.
   §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
+  §34.3z¹⁶⁷ (with 'multi'): alltops  every top z ≠ m of R_K has a fixed-edge parent (F(x,z) ∈ {x, z}) of rank K − 1
   §34.3z¹⁶⁵ (with 'multi'): topparent  some rank-K top z ≠ m has an A- or B-parent of rank K − 1;  sibling  the row m′ has a cell at a rank-K column z ≠ m;  soleB  m is the only B-entry of rank K;  soleA  no A-entry z ≠ m of rank K
   rmin=R: only m of rank ≥ R (TopParent is SecondEntry itself at rank 2, where every parent ≠ ⊥ has rank 1)
   flags: notop (drop ⊤ ∉ R_{K+1}), multi (drop uniqueness of m), post / strictpre (lower feeders diagonal post-fixed / not), nopostlayer (no rank-(K−1) element of R_{K−1} post-fixed)
@@ -38,7 +39,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -80,7 +81,17 @@ def query(L, m, claim, ahead=False):
         if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
             for x in range(n):
                 if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
-        if claim == 'topparent':                   # §34.3z¹⁶⁵: noic_fi and no rank-K top z ≠ m has a fixed-edge parent of rank K − 1 in R_{K−1}
+        if claim == 'alltops':                     # §34.3z¹⁶⁷: noic_fi and some rank-K top z ≠ m of R_K has no fixed-edge parent of rank K − 1
+            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
+            E.S.add_clause([-ic(m)])
+            Zs = [z for z in range(n) if z != m and rk[z] == K]
+            if not Zs: E.S.delete(); return None
+            E.S.add_clause([E.v('zsel', z) for z in Zs])
+            for z in Zs:
+                E.S.add_clause([-E.v('zsel', z), r(K, z)])
+                for g in range(n):
+                    if rk[g] == K - 1: E.S.add_clause([-E.v('zsel', z), -r(K - 1, g), -f(g, z, g)]); E.S.add_clause([-E.v('zsel', z), -r(K - 1, g), -f(g, z, z)])
+        elif claim == 'topparent':                   # §34.3z¹⁶⁵: noic_fi and no rank-K top z ≠ m has a fixed-edge parent of rank K − 1 in R_{K−1}
             for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
             E.S.add_clause([-ic(m)])
             for z in range(n):
@@ -175,7 +186,8 @@ def query(L, m, claim, ahead=False):
         from gfp_top import ic as ic_py
         wv = F[m][y]; side = [z for z in range(n) if le[bm][z] and z != bm and le[z][wv] and inR(z, K)]
         tops = [z for z in range(n) if z != m and rk[z] == K]
-        viol = {'topparent': (bm in low) and not ic_py(L, F, m) and not any((inR(b_of(L, F, z), K - 1) and rk[b_of(L, F, z)] == K - 1) or any(inR(x, K - 1) and rk[x] == K - 1 and a_of(L, F, x) == z for x in range(n)) for z in tops),
+        viol = {'alltops': (bm in low) and not ic_py(L, F, m) and any(inR(z, K) and not any(inR(g, K - 1) and rk[g] == K - 1 and F[g][z] in (g, z) for g in range(n)) for z in tops),
+                'topparent': (bm in low) and not ic_py(L, F, m) and not any((inR(b_of(L, F, z), K - 1) and rk[b_of(L, F, z)] == K - 1) or any(inR(x, K - 1) and rk[x] == K - 1 and a_of(L, F, x) == z for x in range(n)) for z in tops),
                 'sibling': (bm in low) and not ic_py(L, F, m) and not any(le[F[bm][z]][bm] or le[z][F[bm][z]] for z in tops),
                 'soleB': (bm in low) and not ic_py(L, F, m) and not any(inR(b_of(L, F, z), K - 1) for z in tops),
                 'soleA': (bm in low) and not ic_py(L, F, m) and not any(inR(x, K - 1) and a_of(L, F, x) == z for z in tops for x in range(n)),

@@ -135,6 +135,7 @@ import Mordor.FeederStage
 import Mordor.SideEntry
 import Mordor.SecondEntry
 import Mordor.ParentAncestry
+import Mordor.LateParent
 import Mordor.RiseHeight4
 import Mordor.GroundOH
 import Mordor.OHHeight4

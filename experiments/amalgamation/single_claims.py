@@ -25,6 +25,7 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
   'ahead': index-sensitivity test, m placed at stage J = K − 1 (one ahead): R_J ranks ≤ K with unique rank-K
            element m ∉ R_{J−1}, R_{J−1} ranks ≤ K − 1, ⊤ ∉ R_{J+1}, feeders/entries from R_{J−1}.
   §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
+  §34.3z¹⁶⁹ (with 'multi'): dwit  a descent witness: x ∈ T_{K−1}, v ≱ m, x < v, F(x,v) ≤ v, x ≤ F(x,q) on row-pre-fixed q ∈ (x, v]
   §34.3z¹⁶⁸ (with 'multi'): mech  some y ∈ T_{K−1} has a(y) a rank-K top ≠ m, or some rank-K top z ≠ m has b(z) ∈ R_{K−1}, b(z) ≤ z
   §34.3z¹⁶⁸ (with 'multi'): bdom  every late B-parent (F(x,z) = x, rank x < K − 1) of a top z ≠ m lies below a rank-(K−1) element of R_{K−1}
   §34.3z¹⁶⁷ (with 'multi'): alltops  every top z ≠ m of R_K has a fixed-edge parent (F(x,z) ∈ {x, z}) of rank K − 1
@@ -41,7 +42,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -83,7 +84,23 @@ def query(L, m, claim, ahead=False):
         if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
             for x in range(n):
                 if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
-        if claim == 'mech':                        # §34.3z¹⁶⁸: noic_fi with neither canonical TopParent mechanism:
+        if claim == 'dwit':                        # §34.3z¹⁶⁹: noic_fi and no descent witness: no x ∈ T, v ≱ m with x < v, F(x,v) ≤ v and
+            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)   # x ≤ F(x,q) for every
+            E.S.add_clause([-ic(m)])                                                            # row-pre-fixed q ∈ (x, v]
+            def geq(x, q):
+                k_ = ('geq', x, q)
+                if k_ not in E.vars: o = E.v(*k_); E.iff_or(o, [E.v('f', x, q, w_) for w_ in range(n) if le[x][w_]])
+                return E.vars[k_]
+            def P(x, q):
+                k_ = ('Pdrop', x, q)
+                if k_ not in E.vars: o = E.v(*k_); E.iff_and(o, [fle(x, q, q), -geq(x, q)])
+                return E.vars[k_]
+            for x in range(n):
+                if rk[x] != K - 1: continue
+                for v in range(n):
+                    if le[x][v] and v != x and not le[m][v]:
+                        E.S.add_clause([-r(K - 1, x), -fle(x, v, v)] + [P(x, q) for q in range(n) if le[x][q] and q != x and le[q][v]])
+        elif claim == 'mech':                        # §34.3z¹⁶⁸: noic_fi with neither canonical TopParent mechanism:
             for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)   # no y ∈ T with a(y) a top ≠ m,
             E.S.add_clause([-ic(m)])                                                            # no top z ≠ m with b(z) ∈ R_{K−1}, b(z) ≤ z
             for y in range(n):
@@ -210,7 +227,9 @@ def query(L, m, claim, ahead=False):
         from gfp_top import ic as ic_py
         wv = F[m][y]; side = [z for z in range(n) if le[bm][z] and z != bm and le[z][wv] and inR(z, K)]
         tops = [z for z in range(n) if z != m and rk[z] == K]
-        viol = {'mech': (bm in low) and not ic_py(L, F, m) and not any(inR(y, K - 1) and rk[y] == K - 1 and a_of(L, F, y) != m and rk[a_of(L, F, y)] == K for y in range(n)) and not any(inR(b_of(L, F, z), K - 1) and le[b_of(L, F, z)][z] for z in tops),
+        viol = {'dwit': (bm in low) and not ic_py(L, F, m) and not any(inR(x, K - 1) and rk[x] == K - 1 and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v]
+                        and all(le[x][F[x][q]] for q in range(n) if le[x][q] and q != x and le[q][v] and le[F[x][q]][q]) for x in range(n) for v in range(n)),
+                'mech': (bm in low) and not ic_py(L, F, m) and not any(inR(y, K - 1) and rk[y] == K - 1 and a_of(L, F, y) != m and rk[a_of(L, F, y)] == K for y in range(n)) and not any(inR(b_of(L, F, z), K - 1) and le[b_of(L, F, z)][z] for z in tops),
                 'bdom': (bm in low) and not ic_py(L, F, m) and any(inR(z, K) and inR(x, K - 1) and rk[x] < K - 1 and F[x][z] == x and not any(inR(y, K - 1) and rk[y] == K - 1 and le[x][y] for y in range(n)) for z in tops for x in range(n)),
                 'alltops': (bm in low) and not ic_py(L, F, m) and any(inR(z, K) and not any(inR(g, K - 1) and rk[g] == K - 1 and F[g][z] in (g, z) for g in range(n)) for z in tops),
                 'topparent': (bm in low) and not ic_py(L, F, m) and not any((inR(b_of(L, F, z), K - 1) and rk[b_of(L, F, z)] == K - 1) or any(inR(x, K - 1) and rk[x] == K - 1 and a_of(L, F, x) == z for x in range(n)) for z in tops),

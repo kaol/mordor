@@ -22,6 +22,10 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   B-parents are incomparable with their top), `topParent_of_b_le`, `topParent_of_a_top`, `not_topParent_a_low`
   (a TopParent failure forces `a y = m` or `h(a y) ≤ k` for every `y ∈ T_k`), `feeder_a_ne` (`a m' ≠ m`),
   `CanonicalTopParent` (conjectured: no counterexample) and `topParent_of_canonical`.
+* §34.3z¹⁶⁹: `rowCollapse_iff_canonical` (the brief's `rowCollapse_to_BTop` is CanonicalTopParent), `row_cell_of_above`,
+  `canonical_of_row_descent`, **`canonical_of_feeder_descent`** (CanonicalTopParent when the feeder row stays above
+  `m'` on its pre-fixed columns in `(m', w]`), `DescentWitness` (conjectured: no counterexample),
+  `canonical_of_descentWitness`, `topParent_of_descentWitness`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -172,5 +176,86 @@ theorem topParent_of_canonical {k H : ℕ} (IH : ∀ H' < k + 1, OHAt.{u} H') (h
   rcases h with ⟨y, hy, hyk, hm, hay⟩ | ⟨z, hzm, hz, hb, hbz⟩
   · exact topParent_of_a_top hy hyk hay hm
   · exact topParent_of_b_le IH hn hk1 hzm hz (mem_succ_of_b hb) hb hbz
+
+/-! ### Feeder-row descent into the canonical disjunction (§34.3z¹⁶⁹) -/
+
+/-- `rowCollapse_to_BTop` (the brief's Priority A) is CanonicalTopParent itself: `¬A → B` is `A ∨ B`. -/
+theorem rowCollapse_iff_canonical {H k : ℕ} {m : α} :
+    ((¬ ∃ y ∈ Rk F k, height H y = k ∧ a F y ≠ m ∧ height H (a F y) = k + 1) →
+      ∃ z, z ≠ m ∧ height H z = k + 1 ∧ b F z ∈ Rk F k ∧ b F z ≤ z) ↔ CanonicalTopParent F H k m := by
+  unfold CanonicalTopParent; exact (or_iff_not_imp_left).symm
+
+/-- **Row descent above the row.** If the row `x` stays above `x` on its pre-fixed columns in `(x, v]`, it has a cell
+in `(x, v]` (generalizes `row_cell_of_diag_post`, whose hypothesis `x ≤ F x x` implies this one). -/
+theorem row_cell_of_above {H : ℕ} (hn : NoChain α (H + 1)) {x v : α}
+    (habove : ∀ u, x < u → u ≤ v → F x u ≤ u → x ≤ F x u) :
+    ∀ (n : ℕ) {u : α}, height H u ≤ n → x < u → u ≤ v → F x u ≤ u →
+      ∃ z, x < z ∧ z ≤ u ∧ (F x z ≤ x ∨ z ≤ F x z)
+  | 0, u, hu, hxu, _, _ => by have := height_strictMono hn hxu; omega
+  | n + 1, u, hu, hxu, huv, hFu => by
+      by_cases h1 : F x u ≤ x
+      · exact ⟨u, hxu, le_rfl, Or.inl h1⟩
+      by_cases h2 : u ≤ F x u
+      · exact ⟨u, hxu, le_rfl, Or.inr h2⟩
+      have hxg : x < F x u := lt_of_le_not_ge (habove u hxu huv hFu) h1
+      have hgu : F x u < u := lt_of_le_not_ge hFu h2
+      have := height_strictMono hn hgu
+      obtain ⟨z, hz1, hz2, hz3⟩ :=
+        row_cell_of_above hn habove n (by omega) hxg (hgu.le.trans huv) ((F x).mono hFu)
+      exact ⟨z, hz1, hz2.trans hgu.le, hz3⟩
+
+/-- **Canonical mechanism from a row descent.** Let `x ∈ R_k` with `h(x) = k`, `x < v`, `F x v ≤ v`, and suppose the
+row `x` stays above `x` on its pre-fixed columns in `(x, v]`. If `m ≰ v`, CanonicalTopParent holds: the first cell
+`z ∈ (x, v]` is a top `≠ m`; an upper cell makes `z = a x` (mechanism A), a lower cell gives `b z ≤ x < z`
+(mechanism B). -/
+theorem canonical_of_row_descent {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m x v : α} (hx : x ∈ Rk F k) (hxk : height H x = k)
+    (hxv : x < v) (hFv : F x v ≤ v) (hmv : ¬ m ≤ v)
+    (habove : ∀ u, x < u → u ≤ v → F x u ≤ u → x ≤ F x u) : CanonicalTopParent F H k m := by
+  obtain ⟨z, hz1, hz2, hz3⟩ := row_cell_of_above hn habove H (height_le _) hxv le_rfl hFv
+  have hzR := mem_succ_of_cell hx le_rfl hz3
+  have := height_strictMono hn hz1; have := hall z hzR
+  have hz : height H z = k + 1 := by omega
+  have hzm : z ≠ m := fun e => hmv (e ▸ hz2)
+  rcases hz3 with h | h
+  · have hb : b F z ≤ x := b_le h
+    exact Or.inr ⟨z, hzm, hz, Rk_down k hb hx, hb.trans hz1.le⟩
+  · have hle : z ≤ a F x := le_a h
+    have e : z = a F x := by
+      by_contra hne
+      have := height_strictMono hn (lt_of_le_of_ne hle hne)
+      have := hall _ (mem_succ_of_a hx le_rfl); omega
+    exact Or.inl ⟨x, hx, hxk, e ▸ hzm, e ▸ hz⟩
+
+/-- **The feeder-row descent from the column output.** In the no-cell configuration (`y = m ⊔ F m y`,
+`w = F m y ∥ m`), with the feeder `m' ∈ R_k`, `h(m') = k`, `m' ≤ m`, `m' ≤ F m' m`: if the row `m'` stays above `m'`
+on its pre-fixed columns in `(m', w]`, CanonicalTopParent holds. -/
+theorem canonical_of_feeder_descent {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m' m y : α} (hm' : m' ∈ Rk F k) (hm'k : height H m' = k)
+    (hm'm : m' ≤ m) (hfeed : m' ≤ F m' m) (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) (hwm : ¬ F m y ≤ m)
+    (habove : ∀ u, m' < u → u ≤ F m y → F m' u ≤ u → m' ≤ F m' u) : CanonicalTopParent F H k m := by
+  have hmy : m ≤ y := le_sup_left.trans hy.le
+  have hm'w : m' ≤ F m y := hfeed.trans (((F m').mono hmy).trans ((F.mono hm'm) y))
+  have hlt : m' < F m y := lt_of_le_of_ne hm'w fun e => hwm (e ▸ hm'm)
+  exact canonical_of_row_descent hn hall hm' hm'k hlt (feeder_le_side hm'm hy) hmw habove
+
+/-- **DescentWitness** (conjectured, §34.3z¹⁶⁹): a top row `x ∈ T_k` and a row-pre-fixed column `v ≱ m` above `x`
+on whose interval `(x, v]` the row stays above `x` at its pre-fixed columns. Generalizes a diagonal post-fixed top
+(`x ≤ F x x` gives the condition for every `v ≥ x`). -/
+def DescentWitness (F : α →o α →o α) (H k : ℕ) (m : α) : Prop :=
+  ∃ x ∈ Rk F k, height H x = k ∧ ∃ v, x < v ∧ F x v ≤ v ∧ ¬ m ≤ v ∧
+    ∀ u, x < u → u ≤ v → F x u ≤ u → x ≤ F x u
+
+theorem canonical_of_descentWitness {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m : α} (h : DescentWitness F H k m) :
+    CanonicalTopParent F H k m := by
+  obtain ⟨x, hx, hxk, v, hxv, hFv, hmv, habove⟩ := h
+  exact canonical_of_row_descent hn hall hx hxk hxv hFv hmv habove
+
+/-- **TopParent from a descent witness** (stage `k + 1` indexing). -/
+theorem topParent_of_descentWitness {k H : ℕ} (IH : ∀ H' < k + 1, OHAt.{u} H') (hn : NoChain α (H + 1))
+    (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) (hall : ∀ z ∈ Rk F (k + 2), height H z ≤ k + 2) {m : α}
+    (h : DescentWitness F H (k + 1) m) : TopParent F H (k + 1) m :=
+  topParent_of_canonical IH hn hk1 (canonical_of_descentWitness hn hall h)
 
 end Mordor.OrbitHeight

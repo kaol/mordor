@@ -184,6 +184,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     Late B-parents are incomparable with their top (proved). TopParent reduces to CanonicalTopParent: some top of
     R_k has a(y) a second top, or some second top z has b(z) ≤ z. CanonicalTopParent has no counterexample (60
     rank-3 closure systems), while "late B-parents lie below T_k" fails at |L| = 14 (§34.3z¹⁶⁸).
+    Both canonical mechanisms are the two cell types of one row descent. DescentWitness (a top row that stays above
+    itself on a pre-fixed interval missing m) implies CanonicalTopParent. The feeder row does this unless it "drops"
+    (`canonical_of_feeder_descent`, 35/46 rank-3 configurations). DescentWitness has no counterexample (§34.3z¹⁶⁹).
   - `cutMaps_of_riseAt`: the **Rise conjecture** (a rigid map has a good x < a(x)) at all heights ≤ H gives Cut at
     edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices. Rise witnesses can need
     to enter as late as stage H − 1, so for rigid maps Rise is close to the orbit-height property itself.

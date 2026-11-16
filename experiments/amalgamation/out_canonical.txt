@@ -1,0 +1,195 @@
+== corner_probe.py rmin=3 closure (seeds 5 10 1–3, 5 11 4–5, 6 11 6; 10 each), summed
+('A fails: B-witness b(z) = m′', False) 5
+('A fails: B-witness b(z) = m′', True) 22
+('A fails: B-witness count', 1) 20
+('A fails: B-witness count', 2) 2
+('A fails: B-witness count', 3) 1
+('A-witness a(y) vs w', '<') 24
+('A-witness a(y) vs w', '=') 6
+('A-witness y diag', 'not pre') 5
+('A-witness y diag', 'pre') 25
+('A-witness y vs m′', '=') 17
+('A-witness y vs m′', '∥') 13
+('B-witness b(z) diag', 'pre') 36
+('B-witness b(z) vs m′', '=') 27
+('B-witness b(z) vs m′', '∥') 9
+('B-witness z vs', 'm′', '>', 'w', '<', 's', '<') 10
+('B-witness z vs', 'm′', '>', 'w', '=', 's', '=') 17
+('B-witness z vs', 'm′', '>', 'w', '∥', 's', '∥') 3
+('B-witness z vs', 'm′', '∥', 'w', '<', 's', '<') 4
+('B-witness z vs', 'm′', '∥', 'w', '∥', 's', '∥') 2
+('a(m′) route', 'A') 24
+('a(m′) route', 'AB') 1
+('a(m′) route', 'B') 3
+('a(m′) route', 'base') 18
+('a(m′) vs m′', '<') 28
+('a(m′) vs m′', '>') 14
+('a(m′) vs m′', '∥') 4
+('a(m′) vs w', '<') 41
+('a(m′) vs w', '=') 5
+('a(m′)', 'h−K=-1, stage−K=-1') 1
+('a(m′)', 'h−K=-2, stage−K=-2') 10
+('a(m′)', 'h−K=-3, stage−K=-3') 18
+('a(m′)', 'h−K=0, stage−K=0') 17
+('a(s) vs s', '<') 6
+('a(s) vs s', '=') 9
+('a(s) vs s', '>') 31
+('b(a(m′)) vs m′', '<') 28
+('b(a(m′)) vs m′', '>') 14
+('b(a(m′)) vs m′', '∥') 4
+('b(s) vs m′', '=') 17
+('b(s) vs m′', '>') 24
+('b(s) vs m′', '∥') 5
+('b(s) ∈ R_{K−1}', False) 29
+('b(s) ∈ R_{K−1}', True) 17
+('b(s) ≤ s', False) 1
+('b(s) ≤ s', True) 45
+('b(w) vs m′', '=') 17
+('b(w) vs m′', '>') 24
+('b(w) vs m′', '∥') 5
+('b(w) ∈ R_{K−1}', False) 29
+('b(w) ∈ R_{K−1}', True) 17
+('b(w) ≤ w', False) 1
+('b(w) ≤ w', True) 45
+('d* vs w', '<') 32
+('d* vs w', '=') 14
+('d*', 'h−K=-1, stage−K=-1') 21
+('d*', 'h−K=0, stage−K=0') 16
+('d*', 'h−K=1, stage−K=1') 9
+('descent u = w', False) 24
+('descent u = w', True) 22
+('descent u cell', 'lower') 28
+('descent u cell', 'upper') 18
+('descent u is a second top or mechanism A', False) 3
+('descent u is a second top or mechanism A', True) 43
+('descent u is a second top', False) 8
+('descent u is a second top', True) 38
+('descent u vs m′', '>') 35
+('descent u vs m′', '∥') 11
+('descent u', 'h−K=-1, stage−K=-1') 6
+('descent u', 'h−K=-2, stage−K=-2') 2
+('descent u', 'h−K=0, stage−K=0') 38
+('drop case: F(m′,q) vs m′', '∥', 'F(m′,q) vs q', '<') 13
+('drop case: general descent witness exists', True) 11
+('drop case: mechanism', '-', 'B') 3
+('drop case: mechanism', 'A', '-') 4
+('drop case: mechanism', 'A', 'B') 4
+('drop case: witness row x = m′', False) 11
+('general descent witness (x ∈ T_k, v ≱ m) exists', True) 46
+('habove or descent u > m′', 'habove', False, 'u > m′', False) 11
+('habove or descent u > m′', 'habove', True, 'u > m′', True) 35
+('habove: m′ ≤ F(m′,u) for all row-pre-fixed u ∈ (m′, w]', False) 11
+('habove: m′ ≤ F(m′,u) for all row-pre-fixed u ∈ (m′, w]', True) 35
+('mechanism', '-', 'B') 23
+('mechanism', 'A', '-') 14
+('mechanism', 'A', 'B') 9
+('m′ is an A-witness', False) 29
+('m′ is an A-witness', True) 17
+('s vs m′', '>') 46
+('s vs w', '<') 1
+('s vs w', '=') 45
+('s', 'h−K=0, stage−K=0') 23
+('s', 'h−K=1, stage−K=1') 22
+('s', 'h−K=2, stage−K=1') 1
+('w', 'h−K=0, stage−K=0') 22
+('w', 'h−K=1, stage−K=1') 23
+('w', 'h−K=2, stage−K=1') 1
+models 46
+== corner_probe.py sweep 4 16 (rank ≤ 2)
+models 84
+('A fails: B-witness b(z) = m′', False) 3
+('A fails: B-witness b(z) = m′', True) 35
+('A fails: B-witness count', 1) 26
+('A fails: B-witness count', 2) 6
+('A-witness a(y) vs w', '<') 9
+('A-witness a(y) vs w', '=') 51
+('A-witness y diag', 'not pre') 1
+('A-witness y diag', 'pre') 59
+('A-witness y vs m′', '=') 45
+('A-witness y vs m′', '∥') 15
+('B-witness b(z) diag', 'pre') 47
+('B-witness b(z) vs m′', '=') 44
+('B-witness b(z) vs m′', '∥') 3
+('B-witness z vs', 'm′', '>', 'w', '<', 's', '<') 4
+('B-witness z vs', 'm′', '>', 'w', '<', 's', '=') 4
+('B-witness z vs', 'm′', '>', 'w', '=', 's', '=') 27
+('B-witness z vs', 'm′', '>', 'w', '∥', 's', '∥') 9
+('B-witness z vs', 'm′', '∥', 'w', '<', 's', '<') 3
+('a(m′) route', 'A') 45
+('a(m′) route', 'base') 39
+('a(m′) vs m′', '<') 39
+('a(m′) vs m′', '>') 45
+('a(m′) vs w', '<') 44
+('a(m′) vs w', '=') 40
+('a(m′)', 'h−K=-2, stage−K=-2') 39
+('a(m′)', 'h−K=0, stage−K=0') 45
+('a(s) vs s', '<') 13
+('a(s) vs s', '=') 27
+('a(s) vs s', '>') 44
+('b(a(m′)) vs m′', '<') 39
+('b(a(m′)) vs m′', '>') 45
+('b(s) vs m′', '=') 31
+('b(s) vs m′', '>') 53
+('b(s) ∈ R_{K−1}', False) 53
+('b(s) ∈ R_{K−1}', True) 31
+('b(s) ≤ s', False) 6
+('b(s) ≤ s', True) 78
+('b(w) vs m′', '=') 27
+('b(w) vs m′', '>') 57
+('b(w) ∈ R_{K−1}', False) 57
+('b(w) ∈ R_{K−1}', True) 27
+('b(w) ≤ w', False) 6
+('b(w) ≤ w', True) 78
+('d* vs w', '<') 38
+('d* vs w', '=') 46
+('d*', 'h−K=-1, stage−K=-1') 33
+('d*', 'h−K=0, stage−K=0') 45
+('d*', 'h−K=1, stage−K=1') 6
+('descent u = w', False) 17
+('descent u = w', True) 67
+('descent u cell', 'lower') 39
+('descent u cell', 'upper') 45
+('descent u is a second top or mechanism A', False) 3
+('descent u is a second top or mechanism A', True) 81
+('descent u is a second top', False) 6
+('descent u is a second top', True) 78
+('descent u vs m′', '>') 78
+('descent u vs m′', '∥') 6
+('descent u', 'h−K=-1, stage−K=-1') 6
+('descent u', 'h−K=0, stage−K=0') 78
+('drop case: F(m′,q) vs m′', '∥', 'F(m′,q) vs q', '<') 6
+('drop case: general descent witness exists', True) 6
+('drop case: mechanism', '-', 'B') 3
+('drop case: mechanism', 'A', '-') 3
+('drop case: witness row x = m′', False) 6
+('general descent witness (x ∈ T_k, v ≱ m) exists', True) 84
+('habove or descent u > m′', 'habove', False, 'u > m′', False) 6
+('habove or descent u > m′', 'habove', True, 'u > m′', True) 78
+('habove: m′ ≤ F(m′,u) for all row-pre-fixed u ∈ (m′, w]', False) 6
+('habove: m′ ≤ F(m′,u) for all row-pre-fixed u ∈ (m′, w]', True) 78
+('mechanism', '-', 'B') 32
+('mechanism', 'A', '-') 45
+('mechanism', 'A', 'B') 7
+('m′ is an A-witness', False) 39
+('m′ is an A-witness', True) 45
+('s vs m′', '>') 84
+('s vs w', '<') 4
+('s vs w', '=') 80
+('s', 'h−K=0, stage−K=0') 71
+('s', 'h−K=1, stage−K=1') 13
+('w', 'h−K=0, stage−K=0') 67
+('w', 'h−K=1, stage−K=1') 17
+== single_claims.py dwit multi nopostlayer rmin=3 closure 5 10 1 10
+claim dwit: {'none': 10}
+== single_claims.py dwit multi nopostlayer rmin=3 closure 5 10 2 10
+claim dwit: {'none': 10}
+== single_claims.py dwit multi nopostlayer rmin=3 closure 5 10 3 10
+claim dwit: {'none': 10}
+== single_claims.py dwit multi nopostlayer rmin=3 closure 5 11 4 10
+claim dwit: {'none': 10}
+== single_claims.py dwit multi nopostlayer rmin=3 closure 5 11 5 10
+claim dwit: {'none': 10}
+== single_claims.py dwit multi nopostlayer rmin=3 closure 6 11 6 10
+claim dwit: {'none': 10}
+== single_claims.py dwit multi nopostlayer sweep 4 16
+claim dwit: {'none': 179}

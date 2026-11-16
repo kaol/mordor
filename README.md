@@ -225,7 +225,8 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     case F(b(x), x ⊔ c) = c (`sibling_join`), and the sibling c carries the UpCell in 35/36 (§34.3z¹⁷⁵).
     More generally the source row is constant, F(b(x), ·) = c, on the whole drop interval (c, u]. So c has an
     UpCell unless F(c, z) is incomparable with z for every z ∈ (c, u] (`siblingShadow_upCell`; 31/36 pairs).
-    In the remaining 5 pairs the UpCell still comes from the same source family (§34.3z¹⁷⁶).
+    In the remaining case the witness need not share the source: "some same-source sibling has an UpCell"
+    (FamilyUpCell) is false at |L| = 13, where the feeder carries it (§34.3z¹⁷⁶–¹⁷⁸).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

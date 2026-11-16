@@ -1,0 +1,16 @@
+== single_claims.py famup multi nopostlayer rmin=3 closure 5 10 1 10
+claim famup: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 17, rank(m) = 3
+== single_claims.py famup multi nopostlayer rmin=3 closure 5 10 2 10
+claim famup: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 13, rank(m) = 3
+== single_claims.py famup multi nopostlayer rmin=3 closure 5 10 3 10
+claim famup: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 17, rank(m) = 3
+== single_claims.py famup multi nopostlayer rmin=3 closure 5 11 4 10
+claim famup: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 14, rank(m) = 3
+== single_claims.py famup multi nopostlayer rmin=3 closure 5 11 5 10
+claim famup: {'counterexample': 5, 'none': 5}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py famup multi nopostlayer rmin=3 closure 6 11 6 10
+claim famup: {'none': 2, 'counterexample': 8}; smallest counterexample |L| = 18, rank(m) = 3
+== single_claims.py famup multi nopostlayer rmin=3 closure 6 12 10 10
+claim famup: {'counterexample': 10}; smallest counterexample |L| = 17, rank(m) = 3
+== single_claims.py famup multi nopostlayer rmin=3 closure 6 12 9 10
+claim famup: {'counterexample': 9, 'none': 1}; smallest counterexample |L| = 18, rank(m) = 3

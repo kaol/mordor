@@ -242,8 +242,9 @@ Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first o
 choice-free one (§34.3z¹⁴⁰): the **tight-stage upper principal cut**. At a stage where R_k has height exactly k and
 ⊤ ∉ R_{k+1}, some element m ∈ R_k of height k has a witness cell x ≤ m < y. By `OrbitHeight.cutMaps_of_tightUPC`
 it gives Cut at every finite edge-height. The statement is false for an arbitrary m, so a proof must use the
-orbit. Inside that programme, singleton lower transfer is reduced to **DescentWitness** in the residual no-cell
-configuration, and to UpCell (`singletonLower_of_upCell`; see above). The existential general-separator conjectures remain as an alternative:
+orbit. Inside that programme, singleton lower transfer is reduced to **UpCell** in the residual no-cell
+configuration (`singletonLower_of_upCell`; see above). The existential general-separator conjectures remain as an
+alternative:
 - **GSB(H):** every instance of edge-height H has a response-or-maximal run of at most H − 1 stages;
 - **GD(H):** some such run has strictly decreasing maximum gap.
 

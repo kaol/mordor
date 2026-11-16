@@ -153,7 +153,7 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     proposed intermediate statements (normalized BottomMaxCell, "no escape", escape ladders) turned out equivalent
     to Cut itself.
 
-- **Tight stages and height induction (§34.3z¹⁵²–¹⁵⁷).**
+- **Tight stages and height induction (§34.3z¹⁵²–¹⁶¹).**
   - Interval cells are located by the column orbit y ↦ m ⊔ F(m, y) (`ColumnOrbitCell`).
   - Old tops never carry cells, and upper witnesses transfer between tight stages (`TightTransfer`,
     `SingletonLowerTransfer`).
@@ -163,10 +163,28 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     - the orbit-height property, and Cut with it, at edge-height H reduces to *rigid* maps: a(⊥) = ⊥, b(⊤) = ⊤, and
       the diagonal fixes only ⊥ and ⊤ (`HeightInduction.top_mem_reduction`).
   - `cutMaps_of_riseAt`: the **Rise conjecture** (a rigid map has a good x < a(x)) at all heights ≤ H gives Cut at
-    edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices.
-  - The orbit-height property is proved outright at edge-height ≤ 3 (`ohAt_three`, §34.3z¹⁵⁸), and at edge-height 4 by a `bv_decide`
-    certificate over 40 ground terms (`OHHeight4.ohAt_4'`, §34.3z¹⁵⁹, trusting `Lean.ofReduceBool` as `cut_height5` does). Rise witnesses can need
+    edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices. Rise witnesses can need
     to enter as late as stage H − 1, so for rigid maps Rise is close to the orbit-height property itself.
+- **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
+  - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
+  - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and
+    `Lean.trustCompiler`.
+    - `OHHeight4.ohAt_4'` (§34.3z¹⁵⁹): a 407-clause drat-trim core over 40 ground F-terms of the orbit-height ground
+      theory (`GroundOH.OHCx`, Horn rules of the orbit).
+    - `OHHeight4R.ohAt_4R` (§34.3z¹⁶⁰): through the rigid theory `OHCxR`, which adds the rigid hypotheses and the
+      lower-height consequences. `OHRigid.top_mem_or_ohCxR` reduces every map to that theory, using only the true orbit.
+    - `OHCube4.ohAt_4c` (§34.3z¹⁶¹): a 25-leaf cube-and-conquer case tree on the boundary orbits
+      u = (x ↦ F(x, ⊤))ⁿ(⊥) and d = (y ↦ F(⊥, y))ⁿ(⊤).
+  - **H = 5: in progress** (`experiments/sat/oh5_work/`, resume instructions there).
+    - In a rigid map u₁ = d₁ = F(⊥, ⊤), so the case split runs over (n, m), with n + m ≤ 7: u reaches ⊤ after n steps
+      and d reaches ⊥ after m.
+    - 9 of the 10 cases are refuted by the ground search.
+    - The last case, (3, 3), is split 3 × 3; 5 of its 9 sub-cases are refuted and 4 are running in `oh_cube.py`.
+    - The certificate pipeline (`oh_cert.py`, `oh_cert_lean.py`) is validated at H = 4.
+    - At H = 5 single leaves have cores of about 2 000 clauses, which makes `bv_decide` expensive.
+  - Cut at edge-height ≤ 5 is already known (`cut_height5`). The value of OHAt 5 and OHAt 6 is the stronger orbit
+    theorem, and the induction hypothesis for the next height: OHAt ≤ 5 plus the reduction would make OHAt 6, hence
+    Cut at edge-height 6, a question about rigid maps only.
 
 **Open frontier now.** Chain-finite Cut, equivalently join-closure of R(F) (`Frontier.lean`), for cuts where **both**
 Max D and Min Dᶜ are infinite; at bounded height, edge-height 6 is the first open case. The sharpest concrete target is now a
@@ -197,7 +215,7 @@ open:
 | `docs/README.md` | Index to the research log with one-line summaries |
 | `experiments/` | The machine-experiment stack: exact realizability CSP solver, E₃ census pipeline, validation harness |
 | `gpu/` | GPU census of the projection F ↦ (a, b): exact enumeration and heat-bath MCMC with tripwires (PyTorch, ROCm/CUDA/CPU); see `gpu/README.md` |
-| `experiments/sat/` | Round 22: direct SAT encoding (CaDiCaL via PySAT), DRAT certification, semi-commutation and Cut Lemma sweeps, z3 theories |
+| `experiments/sat/` | Round 22: direct SAT encoding (CaDiCaL via PySAT), DRAT certification, semi-commutation and Cut Lemma sweeps, z3 theories. Round 26, §34.3z¹⁵⁹–¹⁶¹: the orbit-height ground theory (`oh_ground.py`), cube-and-conquer (`oh_cube.py`) and Lean certificate generators (`oh_lean.py`, `oh_cert.py`, `oh_cert_lean.py`); `oh5_work/` holds the OHAt 5 run in progress |
 | `lean/` | Round 26: Lean 4 / Mathlib proofs of the log's proved core (Mathlib is a lake dependency, not committed) |
 | `data/gpu-2026-10/` | Round 25: results.jsonl and batch.log of the first GPU run |
 | `experiments/finite_support/`, `experiments/asyncgrid/`, `experiments/infcapture/` | Round 26, §34.3z⁹⁷–¹¹⁵: z3 orbit and support profiles of the crossing case, the asynchronous-grid label abstraction (`reduced_grid.py`), good-word compatibility, grid refinement, dominated and capturing rows |

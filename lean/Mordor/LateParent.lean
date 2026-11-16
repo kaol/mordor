@@ -41,6 +41,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`sibling_join`** (`F p (x ⊔ c) = c`), `sibling_join_lower`.
 * §34.3z¹⁷⁶: `source_row_const` (`F p ≡ c` on `(c, u]`), **`siblingShadow_upCell`** (SiblingShadowCell unless the
   row `c` is incomparable with every column of `(c, u]`).
+* §34.3z¹⁷⁹: `DropNode`, `ChainExit`, `dropNode_step`, **`dropChain_exit`** (the shadow chain down the B-sources ends in
+  an exit; no orbit hypotheses), `iter_source_new`, `lowerExit_mem`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -641,5 +643,70 @@ theorem siblingShadow_upCell {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z �
   · refine upCell_of_descentWitness hn ⟨c, hc, hck, z, hcz, h, fun hm => hmu (hm.trans hzu), fun y hcy hyz _ => ?_⟩
     exact (source_row_const hn hk hp hck hcov hpc hpu hcy (hyz.trans hzu)).symm.le.trans ((F.mono hcov.le) y)
   · exact ⟨c, hc, hck, z, hcz, fun hm => hmu (hm.trans hzu), Or.inr h⟩
+
+/-! ### The shadow chain down the B-sources (§34.3z¹⁷⁹) -/
+
+/-- **A drop node**: a diagonal pre-fixed row `p` with a pre-fixed column `c > p` at which it drops. -/
+def DropNode (F : α →o α →o α) (p c : α) : Prop := F p p ≤ p ∧ p < c ∧ F p c ≤ c ∧ ¬ p ≤ F p c
+
+/-- **An exit**: a row `r` with a pre-fixed column `e > r` at which it has a lower cell, or stays above itself, or
+drops while being its own B-source (`b r = r`, a diagonal fixed point). -/
+def ChainExit (F : α →o α →o α) (r e : α) : Prop :=
+  r < e ∧ F r e ≤ e ∧ (F r e ≤ r ∨ r ≤ F r e ∨ (b F r = r ∧ ¬ r ≤ F r e))
+
+/-- **One transition.** For a drop node `(p, c)` with `q = b p`: the shadow `e = F q c` satisfies `q ≤ e ≤ c`,
+`F q e ≤ e`, and `q` is again diagonal pre-fixed. -/
+theorem dropNode_step {p c : α} (h : DropNode F p c) :
+    b F p ≤ p ∧ F (b F p) (b F p) ≤ b F p ∧ b F p ≤ F (b F p) c ∧ F (b F p) c ≤ c ∧
+      F (b F p) (F (b F p) c) ≤ F (b F p) c := by
+  obtain ⟨hpre, hpc, hFc, -⟩ := h
+  have hq : b F p ≤ p := b_le hpre
+  have hqp : F (b F p) p = b F p := col_b p
+  have hec : F (b F p) c ≤ c := ((F.mono hq) c).trans hFc
+  exact ⟨hq, ((F (b F p)).mono hq).trans hqp.le, hqp.symm.le.trans ((F (b F p)).mono hpc.le), hec,
+    (F (b F p)).mono hec⟩
+
+/-- **The shadow chain terminates in an exit** (no orbit hypotheses). From a drop node `(p, c)`, follow
+`p ↦ b p`, `c ↦ F (b p) c` while the new row drops. Heights strictly decrease, so some iterate `r = b^[i] p` has a
+column `e ≤ c` forming an exit. -/
+theorem dropChain_exit {H : ℕ} (hn : NoChain α (H + 1)) :
+    ∀ (n : ℕ) {p c : α}, height H p ≤ n → DropNode F p c →
+      ∃ i, ∃ e, e ≤ c ∧ ChainExit F ((b F)^[i] p) e := by
+  intro n
+  induction n with
+  | zero =>
+    intro p c hp h
+    obtain ⟨hpre, hpc, hFc, hdrop⟩ := h
+    refine ⟨0, c, le_rfl, hpc, hFc, Or.inr (Or.inr ⟨?_, hdrop⟩)⟩
+    by_contra hne
+    have := height_strictMono hn (lt_of_le_of_ne (b_le hpre) hne); omega
+  | succ n ih =>
+    intro p c hp h
+    obtain ⟨hq, hqpre, hqe, hec, hFe⟩ := dropNode_step h
+    obtain ⟨hpre, hpc, hFc, hdrop⟩ := h
+    by_cases hbp : b F p = p
+    · exact ⟨0, c, le_rfl, hpc, hFc, Or.inr (Or.inr ⟨hbp, hdrop⟩)⟩
+    have hqlt : b F p < p := lt_of_le_of_ne hq hbp
+    by_cases h0 : F (b F p) c ≤ b F p
+    · exact ⟨1, c, le_rfl, hqlt.trans hpc, hec, Or.inl h0⟩
+    have hqe' : b F p < F (b F p) c := lt_of_le_of_ne hqe fun e => h0 (e ▸ le_rfl)
+    by_cases h1 : F (b F p) (F (b F p) c) ≤ b F p
+    · exact ⟨1, F (b F p) c, hec, hqe', hFe, Or.inl h1⟩
+    by_cases h2 : b F p ≤ F (b F p) (F (b F p) c)
+    · exact ⟨1, F (b F p) c, hec, hqe', hFe, Or.inr (Or.inl h2)⟩
+    have := height_strictMono hn hqlt
+    obtain ⟨i, e, hee, hex⟩ := ih (by omega) ⟨hqpre, hqe', hFe, h2⟩
+    exact ⟨i + 1, e, hee.trans hec, by rw [Function.iterate_succ_apply]; exact hex⟩
+
+/-- **The chain rows stay new**: if `p ∉ R_{j+i}` then `b^[i] p ∉ R_j` (iterating `source_new`). -/
+theorem iter_source_new {j : ℕ} : ∀ (i : ℕ) {p : α}, p ∉ Rk F (j + i) → (b F)^[i] p ∉ Rk F j
+  | 0, p, h => h
+  | i + 1, p, h => by
+      rw [Function.iterate_succ_apply]
+      exact iter_source_new i (source_new (show p ∉ Rk F (j + i + 1) by simpa [Nat.add_assoc] using h))
+
+/-- **A lower exit puts its column one stage up**: `r ∈ R_s`, `F r e ≤ r` give `e ∈ R_{s+1}`. -/
+theorem lowerExit_mem {s : ℕ} {r e : α} (hr : r ∈ Rk F s) (hL : F r e ≤ r) : e ∈ Rk F (s + 1) :=
+  mem_succ_of_cell hr le_rfl (Or.inl hL)
 
 end Mordor.OrbitHeight

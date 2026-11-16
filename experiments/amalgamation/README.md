@@ -43,3 +43,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z¹⁷⁶: `shadow_probe.py` adds the sibling-pair analysis (F(c, u) vs u, clamped descent, total incomparability; model `sibling_totinc_min25.json`). Output `out_sibling.txt`.
 - §34.3z¹⁷⁷: `shadow_probe.py` adds the totally incomparable case (upward closure v* = u ⊔ F(c, u), the column t = F(c, u)). Output `out_sibling177.txt`.
 - §34.3z¹⁷⁸: `single_claims.py famup multi nopostlayer rmin=3 …` (FamilyUpCell: false at |L| = 13; the witness is the feeder, with a different source). Output `out_famup.txt`.
+- §34.3z¹⁷⁹: `chain_probe.py [rmin=R] …` (replays `dropChain_exit` from every feeder drop: exit depth and type, and witness relations; the column-localization failure is `chain_rescue_fail_min19.json`). Output `out_chain.txt`.

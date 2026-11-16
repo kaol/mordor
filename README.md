@@ -227,6 +227,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     UpCell unless F(c, z) is incomparable with z for every z ∈ (c, u] (`siblingShadow_upCell`; 31/36 pairs).
     In the remaining case the witness need not share the source: "some same-source sibling has an UpCell"
     (FamilyUpCell) is false at |L| = 13, where the feeder carries it (§34.3z¹⁷⁶–¹⁷⁸).
+    The shadow chain down the B-sources always terminates in an exit (`dropChain_exit`, no orbit hypotheses). But
+    neither its exit column nor "feeder or sibling" locates the witness (|L| = 19, §34.3z¹⁷⁹), so CoverUpCell has
+    to be a whole-layer statement.
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

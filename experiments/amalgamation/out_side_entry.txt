@@ -1,0 +1,96 @@
+== s_side_w_sweep (multi)
+claim side_w: {'none': 36, 'counterexample': 143}; smallest counterexample |L| = 5, rank(m) = 1
+== s_side_w_cl (multi)
+claim side_w: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 1
+== s_side_sweep (multi)
+claim side: {'none': 139, 'counterexample': 40}; smallest counterexample |L| = 7, rank(m) = 2
+== s_side_cl (multi)
+claim side: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 2
+== s_bw_sweep (multi)
+claim below_w: {'none': 148, 'counterexample': 31}; smallest counterexample |L| = 8, rank(m) = 2
+== s_bw_cl (multi)
+claim below_w: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 2
+== s_bw_cl2 (multi)
+claim below_w: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 2
+== witness_probe.py ahead sweep 4 16
+models 39
+('A-route exists', True) 39
+('all maximal R_J elements are witnesses', False) 31
+('all maximal R_J elements are witnesses', True) 8
+('minimal witness route', 'a') 1
+('minimal witness route', 'ab') 4
+('minimal witness route', 'b') 50
+('minimal witness: x ≤ m′', False) 55
+('minimal witness: x ⊓ m = ⊥', False) 55
+('some maximal witness', True) 39
+('some witness ≤ m', False) 1
+('some witness ≤ m', True) 38
+('some witness ≤ m′', False) 39
+('some witness ≤ w', False) 24
+('some witness ≤ w', True) 15
+('tight-admissible witness (h(x) ≤ J) exists', False) 2
+('tight-admissible witness (h(x) ≤ J) exists', True) 37
+('tight-admissible witness exists, or B-route', True) 39
+('tight-admissible witness route', 'a') 1
+('tight-admissible witness route', 'ab') 2
+('tight-admissible witness route', 'b') 68
+('tight-admissible witness vs m', '<') 54
+('tight-admissible witness vs m', '∥') 17
+('tight-admissible witness ≱ m exists', False) 2
+('tight-admissible witness ≱ m exists', True) 37
+('w ≤ a(m) (m itself a witness)', False) 1
+('w ≤ a(m) (m itself a witness)', True) 38
+('witness height − J', -1) 20
+('witness height − J', 0) 51
+('witness height − J', 1) 38
+('witness route', 'a') 1
+('witness route', 'ab') 5
+('witness route', 'b') 103
+('witness stage − J', 0) 109
+('witness vs d*', '<') 15
+('witness vs d*', '∥') 94
+('witness vs m', '<') 54
+('witness vs m', '=') 38
+('witness vs m', '∥') 17
+('witness vs m′', '>') 38
+('witness vs m′', '∥') 71
+('witness vs w', '<') 15
+('witness vs w', '∥') 94
+('witnesses have a least element', False) 16
+('witnesses have a least element', True) 23
+== witness_probe.py multi sweep 4 16
+models 151
+('h(w) − K', 0) 89
+('h(w) − K', 1) 59
+('h(w) − K', 2) 3
+('second elements', 1) 79
+('second elements', 2) 40
+('second elements', 3) 32
+('second route', 'a') 130
+('second route', 'b') 125
+('second vs m', '∥') 255
+('second vs m′', '>') 255
+('second vs w', '<') 90
+('second vs w', '=') 89
+('second vs w', '∥') 76
+('second vs y*', '<') 199
+('second vs y*', '∥') 56
+('some second z with z ⊓ m ≤ m′', True) 151
+('some second z ∥ all of m′, m, w', False) 151
+('some second z ≤ m ⊔ w', True) 151
+('some second z ≤ w', True) 151
+('some second z ≥ m′', True) 151
+('w on time (w ∈ R_{h(w)})', True) 151
+== check_side.py
+== single_claim_side_w_multi_min5.json: |L| = 5, K = 1, w ∥ m: True
+   hypotheses: {'F monotone': True, 'm ∈ R_K \\ R_{K−1}': True, 'R_K heights ≤ K': True, 'R_{K−1} heights ≤ K−1': True, '⊤ ∉ R_{K+1}': True, 'm′ = b(m) ⋖ m, m′ ∈ R_{K−1}, F(m′,m) ≤ m′': True, 'no interval cell at m': True, 'm unique of height K in R_K': False}
+   side-entry candidates: {'w ∈ R_K': False, '(m′, w] ∩ R_K ≠ ∅': True, 'second ≤ w': True, 'second > m′ (sibling)': True, 'second exists': True}
+== single_claim_side_min7.json: |L| = 7, K = 2, w ∥ m: True
+   hypotheses: {'F monotone': True, 'm ∈ R_K \\ R_{K−1}': True, 'R_K heights ≤ K': True, 'R_{K−1} heights ≤ K−1': True, '⊤ ∉ R_{K+1}': True, 'm′ = b(m) ⋖ m, m′ ∈ R_{K−1}, F(m′,m) ≤ m′': True, 'no interval cell at m': True, 'm unique of height K in R_K': False}
+   side-entry candidates: {'w ∈ R_K': False, '(m′, w] ∩ R_K ≠ ∅': False, 'second ≤ w': True, 'second > m′ (sibling)': False, 'second exists': True}
+== single_claim_below_w_multi_min8.json: |L| = 8, K = 2, w ∥ m: True
+   hypotheses: {'F monotone': True, 'm ∈ R_K \\ R_{K−1}': True, 'R_K heights ≤ K': True, 'R_{K−1} heights ≤ K−1': True, '⊤ ∉ R_{K+1}': True, 'm′ = b(m) ⋖ m, m′ ∈ R_{K−1}, F(m′,m) ≤ m′': True, 'no interval cell at m': True, 'm unique of height K in R_K': False}
+   side-entry candidates: {'w ∈ R_K': False, '(m′, w] ∩ R_K ≠ ∅': False, 'second ≤ w': False, 'second > m′ (sibling)': False, 'second exists': True}
+== single_claim_noic_fi_ahead_min7.json: |L| = 7, K = 3, w ∥ m: True
+   hypotheses: {'F monotone': True, 'm ∈ R_K \\ R_{K−1}': False, 'R_K heights ≤ K': True, 'R_{K−1} heights ≤ K−1': False, '⊤ ∉ R_{K+1}': False, 'm′ = b(m) ⋖ m, m′ ∈ R_{K−1}, F(m′,m) ≤ m′': True, 'no interval cell at m': True, 'm unique of height K in R_K': False}
+   side-entry candidates: {'w ∈ R_K': True, '(m′, w] ∩ R_K ≠ ∅': True, 'second ≤ w': True, 'second > m′ (sibling)': True, 'second exists': True}

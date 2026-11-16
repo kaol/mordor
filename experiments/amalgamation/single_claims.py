@@ -24,7 +24,9 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
             fmm_in        F(m, m) ∈ R_{K−1}
   'ahead': index-sensitivity test, m placed at stage J = K − 1 (one ahead): R_J ranks ≤ K with unique rank-K
            element m ∉ R_{J−1}, R_{J−1} ranks ≤ K − 1, ⊤ ∉ R_{J+1}, feeders/entries from R_{J−1}.
-  python3 single_claims.py CLAIM [ahead] (sweep P NMAX | closure K M SEED COUNT)
+  §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
+  flags: notop (drop ⊤ ∉ R_{K+1}), multi (drop uniqueness of m)
+  python3 single_claims.py CLAIM [ahead] [notop] [multi] (sweep P NMAX | closure K M SEED COUNT)
 """
 import sys, collections, itertools
 sys.path.insert(0, '../separation')
@@ -34,8 +36,23 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
+
+def ys_block(E, L, m, f):
+    """One-hot y* = gfp of y ↦ m ⊔ F(m, y); yields (y, Y) for the candidate values."""
+    n = L.n; le = L.le; jn = L.join
+    ys = [E.v('ys', y) for y in range(n) if le[m][y]]; E.S.add_clause(ys)
+    for p, q in itertools.combinations(ys, 2): E.S.add_clause([-p, -q])
+    for y in range(n):
+        if not le[m][y]: continue
+        Y = E.v('ys', y)
+        E.S.add_clause([-Y] + [f(m, y, w) for w in range(n) if jn[m][w] == y])
+        for z in range(n):
+            if le[z][y]: continue
+            for w in range(n):
+                if le[z][jn[m][w]]: E.S.add_clause([-Y, -f(m, z, w)])
+        yield y, Y
 
 def query(L, m, claim, ahead=False):
     n = L.n; le = L.le; rk = L.rank; K = rk[m]; jn = L.join; mt = L.meet; s = 1 if ahead else 0
@@ -55,7 +72,23 @@ def query(L, m, claim, ahead=False):
         for p in feeders:
             o = E.v('low', p); E.iff_and(o, [r(K - 1, p), fle(p, m, p)]); low[p] = o
         E.S.add_clause(list(low.values()))
-        if claim == 'feeder_post':                 # §34.3z¹⁶³: is every lower feeder diagonal post-fixed (m' ≤ F(m', m'))?
+        if claim == 'below_w':         # §34.3z¹⁶⁴: noic_fi plus no on-time height-K element of R_K below w (below_d: below D-limit)
+            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
+            E.S.add_clause([-ic(m)])
+            for y, Y in ys_block(E, L, m, f):
+                for wv in range(n):
+                    for z in range(n):
+                        if le[z][wv] and rk[z] == K: E.S.add_clause([-Y, -f(m, y, wv), -r(K, z)])
+        elif claim in ('side', 'side_w'):             # §34.3z¹⁶⁴: noic_fi plus no on-time side element: (m', w] ∩ R_K = ∅ (side_w: w ∉ R_K)
+            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
+            E.S.add_clause([-ic(m)])
+            for y, Y in ys_block(E, L, m, f):
+                for wv in range(n):
+                    for p in feeders:
+                        for z in range(n):
+                            if (z == wv) if claim == 'side_w' else (le[p][z] and z != p and le[z][wv]):
+                                E.S.add_clause([-Y, -f(m, y, wv), -E.v('fi', p), -r(K, z)])
+        elif claim == 'feeder_post':                 # §34.3z¹⁶³: is every lower feeder diagonal post-fixed (m' ≤ F(m', m'))?
             for p in feeders: o = E.v('fp', p); E.iff_and(o, [low[p], -yle(p, p)]); bad.append(o)
         elif claim == 'noic_fi':                     # §34.3z¹⁶²: no interval cell at m although b(m) is a lower feeder
             for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
@@ -73,16 +106,7 @@ def query(L, m, claim, ahead=False):
                 for w in range(n):
                     if not le[g][w]: o = E.v('bad', g, w); E.iff_and(o, [B(m, g), f(m, L.top, w)]); bad.append(o)
         else:                                           # y* one-hot
-            ys = [E.v('ys', y) for y in range(n) if le[m][y]]; E.S.add_clause(ys)
-            for p, q in itertools.combinations(ys, 2): E.S.add_clause([-p, -q])
-            for y in range(n):
-                if not le[m][y]: continue
-                Y = E.v('ys', y)
-                E.S.add_clause([-Y] + [f(m, y, w) for w in range(n) if jn[m][w] == y])
-                for z in range(n):
-                    if le[z][y]: continue
-                    for w in range(n):
-                        if le[z][jn[m][w]]: E.S.add_clause([-Y, -f(m, z, w)])
+            for y, Y in ys_block(E, L, m, f):
                 if claim == 'gfp':
                     if y != m: o = E.v('bad', y); E.iff_and(o, [Y, -f(m, y, y)]); bad.append(o)
                 else:
@@ -120,7 +144,10 @@ def query(L, m, claim, ahead=False):
         low = [p for p in L.covers_dn[m] if rk[p] == K - 1 and inR(p, K - 1) and le[F[p][m]][p]]; assert low
         y = ystar(L, F, m)
         from gfp_top import ic as ic_py
-        viol = {'feeder_post': any(not le[p][F[p][p]] for p in low), 'noic_fi': (bm in low) and not ic_py(L, F, m), 'bm_eq_feeder': any(bm != p for p in low), 'C_bm_eq_feeder': any(bm != p for p in low),
+        wv = F[m][y]; side = [z for z in range(n) if le[bm][z] and z != bm and le[z][wv] and inR(z, K)]
+        viol = {'below_w': (bm in low) and not ic_py(L, F, m) and not any(le[z][wv] and rk[z] == K and inR(z, K) for z in range(n)),
+                'side': (bm in low) and not ic_py(L, F, m) and not side, 'side_w': (bm in low) and not ic_py(L, F, m) and not inR(wv, K),
+                'feeder_post': any(not le[p][F[p][p]] for p in low), 'noic_fi': (bm in low) and not ic_py(L, F, m), 'bm_eq_feeder': any(bm != p for p in low), 'C_bm_eq_feeder': any(bm != p for p in low),
                 'C_a_feeder_le': any(not le[a_of(L, F, p)][m] for p in low), 'a_feeder_le': any(not le[a_of(L, F, p)][m] for p in low),
                 'fmm_le': not le[F[m][m]][m], 'top_ge_bm': not le[bm][F[m][L.top]], 'w_ge_bm': not le[bm][F[m][y]],
                 'gfp': not gfp_ok(L, F, m)}[claim]
@@ -145,4 +172,4 @@ if __name__ == '__main__':
         if hit and (best is None or L.n < best[0].n): best = (L, hit)
     print(f"claim {claim}{' ahead' if ahead else ''}: {dict(C)}" + (f"; smallest counterexample |L| = {best[0].n}, rank(m) = {best[0].rank[best[1][0]]}" if best else ''), flush=True)
     if best:
-        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}_min{best[0].n}.json", 'w'))
+        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi') if f in sys.argv)}_min{best[0].n}.json", 'w'))

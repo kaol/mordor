@@ -39,6 +39,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `source_meet`, `source_meet_lt`, `feeder_new`, `feeder_cover_source`.
 * §34.3z¹⁷⁵: `shadow_trichotomy`, **`sibling_of_shadow`** (same-source siblings), `source_new`, `upper_branch_eq_a`,
   **`sibling_join`** (`F p (x ⊔ c) = c`), `sibling_join_lower`.
+* §34.3z¹⁷⁶: `source_row_const` (`F p ≡ c` on `(c, u]`), **`siblingShadow_upCell`** (SiblingShadowCell unless the
+  row `c` is incomparable with every column of `(c, u]`).
 -/
 
 namespace Mordor.OrbitHeight
@@ -609,5 +611,35 @@ theorem sibling_join {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F 
 
 theorem sibling_join_lower {p x c y : α} (hpy : p ≤ y) (hj : F p (x ⊔ c) = c) : c ≤ F y (x ⊔ c) :=
   hj.symm.le.trans ((F.mono hpy) (x ⊔ c))
+
+/-! ### SiblingShadowCell, comparable case (§34.3z¹⁷⁶) -/
+
+/-- **The source row is constant on the shadow interval.** Let `p ⋖ c` with `F p c = p`, `p ∈ R_j`, `h(c) = j + 1`,
+`R_{j+1}` tight, and `F p u = c`. Then `F p z = c` for every `z ∈ (c, u]`. (The value lies in `[p, c]`; `p` would be
+a lower cell putting `z`, of height `> j + 1`, into `R_{j+1}`.) -/
+theorem source_row_const {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {p c u z : α} (hp : p ∈ Rk F j) (hck : height H c = j + 1) (hcov : p ⋖ c) (hpc : F p c = p)
+    (hpu : F p u = c) (hcz : c < z) (hzu : z ≤ u) : F p z = c := by
+  have hlo : p ≤ F p z := hpc.symm.le.trans ((F p).mono hcz.le)
+  have hhi : F p z ≤ c := ((F p).mono hzu).trans hpu.le
+  rcases hcov.eq_or_eq hlo hhi with e | e
+  · exfalso
+    have hR := mem_succ_of_cell hp le_rfl (Or.inl e.le)
+    have := height_strictMono hn hcz; have := hk z hR; omega
+  · exact e
+
+/-- **SiblingShadowCell, comparable case.** In the same setting, with `c ∈ R_{j+1}` a top (`h(c) = j + 1`) and
+`m ≰ u`: if some column `z ∈ (c, u]` is comparable with its row-`c` value (`F c z ≤ z` or `z ≤ F c z`), then UpCell
+holds, witnessed by the row `c`. On `(c, u]` the row `c` stays above `c` (`F c z ≥ F p z = c`), so a pre-fixed `z`
+is a descent witness and a post-fixed `z` is an upper cell. The remaining case is that the row `c` is
+*incomparable on the whole interval*: `F c z ∥ z` for every `z ∈ (c, u]`. -/
+theorem siblingShadow_upCell {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {m p c u : α} (hp : p ∈ Rk F j) (hc : c ∈ Rk F (j + 1)) (hck : height H c = j + 1) (hcov : p ⋖ c)
+    (hpc : F p c = p) (hpu : F p u = c) (hmu : ¬ m ≤ u)
+    (hcase : ∃ z, c < z ∧ z ≤ u ∧ (F c z ≤ z ∨ z ≤ F c z)) : UpCell F H (j + 1) m := by
+  obtain ⟨z, hcz, hzu, h | h⟩ := hcase
+  · refine upCell_of_descentWitness hn ⟨c, hc, hck, z, hcz, h, fun hm => hmu (hm.trans hzu), fun y hcy hyz _ => ?_⟩
+    exact (source_row_const hn hk hp hck hcov hpc hpu hcy (hyz.trans hzu)).symm.le.trans ((F.mono hcov.le) y)
+  · exact ⟨c, hc, hck, z, hcz, fun hm => hmu (hm.trans hzu), Or.inr h⟩
 
 end Mordor.OrbitHeight

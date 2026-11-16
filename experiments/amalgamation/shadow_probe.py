@@ -59,6 +59,29 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer', 
                         C[('A1 interval [x ⊔ c, u]', 'cell of x', cellIn(x), 'cell of c', cellIn(c))] += 1
                         upc_ = lambda y: any(le[y][z] and z != y and not le[m][z] and (le[z][F[y][z]] or le[F[y][z]][y]) for z in range(n))
                         C[('A1 sibling pair', 'x has UpCell', upc_(x), 'c has UpCell', upc_(c))] += 1
+                        assert all(F[p][z] == c for z in range(n) if le[c][z] and z != c and le[z][u])   # F(p, ·) = c on (c, u]
+                        fcu = F[c][u]
+                        totinc = all(rel(F[c][z], z) == '∥' for z in range(n) if le[c][z] and z != c and le[z][u])
+                        C[('A1 row c incomparable on all of (c, u]', totinc)] += 1
+                        if totinc:
+                            json.dump(dict(sets=L.S, F=F, m=m, x=x, c=c, u=u, p=p), open(f'sibling_totinc_min{n}.json', 'w'))
+                            others = [y for y in FL if upc_(y)]
+                            C[('A1 totinc: UpCell rows', tuple(sorted(rel(y, x) + '/' + rel(y, c) + ('/same source' if B(y) == p else '/other source') for y in others)))] += 1
+                        C[('A1 F(c,u) vs u', rel(fcu, u), 'c has UpCell', upc_(c))] += 1
+                        if not le[fcu][u]:                     # clamped descent z ↦ u ⊓ F(c, z) from u
+                            z = u
+                            while True:
+                                nz = L.meet[u][F[c][z]]
+                                if nz == z or nz == c: break
+                                z = nz
+                            out = ('upper cell at gfp > c' if nz == z and z != c else
+                                   'lower cell (F(c,z) ≤ u, ⊓ = c)' if le[F[c][z]][u] else 'stuck: F(c,z) ⊓ u = c, F(c,z) ≰ u')
+                            C[('A1 clamped descent', out, 'c has UpCell', upc_(c))] += 1
+                            t_ = fcu
+                            for z in range(n):
+                                if le[c][z] and z != c and not le[m][z] and (le[z][F[c][z]] or le[F[c][z]][c]):
+                                    C[('A1 ∥ case: c-cell column z', 'vs u', rel(z, u), 'vs t=F(c,u)', rel(z, t_), 'vs u ⊔ t', rel(z, L.join[u][t_]), 'type', 'U' if le[z][F[c][z]] else 'L')] += 1
+                            C[('A1 ∥ case', 'm ≤ u ⊔ t', le[m][L.join[u][t_]], 'F(c, u ⊔ t) vs u ⊔ t', rel(F[c][L.join[u][t_]], L.join[u][t_]))] += 1
                     elif br == 'v = c':
                         C[('upper (v = c)', 'c = a(p)', a_of(L, F, p) == c)] += 1
                     else:

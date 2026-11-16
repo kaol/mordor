@@ -63,6 +63,20 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer', 
                         fcu = F[c][u]
                         totinc = all(rel(F[c][z], z) == '∥' for z in range(n) if le[c][z] and z != c and le[z][u])
                         C[('A1 row c incomparable on all of (c, u]', totinc)] += 1
+                        if not le[fcu][u]:                     # §34.3z¹⁷⁷: upward closure v ↦ v ⊔ F(c, v) from u
+                            v = u
+                            while not le[F[c][v]][v]: v = L.join[v][F[c][v]]
+                            hab = all(le[c][F[c][z]] for z in range(n) if le[c][z] and z != c and le[z][v] and le[F[c][z]][z])
+                            habAll = all(le[c][F[c][z]] for z in range(n) if le[c][z] and z != c and le[z][v])
+                            C[('A1 ∥ upward closure v*', 'm ≰ v*', not le[m][v], 'habove(c, v*)', hab, 'row c ≥ c on (c, v*]', habAll, 'totinc', totinc)] += 1
+                            C[('A1 ∥ upward closure v*', 'steps', 'v* = u ⊔ F(c,u)', v == L.join[u][fcu])] += 1
+                            t_ = fcu; ftt = F[c][t_]
+                            C[('A1 ∥ column t = F(c,u)', 'F(c,t) vs t', rel(ftt, t_), 'm ≤ t', le[m][t_], 'totinc', totinc)] += 1
+                            habt = all(le[c][F[c][z]] for z in range(n) if le[c][z] and z != c and le[z][t_] and le[F[c][z]][z])
+                            C[('A1 ∥ column t', 'cell or DW at t', (le[t_][ftt] or (le[ftt][t_] and habt)) and not le[m][t_], 'totinc', totinc)] += 1
+                            okt = (le[t_][ftt] or (le[ftt][t_] and habt)) and not le[m][t_]; okv = (not le[m][v]) and hab
+                            C[('A1 ∥ union of v* and t', 'covered', okt or okv, 'totinc', totinc)] += 1
+                            C[('A1 ∥ F(p, ·) on (c, v*]', 'all ≥ c', all(le[c][F[p][z]] for z in range(n) if le[c][z] and z != c and le[z][v]))] += 1
                         if totinc:
                             json.dump(dict(sets=L.S, F=F, m=m, x=x, c=c, u=u, p=p), open(f'sibling_totinc_min{n}.json', 'w'))
                             others = [y for y in FL if upc_(y)]

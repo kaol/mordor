@@ -1,0 +1,93 @@
+== shadow_probe.py (§34.3z¹⁷⁷: totally incomparable sibling case; rmin=3 closure 5 10 1–3, 5 11 4/5/7, 5 12 8, 6 11 6, 6 12 9/10/12, 6 13 13; rmin=4 closure 6 12 9/10, 6 13 11), summed
+('(1) c ∈ R_{k+1}', 'refuting models') 2
+('(1) c ∈ R_{k+1}', False) 2
+('(1) c ∈ R_{k+1}', True) 66
+('(2) b(c) ∈ R_{k−1}', 'refuting models') 21
+('(2) b(c) ∈ R_{k−1}', False) 23
+('(2) b(c) ∈ R_{k−1}', True) 45
+('(3) b(c) comparable with p', 'refuting models') 10
+('(3) b(c) comparable with p', False) 10
+('(3) b(c) comparable with p', True) 58
+('(4) p ⊔ q ∈ R_k', 'refuting models') 10
+('(4) p ⊔ q ∈ R_k', False) 11
+('(4) p ⊔ q ∈ R_k', True) 22
+('(5) b(x ⊓ y) < x ⊓ y', 'refuting models') 15
+('(5) b(x ⊓ y) < x ⊓ y', False) 16
+('(5) b(x ⊓ y) < x ⊓ y', True) 17
+('A1 (v ≤ p)', 'c new', True, 'b(c) = p', True, 'F(p,c) = p', True) 41
+('A1 F(c,u) vs u', '<', 'c has UpCell', True) 27
+('A1 F(c,u) vs u', '=', 'c has UpCell', True) 3
+('A1 F(c,u) vs u', '∥', 'c has UpCell', False) 1
+('A1 F(c,u) vs u', '∥', 'c has UpCell', True) 10
+('A1 clamped descent', 'stuck: F(c,z) ⊓ u = c, F(c,z) ≰ u', 'c has UpCell', False) 1
+('A1 clamped descent', 'stuck: F(c,z) ⊓ u = c, F(c,z) ≰ u', 'c has UpCell', True) 10
+('A1 interval [x ⊔ c, u]', 'cell of x', False, 'cell of c', False) 13
+('A1 interval [x ⊔ c, u]', 'cell of x', False, 'cell of c', True) 28
+('A1 join j = x ⊔ c', 'x upper cell at j', False, 'c upper cell at j', False) 36
+('A1 join j = x ⊔ c', 'x upper cell at j', False, 'c upper cell at j', True) 5
+('A1 join j', 'F(x,j) vs j', '<', 'F(c,j) vs j', '<') 26
+('A1 join j', 'F(x,j) vs j', '<', 'F(c,j) vs j', '=') 5
+('A1 join j', 'F(x,j) vs j', '<', 'F(c,j) vs j', '∥') 8
+('A1 join j', 'F(x,j) vs j', '∥', 'F(c,j) vs j', '<') 1
+('A1 join j', 'F(x,j) vs j', '∥', 'F(c,j) vs j', '∥') 1
+('A1 join j', 'some cell of x or c at j', False) 13
+('A1 join j', 'some cell of x or c at j', True) 28
+('A1 row c incomparable on all of (c, u]', False) 35
+('A1 row c incomparable on all of (c, u]', True) 6
+('A1 sibling pair', 'x has UpCell', False, 'c has UpCell', False) 1
+('A1 sibling pair', 'x has UpCell', False, 'c has UpCell', True) 40
+('A1 totinc: UpCell rows', ('∥/=/same source', '∥/∥/other source')) 1
+('A1 totinc: UpCell rows', ('∥/=/same source',)) 4
+('A1 totinc: UpCell rows', ('∥/∥/same source',)) 1
+('A1 ∥ F(p, ·) on (c, v*]', 'all ≥ c', False) 1
+('A1 ∥ F(p, ·) on (c, v*]', 'all ≥ c', True) 10
+('A1 ∥ case', 'm ≤ u ⊔ t', False, 'F(c, u ⊔ t) vs u ⊔ t', '<') 3
+('A1 ∥ case', 'm ≤ u ⊔ t', True, 'F(c, u ⊔ t) vs u ⊔ t', '<') 8
+('A1 ∥ case: c-cell column z', 'vs u', '<', 'vs t=F(c,u)', '∥', 'vs u ⊔ t', '<', 'type', 'L') 8
+('A1 ∥ case: c-cell column z', 'vs u', '∥', 'vs t=F(c,u)', '<', 'vs u ⊔ t', '<', 'type', 'U') 1
+('A1 ∥ case: c-cell column z', 'vs u', '∥', 'vs t=F(c,u)', '=', 'vs u ⊔ t', '<', 'type', 'L') 3
+('A1 ∥ case: c-cell column z', 'vs u', '∥', 'vs t=F(c,u)', '=', 'vs u ⊔ t', '<', 'type', 'U') 1
+('A1 ∥ case: c-cell column z', 'vs u', '∥', 'vs t=F(c,u)', '∥', 'vs u ⊔ t', '∥', 'type', 'L') 3
+('A1 ∥ column t = F(c,u)', 'F(c,t) vs t', '<', 'm ≤ t', False, 'totinc', False) 1
+('A1 ∥ column t = F(c,u)', 'F(c,t) vs t', '<', 'm ≤ t', False, 'totinc', True) 4
+('A1 ∥ column t = F(c,u)', 'F(c,t) vs t', '<', 'm ≤ t', True, 'totinc', False) 4
+('A1 ∥ column t = F(c,u)', 'F(c,t) vs t', '<', 'm ≤ t', True, 'totinc', True) 1
+('A1 ∥ column t = F(c,u)', 'F(c,t) vs t', '=', 'm ≤ t', False, 'totinc', True) 1
+('A1 ∥ column t', 'cell or DW at t', False, 'totinc', False) 4
+('A1 ∥ column t', 'cell or DW at t', False, 'totinc', True) 2
+('A1 ∥ column t', 'cell or DW at t', True, 'totinc', False) 1
+('A1 ∥ column t', 'cell or DW at t', True, 'totinc', True) 4
+('A1 ∥ union of v* and t', 'covered', False, 'totinc', False) 4
+('A1 ∥ union of v* and t', 'covered', False, 'totinc', True) 2
+('A1 ∥ union of v* and t', 'covered', True, 'totinc', False) 1
+('A1 ∥ union of v* and t', 'covered', True, 'totinc', True) 4
+('A1 ∥ upward closure v*', 'm ≰ v*', False, 'habove(c, v*)', True, 'row c ≥ c on (c, v*]', True, 'totinc', False) 5
+('A1 ∥ upward closure v*', 'm ≰ v*', False, 'habove(c, v*)', True, 'row c ≥ c on (c, v*]', True, 'totinc', True) 3
+('A1 ∥ upward closure v*', 'm ≰ v*', True, 'habove(c, v*)', False, 'row c ≥ c on (c, v*]', False, 'totinc', True) 1
+('A1 ∥ upward closure v*', 'm ≰ v*', True, 'habove(c, v*)', True, 'row c ≥ c on (c, v*]', True, 'totinc', True) 2
+('A1 ∥ upward closure v*', 'steps', 'v* = u ⊔ F(c,u)', True) 11
+('A2 (v ∥ p)', 'd vs x', '∥', 'd vs b(c)', '<') 1
+('A2 (v ∥ p)', 'd vs x', '∥', 'd vs b(c)', '=') 4
+('A2 (v ∥ p)', 'h(d)−k=-1', 'stage(d)−k=-1', 'diag', 'pre') 5
+('A2 (v ∥ p)', 'p new top of R_{k−1}', True, 'b(p) < p with b(p) ∈ R_{k−2}', True) 5
+('feeder m′', 'new', 'b(m′) ⋖ m′', True) 113
+('feeder-like top', 'early (in R_{k−1})', 'p ⋖ x', False) 204
+('feeder-like top', 'early (in R_{k−1})', 'p ⋖ x', True) 1
+('feeder-like top', 'new at stage k', 'p ⋖ x', True) 196
+('meet pair', 'h(x ⊓ y)−k', -1, 'b(x⊓y) vs p⊓q', '=') 16
+('meet pair', 'h(x ⊓ y)−k', -2, 'b(x⊓y) vs p⊓q', '<') 1
+('meet pair', 'h(x ⊓ y)−k', -2, 'b(x⊓y) vs p⊓q', '=') 16
+('shadow c', 'h−k=0', 'stage−k=0') 46
+('shadow c', 'h−k=0', 'stage−k=1') 2
+('shadow c', 'h−k=0', 'stage−k=2') 2
+('shadow c', 'h−k=1', 'stage−k=1') 18
+('sibling family size |S_p|', 1) 92
+('sibling family size |S_p|', 2) 33
+('sibling family size |S_p|', 3) 10
+('sibling family size |S_p|', 4) 2
+('top shadow', 'branch', 'v ∥ p') 5
+('top shadow', 'branch', 'v ≤ p') 41
+('top shadow', 'c new at stage k', True) 46
+independent source pairs 33
+models 113
+shadows 68

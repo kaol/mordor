@@ -41,3 +41,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z¹⁷⁴: `shadow_probe.py [rmin=R] [save] …` (cross-evaluation shadows c = F(b(x), u) and source meets; claims (1)–(5) refuted, models `shadow_claim*_min*.json`); `single_claims.py bcupnew …` (CoverUpCell: no counterexample). Output `out_shadow.txt`.
 - §34.3z¹⁷⁵: `shadow_probe.py` adds the top-shadow trichotomy, sibling families, the sibling join and the A2 branch data. Output `out_shadow175.txt`.
 - §34.3z¹⁷⁶: `shadow_probe.py` adds the sibling-pair analysis (F(c, u) vs u, clamped descent, total incomparability; model `sibling_totinc_min25.json`). Output `out_sibling.txt`.
+- §34.3z¹⁷⁷: `shadow_probe.py` adds the totally incomparable case (upward closure v* = u ⊔ F(c, u), the column t = F(c, u)). Output `out_sibling177.txt`.

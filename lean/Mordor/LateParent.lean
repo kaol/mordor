@@ -422,4 +422,53 @@ theorem singletonLower_of_upCell {H : ℕ} (hn : NoChain α (H + 1))
     secondEntry_of_canonical (canonical_of_upCell hn hall (hup k htop hk hall m hm hmk hnew m' hm' hm'k hlt hlo hno))
   exact hzm (huniq z hzR hz)
 
+/-! ### Consequences of ¬UpCell, top-row normal form, feeder source (§34.3z¹⁷³) -/
+
+/-- **No UpCell forces an incomparable drop on every upward pre-fixed interval of every top row.** -/
+theorem noUpCell_forces_incomparable_drop {k H : ℕ} (hn : NoChain α (H + 1)) {m x v : α}
+    (hnot : ¬ UpCell F H k m) (hx : x ∈ Rk F k) (hxk : height H x = k) (hxv : x < v) (hFv : F x v ≤ v)
+    (hmv : ¬ m ≤ v) : ∃ u, x < u ∧ u ≤ v ∧ F x u ≤ u ∧ ¬ x ≤ F x u ∧ ¬ F x u ≤ x := by
+  by_contra hno
+  push_neg at hno
+  apply hnot
+  refine upCell_of_descentWitness hn ⟨x, hx, hxk, v, hxv, hFv, hmv, fun u hxu huv hFu => ?_⟩
+  by_contra hge
+  have hle := hno u hxu huv hFu hge
+  exact hnot ⟨x, hx, hxk, u, hxu, fun h => hmv (h.trans huv), Or.inl hle⟩
+
+/-- **Top-row normal form.** A top `x ∈ R_k` (`h(x) = k`, `R_k` tight) *equals* `a^[i] q'` for a terminal source
+`q' ∈ R_t`, `t + i ≤ k`. -/
+theorem topRow_normalForm {k H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F k, height H z ≤ k) {x : α}
+    (hx : x ∈ Rk F k) (hxk : height H x = k) :
+    ∃ i t q', t + i ≤ k ∧ q' ∈ Rk F t ∧ x = (a F)^[i] q' ∧ ATerminal F t q' := by
+  obtain ⟨i, t, q', hti, hq', hle, ht⟩ := a_normal k x hx
+  refine ⟨i, t, q', hti, hq', ?_, ht⟩
+  by_contra hne
+  have := height_strictMono hn (lt_of_le_of_ne hle hne)
+  have := hk _ (Rk_mono hti (aIter_mem hq' i)); omega
+
+/-- For rigid maps (`a ⊥ = ⊥`) the terminal source of a nonzero top row is B-entered, never at stage `0`. -/
+theorem topRow_terminal_B {k H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F k, height H z ≤ k)
+    (hr : a F ⊥ = ⊥) {x : α} (hx : x ∈ Rk F k) (hxk : height H x = k) (hk0 : 0 < k) :
+    ∃ i t' q', t' + 1 + i ≤ k ∧ q' ∈ Rk F (t' + 1) ∧ x = (a F)^[i] q' ∧ q' ∉ Rk F t' ∧ b F q' ∈ Rk F t' ∧
+      ¬ ∃ r ∈ Rk F t', q' ≤ a F r := by
+  obtain ⟨i, t, q', hti, hq', hxe, ht⟩ := topRow_normalForm hn hk hx hxk
+  rcases ht with h0 | ⟨t', rfl, h1, h2, h3⟩
+  · subst h0
+    have hq : q' = ⊥ := le_bot_iff.1 hq'
+    have hxb : x = ⊥ := by rw [hxe, hq, pureA_rigid hr]
+    have hc := chainTo_height (H := H) x
+    rw [hxk] at hc
+    obtain ⟨j, hj⟩ : ∃ j, k = j + 1 := ⟨k - 1, by omega⟩
+    rw [hj] at hc
+    obtain ⟨y, hy, -⟩ := hc
+    exact absurd (hxb ▸ hy) (not_lt_bot)
+  · exact ⟨i, t', q', hti, hq', hxe, h1, h2, h3⟩
+
+/-- **The feeder's own B-source is strictly below it** when the feeder is not diagonal post-fixed. -/
+theorem feeder_b_lt {m' m : α} (hm'm : m' ≤ m) (hlo : F m' m ≤ m') (hnp : ¬ m' ≤ F m' m') : b F m' < m' := by
+  have hpre : F m' m' ≤ m' := ((F m').mono hm'm).trans hlo
+  refine lt_of_le_of_ne (b_le hpre) fun e => hnp ?_
+  have := col_b (F := F) m'; rw [e] at this; exact this.ge
+
 end Mordor.OrbitHeight

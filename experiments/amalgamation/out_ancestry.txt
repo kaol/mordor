@@ -1,0 +1,196 @@
+== single_claims.py bcup multi nopostlayer rmin=3 closure 5 10 1 10
+claim bcup: {'none': 10}
+== single_claims.py bcup multi nopostlayer rmin=3 closure 5 10 2 10
+claim bcup: {'none': 10}
+== single_claims.py bcup multi nopostlayer rmin=3 closure 5 10 3 10
+claim bcup: {'none': 10}
+== single_claims.py bcup multi nopostlayer rmin=3 closure 5 11 4 10
+claim bcup: {'none': 10}
+== single_claims.py bcup multi nopostlayer rmin=3 closure 5 11 5 10
+claim bcup: {'none': 10}
+== single_claims.py bcup multi nopostlayer rmin=3 closure 6 11 6 10
+claim bcup: {'none': 10}
+== single_claims.py bcup multi nopostlayer rmin=4 closure 6 12 10 10
+claim bcup: {'none': 10}
+== single_claims.py bcup multi nopostlayer rmin=4 closure 6 12 9 10
+claim bcup: {'none': 10}
+== single_claims.py bcup multi nopostlayer rmin=4 closure 6 13 11 10
+claim bcup: {'none': 10}
+== single_claims.py bcup multi nopostlayer rmin=2 sweep 4 16
+claim bcup: {'none': 179}
+== single_claims.py sibup multi nopostlayer rmin=3 closure 5 10 1 10
+claim sibup: {'counterexample': 9, 'none': 1}; smallest counterexample |L| = 11, rank(m) = 3
+== single_claims.py sibup multi nopostlayer rmin=3 closure 5 10 2 10
+claim sibup: {'counterexample': 8, 'none': 2}; smallest counterexample |L| = 11, rank(m) = 3
+== single_claims.py sibup multi nopostlayer rmin=3 closure 5 10 3 10
+claim sibup: {'counterexample': 8, 'none': 2}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py sibup multi nopostlayer rmin=3 closure 5 11 4 10
+claim sibup: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 14, rank(m) = 3
+== single_claims.py sibup multi nopostlayer rmin=3 closure 5 11 5 10
+claim sibup: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 13, rank(m) = 3
+== single_claims.py sibup multi nopostlayer rmin=3 closure 6 11 6 10
+claim sibup: {'none': 1, 'counterexample': 9}; smallest counterexample |L| = 15, rank(m) = 3
+== ancestry_probe.py rmin=3 closure (seeds 5 10 1–3, 5 11 4/5/7, 5 12 8, 6 11 6, 6 12 9/10), summed
+('DROP models', 1) 21
+('DROP witness', 'b(x) vs m′', '<', 'b(x) vs b(m′)', '=') 11
+('DROP witness', 'b(x) vs m′', '>', 'b(x) vs b(m′)', '>') 1
+('DROP witness', 'b(x) vs m′', '∥', 'b(x) vs b(m′)', '∥') 14
+('DROP: feeder is a witness', False) 20
+('DROP: feeder is a witness', True) 1
+('DROP: some sibling (b(x) = b(m′)) is a witness', False) 13
+('DROP: some sibling (b(x) = b(m′)) is a witness', True) 8
+('DROP: some witness x with b(x) ∈ R_{k−1}, b(x) < x', True) 21
+('DROP: some witness x with b(x) ≤ b(m′)', False) 12
+('DROP: some witness x with b(x) ≤ b(m′)', True) 9
+('DROP: some witness x with b(x) ≤ m′', False) 12
+('DROP: some witness x with b(x) ≤ m′', True) 9
+('feeder', 'A-source p vs x', '∥') 9
+('feeder', 'b(x) vs b(m′)', '=') 80
+('feeder', 'b(x) vs x', '<') 80
+('feeder', 'diag', 'pre') 80
+('feeder', 'route', 'AB') 9
+('feeder', 'route', 'B') 71
+('feeder', 'x vs m', '<') 80
+('feeder: b(m′) vs m′', '<') 80
+('model: witnesses', True) 80
+('non-witness', 'A-source p vs x', '∥') 2
+('non-witness', 'b(x) vs b(m′)', '<') 118
+('non-witness', 'b(x) vs b(m′)', '=') 64
+('non-witness', 'b(x) vs b(m′)', '>') 1
+('non-witness', 'b(x) vs b(m′)', '∥') 15
+('non-witness', 'b(x) vs x', '<') 158
+('non-witness', 'b(x) vs x', '∥') 40
+('non-witness', 'diag', 'neither') 70
+('non-witness', 'diag', 'pre') 129
+('non-witness', 'route', 'A') 1
+('non-witness', 'route', 'AB') 1
+('non-witness', 'route', 'B') 197
+('non-witness', 'shares B-source with feeder', False) 135
+('non-witness', 'shares B-source with feeder', True) 64
+('non-witness', 'x vs m', '<') 69
+('non-witness', 'x vs m', '∥') 130
+('non-witness', 'x ⊓ m′ vs b(m′)', '<') 51
+('non-witness', 'x ⊓ m′ vs b(m′)', '=') 77
+('non-witness', 'x ⊓ m′ vs b(m′)', '∥') 71
+('witness cell types', 'L') 49
+('witness cell types', 'LU') 7
+('witness cell types', 'U') 34
+('witness rows: some A-image witness', False) 65
+('witness rows: some A-image witness', True) 15
+('witness rows: some B-route witness with b(x) < x', True) 80
+('witness', 'A-source p vs x', '∥') 6
+('witness', 'b(x) vs b(m′)', '=') 14
+('witness', 'b(x) vs b(m′)', '∥') 14
+('witness', 'b(x) vs x', '<') 26
+('witness', 'b(x) vs x', '∥') 2
+('witness', 'diag', 'neither') 6
+('witness', 'diag', 'pre') 24
+('witness', 'route', 'A') 2
+('witness', 'route', 'AB') 4
+('witness', 'route', 'B') 24
+('witness', 'shares B-source with feeder', False) 16
+('witness', 'shares B-source with feeder', True) 14
+('witness', 'x vs m', '<') 2
+('witness', 'x vs m', '∥') 28
+('witness', 'x ⊓ m′ vs b(m′)', '<') 10
+('witness', 'x ⊓ m′ vs b(m′)', '=') 19
+('witness', 'x ⊓ m′ vs b(m′)', '∥') 1
+models 80
+== ancestry_probe.py rmin=4 closure (6 12 9/10, 6 13 11), summed
+('DROP models', 1) 6
+('DROP witness', 'b(x) vs m′', '<', 'b(x) vs b(m′)', '=') 4
+('DROP witness', 'b(x) vs m′', '∥', 'b(x) vs b(m′)', '∥') 2
+('DROP: feeder is a witness', False) 6
+('DROP: some sibling (b(x) = b(m′)) is a witness', False) 2
+('DROP: some sibling (b(x) = b(m′)) is a witness', True) 4
+('DROP: some witness x with b(x) ∈ R_{k−1}, b(x) < x', True) 6
+('DROP: some witness x with b(x) ≤ b(m′)', False) 2
+('DROP: some witness x with b(x) ≤ b(m′)', True) 4
+('DROP: some witness x with b(x) ≤ m′', False) 2
+('DROP: some witness x with b(x) ≤ m′', True) 4
+('feeder', 'A-source p vs x', '∥') 5
+('feeder', 'b(x) vs b(m′)', '=') 15
+('feeder', 'b(x) vs x', '<') 15
+('feeder', 'diag', 'pre') 15
+('feeder', 'route', 'AB') 5
+('feeder', 'route', 'B') 10
+('feeder', 'x vs m', '<') 15
+('feeder: b(m′) vs m′', '<') 15
+('model: witnesses', True) 15
+('non-witness', 'A-source p vs x', '∥') 2
+('non-witness', 'b(x) vs b(m′)', '<') 20
+('non-witness', 'b(x) vs b(m′)', '=') 10
+('non-witness', 'b(x) vs b(m′)', '∥') 4
+('non-witness', 'b(x) vs x', '<') 23
+('non-witness', 'b(x) vs x', '∥') 11
+('non-witness', 'diag', 'neither') 18
+('non-witness', 'diag', 'pre') 17
+('non-witness', 'route', 'A') 1
+('non-witness', 'route', 'AB') 1
+('non-witness', 'route', 'B') 33
+('non-witness', 'shares B-source with feeder', False) 25
+('non-witness', 'shares B-source with feeder', True) 10
+('non-witness', 'x vs m', '<') 6
+('non-witness', 'x vs m', '∥') 29
+('non-witness', 'x ⊓ m′ vs b(m′)', '<') 11
+('non-witness', 'x ⊓ m′ vs b(m′)', '=') 9
+('non-witness', 'x ⊓ m′ vs b(m′)', '∥') 15
+('witness cell types', 'L') 6
+('witness cell types', 'LU') 1
+('witness cell types', 'U') 9
+('witness rows: some A-image witness', False) 7
+('witness rows: some A-image witness', True) 8
+('witness rows: some B-route witness with b(x) < x', True) 15
+('witness', 'A-source p vs x', '∥') 3
+('witness', 'b(x) vs b(m′)', '=') 5
+('witness', 'b(x) vs b(m′)', '∥') 2
+('witness', 'b(x) vs x', '<') 6
+('witness', 'b(x) vs x', '∥') 1
+('witness', 'diag', 'neither') 1
+('witness', 'diag', 'pre') 6
+('witness', 'route', 'AB') 3
+('witness', 'route', 'B') 4
+('witness', 'shares B-source with feeder', False) 2
+('witness', 'shares B-source with feeder', True) 5
+('witness', 'x vs m', '∥') 7
+('witness', 'x ⊓ m′ vs b(m′)', '<') 1
+('witness', 'x ⊓ m′ vs b(m′)', '=') 5
+('witness', 'x ⊓ m′ vs b(m′)', '∥') 1
+models 15
+== ancestry_probe.py sweep 4 16, summed
+('DROP models', 1) 6
+('DROP witness', 'b(x) vs m′', '<', 'b(x) vs b(m′)', '=') 6
+('DROP: feeder is a witness', False) 6
+('DROP: some sibling (b(x) = b(m′)) is a witness', True) 6
+('DROP: some witness x with b(x) ∈ R_{k−1}, b(x) < x', True) 6
+('DROP: some witness x with b(x) ≤ b(m′)', True) 6
+('DROP: some witness x with b(x) ≤ m′', True) 6
+('feeder', 'b(x) vs b(m′)', '=') 84
+('feeder', 'b(x) vs x', '<') 84
+('feeder', 'diag', 'pre') 84
+('feeder', 'route', 'B') 84
+('feeder', 'x vs m', '<') 84
+('feeder: b(m′) vs m′', '<') 84
+('model: witnesses', True) 84
+('non-witness', 'b(x) vs b(m′)', '=') 50
+('non-witness', 'b(x) vs x', '<') 50
+('non-witness', 'diag', 'neither') 4
+('non-witness', 'diag', 'pre') 46
+('non-witness', 'route', 'B') 50
+('non-witness', 'shares B-source with feeder', True) 50
+('non-witness', 'x vs m', '<') 37
+('non-witness', 'x vs m', '∥') 13
+('non-witness', 'x ⊓ m′ vs b(m′)', '=') 50
+('witness cell types', 'L') 36
+('witness cell types', 'LU') 3
+('witness cell types', 'U') 45
+('witness rows: some A-image witness', False) 84
+('witness rows: some B-route witness with b(x) < x', True) 84
+('witness', 'b(x) vs b(m′)', '=') 6
+('witness', 'b(x) vs x', '<') 6
+('witness', 'diag', 'pre') 6
+('witness', 'route', 'B') 6
+('witness', 'shares B-source with feeder', True) 6
+('witness', 'x vs m', '∥') 6
+('witness', 'x ⊓ m′ vs b(m′)', '=') 6
+models 84

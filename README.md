@@ -214,6 +214,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     The missing step: after the forced drop, find another top row with an upward cell away from m. The witness rows
     are incomparable with m′, and no fixed order relation to r, a(m′) or w selects them. A proof must link
     incomparable tops through their entry routes into R_k.
+
+    The witness can be taken *feeder-like*: b(x) ∈ R_{k−1} with b(x) < x, as for m′ (`feeder_b_lt`). This
+    BComparableUpCell has no counterexample at rank 3 or 4. The common-source version b(x) = b(m′) is false at
+    |L| = 11 (§34.3z¹⁷³).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

@@ -220,6 +220,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     |L| = 11 (§34.3z¹⁷³). The witness can even be taken new at stage k, so its source is covered:
     b(x) ⋖ x (`strictBTop_has_cover_source`). Every drop of such a row casts an incomparable "shadow"
     F(b(x), u) above b(x) (`cross_shadow`). That shadow's entry history is not uniform (|L| = 14–24; §34.3z¹⁷⁴).
+    When the shadow c is a new top, the source row either returns to its source, making c a same-source sibling
+    of x (b(c) = b(x), `sibling_of_shadow`; 36/41 cases), or drops onto the previous layer (5/41). In the sibling
+    case F(b(x), x ⊔ c) = c (`sibling_join`), and the sibling c carries the UpCell in 35/36 (§34.3z¹⁷⁵).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

@@ -1,0 +1,94 @@
+== shadow_probe.py (§34.3z¹⁷⁵ top-shadow branches, sibling families, sibling join); sg3 = rmin=3 closure 5 10 1–3, 5 11 4/5/7, 5 12 8, 6 11 6, 6 12 9/10; sg4 = rmin=4 closure 6 12 9/10, 6 13 11; summed
+######## sg3
+('(1) c ∈ R_{k+1}', 'refuting models') 2
+('(1) c ∈ R_{k+1}', False) 2
+('(1) c ∈ R_{k+1}', True) 50
+('(2) b(c) ∈ R_{k−1}', 'refuting models') 15
+('(2) b(c) ∈ R_{k−1}', False) 17
+('(2) b(c) ∈ R_{k−1}', True) 35
+('(3) b(c) comparable with p', 'refuting models') 7
+('(3) b(c) comparable with p', False) 7
+('(3) b(c) comparable with p', True) 45
+('(4) p ⊔ q ∈ R_k', 'refuting models') 7
+('(4) p ⊔ q ∈ R_k', False) 7
+('(4) p ⊔ q ∈ R_k', True) 20
+('(5) b(x ⊓ y) < x ⊓ y', 'refuting models') 13
+('(5) b(x ⊓ y) < x ⊓ y', False) 14
+('(5) b(x ⊓ y) < x ⊓ y', True) 13
+('A1 (v ≤ p)', 'c new', True, 'b(c) = p', True, 'F(p,c) = p', True) 32
+('A1 interval [x ⊔ c, u]', 'cell of x', False, 'cell of c', False) 11
+('A1 interval [x ⊔ c, u]', 'cell of x', False, 'cell of c', True) 21
+('A1 join j = x ⊔ c', 'x upper cell at j', False, 'c upper cell at j', False) 29
+('A1 join j = x ⊔ c', 'x upper cell at j', False, 'c upper cell at j', True) 3
+('A1 join j', 'F(x,j) vs j', '<', 'F(c,j) vs j', '<') 21
+('A1 join j', 'F(x,j) vs j', '<', 'F(c,j) vs j', '=') 3
+('A1 join j', 'F(x,j) vs j', '<', 'F(c,j) vs j', '∥') 7
+('A1 join j', 'F(x,j) vs j', '∥', 'F(c,j) vs j', '∥') 1
+('A1 join j', 'some cell of x or c at j', False) 11
+('A1 join j', 'some cell of x or c at j', True) 21
+('A1 sibling pair', 'x has UpCell', False, 'c has UpCell', False) 1
+('A1 sibling pair', 'x has UpCell', False, 'c has UpCell', True) 31
+('A2 (v ∥ p)', 'd vs x', '∥', 'd vs b(c)', '<') 1
+('A2 (v ∥ p)', 'd vs x', '∥', 'd vs b(c)', '=') 3
+('A2 (v ∥ p)', 'h(d)−k=-1', 'stage(d)−k=-1', 'diag', 'pre') 4
+('A2 (v ∥ p)', 'p new top of R_{k−1}', True, 'b(p) < p with b(p) ∈ R_{k−2}', True) 4
+('feeder m′', 'new', 'b(m′) ⋖ m′', True) 80
+('feeder-like top', 'early (in R_{k−1})', 'p ⋖ x', False) 118
+('feeder-like top', 'new at stage k', 'p ⋖ x', True) 146
+('meet pair', 'h(x ⊓ y)−k', -1, 'b(x⊓y) vs p⊓q', '=') 13
+('meet pair', 'h(x ⊓ y)−k', -2, 'b(x⊓y) vs p⊓q', '=') 14
+('shadow c', 'h−k=0', 'stage−k=0') 36
+('shadow c', 'h−k=0', 'stage−k=1') 1
+('shadow c', 'h−k=0', 'stage−k=2') 2
+('shadow c', 'h−k=1', 'stage−k=1') 13
+('sibling family size |S_p|', 1) 65
+('sibling family size |S_p|', 2) 23
+('sibling family size |S_p|', 3) 9
+('sibling family size |S_p|', 4) 2
+('top shadow', 'branch', 'v ∥ p') 4
+('top shadow', 'branch', 'v ≤ p') 32
+('top shadow', 'c new at stage k', True) 36
+independent source pairs 27
+models 80
+shadows 52
+######## sg4
+('(1) c ∈ R_{k+1}', True) 8
+('(2) b(c) ∈ R_{k−1}', 'refuting models') 3
+('(2) b(c) ∈ R_{k−1}', False) 3
+('(2) b(c) ∈ R_{k−1}', True) 5
+('(3) b(c) comparable with p', 'refuting models') 1
+('(3) b(c) comparable with p', False) 1
+('(3) b(c) comparable with p', True) 7
+('(4) p ⊔ q ∈ R_k', 'refuting models') 1
+('(4) p ⊔ q ∈ R_k', False) 1
+('(4) p ⊔ q ∈ R_k', True) 1
+('(5) b(x ⊓ y) < x ⊓ y', True) 2
+('A1 (v ≤ p)', 'c new', True, 'b(c) = p', True, 'F(p,c) = p', True) 4
+('A1 interval [x ⊔ c, u]', 'cell of x', False, 'cell of c', False) 1
+('A1 interval [x ⊔ c, u]', 'cell of x', False, 'cell of c', True) 3
+('A1 join j = x ⊔ c', 'x upper cell at j', False, 'c upper cell at j', False) 4
+('A1 join j', 'F(x,j) vs j', '<', 'F(c,j) vs j', '<') 3
+('A1 join j', 'F(x,j) vs j', '∥', 'F(c,j) vs j', '<') 1
+('A1 join j', 'some cell of x or c at j', False) 1
+('A1 join j', 'some cell of x or c at j', True) 3
+('A1 sibling pair', 'x has UpCell', False, 'c has UpCell', True) 4
+('A2 (v ∥ p)', 'd vs x', '∥', 'd vs b(c)', '=') 1
+('A2 (v ∥ p)', 'h(d)−k=-1', 'stage(d)−k=-1', 'diag', 'pre') 1
+('A2 (v ∥ p)', 'p new top of R_{k−1}', True, 'b(p) < p with b(p) ∈ R_{k−2}', True) 1
+('feeder m′', 'new', 'b(m′) ⋖ m′', True) 15
+('feeder-like top', 'early (in R_{k−1})', 'p ⋖ x', False) 19
+('feeder-like top', 'early (in R_{k−1})', 'p ⋖ x', True) 1
+('feeder-like top', 'new at stage k', 'p ⋖ x', True) 24
+('meet pair', 'h(x ⊓ y)−k', -1, 'b(x⊓y) vs p⊓q', '=') 1
+('meet pair', 'h(x ⊓ y)−k', -2, 'b(x⊓y) vs p⊓q', '<') 1
+('shadow c', 'h−k=0', 'stage−k=0') 5
+('shadow c', 'h−k=1', 'stage−k=1') 3
+('sibling family size |S_p|', 1) 11
+('sibling family size |S_p|', 2) 5
+('sibling family size |S_p|', 3) 1
+('top shadow', 'branch', 'v ∥ p') 1
+('top shadow', 'branch', 'v ≤ p') 4
+('top shadow', 'c new at stage k', True) 5
+independent source pairs 2
+models 15
+shadows 8

@@ -44,6 +44,32 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer', 
                     C[(nm_, v)] += 1
                     if not v: fails[nm_] += 1
                 C[('shadow c', f'h−k={h[c] - k}', f'stage−k={st[c] - k if st[c] is not None else None}')] += 1
+                if inR(c, k) and h[c] == k:                # §34.3z¹⁷⁵: top-shadow trichotomy for v = F(p, c)
+                    v = F[p][c]; br = 'v ≤ p' if le[v][p] else 'v = c' if v == c else 'v ∥ p' if not le[p][v] else 'other'
+                    C[('top shadow', 'branch', br)] += 1
+                    C[('top shadow', 'c new at stage k', not inR(c, k - 1))] += 1
+                    if br == 'v ≤ p':
+                        C[('A1 (v ≤ p)', 'c new', not inR(c, k - 1), 'b(c) = p', B(c) == p, 'F(p,c) = p', v == p)] += 1
+                        j = L.join[x][c]; assert le[j][u] and F[p][j] == c       # sibling join: F(p, x ⊔ c) = c
+                        tx, tc = F[x][j], F[c][j]
+                        C[('A1 join j = x ⊔ c', 'x upper cell at j', le[j][tx], 'c upper cell at j', le[j][tc])] += 1
+                        C[('A1 join j', 'F(x,j) vs j', rel(tx, j), 'F(c,j) vs j', rel(tc, j))] += 1
+                        C[('A1 join j', 'some cell of x or c at j', le[j][tx] or le[tx][x] or le[j][tc] or le[tc][c])] += 1
+                        cellIn = lambda y: any(le[j][z] and le[z][u] and (le[z][F[y][z]] or le[F[y][z]][y]) for z in range(n))
+                        C[('A1 interval [x ⊔ c, u]', 'cell of x', cellIn(x), 'cell of c', cellIn(c))] += 1
+                        upc_ = lambda y: any(le[y][z] and z != y and not le[m][z] and (le[z][F[y][z]] or le[F[y][z]][y]) for z in range(n))
+                        C[('A1 sibling pair', 'x has UpCell', upc_(x), 'c has UpCell', upc_(c))] += 1
+                    elif br == 'v = c':
+                        C[('upper (v = c)', 'c = a(p)', a_of(L, F, p) == c)] += 1
+                    else:
+                        d = v
+                        C[('A2 (v ∥ p)', f'h(d)−k={h[d] - k}', f'stage(d)−k={st[d] - k if st[d] is not None else None}',
+                           'diag', 'pre' if le[F[d][d]][d] else 'post' if le[d][F[d][d]] else 'neither')] += 1
+                        C[('A2 (v ∥ p)', 'p new top of R_{k−1}', not inR(p, k - 2) and h[p] == k - 1,
+                           'b(p) < p with b(p) ∈ R_{k−2}', inR(B(p), k - 2) and le[B(p)][p] and B(p) != p)] += 1
+                        C[('A2 (v ∥ p)', 'd vs x', rel(d, x), 'd vs b(c)', rel(d, B(c)))] += 1
+        fam = collections.Counter(B(x) for x in FL)          # same-source sibling families S_p (new feeder-like tops)
+        for p_, sz in fam.items(): C[('sibling family size |S_p|', sz)] += 1
         for i, x in enumerate(FL):
             for y in FL[i + 1:]:
                 p, q = B(x), B(y)

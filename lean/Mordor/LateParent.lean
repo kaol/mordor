@@ -37,6 +37,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁷³: `noUpCell_forces_incomparable_drop`, `topRow_normalForm`, `topRow_terminal_B`, `feeder_b_lt`.
 * §34.3z¹⁷⁴: `covBy_of_height`, `height_bot_eq_zero`, `strictBTop_has_cover_source(_one)`, **`cross_shadow`**,
   `source_meet`, `source_meet_lt`, `feeder_new`, `feeder_cover_source`.
+* §34.3z¹⁷⁵: `shadow_trichotomy`, **`sibling_of_shadow`** (same-source siblings), `source_new`, `upper_branch_eq_a`,
+  **`sibling_join`** (`F p (x ⊔ c) = c`), `sibling_join_lower`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -551,5 +553,61 @@ theorem feeder_cover_source {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H') (hn :
     (hm'k : height H m' = j + 2) (hm'm : m' ≤ m) (hlo : F m' m ≤ m') (hnp : ¬ m' ≤ F m' m')
     (hm : m ∉ Rk F (j + 2)) : height H (b F m') = j + 1 ∧ b F m' ⋖ m' :=
   strictBTop_has_cover_source IH hn hm'k (feeder_new hlo hm) (feeder_b_lt hm'm hlo hnp)
+
+/-! ### The top-shadow trichotomy and same-source siblings (§34.3z¹⁷⁵) -/
+
+/-- **Top-shadow trichotomy.** If `p ⋖ c` and `F p c ≤ c`, then `F p c ≤ p`, or `F p c = c`, or `F p c ∥ p`. -/
+theorem shadow_trichotomy {p c : α} (hcov : p ⋖ c) (hle : F p c ≤ c) :
+    F p c ≤ p ∨ F p c = c ∨ (¬ F p c ≤ p ∧ ¬ p ≤ F p c) := by
+  by_cases h1 : F p c ≤ p
+  · exact Or.inl h1
+  by_cases h2 : p ≤ F p c
+  · rcases hcov.eq_or_eq h2 hle with e | e
+    · exact absurd e.le h1
+    · exact Or.inr (Or.inl e)
+  · exact Or.inr (Or.inr ⟨h1, h2⟩)
+
+/-- **Same-source sibling.** With `OHAt` below `j + 1`: if the shadow `c` is a top of height `j + 2` new at stage
+`j + 2` and `F p c ≤ p` for the height-`(j + 1)` source `p < c`, then `b c = p` and `F p c = p`. -/
+theorem sibling_of_shadow {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H') (hn : NoChain α (H + 1)) {p c : α}
+    (hck : height H c = j + 2) (hcnew : c ∉ Rk F (j + 1)) (hph : height H p = j + 1) (hpc : p < c)
+    (hle : F p c ≤ p) : b F c = p ∧ F p c = p := by
+  have hb : b F c ≤ p := b_le hle
+  have hbc := (strictBTop_has_cover_source IH hn hck hcnew (lt_of_le_of_lt hb hpc)).1
+  have e : b F c = p := by
+    by_contra hne
+    have := height_strictMono hn (lt_of_le_of_ne hb hne); omega
+  exact ⟨e, by have := col_b (F := F) c; rwa [e] at this⟩
+
+/-- **The source of a new top is new one stage lower.** -/
+theorem source_new {j : ℕ} {x : α} (hxnew : x ∉ Rk F (j + 1)) : b F x ∉ Rk F j := fun h =>
+  hxnew (mem_succ_of_b h)
+
+/-- **The upper branch is the row gfp of the source**: `F p c = c` with `p ∈ R_j` and `c` of height `j + 1` in a
+tight `R_{j+1}` forces `c = a p`. -/
+theorem upper_branch_eq_a {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {p c : α} (hp : p ∈ Rk F j) (hck : height H c = j + 1) (heq : F p c = c) : c = a F p := by
+  have hle : c ≤ a F p := le_a heq.ge
+  by_contra hne
+  have := height_strictMono hn (lt_of_le_of_ne hle hne)
+  have := hk _ (mem_succ_of_a hp le_rfl); omega
+
+/-- **Sibling join.** Let `p ⋖ c`, `F p x = p` with `p ∈ R_j`, `h(x) = j + 1`, `R_{j+1}` tight, `c ≰ x`, and let `u`
+be a column with `x ⊔ c ≤ u` and `F p u = c` (the drop column whose shadow is `c`). Then `F p (x ⊔ c) = c`;
+consequently every row `y ≥ p` has `c ≤ F y (x ⊔ c)`. -/
+theorem sibling_join {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {p x c u : α} (hp : p ∈ Rk F j) (hxk : height H x = j + 1) (hcov : p ⋖ c) (hpx : F p x = p)
+    (hcx : ¬ c ≤ x) (hju : x ⊔ c ≤ u) (hpu : F p u = c) : F p (x ⊔ c) = c := by
+  have hlo : p ≤ F p (x ⊔ c) := hpx.symm.le.trans ((F p).mono le_sup_left)
+  have hhi : F p (x ⊔ c) ≤ c := ((F p).mono hju).trans hpu.le
+  rcases hcov.eq_or_eq hlo hhi with e | e
+  · exfalso
+    have hR := mem_succ_of_cell hp le_rfl (Or.inl e.le)
+    have hlt : x < x ⊔ c := lt_of_le_of_ne le_sup_left fun h => hcx (h ▸ le_sup_right)
+    have := height_strictMono hn hlt; have := hk _ hR; omega
+  · exact e
+
+theorem sibling_join_lower {p x c y : α} (hpy : p ≤ y) (hj : F p (x ⊔ c) = c) : c ≤ F y (x ⊔ c) :=
+  hj.symm.le.trans ((F.mono hpy) (x ⊔ c))
 
 end Mordor.OrbitHeight

@@ -1,0 +1,166 @@
+== single_claims.py fxq multi nopostlayer rmin=3 closure 5 10 1 10
+claim fxq: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 17, rank(m) = 3
+== single_claims.py fxq multi nopostlayer rmin=3 closure 5 10 2 10
+claim fxq: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 13, rank(m) = 3
+== single_claims.py fxq multi nopostlayer rmin=3 closure 5 10 3 10
+claim fxq: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py fxq multi nopostlayer rmin=3 closure 5 11 4 10
+claim fxq: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 14, rank(m) = 3
+== single_claims.py ontime multi nopostlayer rmin=3 closure 5 10 1 10
+claim ontime: {'counterexample': 6, 'none': 4}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py ontime multi nopostlayer rmin=3 closure 5 10 2 10
+claim ontime: {'none': 4, 'counterexample': 6}; smallest counterexample |L| = 13, rank(m) = 3
+== single_claims.py ontime multi nopostlayer rmin=3 closure 5 10 3 10
+claim ontime: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py ontime multi nopostlayer rmin=3 closure 5 11 4 10
+claim ontime: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 14, rank(m) = 3
+== single_claims.py latejoin multi nopostlayer rmin=3 closure 5 10 1 10
+claim latejoin: {'none': 3, 'counterexample': 7}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py latejoin multi nopostlayer rmin=3 closure 5 10 2 10
+claim latejoin: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 13, rank(m) = 3
+== single_claims.py latejoin multi nopostlayer rmin=3 closure 5 10 3 10
+claim latejoin: {'counterexample': 8, 'none': 2}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py latejoin multi nopostlayer rmin=3 closure 5 11 4 10
+claim latejoin: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 14, rank(m) = 3
+== single_claims.py abovea multi nopostlayer rmin=3 closure 5 10 1 10
+claim abovea: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 17, rank(m) = 3
+== single_claims.py abovea multi nopostlayer rmin=3 closure 5 10 2 10
+claim abovea: {'none': 7, 'counterexample': 3}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py abovea multi nopostlayer rmin=3 closure 5 10 3 10
+claim abovea: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py abovea multi nopostlayer rmin=3 closure 5 11 4 10
+claim abovea: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 14, rank(m) = 3
+== single_claims.py abovea multi nopostlayer rmin=3 closure 5 11 5 10
+claim abovea: {'counterexample': 4, 'none': 6}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py abovea multi nopostlayer rmin=3 closure 6 11 6 10
+claim abovea: {'none': 3, 'counterexample': 7}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py abovea multi nopostlayer sweep 4 16
+claim abovea: {'none': 179}
+== drop_probe.py (raw orbit, r classes; rank 3 closure seeds as in out_drop.txt; rank ≤ 2 sweep), summed
+('F(x,v)', '= x') 12
+('F(x,v)', 'in (x,v)') 44
+('a(r)', 'h−K=-2', 'a(r) vs q', '<') 5
+('a(r)', 'h−K=-3', 'a(r) vs q', '<') 3
+('a(r)', 'h−K=0', 'a(r) vs q', '<') 8
+('a(r)', 'h−K=1', 'a(r) vs q', '=') 5
+('a(r)', 'h−K=2', 'a(r) vs q', '>') 1
+('every top above r is a witness row', False) 1
+('every top above r is a witness row', None) 10
+('every top above r is a witness row', True) 11
+('every top x ≤ r: (x, q) is a witness', False) 2
+('every top x ≤ r: (x, q) is a witness', None) 1
+('every top x ≤ r: (x, q) is a witness', True) 19
+('first drop: descent length', 1) 21
+('first drop: descent length', 2) 1
+('first drop: q = w', False) 1
+('first drop: q = w', True) 21
+('first drop: r vs m′', '∥') 22
+('first drop: r vs q', '<') 22
+('first drop: r', 'h−K=-1', 'stage−K=-1') 12
+('first drop: r', 'h−K=-1', 'stage−K=1') 1
+('first drop: r', 'h−K=0', 'stage−K=0') 9
+('first event on the descent', 'drop') 22
+('r class', 'late: h−K=-1 stage−K=1') 1
+('r class', 'on-time top') 12
+('r class', 'second top') 9
+('r late at stage K', False) 22
+('r row at q', 'F(r,q) vs r', '=', 'F(r,q) vs q', '<') 5
+('r row at q', 'F(r,q) vs r', '>', 'F(r,q) vs q', '<') 11
+('r row at q', 'F(r,q) vs r', '>', 'F(r,q) vs q', '=') 5
+('r row at q', 'F(r,q) vs r', '>', 'F(r,q) vs q', '∥') 1
+('r ∈ R_K', False) 1
+('r ∈ R_K', True) 21
+('r', 'diag', 'neither') 2
+('r', 'diag', 'post') 1
+('r', 'diag', 'pre') 19
+('raw orbit terminal e = a(m′)', 'vs m′', '<', 'h−K=-2', 'stage−K=-2') 8
+('raw orbit terminal e = a(m′)', 'vs m′', '<', 'h−K=-3', 'stage−K=-3') 8
+('raw orbit terminal e = a(m′)', 'vs m′', '∥', 'h−K=-1', 'stage−K=-1') 1
+('raw orbit terminal e = a(m′)', 'vs m′', '∥', 'h−K=-2', 'stage−K=-2') 1
+('raw orbit terminal e = a(m′)', 'vs m′', '∥', 'h−K=0', 'stage−K=0') 4
+('raw orbit: extra strict decreases after r', 0) 5
+('raw orbit: extra strict decreases after r', 1) 8
+('raw orbit: extra strict decreases after r', 2) 7
+('raw orbit: extra strict decreases after r', 3) 2
+('some top x ≤ r: (x, q) is a witness', False) 2
+('some top x ≤ r: (x, q) is a witness', True) 20
+('some witness (x, q) or (x, a(r))', False) 1
+('some witness (x, q) or (x, a(r))', True) 21
+('some witness row x with x ⊓ m′ < m′ and x ∥ m′', True) 22
+('some witness row x ≥ r', False) 11
+('some witness row x ≥ r', True) 11
+('some witness with r ≤ v ≤ q', False) 1
+('some witness with r ≤ v ≤ q', True) 21
+('some witness with v = a(r)', False) 9
+('some witness with v = a(r)', True) 13
+('some witness with v = q', False) 1
+('some witness with v = q', True) 21
+('some witness with v = w', False) 1
+('some witness with v = w', True) 21
+('some witness with v ≤ w', False) 1
+('some witness with v ≤ w', True) 21
+('top x ≤ r', 'F(x,q) vs x', '=', 'F(x,q) vs r', '=') 1
+('top x ≤ r', 'F(x,q) vs x', '>', 'F(x,q) vs r', '=') 12
+('top x ≤ r', 'F(x,q) vs x', '>', 'F(x,q) vs r', '>') 11
+('top x ≤ r', 'F(x,q) ≤ q', True, 'Bad(x,q) empty', False) 2
+('top x ≤ r', 'F(x,q) ≤ q', True, 'Bad(x,q) empty', True) 22
+('tops of R_k above r exist', False) 10
+('tops of R_k above r exist', True) 12
+('tops x ≤ r exist', False) 1
+('tops x ≤ r exist', True) 21
+('witness row x diag', 'not pre') 4
+('witness row x diag', 'pre') 21
+('witness row x vs b(q)', '<') 23
+('witness row x vs b(q)', '=') 1
+('witness row x vs b(q)', '∥') 1
+('witness row x vs b(r)', '<') 10
+('witness row x vs b(r)', '=') 3
+('witness row x vs b(r)', '>') 11
+('witness row x vs b(r)', '∥') 1
+('witness row x vs e = a(m′)', '<') 5
+('witness row x vs e = a(m′)', '>') 19
+('witness row x vs e = a(m′)', '∥') 1
+('witness row x vs', 'm′', '∥', 'r', '<', 'm', '∥') 11
+('witness row x vs', 'm′', '∥', 'r', '=', 'm', '∥') 11
+('witness row x vs', 'm′', '∥', 'r', '∥', 'm', '∥') 3
+('witness row x', 'route', 'A') 1
+('witness row x', 'route', 'AB') 1
+('witness row x', 'route', 'B') 23
+('witness row x: x ⊓ e vs m′', '<', 'x ⊔ e vs r', '<') 6
+('witness row x: x ⊓ e vs m′', '<', 'x ⊔ e vs r', '=') 10
+('witness row x: x ⊓ e vs m′', '<', 'x ⊔ e vs r', '∥') 2
+('witness row x: x ⊓ e vs m′', '∥', 'x ⊔ e vs r', '=') 6
+('witness row x: x ⊓ e vs m′', '∥', 'x ⊔ e vs r', '>') 1
+('witness v vs', 'w', '<', 'q', '<', 'r', '=') 11
+('witness v vs', 'w', '<', 'q', '<', 'r', '>') 13
+('witness v vs', 'w', '<', 'q', '<', 'r', '∥') 1
+('witness v vs', 'w', '<', 'q', '=', 'r', '>') 1
+('witness v vs', 'w', '=', 'q', '=', 'r', '>') 23
+('witness v vs', 'w', '=', 'q', '>', 'r', '>') 1
+('witness v vs', 'w', '∥', 'q', '∥', 'r', '>') 5
+('witness v vs', 'w', '∥', 'q', '∥', 'r', '∥') 1
+drop models 22
+== check_drop171.py on the counterexamples
+single_claim_abovea_multi_nopostlayer_rmin3_min14.json: |L|=14 K=3 m={012} m'={02} w={0234} r={034} (h 3, stage 3, a(r) {}) T_k=['{01}', '{02}', '{03}', '{04}', '{34}'] raw orbit ['{034}', '{34}'] e vs m' ∥ a(m')={34}
+   witnesses [('{04}', '{034}', 'x vs r', '<', 'v vs w', '<'), ('{04}', '{0234}', 'x vs r', '<', 'v vs w', '=')]
+   top x ≤ r: {03} F(x,w) {04} bad cols on (x,w] ['{034}', '{0234}']
+   top x ≤ r: {04} F(x,w) {034} bad cols on (x,w] []
+   top x ≤ r: {34} F(x,w) {04} bad cols on (x,w] ['{034}', '{0234}']
+single_claim_alltops_multi_nopostlayer_rmin3_min13.json: |L|=13 K=3 m={024} m'={24} w={1234} r={124} (h 3, stage 3, a(r) {1234}) T_k=['{12}', '{24}'] raw orbit ['{124}'] e vs m' > a(m')={124}
+   witnesses [('{24}', '{124}', 'x vs r', '<', 'v vs w', '<'), ('{24}', '{1234}', 'x vs r', '<', 'v vs w', '=')]
+   top x ≤ r: {12} F(x,w) {124} bad cols on (x,w] ['{124}']
+   top x ≤ r: {24} F(x,w) {124} bad cols on (x,w] []
+single_claim_bdom_multi_nopostlayer_rmin3_min14.json: |L|=14 K=3 m={123} m'={23} w={234} r={23} (h 2, stage 2, a(r) {}) T_k=['{13}', '{23}'] raw orbit ['{23}', '{3}', '{}'] e vs m' < a(m')={}
+   witnesses [('{23}', '{234}', 'x vs r', '=', 'v vs w', '='), ('{23}', '{0234}', 'x vs r', '=', 'v vs w', '>')]
+   top x ≤ r: {23} F(x,w) {23} bad cols on (x,w] []
+single_claim_dropbelow_multi_nopostlayer_rmin3_min14.json: |L|=14 K=3 m={012} m'={02} w={0234} r={04} (h 2, stage 3, a(r) {034}) T_k=['{01}', '{02}', '{34}'] raw orbit ['{04}', '{4}'] e vs m' ∥ a(m')={4}
+   witnesses [('{34}', '{034}', 'x vs r', '∥', 'v vs w', '<'), ('{34}', '{0234}', 'x vs r', '∥', 'v vs w', '=')]
+single_claim_fxq_multi_nopostlayer_rmin3_min13.json: |L|=13 K=3 m={123} m'={13} w={0134} r={034} (h 3, stage 4, a(r) {0134}) T_k=['{03}', '{13}', '{23}'] raw orbit ['{034}', '{03}', '{3}'] e vs m' < a(m')={3}
+   witnesses [('{03}', '{013}', 'x vs r', '<', 'v vs w', '<'), ('{03}', '{023}', 'x vs r', '<', 'v vs w', '∥'), ('{03}', '{0134}', 'x vs r', '<', 'v vs w', '=')]
+   top x ≤ r: {03} F(x,w) {013} bad cols on (x,w] []
+single_claim_latejoin_multi_nopostlayer_rmin3_min13.json: |L|=13 K=3 m={123} m'={23} w={0234} r={034} (h 3, stage 4, a(r) {01234}) T_k=['{03}', '{13}', '{23}'] raw orbit ['{034}', '{03}'] e vs m' ∥ a(m')={03}
+   witnesses [('{03}', '{023}', 'x vs r', '<', 'v vs w', '<'), ('{03}', '{0234}', 'x vs r', '<', 'v vs w', '=')]
+   top x ≤ r: {03} F(x,w) {023} bad cols on (x,w] []
+single_claim_ontime_multi_nopostlayer_rmin3_min13.json: |L|=13 K=3 m={123} m'={23} w={023} r={03} (h 2, stage 2, a(r) {3}) T_k=['{03}', '{13}', '{23}'] raw orbit ['{03}'] e vs m' ∥ a(m')={03}
+   witnesses [('{03}', '{034}', 'x vs r', '=', 'v vs w', '∥'), ('{03}', '{0234}', 'x vs r', '=', 'v vs w', '>')]
+   top x ≤ r: {03} F(x,w) {034} bad cols on (x,w] []

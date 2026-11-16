@@ -66,6 +66,15 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer', 
             C[('top x ≤ r', 'F(x,q) vs x', rel(F[x][q], x), 'F(x,q) vs r', rel(F[x][q], r))] += 1
         C[('r', 'diag', 'pre' if le[F[r][r]][r] else 'post' if le[r][F[r][r]] else 'neither')] += 1
         C[('r row at q', 'F(r,q) vs r', rel(F[r][q], r), 'F(r,q) vs q', rel(F[r][q], q))] += 1
+        e = r; extra = 0                            # raw feeder orbit from r (rawOrbit_terminal: ends at a(m′))
+        while F[mp][e] != e: e = F[mp][e]; extra += 1
+        assert e == A(mp)
+        C[('raw orbit: extra strict decreases after r', extra)] += 1
+        C[('raw orbit terminal e = a(m′)', 'vs m′', rel(e, mp), f'h−K={h[e] - K}', f'stage−K={st[e] - K if st[e] is not None else None}')] += 1
+        for x in xs:
+            C[('witness row x vs e = a(m′)', rel(x, e))] += 1
+            C[('witness row x: x ⊓ e vs m′', rel(L.meet[x][e], mp), 'x ⊔ e vs r', rel(jn[x][e], r))] += 1
+        C[('r class', 'on-time top' if inR(r, K - 1) and h[r] == K - 1 else 'second top' if inR(r, K) and h[r] == K else f'late: h−K={h[r] - K} stage−K={st[r] - K if st[r] is not None else None}')] += 1
         ar = A(r)
         C[('a(r)', f'h−K={h[ar] - K}', 'a(r) vs q', rel(ar, q))] += 1
         C[('some witness with v = a(r)', any(v == ar for x, v in gen))] += 1

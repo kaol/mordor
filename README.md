@@ -189,6 +189,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     (`canonical_of_feeder_descent`, 35/46 rank-3 configurations). DescentWitness has no counterexample (§34.3z¹⁶⁹).
     When the feeder row drops, r = F(m′, q) is incomparable with m′ or gives mechanism B (proved). The replacement
     row lies below r or beside r with v = a(r), but "some top below r" is false at |L| = 14 (§34.3z¹⁷⁰).
+    The raw feeder orbit ends exactly at a(m′) ≤ w, and m′ < a(m′) gives mechanism A, so the residual case has a
+    forced drop (`feeder_descent_leaves`). Four selectors for the replacement row are false at |L| = 13–14
+    (§34.3z¹⁷¹).
   - `cutMaps_of_riseAt`: the **Rise conjecture** (a rigid map has a good x < a(x)) at all heights ≤ H gives Cut at
     edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices. Rise witnesses can need
     to enter as late as stage H − 1, so for rigid maps Rise is close to the orbit-height property itself.

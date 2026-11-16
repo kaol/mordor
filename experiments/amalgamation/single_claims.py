@@ -25,6 +25,11 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
   'ahead': index-sensitivity test, m placed at stage J = K − 1 (one ahead): R_J ranks ≤ K with unique rank-K
            element m ∉ R_{J−1}, R_{J−1} ranks ≤ K − 1, ⊤ ∉ R_{J+1}, feeders/entries from R_{J−1}.
   §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
+  §34.3z¹⁷¹ (with 'multi'), at the immediate feeder drop r = F(m′, w), m′ ≰ r:
+            abovea    h(a(m′)) ≤ K − 1 ⇒ some top x ≥ a(m′) is a descent-witness row
+            fxq       every top x ≤ r has r ≤ F(x, w)
+            ontime    r an on-time top ⇒ some top x ≤ r with (x, w) a descent witness
+            latejoin  r not an on-time top ⇒ some top x with x ⊔ r = a(r) and (x, a(r)) a descent witness
   §34.3z¹⁷⁰ (with 'multi'): dropbelow  for every feeder drop q ∈ (m′, w] (F(m′,q) ≤ q, m′ ≰ F(m′,q)) some top of R_{K−1} lies below F(m′,q)
   §34.3z¹⁶⁹ (with 'multi'): dwit  a descent witness: x ∈ T_{K−1}, v ≱ m, x < v, F(x,v) ≤ v, x ≤ F(x,q) on row-pre-fixed q ∈ (x, v]
   §34.3z¹⁶⁸ (with 'multi'): mech  some y ∈ T_{K−1} has a(y) a rank-K top ≠ m, or some rank-K top z ≠ m has b(z) ∈ R_{K−1}, b(z) ≤ z
@@ -43,7 +48,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -85,7 +90,58 @@ def query(L, m, claim, ahead=False):
         if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
             for x in range(n):
                 if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
-        if claim == 'dropbelow':                   # §34.3z¹⁷⁰: noic_fi with a feeder drop q ∈ (m′, w] (F(m′,q) ≤ q, m′ ≰ r = F(m′,q))
+        if claim in ('abovea', 'fxq', 'ontime', 'latejoin'):  # §34.3z¹⁷¹: the immediate feeder drop at w (r = F(m′, w), m′ ≰ r)
+            E.S.add_clause([-ic(m)])
+            def geq(x, q):
+                k_ = ('geq', x, q)
+                if k_ not in E.vars: o = E.v(*k_); E.iff_or(o, [E.v('f', x, q, w_) for w_ in range(n) if le[x][w_]])
+                return E.vars[k_]
+            def P(x, q):
+                k_ = ('Pdrop', x, q)
+                if k_ not in E.vars: o = E.v(*k_); E.iff_and(o, [fle(x, q, q), -geq(x, q)])
+                return E.vars[k_]
+            fails = lambda x, v: [-r(K - 1, x), -fle(x, v, v)] + [P(x, u) for u in range(n) if le[x][u] and u != x and le[u][v]]
+            sels = []
+            for y, Y in ys_block(E, L, m, f):
+                for wv in range(n):
+                    if jn[m][wv] != y or le[m][wv] or le[wv][m]: continue
+                    for p in feeders:
+                        for rv in range(n):
+                            if not le[rv][wv] or le[p][rv]: continue
+                            base = (Y, f(m, y, wv), low[p], B(m, p), f(p, wv, rv))
+                            if claim == 'abovea':        # h(a(m′)) ≤ K − 1 and no top x ≥ a(m′) is a descent-witness row (any v ≱ m)
+                                for g in range(n):
+                                    if rk[g] > K - 1: continue
+                                    S_ = E.v('tsel', y, wv, p, rv, g); sels.append(S_)
+                                    for lit in base + (A(p, g),): E.S.add_clause([-S_, lit])
+                                    for x in range(n):
+                                        if rk[x] != K - 1 or not le[g][x]: continue
+                                        for v in range(n):
+                                            if le[x][v] and v != x and not le[m][v]: E.S.add_clause([-S_] + fails(x, v))
+                            elif claim == 'fxq':           # some x ∈ T, x ≤ r, with r ≰ F(x, w)
+                                for x in range(n):
+                                    if rk[x] != K - 1 or not le[x][rv]: continue
+                                    for t in range(n):
+                                        if le[rv][t]: continue
+                                        S_ = E.v('tsel', y, wv, p, rv, x, t); sels.append(S_)
+                                        for lit in base + (r(K - 1, x), f(x, wv, t)): E.S.add_clause([-S_, lit])
+                            elif claim == 'ontime':      # r an on-time top, and no x ∈ T, x ≤ r with (x, w) a descent witness
+                                if rk[rv] != K - 1: continue
+                                S_ = E.v('tsel', y, wv, p, rv); sels.append(S_)
+                                for lit in base + (r(K - 1, rv),): E.S.add_clause([-S_, lit])
+                                for x in range(n):
+                                    if rk[x] == K - 1 and le[x][rv]: E.S.add_clause([-S_] + fails(x, wv))
+                            else:                        # r not an on-time top; no x ∈ T with x ⊔ r = a(r) ≱ m and (x, a(r)) a witness
+                                for g in range(n):
+                                    S_ = E.v('tsel', y, wv, p, rv, g); sels.append(S_)
+                                    for lit in base + (A(rv, g),): E.S.add_clause([-S_, lit])
+                                    if rk[rv] == K - 1: E.S.add_clause([-S_, -r(K - 1, rv)])
+                                    if le[m][g]: continue
+                                    for x in range(n):
+                                        if rk[x] == K - 1 and jn[x][rv] == g and x != g: E.S.add_clause([-S_] + fails(x, g))
+            if not sels: E.S.delete(); return None
+            bad.append(E.v('tany')); E.S.add_clause([-E.v('tany')] + sels)
+        elif claim == 'dropbelow':                   # §34.3z¹⁷⁰: noic_fi with a feeder drop q ∈ (m′, w] (F(m′,q) ≤ q, m′ ≰ r = F(m′,q))
             E.S.add_clause([-ic(m)])                    # such that no rank-(K−1) element of R_{K−1} lies below r
             sels = []
             for y, Y in ys_block(E, L, m, f):
@@ -247,7 +303,15 @@ def query(L, m, claim, ahead=False):
         tops = [z for z in range(n) if z != m and rk[z] == K]
         wq = F[m][y]
         drops = [q for q in range(n) if le[bm][q] and q != bm and le[q][wq] and le[F[bm][q]][q] and not le[bm][F[bm][q]]]
-        viol = {'dropbelow': (bm in low) and not ic_py(L, F, m) and any(not any(inR(x, K - 1) and rk[x] == K - 1 and le[x][F[bm][q]] for x in range(n)) for q in drops),
+        rr = F[bm][wq]; Tq = [x for x in range(n) if inR(x, K - 1) and rk[x] == K - 1]
+        def dw(x, v): return le[x][v] and x != v and le[F[x][v]][v] and not le[m][v] and all(le[x][F[x][u]] for u in range(n) if le[x][u] and u != x and le[u][v] and le[F[x][u]][u])
+        idrop = (bm in low) and not ic_py(L, F, m) and not le[bm][rr]
+        am = a_of(L, F, bm)
+        viol = {'abovea': idrop and rk[am] <= K - 1 and not any(le[am][x] and dw(x, v) for x in Tq for v in range(n)),
+                'fxq': idrop and any(le[x][rr] and not le[rr][F[x][wq]] for x in Tq),
+                'ontime': idrop and rr in Tq and not any(le[x][rr] and dw(x, wq) for x in Tq),
+                'latejoin': idrop and rr not in Tq and not any(L.join[x][rr] == a_of(L, F, rr) and dw(x, a_of(L, F, rr)) for x in Tq),
+                'dropbelow': (bm in low) and not ic_py(L, F, m) and any(not any(inR(x, K - 1) and rk[x] == K - 1 and le[x][F[bm][q]] for x in range(n)) for q in drops),
                 'dwit': (bm in low) and not ic_py(L, F, m) and not any(inR(x, K - 1) and rk[x] == K - 1 and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v]
                         and all(le[x][F[x][q]] for q in range(n) if le[x][q] and q != x and le[q][v] and le[F[x][q]][q]) for x in range(n) for v in range(n)),
                 'mech': (bm in low) and not ic_py(L, F, m) and not any(inR(y, K - 1) and rk[y] == K - 1 and a_of(L, F, y) != m and rk[a_of(L, F, y)] == K for y in range(n)) and not any(inR(b_of(L, F, z), K - 1) and le[b_of(L, F, z)][z] for z in tops),

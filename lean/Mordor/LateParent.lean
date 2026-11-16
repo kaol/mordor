@@ -28,6 +28,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `canonical_of_descentWitness`, `topParent_of_descentWitness`.
 * §34.3z¹⁷⁰ (drop geometry): `drop_lt`, `drop_row_pre`, `drop_meet`, `canonical_of_drop_le`,
   `drop_incomparable_or_canonical` (a drop is mechanism B unless its output is incomparable with the feeder).
+* §34.3z¹⁷¹ (raw feeder orbit): `feeder_a_le_y`, `feeder_a_le_w` (`a m' ≤ w`), `a_le_iter`, `exists_iter_fix`,
+  `rawOrbit_terminal` (the raw feeder orbit from `w` or `r` ends at `a m'`), `a_le_drop` (`a m' ≤ r`),
+  `canonical_of_feeder_lt_a`, **`feeder_descent_leaves`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -294,5 +297,74 @@ theorem drop_incomparable_or_canonical {k H : ℕ} (hn : NoChain α (H + 1))
   by_cases hle : F m' q ≤ m'
   · exact Or.inl (canonical_of_drop_le hn hall hm' hm'k hm'q hmq hle)
   · exact Or.inr ⟨hle, hdrop⟩
+
+/-! ### The raw feeder orbit ends at `a m'` (§34.3z¹⁷¹) -/
+
+/-- `a m'` is below the column gfp `y` (`y` dominates every post-fixed point of `z ↦ m ⊔ F m z`, as
+`colOrb_dichotomy` provides). -/
+theorem feeder_a_le_y {m' m y : α} (hm'm : m' ≤ m) (hmax : ∀ z, z ≤ m ⊔ F m z → z ≤ y) : a F m' ≤ y :=
+  hmax _ ((row_a m').symm.le.trans (((F.mono hm'm) (a F m')).trans le_sup_right))
+
+/-- **`a m' ≤ w`.** -/
+theorem feeder_a_le_w {m' m y : α} (hm'm : m' ≤ m) (hmax : ∀ z, z ≤ m ⊔ F m z → z ≤ y) : a F m' ≤ F m y :=
+  (row_a m').symm.le.trans (((F m').mono (feeder_a_le_y hm'm hmax)).trans ((F.mono hm'm) y))
+
+/-- The feeder-row iterates of anything above `a m'` stay above `a m'`. -/
+theorem a_le_iter {x v : α} (hv : a F x ≤ v) : ∀ n, a F x ≤ (F x)^[n] v
+  | 0 => hv
+  | n + 1 => by
+      rw [Function.iterate_succ_apply']
+      exact (row_a x).symm.le.trans ((F x).mono (a_le_iter hv n))
+
+/-- **The raw row orbit of a row-pre-fixed column stabilizes** (finite edge-height). -/
+theorem exists_iter_fix {H : ℕ} (hn : NoChain α (H + 1)) {x : α} :
+    ∀ (k : ℕ) {v : α}, height H v ≤ k → F x v ≤ v → ∃ n, F x ((F x)^[n] v) = (F x)^[n] v
+  | 0, v, hv, hFv => by
+      refine ⟨0, le_antisymm hFv ?_⟩
+      by_contra hne
+      have := height_strictMono hn (lt_of_le_not_ge hFv hne); omega
+  | k + 1, v, hv, hFv => by
+      by_cases he : F x v = v
+      · exact ⟨0, he⟩
+      have hlt : F x v < v := lt_of_le_of_ne hFv he
+      have := height_strictMono hn hlt
+      obtain ⟨n, hn'⟩ := exists_iter_fix hn k (by omega) ((F x).mono hFv)
+      exact ⟨n + 1, by rw [Function.iterate_succ_apply]; exact hn'⟩
+
+/-- **`rawDropOrbit_terminal`**: a fixed point of the row `x` reached by iterating from a column above `a x` is
+`a x` itself. Applied to the feeder from `w` (or from the drop output `r`, which is `≥ a m'`): the raw feeder orbit
+ends exactly at `a m'`. -/
+theorem rawOrbit_terminal {x v : α} (hv : a F x ≤ v) {n : ℕ} (hfix : F x ((F x)^[n] v) = (F x)^[n] v) :
+    (F x)^[n] v = a F x :=
+  le_antisymm (le_a hfix.ge) (a_le_iter hv n)
+
+/-- The drop output dominates `a m'`: `a m' ≤ F m' q` for every column `q ≥ a m'`. -/
+theorem a_le_drop {m' q : α} (hq : a F m' ≤ q) : a F m' ≤ F m' q :=
+  (row_a m').symm.le.trans ((F m').mono hq)
+
+/-- **A feeder below its row gfp gives mechanism A.** In the no-cell configuration (`hmax`, `m ≰ w`), if
+`m' < a m'` then `a m'` is a second top with the on-time A-parent `m'`. -/
+theorem canonical_of_feeder_lt_a {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m' m y : α} (hm' : m' ∈ Rk F k) (hm'k : height H m' = k)
+    (hm'm : m' ≤ m) (hmax : ∀ z, z ≤ m ⊔ F m z → z ≤ y) (hmw : ¬ m ≤ F m y) (hlt : m' < a F m') :
+    CanonicalTopParent F H k m := by
+  have hR := mem_succ_of_a hm' (le_refl (a F m'))
+  have := height_strictMono hn hlt; have := hall _ hR
+  exact Or.inl ⟨m', hm', hm'k, fun e => hmw (e.symm.le.trans (feeder_a_le_w hm'm hmax)), by omega⟩
+
+/-- **The feeder descent must leave `↑m'`.** In the no-cell configuration, unless CanonicalTopParent holds or the
+feeder is diagonal post-fixed (`m' ≤ F m' m'`, settled by `secondEntry_of_post_layer`), the raw feeder orbit from
+`w` reaches a column not above `m'` — namely its terminal value `a m'`, with `m' ≰ a m'`. -/
+theorem feeder_descent_leaves {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m' m y : α} (hm' : m' ∈ Rk F k) (hm'k : height H m' = k)
+    (hm'm : m' ≤ m) (hy : m ⊔ F m y = y) (hmax : ∀ z, z ≤ m ⊔ F m z → z ≤ y) (hmw : ¬ m ≤ F m y) :
+    CanonicalTopParent F H k m ∨ m' ≤ F m' m' ∨
+      ∃ n, (F m')^[n] (F m y) = a F m' ∧ F m' ((F m')^[n] (F m y)) = (F m')^[n] (F m y) ∧ ¬ m' ≤ a F m' := by
+  by_cases hle : m' ≤ a F m'
+  · rcases eq_or_lt_of_le hle with e | hlt
+    · exact Or.inr (Or.inl (e.trans ((row_a m').symm.trans (by rw [← e]))).le)
+    · exact Or.inl (canonical_of_feeder_lt_a hn hall hm' hm'k hm'm hmax hmw hlt)
+  · obtain ⟨n, hfix⟩ := exists_iter_fix (x := m') hn H (height_le _) (feeder_le_side hm'm hy)
+    exact Or.inr (Or.inr ⟨n, rawOrbit_terminal (feeder_a_le_w hm'm hmax) hfix, hfix, hle⟩)
 
 end Mordor.OrbitHeight

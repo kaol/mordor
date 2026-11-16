@@ -14,6 +14,8 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
   C claims (multi-top transfer, Programme C: uniqueness of m dropped, m any target of rank K in R_K, not in R_{K−1}):
             C_bm_eq_feeder  b(m) = m' for every lower feeder m' of the target m
             C_a_feeder_le   a(m') ≤ m for every lower feeder
+  noic_fi: (as a 'claim', a counterexample is) a configuration with b(m) = m' for a lower feeder and no interval cell
+           at m — tests whether feeder identity alone (all the history the meet lemma uses) forces the cell
   B claims: bentry        b(m) ∈ R_{K−1}  (Programme B's conjecture; = BEntry by the height bound)
             bm_le_x       b(m) ≤ x
             bm_le_meet    b(m) ≤ x ⊓ m
@@ -32,7 +34,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def query(L, m, claim, ahead=False):
@@ -52,7 +54,10 @@ def query(L, m, claim, ahead=False):
         for p in feeders:
             o = E.v('low', p); E.iff_and(o, [r(K - 1, p), fle(p, m, p)]); low[p] = o
         E.S.add_clause(list(low.values()))
-        if claim in ('bm_eq_feeder', 'C_bm_eq_feeder'):
+        if claim == 'noic_fi':                     # §34.3z¹⁶²: no interval cell at m although b(m) is a lower feeder
+            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
+            E.S.add_clause([-ic(m)])
+        elif claim in ('bm_eq_feeder', 'C_bm_eq_feeder'):
             for p in feeders: o = E.v('bad', p); E.iff_and(o, [low[p], -B(m, p)]); bad.append(o)
         elif claim in ('a_feeder_le', 'C_a_feeder_le'):
             for p in feeders:
@@ -111,7 +116,8 @@ def query(L, m, claim, ahead=False):
     if claim in A_CLAIMS:
         low = [p for p in L.covers_dn[m] if rk[p] == K - 1 and inR(p, K - 1) and le[F[p][m]][p]]; assert low
         y = ystar(L, F, m)
-        viol = {'bm_eq_feeder': any(bm != p for p in low), 'C_bm_eq_feeder': any(bm != p for p in low),
+        from gfp_top import ic as ic_py
+        viol = {'noic_fi': (bm in low) and not ic_py(L, F, m), 'bm_eq_feeder': any(bm != p for p in low), 'C_bm_eq_feeder': any(bm != p for p in low),
                 'C_a_feeder_le': any(not le[a_of(L, F, p)][m] for p in low), 'a_feeder_le': any(not le[a_of(L, F, p)][m] for p in low),
                 'fmm_le': not le[F[m][m]][m], 'top_ge_bm': not le[bm][F[m][L.top]], 'w_ge_bm': not le[bm][F[m][y]],
                 'gfp': not gfp_ok(L, F, m)}[claim]

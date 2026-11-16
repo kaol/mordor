@@ -162,6 +162,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     - feeder identity holds;
     - the orbit-height property, and Cut with it, at edge-height H reduces to *rigid* maps: a(⊥) = ⊥, b(⊤) = ⊤, and
       the diagonal fixes only ⊥ and ⊤ (`HeightInduction.top_mem_reduction`).
+  - Feeder identity holds unconditionally at stages k ≤ 4 on every lattice of finite edge-height, and in singleton
+    lower transfer the incomparable column output meets m exactly in the feeder, w ⊓ m = m′ (`FeederStage`,
+    §34.3z¹⁶²). A 7-element one-stage-ahead model satisfies both but has no cell, so a proof must also use the index
+    bound (no early elements).
   - `cutMaps_of_riseAt`: the **Rise conjecture** (a rigid map has a good x < a(x)) at all heights ≤ H gives Cut at
     edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices. Rise witnesses can need
     to enter as late as stage H − 1, so for rigid maps Rise is close to the orbit-height property itself.

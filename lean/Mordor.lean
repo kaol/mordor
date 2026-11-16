@@ -131,6 +131,7 @@ import Mordor.TightTransfer
 import Mordor.SingletonLowerTransfer
 import Mordor.IntervalOrbit
 import Mordor.HeightInduction
+import Mordor.FeederStage
 import Mordor.RiseHeight4
 import Mordor.GroundOH
 import Mordor.OHHeight4

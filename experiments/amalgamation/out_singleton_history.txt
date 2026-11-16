@@ -1,0 +1,10 @@
+# Does feeder identity force the cell in singleton lower transfer? (log §34.3z¹⁶²)
+# claim noic_fi: SAT = a configuration with b(m) = m' (lower feeder) and no interval cell at m; models re-checked.
+--- single_claims.py noic fi ahead closure 5 10 1 10
+claim noic_fi ahead: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 3
+--- single_claims.py noic fi ahead sweep 4 16
+claim noic_fi ahead: {'none': 140, 'counterexample': 39}; smallest counterexample |L| = 7, rank(m) = 3
+--- single_claims.py noic fi closure 5 10 1 10
+claim noic_fi: {'none': 10}
+--- single_claims.py noic fi sweep 4 16
+claim noic_fi: {'none': 179}

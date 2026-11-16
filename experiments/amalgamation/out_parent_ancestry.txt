@@ -1,0 +1,219 @@
+== top_parent.py closure 5 10 1 10 (configuration-free TopParent; low-parent classification)
+  ('A-source vs parent', '∥') 2
+  ('B-source b(x) vs parent', '∥') 8
+  ('parent own entry', 'AB') 2
+  ('parent own entry', 'B') 6
+  ('parent rank', 1) 8
+  ('parent route', 'A') 2
+  ('parent route', 'B') 6
+  ('parent stage', 2) 8
+  ('parent vs z', '<') 2
+  ('parent vs z', '∥') 6
+top_parent: {'counterexample': 8, 'none': 2}; smallest |L| = 15, rank(z) = 3, parents' ranks [1]
+== single_claims.py topparent multi nopostlayer closure 5 10 1 10
+claim topparent: {'none': 10}
+== single_claims.py topparent multi closure 5 10 1 10
+claim topparent: {'none': 10}
+== top_parent.py closure 5 10 2 10 (configuration-free TopParent; low-parent classification)
+  ('A-source vs parent', '∥') 4
+  ('B-source b(x) vs parent', '∥') 8
+  ('parent own entry', 'AB') 3
+  ('parent own entry', 'B') 5
+  ('parent rank', 1) 8
+  ('parent route', 'A') 2
+  ('parent route', 'B') 6
+  ('parent stage', 2) 8
+  ('parent vs z', '∥') 8
+top_parent: {'counterexample': 8, 'none': 2}; smallest |L| = 11, rank(z) = 3, parents' ranks [1]
+== single_claims.py topparent multi nopostlayer closure 5 10 2 10
+claim topparent: {'none': 10}
+== single_claims.py topparent multi closure 5 10 2 10
+claim topparent: {'none': 10}
+== top_parent.py closure 5 10 3 10 (configuration-free TopParent; low-parent classification)
+  ('A-source vs parent', '∥') 4
+  ('B-source b(x) vs parent', '∥') 7
+  ('parent own entry', 'A') 1
+  ('parent own entry', 'AB') 2
+  ('parent own entry', 'B') 5
+  ('parent rank', 1) 8
+  ('parent route', 'A') 5
+  ('parent route', 'B') 3
+  ('parent stage', 2) 8
+  ('parent vs z', '<') 1
+  ('parent vs z', '∥') 7
+top_parent: {'counterexample': 8, 'none': 2}; smallest |L| = 15, rank(z) = 3, parents' ranks [1]
+== single_claims.py topparent multi nopostlayer closure 5 10 3 10
+claim topparent: {'none': 10}
+== single_claims.py topparent multi closure 5 10 3 10
+claim topparent: {'none': 10}
+== top_parent.py closure 5 11 4 10 (configuration-free TopParent; low-parent classification)
+  ('A-source vs parent', '∥') 4
+  ('B-source b(x) vs parent', '∥') 5
+  ('parent own entry', 'AB') 2
+  ('parent own entry', 'B') 3
+  ('parent rank', 1) 5
+  ('parent route', 'A') 2
+  ('parent route', 'B') 3
+  ('parent stage', 2) 5
+  ('parent vs z', '∥') 5
+top_parent: {'none': 5, 'counterexample': 5}; smallest |L| = 14, rank(z) = 3, parents' ranks [1]
+== single_claims.py topparent multi nopostlayer closure 5 11 4 10
+claim topparent: {'none': 10}
+== single_claims.py topparent multi closure 5 11 4 10
+claim topparent: {'none': 10}
+== single_claims.py noic_fi multi rmin=3 sweep 4 16
+claim noic_fi: {'none': 179}
+== single_claims.py noic_fi multi rmin=3 closure 5 10 1 10
+claim noic_fi: {'counterexample': 9, 'none': 1}; smallest counterexample |L| = 11, rank(m) = 3
+== single_claims.py noic_fi multi nopostlayer rmin=3 sweep 4 16
+claim noic_fi: {'none': 179}
+== single_claims.py noic_fi multi nopostlayer rmin=3 closure 5 10 1 10
+claim noic_fi: {'counterexample': 9, 'none': 1}; smallest counterexample |L| = 11, rank(m) = 3
+== single_claims.py topparent multi rmin=3 sweep 4 16
+claim topparent: {'none': 179}
+== single_claims.py topparent multi rmin=3 closure 5 10 1 10
+claim topparent: {'none': 10}
+== single_claims.py topparent multi nopostlayer rmin=3 sweep 4 16
+claim topparent: {'none': 179}
+== single_claims.py topparent multi nopostlayer rmin=3 closure 5 10 1 10
+claim topparent: {'none': 10}
+== single_claims.py noic_fi multi nopostlayer rmin=3 closure 5 10 2 10
+claim noic_fi: {'counterexample': 8, 'none': 2}; smallest counterexample |L| = 11, rank(m) = 3
+== single_claims.py noic_fi multi nopostlayer rmin=3 closure 5 10 3 10
+claim noic_fi: {'counterexample': 8, 'none': 2}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py noic_fi multi nopostlayer rmin=3 closure 5 11 4 10
+claim noic_fi: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 14, rank(m) = 3
+== single_claims.py topparent multi rmin=3 closure 5 10 2 10
+claim topparent: {'none': 10}
+== single_claims.py topparent multi rmin=3 closure 5 10 3 10
+claim topparent: {'none': 10}
+== single_claims.py topparent multi rmin=3 closure 5 11 4 10
+claim topparent: {'none': 10}
+== single_claims.py topparent multi nopostlayer rmin=3 closure 5 10 2 10
+claim topparent: {'none': 10}
+== single_claims.py topparent multi nopostlayer rmin=3 closure 5 10 3 10
+claim topparent: {'none': 10}
+== single_claims.py topparent multi nopostlayer rmin=3 closure 5 11 4 10
+claim topparent: {'none': 10}
+== single_claims.py sibling multi nopostlayer rmin=3 closure 5 10 1 10
+claim sibling: {'counterexample': 9, 'none': 1}; smallest counterexample |L| = 11, rank(m) = 3
+== single_claims.py sibling multi nopostlayer rmin=3 closure 5 10 2 10
+claim sibling: {'none': 3, 'counterexample': 7}; smallest counterexample |L| = 13, rank(m) = 3
+== single_claims.py sibling multi nopostlayer rmin=3 closure 5 10 3 10
+claim sibling: {'counterexample': 8, 'none': 2}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py sibling multi nopostlayer rmin=3 closure 5 11 4 10
+claim sibling: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 14, rank(m) = 3
+== witness_probe.py layer rmin=3 closure 5 10 1 10
+models 9
+('A-top', 'h(x) − (K−1)', -1) 2
+('A-top', 'h(x) − (K−1)', 0) 5
+('A-top', 'x diag-post', False) 7
+('A-top', 'x vs m′', '<') 2
+('A-top', 'x vs m′', '=') 3
+('A-top', 'x vs m′', '∥') 2
+('A-top', 'x vs z', '<') 3
+('A-top', 'x vs z', '∥') 4
+('B-top', 'b z = b of an R-element ≠ itself', False) 11
+('B-top', 'b z diag-post', False) 11
+('B-top', 'b z diag-pre', False) 2
+('B-top', 'b z diag-pre', True) 9
+('B-top', 'b z vs m′', '<') 2
+('B-top', 'b z vs m′', '=') 6
+('B-top', 'b z vs m′', '∥') 3
+('B-top', 'b z vs z', '<') 7
+('B-top', 'b z vs z', '∥') 4
+('B-top', 'h(b z) − (K−1)', -1) 2
+('B-top', 'h(b z) − (K−1)', 0) 9
+('feeder F(m′,m′) < m′', True) 9
+('post-fixed elements of R_{K−1} (any height) exist', True) 9
+('some second A-entry', False) 5
+('some second A-entry', True) 4
+('some second B-entry', False) 1
+('some second B-entry', True) 8
+('top', 'route', 'A') 2
+('top', 'route', 'B') 9
+('top', 'route', 'BA') 2
+('tops of R_{K−1}: all strictly diag-pre', False) 4
+('tops of R_{K−1}: all strictly diag-pre', True) 5
+== witness_probe.py layer rmin=3 closure 5 10 2 10
+models 8
+('A-top', 'h(x) − (K−1)', -1) 1
+('A-top', 'h(x) − (K−1)', 0) 4
+('A-top', 'x diag-post', False) 5
+('A-top', 'x vs m′', '=') 4
+('A-top', 'x vs m′', '∥') 1
+('A-top', 'x vs z', '<') 5
+('B-top', 'b z = b of an R-element ≠ itself', False) 11
+('B-top', 'b z diag-post', False) 11
+('B-top', 'b z diag-pre', True) 11
+('B-top', 'b z vs m′', '=') 10
+('B-top', 'b z vs m′', '∥') 1
+('B-top', 'b z vs z', '<') 9
+('B-top', 'b z vs z', '∥') 2
+('B-top', 'h(b z) − (K−1)', 0) 11
+('feeder F(m′,m′) < m′', True) 8
+('post-fixed elements of R_{K−1} (any height) exist', True) 8
+('some second A-entry', False) 4
+('some second A-entry', True) 4
+('some second B-entry', False) 1
+('some second B-entry', True) 7
+('top', 'route', 'A') 4
+('top', 'route', 'B') 11
+('tops of R_{K−1}: all strictly diag-pre', False) 2
+('tops of R_{K−1}: all strictly diag-pre', True) 6
+== witness_probe.py layer rmin=3 closure 5 10 3 10
+models 8
+('A-top', 'h(x) − (K−1)', 0) 2
+('A-top', 'x diag-post', False) 2
+('A-top', 'x vs m′', '=') 1
+('A-top', 'x vs m′', '∥') 1
+('A-top', 'x vs z', '<') 2
+('B-top', 'b z = b of an R-element ≠ itself', False) 13
+('B-top', 'b z diag-post', False) 13
+('B-top', 'b z diag-pre', False) 2
+('B-top', 'b z diag-pre', True) 11
+('B-top', 'b z vs m′', '<') 1
+('B-top', 'b z vs m′', '=') 10
+('B-top', 'b z vs m′', '∥') 2
+('B-top', 'b z vs z', '<') 7
+('B-top', 'b z vs z', '∥') 6
+('B-top', 'h(b z) − (K−1)', -1) 2
+('B-top', 'h(b z) − (K−1)', 0) 11
+('feeder F(m′,m′) < m′', True) 8
+('post-fixed elements of R_{K−1} (any height) exist', True) 8
+('some second A-entry', False) 6
+('some second A-entry', True) 2
+('some second B-entry', False) 1
+('some second B-entry', True) 7
+('top', 'route', 'A') 2
+('top', 'route', 'B') 13
+('tops of R_{K−1}: all strictly diag-pre', False) 5
+('tops of R_{K−1}: all strictly diag-pre', True) 3
+== witness_probe.py layer rmin=3 closure 5 11 4 10
+models 5
+('A-top', 'h(x) − (K−1)', 0) 5
+('A-top', 'x diag-post', False) 5
+('A-top', 'x vs m′', '=') 2
+('A-top', 'x vs m′', '∥') 3
+('A-top', 'x vs z', '<') 4
+('A-top', 'x vs z', '∥') 1
+('B-top', 'b z = b of an R-element ≠ itself', False) 7
+('B-top', 'b z diag-post', False) 7
+('B-top', 'b z diag-pre', False) 1
+('B-top', 'b z diag-pre', True) 6
+('B-top', 'b z vs m′', '<') 1
+('B-top', 'b z vs m′', '=') 5
+('B-top', 'b z vs m′', '∥') 1
+('B-top', 'b z vs z', '<') 3
+('B-top', 'b z vs z', '∥') 4
+('B-top', 'h(b z) − (K−1)', -1) 1
+('B-top', 'h(b z) − (K−1)', 0) 6
+('feeder F(m′,m′) < m′', True) 5
+('post-fixed elements of R_{K−1} (any height) exist', True) 5
+('some second A-entry', False) 2
+('some second A-entry', True) 3
+('some second B-entry', False) 2
+('some second B-entry', True) 3
+('top', 'route', 'A') 3
+('top', 'route', 'B') 7
+('tops of R_{K−1}: all strictly diag-pre', True) 5

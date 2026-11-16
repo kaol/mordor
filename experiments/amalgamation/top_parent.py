@@ -30,6 +30,25 @@ def query(L, z):
     assert par and all(rk[x] < K - 1 for x in par)
     return F, par
 
+def classify(L, F, z, par, C):
+    """§34.3z¹⁶⁶: provenance of the low parents of z (brief "parent ancestry and mixed-edge descent")."""
+    n = L.n; le = L.le; rk = L.rank; K = rk[z]; st = stages(L, F); inR = lambda x, j: st[x] is not None and st[x] <= j
+    rel = lambda x, y: '=' if x == y else '<' if le[x][y] else '>' if le[y][x] else '∥'
+    bz = b_of(L, F, z)
+    for x in par:
+        rt = ('B' if x == bz or le[F[x][z]][x] else '') + ('A' if a_of(L, F, x) == z else '')
+        C[('parent route', rt)] += 1; C[('parent rank', rk[x])] += 1; C[('parent stage', st[x])] += 1
+        C[('parent vs z', rel(x, z))] += 1
+        s = st[x]                                  # own entry of x at stage s
+        own = ('A' if any(inR(p, s - 1) and le[x][a_of(L, F, p)] for p in range(n)) else '') + ('B' if inR(b_of(L, F, x), s - 1) else '')
+        C[('parent own entry', own)] += 1
+        for p in range(n):
+            if inR(p, s - 1) and le[x][a_of(L, F, p)]:
+                C[('A-source vs parent', rel(p, x))] += 1
+                if 'A' in rt:                      # a_parent_lift: a(p) is again an A-parent of z, of height ≥ h(x)
+                    ap = a_of(L, F, p); C[('lift', 'a(p) = x' if ap == x else 'a(p) > x', 'a(a(p)) = z', a_of(L, F, ap) == z)] += 1
+        if inR(b_of(L, F, x), s - 1): C[('B-source b(x) vs parent', rel(b_of(L, F, x), x))] += 1
+
 if __name__ == '__main__':
     C = collections.Counter(); best = None
     for L in lattices(sys.argv[1:]):
@@ -39,7 +58,11 @@ if __name__ == '__main__':
                 res = query(L, z)
                 if res: hit = (z, res); break
         C['counterexample' if hit else 'none'] += 1
+        if hit: classify(L, hit[1][0], hit[0], hit[1][1], C)
         if hit and (best is None or L.n < best[0].n): best = (L, hit)
+    for k_, v in sorted(C.items(), key=str):
+        if isinstance(k_, tuple): print(' ', k_, v)
+    C = collections.Counter({k_: v for k_, v in C.items() if not isinstance(k_, tuple)})
     print(f"top_parent: {dict(C)}" + (f"; smallest |L| = {best[0].n}, rank(z) = {best[0].rank[best[1][0]]}, parents' ranks {[best[0].rank[x] for x in best[1][1][1]]}" if best else ''), flush=True)
     if best:
         import json; json.dump(dict(sets=best[0].S, F=best[1][1][0], m=best[1][0]), open(f"top_parent_min{best[0].n}.json", 'w'))

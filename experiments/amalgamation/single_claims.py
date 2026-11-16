@@ -26,6 +26,7 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
            element m ∉ R_{J−1}, R_{J−1} ranks ≤ K − 1, ⊤ ∉ R_{J+1}, feeders/entries from R_{J−1}.
   §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
   §34.3z¹⁶⁵ (with 'multi'): topparent  some rank-K top z ≠ m has an A- or B-parent of rank K − 1;  sibling  the row m′ has a cell at a rank-K column z ≠ m;  soleB  m is the only B-entry of rank K;  soleA  no A-entry z ≠ m of rank K
+  rmin=R: only m of rank ≥ R (TopParent is SecondEntry itself at rank 2, where every parent ≠ ⊥ has rank 1)
   flags: notop (drop ⊤ ∉ R_{K+1}), multi (drop uniqueness of m), post / strictpre (lower feeders diagonal post-fixed / not), nopostlayer (no rank-(K−1) element of R_{K−1} post-fixed)
   python3 single_claims.py CLAIM [ahead] [notop] [multi] (sweep P NMAX | closure K M SEED COUNT)
 """
@@ -192,17 +193,19 @@ def query(L, m, claim, ahead=False):
     assert viol
     return F
 
+RMIN = next((int(a[5:]) for a in sys.argv if a.startswith('rmin=')), 1)
+
 if __name__ == '__main__':
     claim = sys.argv[1]; ahead = 'ahead' in sys.argv; C = collections.Counter(); best = None
-    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer')]):
+    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer') and not a.startswith('rmin=')]):
         if L.height < 2: continue
         hit = None
         for m in range(L.n):
-            if 1 <= L.rank[m] < L.height:
+            if max(1, RMIN) <= L.rank[m] < L.height:
                 res = query(L, m, claim, ahead)
                 if res: hit = (m, res); break
         C['counterexample' if hit else 'none'] += 1
         if hit and (best is None or L.n < best[0].n): best = (L, hit)
     print(f"claim {claim}{' ahead' if ahead else ''}: {dict(C)}" + (f"; smallest counterexample |L| = {best[0].n}, rank(m) = {best[0].rank[best[1][0]]}" if best else ''), flush=True)
     if best:
-        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer') if f in sys.argv)}_min{best[0].n}.json", 'w'))
+        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))

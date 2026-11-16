@@ -8,10 +8,10 @@ mode 'layer': as 'multi' with no diagonal post-fixed top of R_{K−1} (the case 
 mode 'multi': the index-tight no-cell models with uniqueness of m dropped (single_claims.py noic_fi multi; m ∈ R_K,
   K = h(m)). Record every second on-time element z ≠ m of height K in R_K: its route and its relation to m′, m, w, y*.
 A universal claim is refuted by any model where it fails; 'True' counts are per model (one SAT model per lattice).
-  python3 witness_probe.py MODE (sweep P NMAX | closure K M SEED COUNT)
+  python3 witness_probe.py MODE [rmin=R] (sweep P NMAX | closure K M SEED COUNT)
 """
 import sys, collections
-mode = sys.argv[1]; args = sys.argv[2:]
+mode = sys.argv[1]; args = [a for a in sys.argv[2:] if not a.startswith('rmin=')]
 if mode in ('multi', 'layer'): sys.argv.append('multi')
 if mode == 'layer': sys.argv.append('nopostlayer')
 sys.path.insert(0, '../separation')
@@ -24,7 +24,7 @@ C = collections.Counter(); ex = []
 for L in lattices(args):
     if L.height < 2: continue
     for m in range(L.n):
-        if not (1 <= L.rank[m] < L.height): continue
+        if not (max(1, sc.RMIN) <= L.rank[m] < L.height): continue
         F = sc.query(L, m, 'noic_fi', mode == 'ahead')
         if not F: continue
         n = L.n; le = L.le; jn = L.join; h = L.rank; st = stages(L, F)

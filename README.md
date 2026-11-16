@@ -175,6 +175,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     SecondEntry (a second top in R_{k+1}) holds whenever some height-k element of R_k is diagonal post-fixed, with no
     uniqueness, feeder identity or OHAt (`SecondEntry.secondEntry_of_post_layer`, §34.3z¹⁶⁵). The open case has no
     post-fixed top in R_k.
+    TopParent (a second top with a parent of height k) differs from SecondEntry only through late elements, and is
+    SecondEntry itself at k = 1 (`ParentAncestry`, §34.3z¹⁶⁶). It has no counterexample at rank 3 (40 closure
+    systems), while the configuration-free version fails at |L| = 11.
   - `cutMaps_of_riseAt`: the **Rise conjecture** (a rigid map has a good x < a(x)) at all heights ≤ H gives Cut at
     edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices. Rise witnesses can need
     to enter as late as stage H − 1, so for rigid maps Rise is close to the orbit-height property itself.

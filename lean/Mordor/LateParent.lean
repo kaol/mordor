@@ -26,6 +26,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `canonical_of_row_descent`, **`canonical_of_feeder_descent`** (CanonicalTopParent when the feeder row stays above
   `m'` on its pre-fixed columns in `(m', w]`), `DescentWitness` (conjectured: no counterexample),
   `canonical_of_descentWitness`, `topParent_of_descentWitness`.
+* §34.3z¹⁷⁰ (drop geometry): `drop_lt`, `drop_row_pre`, `drop_meet`, `canonical_of_drop_le`,
+  `drop_incomparable_or_canonical` (a drop is mechanism B unless its output is incomparable with the feeder).
 -/
 
 namespace Mordor.OrbitHeight
@@ -257,5 +259,40 @@ theorem topParent_of_descentWitness {k H : ℕ} (IH : ∀ H' < k + 1, OHAt.{u} H
     (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) (hall : ∀ z ∈ Rk F (k + 2), height H z ≤ k + 2) {m : α}
     (h : DescentWitness F H (k + 1) m) : TopParent F H (k + 1) m :=
   topParent_of_canonical IH hn hk1 (canonical_of_descentWitness hn hall h)
+
+/-! ### Drop geometry of the feeder row (§34.3z¹⁷⁰)
+
+A *drop* of the row `m'` on `(m', w]` is a column `q` with `m' < q ≤ w`, `F m' q ≤ q`, `m' ≰ F m' q`; write
+`r = F m' q`. -/
+
+/-- The drop output is strictly below the drop column. -/
+theorem drop_lt {m' q : α} (hm'q : m' < q) (hFq : F m' q ≤ q) (hdrop : ¬ m' ≤ F m' q) : F m' q < q :=
+  lt_of_le_of_ne hFq fun e => hdrop (by rw [e]; exact hm'q.le)
+
+/-- The drop output is again row-pre-fixed for the feeder. -/
+theorem drop_row_pre {m' q : α} (hFq : F m' q ≤ q) : F m' (F m' q) ≤ F m' q := (F m').mono hFq
+
+/-- The drop output meets `m` below the feeder (`w ⊓ m = m'` from `single_lower_meet`). -/
+theorem drop_meet {m' m w q : α} (hqw : q ≤ w) (hmeet : w ⊓ m = m') (hFq : F m' q ≤ q) : F m' q ⊓ m ≤ m' :=
+  (inf_le_inf_right m (hFq.trans hqw)).trans hmeet.le
+
+/-- **A drop with output below the feeder is mechanism B**: `q` is a second top with `b q ≤ m' < q`. -/
+theorem canonical_of_drop_le {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m' m q : α} (hm' : m' ∈ Rk F k) (hm'k : height H m' = k) (hm'q : m' < q) (hmq : ¬ m ≤ q)
+    (hle : F m' q ≤ m') : CanonicalTopParent F H k m := by
+  have hqR := mem_succ_of_cell hm' le_rfl (Or.inl hle)
+  have := height_strictMono hn hm'q; have := hall q hqR
+  have hb : b F q ≤ m' := b_le hle
+  exact Or.inr ⟨q, fun e => hmq (e ▸ le_rfl), by omega, Rk_down k hb hm', hb.trans hm'q.le⟩
+
+/-- **Drop dichotomy.** For a drop `q` with `m ≰ q`: CanonicalTopParent holds, or the drop output is incomparable
+with the feeder. -/
+theorem drop_incomparable_or_canonical {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m' m q : α} (hm' : m' ∈ Rk F k) (hm'k : height H m' = k)
+    (hm'q : m' < q) (hmq : ¬ m ≤ q) (hdrop : ¬ m' ≤ F m' q) :
+    CanonicalTopParent F H k m ∨ (¬ F m' q ≤ m' ∧ ¬ m' ≤ F m' q) := by
+  by_cases hle : F m' q ≤ m'
+  · exact Or.inl (canonical_of_drop_le hn hall hm' hm'k hm'q hmq hle)
+  · exact Or.inr ⟨hle, hdrop⟩
 
 end Mordor.OrbitHeight

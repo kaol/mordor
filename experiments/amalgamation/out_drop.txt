@@ -1,0 +1,121 @@
+== drop_probe.py show: one line per drop configuration (rank 3 closure seeds 5 10 1–3, 5 11 4–5/7, 6 11 6, 5 12 8; rank ≤ 2 sweep 4 16)
+|L|=17 m={034} m'={03} w={0123} q={0123} r={123} seq=['{0123}'] Tk=['{01}', '{12}', '{03}', '{23}', '{24}', '{34}'] witness pairs=[('{12}', '{123}'), ('{12}', '{0123}')]
+|L|=15 m={134} m'={34} w={0234} q={0234} r={023} seq=['{0234}'] Tk=['{02}', '{34}'] witness pairs=[('{02}', '{023}'), ('{02}', '{0234}')]
+|L|=15 m={234} m'={34} w={0134} q={0134} r={014} seq=['{0134}'] Tk=['{01}', '{13}', '{24}', '{34}'] witness pairs=[('{01}', '{014}'), ('{01}', '{0124}'), ('{01}', '{0134}')]
+|L|=17 m={023} m'={03} w={0134} q={0134} r={34} seq=['{0134}'] Tk=['{03}', '{23}', '{04}', '{24}', '{34}'] witness pairs=[('{34}', '{134}'), ('{34}', '{0134}'), ('{34}', '{1234}')]
+|L|=14 m={012} m'={02} w={0234} q={0234} r={034} seq=['{0234}'] Tk=['{01}', '{02}', '{03}'] witness pairs=[('{03}', '{034}'), ('{03}', '{0234}')]
+|L|=17 m={124} m'={24} w={0234} q={0234} r={034} seq=['{0234}'] Tk=['{04}', '{14}', '{24}', '{34}'] witness pairs=[('{04}', '{034}'), ('{04}', '{0234}'), ('{34}', '{034}'), ('{34}', '{234}'), ('{34}', '{0234}')]
+|L|=18 m={012} m'={12} w={1234} q={1234} r={23} seq=['{1234}'] Tk=['{02}', '{12}', '{13}', '{23}'] witness pairs=[('{13}', '{123}'), ('{13}', '{1234}'), ('{23}', '{123}'), ('{23}', '{234}'), ('{23}', '{1234}')]
+|L|=15 m={124} m'={12} w={0123} q={0123} r={13} seq=['{0123}'] Tk=['{02}', '{12}', '{13}', '{14}'] witness pairs=[('{13}', '{013}'), ('{13}', '{0123}')]
+|L|=18 m={012} m'={12} w={1234} q={1234} r={14} seq=['{1234}'] Tk=['{01}', '{02}', '{12}', '{23}', '{04}', '{14}'] witness pairs=[('{14}', '{134}'), ('{14}', '{1234}')]
+|L|=14 m={023} m'={03} w={0134} q={0134} r={134} seq=['{0134}'] Tk=['{01}', '{03}', '{04}', '{14}'] witness pairs=[('{14}', '{134}'), ('{14}', '{0134}')]
+|L|=18 m={014} m'={01} w={0123} q={0123} r={023} seq=['{0123}'] Tk=['{01}', '{02}', '{13}', '{04}', '{14}'] witness pairs=[('{02}', '{023}'), ('{02}', '{0123}')]
+|L|=22 m={012} m'={12} w={123} q={123} r={23} seq=['{123}'] Tk=['{01}', '{02}', '{12}', '{13}', '{24}', '{34}'] witness pairs=[('{34}', '{034}'), ('{34}', '{0234}')]
+|L|=15 m={014} m'={04} w={0234} q={0234} r={023} seq=['{0234}'] Tk=['{02}', '{04}'] witness pairs=[('{02}', '{023}'), ('{02}', '{0234}')]
+|L|=18 m={015} m'={15} w={1235} q={135} r={35} seq=['{1235}', '{135}'] Tk=['{02}', '{15}', '{25}', '{35}'] witness pairs=[('{35}', '{135}'), ('{35}', '{1235}')]
+|L|=15 m={145} m'={45} w={2345} q={2345} r={235} seq=['{2345}'] Tk=['{23}', '{35}', '{45}'] witness pairs=[('{23}', '{235}'), ('{23}', '{2345}'), ('{35}', '{235}'), ('{35}', '{2345}')]
+|L|=22 m={012} m'={01} w={0135} q={0135} r={15} seq=['{0135}'] Tk=['{01}', '{12}', '{23}', '{04}', '{05}', '{15}', '{35}'] witness pairs=[('{35}', '{135}'), ('{35}', '{0135}'), ('{35}', '{1235}')]
+|L|=7 m={03} m'={0} w={012} q={012} r={1} seq=['{012}'] Tk=['{0}', '{1}'] witness pairs=[('{1}', '{12}'), ('{1}', '{012}')]
+|L|=8 m={03} m'={0} w={012} q={012} r={1} seq=['{012}'] Tk=['{0}', '{1}'] witness pairs=[('{1}', '{12}'), ('{1}', '{012}')]
+|L|=8 m={03} m'={0} w={012} q={012} r={1} seq=['{012}'] Tk=['{0}', '{1}', '{3}'] witness pairs=[('{1}', '{12}'), ('{1}', '{012}')]
+|L|=9 m={03} m'={0} w={012} q={012} r={1} seq=['{012}'] Tk=['{0}', '{1}'] witness pairs=[('{1}', '{12}'), ('{1}', '{012}')]
+|L|=9 m={23} m'={3} w={013} q={013} r={0} seq=['{013}'] Tk=['{0}', '{3}'] witness pairs=[('{0}', '{01}'), ('{0}', '{013}')]
+|L|=10 m={23} m'={3} w={013} q={013} r={0} seq=['{013}'] Tk=['{0}', '{1}', '{2}', '{3}'] witness pairs=[('{0}', '{01}'), ('{0}', '{012}'), ('{0}', '{013}')]
+== drop_probe.py summed statistics
+('F(x,v)', '= x') 12
+('F(x,v)', 'in (x,v)') 44
+('a(r)', 'h−K=-2', 'a(r) vs q', '<') 5
+('a(r)', 'h−K=-3', 'a(r) vs q', '<') 3
+('a(r)', 'h−K=0', 'a(r) vs q', '<') 8
+('a(r)', 'h−K=1', 'a(r) vs q', '=') 5
+('a(r)', 'h−K=2', 'a(r) vs q', '>') 1
+('every top above r is a witness row', False) 1
+('every top above r is a witness row', None) 10
+('every top above r is a witness row', True) 11
+('every top x ≤ r: (x, q) is a witness', False) 2
+('every top x ≤ r: (x, q) is a witness', None) 1
+('every top x ≤ r: (x, q) is a witness', True) 19
+('first drop: descent length', 1) 21
+('first drop: descent length', 2) 1
+('first drop: q = w', False) 1
+('first drop: q = w', True) 21
+('first drop: r vs m′', '∥') 22
+('first drop: r vs q', '<') 22
+('first drop: r', 'h−K=-1', 'stage−K=-1') 12
+('first drop: r', 'h−K=-1', 'stage−K=1') 1
+('first drop: r', 'h−K=0', 'stage−K=0') 9
+('first event on the descent', 'drop') 22
+('r late at stage K', False) 22
+('r row at q', 'F(r,q) vs r', '=', 'F(r,q) vs q', '<') 5
+('r row at q', 'F(r,q) vs r', '>', 'F(r,q) vs q', '<') 11
+('r row at q', 'F(r,q) vs r', '>', 'F(r,q) vs q', '=') 5
+('r row at q', 'F(r,q) vs r', '>', 'F(r,q) vs q', '∥') 1
+('r ∈ R_K', False) 1
+('r ∈ R_K', True) 21
+('r', 'diag', 'neither') 2
+('r', 'diag', 'post') 1
+('r', 'diag', 'pre') 19
+('some top x ≤ r: (x, q) is a witness', False) 2
+('some top x ≤ r: (x, q) is a witness', True) 20
+('some witness (x, q) or (x, a(r))', False) 1
+('some witness (x, q) or (x, a(r))', True) 21
+('some witness row x with x ⊓ m′ < m′ and x ∥ m′', True) 22
+('some witness row x ≥ r', False) 11
+('some witness row x ≥ r', True) 11
+('some witness with r ≤ v ≤ q', False) 1
+('some witness with r ≤ v ≤ q', True) 21
+('some witness with v = a(r)', False) 9
+('some witness with v = a(r)', True) 13
+('some witness with v = q', False) 1
+('some witness with v = q', True) 21
+('some witness with v = w', False) 1
+('some witness with v = w', True) 21
+('some witness with v ≤ w', False) 1
+('some witness with v ≤ w', True) 21
+('top x ≤ r', 'F(x,q) vs x', '=', 'F(x,q) vs r', '=') 1
+('top x ≤ r', 'F(x,q) vs x', '>', 'F(x,q) vs r', '=') 12
+('top x ≤ r', 'F(x,q) vs x', '>', 'F(x,q) vs r', '>') 11
+('top x ≤ r', 'F(x,q) ≤ q', True, 'Bad(x,q) empty', False) 2
+('top x ≤ r', 'F(x,q) ≤ q', True, 'Bad(x,q) empty', True) 22
+('tops of R_k above r exist', False) 10
+('tops of R_k above r exist', True) 12
+('tops x ≤ r exist', False) 1
+('tops x ≤ r exist', True) 21
+('witness row x diag', 'not pre') 4
+('witness row x diag', 'pre') 21
+('witness row x vs b(q)', '<') 23
+('witness row x vs b(q)', '=') 1
+('witness row x vs b(q)', '∥') 1
+('witness row x vs b(r)', '<') 10
+('witness row x vs b(r)', '=') 3
+('witness row x vs b(r)', '>') 11
+('witness row x vs b(r)', '∥') 1
+('witness row x vs', 'm′', '∥', 'r', '<', 'm', '∥') 11
+('witness row x vs', 'm′', '∥', 'r', '=', 'm', '∥') 11
+('witness row x vs', 'm′', '∥', 'r', '∥', 'm', '∥') 3
+('witness row x', 'route', 'A') 1
+('witness row x', 'route', 'AB') 1
+('witness row x', 'route', 'B') 23
+('witness v vs', 'w', '<', 'q', '<', 'r', '=') 11
+('witness v vs', 'w', '<', 'q', '<', 'r', '>') 13
+('witness v vs', 'w', '<', 'q', '<', 'r', '∥') 1
+('witness v vs', 'w', '<', 'q', '=', 'r', '>') 1
+('witness v vs', 'w', '=', 'q', '=', 'r', '>') 23
+('witness v vs', 'w', '=', 'q', '>', 'r', '>') 1
+('witness v vs', 'w', '∥', 'q', '∥', 'r', '>') 5
+('witness v vs', 'w', '∥', 'q', '∥', 'r', '∥') 1
+drop models 22
+== single_claims.py dropbelow multi nopostlayer rmin=3 closure 5 10 1 10
+claim dropbelow: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 17, rank(m) = 3
+== single_claims.py dropbelow multi nopostlayer rmin=3 closure 5 10 2 10
+claim dropbelow: {'none': 7, 'counterexample': 3}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py dropbelow multi nopostlayer rmin=3 closure 5 10 3 10
+claim dropbelow: {'none': 4, 'counterexample': 6}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py dropbelow multi nopostlayer rmin=3 closure 5 11 4 10
+claim dropbelow: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 14, rank(m) = 3
+== single_claims.py dropbelow multi nopostlayer rmin=3 closure 5 11 5 10
+claim dropbelow: {'counterexample': 4, 'none': 6}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py dropbelow multi nopostlayer rmin=3 closure 6 11 6 10
+claim dropbelow: {'none': 3, 'counterexample': 7}; smallest counterexample |L| = 15, rank(m) = 3
+== single_claims.py dropbelow multi nopostlayer sweep 4 16
+claim dropbelow: {'none': 179}

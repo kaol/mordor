@@ -43,6 +43,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   row `c` is incomparable with every column of `(c, u]`).
 * §34.3z¹⁷⁹: `DropNode`, `ChainExit`, `dropNode_step`, **`dropChain_exit`** (the shadow chain down the B-sources ends in
   an exit; no orbit hypotheses), `iter_source_new`, `lowerExit_mem`.
+* §34.3z¹⁸⁰: `dropNode_source_lt`, `chainExit_not_D` (the D-exit is impossible), `CellState`, **`cellState_cell`**
+  (two-dimensional descent yields a genuine cell), **`dropNode_cell`**, `feeder_cell_dichotomy`,
+  `depthOne_lowerCell_sibling`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -708,5 +711,94 @@ theorem iter_source_new {j : ℕ} : ∀ (i : ℕ) {p : α}, p ∉ Rk F (j + i) �
 /-- **A lower exit puts its column one stage up**: `r ∈ R_s`, `F r e ≤ r` give `e ∈ R_{s+1}`. -/
 theorem lowerExit_mem {s : ℕ} {r e : α} (hr : r ∈ Rk F s) (hL : F r e ≤ r) : e ∈ Rk F (s + 1) :=
   mem_succ_of_cell hr le_rfl (Or.inl hL)
+
+/-! ### Two-dimensional descent: genuine cell extraction (§34.3z¹⁸⁰) -/
+
+/-- **A drop row has a strict B-source.** `b p = p` would give `F p p = p ≤ F p c`. -/
+theorem dropNode_source_lt {p c : α} (h : DropNode F p c) : b F p < p := by
+  obtain ⟨hpre, hpc, -, hdrop⟩ := h
+  refine lt_of_le_of_ne (b_le hpre) fun e => hdrop ?_
+  have := col_b (F := F) p; rw [e] at this
+  exact this.symm.le.trans ((F p).mono hpc.le)
+
+/-- **The D-exit is impossible**: a row that is its own B-source stays above itself on every column above it. -/
+theorem chainExit_not_D {r e : α} (hre : r < e) (hb : b F r = r) : r ≤ F r e := by
+  have := col_b (F := F) r; rw [hb] at this
+  exact this.symm.le.trans ((F r).mono hre.le)
+
+/-- The state of the two-dimensional descent: a diagonal pre-fixed row `r` with a pre-fixed column `e > r`. -/
+def CellState (F : α →o α →o α) (r e : α) : Prop := F r r ≤ r ∧ r < e ∧ F r e ≤ e
+
+/-- **Two-dimensional descent.** From `CellState r e`, some B-iterate `b^[i] r` has a *cell* at a column
+`z ≤ e` above it. Measure `h(r) + h(e)`: an intermediate output `r < F r e < e` keeps the row and lowers the column;
+an incomparable output is a drop node, and passing to `b r < r` (`dropNode_source_lt`) with column `F (b r) e ≤ e`
+lowers the row. -/
+theorem cellState_cell {H : ℕ} (hn : NoChain α (H + 1)) :
+    ∀ (n : ℕ) {r e : α}, height H r + height H e ≤ n → CellState F r e →
+      ∃ i z, z ≤ e ∧ (b F)^[i] r < z ∧ (F ((b F)^[i] r) z ≤ (b F)^[i] r ∨ z ≤ F ((b F)^[i] r) z) := by
+  have hmono := (height_strictMono (H := H) hn).monotone
+  intro n
+  induction n with
+  | zero =>
+    intro r e hh h
+    have := height_strictMono hn h.2.1; omega
+  | succ n ih =>
+    intro r e hh h
+    obtain ⟨hpre, hre, hFe⟩ := h
+    by_cases h1 : F r e ≤ r
+    · exact ⟨0, e, le_rfl, hre, Or.inl h1⟩
+    by_cases h2 : e ≤ F r e
+    · exact ⟨0, e, le_rfl, hre, Or.inr h2⟩
+    by_cases h3 : r ≤ F r e
+    · have hrt : r < F r e := lt_of_le_of_ne h3 fun e' => h1 (e' ▸ le_rfl)
+      have hte : F r e < e := lt_of_le_not_ge hFe h2
+      have := height_strictMono hn hte
+      obtain ⟨i, z, hz, hlt, hc⟩ := ih (by omega) ⟨hpre, hrt, (F r).mono hFe⟩
+      exact ⟨i, z, hz.trans hte.le, hlt, hc⟩
+    · have hd : DropNode F r e := ⟨hpre, hre, hFe, h3⟩
+      have hqlt := dropNode_source_lt hd
+      obtain ⟨-, hqpre, hqe, hec, hFe'⟩ := dropNode_step hd
+      by_cases h4 : F (b F r) e ≤ b F r
+      · exact ⟨1, e, le_rfl, hqlt.trans hre, Or.inl h4⟩
+      have hqe' : b F r < F (b F r) e := lt_of_le_of_ne hqe fun e' => h4 (e' ▸ le_rfl)
+      have := height_strictMono hn hqlt; have := hmono hec
+      obtain ⟨i, z, hz, hlt, hc⟩ := ih (by omega) ⟨hqpre, hqe', hFe'⟩
+      refine ⟨i + 1, z, hz.trans hec, ?_, ?_⟩ <;> rw [Function.iterate_succ_apply] <;> assumption
+
+/-- **`dropNode_cell`** (the brief's strengthening of `dropChain_exit`): a drop node yields a genuine cell on some
+B-iterate of its row, at a column `≤ c`. -/
+theorem dropNode_cell {H : ℕ} (hn : NoChain α (H + 1)) {p c : α} (h : DropNode F p c) :
+    ∃ i z, z ≤ c ∧ (b F)^[i] p < z ∧ (F ((b F)^[i] p) z ≤ (b F)^[i] p ∨ z ≤ F ((b F)^[i] p) z) :=
+  cellState_cell hn _ le_rfl ⟨h.1, h.2.1, h.2.2.1⟩
+
+/-- **The feeder's two-dimensional descent from `w`**: in the no-cell configuration (with `m' ≤ F m' m`, as in
+`canonical_of_feeder_descent`), either UpCell holds (a cell of the feeder row itself at a column `≤ w`), or some
+proper B-iterate `b^[i+1] m'` of the feeder has a cell at a column `z ≤ w` above it. -/
+theorem feeder_cell_dichotomy {k H : ℕ} (hn : NoChain α (H + 1)) {m' m y : α} (hm' : m' ∈ Rk F k)
+    (hm'k : height H m' = k) (hm'm : m' ≤ m) (hfeed : m' ≤ F m' m) (hlo : F m' m ≤ m') (hy : m ⊔ F m y = y)
+    (hmw : ¬ m ≤ F m y) (hwm : ¬ F m y ≤ m) :
+    UpCell F H k m ∨ ∃ i z, z ≤ F m y ∧ (b F)^[i + 1] m' < z ∧
+      (F ((b F)^[i + 1] m') z ≤ (b F)^[i + 1] m' ∨ z ≤ F ((b F)^[i + 1] m') z) := by
+  have hmy : m ≤ y := le_sup_left.trans hy.le
+  have hpre : F m' m' ≤ m' := ((F m').mono hm'm).trans hlo
+  have hm'w : m' ≤ F m y := hfeed.trans (((F m').mono hmy).trans ((F.mono hm'm) y))
+  have hlt : m' < F m y := lt_of_le_of_ne hm'w fun e => hwm (e ▸ hm'm)
+  obtain ⟨i, z, hz, hrz, hc⟩ := cellState_cell hn _ le_rfl ⟨hpre, hlt, feeder_le_side hm'm hy⟩
+  rcases i with _ | i
+  · exact Or.inl ⟨m', hm', hm'k, z, hrz, fun h => hmw (h.trans hz), hc⟩
+  · exact Or.inr ⟨i, z, hz, hrz, hc⟩
+
+/-- **A depth-one lower cell with a new column is a feeder sibling.** With `OHAt` below `j + 1`, `R_{j+2}` tight,
+the feeder's source `r = b m' ∈ R_{j+1}` of height `j + 1`, and a lower cell `F r z ≤ r` at a column `z > r` that
+is new at stage `j + 2`: then `z ∈ R_{j+2}`, `h(z) = j + 2`, `b z = r = b m'` and `F r z = r`. -/
+theorem depthOne_lowerCell_sibling {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H') (hn : NoChain α (H + 1))
+    (hk : ∀ z ∈ Rk F (j + 2), height H z ≤ j + 2) {r z : α} (hr : r ∈ Rk F (j + 1)) (hrh : height H r = j + 1)
+    (hrz : r < z) (hL : F r z ≤ r) (hznew : z ∉ Rk F (j + 1)) :
+    z ∈ Rk F (j + 2) ∧ height H z = j + 2 ∧ b F z = r ∧ F r z = r := by
+  have hzR := lowerExit_mem hr hL
+  have := height_strictMono hn hrz; have := hk z hzR
+  have hzh : height H z = j + 2 := by omega
+  obtain ⟨h1, h2⟩ := sibling_of_shadow IH hn hzh hznew hrh hrz hL
+  exact ⟨hzR, hzh, h1, h2⟩
 
 end Mordor.OrbitHeight

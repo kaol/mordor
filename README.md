@@ -230,6 +230,11 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     The shadow chain down the B-sources always terminates in an exit (`dropChain_exit`, no orbit hypotheses). But
     neither its exit column nor "feeder or sibling" locates the witness (|L| = 19, §34.3z¹⁷⁹), so CoverUpCell has
     to be a whole-layer statement.
+    A two-dimensional descent (row by B-source, column by the row map) always ends in a genuine cell
+    (`cellState_cell`). Started from the feeder, it gives UpCell at depth 0 (`feeder_cell_dichotomy`; 209/267
+    configurations). At depth 1 with a new column, that column is a same-source sibling of the feeder
+    (`depthOne_lowerCell_sibling`) with an observed UpCell (33/33). Early columns and depth ≥ 2 are the open cases
+    (§34.3z¹⁸⁰).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

@@ -34,16 +34,17 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def query(L, m, claim, ahead=False):
     n = L.n; le = L.le; rk = L.rank; K = rk[m]; jn = L.join; mt = L.meet; s = 1 if ahead else 0
     if K - s < 1: return None
     E = Enc(L, K + 1 - s); fle, yle, ic = helpers(E, L); r = lambda j, z: E.v('r', j - s, z)
-    E.S.add_clause([-r(K + 1, L.top)]); E.S.add_clause([r(K, m)]); E.S.add_clause([-r(K - 1, m)])
+    if 'notop' not in sys.argv: E.S.add_clause([-r(K + 1, L.top)])
+    E.S.add_clause([r(K, m)]); E.S.add_clause([-r(K - 1, m)])
     for z in range(n):
-        if rk[z] > K or (rk[z] == K and z != m and not claim.startswith('C_')): E.S.add_clause([-r(K, z)])
+        if rk[z] > K or (rk[z] == K and z != m and not claim.startswith('C_') and 'multi' not in sys.argv): E.S.add_clause([-r(K, z)])
         if rk[z] > K - 1: E.S.add_clause([-r(K - 1, z)])
     B = lambda y, g: E.v('B', y, g); A = lambda x, g: E.v('A', x, g); f = lambda x, y, v: E.v('f', x, y, v)
     bad = []                                            # witnesses of ¬claim
@@ -54,7 +55,9 @@ def query(L, m, claim, ahead=False):
         for p in feeders:
             o = E.v('low', p); E.iff_and(o, [r(K - 1, p), fle(p, m, p)]); low[p] = o
         E.S.add_clause(list(low.values()))
-        if claim == 'noic_fi':                     # §34.3z¹⁶²: no interval cell at m although b(m) is a lower feeder
+        if claim == 'feeder_post':                 # §34.3z¹⁶³: is every lower feeder diagonal post-fixed (m' ≤ F(m', m'))?
+            for p in feeders: o = E.v('fp', p); E.iff_and(o, [low[p], -yle(p, p)]); bad.append(o)
+        elif claim == 'noic_fi':                     # §34.3z¹⁶²: no interval cell at m although b(m) is a lower feeder
             for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
             E.S.add_clause([-ic(m)])
         elif claim in ('bm_eq_feeder', 'C_bm_eq_feeder'):
@@ -110,14 +113,14 @@ def query(L, m, claim, ahead=False):
     if not E.S.solve(): E.S.delete(); return False
     F = E.decode(); E.S.delete()
     st = stages(L, F); inR = lambda z, j: st[z] is not None and st[z] <= j - s
-    assert inR(m, K) and not inR(m, K - 1) and not inR(L.top, K + 1)
-    assert all(rk[z] < K or z == m or claim.startswith('C_') for z in range(n) if inR(z, K)) and all(rk[z] <= K for z in range(n) if inR(z, K)) and all(rk[z] <= K - 1 for z in range(n) if inR(z, K - 1))
+    assert inR(m, K) and not inR(m, K - 1) and ('notop' in sys.argv or not inR(L.top, K + 1))
+    assert all(rk[z] < K or z == m or claim.startswith('C_') or 'multi' in sys.argv for z in range(n) if inR(z, K)) and all(rk[z] <= K for z in range(n) if inR(z, K)) and all(rk[z] <= K - 1 for z in range(n) if inR(z, K - 1))
     bm = b_of(L, F, m)
     if claim in A_CLAIMS:
         low = [p for p in L.covers_dn[m] if rk[p] == K - 1 and inR(p, K - 1) and le[F[p][m]][p]]; assert low
         y = ystar(L, F, m)
         from gfp_top import ic as ic_py
-        viol = {'noic_fi': (bm in low) and not ic_py(L, F, m), 'bm_eq_feeder': any(bm != p for p in low), 'C_bm_eq_feeder': any(bm != p for p in low),
+        viol = {'feeder_post': any(not le[p][F[p][p]] for p in low), 'noic_fi': (bm in low) and not ic_py(L, F, m), 'bm_eq_feeder': any(bm != p for p in low), 'C_bm_eq_feeder': any(bm != p for p in low),
                 'C_a_feeder_le': any(not le[a_of(L, F, p)][m] for p in low), 'a_feeder_le': any(not le[a_of(L, F, p)][m] for p in low),
                 'fmm_le': not le[F[m][m]][m], 'top_ge_bm': not le[bm][F[m][L.top]], 'w_ge_bm': not le[bm][F[m][y]],
                 'gfp': not gfp_ok(L, F, m)}[claim]
@@ -131,7 +134,7 @@ def query(L, m, claim, ahead=False):
 
 if __name__ == '__main__':
     claim = sys.argv[1]; ahead = 'ahead' in sys.argv; C = collections.Counter(); best = None
-    for L in lattices([a for a in sys.argv[2:] if a != 'ahead']):
+    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi')]):
         if L.height < 2: continue
         hit = None
         for m in range(L.n):

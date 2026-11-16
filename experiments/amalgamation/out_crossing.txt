@@ -1,0 +1,75 @@
+== ab_noic_fi_multi_closure_5_10_1_10
+claim noic_fi: {'counterexample': 10}; smallest counterexample |L| = 11, rank(m) = 1
+== ab_noic_fi_multi_sweep_4_16
+claim noic_fi: {'none': 28, 'counterexample': 151}; smallest counterexample |L| = 5, rank(m) = 1
+== ab_noic_fi_notop_closure_5_10_1_10
+claim noic_fi: {'none': 10}
+== ab_noic_fi_notop_sweep_4_16
+claim noic_fi: {'none': 179}
+example |L| = 7 m {013} m' {01} c ['{0123}'] q ['{0123}'] d ['{0123}', '{012}'] w {012}
+models 39
+('F(m′, w) vs m′', '∥') 39
+('F(m′,y*)', 'entry − J', 1) 39
+('F(m′,y*)', 'vs m', '∥') 39
+('F(w, w) ≤ w', False) 16
+('F(w, w) ≤ w', True) 23
+('a(m′)', 'entry − J', -2) 18
+('a(m′)', 'entry − J', 0) 21
+('a(m′)', 'vs m', '<') 18
+('a(m′)', 'vs m', '∥') 21
+('b(y*)', 'entry − J', 1) 17
+('b(y*)', 'entry − J', 2) 22
+('b(y*)', 'vs m', '>') 22
+('b(y*)', 'vs m', '∥') 17
+('d* = w', True) 39
+('d* vs m', '∥') 39
+('d*', 'entry − J', 1) 39
+('d*', 'vs m', '∥') 39
+('m ⊔ d* = y*', True) 39
+('m ⊔ d*', 'entry − J', 2) 39
+('m ⊔ d*', 'vs m', '>') 39
+('min x relation to w', '<') 15
+('min x relation to w', '∥') 24
+('q_n diag-pre-fixed', True) 39
+('q_n vs c_n', '<') 17
+('q_n vs c_n', '=') 22
+('q_n vs m', '>') 22
+('q_n vs m', '∥') 17
+('some x with x ∥ m and x ≤ w', False) 24
+('some x with x ∥ m and x ≤ w', True) 15
+('some x ≤ w', False) 24
+('some x ≤ w', True) 15
+('w entry: b(w) vs m′', '>') 12
+('w entry: b(w) vs m′', '∥') 27
+('w entry: b(w) ∈ R_J', False) 12
+('w entry: b(w) ∈ R_J', True) 27
+('w entry: b(y) ∈ R_J for some y ≥ w', False) 12
+('w entry: b(y) ∈ R_J for some y ≥ w', True) 27
+('w entry: w ≤ a(m′)', False) 39
+('w entry: w ≤ a(x), x ∈ R_J', True) 39
+('w', 'entry − J', 1) 39
+('w', 'vs m', '∥') 39
+('x candidate works', 'F(m′,m′)', False) 39
+('x candidate works', 'F(m′,w)', False) 31
+('x candidate works', 'F(m′,w)', True) 8
+('x candidate works', 'F(m′,y*)', False) 39
+('x candidate works', 'F(w,m′)', False) 39
+('x candidate works', 'F(⊥,w)', False) 38
+('x candidate works', 'F(⊥,w)', True) 1
+('x candidate works', 'b(w)', False) 39
+('x candidate works', 'm′', False) 39
+('x candidate works', 'w⊓F(m′,w)', False) 31
+('x candidate works', 'w⊓F(m′,w)', True) 8
+('y* = ⊤', True) 39
+
+real	0m6.918s
+user	0m6.856s
+sys	0m0.024s
+m {013} m' {01} y* {0123} w {012} k 2 stages {'{}': 0, '{0}': 1, '{01}': 1, '{02}': 2, '{012}': 3, '{013}': 2, '{0123}': 4}
+m' ∈ R_k: True  m ∉ R_k: False
+hall (R_{k+1} heights ≤ k+1): True
+huniq (m unique height-(k+1) in R_{k+1}): ['{012}', '{013}']
+index-tight at k (R_k heights ≤ k): False
+F m' w ≤ w: True  w ∥ m: True
+== feeder_post
+claim feeder_post: {'none': 81, 'counterexample': 98}; smallest counterexample |L| = 5, rank(m) = 2

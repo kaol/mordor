@@ -166,6 +166,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     lower transfer the incomparable column output meets m exactly in the feeder, w ⊓ m = m′ (`FeederStage`,
     §34.3z¹⁶²). A 7-element one-stage-ahead model satisfies both but has no cell, so a proof must also use the index
     bound (no early elements).
+    Also b(y) ≰ m for all y > m (`strict_upper_b_not_le`). With m unique on time, the no-cell configuration
+    descends to a no-cell column fixed point d* of the feeder row inside (m′, w] (`side_interval_maps`, §34.3z¹⁶³).
+    Uniqueness of m is essential at |L| = 5, while ⊤ ∉ R_{k+2} is not.
   - `cutMaps_of_riseAt`: the **Rise conjecture** (a rigid map has a good x < a(x)) at all heights ≤ H gives Cut at
     edge-height H. Rise is unproved; exact search found no counterexample on 271 lattices. Rise witnesses can need
     to enter as late as stage H − 1, so for rigid maps Rise is close to the orbit-height property itself.

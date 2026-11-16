@@ -89,4 +89,67 @@ theorem single_lower_meet_le_four {k H : ℕ} (hk : k ≤ 4) (hn : NoChain α (H
     (hlo : F m' m ≤ m') {y : α} (hmy : m ≤ y) (hnot : ¬ m ≤ F m y) : F m y ⊓ m = m' :=
   single_lower_meet (fun H' h => ohAt_lt_four H' (by omega)) hn hm'k hmk hlt hnew hlo hmy hnot
 
+/-- **No strictly higher column has its b-value below `m`** (§34.3z¹⁶³). In the singleton lower configuration with
+no interval cell at `m`: for `y > m`, `b y ∈ [m', m]` would be `m'` (then `y ∈ R_{k+1}` above the height bound)
+or `m` (then `F m y = m`, a lower cell). Only `m' ≤ b m` is needed (feeder identity gives equality). -/
+theorem strict_upper_b_not_le {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m' m : α} (hm' : m' ∈ Rk F k) (hm'k : height H m' = k) (hmk : height H m = k + 1) (hb : m' ≤ b F m)
+    (hnocell : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : ∀ y, m < y → ¬ b F y ≤ m := by
+  intro y hy hle
+  have h1 : m' ≤ b F y := hb.trans ((b F).mono hy.le)
+  rcases eq_of_height_between hn hm'k hmk h1 hle with e | e
+  · have := hall y (mem_succ_of_b (e ▸ hm'))
+    have := height_strictMono hn hy
+    omega
+  · exact hnocell ⟨y, hy, Or.inl (by rw [← e]; exact (col_b y).le)⟩
+
+/-! ### Crossing facts and the side interval (§34.3z¹⁶³) -/
+
+/-- **The b-value dichotomy.** For `y ≥ m` with `m' ≤ b m` and `m' ⋖ m` (heights): `m ≤ b y` or `b y ⊓ m = m'`. -/
+theorem b_dichotomy {k H : ℕ} (hn : NoChain α (H + 1)) {m' m : α} (hm'k : height H m' = k)
+    (hmk : height H m = k + 1) (hm'm : m' ≤ m) (hb : m' ≤ b F m) {y : α} (hmy : m ≤ y) :
+    m ≤ b F y ∨ b F y ⊓ m = m' := by
+  rcases eq_of_height_between hn hm'k hmk (le_inf (hb.trans ((b F).mono hmy)) hm'm) inf_le_right with e | e
+  · exact Or.inr e
+  · exact Or.inl (e.symm.le.trans inf_le_left)
+
+/-- First crossing case: a column whose b-value lies above `m` bounds the next column-orbit value. -/
+theorem col_step_le_b {m c : α} (h : m ≤ b F c) : m ⊔ F m c ≤ b F c :=
+  sup_le h ((F.mono h c).trans (col_b c).le)
+
+/-- Second crossing case: a b-value below its own column is diagonal pre-fixed. -/
+theorem b_diag_pre {c : α} (h : b F c ≤ c) : F (b F c) (b F c) ≤ b F c :=
+  ((F (b F c)).mono h).trans (col_b c).le
+
+/-- **Uniqueness above the feeder.** At a tight stage `k + 1` with the unique top `m`, every element of `R_{k+1}`
+strictly above a height-`k` element `m'` is `m`. -/
+theorem above_feeder_eq {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m' m : α} (huniq : ∀ z ∈ Rk F (k + 1), height H z = k + 1 → z = m) (hm'k : height H m' = k)
+    {z : α} (hz : z ∈ Rk F (k + 1)) (hlt : m' < z) : z = m := by
+  have := height_strictMono hn hlt; have := hall z hz
+  exact huniq z hz (by omega)
+
+/-- **The feeder has no cell sideways.** Every `z > m'` other than `m` is not a cell column of the row `m'`. -/
+theorem feeder_row_escape {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m' m : α} (huniq : ∀ z ∈ Rk F (k + 1), height H z = k + 1 → z = m) (hm' : m' ∈ Rk F k)
+    (hm'k : height H m' = k) {z : α} (hlt : m' < z) (hzm : z ≠ m) : ¬ F m' z ≤ m' ∧ ¬ z ≤ F m' z :=
+  ⟨fun h => hzm (above_feeder_eq hn hall huniq hm'k (mem_succ_of_cell hm' le_rfl (Or.inl h)) hlt),
+   fun h => hzm (above_feeder_eq hn hall huniq hm'k (mem_succ_of_cell hm' le_rfl (Or.inr h)) hlt)⟩
+
+/-- **The side interval is invariant under the feeder's column map.** If `m' ≤ w`, `m ≰ w` and `F m' w ≤ w`, then
+`z ↦ m' ⊔ F m' z` maps `(m', w]` into itself, and (by `feeder_row_escape`) `m'` has no cell into `(m', w]`: the
+incomparable configuration at `m` reproduces at the feeder, one height lower. -/
+theorem side_interval_maps {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m' m : α} (huniq : ∀ z ∈ Rk F (k + 1), height H z = k + 1 → z = m) (hm' : m' ∈ Rk F k)
+    (hm'k : height H m' = k) {w : α} (hm'w : m' ≤ w) (hmw : ¬ m ≤ w) (hFw : F m' w ≤ w)
+    {z : α} (hlt : m' < z) (hzw : z ≤ w) : m' < m' ⊔ F m' z ∧ m' ⊔ F m' z ≤ w := by
+  have hzm : z ≠ m := fun e => hmw (e ▸ hzw)
+  refine ⟨lt_of_le_of_ne le_sup_left fun e => ?_, sup_le hm'w (((F m').mono hzw).trans hFw)⟩
+  exact (feeder_row_escape hn hall huniq hm' hm'k hlt hzm).1 (le_sup_right.trans e.symm.le)
+
+/-- The side-interval hypothesis `F m' w ≤ w` is automatic for the column-orbit output `w = F m y` of a fixed point
+`y = m ⊔ F m y` (monotonicity in both arguments). -/
+theorem feeder_le_side {m' m y : α} (hm'm : m' ≤ m) (hy : m ⊔ F m y = y) : F m' (F m y) ≤ F m y :=
+  ((F.mono hm'm) (F m y)).trans ((F m).mono (le_sup_right.trans hy.le))
+
 end Mordor.OrbitHeight

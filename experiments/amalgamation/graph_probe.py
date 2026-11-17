@@ -50,6 +50,8 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer') 
             C[('root', 'not a configuration', why)] += 1
             if why.startswith('upper'):
                 ar = __import__('rstages').a_of(L, F, r)
+                C[('upper root', 'depth i', i, 'h(z) − k', h[z] - k, 'z ∈ R_k', inR(z, k), 'z top of R_k with UpCell', h[z] == k and inR(z, k) and
+                   any(le[z][y] and y != z and not le[m][y] and (le[F[z][y]][z] or le[y][F[z][y]]) for y in range(n)))] += 1
                 C[('upper root', 'z = a(r)', ar == z, 'z new at its stage', not inR(z, h[z] - 1), 'z has an upward cell away from m (stage of z)',
                    any(le[z][y] and y != z and not le[m][y] and (le[F[z][y]][z] or le[y][F[z][y]]) for y in range(n)), 'UpCell at stage k exists',
                    any(h[x] == k and inR(x, k) and any(le[x][y] and y != x and not le[m][y] and (le[F[x][y]][x] or le[y][F[x][y]]) for y in range(n)) for x in range(n)))] += 1
@@ -80,6 +82,12 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer') 
             seen[(pp, cc)] = bool(kids)
             if not kids: dead.append((pp, cc, s, frozenset(causes)))
             stack.extend(kids)
+        if len(tops) >= 2:
+            W_ = max(x.bit_length() for x in L.S); nm = lambda q: '{' + ''.join(str(j_) for j_ in range(W_) if L.S[q] >> j_ & 1) + '}'
+            rel_ = lambda x, y: '=' if x == y else '<' if le[x][y] else '>' if le[y][x] else '∥'
+            (p1, c1, ok1), (p2, c2, ok2) = tops[0], tops[1]
+            print('MULTI', f'|L|={n}', 'root', (nm(r), nm(z)), 'terminals', [(nm(a), nm(b), ok) for a, b, ok in tops],
+                  'sources', rel_(p1, p2), 'tops', rel_(c1, c2), 'U-joins stable', [F[a][__import__('functools').reduce(lambda x, y: L.join[x][y], fib(a, b))] == b for a, b, _ in tops])
         C[('model', 'reachable stage-k configurations', len(tops), 'FibreTop among them', sum(1 for t in tops if t[2]))] += 1
         C[('model', 'some reachable FibreTop', any(t[2] for t in tops))] += 1
         for pp, cc, s, cs in dead: C[('dead end below k', 'stage k −', k - s, 'causes', tuple(sorted(cs)))] += 1
@@ -106,6 +114,42 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer') 
                             kids = True
                     tag = 'unseeded, has a child' if kids else 'unseeded dead end'
                     C[(tag, 'stage k −', k - s0, 'p = some b^i(m′)', any(pp == x for x in [B(mp), B(B(mp))]), 'causes', tuple(sorted(causes)) if not kids else ())] += 1
+        # §34.3z¹⁸⁵: anchoring — the fibre meets ↓w (w = F(m, y*), the feeder's descent start)
+        anch = lambda pp, cc: any(le[v][w] for v in fib(pp, cc))
+        def children(pp, cc):                           # descent edges, with tags
+            out = []
+            s0 = h[cc]
+            for v in fib(pp, cc):
+                for v1 in range(n):
+                    if not (le[cc][v1] and v1 != cc and le[v1][v] and le[F[cc][v1]][v1]): continue
+                    u_ = v1; prevu = None
+                    while True:
+                        g = F[cc][u_]
+                        if le[g][cc] or le[u_][g]: break
+                        prevu, u_ = u_, g
+                    y = u_
+                    if le[F[cc][y]][cc] and not inR(y, s0) and fib(cc, y): out.append((y, v, v1, 'endpoint' if prevu is None else 'shadow', prevu))
+            return out
+        for pp, cc in seen: C[('seeded configuration anchored', anch(pp, cc))] += 1
+        allc = [(pp, cc) for s0 in range(1, k + 1) for cc in range(n) if h[cc] == s0 and inR(cc, s0) and not inR(cc, s0 - 1)
+                for pp in range(n) if config_ok(pp, cc)]
+        good = {}
+        def isgood(pp, cc):                              # anchored path to a stage-k FibreTop configuration
+            if (pp, cc) in good: return good[(pp, cc)]
+            good[(pp, cc)] = False
+            if h[cc] == k: res = any(comp(cc, v) for v in fib(pp, cc))
+            else: res = any(anch(cc, y) and isgood(cc, y) for y, *_ in children(pp, cc))
+            good[(pp, cc)] = res; return res
+        for pp, cc in allc:
+            a_ = anch(pp, cc); tag = 'seeded' if (pp, cc) in seen else 'unseeded'
+            if h[cc] < k:
+                ch = children(pp, cc)
+                C[('below k', tag, 'anchored', a_, 'has a child', bool(ch), 'has an anchored child', any(anch(cc, y) for y, *_ in ch),
+                   'good (anchored path to FibreTop)', isgood(pp, cc) if a_ else None)] += 1
+                for y, v, v1, tg, pu in ch:
+                    if a_ and le[v][w]: C[('edge from an anchored fibre column v ≤ w', tg, 'child anchored', anch(cc, y), 'shadow column u′ ≤ w', pu is not None and le[pu][w])] += 1
+            else:
+                C[('stage k', tag, 'anchored', a_, 'FibreTop', any(comp(cc, v) for v in fib(pp, cc)))] += 1
         # fibre-join boundary and selection candidates over all reachable configurations (and all stage-k ones)
         allk = [(pp, cc) for cc in range(n) if h[cc] == k and inR(cc, k) and not inR(cc, k - 1)
                 for pp in range(n) if config_ok(pp, cc)]

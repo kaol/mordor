@@ -53,6 +53,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁸³: `TopFibre`, **`upCell_of_topFibre`**, **`singletonLower_of_topFibre`**.
 * §34.3z¹⁸⁴: `shadowFibre`, `FibreTopAt`, **`fibreTopAt_iff_join`** (a stable fibre join reduces FibreTop to the single
   interval `(c, ⋁S]`), `topFibre_iff`.
+* §34.3z¹⁸⁵: `SibConfig`, `SeedEdge`, `SeedReach` (the descent-seeded configuration graph), `seedReach_stage`,
+  **`seedEdge_of_climb`**, `seedEdge_anchor`, `aRoot_eq_a`, `upCell_of_sibConfig_top`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -925,5 +927,76 @@ theorem topFibre_iff {j H : ℕ} {m : α} :
     exact ⟨p, c, hp, hph, hc, hch, hpc, hpcp, v, ⟨lt_of_lt_of_le hcy hyv, hmv, hpv⟩, y, hcy, hyv, hcell⟩
   · rintro ⟨p, c, hp, hph, hc, hch, hpc, hpcp, v, ⟨-, hmv, hpv⟩, y, hcy, hyv, hcell⟩
     exact ⟨p, c, v, y, hp, hph, hc, hch, hpc, hpcp, hpv, hmv, hcy, hyv, hcell⟩
+
+/-! ### The descent-seeded configuration graph (§34.3z¹⁸⁵) -/
+
+/-- A sibling-shadow **configuration** `(p, c)` at stage `j + 1`. -/
+def SibConfig (F : α →o α →o α) (H j : ℕ) (m p c : α) : Prop :=
+  p ∈ Rk F j ∧ height H p = j ∧ c ∈ Rk F (j + 1) ∧ c ∉ Rk F j ∧ height H c = j + 1 ∧ p < c ∧ F p c = p ∧
+    (shadowFibre F m p c).Nonempty
+
+/-- A **tagged edge** `(p, c) → (c, y)`: a fibre column `v`, a row-`c` pre-fixed column `v' ∈ (c, v]`, and the cell
+`y ≤ v'` that the shadow-tracking descent extracts: `y = v'` (endpoint) or `y = F c u'` (row-value shadow), a lower
+cell of the row `c`, with `(c, y)` again a configuration. -/
+def SeedEdge (F : α →o α →o α) (H j : ℕ) (m p c y : α) : Prop :=
+  SibConfig F H j m p c ∧ SibConfig F H (j + 1) m c y ∧
+    ∃ v ∈ shadowFibre F m p c, ∃ v', c < v' ∧ v' ≤ v ∧ F c v' ≤ v' ∧ y ≤ v' ∧ F c y ≤ c ∧
+      (y = v' ∨ ∃ u', y = F c u' ∧ c < u' ∧ u' ≤ v' ∧ F c u' ≤ u')
+
+/-- **Root-relative reachability** along tagged edges (each edge raises the stage by one). -/
+inductive SeedReach (F : α →o α →o α) (H : ℕ) (m : α) (j₀ : ℕ) (p₀ c₀ : α) : ℕ → α → α → Prop
+  | root : SeedReach F H m j₀ p₀ c₀ j₀ p₀ c₀
+  | step {j p c y} : SeedReach F H m j₀ p₀ c₀ j p c → SeedEdge F H j m p c y →
+      SeedReach F H m j₀ p₀ c₀ (j + 1) c y
+
+theorem seedReach_stage {j₀ : ℕ} {p₀ c₀ : α} {H : ℕ} {m : α} {j : ℕ} {p c : α}
+    (h : SeedReach F H m j₀ p₀ c₀ j p c) : j₀ ≤ j := by
+  induction h with
+  | root => exact le_rfl
+  | step _ _ ih => omega
+
+/-- **Edges exist where the climb extracts a new lower cell with a nonempty fibre.** With `OHAt` below `j + 1`
+and `R_{j+1}`, `R_{j+2}` tight: given a configuration `(p, c)` at stage `j + 1`, a fibre column `v`, a row-`c`
+pre-fixed `v' ∈ (c, v]` and the `climb_step` output `y` — a lower cell, new at stage `j + 2`, with a nonempty fibre
+`S(c, y; m)` — the edge `(p, c) → (c, y)` holds. -/
+theorem seedEdge_of_climb {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H') (hn : NoChain α (H + 1))
+    (hk2 : ∀ z ∈ Rk F (j + 2), height H z ≤ j + 2) {m p c v v' y : α} (hC : SibConfig F H j m p c)
+    (hv : v ∈ shadowFibre F m p c) (hcv' : c < v') (hv'v : v' ≤ v) (hFv' : F c v' ≤ v') (hcy : c < y)
+    (hyv' : y ≤ v') (hL : F c y ≤ c) (horig : y = v' ∨ ∃ u', y = F c u' ∧ c < u' ∧ u' ≤ v' ∧ F c u' ≤ u')
+    (hynew : y ∉ Rk F (j + 1)) (hfib : (shadowFibre F m c y).Nonempty) : SeedEdge F H j m p c y := by
+  obtain ⟨hp, hph, hc, hcnew, hch, hpc, hpcp, hS⟩ := hC
+  obtain ⟨hyR, hyh, -, hcyc⟩ := depthOne_lowerCell_sibling IH hn hk2 hc hch hcy hL hynew
+  exact ⟨⟨hp, hph, hc, hcnew, hch, hpc, hpcp, hS⟩, ⟨hc, hch, hyR, hynew, hyh, hcy, hcyc, hfib⟩,
+    v, hv, v', hcv', hv'v, hFv', hyv', hL, horig⟩
+
+/-- **Shadow edges preserve anchoring.** If the edge's fibre column `v` lies below `w` and the cell is a row-value
+shadow `y = F c u'` of a row-`c` pre-fixed `u' ∈ (c, v]`, then `u'` is a fibre column of the child `(c, y)` below
+`w`. -/
+theorem seedEdge_anchor {m c y v w u' : α} (hy : y = F c u') (hFu' : F c u' ≤ u') (hu'v : u' ≤ v)
+    (hvw : v ≤ w) (hmv : ¬ m ≤ v) (hL : F c y ≤ c) (hcy : c < y) :
+    u' ∈ shadowFibre F m c y ∧ u' ≤ w := by
+  have hyu : y ≤ u' := hy ▸ hFu'
+  have hne : y ≠ u' := fun e => by
+    have h1 : F c y = y := by
+      calc F c y = F c u' := by rw [e]
+        _ = y := hy.symm
+    exact absurd (h1.symm.le.trans hL) (not_le_of_gt hcy)
+  exact ⟨⟨lt_of_le_of_ne hyu hne, fun h => hmv (h.trans hu'v), hy.symm⟩, hu'v.trans hvw⟩
+
+/-- **The A-roots.** A depth-`≥ 1` *upper* final cell `z ≤ F r z` of a row `r ∈ R_j`, with `z` of height `j + 1` in a
+tight `R_{j+1}`, is the row gfp: `z = a r` (`upper_branch_eq_a` after `F r z = z`). -/
+theorem aRoot_eq_a {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {r z : α} (hr : r ∈ Rk F j) (hzh : height H z = j + 1) (hU : z ≤ F r z) : z = a F r := by
+  have hle : z ≤ a F r := le_a hU
+  by_contra hne
+  have := height_strictMono hn (lt_of_le_of_ne hle hne)
+  have := hk _ (mem_succ_of_a hr le_rfl); omega
+
+/-- **A stage-`k` configuration with FibreTop gives UpCell.** -/
+theorem upCell_of_sibConfig_top {j H : ℕ} (hn : NoChain α (H + 1))
+    (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1) {m p c : α} (hC : SibConfig F H j m p c)
+    (hT : FibreTopAt F m p c) : UpCell F H (j + 1) m := by
+  obtain ⟨hp, hph, hc, -, hch, hpc, hpcp, -⟩ := hC
+  exact upCell_of_topFibre hn hk (topFibre_iff.2 ⟨p, c, hp, hph, hc, hch, hpc, hpcp, hT⟩)
 
 end Mordor.OrbitHeight

@@ -1,0 +1,70 @@
+== graph_probe.py (§34.3z¹⁸⁵: anchoring, good paths, A-roots); same seeds as out_graph.txt; summed
+('below k', 'seeded', 'anchored', True, 'has a child', True, 'has an anchored child', False, 'good (anchored path to FibreTop)', False) 9
+('below k', 'seeded', 'anchored', True, 'has a child', True, 'has an anchored child', True, 'good (anchored path to FibreTop)', True) 40
+('below k', 'unseeded', 'anchored', False, 'has a child', False, 'has an anchored child', False, 'good (anchored path to FibreTop)', None) 18
+('below k', 'unseeded', 'anchored', False, 'has a child', True, 'has an anchored child', False, 'good (anchored path to FibreTop)', None) 1
+('below k', 'unseeded', 'anchored', True, 'has a child', False, 'has an anchored child', False, 'good (anchored path to FibreTop)', False) 55
+('below k', 'unseeded', 'anchored', True, 'has a child', True, 'has an anchored child', False, 'good (anchored path to FibreTop)', False) 6
+('below k', 'unseeded', 'anchored', True, 'has a child', True, 'has an anchored child', True, 'good (anchored path to FibreTop)', False) 2
+('below k', 'unseeded', 'anchored', True, 'has a child', True, 'has an anchored child', True, 'good (anchored path to FibreTop)', True) 74
+('edge from an anchored fibre column v ≤ w', 'endpoint', 'child anchored', False, 'shadow column u′ ≤ w', False) 13
+('edge from an anchored fibre column v ≤ w', 'endpoint', 'child anchored', True, 'shadow column u′ ≤ w', False) 308
+('edge from an anchored fibre column v ≤ w', 'shadow', 'child anchored', True, 'shadow column u′ ≤ w', True) 239
+('edge tag', 'endpoint') 131
+('edge tag', 'row-value shadow') 96
+('fibre join', 'other stage-k', 'jump, m ≤ U') 2
+('fibre join', 'other stage-k', 'stable (F(p,U) = c, m ≰ U)') 24
+('fibre join', 'reachable', 'jump, m ≤ U') 62
+('fibre join', 'reachable', 'jump, m ≰ U') 12
+('fibre join', 'reachable', 'stable (F(p,U) = c, m ≰ U)') 131
+('model', 'dead ends below k', False, 'and success', True) 154
+('model', 'reachable configurations below k', 0) 107
+('model', 'reachable configurations below k', 1) 45
+('model', 'reachable configurations below k', 2) 2
+('model', 'reachable stage-k configurations', 1, 'FibreTop among them', 1) 152
+('model', 'reachable stage-k configurations', 2, 'FibreTop among them', 1) 1
+('model', 'reachable stage-k configurations', 2, 'FibreTop among them', 2) 1
+('model', 'some reachable FibreTop', True) 154
+('root', 'configuration at stage k − ', 0) 107
+('root', 'configuration at stage k − ', 1) 45
+('root', 'configuration at stage k − ', 2) 2
+('root', 'depth 0: UpCell outright') 629
+('root', 'not a configuration', 'early column') 1
+('root', 'not a configuration', 'upper final cell (z ≤ F(r, z))') 25
+('seeded configuration anchored', False) 9
+('seeded configuration anchored', True) 196
+('selection S1: stage-k configuration with a fibre column of maximal height', 'FibreTop', False) 14
+('selection S1: stage-k configuration with a fibre column of maximal height', 'FibreTop', True) 140
+('selection S2: some stage-k configuration with stable fibre join and comparable (c, U]', False) 48
+('selection S2: some stage-k configuration with stable fibre join and comparable (c, U]', True) 106
+('stage k', 'seeded', 'anchored', False, 'FibreTop', True) 9
+('stage k', 'seeded', 'anchored', True, 'FibreTop', False) 1
+('stage k', 'seeded', 'anchored', True, 'FibreTop', True) 146
+('stage k', 'unseeded', 'anchored', False, 'FibreTop', False) 11
+('stage k', 'unseeded', 'anchored', False, 'FibreTop', True) 7
+('stage k', 'unseeded', 'anchored', True, 'FibreTop', False) 1
+('stage k', 'unseeded', 'anchored', True, 'FibreTop', True) 7
+('stage k, stable fibre', 'FibreTop', False, 'comparable in (c, U]', False) 13
+('stage k, stable fibre', 'FibreTop', True, 'comparable in (c, U]', True) 117
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', False, 'causes', ('early y', 'no pre-fixed column in (c, v]')) 2
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', False, 'causes', ('early y',)) 2
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', False, 'causes', ('empty fibre at y',)) 1
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', False, 'causes', ('no pre-fixed column in (c, v]',)) 1
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', True, 'causes', ('early y', 'empty fibre at y')) 7
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', True, 'causes', ('early y', 'empty fibre at y', 'no pre-fixed column in (c, v]')) 1
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', True, 'causes', ('early y', 'no pre-fixed column in (c, v]')) 4
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', True, 'causes', ('early y',)) 6
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', True, 'causes', ('empty fibre at y', 'no pre-fixed column in (c, v]')) 4
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', True, 'causes', ('empty fibre at y',)) 35
+('unseeded dead end', 'stage k −', 1, 'p = some b^i(m′)', True, 'causes', ('no pre-fixed column in (c, v]',)) 4
+('unseeded dead end', 'stage k −', 2, 'p = some b^i(m′)', False, 'causes', ('early y', 'empty fibre at y')) 2
+('unseeded dead end', 'stage k −', 2, 'p = some b^i(m′)', False, 'causes', ('early y', 'upper cell')) 1
+('unseeded dead end', 'stage k −', 2, 'p = some b^i(m′)', False, 'causes', ('empty fibre at y', 'no pre-fixed column in (c, v]', 'upper cell')) 3
+('unseeded, has a child', 'stage k −', 1, 'p = some b^i(m′)', True, 'causes', ()) 75
+('unseeded, has a child', 'stage k −', 2, 'p = some b^i(m′)', False, 'causes', ()) 8
+('upper root', 'depth i', 2, 'h(z) − k', -1, 'z ∈ R_k', True, 'z top of R_k with UpCell', False) 25
+('upper root', 'z = a(r)', True, 'z new at its stage', True, 'z has an upward cell away from m (stage of z)', True, 'UpCell at stage k exists', True) 25
+models 809
+== multi-terminal instances
+MULTI |L|=21 root ('{}', '{4}') terminals [('{4}', '{34}', True), ('{4}', '{24}', False)] sources = tops ∥ U-joins stable [True, True]
+MULTI |L|=23 root ('{}', '{4}') terminals [('{4}', '{34}', True), ('{4}', '{14}', True)] sources = tops ∥ U-joins stable [True, True]

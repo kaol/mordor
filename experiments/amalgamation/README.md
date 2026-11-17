@@ -49,3 +49,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z¹⁸²: `descent2d_probe.py` adds the climb simulation (`climb_step` / `climb_next_config`, greedy and exhaustive). Output `out_climb.txt`.
 - §34.3z¹⁸³: `descent2d_probe.py` adds the full-fibre climb (`climbF`), the liberal graph search and the fibre join; `fibre_probe.py [rmin=R] [save] …` (FibreTop / FibreStep over all sibling-shadow configurations; models `fibre_{top,step}_fail_min*.json`); `single_claims.py topfibre multi nopostlayer …` (TopFibre: no counterexample). Output `out_fibre.txt`.
 - §34.3z¹⁸⁴: `graph_probe.py [rmin=R] …` (the descent-seeded configuration graph: roots, tagged edges, dead ends, unseeded dead-end causes, fibre-join cases, selection candidates). Output `out_graph.txt`.
+- §34.3z¹⁸⁵: `graph_probe.py` adds anchoring (fibre meets ↓w), good paths, A-root stages and the multi-terminal dump. Output `out_seeded.txt`.

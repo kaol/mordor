@@ -1,0 +1,18 @@
+== seeded_deadend_min29.json: |L| = 29, K = 4, k = 3, h(z) = 1; hypotheses all hold: True  ; non-tight lower stages: [1, 2]
+   top graph from z: reached [4, 10, 18], dead ends below k [], stage-k tops [(18, True)] (top, UpCell)
+   B-edges from (r, z): []; A-edges from z: [10]; a(z) = 10
+   a(z): h = 2, new = True, SibConfig sources = [], B-edges = [], A-edges = []
+     cell (a(z), 18): lower, h = 3, stage = 3, new at h(a(z))+1 = True, SibConfig(a(z), x) = True, x ∈ R_k with h = k = True
+   UpCell witnesses at stage k: [18]; their relation to a(z): ['<']
+== seeded_deadend_min32.json: |L| = 32, K = 4, k = 3, h(z) = 1; hypotheses all hold: True  ; non-tight lower stages: [1, 2]
+   top graph from z: reached [5, 10, 19], dead ends below k [], stage-k tops [(19, True)] (top, UpCell)
+   B-edges from (r, z): []; A-edges from z: [10]; a(z) = 10
+   a(z): h = 2, new = True, SibConfig sources = [], B-edges = [], A-edges = []
+     cell (a(z), 19): lower, h = 3, stage = 3, new at h(a(z))+1 = True, SibConfig(a(z), x) = True, x ∈ R_k with h = k = True
+   UpCell witnesses at stage k: [19]; their relation to a(z): ['<']
+== seeded_topdead_min31.json: |L| = 31, K = 4, k = 3, h(z) = 1; hypotheses all hold: True  ; non-tight lower stages: [1, 2]
+   top graph from z: reached [5, 12, 14, 21], dead ends below k [12], stage-k tops [(21, True)] (top, UpCell)
+   B-edges from (r, z): [12, 14]; A-edges from z: []
+== seeded_badterm_min21.json: |L| = 21, K = 3, k = 2, h(z) = 1; hypotheses all hold: True  ; non-tight lower stages: []
+   top graph from z: reached [5, 11, 12], dead ends below k [], stage-k tops [(11, False), (12, True)] (top, UpCell)
+   B-edges from (r, z): [11, 12]; A-edges from z: []

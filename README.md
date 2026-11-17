@@ -243,7 +243,11 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     (`singletonLower_of_topFibre`) and has no counterexample (rank 2–4). The descent-seeded configuration graph never dead-ends on
     this corpus and always reaches a FibreTop configuration. That gives two precise targets, SeededStep and
     SeededTop (§34.3z¹⁸⁴). The graph is now defined in Lean (`SibConfig`, `SeedEdge`, `SeedReach`). The obvious
-    separating invariant, anchoring below w, is refuted (§34.3z¹⁸⁵).
+    separating invariant, anchoring below w, is refuted (§34.3z¹⁸⁵). SeededStep with B-edges only is false
+    (|L| = 29: the root's only outcome is the upper cell a(z)). In the **top graph** (`TopEdge`: an outgoing sibling
+    configuration or an A-edge), every node with an out-edge is already UpCell at its stage (`upCell_of_topEdge`), and
+    `upCell_of_topGoal` reduces the seeded case to **TopGoal**: existential reachability of a stage-k UpCell top. It
+    holds on 68/68 seeded roots below k, while universal continuation fails (|L| = 31) (§34.3z¹⁸⁶).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

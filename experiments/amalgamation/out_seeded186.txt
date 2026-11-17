@@ -1,0 +1,23 @@
+== seeded_probe.py (§34.3z¹⁸⁶: seeded roots below k, candidate pairs, descent provenance, mixed and top graphs); same seeds as out_seeded.txt (rank 3 and rank 4 closure lists); summed; last two lines: k − s histogram and candidate-pair totals over the TABLE rows
+('B-dead-end root, mixed graph', 'reachable tops', 2, 'stage-k tops reached', False) 2
+('dead-end root: upper outcome', 'y = a(z)', True, 'h(y) − h(z)', 1, 'y new at its stage', True, 'y has an upward cell away from m', True, 'UpCell at stage k', True) 4
+('descent data (v, v′) = (e, t)', 'gives an edge', True, 'child = some edge child', True) 2
+('descent data (v, v′) = (e, t)', 'not a candidate pair', 't row-z pre-fixed', True) 66
+('descent data', 'r = b(q)', True, 'z = F(r, e)', False, 'e in the root fibre', False, 't vs z', '>', 't ≤ e', True) 8
+('descent data', 'r = b(q)', True, 'z = F(r, e)', True, 'e in the root fibre', True, 't vs z', '=', 't ≤ e', True) 58
+('descent data', 'r = b(q)', True, 'z = F(r, e)', True, 'e in the root fibre', True, 't vs z', '>', 't ≤ e', True) 2
+('mixed graph', 'root had a B-edge', False, 'reaches a stage-k UpCell top', False, 'mixed dead ends below k', 1, 'A-only edges used', True) 2
+('mixed graph', 'root had a B-edge', True, 'reaches a stage-k UpCell top', True, 'mixed dead ends below k', 0, 'A-only edges used', False) 36
+('mixed graph', 'root had a B-edge', True, 'reaches a stage-k UpCell top', True, 'mixed dead ends below k', 0, 'A-only edges used', True) 29
+('mixed graph', 'root had a B-edge', True, 'reaches a stage-k UpCell top', True, 'mixed dead ends below k', 1, 'A-only edges used', True) 1
+('q vs the edge children', ('∥', '∥')) 5
+('q vs the edge children', ('∥',)) 61
+('q vs the edge children', ()) 2
+('root has an edge', False) 2
+('root has an edge', True) 66
+('top graph', 'reaches a stage-k UpCell top', True, 'dead ends below k', 0, 'every reached stage-k top is UpCell', False) 1
+('top graph', 'reaches a stage-k UpCell top', True, 'dead ends below k', 0, 'every reached stage-k top is UpCell', True) 66
+('top graph', 'reaches a stage-k UpCell top', True, 'dead ends below k', 1, 'every reached stage-k top is UpCell', True) 1
+seeded roots below k 68
+{('k - s', 1): 62, ('k - s', 2): 6}
+{'fibre columns': 271, 'pre-fixed inputs': 417, 'endpoint': 280, 'edge': 320, 'shadow': 133, 'empty child fibre': 37, 'early': 56, 'upper': 4}

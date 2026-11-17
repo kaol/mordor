@@ -55,6 +55,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   interval `(c, ⋁S]`), `topFibre_iff`.
 * §34.3z¹⁸⁵: `SibConfig`, `SeedEdge`, `SeedReach` (the descent-seeded configuration graph), `seedReach_stage`,
   **`seedEdge_of_climb`**, `seedEdge_anchor`, `aRoot_eq_a`, `upCell_of_sibConfig_top`.
+* §34.3z¹⁸⁶: `AEdge`, `aEdge_eq_a`, `aEdge_of_upper`, `MixedReach`, `mixedReach_stage`, `upCell_of_mixedTop`,
+  `upCell_of_sibConfig_src`, `upCell_of_aEdge`, `TopEdge`, `TopReach`, `topReach_of_mixedReach`, `upCell_of_topEdge`,
+  `SeededStepB`, `TopGoal`, `topReach_stage`, `topReach_top`, `upCell_of_topGoal`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -998,5 +1001,115 @@ theorem upCell_of_sibConfig_top {j H : ℕ} (hn : NoChain α (H + 1))
     (hT : FibreTopAt F m p c) : UpCell F H (j + 1) m := by
   obtain ⟨hp, hph, hc, -, hch, hpc, hpcp, -⟩ := hC
   exact upCell_of_topFibre hn hk (topFibre_iff.2 ⟨p, c, hp, hph, hc, hch, hpc, hpcp, hT⟩)
+
+/-! ### Mixed A/B transitions (§34.3z¹⁸⁶) -/
+
+/-- **An A-edge** from a top `c` (stage `j + 1`): an *upper* cell `y ≤ F c y` at a column `y > c`, `m ≰ y`, which is
+a new top of stage `j + 2`. -/
+def AEdge (F : α →o α →o α) (H j : ℕ) (m c y : α) : Prop :=
+  c ∈ Rk F (j + 1) ∧ height H c = j + 1 ∧ c < y ∧ y ≤ F c y ∧ ¬ m ≤ y ∧ y ∈ Rk F (j + 2) ∧ y ∉ Rk F (j + 1) ∧
+    height H y = j + 2
+
+/-- **The A-edge is the row gfp**: with `R_{j+2}` tight, an A-edge `c → y` has `y = a c` and `F c y = y`. -/
+theorem aEdge_eq_a {j H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F (j + 2), height H z ≤ j + 2)
+    {m c y : α} (h : AEdge F H j m c y) : y = a F c ∧ F c y = y := by
+  obtain ⟨hc, -, -, hU, -, -, -, hyh⟩ := h
+  have e := aRoot_eq_a hn hk2 hc hyh hU
+  exact ⟨e, by rw [e]; exact row_a c⟩
+
+/-- **Upper cells of tops give A-edges.** If the top `c ∈ R_{j+1}` (height `j + 1`) has an upper cell `y ≤ F c y` at a
+column `y > c` with `m ≰ y`, new at stage `j + 2`, in a tight `R_{j+2}`, then `c → y` is an A-edge. -/
+theorem aEdge_of_upper {j H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F (j + 2), height H z ≤ j + 2)
+    {m c y : α} (hc : c ∈ Rk F (j + 1)) (hch : height H c = j + 1) (hcy : c < y) (hU : y ≤ F c y)
+    (hmy : ¬ m ≤ y) (hynew : y ∉ Rk F (j + 1)) : AEdge F H j m c y := by
+  have hyR : y ∈ Rk F (j + 2) := mem_succ_of_cell hc le_rfl (Or.inr hU)
+  have := height_strictMono hn hcy; have := hk2 y hyR
+  exact ⟨hc, hch, hcy, hU, hmy, hyR, hynew, by omega⟩
+
+/-- **Mixed reachability** from a top `c₀` at stage `j₀ + 1`: along B-edges (`SeedEdge`, forgetting the source) and
+A-edges. -/
+inductive MixedReach (F : α →o α →o α) (H : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : ℕ → α → Prop
+  | root : MixedReach F H m j₀ c₀ j₀ c₀
+  | bstep {j p c y} : MixedReach F H m j₀ c₀ j c → SeedEdge F H j m p c y → MixedReach F H m j₀ c₀ (j + 1) y
+  | astep {j c y} : MixedReach F H m j₀ c₀ j c → AEdge F H j m c y → MixedReach F H m j₀ c₀ (j + 1) y
+
+theorem mixedReach_stage {H j₀ j : ℕ} {m c₀ c : α} (h : MixedReach F H m j₀ c₀ j c) : j₀ ≤ j := by
+  induction h with
+  | root => exact le_rfl
+  | bstep _ _ ih => omega
+  | astep _ _ ih => omega
+
+/-- **A reachable top at stage `k` with an off-target upward cell is UpCell** (immediate from the definition; recorded
+to fix the terminal condition of the mixed graph). -/
+theorem upCell_of_mixedTop {j H : ℕ} {m c : α} (hc : c ∈ Rk F (j + 1)) (hch : height H c = j + 1)
+    (hcell : ∃ z, c < z ∧ ¬ m ≤ z ∧ (F c z ≤ c ∨ z ≤ F c z)) : UpCell F H (j + 1) m := by
+  obtain ⟨z, hcz, hmz, hz⟩ := hcell
+  exact ⟨c, hc, hch, z, hcz, hmz, hz⟩
+
+/-- **The source of a sibling configuration is an UpCell witness at its own stage**: `F p c = p` is a lower cell at the
+column `c > p`, and `m ≰ c` because the fibre is nonempty (`c < v`, `m ≰ v`). -/
+theorem upCell_of_sibConfig_src {j H : ℕ} {m p c : α} (hC : SibConfig F H j m p c) : UpCell F H j m := by
+  obtain ⟨hp, hph, -, -, -, hpc, hpcp, v, hcv, hmv, -⟩ := hC
+  exact ⟨p, hp, hph, c, hpc, fun hmc => hmv (hmc.trans hcv.le), Or.inl hpcp.le⟩
+
+/-- The source of an A-edge is an UpCell witness at its stage. -/
+theorem upCell_of_aEdge {j H : ℕ} {m c y : α} (h : AEdge F H j m c y) : UpCell F H (j + 1) m := by
+  obtain ⟨hc, hch, hcy, hU, hmy, -⟩ := h
+  exact ⟨c, hc, hch, y, hcy, hmy, Or.inr hU⟩
+
+/-- **Top edges**: `c → y` when `(c, y)` is itself a sibling configuration (a B-cell out of `c`, with nonempty child
+fibre), or an A-edge. No incoming source is required. -/
+def TopEdge (F : α →o α →o α) (H j : ℕ) (m c y : α) : Prop := SibConfig F H (j + 1) m c y ∨ AEdge F H j m c y
+
+inductive TopReach (F : α →o α →o α) (H : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : ℕ → α → Prop
+  | root : TopReach F H m j₀ c₀ j₀ c₀
+  | step {j c y} : TopReach F H m j₀ c₀ j c → TopEdge F H j m c y → TopReach F H m j₀ c₀ (j + 1) y
+
+/-- The mixed graph embeds in the top graph (`SeedEdge p c y` contains `SibConfig c y`). -/
+theorem topReach_of_mixedReach {H j₀ j : ℕ} {m c₀ c : α} (h : MixedReach F H m j₀ c₀ j c) :
+    TopReach F H m j₀ c₀ j c := by
+  induction h with
+  | root => exact .root
+  | bstep _ he ih => exact .step ih (Or.inl he.2.1)
+  | astep _ he ih => exact .step ih (Or.inr he)
+
+/-- **Any top with an outgoing top edge is an UpCell witness at its stage.** Hence the terminal condition of the top
+graph at stage `k` is just "some reached stage-`k` top has an out-edge (or any upward cell away from `m`)". -/
+theorem upCell_of_topEdge {j H : ℕ} {m c y : α} (h : TopEdge F H j m c y) : UpCell F H (j + 1) m :=
+  h.elim upCell_of_sibConfig_src upCell_of_aEdge
+
+/-- **Seeded step, B-edges only** (the statement refuted in §34.3z¹⁸⁶ by `seeded_deadend_min29.json`): every reachable
+configuration strictly below stage `k` has a B-successor. -/
+def SeededStepB (F : α →o α →o α) (H k : ℕ) (m : α) (j₀ : ℕ) (p₀ c₀ : α) : Prop :=
+  ∀ j p c, SeedReach F H m j₀ p₀ c₀ j p c → j + 1 < k → ∃ y, SeedEdge F H j m p c y
+
+/-- **Top-graph goal** (conjectural; 68/68 seeded roots below `k` in the sweep): the top graph from the seeded root
+reaches a stage-`k` top that is an UpCell witness. -/
+def TopGoal (F : α →o α →o α) (H k : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : Prop :=
+  ∃ c, TopReach F H m j₀ c₀ (k - 1) c ∧ ∃ z, c < z ∧ ¬ m ≤ z ∧ (F c z ≤ c ∨ z ≤ F c z)
+
+theorem topReach_stage {H j₀ j : ℕ} {m c₀ c : α} (h : TopReach F H m j₀ c₀ j c) : j₀ ≤ j := by
+  induction h with
+  | root => exact le_rfl
+  | step _ _ ih => omega
+
+/-- Reached tops are new tops at stage `j + 1` of height `j + 1` (for `j > j₀`, from the edge; the root by assumption). -/
+theorem topReach_top {H j₀ j : ℕ} {m c₀ c : α} (h0 : c₀ ∈ Rk F (j₀ + 1) ∧ height H c₀ = j₀ + 1)
+    (h : TopReach F H m j₀ c₀ j c) : c ∈ Rk F (j + 1) ∧ height H c = j + 1 := by
+  cases h with
+  | root => exact h0
+  | step _ he =>
+    rcases he with ⟨-, -, hy, -, hyh, -⟩ | ⟨-, -, -, -, -, hy, -, hyh⟩
+    · exact ⟨hy, hyh⟩
+    · exact ⟨hy, hyh⟩
+
+/-- **TopGoal gives UpCell at stage `k`** (`k ≥ 1`). -/
+theorem upCell_of_topGoal {H k j₀ : ℕ} {m c₀ : α} (hk : 1 ≤ k) (h0 : c₀ ∈ Rk F (j₀ + 1) ∧ height H c₀ = j₀ + 1)
+    (h : TopGoal F H k m j₀ c₀) : UpCell F H k m := by
+  obtain ⟨c, hr, z, hcz, hmz, hz⟩ := h
+  obtain ⟨hc, hch⟩ := topReach_top h0 hr
+  have e : k - 1 + 1 = k := by omega
+  rw [e] at hc hch
+  exact ⟨c, hc, hch, z, hcz, hmz, hz⟩
 
 end Mordor.OrbitHeight

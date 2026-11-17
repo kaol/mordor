@@ -31,6 +31,8 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
                             S ⊆ ↓U) has a comparable column in (c, U]   [refuted: |L| = 10]
                             pairjump   every stage-(K−1) sibling configuration with two fibre columns v₁, v₂ whose join is off m and outside
                             the fibre has a comparable column in the fibre (covers "jump with m ≰ ⋁S ⇒ FibreTopAt")
+  §34.3z¹⁹⁰ ablation flags for 'upcell': nofi (drop b(m) = m′), icok (drop ¬IC(m)), notightK1 (drop R_{K−1} tightness),
+                            nofeeder (no lower feeder required), needcfg (require a stage-(K−1) sibling configuration)
   §34.3z¹⁸³ (with 'multi'): topfibre  some new top c of R_{K−1} with p ⋖ c, F(p,c) = p has a fibre column v (F(p,v) = c, m ≰ v) and a comparable column in (c, v]
   §34.3z¹⁷⁸ (with 'multi'): famup  FamilyUpCell: in a sibling configuration some new top with the same B-source has an upward cell away from m
   §34.3z¹⁷⁴ (with 'multi'): bcupnew  as bcup with x new at stage K − 1 (x ∉ R_{K−2}; then b(x) ⋖ x)
@@ -84,7 +86,7 @@ def query(L, m, claim, ahead=False):
     E.S.add_clause([r(K, m)]); E.S.add_clause([-r(K - 1, m)])
     for z in range(n):
         if rk[z] > K or (rk[z] == K and z != m and not claim.startswith('C_') and 'multi' not in sys.argv): E.S.add_clause([-r(K, z)])
-        if rk[z] > K - 1: E.S.add_clause([-r(K - 1, z)])
+        if rk[z] > K - 1 and 'notightK1' not in sys.argv: E.S.add_clause([-r(K - 1, z)])   # 'notightK1' (§34.3z¹⁹⁰): drop R_{K−1} tightness
     B = lambda y, g: E.v('B', y, g); A = lambda x, g: E.v('A', x, g); f = lambda x, y, v: E.v('f', x, y, v)
     bad = []                                            # witnesses of ¬claim
     if claim in A_CLAIMS:
@@ -93,7 +95,7 @@ def query(L, m, claim, ahead=False):
         low = {}
         for p in feeders:
             o = E.v('low', p); E.iff_and(o, [r(K - 1, p), fle(p, m, p)]); low[p] = o
-        E.S.add_clause(list(low.values()))
+        if 'nofeeder' not in sys.argv: E.S.add_clause(list(low.values()))   # 'nofeeder' (§34.3z¹⁹⁰, upcell only): no lower feeder required
         for p in feeders:                            # §34.3z¹⁶⁵ flags: post (every lower feeder diagonal post-fixed) / strictpre (none is)
             if 'post' in sys.argv: E.S.add_clause([-low[p], yle(p, p)])
             if 'strictpre' in sys.argv: E.S.add_clause([-low[p], -yle(p, p)])
@@ -195,8 +197,25 @@ def query(L, m, claim, ahead=False):
                     if le[x][z] and z != x and not le[m][z]:
                         E.S.add_clause([-r(K - 1, x), -adm(x), -fle(x, z, x)]); E.S.add_clause([-r(K - 1, x), -adm(x), -yle(x, z)])
         elif claim == 'upcell':                      # §34.3z¹⁷²: noic_fi and no top row x of R_{K−1} has a cell at a column z > x with m ≰ z
-            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
-            E.S.add_clause([-ic(m)])
+            if 'nofeeder' in sys.argv: o = E.v('true'); E.S.add_clause([o]); bad.append(o)
+            for p in feeders:                        # §34.3z¹⁹⁰ ablation flags: 'nofi' drops b(m) = m′, 'icok' drops ¬IC(m)
+                if 'nofeeder' in sys.argv: break
+                if 'nofi' in sys.argv: bad.append(low[p])
+                else: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
+            if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])
+            if 'needcfg' in sys.argv:                # §34.3z¹⁹⁰: require a stage-(K−1) sibling configuration with nonempty fibre
+                if K < 2: E.S.delete(); return None
+                cs = []
+                for c in range(n):
+                    if rk[c] != K - 1: continue
+                    for p in range(n):
+                        if rk[p] != K - 2 or not le[p][c]: continue
+                        for v in range(n):
+                            if le[c][v] and v != c and not le[m][v]:
+                                o = E.v('cfg', p, c, v); cs.append(o)
+                                for lit in (r(K - 1, c), -r(K - 2, c), r(K - 2, p), f(p, c, p), f(p, v, c)): E.S.add_clause([-o, lit])
+                if not cs: E.S.delete(); return None
+                E.S.add_clause(cs)
             for x in range(n):
                 if rk[x] != K - 1: continue
                 for z in range(n):
@@ -405,10 +424,10 @@ def query(L, m, claim, ahead=False):
     F = E.decode(); E.S.delete()
     st = stages(L, F); inR = lambda z, j: st[z] is not None and st[z] <= j - s
     assert inR(m, K) and not inR(m, K - 1) and ('notop' in sys.argv or not inR(L.top, K + 1))
-    assert all(rk[z] < K or z == m or claim.startswith('C_') or 'multi' in sys.argv for z in range(n) if inR(z, K)) and all(rk[z] <= K for z in range(n) if inR(z, K)) and all(rk[z] <= K - 1 for z in range(n) if inR(z, K - 1))
+    assert all(rk[z] < K or z == m or claim.startswith('C_') or 'multi' in sys.argv for z in range(n) if inR(z, K)) and all(rk[z] <= K for z in range(n) if inR(z, K)) and ('notightK1' in sys.argv or all(rk[z] <= K - 1 for z in range(n) if inR(z, K - 1)))
     bm = b_of(L, F, m)
     if claim in A_CLAIMS:
-        low = [p for p in L.covers_dn[m] if rk[p] == K - 1 and inR(p, K - 1) and le[F[p][m]][p]]; assert low
+        low = [p for p in L.covers_dn[m] if rk[p] == K - 1 and inR(p, K - 1) and le[F[p][m]][p]]; assert low or 'nofeeder' in sys.argv
         y = ystar(L, F, m)
         from gfp_top import ic as ic_py
         wv = F[m][y]; side = [z for z in range(n) if le[bm][z] and z != bm and le[z][wv] and inR(z, K)]
@@ -459,7 +478,7 @@ def query(L, m, claim, ahead=False):
                 'bcupnew': (bm in low) and not ic_py(L, F, m) and not any(not inR(x, K - 2) and inR(b_of(L, F, x), K - 2) and le[b_of(L, F, x)][x] and b_of(L, F, x) != x and upc(x) for x in Tq2),
                 'bcup': (bm in low) and not ic_py(L, F, m) and not any(inR(b_of(L, F, x), K - 2) and le[b_of(L, F, x)][x] and b_of(L, F, x) != x and upc(x) for x in Tq2),
                 'sibup': (bm in low) and not ic_py(L, F, m) and not any(x != bm and b_of(L, F, x) == b_of(L, F, bm) and upc(x) for x in Tq2),
-                'upcell': (bm in low) and not ic_py(L, F, m) and not any(inR(x, K - 1) and rk[x] == K - 1 and le[x][z] and z != x and not le[m][z] and (le[F[x][z]][x] or le[z][F[x][z]]) for x in range(n) for z in range(n)),
+                'upcell': (True if 'nofeeder' in sys.argv else bool(low) if 'nofi' in sys.argv else bm in low) and ('icok' in sys.argv or not ic_py(L, F, m)) and not any(inR(x, K - 1) and rk[x] == K - 1 and le[x][z] and z != x and not le[m][z] and (le[F[x][z]][x] or le[z][F[x][z]]) for x in range(n) for z in range(n)),
                 'abovea': idrop and rk[am] <= K - 1 and not any(le[am][x] and dw(x, v) for x in Tq for v in range(n)),
                 'fxq': idrop and any(le[x][rr] and not le[rr][F[x][wq]] for x in Tq),
                 'ontime': idrop and rr in Tq and not any(le[x][rr] and dw(x, wq) for x in Tq),
@@ -492,7 +511,7 @@ RMIN = next((int(a[5:]) for a in sys.argv if a.startswith('rmin=')), 1)
 
 if __name__ == '__main__':
     claim = sys.argv[1]; ahead = 'ahead' in sys.argv; C = collections.Counter(); best = None
-    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2') and not a.startswith('rmin=')]):
+    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg') and not a.startswith('rmin=')]):
         if L.height < 2: continue
         hit = None
         for m in range(L.n):
@@ -503,4 +522,4 @@ if __name__ == '__main__':
         if hit and (best is None or L.n < best[0].n): best = (L, hit)
     print(f"claim {claim}{' ahead' if ahead else ''}: {dict(C)}" + (f"; smallest counterexample |L| = {best[0].n}, rank(m) = {best[0].rank[best[1][0]]}" if best else ''), flush=True)
     if best:
-        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))
+        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))

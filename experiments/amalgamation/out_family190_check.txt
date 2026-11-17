@@ -1,0 +1,14 @@
+== fam_nosamesource_min13.json: |L| = 13, K = 3, k = 2; hypotheses hold: True  ; IC(m) = False; m = {023}, m′ = {03}
+   ({0}, {03}): b(p) = {}, c = m′: True, S = ['{034}'], good = True
+   ({3}, {23}): b(p) = {}, c = m′: False, S = ['{123}'], good = False, transfers [('{123}', 't = {023}', 'c′ = {03}', 'm ≤ t')]
+   stage-k tops: ['{03}', '{13}', '{23}']; UpCell at stage k: True
+== fam_noescape_min8.json: |L| = 8, K = 2, k = 1; hypotheses hold: True  ; IC(m) = False; m = {01}, m′ = {1}
+   ({}, {0}): b(p) = {}, c = m′: False, S = ['{03}'], good = False, transfers [('{03}', 't = {01}', 'c′ = {1}', 'm ≤ t')]
+   ({}, {1}): b(p) = {}, c = m′: True, S = ['{12}'], good = True
+   stage-k tops: ['{0}', '{1}']; UpCell at stage k: True
+== single_claim_upcell_multi_nopostlayer_icok_needcfg_min6.json: |L| = 6, K = 2, k = 1; hypotheses hold: True  ; IC(m) = True; m = {01}, m′ = {0}
+   ({}, {0}): b(p) = {}, c = m′: True, S = ['{02}'], good = False, transfers [('{02}', 't = {01}', 'c′ = {0}', 'm ≤ t')]
+   stage-k tops: ['{0}']; UpCell at stage k: False
+== single_claim_upcell_multi_nopostlayer_icok_needcfg_rmin3_min11.json: |L| = 11, K = 3, k = 2; hypotheses hold: True  ; IC(m) = True; m = {234}, m′ = {23}
+   ({2}, {24}): b(p) = {}, c = m′: False, S = ['{024}'], good = False, transfers [('{024}', 't = {234}', 'c′ = {23}', 'm ≤ t')]
+   stage-k tops: ['{23}', '{04}', '{24}']; UpCell at stage k: False

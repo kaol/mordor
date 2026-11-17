@@ -259,7 +259,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations
-    (§34.3z¹⁸⁹).
+    (§34.3z¹⁸⁹). The `htf` alternative is equivalent to UpCell (`htf_concl_iff`). Family transfers fail (same-source rescue
+    |L| = 13, orbit escape |L| = 8). An exact ablation shows that UpCell survives dropping every `htf` hypothesis except
+    the no-interval-cell condition at m: without it, an entirely bad nonempty family with ¬UpCell exists at |L| = 6. The
+    hypothesis-minimal **MinUpCell** implies SingletonLower and is **proved at k = 0** (`upCell_zero`) (§34.3z¹⁹⁰).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

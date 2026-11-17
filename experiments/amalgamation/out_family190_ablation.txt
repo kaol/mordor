@@ -1,0 +1,30 @@
+== single_claims.py upcell ablations (§34.3z¹⁹⁰); a run with no result line hit the 580 s cap
+   sw_* = sweep 4 16; c511_* = rmin=3 closure 5 11 4 10; cl_*_A_B_C_D = rmin=3 closure A B C D; cl4_min = rmin=4 closure 6 13 11 10
+   suffixes name the flags; 'min' = multi notop nofeeder notightK1 (no nopostlayer); 'nofeeder' = multi nopostlayer nofeeder;
+   'icok_cfg' = multi nopostlayer icok needcfg; 'cfg' = multi nopostlayer needcfg
+c511_multi: claim upcell: {'none': 10}
+c511_multi_nopostlayer: claim upcell: {'none': 10}
+c511_multi_nopostlayer_icok: claim upcell: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 12, rank(m) = 3
+c511_multi_nopostlayer_nofi: claim upcell: {'none': 10}
+c511_multi_nopostlayer_notightK1: claim upcell: {'none': 10}
+c511_multi_nopostlayer_notop: claim upcell: {'none': 10}
+c511_nofeeder: claim upcell: {'none': 10}
+cl4_min: 
+cl_icok_cfg_5_10_1_10: claim upcell: {'counterexample': 9, 'none': 1}; smallest counterexample |L| = 11, rank(m) = 3
+cl_icok_cfg_5_11_4_10: claim upcell: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 14, rank(m) = 3
+cl_icok_cfg_5_12_8_10: claim upcell: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 17, rank(m) = 3
+cl_min_5_10_1_10: claim upcell: {'none': 10}
+cl_min_5_11_4_10: claim upcell: {'none': 10}
+cl_min_5_12_8_10: claim upcell: {'none': 10}
+cl_min_6_12_9_10: claim upcell: {'none': 10}
+cl_min_6_13_13_10: 
+sw_cfg: claim upcell: {'none': 179}
+sw_icok_cfg: claim upcell: {'none': 95, 'counterexample': 84}; smallest counterexample |L| = 6, rank(m) = 2
+sw_min: claim upcell: {'none': 179}
+sw_multi: claim upcell: {'none': 179}
+sw_multi_nopostlayer: claim upcell: {'none': 179}
+sw_multi_nopostlayer_icok: claim upcell: {'none': 81, 'counterexample': 98}; smallest counterexample |L| = 5, rank(m) = 2
+sw_multi_nopostlayer_nofi: claim upcell: {'none': 179}
+sw_multi_nopostlayer_notightK1: claim upcell: {'none': 179}
+sw_multi_nopostlayer_notop: claim upcell: {'none': 179}
+sw_nofeeder: claim upcell: {'none': 179}

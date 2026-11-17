@@ -1,0 +1,79 @@
+== family_probe.py (§34.3z¹⁹⁰): bad stage-k configurations in the SAT models of noic_fi, stabletop and pairjump, every qualifying m; seeds as out_fork187.txt; runs capped at 580 s; summed
+('bad config', 'noic_fi', 'same-source good config', False, 'some good config', True, 'c = m′', False) 7
+('bad config', 'noic_fi', 'same-source good config', False, 'some good config', True, 'c = m′', True) 2
+('bad config', 'noic_fi', 'same-source good config', True, 'some good config', True, 'c = m′', False) 26
+('bad config', 'noic_fi', 'same-source good config', True, 'some good config', True, 'c = m′', True) 8
+('bad config', 'pairjump', 'same-source good config', False, 'some good config', True, 'c = m′', False) 130
+('bad config', 'pairjump', 'same-source good config', False, 'some good config', True, 'c = m′', True) 9
+('bad config', 'pairjump', 'same-source good config', True, 'some good config', True, 'c = m′', False) 253
+('bad config', 'pairjump', 'same-source good config', True, 'some good config', True, 'c = m′', True) 29
+('bad config', 'stabletop', 'same-source good config', False, 'some good config', True, 'c = m′', False) 273
+('bad config', 'stabletop', 'same-source good config', False, 'some good config', True, 'c = m′', True) 48
+('bad config', 'stabletop', 'same-source good config', True, 'some good config', True, 'c = m′', False) 615
+('bad config', 'stabletop', 'same-source good config', True, 'some good config', True, 'c = m′', True) 138
+('bad config: some fibre orbit exits to a good same-source configuration', 'noic_fi', False) 20
+('bad config: some fibre orbit exits to a good same-source configuration', 'noic_fi', True) 23
+('bad config: some fibre orbit exits to a good same-source configuration', 'pairjump', False) 166
+('bad config: some fibre orbit exits to a good same-source configuration', 'pairjump', True) 255
+('bad config: some fibre orbit exits to a good same-source configuration', 'stabletop', False) 558
+('bad config: some fibre orbit exits to a good same-source configuration', 'stabletop', True) 516
+('bad fibre column', 'noic_fi', 'transfer', 'c′ not a configuration top', 'good target', None, 't comparable in row c′', None) 11
+('bad fibre column', 'noic_fi', 'transfer', 'stays (c′ = c)', 'good target', None, 't comparable in row c′', None) 1
+('bad fibre column', 'noic_fi', 'transfer', 't ∉ S(p, c′)', 'good target', True, 't comparable in row c′', None) 11
+('bad fibre column', 'noic_fi', 'transfer', 'to a configuration (p, c′), t ∈ S(p, c′)', 'good target', True, 't comparable in row c′', False) 3
+('bad fibre column', 'noic_fi', 'transfer', 'to a configuration (p, c′), t ∈ S(p, c′)', 'good target', True, 't comparable in row c′', True) 20
+('bad fibre column', 'pairjump', 'transfer', 'c′ not a configuration top', 'good target', None, 't comparable in row c′', None) 358
+('bad fibre column', 'pairjump', 'transfer', 'stays (c′ = c)', 'good target', None, 't comparable in row c′', None) 79
+('bad fibre column', 'pairjump', 'transfer', 't ∉ S(p, c′)', 'good target', False, 't comparable in row c′', None) 1
+('bad fibre column', 'pairjump', 'transfer', 't ∉ S(p, c′)', 'good target', True, 't comparable in row c′', None) 26
+('bad fibre column', 'pairjump', 'transfer', 'to a configuration (p, c′), t ∈ S(p, c′)', 'good target', False, 't comparable in row c′', False) 5
+('bad fibre column', 'pairjump', 'transfer', 'to a configuration (p, c′), t ∈ S(p, c′)', 'good target', True, 't comparable in row c′', False) 2
+('bad fibre column', 'pairjump', 'transfer', 'to a configuration (p, c′), t ∈ S(p, c′)', 'good target', True, 't comparable in row c′', True) 420
+('bad fibre column', 'stabletop', 'transfer', 'c′ not a configuration top', 'good target', None, 't comparable in row c′', None) 445
+('bad fibre column', 'stabletop', 'transfer', 'stays (c′ = c)', 'good target', None, 't comparable in row c′', None) 36
+('bad fibre column', 'stabletop', 'transfer', 't ∉ S(p, c′)', 'good target', True, 't comparable in row c′', None) 130
+('bad fibre column', 'stabletop', 'transfer', 'to a configuration (p, c′), t ∈ S(p, c′)', 'good target', False, 't comparable in row c′', False) 4
+('bad fibre column', 'stabletop', 'transfer', 'to a configuration (p, c′), t ∈ S(p, c′)', 'good target', True, 't comparable in row c′', False) 9
+('bad fibre column', 'stabletop', 'transfer', 'to a configuration (p, c′), t ∈ S(p, c′)', 'good target', True, 't comparable in row c′', True) 545
+('cross-source good config vs bad (p, c)', 'noic_fi', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', False, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', False) 1
+('cross-source good config vs bad (p, c)', 'noic_fi', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', False, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', True) 2
+('cross-source good config vs bad (p, c)', 'noic_fi', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', False, 'fibres meet', False, 'c′ = m′', False) 2
+('cross-source good config vs bad (p, c)', 'noic_fi', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', False, 'fibres meet', False, 'c′ = m′', True) 1
+('cross-source good config vs bad (p, c)', 'noic_fi', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', False) 2
+('cross-source good config vs bad (p, c)', 'noic_fi', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', True) 3
+('cross-source good config vs bad (p, c)', 'pairjump', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', False, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', False) 8
+('cross-source good config vs bad (p, c)', 'pairjump', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', False, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', True) 5
+('cross-source good config vs bad (p, c)', 'pairjump', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', False, 'fibres meet', False, 'c′ = m′', False) 5
+('cross-source good config vs bad (p, c)', 'pairjump', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', False, 'fibres meet', False, 'c′ = m′', True) 9
+('cross-source good config vs bad (p, c)', 'pairjump', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', False) 34
+('cross-source good config vs bad (p, c)', 'pairjump', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', True) 78
+('cross-source good config vs bad (p, c)', 'stabletop', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', False, 'c′ below some row value t = F(c, y)', False, 'fibres meet', False, 'c′ = m′', False) 6
+('cross-source good config vs bad (p, c)', 'stabletop', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', False, 'c′ below some row value t = F(c, y)', False, 'fibres meet', False, 'c′ = m′', True) 4
+('cross-source good config vs bad (p, c)', 'stabletop', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', False, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', False) 42
+('cross-source good config vs bad (p, c)', 'stabletop', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', False, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', True) 30
+('cross-source good config vs bad (p, c)', 'stabletop', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', False, 'fibres meet', False, 'c′ = m′', False) 33
+('cross-source good config vs bad (p, c)', 'stabletop', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', False, 'fibres meet', False, 'c′ = m′', True) 24
+('cross-source good config vs bad (p, c)', 'stabletop', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', False) 76
+('cross-source good config vs bad (p, c)', 'stabletop', 'p′ vs p', '∥', 'c′ vs c', '∥', 'b(p′) = b(p)', True, 'c′ below some row value t = F(c, y)', True, 'fibres meet', False, 'c′ = m′', True) 110
+('model', 'noic_fi', 'configurations', 1, 'bad', 0, 'TopFibre', True) 1067
+('model', 'noic_fi', 'configurations', 2, 'bad', 0, 'TopFibre', True) 47
+('model', 'noic_fi', 'configurations', 2, 'bad', 1, 'TopFibre', True) 41
+('model', 'noic_fi', 'configurations', 3, 'bad', 0, 'TopFibre', True) 1
+('model', 'noic_fi', 'configurations', 3, 'bad', 1, 'TopFibre', True) 2
+('model', 'pairjump', 'configurations', 2, 'bad', 1, 'TopFibre', True) 387
+('model', 'pairjump', 'configurations', 3, 'bad', 1, 'TopFibre', True) 8
+('model', 'pairjump', 'configurations', 3, 'bad', 2, 'TopFibre', True) 13
+('model', 'stabletop', 'configurations', 2, 'bad', 1, 'TopFibre', True) 1020
+('model', 'stabletop', 'configurations', 3, 'bad', 1, 'TopFibre', True) 18
+('model', 'stabletop', 'configurations', 3, 'bad', 2, 'TopFibre', True) 18
+('orbit from y', 'noic_fi', 'exits to a configuration (p, F(p, z)) with z in its fibre', False, 'its goodness', None, 'm ≤ exit', False) 14
+('orbit from y', 'noic_fi', 'exits to a configuration (p, F(p, z)) with z in its fibre', False, 'its goodness', None, 'm ≤ exit', True) 8
+('orbit from y', 'noic_fi', 'exits to a configuration (p, F(p, z)) with z in its fibre', True, 'its goodness', True, 'm ≤ exit', False) 24
+('orbit from y', 'pairjump', 'exits to a configuration (p, F(p, z)) with z in its fibre', False, 'its goodness', None, 'm ≤ exit', False) 305
+('orbit from y', 'pairjump', 'exits to a configuration (p, F(p, z)) with z in its fibre', False, 'its goodness', None, 'm ≤ exit', True) 104
+('orbit from y', 'pairjump', 'exits to a configuration (p, F(p, z)) with z in its fibre', True, 'its goodness', False, 'm ≤ exit', False) 5
+('orbit from y', 'pairjump', 'exits to a configuration (p, F(p, z)) with z in its fibre', True, 'its goodness', True, 'm ≤ exit', False) 477
+('orbit from y', 'stabletop', 'exits to a configuration (p, F(p, z)) with z in its fibre', False, 'its goodness', None, 'm ≤ exit', False) 355
+('orbit from y', 'stabletop', 'exits to a configuration (p, F(p, z)) with z in its fibre', False, 'its goodness', None, 'm ≤ exit', True) 252
+('orbit from y', 'stabletop', 'exits to a configuration (p, F(p, z)) with z in its fibre', True, 'its goodness', False, 'm ≤ exit', False) 4
+('orbit from y', 'stabletop', 'exits to a configuration (p, F(p, z)) with z in its fibre', True, 'its goodness', True, 'm ≤ exit', False) 558

@@ -65,6 +65,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `nonemptyForkGoodChild_of_split`, `topGoal_of_split`, `topEdge_lt`, `topReach_ge`, `ConeForkGood`,
   `nonemptyForkGoodChild_of_cone`, `not_tight_of_early`.
 * §34.3z¹⁸⁹: `shadowFibre_downClosed`, `fibreTopAt_iff_mem`, `shadowFibre_eq_Ioc`, `StableFibreTop`, `JumpFibreTop`.
+* §34.3z¹⁹⁰: `htf_concl_iff`, `fibre_bad_of_not_upCell`, `badFibre_row`, `no_cell_above`, `rowShadow_source`, `MinUpCell`,
+  `singletonLower_of_minUpCell`, **`upCell_zero`** (MinUpCell at `k = 0`).
 -/
 
 namespace Mordor.OrbitHeight
@@ -1327,6 +1329,79 @@ def JumpFibreTop (F : α →o α →o α) (H j : ℕ) (m : α) : Prop :=
   ∀ p c, p ∈ Rk F j → height H p = j → c ∈ Rk F (j + 1) → c ∉ Rk F j → height H c = j + 1 → p < c → F p c = p →
     (shadowFibre F m p c).Nonempty → sSup (shadowFibre F m p c) ∉ shadowFibre F m p c →
       ¬ m ≤ sSup (shadowFibre F m p c) → FibreTopAt F m p c
+
+/-! ### Bad fibres and the configuration family (§34.3z¹⁹⁰) -/
+
+/-- **The `htf` alternative is UpCell.** With `R_k` tight, `UpCell ∨ (k = j + 1 ∧ TopFibre j)` is equivalent to UpCell
+at stage `k`: TopFibre is only a route to UpCell (`upCell_of_topFibre`). So a proof of `htf` may assume ¬UpCell, which
+is stronger than "every stage configuration is bad". -/
+theorem htf_concl_iff {k H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F k, height H z ≤ k) {m : α} :
+    (UpCell F H k m ∨ ∃ j, k = j + 1 ∧ TopFibre F H j m) ↔ UpCell F H k m := by
+  refine ⟨fun h => ?_, Or.inl⟩
+  rcases h with h | ⟨j, rfl, h⟩
+  · exact h
+  · exact upCell_of_topFibre hn hk h
+
+/-- **¬UpCell makes every stage configuration bad**: if the top `c` of a configuration had a comparable fibre column,
+it would be an UpCell witness. -/
+theorem fibre_bad_of_not_upCell {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {m p c : α} (hp : p ∈ Rk F j) (hph : height H p = j) (hc : c ∈ Rk F (j + 1)) (hch : height H c = j + 1)
+    (hpc : p < c) (hpcp : F p c = p) (hno : ¬ UpCell F H (j + 1) m) :
+    ∀ y ∈ shadowFibre F m p c, ¬ (F c y ≤ y ∨ y ≤ F c y) := fun y hy hcmp =>
+  hno (upCell_of_topFibre hn hk ⟨p, c, y, y, hp, hph, hc, hch, hpc, hpcp, hy.2.2, hy.2.1, hy.1, le_rfl, hcmp⟩)
+
+/-- **Row values of a bad fibre** (the brief's Step 1): for `y ∈ S(p, c; m)` with `p ≤ c` and `F c y ∥ y`, the row value
+`t = F c y` lies strictly above `c`. -/
+theorem badFibre_row {m p c y : α} (hpc : p ≤ c) (hy : y ∈ shadowFibre F m p c) (hbad : ¬ (F c y ≤ y ∨ y ≤ F c y)) :
+    c < F c y ∧ ¬ F c y ≤ y ∧ ¬ y ≤ F c y := by
+  have hle : c ≤ F c y := hy.2.2.symm.le.trans ((F.mono hpc) y)
+  refine ⟨lt_of_le_of_ne hle fun e => hbad (Or.inl (e ▸ hy.1.le)), fun h => hbad (Or.inl h), fun h => hbad (Or.inr h)⟩
+
+/-- **No cell of a stage-`j` row above stage `j + 1`**: a column of height `> j + 1` cannot carry a cell of a row of
+`R_j` when `R_{j+1}` is tight. -/
+theorem no_cell_above {j H : ℕ} (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1) {p t : α} (hp : p ∈ Rk F j)
+    (ht : j + 1 < height H t) : ¬ (F p t ≤ p ∨ t ≤ F p t) := fun h => by
+  have := hk t (mem_succ_of_cell hp le_rfl h); omega
+
+/-- **The row-value transfer is non-degenerate**: for a configuration source `p` (`F p c = p`, `p ∈ R_j`) and a column
+`t > c` with `h(c) = j + 1`, the source value `c′ = F p t` satisfies `p < c′` and `t ≰ c′`. (Whether `(p, c′)` is again
+a configuration with `t` in its fibre is *not* forced: §34.3z¹⁹⁰.) -/
+theorem rowShadow_source {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {p c t : α} (hp : p ∈ Rk F j) (hch : height H c = j + 1) (hpcp : F p c = p) (hct : c < t) :
+    p < F p t ∧ ¬ t ≤ F p t := by
+  have hh : j + 1 < height H t := by have := height_strictMono hn hct; omega
+  have hno := no_cell_above hk hp hh
+  have hle : p ≤ F p t := hpcp.symm.le.trans ((F p).mono hct.le)
+  exact ⟨lt_of_le_of_ne hle fun e => hno (Or.inl e.symm.le), fun h => hno (Or.inr h)⟩
+
+/-- **MinUpCell (conjectural)**: the `htf` alternative with only the hypotheses the §34.3z¹⁹⁰ ablation could not drop:
+`R_{k+1}` tight, `m` new at stage `k + 1` of height `k + 1`, `m ≠ ⊤` (from `⊤ ∉ R_{k+2}`; needed: the 2-element lattice),
+and no interval cell at `m`. (Dropping the last one is
+refuted at `|L| = 5`, and at `|L| = 6` even with a nonempty, entirely bad configuration family.) -/
+def MinUpCell (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k m, (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k → m ≠ ⊤ →
+    (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) → UpCell F H k m
+
+/-- **MinUpCell gives SingletonLower** (through `singletonLower_of_topFibre`; `m ≠ ⊤` from `⊤ ∉ R_{k+2}`; the other
+`htf` hypotheses are unused). -/
+theorem singletonLower_of_minUpCell {H : ℕ} (hn : NoChain α (H + 1)) (h : MinUpCell F H) : SingletonLower F H :=
+  singletonLower_of_topFibre hn fun k htop _ hall m hm hmk hnew _ _ _ _ _ hno =>
+    Or.inl (h k m hall hm hmk hnew (fun e => htop (e ▸ Rk_mono (Nat.le_succ _) hm)) hno)
+
+/-- **MinUpCell at the first stage** (`k = 0`), proved: for `m ≠ ⊤` with no interval cell, the row `⊥` has a cell at a
+column `z ∈ (⊥, w]`, `w = F m y*` (`colOrb_dichotomy`), hence off `m`. Only `m ≠ ⊤` and `¬IC(m)` are used: the row `⊥`
+stays above itself (`⊥ ≤ F ⊥ u`), and `F ⊥ w ≤ F m w ≤ F m y* = w`, so `row_cell_of_above` applies below `w`. -/
+theorem upCell_zero [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) {m : α} (ht : m ≠ ⊤)
+    (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : UpCell F H 0 m := by
+  rcases colOrb_dichotomy (F := F) ht with hc | ⟨n, -, hfix, -, hup, hlo⟩
+  · exact absurd hc hno
+  set y := colOrb F m n
+  have hwy : F m y ≤ y := le_sup_right.trans hfix.le
+  have hFw : F ⊥ (F m y) ≤ F m y := ((F.mono bot_le) (F m y)).trans ((F m).mono hwy)
+  have hbw : ⊥ < F m y := bot_lt_iff_ne_bot.2 fun e => hlo (e ▸ bot_le)
+  obtain ⟨z, hz, hzw, hcell⟩ :=
+    row_cell_of_above hn (x := ⊥) (v := F m y) (fun _ _ _ _ => bot_le) H (height_le _) hbw le_rfl hFw
+  exact ⟨⊥, show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl, height_bot_eq_zero, z, hz, fun hmz => hup (hmz.trans hzw), hcell⟩
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

@@ -270,8 +270,8 @@ choice-free one (§34.3z¹⁴⁰): the **tight-stage upper principal cut**. At a
 ⊤ ∉ R_{k+1}, some element m ∈ R_k of height k has a witness cell x ≤ m < y. By `OrbitHeight.cutMaps_of_tightUPC`
 it gives Cut at every finite edge-height. The statement is false for an arbitrary m, so a proof must use the
 orbit. Inside that programme, singleton lower transfer is reduced to **UpCell** in the residual no-cell
-configuration (`singletonLower_of_upCell`), and further to **TopFibre** (`singletonLower_of_topFibre`; see above). The existential general-separator conjectures remain as an
-alternative:
+configuration (`singletonLower_of_upCell`), and further to **TopFibre** (`singletonLower_of_topFibre`; see
+above). The existential general-separator conjectures remain as an alternative:
 - **GSB(H):** every instance of edge-height H has a response-or-maximal run of at most H − 1 stages;
 - **GD(H):** some such run has strictly decreasing maximum gap.
 

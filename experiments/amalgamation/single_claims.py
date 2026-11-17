@@ -290,8 +290,10 @@ def query(L, m, claim, ahead=False):
             if not sels: E.S.delete(); return None
             bad.append(E.v('dany')); E.S.add_clause([-E.v('dany')] + sels)
         elif claim == 'dwit':                        # §34.3z¹⁶⁹: noic_fi and no descent witness: no x ∈ T, v ≱ m with x < v, F(x,v) ≤ v and
-            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)   # x ≤ F(x,q) for every
-            E.S.add_clause([-ic(m)])                                                            # row-pre-fixed q ∈ (x, v]
+            if 'nofeeder' in sys.argv: o = E.v('true'); E.S.add_clause([o]); bad.append(o)       # x ≤ F(x,q) for every
+            else:                                                                               # row-pre-fixed q ∈ (x, v]
+                for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)   # (§34.3z¹⁹¹: flags as upcell)
+            E.S.add_clause([-ic(m)])
             def geq(x, q):
                 k_ = ('geq', x, q)
                 if k_ not in E.vars: o = E.v(*k_); E.iff_or(o, [E.v('f', x, q, w_) for w_ in range(n) if le[x][w_]])
@@ -484,7 +486,7 @@ def query(L, m, claim, ahead=False):
                 'ontime': idrop and rr in Tq and not any(le[x][rr] and dw(x, wq) for x in Tq),
                 'latejoin': idrop and rr not in Tq and not any(L.join[x][rr] == a_of(L, F, rr) and dw(x, a_of(L, F, rr)) for x in Tq),
                 'dropbelow': (bm in low) and not ic_py(L, F, m) and any(not any(inR(x, K - 1) and rk[x] == K - 1 and le[x][F[bm][q]] for x in range(n)) for q in drops),
-                'dwit': (bm in low) and not ic_py(L, F, m) and not any(inR(x, K - 1) and rk[x] == K - 1 and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v]
+                'dwit': (True if 'nofeeder' in sys.argv else bm in low) and not ic_py(L, F, m) and not any(inR(x, K - 1) and rk[x] == K - 1 and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v]
                         and all(le[x][F[x][q]] for q in range(n) if le[x][q] and q != x and le[q][v] and le[F[x][q]][q]) for x in range(n) for v in range(n)),
                 'mech': (bm in low) and not ic_py(L, F, m) and not any(inR(y, K - 1) and rk[y] == K - 1 and a_of(L, F, y) != m and rk[a_of(L, F, y)] == K for y in range(n)) and not any(inR(b_of(L, F, z), K - 1) and le[b_of(L, F, z)][z] for z in tops),
                 'bdom': (bm in low) and not ic_py(L, F, m) and any(inR(z, K) and inR(x, K - 1) and rk[x] < K - 1 and F[x][z] == x and not any(inR(y, K - 1) and rk[y] == K - 1 and le[x][y] for y in range(n)) for z in tops for x in range(n)),

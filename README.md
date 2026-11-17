@@ -262,7 +262,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     (§34.3z¹⁸⁹). The `htf` alternative is equivalent to UpCell (`htf_concl_iff`). Family transfers fail (same-source rescue
     |L| = 13, orbit escape |L| = 8). An exact ablation shows that UpCell survives dropping every `htf` hypothesis except
     the no-interval-cell condition at m: without it, an entirely bad nonempty family with ¬UpCell exists at |L| = 6. The
-    hypothesis-minimal **MinUpCell** implies SingletonLower and is **proved at k = 0** (`upCell_zero`) (§34.3z¹⁹⁰).
+    hypothesis-minimal **MinUpCell** implies SingletonLower and is **proved at k = 0** (`upCell_zero`) (§34.3z¹⁹⁰). It
+    reduces further to MinDescentWitness, which has no counterexample under the same minimal hypotheses. Its witness
+    cannot be anchored at w, y* or the feeder (|L| = 18, 20) (§34.3z¹⁹¹).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

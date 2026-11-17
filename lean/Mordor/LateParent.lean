@@ -67,6 +67,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁸⁹: `shadowFibre_downClosed`, `fibreTopAt_iff_mem`, `shadowFibre_eq_Ioc`, `StableFibreTop`, `JumpFibreTop`.
 * §34.3z¹⁹⁰: `htf_concl_iff`, `fibre_bad_of_not_upCell`, `badFibre_row`, `no_cell_above`, `rowShadow_source`, `MinUpCell`,
   `singletonLower_of_minUpCell`, **`upCell_zero`** (MinUpCell at `k = 0`).
+* §34.3z¹⁹¹: `MinDescentWitness`, `minUpCell_of_minDescentWitness`, `diag_post_of_aEntry`, `above_of_diag_post`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1402,6 +1403,28 @@ theorem upCell_zero [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) {m : 
   obtain ⟨z, hz, hzw, hcell⟩ :=
     row_cell_of_above hn (x := ⊥) (v := F m y) (fun _ _ _ _ => bot_le) H (height_le _) hbw le_rfl hFw
   exact ⟨⊥, show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl, height_bot_eq_zero, z, hz, fun hmz => hup (hmz.trans hzw), hcell⟩
+
+/-! ### Descent witnesses under the minimal hypotheses (§34.3z¹⁹¹) -/
+
+/-- **MinDescentWitness (conjectural)**: under the MinUpCell hypotheses, a descent witness exists at stage `k`. No
+counterexample (sweep 4 16, rank-3 closure lists, with the feeder, `⊤ ∉ R_{K+1}` and `R_k` tightness all dropped).
+Its witness column cannot be anchored at `w = F m y*`: `v ≤ w`, `x < w` and `v ≤ y*` all fail (§34.3z¹⁹¹). -/
+def MinDescentWitness (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k m, (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k → m ≠ ⊤ →
+    (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) → DescentWitness F H k m
+
+theorem minUpCell_of_minDescentWitness {H : ℕ} (hn : NoChain α (H + 1)) (h : MinDescentWitness F H) :
+    MinUpCell F H := fun k m hall hm hmk hnew ht hno =>
+  upCell_of_descentWitness hn (h k m hall hm hmk hnew ht hno)
+
+/-- **An A-entered top above its source is diagonal post-fixed**: `q ≤ x ≤ F q x` gives `x ≤ F x x`; such a row stays
+above itself on every column `u ≥ x`. (So the `nopostlayer` residue consists of B-entered tops and of A-entries
+`x = a q` with `q ≰ x`.) -/
+theorem diag_post_of_aEntry {q x : α} (hqx : q ≤ x) (hU : x ≤ F q x) : x ≤ F x x :=
+  hU.trans ((F.mono hqx) x)
+
+theorem above_of_diag_post {x u : α} (hx : x ≤ F x x) (hxu : x ≤ u) : x ≤ F x u :=
+  hx.trans ((F x).mono hxu)
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

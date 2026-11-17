@@ -1,0 +1,28 @@
+== wdesc_probe.py (§34.3z¹⁹¹): the 1224 noic_fi models of out_fork187.txt (same seeds, every qualifying m; runs capped at 580 s); summed
+('descent witness', 'any v', True, 'v ≤ w', False, 'v = w', False) 32
+('descent witness', 'any v', True, 'v ≤ w', True, 'v = w', False) 5
+('descent witness', 'any v', True, 'v ≤ w', True, 'v = w', True) 1187
+('descent witness', 'v ≤ y*', False, 'x < w', False, 'x < w and v ≤ y*', False, 'x a feeder drop value F(m′, u), u ∈ (m′, w] pre-fixed', False) 2
+('descent witness', 'v ≤ y*', False, 'x < w', True, 'x < w and v ≤ y*', False, 'x a feeder drop value F(m′, u), u ∈ (m′, w] pre-fixed', False) 1
+('descent witness', 'v ≤ y*', False, 'x < w', True, 'x < w and v ≤ y*', False, 'x a feeder drop value F(m′, u), u ∈ (m′, w] pre-fixed', True) 3
+('descent witness', 'v ≤ y*', True, 'x < w', False, 'x < w and v ≤ y*', False, 'x a feeder drop value F(m′, u), u ∈ (m′, w] pre-fixed', False) 21
+('descent witness', 'v ≤ y*', True, 'x < w', True, 'x < w and v ≤ y*', True, 'x a feeder drop value F(m′, u), u ∈ (m′, w] pre-fixed', False) 991
+('descent witness', 'v ≤ y*', True, 'x < w', True, 'x < w and v ≤ y*', True, 'x a feeder drop value F(m′, u), u ∈ (m′, w] pre-fixed', True) 206
+('feeder row m′ on (m′, w]', 'stays above', False, 'F(m′, w) ≤ w', True) 321
+('feeder row m′ on (m′, w]', 'stays above', True, 'F(m′, w) ≤ w', True) 903
+('rows with a witness v ≤ w', 'includes m′', False, 'some diagonal post-fixed', False, 'all below w', None) 32
+('rows with a witness v ≤ w', 'includes m′', False, 'some diagonal post-fixed', False, 'all below w', True) 278
+('rows with a witness v ≤ w', 'includes m′', True, 'some diagonal post-fixed', False, 'all below w', True) 914
+models 1224
+
+== single_claims.py dwit (exact): 'min' = multi notop nofeeder notightK1, 'base' = multi nopostlayer
+cl_base_5_10_1_10: claim dwit: {'none': 10}
+cl_base_5_11_4_10: claim dwit: {'none': 10}
+cl_base_5_12_8_10: claim dwit: {'none': 10}
+cl_base_6_12_9_10: claim dwit: {'none': 10}
+cl_min_5_10_1_10: claim dwit: {'none': 10}
+cl_min_5_11_4_10: claim dwit: {'none': 10}
+cl_min_5_12_8_10: claim dwit: {'none': 10}
+cl_min_6_12_9_10: claim dwit: {'none': 10}
+sw_base: claim dwit: {'none': 179}
+sw_min: claim dwit: {'none': 179}

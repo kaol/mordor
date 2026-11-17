@@ -1,0 +1,14 @@
+== wd_no_le_w_min18.json: |L| = 18, K = 3; hypotheses hold: True; m = {013}, m′ = {01}, y* = {012345}, w = {0145}
+   row {01} (vs w <, vs m′ =): witness columns []
+   row {04} (vs w <, vs m′ ∥): witness columns [('{024}', 'v vs w ∥', 'v vs y* <'), ('{0124}', 'v vs w ∥', 'v vs y* <')]
+== wd_no_xw_min18.json: |L| = 18, K = 3; hypotheses hold: True; m = {034}, m′ = {03}, y* = {01234}, w = {013}
+   row {12} (vs w ∥, vs m′ ∥): witness columns [('{124}', 'v vs w ∥', 'v vs y* <'), ('{1234}', 'v vs w ∥', 'v vs y* <')]
+   row {03} (vs w <, vs m′ =): witness columns []
+   row {23} (vs w ∥, vs m′ ∥): witness columns []
+   row {34} (vs w ∥, vs m′ ∥): witness columns []
+== wd_no_ys_min20.json: |L| = 20, K = 3; hypotheses hold: True; m = {013}, m′ = {01}, y* = {0123}, w = {012}
+   row {01} (vs w <, vs m′ =): witness columns []
+   row {13} (vs w ∥, vs m′ ∥): witness columns []
+   row {23} (vs w ∥, vs m′ ∥): witness columns []
+   row {24} (vs w ∥, vs m′ ∥): witness columns [('{024}', 'v vs w ∥', 'v vs y* ∥')]
+   row {35} (vs w ∥, vs m′ ∥): witness columns []

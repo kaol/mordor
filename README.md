@@ -237,7 +237,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     `depthOne_shadow_upCell` proves the lift in the comparable case (32/33). At depth 2 the witness y has b(y) = z
     and is a z-shadow (24/24, comparable 22/24): the same mechanism one level up. Sibling-shadow configurations
     propagate upward (`climb_step`, `climb_next_config`). Inside the shadow interval the climb reaches stage k in
-    only 6 of 19 depth-two cases. Allowing larger shadow columns raises this to 14 of 19 (§34.3z¹⁸⁰–¹⁸²).
+    only 6 of 19 depth-two cases, and the upper cone of larger shadow columns 14 of 19. The full off-target fibre
+    of the source row reaches 19 of 19 (§34.3z¹⁸⁰–¹⁸³). The open content is now **TopFibre**: a stage-k
+    sibling-shadow configuration with a comparable fibre column. It implies SingletonLower
+    (`singletonLower_of_topFibre`) and has no counterexample (rank 2–4).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and
@@ -267,7 +270,7 @@ choice-free one (§34.3z¹⁴⁰): the **tight-stage upper principal cut**. At a
 ⊤ ∉ R_{k+1}, some element m ∈ R_k of height k has a witness cell x ≤ m < y. By `OrbitHeight.cutMaps_of_tightUPC`
 it gives Cut at every finite edge-height. The statement is false for an arbitrary m, so a proof must use the
 orbit. Inside that programme, singleton lower transfer is reduced to **UpCell** in the residual no-cell
-configuration (`singletonLower_of_upCell`; see above). The existential general-separator conjectures remain as an
+configuration (`singletonLower_of_upCell`), and further to **TopFibre** (`singletonLower_of_topFibre`; see above). The existential general-separator conjectures remain as an
 alternative:
 - **GSB(H):** every instance of edge-height H has a response-or-maximal run of at most H − 1 stages;
 - **GD(H):** some such run has strictly decreasing maximum gap.

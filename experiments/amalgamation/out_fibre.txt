@@ -1,0 +1,109 @@
+== descent2d_probe.py climbs (interval, upper cone, full fibre, liberal graph; fibre join); rank 3 closure seeds as out_descent2d.txt, rank 4 closure 6 12 9/10, 6 13 11; summed
+('climb (extended intervals) from depth', 1, 'result', 'UpCell at stage k') 27
+('climb (extended intervals) from depth', 1, 'result', 'column early') 1
+('climb (extended intervals) from depth', 2, 'result', 'UpCell at stage k') 14
+('climb (extended intervals) from depth', 2, 'result', 'stalled') 5
+('climb (full fibre) from depth', 1, 'result', 'UpCell at stage k') 27
+('climb (full fibre) from depth', 1, 'result', 'column early') 1
+('climb (full fibre) from depth', 2, 'result', 'UpCell at stage k') 19
+('climb (liberal graph) from depth', 1, 'reaches an UpCell at stage k', False) 1
+('climb (liberal graph) from depth', 1, 'reaches an UpCell at stage k', True) 27
+('climb (liberal graph) from depth', 2, 'reaches an UpCell at stage k', True) 19
+('climb (search) from depth', 1, 'result', 'UpCell at stage k') 26
+('climb (search) from depth', 1, 'result', 'column early') 1
+('climb (search) from depth', 1, 'result', 'stage k, totinc') 1
+('climb (search) from depth', 2, 'result', 'UpCell at stage k') 6
+('climb (search) from depth', 2, 'result', 'no continuation: break: endpoint') 9
+('climb (search) from depth', 2, 'result', 'totinc') 4
+('climb from depth', 1, 'result', 'UpCell at stage k') 26
+('climb from depth', 1, 'result', 'column early') 1
+('climb from depth', 1, 'result', 'stage k, totinc') 1
+('climb from depth', 2, 'result', 'UpCell at stage k') 6
+('climb from depth', 2, 'result', 'endpoint cell (break)') 9
+('climb from depth', 2, 'result', 'totinc (break)') 4
+('depth 0: UpCell of the feeder (proved)', True) 131
+('depth ≥ 1 U-cell', 'z = a(r)', True, 'z ≤ a(r)', True) 5
+('depth ≥ 1 final column', 'type', 'L', 'h(z) − h(r)', 1, 'stage status', 'early') 1
+('depth ≥ 1 final column', 'type', 'L', 'h(z) − h(r)', 1, 'stage status', 'on time') 46
+('depth ≥ 1 final column', 'type', 'U', 'h(z) − h(r)', 1, 'stage status', 'on time') 5
+('depth ≥ 2 climb', 'best witness y (b(y) = z) status', 'shadow, comparable') 22
+('depth ≥ 2 climb', 'best witness y (b(y) = z) status', 'shadow, totinc') 2
+('depth ≥ 2 witness y ≥ z', 'b(y) = z', False, 'b(y) vs z', '>', 'y = a(z)', False, 'y new', True) 2
+('depth ≥ 2 witness y ≥ z', 'b(y) = z', True, 'b(y) vs z', '=', 'y = a(z)', False, 'y new', True) 24
+('depth ≥ 2 witness y ≥ z', 'y is a path column', False, 'y = u_prev', False, 'y ≤ some path column', False) 3
+('depth ≥ 2 witness y ≥ z', 'y is a path column', False, 'y = u_prev', False, 'y ≤ some path column', True) 11
+('depth ≥ 2 witness y ≥ z', 'y is a path column', True, 'y = u_prev', True, 'y ≤ some path column', True) 12
+('depth ≥ 2', 'a(z) a top of R_k ≠ m with UpCell', False) 24
+('depth ≥ 2', 'some witness y ≥ z with b(y) = z', True, 'some witness y ≥ z', True) 24
+('depth ≥ 2', 'z new at its stage', True, 'h(z) = k − i + 1', True) 24
+('depth ≥ 2: F(z, path column)', 'path index from end', 0, 'column ≥ z', True, 'value', 'h−k=-1') 7
+('depth ≥ 2: F(z, path column)', 'path index from end', 0, 'column ≥ z', True, 'value', 'h−k=-2') 17
+('depth ≥ 2: F(z, path column)', 'path index from end', 1, 'column ≥ z', True, 'value', 'h−k=-1') 12
+('depth ≥ 2: F(z, path column)', 'path index from end', 1, 'column ≥ z', True, 'value', 'h−k=1') 2
+('depth ≥ 2: F(z, path column)', 'path index from end', 1, 'column ≥ z', True, 'value', 'witness y') 10
+('depth ≥ 2: F(z, path column)', 'path index from end', 2, 'column ≥ z', True, 'value', 'h−k=1') 10
+('depth ≥ 2: F(z, path column)', 'path index from end', 2, 'column ≥ z', True, 'value', 'h−k=2') 2
+('depth ≥ 2: F(z, path column)', 'path index from end', 2, 'column ≥ z', True, 'value', 'witness y') 12
+('depth ≥ 2: F(z, path column)', 'path index from end', 3, 'column ≥ z', True, 'value', 'h−k=1') 6
+('depth ≥ 2: F(z, w) is a witness y', False, 'F(z, w) vs z', '>') 18
+('depth ≥ 2: F(z, w) is a witness y', True, 'F(z, w) vs z', '>') 6
+('depth ≥ 2: some path column u′ with F(z, u′) a witness y', False) 3
+('depth ≥ 2: some path column u′ with F(z, u′) a witness y', True) 21
+('depth-1 L new column', 'origin', 'shadow z = F(b m′, u)', 'siblingShadow_upCell applies', False, 'z has UpCell', True) 1
+('depth-1 L new column', 'origin', 'shadow z = F(b m′, u)', 'siblingShadow_upCell applies', True, 'z has UpCell', True) 26
+('depth-1 L, column a top of R_k', 'new', False, 'b(z) = b(m′)', False, 'z has UpCell', False) 1
+('depth-1 L, column a top of R_k', 'new', True, 'b(z) = b(m′)', True, 'z has UpCell', True) 27
+('fibre join U of the starting configuration', 'F(p,U) = c', False, 'm ≤ U', False, 'U in fibre', False) 3
+('fibre join U of the starting configuration', 'F(p,U) = c', False, 'm ≤ U', True, 'U in fibre', False) 12
+('fibre join U of the starting configuration', 'F(p,U) = c', True, 'm ≤ U', False, 'U in fibre', True) 32
+('final row', 'h = k − depth', True, 'new at its stage', True) 183
+('final', 'depth', 0, 'type', 'L') 73
+('final', 'depth', 0, 'type', 'U') 58
+('final', 'depth', 1, 'type', 'L') 28
+('final', 'depth', 2, 'type', 'L') 19
+('final', 'depth', 2, 'type', 'U') 5
+('path', 'same-row steps', 0, 'source steps (before the final one)', 0) 80
+('path', 'same-row steps', 0, 'source steps (before the final one)', 1) 15
+('path', 'same-row steps', 0, 'source steps (before the final one)', 2) 18
+('path', 'same-row steps', 1, 'source steps (before the final one)', 0) 49
+('path', 'same-row steps', 1, 'source steps (before the final one)', 1) 13
+('path', 'same-row steps', 1, 'source steps (before the final one)', 2) 6
+('path', 'same-row steps', 2, 'source steps (before the final one)', 0) 2
+('witness rows vs final', 'some witness ≥ r', False, 'some witness ≥ z', False, 'some witness with b(y) = b^[i] m′', False) 1
+('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', False, 'some witness with b(y) = b^[i] m′', False) 131
+('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', True, 'some witness with b(y) = b^[i] m′', False) 24
+('witness rows vs final', 'some witness ≥ r', True, 'some witness ≥ z', True, 'some witness with b(y) = b^[i] m′', True) 27
+configurations 183
+== fibre_probe.py (FibreTop / FibreStep over all sibling-shadow configurations; per model TopFibre); same seeds plus sweep 4 16; summed
+('FibreStep', 'stage s − k', -1, False) 58
+('FibreStep', 'stage s − k', -1, True) 150
+('FibreStep', 'stage s − k', -2, False) 7
+('FibreStep', 'stage s − k', -2, True) 9
+('FibreTop', False) 10
+('FibreTop', True) 274
+('model: some stage-k sibling-shadow configuration satisfies FibreTop', True) 267
+('step', 'refuting models') 59
+('top', 'refuting models') 10
+models 267
+== single_claims.py topfibre multi nopostlayer (tf2_sw)
+claim topfibre: {'none': 179}
+== single_claims.py topfibre multi nopostlayer (tf3_5_10_1_10)
+claim topfibre: {'none': 10}
+== single_claims.py topfibre multi nopostlayer (tf3_5_10_2_10)
+claim topfibre: {'none': 10}
+== single_claims.py topfibre multi nopostlayer (tf3_5_10_3_10)
+claim topfibre: {'none': 10}
+== single_claims.py topfibre multi nopostlayer (tf3_5_11_4_10)
+claim topfibre: {'none': 10}
+== single_claims.py topfibre multi nopostlayer (tf3_5_11_5_10)
+claim topfibre: {'none': 10}
+== single_claims.py topfibre multi nopostlayer (tf3_6_11_6_10)
+claim topfibre: {'none': 10}
+== single_claims.py topfibre multi nopostlayer (tf3_6_12_10_10)
+claim topfibre: {'none': 10}
+== single_claims.py topfibre multi nopostlayer (tf3_6_12_9_10)
+claim topfibre: {'none': 10}
+== single_claims.py topfibre multi nopostlayer (tf4_6_12_9_10)
+claim topfibre: {'none': 10}
+== single_claims.py topfibre multi nopostlayer (tf4_6_13_11_10)
+claim topfibre: {'none': 10}

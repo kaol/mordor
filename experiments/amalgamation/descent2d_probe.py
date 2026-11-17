@@ -130,6 +130,55 @@ for L in lattices([a for a in sys.argv[1:] if a not in ('multi', 'nopostlayer') 
                     best = best or 'stalled'
                 return best or 'stalled'
             C[('climb (extended intervals) from depth', i, 'result', climbx(r, z, u_prev, h[z]))] += 1
+            # §34.3z¹⁸³: full off-target fibre S(p, c; m) = {v : c < v, m ≰ v, F(p, v) = c}
+            fib = lambda pp, cc: [v for v in range(n) if le[cc][v] and v != cc and not le[m][v] and F[pp][v] == cc]
+            def comparable_in(cc, v):
+                return any(le[cc][y] and y != cc and le[y][v] and (le[F[cc][y]][y] or le[y][F[cc][y]]) for y in range(n))
+            memo = {}
+            def climbF(pp, cc, lvl):                    # descent-driven climb over the full fibre (endpoints included)
+                key = (pp, cc)
+                if key in memo: return memo[key]
+                memo[key] = 'cycle'
+                if inR(cc, lvl - 1): res = 'column early'
+                else:
+                    S = fib(pp, cc)
+                    if lvl == k:
+                        res = 'UpCell at stage k' if any(comparable_in(cc, v) for v in S) else ('stage k: c has UpCell, no comparable fibre column' if ups(cc) else 'stage k, no UpCell')
+                    else:
+                        res = 'stalled'; seen_break = set()
+                        for v in S:
+                            for v1 in range(n):
+                                if not (le[cc][v1] and v1 != cc and le[v1][v] and le[F[cc][v1]][v1]): continue
+                                x_, u_ = cc, v1
+                                while True:
+                                    g = F[x_][u_]
+                                    if le[g][x_] or le[u_][g]: break
+                                    u_ = g
+                                y = u_
+                                if not le[F[x_][y]][x_]: seen_break.add('upper'); continue
+                                if inR(y, lvl): seen_break.add('early y'); continue
+                                if not fib(cc, y): seen_break.add('empty fibre'); continue
+                                if climbF(cc, y, lvl + 1) == 'UpCell at stage k': res = 'UpCell at stage k'; break
+                            if res == 'UpCell at stage k': break
+                        if res != 'UpCell at stage k': res = 'stalled: ' + (','.join(sorted(seen_break)) or ('no fibre' if not S else 'no pre-fixed column'))
+                memo[key] = res; return res
+            C[('climb (full fibre) from depth', i, 'result', climbF(r, z, h[z]))] += 1
+            memo2 = {}
+            def climbG(pp, cc, lvl):                    # liberal: any new lower-cell edge c → y with a nonempty fibre
+                if (pp, cc) in memo2: return memo2[(pp, cc)]
+                memo2[(pp, cc)] = False
+                if inR(cc, lvl - 1): return False
+                if lvl == k: res = any(comparable_in(cc, v) for v in fib(pp, cc))
+                else:
+                    res = any(climbG(cc, y, lvl + 1) for y in range(n) if le[cc][y] and y != cc and le[F[cc][y]][cc]
+                              and h[y] == lvl + 1 and inR(y, lvl + 1) and not inR(y, lvl) and fib(cc, y))
+                memo2[(pp, cc)] = res; return res
+            C[('climb (liberal graph) from depth', i, 'reaches an UpCell at stage k', climbG(r, z, h[z]))] += 1
+            S0 = fib(r, z)
+            if S0:
+                U = S0[0]
+                for v in S0[1:]: U = L.join[U][v]
+                C[('fibre join U of the starting configuration', 'F(p,U) = c', F[r][U] == z, 'm ≤ U', le[m][U], 'U in fibre', U in S0)] += 1
         if i >= 2:
             ab = [y for y in wit if le[z][y]]
             C[('depth ≥ 2', 'z new at its stage', st[z] is not None and not inR(z, st[z] - 1) if st[z] else None, 'h(z) = k − i + 1', h[z] == k - i + 1)] += 1

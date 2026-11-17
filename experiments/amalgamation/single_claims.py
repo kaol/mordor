@@ -27,6 +27,7 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
   §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
   §34.3z¹⁷³ (with 'multi'): bcup   some top x with b(x) ∈ R_{K−2}, b(x) < x has an upward cell away from m
                             sibup  some top x ≠ m′ with b(x) = b(m′) has an upward cell away from m
+  §34.3z¹⁸³ (with 'multi'): topfibre  some new top c of R_{K−1} with p ⋖ c, F(p,c) = p has a fibre column v (F(p,v) = c, m ≰ v) and a comparable column in (c, v]
   §34.3z¹⁷⁸ (with 'multi'): famup  FamilyUpCell: in a sibling configuration some new top with the same B-source has an upward cell away from m
   §34.3z¹⁷⁴ (with 'multi'): bcupnew  as bcup with x new at stage K − 1 (x ∉ R_{K−2}; then b(x) ⋖ x)
   §34.3z¹⁷² (with 'multi'): upcell  some top row x of R_{K−1} has a cell at a column z > x with m ≰ z
@@ -53,7 +54,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -95,7 +96,21 @@ def query(L, m, claim, ahead=False):
         if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
             for x in range(n):
                 if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
-        if claim == 'famup':                       # §34.3z¹⁷⁸ FamilyUpCell: noic_fi + a sibling configuration (x, c new tops of R_{K−1},
+        if claim == 'topfibre':                    # §34.3z¹⁸³ TopFibre: some new top c of R_{K−1} with p ⋖ c, F(p,c) = p (p ∈ R_{K−2}),
+            if K < 3: E.S.delete(); return None         # a fibre column v (c < v, m ≰ v, F(p,v) = c) and y ∈ (c, v] with F(c,y) ≤ y or y ≤ F(c,y)
+            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
+            E.S.add_clause([-ic(m)])
+            for c in range(n):
+                if rk[c] != K - 1: continue
+                for p in range(n):
+                    if rk[p] != K - 2 or not le[p][c]: continue
+                    for v in range(n):
+                        if not (le[c][v] and v != c and not le[m][v]): continue
+                        for y in range(n):
+                            if not (le[c][y] and y != c and le[y][v]): continue
+                            base = [-r(K - 1, c), r(K - 2, c), -r(K - 2, p), -f(p, c, p), -f(p, v, c)]
+                            E.S.add_clause(base + [-fle(c, y, y)]); E.S.add_clause(base + [-yle(c, y)])
+        elif claim == 'famup':                       # §34.3z¹⁷⁸ FamilyUpCell: noic_fi + a sibling configuration (x, c new tops of R_{K−1},
             if K < 3: E.S.delete(); return None         # b(x) = b(c) = p, x ∥ c, u a drop column of x with F(p, u) = c, m ≰ u)
             for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)   # and no new top y with b(y) = p
             E.S.add_clause([-ic(m)])                                                            # has an upward cell away from m
@@ -383,7 +398,17 @@ def query(L, m, claim, ahead=False):
                         if le[x][u] and u != x and le[c][u] and not le[m][u] and le[F[x][u]][u] and not le[x][F[x][u]] and F[p_][u] == c:
                             if not any(ups(y) for y in Tq2 if not inR(y, K - 2) and b_of(L, F, y) == p_): return True
             return False
-        viol = {'famup': (bm in low) and not ic_py(L, F, m) and famviol(),
+        def topfib():
+            for c in Tq2:
+                if inR(c, K - 2): continue
+                for p in range(n):
+                    if not (rk[p] == K - 2 and inR(p, K - 2) and le[p][c] and F[p][c] == p): continue
+                    for v in range(n):
+                        if le[c][v] and v != c and not le[m][v] and F[p][v] == c:
+                            if any(le[c][y] and y != c and le[y][v] and (le[F[c][y]][y] or le[y][F[c][y]]) for y in range(n)): return True
+            return False
+        viol = {'topfibre': (bm in low) and not ic_py(L, F, m) and not topfib(),
+                'famup': (bm in low) and not ic_py(L, F, m) and famviol(),
                 'bcupnew': (bm in low) and not ic_py(L, F, m) and not any(not inR(x, K - 2) and inR(b_of(L, F, x), K - 2) and le[b_of(L, F, x)][x] and b_of(L, F, x) != x and upc(x) for x in Tq2),
                 'bcup': (bm in low) and not ic_py(L, F, m) and not any(inR(b_of(L, F, x), K - 2) and le[b_of(L, F, x)][x] and b_of(L, F, x) != x and upc(x) for x in Tq2),
                 'sibup': (bm in low) and not ic_py(L, F, m) and not any(x != bm and b_of(L, F, x) == b_of(L, F, bm) and upc(x) for x in Tq2),

@@ -50,6 +50,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁸²: `row_cell_of_above_shadow` (descent with shadow tracking), **`climb_step`**, **`climb_next_config`** (a
   sibling-shadow configuration whose cell is a new lower-cell shadow gives a sibling-shadow configuration one
   stage higher).
+* §34.3z¹⁸³: `TopFibre`, **`upCell_of_topFibre`**, **`singletonLower_of_topFibre`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -862,5 +863,33 @@ theorem climb_next_config {j H : ℕ} (IH : ∀ H' < j + 1, OHAt.{u} H') (hn : N
     y ∈ Rk F (j + 2) ∧ height H y = j + 2 ∧ c ⋖ y ∧ F c y = c ∧ F c u' = y := by
   obtain ⟨hyR, hyh, -, hcyc⟩ := depthOne_lowerCell_sibling IH hn hk2 hc hck hcy hL hynew
   exact ⟨hyR, hyh, covBy_of_height hn hcy (by omega), hcyc, hy.symm⟩
+
+/-! ### TopFibre: a stage-`k` sibling-shadow configuration with a comparable fibre column (§34.3z¹⁸³) -/
+
+/-- **TopFibre** at stage `j + 1`: a height-`j` row `p ∈ R_j` below a height-`(j+1)` top `c ∈ R_{j+1}` with
+`F p c = p`, a column `v` of the off-target shadow fibre (`F p v = c`, `m ≰ v`), and a column `y ∈ (c, v]` comparable
+with its row-`c` value. -/
+def TopFibre (F : α →o α →o α) (H j : ℕ) (m : α) : Prop :=
+  ∃ p c v y, p ∈ Rk F j ∧ height H p = j ∧ c ∈ Rk F (j + 1) ∧ height H c = j + 1 ∧ p < c ∧ F p c = p ∧
+    F p v = c ∧ ¬ m ≤ v ∧ c < y ∧ y ≤ v ∧ (F c y ≤ y ∨ y ≤ F c y)
+
+/-- **TopFibre gives UpCell** (`siblingShadow_upCell`; the cover `p ⋖ c` comes from the heights). -/
+theorem upCell_of_topFibre {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {m : α} (h : TopFibre F H j m) : UpCell F H (j + 1) m := by
+  obtain ⟨p, c, v, y, hp, hph, hc, hch, hpc, hpcp, hpv, hmv, hcy, hyv, hcell⟩ := h
+  exact siblingShadow_upCell hn hk hp hc hch (covBy_of_height hn hpc (by omega)) hpcp hpv hmv ⟨y, hcy, hyv, hcell⟩
+
+/-- **SingletonLower from TopFibre.** If in every uniqueness-free no-cell singleton configuration at stage `k`
+either UpCell holds or (`k = j + 1` and) TopFibre holds at `j`, then `SingletonLower F H`. -/
+theorem singletonLower_of_topFibre {H : ℕ} (hn : NoChain α (H + 1))
+    (htf : ∀ k, (⊤ : α) ∉ Rk F (k + 2) → (∀ z ∈ Rk F k, height H z ≤ k) →
+      (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → ∀ m, m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k →
+      ∀ m' ∈ Rk F k, height H m' = k → m' < m → F m' m ≤ m' →
+      (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) → UpCell F H k m ∨ ∃ j, k = j + 1 ∧ TopFibre F H j m) :
+    SingletonLower F H := by
+  refine singletonLower_of_upCell hn fun k htop hk hall m hm hmk hnew m' hm' hm'k hlt hlo hno => ?_
+  rcases htf k htop hk hall m hm hmk hnew m' hm' hm'k hlt hlo hno with h | ⟨j, rfl, h⟩
+  · exact h
+  · exact upCell_of_topFibre hn hk h
 
 end Mordor.OrbitHeight

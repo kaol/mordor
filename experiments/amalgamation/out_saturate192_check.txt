@@ -1,0 +1,10 @@
+== sat_min_bq_not_lt_x_min7.json: |L| = 7, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; UpCell = True; m = {12}; R_k tight: False
+   row {0}, column {01}: drop q = {01}, F(x,q) = {1}, b(q) = {01} (> x), b(q) ∈ R_k: False, h(b(q)) = 2
+   row {0}, column {03}: lower cell at {03}
+   row {1}, column {01}: upper cell at {01}
+== sat_icok_bq_not_lt_x_min6.json: |L| = 6, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; UpCell = False; m = {013}; R_k tight: True
+   row {2}, column {012}: drop q = {012}, F(x,q) = {01}, b(q) = {013} (∥ x), b(q) ∈ R_k: False, h(b(q)) = 2
+== sat_icok_pair_noupcell_min14.json: |L| = 14, K = 3; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; UpCell = False; m = {012}; R_k tight: False
+   row {03}, column {0234}: drop q = {0234}, F(x,q) = {02}, b(q) = {01234} (> x), b(q) ∈ R_k: False, h(b(q)) = 5
+   row {34}, column {034}: drop q = {034}, F(x,q) = {0}, b(q) = {0} (∥ x), b(q) ∈ R_k: True, h(b(q)) = 1
+== sat_icok_noinitial_min4.json: |L| = 4, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; UpCell = False; m = {01}; R_k tight: True

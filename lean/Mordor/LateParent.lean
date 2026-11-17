@@ -68,6 +68,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁹⁰: `htf_concl_iff`, `fibre_bad_of_not_upCell`, `badFibre_row`, `no_cell_above`, `rowShadow_source`, `MinUpCell`,
   `singletonLower_of_minUpCell`, **`upCell_zero`** (MinUpCell at `k = 0`).
 * §34.3z¹⁹¹: `MinDescentWitness`, `minUpCell_of_minDescentWitness`, `diag_post_of_aEntry`, `above_of_diag_post`.
+* §34.3z¹⁹²: **`saturated_shadow`**, `SatSourceBelow` (refuted), `initialPair_of_le`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1425,6 +1426,45 @@ theorem diag_post_of_aEntry {q x : α} (hqx : q ≤ x) (hU : x ≤ F q x) : x �
 
 theorem above_of_diag_post {x u : α} (hx : x ≤ F x x) (hxu : x ≤ u) : x ≤ F x u :=
   hx.trans ((F x).mono hxu)
+
+/-! ### Saturated shadows and the initial pair (§34.3z¹⁹²) -/
+
+/-- **Saturated shadow** (the provable part of the brief's SaturatedShadow). Without UpCell, every candidate pair
+`x < v`, `F x v ≤ v`, `m ≰ v` of a stage-`k` row `x` (height `k`) contains a *saturated drop* `q ∈ (x, v]`:
+`q = x ⊔ F x q`, `F x q ≤ q`, `m ≰ q`, and `F x q ∥ x`. Proof: iterate `u ↦ x ⊔ F x u` (it stays pre-fixed, off `m`, and
+strictly above `x`, since `x ⊔ F x u = x` would be a lower cell); heights strictly decrease until a fixed point, where an
+upper cell is again excluded. Only `NoChain` is used — no tightness, no membership of the iterates in any stage.
+(The brief's further claim `b q < x` is refuted, §34.3z¹⁹².) -/
+theorem saturated_shadow {k H : ℕ} (hn : NoChain α (H + 1)) {m x v : α} (hnot : ¬ UpCell F H k m)
+    (hx : x ∈ Rk F k) (hxk : height H x = k) :
+    ∀ (n : ℕ) {u : α}, height H u ≤ n → x < u → u ≤ v → F x u ≤ u → ¬ m ≤ v →
+      ∃ q, x < q ∧ q ≤ u ∧ ¬ m ≤ q ∧ F x q ≤ q ∧ x ⊔ F x q = q ∧ ¬ x ≤ F x q ∧ ¬ F x q ≤ x
+  | 0, u, hu, hxu, _, _, _ => by have := height_strictMono hn hxu; omega
+  | n + 1, u, hu, hxu, huv, hFu, hmv => by
+      have hmu : ¬ m ≤ u := fun h => hmv (h.trans huv)
+      have hlow : ¬ F x u ≤ x := fun h => hnot ⟨x, hx, hxk, u, hxu, hmu, Or.inl h⟩
+      have hle : x ⊔ F x u ≤ u := sup_le hxu.le hFu
+      by_cases he : x ⊔ F x u = u
+      · refine ⟨u, hxu, le_rfl, hmu, hFu, he, fun h => ?_, hlow⟩
+        exact hnot ⟨x, hx, hxk, u, hxu, hmu, Or.inr (he.symm.trans (sup_eq_right.2 h)).le⟩
+      · have hlt : x ⊔ F x u < u := lt_of_le_of_ne hle he
+        have hxlt : x < x ⊔ F x u := lt_of_le_of_ne le_sup_left fun e => hlow (le_sup_right.trans e.symm.le)
+        have hpre : F x (x ⊔ F x u) ≤ x ⊔ F x u := ((F x).mono hle).trans le_sup_right
+        have := height_strictMono hn hlt
+        obtain ⟨q, h1, h2, h3⟩ := saturated_shadow hn hnot hx hxk n (by omega) hxlt (hlt.le.trans huv) hpre hmv
+        exact ⟨q, h1, h2.trans hlt.le, h3⟩
+
+/-- **Saturated source below the row** (the brief's conjectured second half; refuted at `|L| = 6` under ¬UpCell and at
+`|L| = 7` for local drops in MinUpCell models, §34.3z¹⁹²). -/
+def SatSourceBelow (F : α →o α →o α) (H k : ℕ) (m : α) : Prop :=
+  ∀ x q, x ∈ Rk F k → height H x = k → x < q → ¬ m ≤ q → F x q ≤ q → x ⊔ F x q = q → ¬ x ≤ F x q → b F q < x
+
+/-- **Initial pair from a row below `m ⊓ w`**: any row `x ≤ m` strictly below the column-orbit output `w = F m y*`
+has `w` as a candidate column (`F x w ≤ w`, `m ≰ w`). In MinUpCell models `m ⊓ w` is a height-`k` row of `R_k` in 830
+of 981 cases; the remaining cases need another row. -/
+theorem initialPair_of_le {m x y : α} (hxm : x ≤ m) (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) :
+    F x (F m y) ≤ F m y ∧ ¬ m ≤ F m y :=
+  ⟨feeder_le_side hxm hy, hmw⟩
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

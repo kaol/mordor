@@ -264,7 +264,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     the no-interval-cell condition at m: without it, an entirely bad nonempty family with ¬UpCell exists at |L| = 6. The
     hypothesis-minimal **MinUpCell** implies SingletonLower and is **proved at k = 0** (`upCell_zero`) (§34.3z¹⁹⁰). It
     reduces further to MinDescentWitness, which has no counterexample under the same minimal hypotheses. Its witness
-    cannot be anchored at w, y* or the feeder (|L| = 18, 20) (§34.3z¹⁹¹).
+    cannot be anchored at w, y* or the feeder (|L| = 18, 20) (§34.3z¹⁹¹). Without UpCell, every candidate interval of a top row
+    contains a saturated drop q = x ⊔ F(x, q) (`saturated_shadow`), but its B-source need not lie below the row
+    (|L| = 6, 7). Models with an initial pair and ¬UpCell exist once ¬IC(m) is dropped (|L| = 6, 14), so ¬IC(m) has to
+    be used after the pair is found (§34.3z¹⁹²).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

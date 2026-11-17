@@ -1,0 +1,84 @@
+== saturate_probe.py (§34.3z¹⁹²), mode=min: SAT models of 'minhyp' under the MinUpCell hypotheses (multi notop nofeeder notightK1), every qualifying m; rank-3 closure 5 10 1, 5 11 4, 5 11 14, 5 12 8, 6 12 9, 6 12 18, 6 13 13; rank-4 closure 6 13 11; sweep 4 16; runs capped at 580 s; summed
+('initial pair', 'min', 'rows of height k in R_k', 1, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', False, 'b(m) a height-k row of R_k', False) 1
+('initial pair', 'min', 'rows of height k in R_k', 1, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', False, 'b(m) a height-k row of R_k', False) 1
+('initial pair', 'min', 'rows of height k in R_k', 1, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', False, 'b(m) a height-k row of R_k', True) 7
+('initial pair', 'min', 'rows of height k in R_k', 1, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', True, 'b(m) a height-k row of R_k', False) 4
+('initial pair', 'min', 'rows of height k in R_k', 1, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', True, 'b(m) a height-k row of R_k', True) 121
+('initial pair', 'min', 'rows of height k in R_k', 2, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', True, 'b(m) a height-k row of R_k', False) 2
+('initial pair', 'min', 'rows of height k in R_k', 2, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', True, 'b(m) a height-k row of R_k', True) 6
+('initial pair', 'min', 'rows of height k in R_k', 2, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', False, 'b(m) a height-k row of R_k', False) 8
+('initial pair', 'min', 'rows of height k in R_k', 2, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', False, 'b(m) a height-k row of R_k', True) 19
+('initial pair', 'min', 'rows of height k in R_k', 2, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', True, 'b(m) a height-k row of R_k', False) 10
+('initial pair', 'min', 'rows of height k in R_k', 2, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', True, 'b(m) a height-k row of R_k', True) 141
+('initial pair', 'min', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', False, 'b(m) a height-k row of R_k', False) 27
+('initial pair', 'min', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', False, 'b(m) a height-k row of R_k', True) 36
+('initial pair', 'min', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', True, 'b(m) a height-k row of R_k', False) 52
+('initial pair', 'min', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', True, 'b(m) a height-k row of R_k', True) 188
+('initial pair', 'min', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', False, 'b(m) a height-k row of R_k', False) 10
+('initial pair', 'min', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', False, 'b(m) a height-k row of R_k', True) 42
+('initial pair', 'min', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', True, 'b(m) a height-k row of R_k', False) 39
+('initial pair', 'min', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', True, 'b(m) a height-k row of R_k', True) 267
+('models', 'min', 'UpCell', True) 981
+('saturation', 'min', 'drop', 'b(q) vs x', '<', 'b(q) ∈ R_k', True, 'h(b(q)) − k', -1, 'q ∈ R_{k+1}', True) 9
+('saturation', 'min', 'drop', 'b(q) vs x', '<', 'b(q) ∈ R_k', True, 'h(b(q)) − k', -2, 'q ∈ R_{k+1}', True) 8
+('saturation', 'min', 'drop', 'b(q) vs x', '<', 'b(q) ∈ R_k', True, 'h(b(q)) − k', -3, 'q ∈ R_{k+1}', True) 2
+('saturation', 'min', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 1, 'q ∈ R_{k+1}', True) 343
+('saturation', 'min', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 2, 'q ∈ R_{k+1}', False) 47
+('saturation', 'min', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 2, 'q ∈ R_{k+1}', True) 86
+('saturation', 'min', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 3, 'q ∈ R_{k+1}', False) 49
+('saturation', 'min', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 3, 'q ∈ R_{k+1}', True) 35
+('saturation', 'min', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 4, 'q ∈ R_{k+1}', False) 39
+('saturation', 'min', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 4, 'q ∈ R_{k+1}', True) 14
+('saturation', 'min', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 0, 'q ∈ R_{k+1}', False) 7
+('saturation', 'min', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 1, 'q ∈ R_{k+1}', False) 230
+('saturation', 'min', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 1, 'q ∈ R_{k+1}', True) 33
+('saturation', 'min', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 2, 'q ∈ R_{k+1}', False) 58
+('saturation', 'min', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 2, 'q ∈ R_{k+1}', True) 6
+('saturation', 'min', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 3, 'q ∈ R_{k+1}', False) 4
+('saturation', 'min', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', True, 'h(b(q)) − k', -1, 'q ∈ R_{k+1}', True) 111
+('saturation', 'min', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', True, 'h(b(q)) − k', 0, 'q ∈ R_{k+1}', True) 622
+('saturation', 'min', 'lower cell') 1416
+('saturation', 'min', 'upper cell') 1051
+
+== mode=icok: models of the upcell counterexamples with ¬IC(m) dropped (¬UpCell), same seeds; summed
+('initial pair', 'icok', 'rows of height k in R_k', 1, 'some row with a candidate column', False, 'R_k tight', False, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', False) 1
+('initial pair', 'icok', 'rows of height k in R_k', 1, 'some row with a candidate column', False, 'R_k tight', False, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', True) 25
+('initial pair', 'icok', 'rows of height k in R_k', 1, 'some row with a candidate column', False, 'R_k tight', True, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', False) 108
+('initial pair', 'icok', 'rows of height k in R_k', 1, 'some row with a candidate column', False, 'R_k tight', True, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', True) 170
+('initial pair', 'icok', 'rows of height k in R_k', 2, 'some row with a candidate column', False, 'R_k tight', False, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', False) 4
+('initial pair', 'icok', 'rows of height k in R_k', 2, 'some row with a candidate column', False, 'R_k tight', False, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', True) 7
+('initial pair', 'icok', 'rows of height k in R_k', 2, 'some row with a candidate column', False, 'R_k tight', True, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', False) 57
+('initial pair', 'icok', 'rows of height k in R_k', 2, 'some row with a candidate column', False, 'R_k tight', True, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', True) 128
+('initial pair', 'icok', 'rows of height k in R_k', 2, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', False) 7
+('initial pair', 'icok', 'rows of height k in R_k', 2, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', True) 8
+('initial pair', 'icok', 'rows of height k in R_k', 2, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', False) 27
+('initial pair', 'icok', 'rows of height k in R_k', 2, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', True) 18
+('initial pair', 'icok', 'rows of height k in R_k', 3, 'some row with a candidate column', False, 'R_k tight', False, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', False) 27
+('initial pair', 'icok', 'rows of height k in R_k', 3, 'some row with a candidate column', False, 'R_k tight', False, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', True) 23
+('initial pair', 'icok', 'rows of height k in R_k', 3, 'some row with a candidate column', False, 'R_k tight', True, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', False) 26
+('initial pair', 'icok', 'rows of height k in R_k', 3, 'some row with a candidate column', False, 'R_k tight', True, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', True) 46
+('initial pair', 'icok', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', False) 146
+('initial pair', 'icok', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', False, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', True) 184
+('initial pair', 'icok', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', False) 37
+('initial pair', 'icok', 'rows of height k in R_k', 3, 'some row with a candidate column', True, 'R_k tight', True, 'm ∧ w a height-k row of R_k', None, 'b(m) a height-k row of R_k', True) 45
+('models', 'icok', 'UpCell', False) 1094
+('saturation', 'icok', 'drop', 'b(q) vs x', '<', 'b(q) ∈ R_k', True, 'h(b(q)) − k', -1, 'q ∈ R_{k+1}', True) 175
+('saturation', 'icok', 'drop', 'b(q) vs x', '<', 'b(q) ∈ R_k', True, 'h(b(q)) − k', -2, 'q ∈ R_{k+1}', True) 114
+('saturation', 'icok', 'drop', 'b(q) vs x', '<', 'b(q) ∈ R_k', True, 'h(b(q)) − k', -3, 'q ∈ R_{k+1}', True) 21
+('saturation', 'icok', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 2, 'q ∈ R_{k+1}', False) 71
+('saturation', 'icok', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 2, 'q ∈ R_{k+1}', True) 49
+('saturation', 'icok', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 3, 'q ∈ R_{k+1}', False) 200
+('saturation', 'icok', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 3, 'q ∈ R_{k+1}', True) 30
+('saturation', 'icok', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 4, 'q ∈ R_{k+1}', False) 80
+('saturation', 'icok', 'drop', 'b(q) vs x', '>', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 4, 'q ∈ R_{k+1}', True) 7
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 0, 'q ∈ R_{k+1}', False) 8
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 0, 'q ∈ R_{k+1}', True) 2
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 1, 'q ∈ R_{k+1}', False) 258
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 1, 'q ∈ R_{k+1}', True) 27
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 2, 'q ∈ R_{k+1}', False) 41
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 2, 'q ∈ R_{k+1}', True) 1
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', False, 'h(b(q)) − k', 3, 'q ∈ R_{k+1}', False) 10
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', True, 'h(b(q)) − k', -1, 'q ∈ R_{k+1}', True) 124
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', True, 'h(b(q)) − k', -2, 'q ∈ R_{k+1}', True) 4
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', True, 'h(b(q)) − k', 0, 'q ∈ R_{k+1}', True) 53
+('saturation', 'icok', 'drop', 'b(q) vs x', '∥', 'b(q) ∈ R_k', True, 'h(b(q)) − k', 1, 'q ∈ R_{k+1}', True) 7

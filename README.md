@@ -240,7 +240,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     only 6 of 19 depth-two cases, and the upper cone of larger shadow columns 14 of 19. The full off-target fibre
     of the source row reaches 19 of 19 (§34.3z¹⁸⁰–¹⁸³). The open content is now **TopFibre**: a stage-k
     sibling-shadow configuration with a comparable fibre column. It implies SingletonLower
-    (`singletonLower_of_topFibre`) and has no counterexample (rank 2–4).
+    (`singletonLower_of_topFibre`) and has no counterexample (rank 2–4). The descent-seeded configuration graph never dead-ends on
+    this corpus and always reaches a FibreTop configuration. That gives two precise targets, SeededStep and
+    SeededTop (§34.3z¹⁸⁴).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

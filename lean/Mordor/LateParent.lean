@@ -51,6 +51,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   sibling-shadow configuration whose cell is a new lower-cell shadow gives a sibling-shadow configuration one
   stage higher).
 * §34.3z¹⁸³: `TopFibre`, **`upCell_of_topFibre`**, **`singletonLower_of_topFibre`**.
+* §34.3z¹⁸⁴: `shadowFibre`, `FibreTopAt`, **`fibreTopAt_iff_join`** (a stable fibre join reduces FibreTop to the single
+  interval `(c, ⋁S]`), `topFibre_iff`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -891,5 +893,37 @@ theorem singletonLower_of_topFibre {H : ℕ} (hn : NoChain α (H + 1))
   rcases htf k htop hk hall m hm hmk hnew m' hm' hm'k hlt hlo hno with h | ⟨j, rfl, h⟩
   · exact h
   · exact upCell_of_topFibre hn hk h
+
+/-! ### The fibre join (§34.3z¹⁸⁴) -/
+
+/-- The off-target shadow fibre of the configuration `(p, c)`. -/
+def shadowFibre (F : α →o α →o α) (m p c : α) : Set α := {v | c < v ∧ ¬ m ≤ v ∧ F p v = c}
+
+/-- FibreTop at a fixed configuration `(p, c)`: some fibre interval `(c, v]` has a column comparable with its
+row-`c` value. -/
+def FibreTopAt (F : α →o α →o α) (m p c : α) : Prop :=
+  ∃ v ∈ shadowFibre F m p c, ∃ y, c < y ∧ y ≤ v ∧ (F c y ≤ y ∨ y ≤ F c y)
+
+/-- **A stable fibre join reduces FibreTop to one interval.** If `U = ⋁ S(p, c; m)` is itself in the fibre
+(`F p U = c`, `m ≰ U`), then FibreTop at `(p, c)` holds iff `(c, U]` contains a comparable column. -/
+theorem fibreTopAt_iff_join {m p c : α} (hU : F p (sSup (shadowFibre F m p c)) = c)
+    (hmU : ¬ m ≤ sSup (shadowFibre F m p c)) :
+    FibreTopAt F m p c ↔
+      ∃ y, c < y ∧ y ≤ sSup (shadowFibre F m p c) ∧ (F c y ≤ y ∨ y ≤ F c y) := by
+  constructor
+  · rintro ⟨v, hv, y, hcy, hyv, hc⟩
+    exact ⟨y, hcy, hyv.trans (le_sSup hv), hc⟩
+  · rintro ⟨y, hcy, hyU, hc⟩
+    exact ⟨_, ⟨lt_of_lt_of_le hcy hyU, hmU, hU⟩, y, hcy, hyU, hc⟩
+
+/-- `TopFibre` is FibreTop at some stage configuration. -/
+theorem topFibre_iff {j H : ℕ} {m : α} :
+    TopFibre F H j m ↔ ∃ p c, p ∈ Rk F j ∧ height H p = j ∧ c ∈ Rk F (j + 1) ∧ height H c = j + 1 ∧ p < c ∧
+      F p c = p ∧ FibreTopAt F m p c := by
+  constructor
+  · rintro ⟨p, c, v, y, hp, hph, hc, hch, hpc, hpcp, hpv, hmv, hcy, hyv, hcell⟩
+    exact ⟨p, c, hp, hph, hc, hch, hpc, hpcp, v, ⟨lt_of_lt_of_le hcy hyv, hmv, hpv⟩, y, hcy, hyv, hcell⟩
+  · rintro ⟨p, c, hp, hph, hc, hch, hpc, hpcp, v, ⟨-, hmv, hpv⟩, y, hcy, hyv, hcell⟩
+    exact ⟨p, c, v, y, hp, hph, hc, hch, hpc, hpcp, hpv, hmv, hcy, hyv, hcell⟩
 
 end Mordor.OrbitHeight

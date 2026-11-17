@@ -251,7 +251,11 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     TopGoal is the recursion `Good` (`good_iff_topGoal`). The local fork principle "a node with a child has a good
     child" is false for unreachable nodes (|L| = 17), but holds on all 116 forks reachable from feeder roots, and every
     A-child observed is good (56/56). The missing step is now: a B-child reachable from the feeder root is good
-    (§34.3z¹⁸⁷).
+    (§34.3z¹⁸⁷). The rooted principle splits into AGood and BOnlyGoodChild (`nonemptyForkGoodChild_of_split`). Every A-child
+    observed is a fixed point of a, so A-children continue by B-edges. All 17 all-bad forks in rooted models lie
+    outside the root's upper cone (`topReach_ge`), which leaves **ConeForkGood** as the order-theoretic gap. The early
+    column is genuine, since `htf` gives no lower-stage tightness, and in 2/2 cases it transfers to a Good B-source
+    below z (§34.3z¹⁸⁸).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

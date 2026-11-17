@@ -61,6 +61,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁸⁷: `UpAt`, `Good`, `topReach_cons`, `topGoal_of_good`, `good_of_topReach`, `good_iff_topGoal`, `good_le`,
   `NonemptyForkGoodChild`, `topGoal_of_fork`, `good_term_of_topEdge`, `good_child_of_good`,
   `nonemptyForkGoodChild_iff`, `ForkGoodChildAll`, `nonemptyForkGoodChild_of_all`.
+* §34.3z¹⁸⁸: `le_a_of_upper`, `aEdge_le_a`, `upAt_of_a`, `good_aChild_term`, `AGoodFrom`, `BOnlyGoodChild`,
+  `nonemptyForkGoodChild_of_split`, `topGoal_of_split`, `topEdge_lt`, `topReach_ge`, `ConeForkGood`,
+  `nonemptyForkGoodChild_of_cone`, `not_tight_of_early`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1203,6 +1206,82 @@ theorem nonemptyForkGoodChild_of_all {H k j₀ : ℕ} {m c₀ : α} (h0 : c₀ �
   intro j c hr hj he
   obtain ⟨hc, hch⟩ := topReach_top h0 hr
   exact h j c hc hch hj he
+
+/-! ### Decomposition of the rooted fork principle (§34.3z¹⁸⁸) -/
+
+/-- **An upper cell makes its column row-post-fixed**: `c ≤ y ≤ F c y` gives `y ≤ F y y`, so `y ≤ a y`. -/
+theorem le_a_of_upper {c y : α} (hcy : c ≤ y) (hU : y ≤ F c y) : y ≤ a F y :=
+  le_a (hU.trans ((F.mono hcy) y))
+
+theorem aEdge_le_a {j H : ℕ} {m c y : α} (h : AEdge F H j m c y) : y ≤ a F y :=
+  le_a_of_upper h.2.2.1.le h.2.2.2.1
+
+/-- **A-orbit terminal step**: a strict A-iterate off `m` is an upward cell, `a y ≤ F y (a y)` (`row_a`). -/
+theorem upAt_of_a {m y : α} (hy : y < a F y) (hm : ¬ m ≤ a F y) : UpAt F m y :=
+  ⟨a F y, hy, hm, Or.inr (row_a y).ge⟩
+
+/-- **A-orbit terminal lemma**: an A-child at the terminal index whose own A-iterate moves strictly and stays off `m`
+is good. The two obstructions are exactly `a y = y` (stabilization) and `m ≤ a y`. -/
+theorem good_aChild_term {H k : ℕ} {m c y : α} (h : AEdge F H (k - 2) m c y) (hy : y ≠ a F y) (hm : ¬ m ≤ a F y) :
+    Good F H k m (k - 1) y :=
+  .term (upAt_of_a (lt_of_le_of_ne (aEdge_le_a h) hy) hm)
+
+/-- **AGood (rooted, conjectural)**: every A-child of a reachable top below the terminal index is good. -/
+def AGoodFrom (F : α →o α →o α) (H k : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : Prop :=
+  ∀ j c y, TopReach F H m j₀ c₀ j c → j < k - 1 → AEdge F H j m c y → Good F H k m (j + 1) y
+
+/-- **BOnlyGoodChild (rooted, conjectural)**: a reachable top below the terminal index with a B-child and no A-child
+has a good B-child. -/
+def BOnlyGoodChild (F : α →o α →o α) (H k : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : Prop :=
+  ∀ j c, TopReach F H m j₀ c₀ j c → j < k - 1 → (∃ y, SibConfig F H (j + 1) m c y) →
+    (¬ ∃ y, AEdge F H j m c y) → ∃ y, SibConfig F H (j + 1) m c y ∧ Good F H k m (j + 1) y
+
+/-- **Assembly**: AGood and BOnlyGoodChild give the rooted fork principle. -/
+theorem nonemptyForkGoodChild_of_split {H k j₀ : ℕ} {m c₀ : α} (hA : AGoodFrom F H k m j₀ c₀)
+    (hB : BOnlyGoodChild F H k m j₀ c₀) : NonemptyForkGoodChild F H k m j₀ c₀ := by
+  intro j c hr hj ⟨y, he⟩
+  by_cases hAe : ∃ y, AEdge F H j m c y
+  · obtain ⟨y', hy'⟩ := hAe
+    exact ⟨y', Or.inr hy', hA j c y' hr hj hy'⟩
+  · rcases he with hS | hA'
+    · obtain ⟨y', hS', hg⟩ := hB j c hr hj ⟨y, hS⟩ hAe
+      exact ⟨y', Or.inl hS', hg⟩
+    · exact absurd ⟨y, hA'⟩ hAe
+
+/-- **TopGoal from the split**: with a root edge strictly below the terminal index. -/
+theorem topGoal_of_split {H k j₀ : ℕ} {m c₀ : α} (hj : j₀ < k - 1) (hroot : ∃ y, TopEdge F H j₀ m c₀ y)
+    (hA : AGoodFrom F H k m j₀ c₀) (hB : BOnlyGoodChild F H k m j₀ c₀) : TopGoal F H k m j₀ c₀ :=
+  topGoal_of_fork hj hroot (nonemptyForkGoodChild_of_split hA hB)
+
+/-- Top edges strictly increase the order. -/
+theorem topEdge_lt {H j : ℕ} {m c y : α} (h : TopEdge F H j m c y) : c < y := by
+  rcases h with ⟨-, -, -, -, -, h, -⟩ | ⟨-, -, h, -⟩ <;> exact h
+
+/-- **Root cone**: every top reachable from `c₀` lies above `c₀`. -/
+theorem topReach_ge {H j₀ j : ℕ} {m c₀ c : α} (h : TopReach F H m j₀ c₀ j c) : c₀ ≤ c := by
+  induction h with
+  | root => exact le_rfl
+  | step _ he ih => exact ih.trans (topEdge_lt he).le
+
+/-- **ConeForkGood (conjectural)**: every top above the root `c₀` strictly below the terminal index with a top edge has
+a good child. An order-theoretic replacement for reachability; all-bad forks in rooted models lie outside the cone
+(§34.3z¹⁸⁸, 17/17). -/
+def ConeForkGood (F : α →o α →o α) (H k : ℕ) (m : α) (c₀ : α) : Prop :=
+  ∀ j c, c₀ ≤ c → c ∈ Rk F (j + 1) → height H c = j + 1 → j < k - 1 → (∃ y, TopEdge F H j m c y) →
+    ∃ y, TopEdge F H j m c y ∧ Good F H k m (j + 1) y
+
+/-- **ConeForkGood gives the rooted fork principle** (reachable tops lie in the root cone, `topReach_ge`). -/
+theorem nonemptyForkGoodChild_of_cone {H k j₀ : ℕ} {m c₀ : α} (h0 : c₀ ∈ Rk F (j₀ + 1) ∧ height H c₀ = j₀ + 1)
+    (h : ConeForkGood F H k m c₀) : NonemptyForkGoodChild F H k m j₀ c₀ := by
+  intro j c hr hj he
+  obtain ⟨hc, hch⟩ := topReach_top h0 hr
+  exact h j c (topReach_ge hr) hc hch hj he
+
+/-- **Early columns contradict lower-stage tightness**: an element of `R_j` of height `j + 1` makes `R_j` non-tight.
+The `htf` hypotheses of `singletonLower_of_topFibre` give tightness only at `R_k` and `R_{k+1}`, so the early-column
+case (`z ∈ R_{h(z) − 1}`) is genuine there. -/
+theorem not_tight_of_early {H j : ℕ} {z : α} (hz : z ∈ Rk F j) (hzh : height H z = j + 1) :
+    ¬ ∀ x ∈ Rk F j, height H x ≤ j := fun ht => by have := ht z hz; omega
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

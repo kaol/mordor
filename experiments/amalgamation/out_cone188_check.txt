@@ -1,0 +1,10 @@
+== cone_mixfail_min16.json: |L| = 16, K = 3, k = 2; harness hypotheses hold: True; root {2} (stage 1), SibConfig sources of the root: []
+   good top path: {2} -B→ {24} (UpAt)
+   {2}: children [('{24}', 'B')], SeedEdge children [], a(x) = {2}
+   {24}: children [('{124}', 'B')], SeedEdge children ['{124}'], a(x) = {2}
+== fork_root_bad_L_min19.json (early column): |L| = 19, K = 3, k = 2; hypotheses hold: True; m = {134}, m′ = {34}, w = {02345}; non-tight stages ≤ k: [1]
+   root (r, z) = ({4}, {24}): stage(z) = 1, h(z) = 2, F(r, z) = {}, UpAt(z) = False
+   UpCell witness x = {25}: b(x) = {2} = x ∧ z: True, b(x) < z: True, stage(b(x)) = 1, h(b(x)) = 1, SibConfig(b(x), x) (a B-edge b(x) → x) = True, x vs z: ∥, x vs r: ∥
+== cone_early_min28.json (early column): |L| = 28, K = 3, k = 2; hypotheses hold: True; m = {125}, m′ = {12}, w = {0123}; non-tight stages ≤ k: [1]
+   root (r, z) = ({}, {01}): stage(z) = 1, h(z) = 2, F(r, z) = {}, UpAt(z) = False
+   UpCell witness x = {03}: b(x) = {0} = x ∧ z: True, b(x) < z: True, stage(b(x)) = 1, h(b(x)) = 1, SibConfig(b(x), x) (a B-edge b(x) → x) = True, x vs z: ∥, x vs r: >

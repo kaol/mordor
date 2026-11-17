@@ -1,0 +1,22 @@
+== cone_probe.py (§34.3z¹⁸⁸): the 1224 models of out_fork187.txt (same seeds, every qualifying m; runs capped at 580 s); A-roots rooted at r when r is a node, else at z; summed
+('A-child', 'stage', '< k', 'Good', True, 'a-orbit', 'a(y) = y (stabilizes)', 'pure A-chain reaches a stage-k UpAt', False, 'terminal via upAt_of_a', False) 56
+('all-bad fork (rooted model)', 'root ≤ x', False, 'reachable', False) 17
+('cone node (root < x, h(x) ≤ k)', 'reachable', False, 'below k with children', False, 'Good', False) 158
+('cone node (root < x, h(x) ≤ k)', 'reachable', False, 'below k with children', False, 'Good', True) 5
+('cone node (root < x, h(x) ≤ k)', 'reachable', True, 'below k with children', False, 'Good', False) 9
+('cone node (root < x, h(x) ≤ k)', 'reachable', True, 'below k with children', False, 'Good', True) 152
+('cone node (root < x, h(x) ≤ k)', 'reachable', True, 'below k with children', True, 'Good', True) 18
+('early-column root', 'k − h(z)', 0, 'r has a source p (F(p, r) = p, h(p) = h(r) − 1)', False, 'a sibling s ≤ z of r (same source) is Good', False, 'z = r ∨ s for such s', False, 'UpCell at stage k', True) 1
+('early-column root', 'k − h(z)', 0, 'r has a source p (F(p, r) = p, h(p) = h(r) − 1)', True, 'a sibling s ≤ z of r (same source) is Good', True, 'z = r ∨ s for such s', True, 'UpCell at stage k', True) 1
+('reachable B top-edge', 'is a SeedEdge (some source)', False, 'x has a SibConfig source', False, 'child Good', False) 1
+('reachable B top-edge', 'is a SeedEdge (some source)', False, 'x has a SibConfig source', False, 'child Good', True) 55
+('reachable B top-edge', 'is a SeedEdge (some source)', True, 'x has a SibConfig source', True, 'child Good', False) 8
+('reachable B top-edge', 'is a SeedEdge (some source)', True, 'x has a SibConfig source', True, 'child Good', True) 105
+('reachable B-only fork', 'B-children', 1, 'good B-children', 1) 141
+('reachable B-only fork', 'B-children', 2, 'good B-children', 1) 3
+('reachable B-only fork', 'B-children', 2, 'good B-children', 2) 8
+('root', 'lower', 'Good (top graph)', False, 'Good (mixed graph)', False) 2
+('root', 'lower', 'Good (top graph)', True, 'Good (mixed graph)', False) 2
+('root', 'lower', 'Good (top graph)', True, 'Good (mixed graph)', True) 269
+('root', 'upper', 'Good (top graph)', True, 'Good (mixed graph)', False) 48
+models 1224

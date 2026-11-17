@@ -248,6 +248,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     configuration or an A-edge), every node with an out-edge is already UpCell at its stage (`upCell_of_topEdge`), and
     `upCell_of_topGoal` reduces the seeded case to **TopGoal**: existential reachability of a stage-k UpCell top. It
     holds on 68/68 seeded roots below k, while universal continuation fails (|L| = 31) (§34.3z¹⁸⁶).
+    TopGoal is the recursion `Good` (`good_iff_topGoal`). The local fork principle "a node with a child has a good
+    child" is false for unreachable nodes (|L| = 17), but holds on all 116 forks reachable from feeder roots, and every
+    A-child observed is good (56/56). The missing step is now: a B-child reachable from the feeder root is good
+    (§34.3z¹⁸⁷).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

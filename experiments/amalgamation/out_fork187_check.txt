@@ -1,0 +1,15 @@
+== fork_allbad_new_min17.json: |L| = 17, K = 3, k = 2; hypotheses all hold: True 
+   m = {124}, m′ = {12}, w = {0123}; descent depth 0, root (r, z) = ({12}, {012}), h(z) = 3, z new = True, F(r, z) = {12}, z ∈ R_(h(z)−1) (early) = False, UpAt(z) = True
+   ALL-BAD FORK at {1} (stage 1, new True, reachable from z: False, x vs m′: <)
+     child {13}: B, stage 2, stage-k top without an upward cell away from m; F(x, y) = {1}, fibre S(x, y; m) = ['{134}']
+   UpCell witnesses at stage k: ['{12}']
+== fork_allbad_new_sib_min31.json: |L| = 31, K = 3, k = 2; hypotheses all hold: True 
+   m = {035}, m′ = {03}, w = {0123}; descent depth 1, root (r, z) = ({3}, {13}), h(z) = 2, z new = True, F(r, z) = {3}, z ∈ R_(h(z)−1) (early) = False, UpAt(z) = True
+   top graph from z: ['{13}']; Good(z) = True
+   ALL-BAD FORK at {1} (stage 1, new True, reachable from z: False, x vs m′: ∥)
+     child {01}: B, stage 2, stage-k top without an upward cell away from m; F(x, y) = {1}, fibre S(x, y; m) = ['{015}']
+   UpCell witnesses at stage k: ['{03}', '{13}']
+== fork_root_bad_L_min19.json: |L| = 19, K = 3, k = 2; hypotheses all hold: True 
+   m = {134}, m′ = {34}, w = {02345}; descent depth 1, root (r, z) = ({4}, {24}), h(z) = 2, z new = False, F(r, z) = {}, z ∈ R_(h(z)−1) (early) = True, UpAt(z) = False
+   top graph from z: ['{24}']; Good(z) = False
+   UpCell witnesses at stage k: ['{25}']

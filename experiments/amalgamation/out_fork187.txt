@@ -1,0 +1,43 @@
+== fork_probe.py (§34.3z¹⁸⁷: nonempty-fork good-child principle over the Lean top graph; every qualifying m, one model each); rank 3 closure 5 10 1–3, 5 11 4/5/7/14/15, 5 12 8/16/17, 6 11 6, 6 12 9/10/12/18/19, 6 13 13/20/21; rank 4 closure 6 12 9/10, 6 13 11; rank 2 sweep 4 16; summed over runs, each capped at 580 s (a capped run reports its counts so far)
+('A-root not a node', 'z node', True, 'z new', True, 'Good(z)', True, 'z = a(r)', True) 43
+('A-root', 'r → z an A-edge', True, 'z = a(r)', True, 'Good(r)', True, 'Good(z)', True) 5
+('all-bad fork', 'reachable from the descent root', None) 0
+('all-bad forks in the model', 0, 'reachable from the root', 0, 'root good', False) 2
+('all-bad forks in the model', 0, 'reachable from the root', 0, 'root good', True) 264
+('all-bad forks in the model', 1, 'reachable from the root', 0, 'root good', True) 12
+('bad root', 'SibConfig(r, z)', False, 'F(r,z) = r', False, 'fibre nonempty', True, 'z new', False, 'UpCell at stage k', True) 1
+('bad root', 'SibConfig(r, z)', False, 'F(r,z) = r', True, 'fibre nonempty', True, 'z new', False, 'UpCell at stage k', True) 1
+('child goodness (nodes below k)', 'A', 'good', True, 'other') 56
+('child goodness (nodes below k)', 'B', 'good', False, 'child at stage k without UpAt') 28
+('child goodness (nodes below k)', 'B', 'good', False, 'child is a dead end below k') 41
+('child goodness (nodes below k)', 'B', 'good', True, 'other') 1159
+('fork position', 'x vs m′', '<', 'x vs w', '<', 'x vs m', '<', 'has a good child', False) 21
+('fork position', 'x vs m′', '<', 'x vs w', '<', 'x vs m', '<', 'has a good child', True) 1003
+('fork position', 'x vs m′', '∥', 'x vs w', '<', 'x vs m', '∥', 'has a good child', False) 2
+('fork position', 'x vs m′', '∥', 'x vs w', '<', 'x vs m', '∥', 'has a good child', True) 180
+('fork with ≥ 2 children', 'good B/A', 'A', 'bad B/A', 'B') 6
+('fork with ≥ 2 children', 'good B/A', 'A', 'bad B/A', 'BB') 1
+('fork with ≥ 2 children', 'good B/A', 'AB', 'bad B/A', '') 1
+('fork with ≥ 2 children', 'good B/A', 'B', 'bad B/A', 'B') 38
+('fork with ≥ 2 children', 'good B/A', 'BB', 'bad B/A', '') 31
+('fork', 'new top', 'k − s', 1, 'has a good child', False) 10
+('fork', 'new top', 'k − s', 1, 'has a good child', True) 1004
+('fork', 'new top', 'k − s', 2, 'has a good child', False) 13
+('fork', 'new top', 'k − s', 2, 'has a good child', True) 179
+('reachable dead end below k',) 7
+('reachable fork', 'children', 1, 'B/A', 'A', 'good children', 1) 2
+('reachable fork', 'children', 1, 'B/A', 'B', 'good children', 1) 103
+('reachable fork', 'children', 2, 'B/A', 'AB', 'good children', 1) 4
+('reachable fork', 'children', 2, 'B/A', 'BB', 'good children', 1) 2
+('reachable fork', 'children', 2, 'B/A', 'BB', 'good children', 2) 4
+('reachable fork', 'children', 3, 'B/A', 'ABB', 'good children', 1) 1
+('reachable stage-k node', 'UpAt', False) 3
+('reachable stage-k node', 'UpAt', True) 280
+('root', 'A-root (upper final cell)', 'k − h(root)', 2, 'root good (TopGoal)', True, 'reachable all-bad forks', 0) 5
+('root', 'A-root (upper final cell)', 'not a node', 'h', 0, 'stage', 0, 'other') 43
+('root', 'depth 0') 903
+('root', 'lower root', 'k − h(root)', 0, 'root good (TopGoal)', False, 'reachable all-bad forks', 0) 2
+('root', 'lower root', 'k − h(root)', 0, 'root good (TopGoal)', True, 'reachable all-bad forks', 0) 175
+('root', 'lower root', 'k − h(root)', 1, 'root good (TopGoal)', True, 'reachable all-bad forks', 0) 87
+('root', 'lower root', 'k − h(root)', 2, 'root good (TopGoal)', True, 'reachable all-bad forks', 0) 9
+models 1224

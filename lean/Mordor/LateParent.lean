@@ -58,6 +58,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁸⁶: `AEdge`, `aEdge_eq_a`, `aEdge_of_upper`, `MixedReach`, `mixedReach_stage`, `upCell_of_mixedTop`,
   `upCell_of_sibConfig_src`, `upCell_of_aEdge`, `TopEdge`, `TopReach`, `topReach_of_mixedReach`, `upCell_of_topEdge`,
   `SeededStepB`, `TopGoal`, `topReach_stage`, `topReach_top`, `upCell_of_topGoal`.
+* §34.3z¹⁸⁷: `UpAt`, `Good`, `topReach_cons`, `topGoal_of_good`, `good_of_topReach`, `good_iff_topGoal`, `good_le`,
+  `NonemptyForkGoodChild`, `topGoal_of_fork`, `good_term_of_topEdge`, `good_child_of_good`,
+  `nonemptyForkGoodChild_iff`, `ForkGoodChildAll`, `nonemptyForkGoodChild_of_all`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1111,5 +1114,101 @@ theorem upCell_of_topGoal {H k j₀ : ℕ} {m c₀ : α} (hk : 1 ≤ k) (h0 : c�
   have e : k - 1 + 1 = k := by omega
   rw [e] at hc hch
   exact ⟨c, hc, hch, z, hcz, hmz, hz⟩
+
+/-! ### Good tops and fork selection (§34.3z¹⁸⁷) -/
+
+/-- The terminal condition: an upward cell away from `m`. -/
+def UpAt (F : α →o α →o α) (m c : α) : Prop := ∃ z, c < z ∧ ¬ m ≤ z ∧ (F c z ≤ c ∨ z ≤ F c z)
+
+/-- **Good tops** (index `j` = the top lies at stage `j + 1`): at index `k − 1` a top with an upward cell away from `m`;
+below, a top with a top edge to a good top. -/
+inductive Good (F : α →o α →o α) (H k : ℕ) (m : α) : ℕ → α → Prop
+  | term {c} : UpAt F m c → Good F H k m (k - 1) c
+  | step {j c y} : TopEdge F H j m c y → Good F H k m (j + 1) y → Good F H k m j c
+
+/-- Prepending an edge to a top-graph path. -/
+theorem topReach_cons {H j j' : ℕ} {m c y c' : α} (he : TopEdge F H j m c y)
+    (h : TopReach F H m (j + 1) y j' c') : TopReach F H m j c j' c' := by
+  induction h with
+  | root => exact .step .root he
+  | step _ he' ih => exact .step ih he'
+
+/-- Good tops are exactly the roots of TopGoal (forward direction). -/
+theorem topGoal_of_good {H k j : ℕ} {m c : α} (h : Good F H k m j c) : TopGoal F H k m j c := by
+  induction h with
+  | term hu => exact ⟨_, .root, hu⟩
+  | step he _ ih =>
+    obtain ⟨c', hr, hu⟩ := ih
+    exact ⟨c', topReach_cons he hr, hu⟩
+
+/-- Goodness propagates backwards along top-graph paths. -/
+theorem good_of_topReach {H k j₀ j : ℕ} {m c₀ c : α} (hr : TopReach F H m j₀ c₀ j c) (hg : Good F H k m j c) :
+    Good F H k m j₀ c₀ := by
+  induction hr with
+  | root => exact hg
+  | step _ he ih => exact ih (.step he hg)
+
+/-- **`Good ↔ TopGoal`.** -/
+theorem good_iff_topGoal {H k j : ℕ} {m c : α} : Good F H k m j c ↔ TopGoal F H k m j c :=
+  ⟨topGoal_of_good, fun ⟨_, hr, hu⟩ => good_of_topReach hr (.term hu)⟩
+
+/-- A good top sits at index `≤ k − 1`. -/
+theorem good_le {H k j : ℕ} {m c : α} (h : Good F H k m j c) : j ≤ k - 1 := by
+  induction h with
+  | term => exact le_rfl
+  | step _ _ ih => omega
+
+/-- **Nonempty-fork good child** (conjectural, §34.3z¹⁸⁷), relative to a root: every top reachable from `c₀` strictly
+below index `k − 1` that has some top edge has a good child. -/
+def NonemptyForkGoodChild (F : α →o α →o α) (H k : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : Prop :=
+  ∀ j c, TopReach F H m j₀ c₀ j c → j < k - 1 → (∃ y, TopEdge F H j m c y) →
+    ∃ y, TopEdge F H j m c y ∧ Good F H k m (j + 1) y
+
+/-- **Fork selection gives TopGoal**: if the root (strictly below index `k − 1`) has a top edge and the fork principle
+holds, the root is good. (Only the root instance of the principle is used.) -/
+theorem topGoal_of_fork {H k j₀ : ℕ} {m c₀ : α} (hj : j₀ < k - 1) (hroot : ∃ y, TopEdge F H j₀ m c₀ y)
+    (hfork : NonemptyForkGoodChild F H k m j₀ c₀) : TopGoal F H k m j₀ c₀ := by
+  obtain ⟨y, he, hg⟩ := hfork j₀ c₀ .root hj hroot
+  exact good_iff_topGoal.1 (.step he hg)
+
+/-- **Inversion below the terminal index**: a good top strictly below `k − 1` has a good child. -/
+theorem good_child_of_good {H k j : ℕ} {m c : α} (h : Good F H k m j c) (hj : j < k - 1) :
+    ∃ y, TopEdge F H j m c y ∧ Good F H k m (j + 1) y := by
+  cases h with
+  | term => omega
+  | step he hg => exact ⟨_, he, hg⟩
+
+/-- **The fork principle, restated**: it says exactly that every reachable top strictly below `k − 1` with a top edge
+is good. -/
+theorem nonemptyForkGoodChild_iff {H k j₀ : ℕ} {m c₀ : α} :
+    NonemptyForkGoodChild F H k m j₀ c₀ ↔
+      ∀ j c, TopReach F H m j₀ c₀ j c → j < k - 1 → (∃ y, TopEdge F H j m c y) → Good F H k m j c := by
+  constructor
+  · intro hf j c hr hj he
+    obtain ⟨y, hy, hg⟩ := hf j c hr hj he
+    exact .step hy hg
+  · intro hf j c hr hj he
+    exact good_child_of_good (hf j c hr hj he) hj
+
+/-- **The unrooted fork principle** (refuted in §34.3z¹⁸⁷ by `fork_allbad_new_min17.json`): every top strictly below
+`k − 1` (in `R_{j+1}`, of height `j + 1`) with a top edge has a good child. -/
+def ForkGoodChildAll (F : α →o α →o α) (H k : ℕ) (m : α) : Prop :=
+  ∀ j c, c ∈ Rk F (j + 1) → height H c = j + 1 → j < k - 1 → (∃ y, TopEdge F H j m c y) →
+    ∃ y, TopEdge F H j m c y ∧ Good F H k m (j + 1) y
+
+/-- The unrooted principle implies every rooted one. Its refutation means a proof of the rooted principle must use
+reachability from the root. -/
+theorem nonemptyForkGoodChild_of_all {H k j₀ : ℕ} {m c₀ : α} (h0 : c₀ ∈ Rk F (j₀ + 1) ∧ height H c₀ = j₀ + 1)
+    (h : ForkGoodChildAll F H k m) : NonemptyForkGoodChild F H k m j₀ c₀ := by
+  intro j c hr hj he
+  obtain ⟨hc, hch⟩ := topReach_top h0 hr
+  exact h j c hc hch hj he
+
+/-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
+theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by
+  refine .term ?_
+  rcases he with ⟨-, -, -, -, -, hcy, hcyc, v, hyv, hmv, -⟩ | ⟨-, -, hcy, hU, hmy, -⟩
+  · exact ⟨y, hcy, fun hmy => hmv (hmy.trans hyv.le), Or.inl hcyc.le⟩
+  · exact ⟨y, hcy, hmy, Or.inr hU⟩
 
 end Mordor.OrbitHeight

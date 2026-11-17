@@ -27,6 +27,10 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
   §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
   §34.3z¹⁷³ (with 'multi'): bcup   some top x with b(x) ∈ R_{K−2}, b(x) < x has an upward cell away from m
                             sibup  some top x ≠ m′ with b(x) = b(m′) has an upward cell away from m
+  §34.3z¹⁸⁹ (with 'multi'): stabletop  every stage-(K−1) sibling configuration (p, c) whose fibre has a maximum U (F(p,U) = c, m ≰ U,
+                            S ⊆ ↓U) has a comparable column in (c, U]   [refuted: |L| = 10]
+                            pairjump   every stage-(K−1) sibling configuration with two fibre columns v₁, v₂ whose join is off m and outside
+                            the fibre has a comparable column in the fibre (covers "jump with m ≰ ⋁S ⇒ FibreTopAt")
   §34.3z¹⁸³ (with 'multi'): topfibre  some new top c of R_{K−1} with p ⋖ c, F(p,c) = p has a fibre column v (F(p,v) = c, m ≰ v) and a comparable column in (c, v]
   §34.3z¹⁷⁸ (with 'multi'): famup  FamilyUpCell: in a sibling configuration some new top with the same B-source has an upward cell away from m
   §34.3z¹⁷⁴ (with 'multi'): bcupnew  as bcup with x new at stage K − 1 (x ∉ R_{K−2}; then b(x) ⋖ x)
@@ -54,7 +58,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -96,8 +100,37 @@ def query(L, m, claim, ahead=False):
         if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
             for x in range(n):
                 if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
-        if claim == 'topfibre':                    # §34.3z¹⁸³ TopFibre: some new top c of R_{K−1} with p ⋖ c, F(p,c) = p (p ∈ R_{K−2}),
-            if K < 3: E.S.delete(); return None         # a fibre column v (c < v, m ≰ v, F(p,v) = c) and y ∈ (c, v] with F(c,y) ≤ y or y ≤ F(c,y)
+        if claim in ('stabletop', 'pairjump'):       # §34.3z¹⁸⁹ per-configuration fibre-join lemmas (see docstring)
+            if K < 2: E.S.delete(); return None
+            for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
+            E.S.add_clause([-ic(m)]); sels = []
+            for c in range(n):
+                if rk[c] != K - 1: continue
+                for p in range(n):
+                    if rk[p] != K - 2 or not le[p][c]: continue
+                    com = [r(K - 1, c), -r(K - 2, c), r(K - 2, p), f(p, c, p)]
+                    if claim == 'stabletop':
+                        for U in range(n):
+                            if not (le[c][U] and U != c and not le[m][U]): continue
+                            S_ = E.v('stsel', p, c, U); sels.append(S_)
+                            for lit in com + [f(p, U, c)]: E.S.add_clause([-S_, lit])
+                            for v in range(n):
+                                if le[c][v] and v != c and not le[m][v] and not le[v][U]: E.S.add_clause([-S_, -f(p, v, c)])
+                            for y in range(n):
+                                if le[c][y] and y != c and le[y][U]: E.S.add_clause([-S_, -fle(c, y, y)]); E.S.add_clause([-S_, -yle(c, y)])
+                    else:
+                        for v1 in range(n):
+                            for v2 in range(v1 + 1, n):
+                                if not (le[c][v1] and le[c][v2] and v1 != c and v2 != c and not le[v1][v2] and not le[v2][v1] and not le[m][jn[v1][v2]]): continue
+                                S_ = E.v('pjsel', p, c, v1, v2); sels.append(S_)
+                                for lit in com + [f(p, v1, c), f(p, v2, c), -f(p, jn[v1][v2], c)]: E.S.add_clause([-S_, lit])
+                                for y in range(n):
+                                    if le[c][y] and y != c and not le[m][y]:
+                                        E.S.add_clause([-S_, -f(p, y, c), -fle(c, y, y)]); E.S.add_clause([-S_, -f(p, y, c), -yle(c, y)])
+            if not sels: E.S.delete(); return None
+            E.S.add_clause(sels)
+        elif claim == 'topfibre':                    # §34.3z¹⁸³ TopFibre: some new top c of R_{K−1} with p ⋖ c, F(p,c) = p (p ∈ R_{K−2}),
+            if K < (2 if 'k2' in sys.argv else 3): E.S.delete(); return None   # a fibre column v (c < v, m ≰ v, F(p,v) = c) and y ∈ (c, v] with F(c,y) ≤ y or y ≤ F(c,y); 'k2' admits K = 2 (p = ⊥)
             for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); bad.append(o)
             E.S.add_clause([-ic(m)])
             for c in range(n):
@@ -407,7 +440,21 @@ def query(L, m, claim, ahead=False):
                         if le[c][v] and v != c and not le[m][v] and F[p][v] == c:
                             if any(le[c][y] and y != c and le[y][v] and (le[F[c][y]][y] or le[y][F[c][y]]) for y in range(n)): return True
             return False
-        viol = {'topfibre': (bm in low) and not ic_py(L, F, m) and not topfib(),
+        def fjviol(kind):
+            for c in Tq2:
+                if inR(c, K - 2): continue
+                for p in range(n):
+                    if not (rk[p] == K - 2 and inR(p, K - 2) and le[p][c] and F[p][c] == p): continue
+                    S = [v for v in range(n) if le[c][v] and v != c and not le[m][v] and F[p][v] == c]
+                    if not S or any(le[F[c][y]][y] or le[y][F[c][y]] for y in S): continue
+                    U = S[0]
+                    for v in S[1:]: U = L.join[U][v]
+                    if kind == 'stable' and U in S: return True
+                    if kind == 'pair' and any(not le[m][L.join[a_][b_]] and L.join[a_][b_] not in S and not le[a_][b_] and not le[b_][a_] for a_ in S for b_ in S): return True
+            return False
+        viol = {'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
+                'pairjump': (bm in low) and not ic_py(L, F, m) and fjviol('pair'),
+                'topfibre': (bm in low) and not ic_py(L, F, m) and not topfib(),
                 'famup': (bm in low) and not ic_py(L, F, m) and famviol(),
                 'bcupnew': (bm in low) and not ic_py(L, F, m) and not any(not inR(x, K - 2) and inR(b_of(L, F, x), K - 2) and le[b_of(L, F, x)][x] and b_of(L, F, x) != x and upc(x) for x in Tq2),
                 'bcup': (bm in low) and not ic_py(L, F, m) and not any(inR(b_of(L, F, x), K - 2) and le[b_of(L, F, x)][x] and b_of(L, F, x) != x and upc(x) for x in Tq2),
@@ -445,7 +492,7 @@ RMIN = next((int(a[5:]) for a in sys.argv if a.startswith('rmin=')), 1)
 
 if __name__ == '__main__':
     claim = sys.argv[1]; ahead = 'ahead' in sys.argv; C = collections.Counter(); best = None
-    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer') and not a.startswith('rmin=')]):
+    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2') and not a.startswith('rmin=')]):
         if L.height < 2: continue
         hit = None
         for m in range(L.n):

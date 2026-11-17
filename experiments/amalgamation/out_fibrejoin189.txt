@@ -1,0 +1,18 @@
+== fibrejoin_probe.py (§34.3z¹⁸⁹): stage-k sibling configurations in the 1224 models of out_fork187.txt (same seeds, every qualifying m; runs capped at 580 s); summed
+('FibreTop fails', 'join', 'jump, m ≤ U', 'F(c, U) vs U', '<', 'F(c,U) ∧ U = c', False) 1
+('FibreTop fails', 'join', 'stable', 'F(c, U) vs U', '∥', 'F(c,U) ∧ U = c', True) 43
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'jump, m ≤ U', '|max S|', 2, 'FibreTopAt', False, 'pre-fixed in S', False, 'post-fixed in S', False) 1
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'jump, m ≤ U', '|max S|', 2, 'FibreTopAt', True, 'pre-fixed in S', True, 'post-fixed in S', False) 127
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'jump, m ≤ U', '|max S|', 2, 'FibreTopAt', True, 'pre-fixed in S', True, 'post-fixed in S', True) 72
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'jump, m ≤ U', '|max S|', 3, 'FibreTopAt', True, 'pre-fixed in S', True, 'post-fixed in S', False) 4
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'jump, m ≤ U', '|max S|', 3, 'FibreTopAt', True, 'pre-fixed in S', True, 'post-fixed in S', True) 6
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'jump, m ≰ U', '|max S|', 2, 'FibreTopAt', True, 'pre-fixed in S', True, 'post-fixed in S', False) 30
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'jump, m ≰ U', '|max S|', 2, 'FibreTopAt', True, 'pre-fixed in S', True, 'post-fixed in S', True) 34
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'jump, m ≰ U', '|max S|', 3, 'FibreTopAt', True, 'pre-fixed in S', True, 'post-fixed in S', True) 1
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'stable', '|max S|', 1, 'FibreTopAt', False, 'pre-fixed in S', False, 'post-fixed in S', False) 43
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'stable', '|max S|', 1, 'FibreTopAt', True, 'pre-fixed in S', True, 'post-fixed in S', False) 536
+('config', 'p ⋖ c', True, 'S down-closed in (c, ·)', True, 'join', 'stable', '|max S|', 1, 'FibreTopAt', True, 'pre-fixed in S', True, 'post-fixed in S', True) 467
+('model', 'stage-k configurations', 1, 'TopFibre', True) 1130
+('model', 'stage-k configurations', 2, 'TopFibre', True) 91
+('model', 'stage-k configurations', 3, 'TopFibre', True) 3
+models 1224

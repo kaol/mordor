@@ -64,6 +64,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁸⁸: `le_a_of_upper`, `aEdge_le_a`, `upAt_of_a`, `good_aChild_term`, `AGoodFrom`, `BOnlyGoodChild`,
   `nonemptyForkGoodChild_of_split`, `topGoal_of_split`, `topEdge_lt`, `topReach_ge`, `ConeForkGood`,
   `nonemptyForkGoodChild_of_cone`, `not_tight_of_early`.
+* §34.3z¹⁸⁹: `shadowFibre_downClosed`, `fibreTopAt_iff_mem`, `shadowFibre_eq_Ioc`, `StableFibreTop`, `JumpFibreTop`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1282,6 +1283,50 @@ The `htf` hypotheses of `singletonLower_of_topFibre` give tightness only at `R_k
 case (`z ∈ R_{h(z) − 1}`) is genuine there. -/
 theorem not_tight_of_early {H j : ℕ} {z : α} (hz : z ∈ Rk F j) (hzh : height H z = j + 1) :
     ¬ ∀ x ∈ Rk F j, height H x ≤ j := fun ht => by have := ht z hz; omega
+
+/-! ### The fibre as a whole (§34.3z¹⁸⁹) -/
+
+/-- **The off-target fibre is down-closed above `c`** (from `source_row_const`): with `p ∈ R_j`, `p < c`, `h(p) = j`,
+`h(c) = j + 1`, `F p c = p` and `R_{j+1}` tight, `v ∈ S(p, c; m)` and `c < y ≤ v` give `y ∈ S(p, c; m)`. -/
+theorem shadowFibre_downClosed {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {m p c v y : α} (hp : p ∈ Rk F j) (hph : height H p = j) (hch : height H c = j + 1) (hpc : p < c)
+    (hpcp : F p c = p) (hv : v ∈ shadowFibre F m p c) (hcy : c < y) (hyv : y ≤ v) : y ∈ shadowFibre F m p c :=
+  ⟨hcy, fun hmy => hv.2.1 (hmy.trans hyv),
+    source_row_const hn hk hp hch (covBy_of_height hn hpc (by omega)) hpcp hv.2.2 hcy hyv⟩
+
+/-- **FibreTop is a property of the fibre itself**: under the same hypotheses, `FibreTopAt` holds iff some fibre
+column is comparable with its row-`c` value. -/
+theorem fibreTopAt_iff_mem {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {m p c : α} (hp : p ∈ Rk F j) (hph : height H p = j) (hch : height H c = j + 1) (hpc : p < c)
+    (hpcp : F p c = p) :
+    FibreTopAt F m p c ↔ ∃ y ∈ shadowFibre F m p c, F c y ≤ y ∨ y ≤ F c y := by
+  constructor
+  · rintro ⟨v, hv, y, hcy, hyv, hc⟩
+    exact ⟨y, shadowFibre_downClosed hn hk hp hph hch hpc hpcp hv hcy hyv, hc⟩
+  · rintro ⟨y, hy, hc⟩
+    exact ⟨y, hy, y, hy.1, le_rfl, hc⟩
+
+/-- **A stable fibre is an interval**: if `U = ⋁ S` lies in the fibre then `S(p, c; m) = (c, U]`. -/
+theorem shadowFibre_eq_Ioc {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {m p c : α} (hp : p ∈ Rk F j) (hph : height H p = j) (hch : height H c = j + 1) (hpc : p < c)
+    (hpcp : F p c = p) (hU : sSup (shadowFibre F m p c) ∈ shadowFibre F m p c) :
+    shadowFibre F m p c = Set.Ioc c (sSup (shadowFibre F m p c)) := by
+  ext y
+  refine ⟨fun hy => ⟨hy.1, le_sSup hy⟩, fun ⟨hcy, hyU⟩ => ?_⟩
+  exact shadowFibre_downClosed hn hk hp hph hch hpc hpcp hU hcy hyU
+
+/-- **Stable fibre-top** (per configuration; refuted in §34.3z¹⁸⁹ at `|L| = 8`): a stable fibre has a comparable
+column. -/
+def StableFibreTop (F : α →o α →o α) (H j : ℕ) (m : α) : Prop :=
+  ∀ p c, p ∈ Rk F j → height H p = j → c ∈ Rk F (j + 1) → c ∉ Rk F j → height H c = j + 1 → p < c → F p c = p →
+    sSup (shadowFibre F m p c) ∈ shadowFibre F m p c → FibreTopAt F m p c
+
+/-- **Jump fibre-top** (per configuration; refuted in §34.3z¹⁸⁹ at `|L| = 11`, with `m ≰ ⋁S`): a fibre whose join leaves
+it while staying off `m` has a comparable column. -/
+def JumpFibreTop (F : α →o α →o α) (H j : ℕ) (m : α) : Prop :=
+  ∀ p c, p ∈ Rk F j → height H p = j → c ∈ Rk F (j + 1) → c ∉ Rk F j → height H c = j + 1 → p < c → F p c = p →
+    (shadowFibre F m p c).Nonempty → sSup (shadowFibre F m p c) ∉ shadowFibre F m p c →
+      ¬ m ≤ sSup (shadowFibre F m p c) → FibreTopAt F m p c
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

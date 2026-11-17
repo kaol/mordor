@@ -1,0 +1,8 @@
+== single_claims.py, exact SAT claims of §34.3z¹⁸⁹ (multi nopostlayer); 'sweep 4 16' = every Moore family on 4 points with ≤ 16 sets
+python3 single_claims.py stabletop sweep 4 16 multi nopostlayer
+claim stabletop: {'none': 127, 'counterexample': 52}; smallest counterexample |L| = 8, rank(m) = 2
+python3 single_claims.py pairjump sweep 4 16 multi nopostlayer
+claim pairjump: {'none': 167, 'counterexample': 12}; smallest counterexample |L| = 11, rank(m) = 2
+python3 single_claims.py pairjump rmin=R closure … multi nopostlayer (the 23 closure seed lists of out_fork187.txt, rank 3 / rank 4): counterexamples in 20 of 23 lists, smallest |L| = 13 at rank(m) = 3
+python3 single_claims.py topfibre sweep 4 16 multi nopostlayer k2
+claim topfibre: {'none': 179}

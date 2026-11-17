@@ -1,0 +1,16 @@
+== single_claim_stabletop_multi_nopostlayer_min8.json: |L| = 8, K = 2, k = 1; harness hypotheses hold: True; m = {02}, m′ = {0}
+   config (p, c) = ({}, {0}): S = ['{03}'], U = {03} [stable], F(p, U) = {0}, S down-closed: True, row c on S: ['{01}'], FibreTopAt: False, UpAt(c): False
+   config (p, c) = ({}, {1}): S = ['{01}'], U = {01} [stable], F(p, U) = {1}, S down-closed: True, row c on S: ['{01}'], FibreTopAt: True, UpAt(c): True
+   TopFibre (some configuration): True; UpCell at stage k: True
+== single_claim_pairjump_multi_nopostlayer_min11.json: |L| = 11, K = 2, k = 1; harness hypotheses hold: True; m = {12}, m′ = {2}
+   config (p, c) = ({}, {0}): S = ['{01}', '{03}'], U = {013} [jump, m ≰ U], F(p, U) = {02}, S down-closed: True, row c on S: ['{02}', '{02}'], FibreTopAt: False, UpAt(c): True
+   config (p, c) = ({}, {2}): S = ['{02}'], U = {02} [stable], F(p, U) = {2}, S down-closed: True, row c on S: ['{02}'], FibreTopAt: True, UpAt(c): True
+   TopFibre (some configuration): True; UpCell at stage k: True
+== fj_fail_stable_min10.json: |L| = 10, K = 2, k = 1; harness hypotheses hold: True; m = {03}, m′ = {0}
+   config (p, c) = ({}, {0}): S = ['{01}', '{012}'], U = {012} [stable], F(p, U) = {0}, S down-closed: True, row c on S: ['{0}', '{01}'], FibreTopAt: True, UpAt(c): True
+   config (p, c) = ({}, {1}): S = ['{13}'], U = {13} [stable], F(p, U) = {1}, S down-closed: True, row c on S: ['{01}'], FibreTopAt: False, UpAt(c): False
+   TopFibre (some configuration): True; UpCell at stage k: True
+== fj_fail_jump_min12.json: |L| = 12, K = 2, k = 1; harness hypotheses hold: True; m = {13}, m′ = {1}
+   config (p, c) = ({}, {0}): S = ['{01}', '{03}'], U = {0123} [jump, m ≤ U], F(p, U) = {012}, S down-closed: True, row c on S: ['{02}', '{01}'], FibreTopAt: False, UpAt(c): False
+   config (p, c) = ({}, {2}): S = ['{02}'], U = {02} [stable], F(p, U) = {2}, S down-closed: True, row c on S: ['{2}'], FibreTopAt: True, UpAt(c): True
+   TopFibre (some configuration): True; UpCell at stage k: True

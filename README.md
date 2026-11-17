@@ -255,7 +255,11 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     observed is a fixed point of a, so A-children continue by B-edges. All 17 all-bad forks in rooted models lie
     outside the root's upper cone (`topReach_ge`), which leaves **ConeForkGood** as the order-theoretic gap. The early
     column is genuine, since `htf` gives no lower-stage tightness, and in 2/2 cases it transfers to a Good B-source
-    below z (§34.3z¹⁸⁸).
+    below z (§34.3z¹⁸⁸). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
+    forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
+    is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations
+    (§34.3z¹⁸⁹).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

@@ -60,7 +60,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -102,7 +102,36 @@ def query(L, m, claim, ahead=False):
         if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
             for x in range(n):
                 if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
-        if claim == 'pajump':                        # §34.3z¹⁹⁵: hypotheses (as minhyp) + the pure A-chain a^i(⊥), i ≤ K − 1, reaches rank K
+        if claim == 'a1cert':                        # §34.3z¹⁹⁹: hypotheses (as minhyp) + some A1-shape configuration (p ⋖ c, F(p,c) = p,
+            if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])   # c of rank K − 1 in R_{K−1}) with a fibre column u (F(p,u) = c, m ≰ u)
+            sels = []                                             # and no A1Cert anywhere
+            for c in range(n):
+                if rk[c] != K - 1: continue
+                for p in L.covers_dn[c]:
+                    for u in range(n):
+                        if not (le[c][u] and u != c and not le[m][u]): continue
+                        base = [r(K - 1, c), f(p, c, p), f(p, u, c)]
+                        if 'genuine' in sys.argv:            # the A1 residue: p = b(c) and c non-ascending (a(c) ≱ c)
+                            na = E.v('nonasc', c)
+                            E.iff_or(na, [A(c, g) for g in range(n) if not le[c][g]])
+                            o = E.v('a1sel', p, c, u); E.iff_and(o, base + [B(c, p), na]); sels.append(o)
+                        else:
+                            o = E.v('a1sel', p, c, u); E.iff_and(o, base); sels.append(o)
+                        for z in range(n):
+                            if not (le[c][z] and z != c and le[z][u]): continue
+                            nb = [-l for l in base]
+                            E.S.add_clause(nb + [-fle(c, z, c)]); E.S.add_clause(nb + [-yle(c, z)])
+                            E.S.add_clause(nb + [-fle(c, z, z)] + [f(p, e, p) for e in range(n) if le[c][e] and e != c and le[e][z]])
+            if not sels: E.S.delete(); return None
+            bad.extend(sels)
+            if 'rowtypes' in sys.argv:                   # impose the ¬UpCell row types (noUpCell_rowTypes) on the height-k rows
+                for x in range(n):
+                    if rk[x] != K - 1: continue
+                    for g in range(n):
+                        if le[x][g] and g != x and g != m: E.S.add_clause([-r(K - 1, x), -A(x, g)])
+                    for v in range(n):
+                        if le[x][v] and v != x and not le[m][v]: E.S.add_clause([-r(K - 1, x), -A(x, x), -fle(x, v, v)])
+        elif claim == 'pajump':                        # §34.3z¹⁹⁵: hypotheses (as minhyp) + the pure A-chain a^i(⊥), i ≤ K − 1, reaches rank K
             if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])
             Sc = lambda i, g: E.v('chain', i, g)
             for g in range(n): E.S.add_clause([Sc(0, g)] if g == L.bot else [-Sc(0, g)])
@@ -496,7 +525,30 @@ def query(L, m, claim, ahead=False):
                 if rk[c_] == K: return True
                 c_ = a_of(L, F, c_)
             return False
-        viol = {'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
+        def a1nocert():
+            has = 'genuine' not in sys.argv and False
+            gen = lambda p_, c_: ('genuine' not in sys.argv) or (b_of(L, F, c_) == p_ and not le[c_][a_of(L, F, c_)])
+            for c in range(n):
+                if rk[c] != K - 1 or not inR(c, K - 1): continue
+                for p in L.covers_dn[c]:
+                    if F[p][c] != p: continue
+                    for u in range(n):
+                        if not (le[c][u] and u != c and not le[m][u] and F[p][u] == c): continue
+                        if gen(p, c): has = True
+                        for z in range(n):
+                            if not (le[c][z] and z != c and le[z][u]): continue
+                            if le[F[c][z]][c] or le[z][F[c][z]]: return False
+                            if le[F[c][z]][z] and not any(le[c][e] and e != c and le[e][z] and F[p][e] == p for e in range(n)): return False
+            return has
+        def rowtypes_ok():
+            if 'rowtypes' not in sys.argv: return True
+            for x in range(n):
+                if rk[x] != K - 1 or not inR(x, K - 1): continue
+                ax = a_of(L, F, x)
+                if le[x][ax] and ax not in (x, m): return False
+                if ax == x and any(le[x][v] and v != x and not le[m][v] and le[F[x][v]][v] for v in range(n)): return False
+            return True
+        viol = {'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
                 'pairjump': (bm in low) and not ic_py(L, F, m) and fjviol('pair'),
                 'topfibre': (bm in low) and not ic_py(L, F, m) and not topfib(),
                 'famup': (bm in low) and not ic_py(L, F, m) and famviol(),
@@ -536,7 +588,7 @@ RMIN = next((int(a[5:]) for a in sys.argv if a.startswith('rmin=')), 1)
 
 if __name__ == '__main__':
     claim = sys.argv[1]; ahead = 'ahead' in sys.argv; C = collections.Counter(); best = None
-    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg') and not a.startswith('rmin=')]):
+    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes') and not a.startswith('rmin=')]):
         if L.height < 2: continue
         hit = None
         for m in range(L.n):
@@ -547,4 +599,4 @@ if __name__ == '__main__':
         if hit and (best is None or L.n < best[0].n): best = (L, hit)
     print(f"claim {claim}{' ahead' if ahead else ''}: {dict(C)}" + (f"; smallest counterexample |L| = {best[0].n}, rank(m) = {best[0].rank[best[1][0]]}" if best else ''), flush=True)
     if best:
-        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))
+        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))

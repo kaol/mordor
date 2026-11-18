@@ -78,6 +78,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁹⁷: `i0_dichotomy`, `bSource_of_new_nonAscending`, **`noUpCell_i0_cover`**, `i0_A1_cover`, `noUpCell_firstA_parent`,
   `noUpCell_firstA_parent_height`.
 * §34.3z¹⁹⁸: `source_row_or`, `exceptional_column`, **`upCell_of_rowConst`**, **`a1_upCell_or_exceptional`**.
+* §34.3z¹⁹⁹: `exceptional_same_source`, **`exception_join_dichotomy`**, `A1CleanFibre`, **`upCell_of_a1CleanFibre`**, `A1Cert`,
+  `a1Cert_of_cleanFibre`, **`upCell_of_a1Cert`**, `A1RowTypeCert`, **`noUpCell_a1_fibre_empty`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1948,6 +1950,116 @@ theorem a1_upCell_or_exceptional {k j H : ℕ} (hn : NoChain α (H + 1)) (hall :
     rcases source_row_or hp hcov hpc hpu hcz hzu with e | ⟨e, -⟩
     · exact e
     · exact absurd e (hex z hcz hzu)
+
+/-! ### Exceptional covers and the clean A1 fibre (§34.3z¹⁹⁹) -/
+
+/-- **`exceptional_same_source`**: for the actual B-source `p = b c`, an exceptional column `e ≥ c` with `b e ≤ p`
+(`exceptional_column`) has `b e = p` (`b` is monotone). -/
+theorem exceptional_same_source {c e : α} (hce : c ≤ e) (hbe : b F e ≤ b F c) : b F e = b F c :=
+  le_antisymm hbe ((b F).mono hce)
+
+/-- **`exception_join_dichotomy`.** For `p ⋖ c`, `F p c = p`, `F p u = c` (`p ∈ R_j`, `j ≤ k`, `h(c) = k`, `R_{k+1}` tight)
+and a nonempty exception set `E = {e | c < e ≤ u ∧ F p e = p}`, its join `e* = ⋁E` satisfies `c < e* ≤ u` and either
+* `F p e* = p` — then `e*` is itself exceptional, and **`E = {e*}`** (all exceptions have height `k + 1`); or
+* `F p e* = c` — then `e*` is a fibre column (`m ≰ e*` as `e* ≤ u`). -/
+theorem exception_join_dichotomy {k j H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {p c u : α} (hp : p ∈ Rk F j) (hjk : j ≤ k) (hck : height H c = k) (hcov : p ⋖ c) (hpc : F p c = p)
+    (hpu : F p u = c) (hE : ∃ e, c < e ∧ e ≤ u ∧ F p e = p) :
+    let E := {e | c < e ∧ e ≤ u ∧ F p e = p}
+    c < sSup E ∧ sSup E ≤ u ∧
+      ((F p (sSup E) = p ∧ E = {sSup E}) ∨ F p (sSup E) = c) := by
+  intro E
+  obtain ⟨e0, he0c, he0u, he0p⟩ := hE
+  have he0E : e0 ∈ E := ⟨he0c, he0u, he0p⟩
+  have hcs : c < sSup E := lt_of_lt_of_le he0c (le_sSup he0E)
+  have hsu : sSup E ≤ u := sSup_le fun e he => he.2.1
+  refine ⟨hcs, hsu, ?_⟩
+  rcases source_row_or hp hcov hpc hpu hcs hsu with e | ⟨e, hR⟩
+  · exact Or.inr e
+  · left
+    refine ⟨e, ?_⟩
+    have hs := (exceptional_column hn hall hjk hck hcs hR e).1
+    ext x
+    constructor
+    · intro hx
+      have hxR : x ∈ Rk F (j + 1) := mem_succ_of_cell hp le_rfl (Or.inl hx.2.2.le)
+      have hx1 := (exceptional_column hn hall hjk hck hx.1 hxR hx.2.2).1
+      have hle : x ≤ sSup E := le_sSup hx
+      by_contra hne
+      have := height_strictMono hn (lt_of_le_of_ne hle hne); omega
+    · intro hx
+      rw [Set.mem_singleton_iff] at hx
+      rw [hx]; exact ⟨hcs, hsu, e⟩
+
+/-- **`A1CleanFibre`**: an A1-shape configuration with a fibre column `u`, a comparable column `z ∈ (c, u]` of the row `c`,
+and **no exceptional column in `(c, u]`**. -/
+def A1CleanFibre (F : α →o α →o α) (H k : ℕ) (m : α) : Prop :=
+  ∃ j p c u z, p ∈ Rk F j ∧ j ≤ k ∧ p ⋖ c ∧ c ∈ Rk F k ∧ height H c = k ∧ F p c = p ∧ F p u = c ∧ ¬ m ≤ u ∧
+    c < z ∧ z ≤ u ∧ (F c z ≤ z ∨ z ≤ F c z) ∧ ∀ e, c < e → e ≤ u → F p e ≠ p
+
+/-- **A clean A1 fibre gives UpCell** (`source_row_or` makes the source row constant on `(c, u]`, then
+`upCell_of_rowConst`). No tightness. -/
+theorem upCell_of_a1CleanFibre {k H : ℕ} (hn : NoChain α (H + 1)) {m : α} (h : A1CleanFibre F H k m) :
+    UpCell F H k m := by
+  obtain ⟨j, p, c, u, z, hp, -, hcov, hc, hck, hpc, hpu, hmu, hcz, hzu, hcmp, hclean⟩ := h
+  refine upCell_of_rowConst hn hc hck hcov.le (fun e hce heu => ?_) hmu ⟨z, hcz, hzu, hcmp⟩
+  rcases source_row_or hp hcov hpc hpu hce heu with r | ⟨r, -⟩
+  · exact r
+  · exact absurd r (hclean e hce heu)
+
+/-- **`A1Cert`** (the sharp certificate): an A1-shape configuration and a column `z ∈ (c, u]` of a fibre column `u` such
+that either `(c, z)` is already a cell, or `z` is row-`c` pre-fixed and `(c, z]` (not all of `(c, u]`) is free of
+exceptional columns. -/
+def A1Cert (F : α →o α →o α) (H k : ℕ) (m : α) : Prop :=
+  ∃ j p c u z, p ∈ Rk F j ∧ p ⋖ c ∧ c ∈ Rk F k ∧ height H c = k ∧ F p c = p ∧ F p u = c ∧ ¬ m ≤ u ∧
+    c < z ∧ z ≤ u ∧ ((F c z ≤ c ∨ z ≤ F c z) ∨ (F c z ≤ z ∧ ∀ e, c < e → e ≤ z → F p e ≠ p))
+
+/-- `A1CleanFibre` is a special case of `A1Cert`. -/
+theorem a1Cert_of_cleanFibre {k H : ℕ} {m : α} (h : A1CleanFibre F H k m) : A1Cert F H k m := by
+  obtain ⟨j, p, c, u, z, hp, -, hcov, hc, hck, hpc, hpu, hmu, hcz, hzu, hcmp, hclean⟩ := h
+  refine ⟨j, p, c, u, z, hp, hcov, hc, hck, hpc, hpu, hmu, hcz, hzu, ?_⟩
+  rcases hcmp with h1 | h1
+  · exact Or.inr ⟨h1, fun e hce hez => hclean e hce (hez.trans hzu)⟩
+  · exact Or.inl (Or.inr h1)
+
+/-- **`A1Cert` gives UpCell** (a cell directly; a pre-fixed column through the descent on the exception-free `(c, z]`). -/
+theorem upCell_of_a1Cert {k H : ℕ} (hn : NoChain α (H + 1)) {m : α} (h : A1Cert F H k m) : UpCell F H k m := by
+  obtain ⟨j, p, c, u, z, hp, hcov, hc, hck, hpc, hpu, hmu, hcz, hzu, hcase⟩ := h
+  have hmz : ¬ m ≤ z := fun hm => hmu (hm.trans hzu)
+  rcases hcase with hcell | ⟨hpre, hclean⟩
+  · exact ⟨c, hc, hck, z, hcz, hmz, hcell⟩
+  · refine upCell_of_rowConst hn hc hck hcov.le (u := z) (fun e hce hez => ?_) hmz ⟨z, hcz, le_rfl, Or.inl hpre⟩
+    rcases source_row_or hp hcov hpc hpu hce (hez.trans hzu) with r | ⟨r, -⟩
+    · exact r
+    · exact absurd r (hclean e hce hez)
+
+/-- **`A1RowTypeCert` (conjectural).** Under the MinUpCell hypotheses and the row-type consequences of ¬UpCell
+(`noUpCell_rowTypes`: ascending height-`k` rows have `a x ∈ {x, m}`, stationary ones have no initial pair), a *genuine* A1
+configuration (`p = b c ⋖ c`, `c` a non-ascending height-`k` row of `R_k`) with a nonempty fibre yields an `A1Cert`.
+Exact search (§34.3z¹⁹⁹): no counterexample on every Moore family on 4 points and 8 rank-3/4 closure lists; dropping
+¬IC(m) (`|L| = 5`) or the row-type constraints (`|L| = 7`) gives counterexamples. -/
+def A1RowTypeCert (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k m, (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k → m ≠ ⊤ →
+    (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) →
+    (∀ x ∈ Rk F k, height H x = k → x ≤ a F x → a F x = x ∨ a F x = m) →
+    (∀ x ∈ Rk F k, height H x = k → a F x = x → ¬ ∃ v, x < v ∧ F x v ≤ v ∧ ¬ m ≤ v) →
+    ∀ c u, c ∈ Rk F k → height H c = k → b F c ⋖ c → ¬ c ≤ a F c → F (b F c) u = c → ¬ m ≤ u → c < u →
+      A1Cert F H k m
+
+/-- **What `A1RowTypeCert` buys**: without UpCell (and under the MinUpCell hypotheses), every genuine A1 configuration has
+an *empty* off-`m` fibre — the row-type side conditions are theorems (`noUpCell_rowTypes`), and `A1Cert` would give UpCell
+(`upCell_of_a1Cert`). -/
+theorem noUpCell_a1_fibre_empty {k H : ℕ} (hn : NoChain α (H + 1)) (hc4 : A1RowTypeCert F H)
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m : α} (hm : m ∈ Rk F (k + 1)) (hmk : height H m = k + 1)
+    (hnew : m ∉ Rk F k) (ht : m ≠ ⊤) (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) (hnot : ¬ UpCell F H k m)
+    {c u : α} (hc : c ∈ Rk F k) (hck : height H c = k) (hcov : b F c ⋖ c) (hna : ¬ c ≤ a F c)
+    (hu : F (b F c) u = c) (hmu : ¬ m ≤ u) (hcu : c < u) : False := by
+  have hasc : ∀ x ∈ Rk F k, height H x = k → x ≤ a F x → a F x = x ∨ a F x = m :=
+    fun x hx hxk hxa => noUpCell_aResponse hn hall hmk hnot hx hxk hxa
+  have hstat : ∀ x ∈ Rk F k, height H x = k → a F x = x → ¬ ∃ v, x < v ∧ F x v ≤ v ∧ ¬ m ≤ v :=
+    fun x hx hxk hax ⟨v, hxv, hFv, hmv⟩ =>
+      hnot (upCell_of_diagPost_pair hn hx hxk (stationary_b_le hax).1.ge hxv hFv hmv)
+  exact hnot (upCell_of_a1Cert hn (hc4 k m hall hm hmk hnew ht hno hasc hstat c u hc hck hcov hna hu hmu hcu))
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

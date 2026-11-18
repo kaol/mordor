@@ -1,0 +1,71 @@
+== a1clean_probe.py (§34.3z¹⁹⁹): exceptional covers, join dichotomy, ¬IC(m) response, A1CleanFibre / A1Cert per model; mode=icok and mode=min; rank-3 closure 5 10 1, 5 11 4/14, 5 12 8, 6 12 9/18, 6 13 13; rank-4 6 13 11; sweep 4 16; summed
+-- icok
+('exceptions under a fibre column', 'icok', 'p = b(c)', True, 'all b(e) = b(c)', True, '|E|', 1, 'join', 'singleton blocker (F(p,e*) = p)', 'F(c, e*) comparable with e*', False, 'comparable column in (c, u]', False) 46
+('exceptions under a fibre column', 'icok', 'p = b(c)', True, 'all b(e) = b(c)', True, '|E|', 1, 'join', 'singleton blocker (F(p,e*) = p)', 'F(c, e*) comparable with e*', True, 'comparable column in (c, u]', True) 2
+('exceptions under a fibre column', 'icok', 'p = b(c)', True, 'all b(e) = b(c)', True, '|E|', 2, 'join', 'e* in the fibre', 'F(c, e*) comparable with e*', False, 'comparable column in (c, u]', False) 13
+('exceptions under a fibre column', 'icok', 'p = b(c)', True, 'all b(e) = b(c)', True, '|E|', 2, 'join', 'e* in the fibre', 'F(c, e*) comparable with e*', True, 'comparable column in (c, u]', True) 2
+('model', 'icok', 'A1CleanFibre', False, 'UpCell', False) 1094
+('¬IC(m) response at m ⊔ e', 'icok', 'r vs e', '>', 'r vs c', '>', 'r vs m', '>', 'h(r) − k', 2) 16
+('¬IC(m) response at m ⊔ e', 'icok', 'r vs e', '>', 'r vs c', '>', 'r vs m', '>', 'h(r) − k', 3) 30
+('¬IC(m) response at m ⊔ e', 'icok', 'r vs e', '>', 'r vs c', '>', 'r vs m', '>', 'h(r) − k', 4) 13
+('¬IC(m) response at m ⊔ e', 'icok', 'r vs e', '∥', 'r vs c', '>', 'r vs m', '=', 'h(r) − k', 1) 11
+('¬IC(m) response at m ⊔ e', 'icok', 'r vs e', '∥', 'r vs c', '>', 'r vs m', '>', 'h(r) − k', 2) 5
+('¬IC(m) response at m ⊔ e', 'icok', 'r vs e', '∥', 'r vs c', '∥', 'r vs m', '>', 'h(r) − k', 2) 3
+-- min
+('exceptions under a fibre column', 'min', 'p = b(c)', True, 'all b(e) = b(c)', True, '|E|', 1, 'join', 'singleton blocker (F(p,e*) = p)', 'F(c, e*) comparable with e*', True, 'comparable column in (c, u]', True) 26
+('model', 'min', 'A1CleanFibre', False, 'UpCell', True) 288
+('model', 'min', 'A1CleanFibre', True, 'UpCell', True) 693
+('¬IC(m) response at m ⊔ e', 'min', 'r vs e', '<', 'r vs c', '=', 'r vs m', '∥', 'h(r) − k', 0) 3
+('¬IC(m) response at m ⊔ e', 'min', 'r vs e', '<', 'r vs c', '∥', 'r vs m', '∥', 'h(r) − k', 0) 1
+('¬IC(m) response at m ⊔ e', 'min', 'r vs e', '=', 'r vs c', '>', 'r vs m', '∥', 'h(r) − k', 1) 1
+('¬IC(m) response at m ⊔ e', 'min', 'r vs e', '>', 'r vs c', '>', 'r vs m', '∥', 'h(r) − k', 2) 9
+('¬IC(m) response at m ⊔ e', 'min', 'r vs e', '∥', 'r vs c', '>', 'r vs m', '>', 'h(r) − k', 2) 1
+('¬IC(m) response at m ⊔ e', 'min', 'r vs e', '∥', 'r vs c', '>', 'r vs m', '∥', 'h(r) − k', 1) 3
+('¬IC(m) response at m ⊔ e', 'min', 'r vs e', '∥', 'r vs c', '>', 'r vs m', '∥', 'h(r) − k', 2) 2
+('¬IC(m) response at m ⊔ e', 'min', 'r vs e', '∥', 'r vs c', '∥', 'r vs m', '∥', 'h(r) − k', 0) 5
+('¬IC(m) response at m ⊔ e', 'min', 'r vs e', '∥', 'r vs c', '∥', 'r vs m', '∥', 'h(r) − k', 1) 1
+-- model-level (second/third runs, with A1Cert)
+('model', 'icok', 'some A1-shape configuration with a nonempty fibre', False, 'with p = b(c)', False, 'A1CleanFibre', False, 'A1Cert', False, 'UpCell', False) 666
+('model', 'icok', 'some A1-shape configuration with a nonempty fibre', True, 'with p = b(c)', False, 'A1CleanFibre', False, 'A1Cert', False, 'UpCell', False) 6
+('model', 'icok', 'some A1-shape configuration with a nonempty fibre', True, 'with p = b(c)', True, 'A1CleanFibre', False, 'A1Cert', False, 'UpCell', False) 422
+('model', 'min', 'some A1-shape configuration with a nonempty fibre', False, 'with p = b(c)', False, 'A1CleanFibre', False, 'A1Cert', False, 'UpCell', True) 286
+('model', 'min', 'some A1-shape configuration with a nonempty fibre', True, 'with p = b(c)', True, 'A1CleanFibre', False, 'A1Cert', True, 'UpCell', True) 2
+('model', 'min', 'some A1-shape configuration with a nonempty fibre', True, 'with p = b(c)', True, 'A1CleanFibre', True, 'A1Cert', True, 'UpCell', True) 693
+
+== single_claims.py a1cert (exact), flags multi notop nofeeder notightK1 (MinUpCell hypotheses); sw = sweep 4 16, cl_* = rmin=3 closure, cl4 = rmin=4 closure 6 13 11; a run without a result line hit the 580 s cap
+-- a1sat (any A1-shape configuration)
+cl4: claim a1cert: {'counterexample': 6, 'none': 4}; smallest counterexample |L| = 23, rank(m) = 4
+cl_5_10_1_10: claim a1cert: {'none': 4, 'counterexample': 6}; smallest counterexample |L| = 17, rank(m) = 3
+cl_5_10_2_10: claim a1cert: {'none': 3, 'counterexample': 7}; smallest counterexample |L| = 13, rank(m) = 3
+cl_5_11_14_10: claim a1cert: {'counterexample': 8, 'none': 2}; smallest counterexample |L| = 13, rank(m) = 3
+cl_5_11_4_10: claim a1cert: {'none': 3, 'counterexample': 7}; smallest counterexample |L| = 14, rank(m) = 3
+cl_5_11_5_10: claim a1cert: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 13, rank(m) = 3
+cl_5_12_8_10: claim a1cert: {'counterexample': 9, 'none': 1}; smallest counterexample |L| = 17, rank(m) = 3
+cl_6_12_18_10: claim a1cert: {'counterexample': 10}; smallest counterexample |L| = 18, rank(m) = 3
+cl_6_12_9_10: claim a1cert: {'counterexample': 10}; smallest counterexample |L| = 16, rank(m) = 3
+cl_6_13_13_10: claim a1cert: {'counterexample': 10}; smallest counterexample |L| = 18, rank(m) = 3
+sw: claim a1cert: {'none': 107, 'counterexample': 72}; smallest counterexample |L| = 7, rank(m) = 2
+sw_icok: claim a1cert: {'none': 50, 'counterexample': 129}; smallest counterexample |L| = 5, rank(m) = 2
+-- a1sat2 (genuine: p = b(c), c non-ascending)
+cl_5_10_1_10: claim a1cert: {'none': 4, 'counterexample': 6}; smallest counterexample |L| = 17, rank(m) = 3
+cl_5_10_2_10: claim a1cert: {'none': 3, 'counterexample': 7}; smallest counterexample |L| = 13, rank(m) = 3
+cl_5_11_14_10: claim a1cert: {'counterexample': 8, 'none': 2}; smallest counterexample |L| = 13, rank(m) = 3
+cl_5_11_4_10: claim a1cert: {'none': 3, 'counterexample': 7}; smallest counterexample |L| = 14, rank(m) = 3
+cl_5_11_5_10: claim a1cert: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 13, rank(m) = 3
+cl_5_12_8_10: claim a1cert: {'counterexample': 9, 'none': 1}; smallest counterexample |L| = 17, rank(m) = 3
+cl_6_12_9_10: claim a1cert: {'counterexample': 10}; smallest counterexample |L| = 16, rank(m) = 3
+sw: claim a1cert: {'none': 107, 'counterexample': 72}; smallest counterexample |L| = 7, rank(m) = 2
+sw_icok: claim a1cert: {'none': 50, 'counterexample': 129}; smallest counterexample |L| = 5, rank(m) = 2
+-- a1sat3 (genuine + rowtypes (¬UpCell row-type consequences); ctrl_* = the same with icok)
+cl4: claim a1cert: {'none': 10}
+cl_5_10_1_10: claim a1cert: {'none': 10}
+cl_5_10_2_10: claim a1cert: {'none': 10}
+cl_5_11_14_10: claim a1cert: {'none': 10}
+cl_5_11_4_10: claim a1cert: {'none': 10}
+cl_5_11_5_10: claim a1cert: {'none': 10}
+cl_5_12_8_10: claim a1cert: {'none': 10}
+cl_6_12_9_10: claim a1cert: {'none': 10}
+cl_6_13_13_10: 
+ctrl_cl_icok: claim a1cert: {'counterexample': 9, 'none': 1}; smallest counterexample |L| = 12, rank(m) = 4
+ctrl_sw_icok: claim a1cert: {'none': 50, 'counterexample': 129}; smallest counterexample |L| = 5, rank(m) = 2
+sw: claim a1cert: {'none': 179}

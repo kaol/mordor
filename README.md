@@ -280,7 +280,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     (A2, where b(q′) ≠ x under ¬UpCell). Every A1/A2 subcase other than the excluded ones occurs once ¬IC(m) is
     dropped; the fibre lemmas that would handle A1 need R_k tightness (§34.3z¹⁹⁷). Without R_k tightness the A1 fibre argument still works, with one
     explicit exception, an old height-(k+1) cover (`a1_upCell_or_exceptional`). On the data, A1 fibres have FibreTop
-    in 740 of 746 configurations under ¬IC(m), and in only 4 of 446 without it (§34.3z¹⁹⁸).
+    in 740 of 746 configurations under ¬IC(m), and in only 4 of 446 without it (§34.3z¹⁹⁸). The sharp certificate `A1Cert` gives UpCell, but exact search refutes "an A1
+    fibre forces A1Cert" (|L| = 7). It survives once the ¬UpCell row-type exclusions are added (**A1RowTypeCert**: no
+    counterexample; both ¬IC(m) and the exclusions are necessary). Under ¬UpCell it would leave every genuine A1
+    configuration with an empty fibre (`noUpCell_a1_fibre_empty`) (§34.3z¹⁹⁹).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

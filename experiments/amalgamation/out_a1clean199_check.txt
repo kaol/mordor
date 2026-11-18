@@ -1,0 +1,32 @@
+== a1c_icok_blocker_join_min8.json: |L| = 8, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; m = {02}
+   ({} ⋖ {0}), b(c) = p: True; fibre column {013}: exceptions ['{01}', '{03}'], comparable columns [], ¬IC(m) response F(m, m ⊔ e) = ['{02}', '{0123}']
+== a1c_icok_blocker_single_min8.json: |L| = 8, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; m = {03}
+   ({} ⋖ {0}), b(c) = p: True; fibre column {012}: exceptions ['{01}'], comparable columns [], ¬IC(m) response F(m, m ⊔ e) = ['{03}']
+== a1c_icok_nocert_min6.json: |L| = 6, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; m = {02}
+   ({} ⋖ {0}), b(c) = p: True; fibre column {01}: exceptions [], comparable columns []
+== a1c_min_blocker_single_min11.json: |L| = 11, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; m = {03}
+   ({} ⋖ {0}), b(c) = p: True; fibre column {01}: exceptions [], comparable columns ['{01}']
+   ({} ⋖ {0}), b(c) = p: True; fibre column {012}: exceptions ['{02}'], comparable columns ['{01}', '{02}', '{012}'], ¬IC(m) response F(m, m ⊔ e) = ['{012}']
+   UpCell row {0} (non-ascending; b(x) = {}): off-m cells ['{01}', '{02}']
+   UpCell row {1} (non-ascending; b(x) = {}): off-m cells ['{12}']
+   UpCell row {2} (non-ascending; b(x) = {}): off-m cells ['{02}', '{12}']
+== a1c_min_noclean_min22.json: |L| = 22, K = 3; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; m = {014}
+   ({0} ⋖ {05}), b(c) = p: True; fibre column {0235}: exceptions ['{025}'], comparable columns ['{025}'], ¬IC(m) response F(m, m ⊔ e) = ['{015}']
+   UpCell row {01} (other ascending; b(x) = {01}): off-m cells ['{015}']
+   UpCell row {14} (non-ascending; b(x) = {}): off-m cells ['{124}']
+   UpCell row {24} (non-ascending; b(x) = {}): off-m cells ['{124}']
+   UpCell row {05} (non-ascending; b(x) = {0}): off-m cells ['{025}']
+== single_claim_a1cert_notop_multi_icok_notightK1_nofeeder_genuine_rowtypes_min5.json: |L| = 5, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; m = {01}
+   ({} ⋖ {0}), b(c) = p: True; fibre column {02}: exceptions [], comparable columns []
+== single_claim_a1cert_notop_multi_icok_notightK1_nofeeder_genuine_rowtypes_rmin3_min12.json: |L| = 12, K = 4; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; m = {0123}
+   ({01} ⋖ {012}), b(c) = p: True; fibre column {0124}: exceptions [], comparable columns []
+== single_claim_a1cert_notop_multi_notightK1_nofeeder_genuine_min7.json: |L| = 7, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; m = {02}
+   ({} ⋖ {0}), b(c) = p: True; fibre column {03}: exceptions [], comparable columns []
+   UpCell row {1} (other ascending; b(x) = {1}): off-m cells ['{01}']
+== single_claim_a1cert_notop_multi_notightK1_nofeeder_genuine_rmin3_min13.json: |L| = 13, K = 3; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; m = {024}
+   ({2} ⋖ {24}), b(c) = p: True; fibre column {234}: exceptions [], comparable columns []
+   UpCell row {12} (stationary; b(x) = {12}): off-m cells ['{124}']
+== single_claim_a1cert_notop_multi_notightK1_nofeeder_min7.json: |L| = 7, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; m = {02}
+   ({} ⋖ {0}), b(c) = p: True; fibre column {03}: exceptions [], comparable columns []
+   UpCell row {0} (other ascending; b(x) = {}): off-m cells ['{01}']
+   UpCell row {1} (other ascending; b(x) = {1}): off-m cells ['{01}']

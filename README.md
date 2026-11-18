@@ -276,7 +276,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     positive stage (`noUpCell_nonAscending_terminal`) (§34.3z¹⁹⁵). More generally, ascending elements of R_k have height ≤ k (`ascending_height_le`),
     so a non-ascending row lies only below non-ascending A-chains (`nonAscending_chain`, unconditional). The B-genealogy
     of its terminal source ends pure-B or at a first A-entry (`terminalBAncestry`). Pure-B cannot be excluded without
-    ¬IC(m) (|L| = 4) (§34.3z¹⁹⁶).
+    ¬IC(m) (|L| = 4) (§34.3z¹⁹⁶). In the dominant case x ≤ q′ either x = q′ (A1: b(x) < x or b(x) ∥ x) or x ⋖ q′
+    (A2, where b(q′) ≠ x under ¬UpCell). Every A1/A2 subcase other than the excluded ones occurs once ¬IC(m) is
+    dropped; the fibre lemmas that would handle A1 need R_k tightness (§34.3z¹⁹⁷).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

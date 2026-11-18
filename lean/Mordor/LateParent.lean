@@ -75,6 +75,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`pureA_height_le`**, **`noUpCell_not_below_pureA`**, **`noUpCell_nonAscending_terminal`**.
 * §34.3z¹⁹⁶: `terminalSource_new`, **`terminalBAncestry`**, **`ascending_height_le`**, `row_below_ascending_eq`, `a_ascending`,
   **`nonAscending_chain`**, `noUpCell_nonAscending_terminal'`.
+* §34.3z¹⁹⁷: `i0_dichotomy`, `bSource_of_new_nonAscending`, **`noUpCell_i0_cover`**, `i0_A1_cover`, `noUpCell_firstA_parent`,
+  `noUpCell_firstA_parent_height`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1833,6 +1835,66 @@ theorem noUpCell_nonAscending_terminal' [WellFoundedLT α] {k H : ℕ} (hn : NoC
       (¬ ∃ r ∈ Rk F t', q' ≤ a F r) ∧ ∀ n ≤ i, ¬ (a F)^[n] q' ≤ a F ((a F)^[n] q') := by
   obtain ⟨i, t', q', h1, h2, h3, h4, h5, h6⟩ := noUpCell_nonAscending_terminal hn hall hmk hnew hnot hx hxk hna
   exact ⟨i, t', q', h1, h2, h3, h4, h5, h6, nonAscending_chain hn hall hnew hxk hna h2 h1 h3⟩
+
+/-! ### The i = 0 case and the first A-entry (§34.3z¹⁹⁷) -/
+
+/-- **The `i = 0` height dichotomy**: a height-`k` row below `q ∈ R_k` (with `R_{k+1}` tight) is either `q` itself (A1),
+or `q` has height `k + 1` and covers it (A2). -/
+theorem i0_dichotomy {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {q x : α}
+    (hq : q ∈ Rk F k) (hxk : height H x = k) (hxq : x ≤ q) : x = q ∨ (height H q = k + 1 ∧ x ⋖ q) := by
+  rcases eq_or_lt_of_le hxq with e | hlt
+  · exact Or.inl e
+  · have h1 := height_strictMono hn hlt; have h2 := hall q (Rk_mono (Nat.le_succ k) hq)
+    exact Or.inr ⟨by omega, covBy_of_height hn hlt (by omega)⟩
+
+/-- **The B-source of a new non-ascending element** is neither the element nor above it: `b y ≠ y` (else `F y y = y`
+makes `y` ascending) and `y ≰ b y` (`R_t` is a down-set and `y ∉ R_t ∋ b y`). So `b y < y` or `b y ∥ y` (case A1). -/
+theorem bSource_of_new_nonAscending {t : ℕ} {y : α} (hna : ¬ y ≤ a F y) (hnew : y ∉ Rk F t) (hb : b F y ∈ Rk F t) :
+    b F y ≠ y ∧ ¬ y ≤ b F y := by
+  refine ⟨fun e => hna (le_a ?_), fun h => hnew (Rk_down t h hb)⟩
+  have := col_b (F := F) y; rw [e] at this; exact this.ge
+
+/-- **Case A2** (`x ⋖ q`, `q` old of height `k + 1`, new at stage `t + 1 ≤ k`, `b q ∈ R_t`), without UpCell:
+`b q ≠ x` (else `F x q = x` is a lower cell at `q`, and `m ≰ q` because `q ∈ R_k ∌ m`), and if `x < b q` then `b q` is
+another old element of height `k + 1`, incomparable with `q`. -/
+theorem noUpCell_i0_cover {k H t : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m x q : α} (hnew : m ∉ Rk F k) (hnot : ¬ UpCell F H k m) (hx : x ∈ Rk F k) (hxk : height H x = k) (hcov : x ⋖ q)
+    (hq : q ∈ Rk F k) (hqt : q ∉ Rk F t) (hb : b F q ∈ Rk F t) (htk : t ≤ k) :
+    b F q ≠ x ∧ (x < b F q → height H (b F q) = k + 1 ∧ ¬ b F q ≤ q ∧ ¬ q ≤ b F q) := by
+  have hmq : ¬ m ≤ q := fun h => hnew (Rk_down k h hq)
+  refine ⟨fun e => hnot ⟨x, hx, hxk, q, hcov.lt, hmq, Or.inl ?_⟩, fun hxb => ?_⟩
+  · have := col_b (F := F) q; rw [e] at this; exact this.le
+  · have hbR : b F q ∈ Rk F k := Rk_mono htk hb
+    have h1 := height_strictMono hn hxb; have h2 := hall _ (Rk_mono (Nat.le_succ k) hbR)
+    refine ⟨by omega, fun hle => ?_, fun hle => hqt (Rk_down t hle hb)⟩
+    rcases eq_or_lt_of_le hle with e | hlt
+    · exact hqt (e ▸ hb)
+    · exact hcov.2 hxb hlt
+
+/-- **Case A1 with a comparable B-source of height `k − 1`**: `b x ⋖ x` and `F (b x) x = b x`, so `(b x, x)` is a sibling
+configuration top. (Its fibre is bad without UpCell only via `fibre_bad_of_not_upCell`, which needs `R_k` tight — not a
+MinUpCell hypothesis.) -/
+theorem i0_A1_cover {k H : ℕ} (hn : NoChain α (H + 1)) {x : α} (hxk : height H x = k) (hlt : b F x < x)
+    (hbk : height H (b F x) + 1 = k) : b F x ⋖ x ∧ F (b F x) x = b F x :=
+  ⟨covBy_of_height hn hlt (by omega), col_b x⟩
+
+/-- **The first A-entry parent** (without UpCell): if `q ≤ a r` with `r ∈ R_e`, `q ∉ R_e`, `e + 1 ≤ k`, then `r` is not
+an ascending height-`k` row (`noUpCell_ascending_old`: `a r ∈ R_k` would make it stationary, putting `q ≤ r` into `R_e`).
+With `ascending_height_le`, an ascending first-A parent has height `< k`. -/
+theorem noUpCell_firstA_parent {k H e : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m q r : α} (hmk : height H m = k + 1) (hnew : m ∉ Rk F k) (hnot : ¬ UpCell F H k m) (hr : r ∈ Rk F e)
+    (hek : e + 1 ≤ k) (hqa : q ≤ a F r) (hqe : q ∉ Rk F e) (hrk : height H r = k) : ¬ r ≤ a F r := fun hra => by
+  have hst := noUpCell_ascending_old hn hall hmk hnew hnot (Rk_mono (by omega) hr) hrk hra
+    (Rk_mono hek (mem_succ_of_a hr le_rfl))
+  exact hqe (Rk_down e (hst ▸ hqa) hr)
+
+theorem noUpCell_firstA_parent_height [WellFoundedLT α] {k H e : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m q r : α} (hmk : height H m = k + 1) (hnew : m ∉ Rk F k)
+    (hnot : ¬ UpCell F H k m) (hr : r ∈ Rk F e) (hek : e + 1 ≤ k) (hqa : q ≤ a F r) (hqe : q ∉ Rk F e)
+    (hra : r ≤ a F r) : height H r < k := by
+  have := ascending_height_le hn hall hnew (Rk_mono (by omega) hr) hra
+  by_contra h
+  exact noUpCell_firstA_parent hn hall hmk hnew hnot hr hek hqa hqe (by omega) hra
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

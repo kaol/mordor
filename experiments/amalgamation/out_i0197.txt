@@ -1,0 +1,73 @@
+== i0_probe.py (§34.3z¹⁹⁷): the i = 0 case (x ≤ q′) and first A-entry parents; mode=icok (¬IC(m) dropped, ¬UpCell) and mode=min; rank-3 closure 5 10 1, 5 11 4/14, 5 12 8, 6 12 9/18, 6 13 13; rank-4 6 13 11; sweep 4 16; summed
+-- icok
+('first A-entry parent', 'icok', 'r ascending', False, 'h(r) − k', -1, 'q_d = a(r)', False, 'r vs q_d', '∥') 12
+('first A-entry parent', 'icok', 'r ascending', False, 'h(r) − k', -1, 'q_d = a(r)', True, 'r vs q_d', '∥') 68
+('first A-entry parent', 'icok', 'r ascending', False, 'h(r) − k', -2, 'q_d = a(r)', False, 'r vs q_d', '∥') 3
+('first A-entry parent', 'icok', 'r ascending', False, 'h(r) − k', -2, 'q_d = a(r)', True, 'r vs q_d', '∥') 29
+('first A-entry parent', 'icok', 'r ascending', False, 'h(r) − k', -3, 'q_d = a(r)', True, 'r vs q_d', '∥') 2
+('first A-entry parent', 'icok', 'r ascending', False, 'h(r) − k', 0, 'q_d = a(r)', False, 'r vs q_d', '∥') 7
+('first A-entry parent', 'icok', 'r ascending', False, 'h(r) − k', 0, 'q_d = a(r)', True, 'r vs q_d', '∥') 28
+('first A-entry parent', 'icok', 'r ascending', False, 'h(r) − k', 1, 'q_d = a(r)', False, 'r vs q_d', '∥') 1
+('first A-entry parent', 'icok', 'r ascending', False, 'h(r) − k', 1, 'q_d = a(r)', True, 'r vs q_d', '∥') 3
+('first A-entry parent', 'icok', 'r ascending', True, 'h(r) − k', -2, 'q_d = a(r)', False, 'r vs q_d', '∥') 3
+('first A-entry parent', 'icok', 'r ascending', True, 'h(r) − k', -2, 'q_d = a(r)', True, 'r vs q_d', '<') 174
+('first A-entry parent', 'icok', 'r ascending', True, 'h(r) − k', -3, 'q_d = a(r)', True, 'r vs q_d', '<') 50
+('first A-entry parent', 'icok', 'r ascending', True, 'h(r) − k', -4, 'q_d = a(r)', True, 'r vs q_d', '<') 2
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -1, 'p ∧ q′: h − k', -1, 'p ∨ q′ off m', True, 'x carries UpCell', False) 930
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -2, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', True, 'x carries UpCell', False) 851
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -3, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', True, 'x carries UpCell', False) 194
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -4, 'p ∧ q′: h − k', -4, 'p ∨ q′ off m', True, 'x carries UpCell', False) 3
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -1, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', False, 'x carries UpCell', False) 154
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -1, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', True, 'x carries UpCell', False) 151
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -1, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', False, 'x carries UpCell', False) 8
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -1, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', True, 'x carries UpCell', False) 1
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -2, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', False, 'x carries UpCell', False) 34
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -2, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', True, 'x carries UpCell', False) 23
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -3, 'p ∧ q′: h − k', -4, 'p ∨ q′ off m', False, 'x carries UpCell', False) 1
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', 0, 'p ∧ q′: h − k', -1, 'p ∨ q′ off m', False, 'x carries UpCell', False) 2
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', 0, 'p ∧ q′: h − k', -1, 'p ∨ q′ off m', True, 'x carries UpCell', False) 6
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', 0, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', False, 'x carries UpCell', False) 6
+('i = 0', 'icok', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', 0, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', True, 'x carries UpCell', False) 4
+('i = 0', 'icok', 'A2 (x ⋖ q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -2, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', True, 'x carries UpCell', False) 12
+('i = 0', 'icok', 'A2 (x ⋖ q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -3, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', True, 'x carries UpCell', False) 1
+('i = 0', 'icok', 'A2 (x ⋖ q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -2, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', False, 'x carries UpCell', False) 2
+('models', 'icok') 1094
+-- min
+('first A-entry parent', 'min', 'r ascending', False, 'h(r) − k', -1, 'q_d = a(r)', False, 'r vs q_d', '∥') 30
+('first A-entry parent', 'min', 'r ascending', False, 'h(r) − k', -1, 'q_d = a(r)', True, 'r vs q_d', '∥') 78
+('first A-entry parent', 'min', 'r ascending', False, 'h(r) − k', -2, 'q_d = a(r)', False, 'r vs q_d', '∥') 2
+('first A-entry parent', 'min', 'r ascending', False, 'h(r) − k', -2, 'q_d = a(r)', True, 'r vs q_d', '∥') 49
+('first A-entry parent', 'min', 'r ascending', False, 'h(r) − k', -3, 'q_d = a(r)', True, 'r vs q_d', '∥') 11
+('first A-entry parent', 'min', 'r ascending', False, 'h(r) − k', 0, 'q_d = a(r)', False, 'r vs q_d', '∥') 7
+('first A-entry parent', 'min', 'r ascending', False, 'h(r) − k', 0, 'q_d = a(r)', True, 'r vs q_d', '∥') 16
+('first A-entry parent', 'min', 'r ascending', False, 'h(r) − k', 1, 'q_d = a(r)', False, 'r vs q_d', '∥') 1
+('first A-entry parent', 'min', 'r ascending', True, 'h(r) − k', -2, 'q_d = a(r)', False, 'r vs q_d', '∥') 4
+('first A-entry parent', 'min', 'r ascending', True, 'h(r) − k', -2, 'q_d = a(r)', True, 'r vs q_d', '<') 266
+('first A-entry parent', 'min', 'r ascending', True, 'h(r) − k', -3, 'q_d = a(r)', True, 'r vs q_d', '<') 64
+('first A-entry parent', 'min', 'r ascending', True, 'h(r) − k', -4, 'q_d = a(r)', True, 'r vs q_d', '<') 3
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -1, 'p ∧ q′: h − k', -1, 'p ∨ q′ off m', True, 'x carries UpCell', False) 559
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -1, 'p ∧ q′: h − k', -1, 'p ∨ q′ off m', True, 'x carries UpCell', True) 408
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -2, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', True, 'x carries UpCell', False) 537
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -2, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', True, 'x carries UpCell', True) 283
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -3, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', True, 'x carries UpCell', False) 94
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -3, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', True, 'x carries UpCell', True) 8
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -4, 'p ∧ q′: h − k', -4, 'p ∨ q′ off m', True, 'x carries UpCell', False) 1
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -1, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', False, 'x carries UpCell', False) 153
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -1, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', True, 'x carries UpCell', False) 238
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -1, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', False, 'x carries UpCell', False) 30
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -1, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', True, 'x carries UpCell', False) 4
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -2, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', False, 'x carries UpCell', False) 19
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -2, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', True, 'x carries UpCell', False) 21
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -3, 'p ∧ q′: h − k', -4, 'p ∨ q′ off m', False, 'x carries UpCell', False) 1
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', -3, 'p ∧ q′: h − k', -4, 'p ∨ q′ off m', True, 'x carries UpCell', False) 1
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', 0, 'p ∧ q′: h − k', -1, 'p ∨ q′ off m', False, 'x carries UpCell', False) 2
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', 0, 'p ∧ q′: h − k', -1, 'p ∨ q′ off m', True, 'x carries UpCell', False) 3
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', 0, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', False, 'x carries UpCell', False) 6
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', 0, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', True, 'x carries UpCell', False) 1
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', 1, 'p ∧ q′: h − k', -1, 'p ∨ q′ off m', False, 'x carries UpCell', False) 1
+('i = 0', 'min', 'A1 (x = q′)', 'p vs q′', '∥', 'p vs x', '∥', 'h(p) − k', 1, 'p ∧ q′: h − k', -1, 'p ∨ q′ off m', True, 'x carries UpCell', False) 2
+('i = 0', 'min', 'A2 (x ⋖ q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -2, 'p ∧ q′: h − k', -2, 'p ∨ q′ off m', True, 'x carries UpCell', True) 2
+('i = 0', 'min', 'A2 (x ⋖ q′)', 'p vs q′', '<', 'p vs x', '<', 'h(p) − k', -3, 'p ∧ q′: h − k', -3, 'p ∨ q′ off m', True, 'x carries UpCell', True) 1
+('i = 0', 'min', 'A2 (x ⋖ q′)', 'p vs q′', '<', 'p vs x', '=', 'h(p) − k', 0, 'p ∧ q′: h − k', 0, 'p ∨ q′ off m', True, 'x carries UpCell', True) 1
+('i = 0', 'min', 'A2 (x ⋖ q′)', 'p vs q′', '∥', 'p vs x', '>', 'h(p) − k', 1, 'p ∧ q′: h − k', 0, 'p ∨ q′ off m', True, 'x carries UpCell', True) 1
+('models', 'min') 981

@@ -1,0 +1,18 @@
+== i0_icok_A1_plt_xlt_min4.json: |L| = 4, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; UpCell = False; m = {01}
+   x = {0} (h 1, non-ascending True), q′ = {0} (stage 1, h 1): A1; p = b(q′) = {} (stage 0, h 0), p vs q′ <, p vs x <, F(p, q′) = {}
+== i0_icok_A1_ppar_xpar_min9.json: |L| = 9, K = 3; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; UpCell = False; m = {012}
+   x = {01} (h 2, non-ascending True), q′ = {01} (stage 2, h 2): A1; p = b(q′) = {2} (stage 1, h 1), p vs q′ ∥, p vs x ∥, F(p, q′) = {2}
+== i0_icok_A2_plt_xlt_min13.json: |L| = 13, K = 3; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; UpCell = False; m = {013}
+   x = {04} (h 2, non-ascending True), q′ = {024} (stage 1, h 3): A2; p = b(q′) = {} (stage 0, h 0), p vs q′ <, p vs x <, F(p, q′) = {}
+== i0_icok_A2_ppar_xpar_min19.json: |L| = 19, K = 4; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; UpCell = False; m = {0123}
+   x = {014} (h 3, non-ascending True), q′ = {0134} (stage 2, h 4): A2; p = b(q′) = {2} (stage 1, h 1), p vs q′ ∥, p vs x ∥, F(p, q′) = {2}
+== i0_min_A1_plt_xlt_min6.json: |L| = 6, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; UpCell = True; m = {01}
+   x = {1} (h 1, non-ascending True), q′ = {1} (stage 1, h 1): A1; p = b(q′) = {} (stage 0, h 0), p vs q′ <, p vs x <, F(p, q′) = {}
+== i0_min_A1_ppar_xpar_min10.json: |L| = 10, K = 3; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; UpCell = True; m = {012}
+   x = {23} (h 2, non-ascending True), q′ = {23} (stage 2, h 2): A1; p = b(q′) = {0} (stage 1, h 1), p vs q′ ∥, p vs x ∥, F(p, q′) = {0}
+== i0_min_A2_plt_xeq_min36.json: |L| = 36, K = 4; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; UpCell = True; m = {0134}
+   x = {045} (h 3, non-ascending True), q′ = {0145} (stage 2, h 4): A2; p = b(q′) = {045} (stage 1, h 3), p vs q′ <, p vs x =, F(p, q′) = {045}
+== i0_min_A2_plt_xlt_min28.json: |L| = 28, K = 3; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; UpCell = True; m = {234}
+   x = {15} (h 2, non-ascending True), q′ = {015} (stage 1, h 3): A2; p = b(q′) = {} (stage 0, h 0), p vs q′ <, p vs x <, F(p, q′) = {}
+== i0_min_A2_ppar_xgt_min34.json: |L| = 34, K = 4; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; UpCell = True; m = {0345}
+   x = {015} (h 3, non-ascending True), q′ = {0135} (stage 2, h 4): A2; p = b(q′) = {0125} (stage 1, h 4), p vs q′ ∥, p vs x >, F(p, q′) = {0125}

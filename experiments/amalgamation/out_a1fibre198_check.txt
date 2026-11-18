@@ -1,0 +1,6 @@
+== a1f_icok_exceptional_min8.json: |L| = 8, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; UpCell = False; m = {03}
+   p = {} (b(c) = p: True) ⋖ c = {0}; fibre ['{012}']; exceptional columns [('{01}', 'h 2', 'stage 1')]; comparable columns of row c []
+== a1f_icok_ft_noupcell_min13.json: |L| = 13, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; UpCell = False; m = {03}
+   p = {} (b(c) = p: True) ⋖ c = {1}; fibre ['{012}']; exceptional columns [('{01}', 'h 2', 'stage 1'), ('{12}', 'h 2', 'stage 1')]; comparable columns of row c ['{01}', '{012}']
+== a1f_min_exceptional_min11.json: |L| = 11, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; UpCell = True; m = {03}
+   p = {} (b(c) = p: True) ⋖ c = {0}; fibre ['{01}', '{012}']; exceptional columns [('{02}', 'h 2', 'stage 1')]; comparable columns of row c ['{01}', '{02}', '{012}']

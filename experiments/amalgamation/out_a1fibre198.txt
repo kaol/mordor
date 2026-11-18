@@ -1,0 +1,21 @@
+== a1fibre_probe.py (§34.3z¹⁹⁸): A1-shape configurations (p ⋖ c, F(p, c) = p, c a height-k row); mode=icok (¬IC(m) dropped, ¬UpCell) and mode=min; rank-3 closure 5 10 1, 5 11 4/14, 5 12 8, 6 12 9/18, 6 13 13; rank-4 6 13 11; sweep 4 16; summed
+-- icok
+('A1-shape configuration', 'icok', 'p = b(c)', False, 'fibre nonempty', False, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', False) 37
+('A1-shape configuration', 'icok', 'p = b(c)', False, 'fibre nonempty', True, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', False) 9
+('A1-shape configuration', 'icok', 'p = b(c)', True, 'fibre nonempty', False, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', False) 926
+('A1-shape configuration', 'icok', 'p = b(c)', True, 'fibre nonempty', True, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', False) 382
+('A1-shape configuration', 'icok', 'p = b(c)', True, 'fibre nonempty', True, 'exceptional columns', True, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', False) 51
+('A1-shape configuration', 'icok', 'p = b(c)', True, 'fibre nonempty', True, 'exceptional columns', True, 'FibreTop', True, 'FibreTop on an exception-free interval', False, 'c carries UpCell', False) 4
+('models', 'icok') 1094
+-- min
+('A1-shape configuration', 'min', 'p = b(c)', False, 'fibre nonempty', False, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', False) 27
+('A1-shape configuration', 'min', 'p = b(c)', False, 'fibre nonempty', False, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', True) 3
+('A1-shape configuration', 'min', 'p = b(c)', False, 'fibre nonempty', True, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', False) 2
+('A1-shape configuration', 'min', 'p = b(c)', True, 'fibre nonempty', False, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', False) 581
+('A1-shape configuration', 'min', 'p = b(c)', True, 'fibre nonempty', False, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', True) 278
+('A1-shape configuration', 'min', 'p = b(c)', True, 'fibre nonempty', True, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', False) 2
+('A1-shape configuration', 'min', 'p = b(c)', True, 'fibre nonempty', True, 'exceptional columns', False, 'FibreTop', False, 'FibreTop on an exception-free interval', False, 'c carries UpCell', True) 2
+('A1-shape configuration', 'min', 'p = b(c)', True, 'fibre nonempty', True, 'exceptional columns', False, 'FibreTop', True, 'FibreTop on an exception-free interval', True, 'c carries UpCell', True) 719
+('A1-shape configuration', 'min', 'p = b(c)', True, 'fibre nonempty', True, 'exceptional columns', True, 'FibreTop', True, 'FibreTop on an exception-free interval', False, 'c carries UpCell', True) 2
+('A1-shape configuration', 'min', 'p = b(c)', True, 'fibre nonempty', True, 'exceptional columns', True, 'FibreTop', True, 'FibreTop on an exception-free interval', True, 'c carries UpCell', True) 19
+('models', 'min') 981

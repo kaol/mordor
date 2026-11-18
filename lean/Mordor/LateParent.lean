@@ -77,6 +77,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`nonAscending_chain`**, `noUpCell_nonAscending_terminal'`.
 * §34.3z¹⁹⁷: `i0_dichotomy`, `bSource_of_new_nonAscending`, **`noUpCell_i0_cover`**, `i0_A1_cover`, `noUpCell_firstA_parent`,
   `noUpCell_firstA_parent_height`.
+* §34.3z¹⁹⁸: `source_row_or`, `exceptional_column`, **`upCell_of_rowConst`**, **`a1_upCell_or_exceptional`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1895,6 +1896,58 @@ theorem noUpCell_firstA_parent_height [WellFoundedLT α] {k H e : ℕ} (hn : NoC
   have := ascending_height_le hn hall hnew (Rk_mono (by omega) hr) hra
   by_contra h
   exact noUpCell_firstA_parent hn hall hmk hnew hnot hr hek hqa hqe (by omega) hra
+
+/-! ### Sibling configurations without `R_k` tightness (§34.3z¹⁹⁸) -/
+
+/-- **The source row on the shadow interval, without tightness**: for `p ⋖ c`, `F p c = p`, `F p u = c` and `c < z ≤ u`,
+either `F p z = c`, or `F p z = p` and the column `z` is *exceptional*: `z ∈ R_{j+1}` (a lower cell of the row
+`p ∈ R_j`). (`source_row_const` excludes the second case using `R_{j+1}` tightness.) -/
+theorem source_row_or {j : ℕ} {p c u z : α} (hp : p ∈ Rk F j) (hcov : p ⋖ c) (hpc : F p c = p) (hpu : F p u = c)
+    (hcz : c < z) (hzu : z ≤ u) : F p z = c ∨ (F p z = p ∧ z ∈ Rk F (j + 1)) := by
+  have hlo : p ≤ F p z := hpc.symm.le.trans ((F p).mono hcz.le)
+  have hhi : F p z ≤ c := ((F p).mono hzu).trans hpu.le
+  rcases hcov.eq_or_eq hlo hhi with e | e
+  · exact Or.inr ⟨e, mem_succ_of_cell hp le_rfl (Or.inl e.le)⟩
+  · exact Or.inl e
+
+/-- **Exceptional columns are old covers of height `k + 1`**: with `R_{k+1}` tight, `j ≤ k`, `h(c) = k`, an exceptional
+`z > c` (`z ∈ R_{j+1}`) has `h(z) = k + 1`, `c ⋖ z`, `z ∈ R_k`, and `b z ≤ p`. -/
+theorem exceptional_column {k j H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {p c z : α} (hjk : j ≤ k) (hck : height H c = k) (hcz : c < z) (hzR : z ∈ Rk F (j + 1)) (hpz : F p z = p) :
+    height H z = k + 1 ∧ c ⋖ z ∧ z ∈ Rk F (k + 1) ∧ b F z ≤ p := by
+  have hz1 : z ∈ Rk F (k + 1) := Rk_mono (by omega) hzR
+  have h1 := height_strictMono hn hcz; have h2 := hall z hz1
+  exact ⟨by omega, covBy_of_height hn hcz (by omega), hz1, b_le hpz.le⟩
+
+/-- **UpCell from a source-constant shadow interval** (the content of `siblingShadow_upCell`, with the tightness
+replaced by the explicit hypothesis that the source row is constant `= c` on `(c, u]`, i.e. no exceptional column): a
+column of `(c, u]` comparable with its row-`c` value gives UpCell at the height-`k` top `c ∈ R_k`. -/
+theorem upCell_of_rowConst {k H : ℕ} (hn : NoChain α (H + 1)) {m p c u : α} (hc : c ∈ Rk F k)
+    (hck : height H c = k) (hpc : p ≤ c) (hconst : ∀ z, c < z → z ≤ u → F p z = c) (hmu : ¬ m ≤ u)
+    (hcase : ∃ z, c < z ∧ z ≤ u ∧ (F c z ≤ z ∨ z ≤ F c z)) : UpCell F H k m := by
+  obtain ⟨z, hcz, hzu, h | h⟩ := hcase
+  · refine upCell_of_descentWitness hn ⟨c, hc, hck, z, hcz, h, fun hm => hmu (hm.trans hzu), fun y hcy hyz _ => ?_⟩
+    exact (hconst y hcy (hyz.trans hzu)).symm.le.trans ((F.mono hpc) y)
+  · exact ⟨c, hc, hck, z, hcz, fun hm => hmu (hm.trans hzu), Or.inr h⟩
+
+/-- **The A1 dichotomy without `R_k` tightness.** For an A1 row `c` (height `k`, `c ∈ R_k`) with B-source `p ⋖ c`,
+`F p c = p`, `p ∈ R_j`, `j ≤ k`, and a fibre column `u` (`F p u = c`, `m ≰ u`) carrying a comparable column of row `c` in
+`(c, u]`: either UpCell, or `(c, u]` contains an exceptional old cover `z` of `c` (height `k + 1`, `z ∈ R_k`, `b z ≤ p`,
+`F p z = p`). -/
+theorem a1_upCell_or_exceptional {k j H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m p c u : α} (hp : p ∈ Rk F j) (hjk : j ≤ k) (hc : c ∈ Rk F k) (hck : height H c = k) (hcov : p ⋖ c)
+    (hpc : F p c = p) (hpu : F p u = c) (hmu : ¬ m ≤ u) (hcase : ∃ z, c < z ∧ z ≤ u ∧ (F c z ≤ z ∨ z ≤ F c z)) :
+    UpCell F H k m ∨ ∃ z, c < z ∧ z ≤ u ∧ F p z = p ∧ height H z = k + 1 ∧ c ⋖ z ∧ z ∈ Rk F (j + 1) ∧ b F z ≤ p := by
+  by_cases hex : ∃ z, c < z ∧ z ≤ u ∧ F p z = p
+  · obtain ⟨z, hcz, hzu, hpz⟩ := hex
+    have hzR : z ∈ Rk F (j + 1) := mem_succ_of_cell hp le_rfl (Or.inl hpz.le)
+    obtain ⟨h1, h2, -, h4⟩ := exceptional_column hn hall hjk hck hcz hzR hpz
+    exact Or.inr ⟨z, hcz, hzu, hpz, h1, h2, hzR, h4⟩
+  · push_neg at hex
+    refine Or.inl (upCell_of_rowConst hn hc hck hcov.le (fun z hcz hzu => ?_) hmu hcase)
+    rcases source_row_or hp hcov hpc hpu hcz hzu with e | ⟨e, -⟩
+    · exact e
+    · exact absurd e (hex z hcz hzu)
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

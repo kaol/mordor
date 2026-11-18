@@ -69,6 +69,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `singletonLower_of_minUpCell`, **`upCell_zero`** (MinUpCell at `k = 0`).
 * §34.3z¹⁹¹: `MinDescentWitness`, `minUpCell_of_minDescentWitness`, `diag_post_of_aEntry`, `above_of_diag_post`.
 * §34.3z¹⁹²: **`saturated_shadow`**, `SatSourceBelow` (refuted), `initialPair_of_le`.
+* §34.3z¹⁹³: **`joinProbe`**, `joinProbe_split`, `sat_iter_ge`, `joinProbe_A1_ge`, `eq_meet_of_row_below`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1465,6 +1466,74 @@ of 981 cases; the remaining cases need another row. -/
 theorem initialPair_of_le {m x y : α} (hxm : x ≤ m) (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) :
     F x (F m y) ≤ F m y ∧ ¬ m ≤ F m y :=
   ⟨feeder_le_side hxm hy, hmw⟩
+
+/-! ### The join probe: re-entering ¬IC(m) after saturation (§34.3z¹⁹³) -/
+
+/-- **Join probe.** Let `m ⊔ F m y = y` (a column-orbit fixed point, `w = F m y`), `x ≤ m`, and let `q ≤ w` be saturated
+for the row `x` (`x ⊔ F x q = q`) with `q ≰ m`. Put `z` = the least fixed point of `Ψ t = m ⊔ F m t` above `m ⊔ q`
+(`sInf` of the `Ψ`-pre-fixed points above `m ⊔ q`; no iteration or finiteness needed, since `m ⊔ q ≤ Ψ (m ⊔ q)`).
+Then `m ⊔ q ≤ z ≤ y`, `z = m ⊔ F m z`, and with `r = F m z`: `F x q ≤ r ≤ w`, `q ≤ x ⊔ r`, and — using ¬IC(m) a second
+time, at `z > m` — `r ∥ m`. -/
+theorem joinProbe {m x q y : α} (hy : m ⊔ F m y = y) (hxm : x ≤ m) (hqw : q ≤ F m y) (hq : x ⊔ F x q = q)
+    (hqm : ¬ q ≤ m) (hno : ¬ ∃ y', m < y' ∧ (F m y' ≤ m ∨ y' ≤ F m y')) :
+    ∃ z, m ⊔ q ≤ z ∧ z ≤ y ∧ m ⊔ F m z = z ∧ ¬ F m z ≤ m ∧ ¬ m ≤ F m z ∧ F m z ≤ F m y ∧ F x q ≤ F m z ∧
+      q ≤ x ⊔ F m z := by
+  set Ψ : α → α := fun t => m ⊔ F m t
+  have hΨ : Monotone Ψ := fun a b h => sup_le_sup_left ((F m).mono h) m
+  set t0 := m ⊔ q
+  have hwy : F m y ≤ y := le_sup_right.trans hy.le
+  have hqy : q ≤ y := hqw.trans hwy
+  have ht0y : t0 ≤ y := sup_le (le_sup_left.trans hy.le) hqy
+  have hsx : F x q ≤ F m t0 := ((F.mono hxm) q).trans ((F m).mono le_sup_right)
+  have ht0 : t0 ≤ Ψ t0 := by
+    refine sup_le le_sup_left ?_
+    rw [← hq]; exact sup_le (hxm.trans le_sup_left) (hsx.trans le_sup_right)
+  set S := {t | t0 ≤ t ∧ Ψ t ≤ t}
+  set z := sInf S
+  have hyS : y ∈ S := ⟨ht0y, hy.le⟩
+  have hzy : z ≤ y := sInf_le hyS
+  have ht0z : t0 ≤ z := le_sInf fun t ht => ht.1
+  have hΨz : Ψ z ≤ z := le_sInf fun t ht => (hΨ (sInf_le ht)).trans ht.2
+  have hzΨ : z ≤ Ψ z := sInf_le ⟨ht0.trans (hΨ ht0z), hΨ hΨz⟩
+  have hfix : m ⊔ F m z = z := le_antisymm hΨz hzΨ
+  have hmz : m < z := lt_of_le_of_ne (le_sup_left.trans ht0z) fun e => hqm (le_sup_right.trans (ht0z.trans e.symm.le))
+  have hr1 : ¬ F m z ≤ m := fun h => hno ⟨z, hmz, Or.inl h⟩
+  have hr2 : ¬ m ≤ F m z := fun h => hno ⟨z, hmz, Or.inr (hfix.symm.trans (sup_eq_right.2 h)).le⟩
+  have hsr : F x q ≤ F m z := hsx.trans ((F m).mono ht0z)
+  refine ⟨z, ht0z, hzy, hfix, hr1, hr2, (F m).mono hzy, hsr, ?_⟩
+  rw [← hq]; exact sup_le_sup_left hsr x
+
+/-- **The A1/A2 split of the join probe** for the meet row `x = m ⊓ w`: either `x ≤ r` — then `m ⊓ r = x`, `x < r` and
+`r` is a second pre-fixed column of the row `x` off `m` (A1) — or `m ⊓ r < x` (A2). -/
+theorem joinProbe_split {m y z : α} (hzy : z ≤ y) (hfix : m ⊔ F m z = z) (hr1 : ¬ F m z ≤ m) :
+    (m ⊓ F m y ≤ F m z ∧ m ⊓ F m z = m ⊓ F m y ∧ m ⊓ F m y < F m z ∧
+        F (m ⊓ F m y) (F m z) ≤ F m z) ∨
+      m ⊓ F m z < m ⊓ F m y := by
+  have hrw : F m z ≤ F m y := (F m).mono hzy
+  have hmeet : m ⊓ F m z ≤ m ⊓ F m y := inf_le_inf_left m hrw
+  by_cases hA : m ⊓ F m y ≤ F m z
+  · refine Or.inl ⟨hA, le_antisymm hmeet (le_inf inf_le_left hA), lt_of_le_of_ne hA fun e => hr1 (e ▸ inf_le_left), ?_⟩
+    exact ((F.mono inf_le_left) (F m z)).trans ((F m).mono (le_sup_right.trans hfix.le))
+  · exact Or.inr (lt_of_le_of_ne hmeet fun e => hA (e ▸ inf_le_right))
+
+/-- **Saturation cannot pass below a saturated point**: if `q = x ⊔ F x q` and `q ≤ u`, then `q ≤ x ⊔ F x u`. So in case A1
+(`x ≤ r`, hence `q ≤ r`) re-saturating the row `x` from `r` returns a saturated point `≥ q` (in the corpus: `q` itself). -/
+theorem sat_iter_ge {x q u : α} (hq : x ⊔ F x q = q) (hqu : q ≤ u) : q ≤ x ⊔ F x u :=
+  hq.symm.le.trans (sup_le_sup_left ((F x).mono hqu) x)
+
+theorem joinProbe_A1_ge {m x q z : α} (hq : q ≤ x ⊔ F m z) (hxr : x ≤ F m z) : q ≤ F m z :=
+  hq.trans (sup_le hxr le_rfl)
+
+/-- **Only the meet row can use `w`**: a height-`k` row below `m` that lies below `w` (with `m ≰ w`, `h(m) = k + 1`) is
+`m ⊓ w`. Hence outside the meet-row case no height-`k` row below `m` has `w` as a candidate column, and an initial pair must
+use a row `x ≰ m` (in the corpus, 219 of 220 such models have no witness row below `m` at all). -/
+theorem eq_meet_of_row_below {H k : ℕ} (hn : NoChain α (H + 1)) {m w x : α} (hxm : x ≤ m) (hxw : x ≤ w)
+    (hxk : height H x = k) (hmk : height H m = k + 1) (hmw : ¬ m ≤ w) : x = m ⊓ w := by
+  have hle : x ≤ m ⊓ w := le_inf hxm hxw
+  have hlt : m ⊓ w < m := lt_of_le_of_ne inf_le_left fun e => hmw (e ▸ inf_le_right)
+  have h1 := height_strictMono hn hlt
+  by_contra hne
+  have := height_strictMono hn (lt_of_le_of_ne hle hne); omega
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

@@ -267,7 +267,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     cannot be anchored at w, y* or the feeder (|L| = 18, 20) (§34.3z¹⁹¹). Without UpCell, every candidate interval of a top row
     contains a saturated drop q = x ⊔ F(x, q) (`saturated_shadow`), but its B-source need not lie below the row
     (|L| = 6, 7). Models with an initial pair and ¬UpCell exist once ¬IC(m) is dropped (|L| = 6, 14), so ¬IC(m) has to
-    be used after the pair is found (§34.3z¹⁹²).
+    be used after the pair is found (§34.3z¹⁹²). Re-applying it at the join of m and a saturated drop (`joinProbe`, proved) gives r ∥ m,
+    but on the corpus the probe returns only w, q or F(x, q). Outside the meet row, no height-k row below m can use w
+    (`eq_meet_of_row_below`) (§34.3z¹⁹³).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

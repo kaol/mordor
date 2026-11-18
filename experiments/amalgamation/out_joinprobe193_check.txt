@@ -1,0 +1,6 @@
+== jp_A1_nontrivial_min21.json: |L| = 21, K = 3; MinUpCell hypotheses hold: True; m = {234}, y* = {01234}, w = {0134}, m ∧ w = {34} (height 2, in R_k: True); R_k tight: True
+   drop q = {134} (F(x,q) = {14}), z = {1234} (= y*: False), r = F(m,z) = {134} (= w: False), split: A1, m ∧ r = {34} (height 2, stage 2)
+== jp_A2_min20.json: |L| = 20, K = 3; MinUpCell hypotheses hold: True; m = {145}, y* = {012345}, w = {0134}, m ∧ w = {14} (height 2, in R_k: True); R_k tight: False
+   drop q = {014} (F(x,q) = {0}), z = {0145} (= y*: False), r = F(m,z) = {0} (= w: False), split: A2, m ∧ r = {} (height 0, stage 0)
+== jp_nomeetrow_min6.json: |L| = 6, K = 2; MinUpCell hypotheses hold: True; m = {12}, y* = {0123}, w = {03}, m ∧ w = {} (height 0, in R_k: True); R_k tight: True
+   height-k rows ['{0}', '{1}'] (below m: ['{1}']); descent witnesses (row, column): [('{0}', '{03}')]

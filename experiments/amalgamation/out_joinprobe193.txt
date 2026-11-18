@@ -1,0 +1,41 @@
+== joinprobe_probe.py (§34.3z¹⁹³): SAT models of 'minhyp' under the MinUpCell hypotheses (multi notop nofeeder notightK1), every qualifying m; rank-3 closure 5 10 1/2, 5 11 4/5/14, 5 12 8, 6 11 6, 6 12 9/18, 6 13 13/20; rank-4 closure 6 13 11; sweep 4 16; runs capped at 580 s; summed
+('join probe', 'z = y*', False, 'r = w', False, 'split', 'A1', 'saturation from r', 'same drop q') 4
+('join probe', 'z = y*', False, 'r = w', False, 'split', 'A2', 'p = m ∧ r: h(p) − k', -1, 'p ∈ R_{h(p)}', True, 'p new at its height stage', True, 'a(p) a height-k row', False, 'another height-k row above p with a candidate column', True) 2
+('join probe', 'z = y*', False, 'r = w', False, 'split', 'A2', 'p = m ∧ r: h(p) − k', -1, 'p ∈ R_{h(p)}', True, 'p new at its height stage', True, 'a(p) a height-k row', True, 'another height-k row above p with a candidate column', True) 1
+('join probe', 'z = y*', False, 'r = w', False, 'split', 'A2', 'p = m ∧ r: h(p) − k', -2, 'p ∈ R_{h(p)}', True, 'p new at its height stage', True, 'a(p) a height-k row', False, 'another height-k row above p with a candidate column', True) 1
+('join probe', 'z = y*', True, 'r = w', True, 'split', 'A1') 209
+('meet row', 'saturated drops q ≤ w', 0) 813
+('meet row', 'saturated drops q ≤ w', 1) 208
+('meet row', 'saturated drops q ≤ w', 2) 3
+('meet row', 'saturated drops q ≤ w', 3) 1
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', False, 'height-k rows below m', 0, 'b(m) a height-k row', False, 'witness rows: some ≤ m', False) 1
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', False, 'height-k rows below m', 0, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 1
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', False, 'height-k rows below m', 1, 'b(m) a height-k row', False, 'witness rows: some ≤ m', False) 1
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', False, 'height-k rows below m', 1, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 1
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 0, 'b(m) a height-k row', False, 'witness rows: some ≤ m', False) 4
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 0, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 2
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 1, 'b(m) a height-k row', False, 'witness rows: some ≤ m', False) 15
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 1, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 25
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 2, 'b(m) a height-k row', False, 'witness rows: some ≤ m', False) 24
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 2, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 47
+('no meet row', 'h(m ∧ w) − k', -1, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 2, 'b(m) a height-k row', True, 'witness rows: some ≤ m', True) 1
+('no meet row', 'h(m ∧ w) − k', -2, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 0, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 3
+('no meet row', 'h(m ∧ w) − k', -2, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 1, 'b(m) a height-k row', False, 'witness rows: some ≤ m', False) 3
+('no meet row', 'h(m ∧ w) − k', -2, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 1, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 5
+('no meet row', 'h(m ∧ w) − k', -2, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 2, 'b(m) a height-k row', False, 'witness rows: some ≤ m', False) 4
+('no meet row', 'h(m ∧ w) − k', -2, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 2, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 12
+('no meet row', 'h(m ∧ w) − k', -3, 'm ∧ w ∈ R_k', True, 'height-k rows below m', 0, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 1
+('no meet row', 'h(m ∧ w) − k', 0, 'm ∧ w ∈ R_k', False, 'height-k rows below m', 0, 'b(m) a height-k row', False, 'witness rows: some ≤ m', False) 9
+('no meet row', 'h(m ∧ w) − k', 0, 'm ∧ w ∈ R_k', False, 'height-k rows below m', 0, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 20
+('no meet row', 'h(m ∧ w) − k', 0, 'm ∧ w ∈ R_k', False, 'height-k rows below m', 1, 'b(m) a height-k row', False, 'witness rows: some ≤ m', False) 7
+('no meet row', 'h(m ∧ w) − k', 0, 'm ∧ w ∈ R_k', False, 'height-k rows below m', 1, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 23
+('no meet row', 'h(m ∧ w) − k', 0, 'm ∧ w ∈ R_k', False, 'height-k rows below m', 2, 'b(m) a height-k row', False, 'witness rows: some ≤ m', False) 2
+('no meet row', 'h(m ∧ w) − k', 0, 'm ∧ w ∈ R_k', False, 'height-k rows below m', 2, 'b(m) a height-k row', True, 'witness rows: some ≤ m', False) 9
+models 1245
+
+== second run with the probe-output counter (same seeds)
+('probe output', 'z = m ⊔ q', False, 'z = y*', True, 'r is', 'w') 29
+('probe output', 'z = m ⊔ q', True, 'z = y*', False, 'r is', 'F(x,q)') 2
+('probe output', 'z = m ⊔ q', True, 'z = y*', False, 'r is', 'other') 2
+('probe output', 'z = m ⊔ q', True, 'z = y*', False, 'r is', 'q') 4
+('probe output', 'z = m ⊔ q', True, 'z = y*', True, 'r is', 'w') 180

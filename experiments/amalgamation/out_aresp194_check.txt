@@ -1,0 +1,14 @@
+== ar_min_noIPO_min5.json: |L| = 5, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; m = {01}; entry: B-entered, b(m) = {0}
+   row {0} (< m): other ascending, a(x) = {02}, b(x) = {}; off-m pre-fixed columns ['{02}']; off-m cells ['{02}']
+   InitialPairOutside: False
+== ar_min_noIPO_min11.json: |L| = 11, K = 3; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; m = {234}; entry: B-entered, b(m) = {24}
+   row {12} (∥ m): non-ascending, a(x) = {24}, b(x) = {}; off-m pre-fixed columns []; off-m cells []
+   row {23} (< m): non-ascending, a(x) = {24}, b(x) = {2}; off-m pre-fixed columns []; off-m cells []
+   row {24} (< m): stationary, a(x) = {24}, b(x) = {24}; off-m pre-fixed columns ['{024}']; off-m cells ['{024}']
+   InitialPairOutside: False
+== ar_icok_noIPO_min4.json: |L| = 4, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; m = {01}; entry: B-entered, b(m) = {0}
+   row {0} (< m): non-ascending, a(x) = {}, b(x) = {}; off-m pre-fixed columns []; off-m cells []
+   InitialPairOutside: False
+== ar_icok_noIPO_min11.json: |L| = 11, K = 3; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; m = {024}; entry: A-entered
+   row {04} (< m): target, a(x) = {024}, b(x) = {4}; off-m pre-fixed columns []; off-m cells []
+   InitialPairOutside: False

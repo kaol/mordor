@@ -1,0 +1,68 @@
+== aresp_probe.py (§34.3z¹⁹⁴), mode=min: SAT models of 'minhyp' under the MinUpCell hypotheses; rank-3 closure 5 10 1, 5 11 4/14, 5 12 8, 6 12 9/18, 6 13 13; rank-4 closure 6 13 11; sweep 4 16; every qualifying m; runs capped at 580 s; summed
+('InitialPairOutside', 'min', False, 'UpCell', True, 'UpCell rows ≰ m', False) 241
+('InitialPairOutside', 'min', True, 'UpCell', True, 'UpCell rows ≰ m', False) 147
+('InitialPairOutside', 'min', True, 'UpCell', True, 'UpCell rows ≰ m', True) 593
+('entry of m', 'min', 'A-entered', 'A-parent heights − k', (-1, 0), 'height-k A-parents', 1) 1
+('entry of m', 'min', 'A-entered', 'A-parent heights − k', (-1, 0, 1), 'height-k A-parents', 1) 1
+('entry of m', 'min', 'A-entered', 'A-parent heights − k', (-1,), 'height-k A-parents', 0) 27
+('entry of m', 'min', 'A-entered', 'A-parent heights − k', (-2,), 'height-k A-parents', 0) 8
+('entry of m', 'min', 'A-entered', 'A-parent heights − k', (0, 1), 'height-k A-parents', 1) 4
+('entry of m', 'min', 'A-entered', 'A-parent heights − k', (0,), 'height-k A-parents', 1) 56
+('entry of m', 'min', 'A-entered', 'A-parent heights − k', (1,), 'height-k A-parents', 0) 35
+('entry of m', 'min', 'B-entered', 'h(b m) − k', -1, 'b m a height-k row', False) 27
+('entry of m', 'min', 'B-entered', 'h(b m) − k', -2, 'b m a height-k row', False) 1
+('entry of m', 'min', 'B-entered', 'h(b m) − k', 0, 'b m a height-k row', True) 806
+('entry of m', 'min', 'B-entered', 'h(b m) − k', 1, 'b m a height-k row', False) 15
+('models', 'min') 981
+('row', 'min', 'non-ascending', 'x vs m', '<', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', False) 614
+('row', 'min', 'non-ascending', 'x vs m', '<', 'initial pair', True, 'UpCell row', False, 'A-normal terminal stage 0', False) 297
+('row', 'min', 'non-ascending', 'x vs m', '<', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', False) 280
+('row', 'min', 'non-ascending', 'x vs m', '∥', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', False) 228
+('row', 'min', 'non-ascending', 'x vs m', '∥', 'initial pair', True, 'UpCell row', False, 'A-normal terminal stage 0', False) 575
+('row', 'min', 'non-ascending', 'x vs m', '∥', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', False) 453
+('row', 'min', 'other ascending', 'x vs m', '<', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', False) 452
+('row', 'min', 'other ascending', 'x vs m', '<', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', True) 15
+('row', 'min', 'other ascending', 'x vs m', '∥', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', False) 276
+('row', 'min', 'other ascending', 'x vs m', '∥', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', True) 79
+('row', 'min', 'stationary, b x < x', 'x vs m', '<', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', False) 14
+('row', 'min', 'stationary, b x < x', 'x vs m', '∥', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', False) 13
+('row', 'min', 'stationary, b x = x', 'x vs m', '<', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', False) 25
+('row', 'min', 'stationary, b x = x', 'x vs m', '<', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', True) 12
+('row', 'min', 'stationary, b x = x', 'x vs m', '∥', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', False) 29
+('row', 'min', 'stationary, b x = x', 'x vs m', '∥', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', True) 6
+('row', 'min', 'target (a x = m)', 'x vs m', '∥', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', False) 28
+('row', 'min', 'target (a x = m)', 'x vs m', '∥', 'initial pair', True, 'UpCell row', False, 'A-normal terminal stage 0', False) 33
+('row', 'min', 'target (a x = m)', 'x vs m', '∥', 'initial pair', True, 'UpCell row', True, 'A-normal terminal stage 0', False) 1
+
+== mode=icok (¬IC(m) dropped, ¬UpCell imposed), same seeds
+('InitialPairOutside', 'icok', False, 'UpCell', False, 'UpCell rows ≰ m', False) 622
+('InitialPairOutside', 'icok', True, 'UpCell', False, 'UpCell rows ≰ m', False) 472
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-1, 0), 'height-k A-parents', 1) 31
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-1, 0), 'height-k A-parents', 2) 10
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-1, 0, 1), 'height-k A-parents', 1) 5
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-1, 0, 1), 'height-k A-parents', 3) 2
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-1,), 'height-k A-parents', 0) 30
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-2, -1, 0), 'height-k A-parents', 1) 3
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-2, -1, 0), 'height-k A-parents', 2) 1
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-2, -1, 0), 'height-k A-parents', 3) 2
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-2, 0), 'height-k A-parents', 1) 2
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-2, 1), 'height-k A-parents', 0) 1
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (-2,), 'height-k A-parents', 0) 2
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (0, 1), 'height-k A-parents', 1) 78
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (0, 1), 'height-k A-parents', 2) 18
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (0,), 'height-k A-parents', 1) 327
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (0,), 'height-k A-parents', 2) 31
+('entry of m', 'icok', 'A-entered', 'A-parent heights − k', (1,), 'height-k A-parents', 0) 22
+('entry of m', 'icok', 'B-entered', 'h(b m) − k', 0, 'b m a height-k row', True) 529
+('models', 'icok') 1094
+('row', 'icok', 'non-ascending', 'x vs m', '<', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', False) 992
+('row', 'icok', 'non-ascending', 'x vs m', '<', 'initial pair', True, 'UpCell row', False, 'A-normal terminal stage 0', False) 13
+('row', 'icok', 'non-ascending', 'x vs m', '∥', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', False) 640
+('row', 'icok', 'non-ascending', 'x vs m', '∥', 'initial pair', True, 'UpCell row', False, 'A-normal terminal stage 0', False) 872
+('row', 'icok', 'stationary, b x < x', 'x vs m', '<', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', False) 70
+('row', 'icok', 'stationary, b x = x', 'x vs m', '<', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', False) 103
+('row', 'icok', 'stationary, b x = x', 'x vs m', '<', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', True) 74
+('row', 'icok', 'target (a x = m)', 'x vs m', '<', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', False) 435
+('row', 'icok', 'target (a x = m)', 'x vs m', '<', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', True) 61
+('row', 'icok', 'target (a x = m)', 'x vs m', '∥', 'initial pair', False, 'UpCell row', False, 'A-normal terminal stage 0', False) 54
+('row', 'icok', 'target (a x = m)', 'x vs m', '∥', 'initial pair', True, 'UpCell row', False, 'A-normal terminal stage 0', False) 28

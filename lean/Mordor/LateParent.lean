@@ -70,6 +70,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁹¹: `MinDescentWitness`, `minUpCell_of_minDescentWitness`, `diag_post_of_aEntry`, `above_of_diag_post`.
 * §34.3z¹⁹²: **`saturated_shadow`**, `SatSourceBelow` (refuted), `initialPair_of_le`.
 * §34.3z¹⁹³: **`joinProbe`**, `joinProbe_split`, `sat_iter_ge`, `joinProbe_A1_ge`, `eq_meet_of_row_below`.
+* §34.3z¹⁹⁴: **`noUpCell_aResponse`**, `stationary_b_le`, `entry_of_new`, **`upCell_of_diagPost_pair`**, **`noUpCell_rowTypes`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1534,6 +1535,66 @@ theorem eq_meet_of_row_below {H k : ℕ} (hn : NoChain α (H + 1)) {m w x : α} 
   have h1 := height_strictMono hn hlt
   by_contra hne
   have := height_strictMono hn (lt_of_le_of_ne hle hne); omega
+
+/-! ### The A-response of top rows and the entry of `m` (§34.3z¹⁹⁴) -/
+
+/-- **A-response classification.** With `R_{k+1}` tight, `h(m) = k + 1` and no UpCell, a height-`k` row `x ∈ R_k`
+that ascends (`x ≤ a x`) has `a x = x` or `a x = m`: otherwise `F x (a x) = a x` is an upper cell at `a x > x`, which
+must lie above `m`, and heights force `a x = m`. -/
+theorem noUpCell_aResponse {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m x : α} (hmk : height H m = k + 1) (hnot : ¬ UpCell F H k m) (hx : x ∈ Rk F k) (hxk : height H x = k)
+    (hxa : x ≤ a F x) : a F x = x ∨ a F x = m := by
+  by_cases he : a F x = x
+  · exact Or.inl he
+  right
+  have hlt : x < a F x := lt_of_le_of_ne hxa (Ne.symm he)
+  have hma : m ≤ a F x := by
+    by_contra hma
+    exact hnot ⟨x, hx, hxk, a F x, hlt, hma, Or.inr (row_a x).ge⟩
+  have hR := hall _ (mem_succ_of_a hx le_rfl)
+  by_contra hne
+  have := height_strictMono hn (lt_of_le_of_ne hma (Ne.symm hne)); omega
+
+/-- In the stationary branch `a x = x` the row is diagonal fixed, so `b x ≤ x`. -/
+theorem stationary_b_le {x : α} (h : a F x = x) : F x x = x ∧ b F x ≤ x := by
+  have hx : F x x = x := by
+    have := row_a (F := F) x; rw [h] at this; exact this
+  exact ⟨hx, b_le hx.le⟩
+
+/-- **Entry of `m`**: a new top `m ∈ R_{k+1} ∖ R_k` of height `k + 1` in a tight `R_{k+1}` is either A-entered as an
+exact row gfp (`a q = m` for some `q ∈ R_k`), or B-entered (`b m ∈ R_k`) and not A-entered. -/
+theorem entry_of_new {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m : α} (hm : m ∈ Rk F (k + 1)) (hmk : height H m = k + 1) (hnew : m ∉ Rk F k) :
+    (∃ q ∈ Rk F k, a F q = m) ∨ (b F m ∈ Rk F k ∧ ¬ ∃ q ∈ Rk F k, m ≤ a F q) := by
+  by_cases hA : ∃ q ∈ Rk F k, m ≤ a F q
+  · obtain ⟨q, hq, hle⟩ := hA
+    refine Or.inl ⟨q, hq, ?_⟩
+    by_contra hne
+    have := height_strictMono hn (lt_of_le_of_ne hle (Ne.symm hne))
+    have := hall _ (mem_succ_of_a hq le_rfl); omega
+  · rcases mem_succ_iff.1 hm with h | h | h
+    · exact absurd h hnew
+    · exact absurd h hA
+    · exact Or.inr ⟨h, hA⟩
+
+/-- **A diagonal post-fixed row with an initial pair is an UpCell row** (`above_of_diag_post` makes the pair a descent
+witness). Applies to stationary rows (`a x = x`, so `F x x = x`) and to A-entered tops above their source
+(`diag_post_of_aEntry`). Hence, without UpCell, no diagonal post-fixed height-`k` row has an off-`m` pre-fixed column. -/
+theorem upCell_of_diagPost_pair {k H : ℕ} (hn : NoChain α (H + 1)) {m x v : α} (hx : x ∈ Rk F k)
+    (hxk : height H x = k) (hd : x ≤ F x x) (hxv : x < v) (hFv : F x v ≤ v) (hmv : ¬ m ≤ v) : UpCell F H k m :=
+  upCell_of_descentWitness hn ⟨x, hx, hxk, v, hxv, hFv, hmv, fun _ hxu _ _ => above_of_diag_post hd hxu.le⟩
+
+/-- **Under ¬UpCell the A-response leaves three row types**: stationary rows (`a x = x`) without any initial pair,
+target A-parents (`a x = m`), and non-ascending rows (`x ≰ a x`). -/
+theorem noUpCell_rowTypes {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m x : α} (hmk : height H m = k + 1) (hnot : ¬ UpCell F H k m) (hx : x ∈ Rk F k) (hxk : height H x = k) :
+    (a F x = x ∧ ¬ ∃ v, x < v ∧ F x v ≤ v ∧ ¬ m ≤ v) ∨ a F x = m ∨ ¬ x ≤ a F x := by
+  by_cases hxa : x ≤ a F x
+  · rcases noUpCell_aResponse hn hall hmk hnot hx hxk hxa with h | h
+    · refine Or.inl ⟨h, fun ⟨v, hxv, hFv, hmv⟩ => hnot ?_⟩
+      exact upCell_of_diagPost_pair hn hx hxk (stationary_b_le h).1.ge hxv hFv hmv
+    · exact Or.inr (Or.inl h)
+  · exact Or.inr (Or.inr hxa)
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

@@ -60,7 +60,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -102,7 +102,21 @@ def query(L, m, claim, ahead=False):
         if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
             for x in range(n):
                 if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
-        if claim == 'minhyp':                        # §34.3z¹⁹²: a model of the hypotheses only (¬IC(m); with nofeeder / notightK1 / notop
+        if claim == 'pajump':                        # §34.3z¹⁹⁵: hypotheses (as minhyp) + the pure A-chain a^i(⊥), i ≤ K − 1, reaches rank K
+            if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])
+            Sc = lambda i, g: E.v('chain', i, g)
+            for g in range(n): E.S.add_clause([Sc(0, g)] if g == L.bot else [-Sc(0, g)])
+            for i in range(K - 1):
+                for g in range(n):
+                    lits = []
+                    for g2 in range(n):
+                        o = E.v('chainstep', i, g2, g); E.iff_and(o, [Sc(i, g2), A(g2, g)]); lits.append(o)
+                    E.iff_or(Sc(i + 1, g), lits)
+            for i in range(K):
+                for g in range(n):
+                    if rk[g] == K: bad.append(Sc(i, g))
+            if not bad: E.S.delete(); return None
+        elif claim == 'minhyp':                        # §34.3z¹⁹²: a model of the hypotheses only (¬IC(m); with nofeeder / notightK1 / notop
             o = E.v('true'); E.S.add_clause([o]); bad.append(o)   #  these are the MinUpCell hypotheses); 'icok' drops ¬IC(m)
             if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])
         elif claim in ('stabletop', 'pairjump'):       # §34.3z¹⁸⁹ per-configuration fibre-join lemmas (see docstring)
@@ -476,7 +490,13 @@ def query(L, m, claim, ahead=False):
                     if kind == 'stable' and U in S: return True
                     if kind == 'pair' and any(not le[m][L.join[a_][b_]] and L.join[a_][b_] not in S and not le[a_][b_] and not le[b_][a_] for a_ in S for b_ in S): return True
             return False
-        viol = {'minhyp': True, 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
+        def pachain():
+            c_ = L.bot
+            for i in range(K):
+                if rk[c_] == K: return True
+                c_ = a_of(L, F, c_)
+            return False
+        viol = {'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
                 'pairjump': (bm in low) and not ic_py(L, F, m) and fjviol('pair'),
                 'topfibre': (bm in low) and not ic_py(L, F, m) and not topfib(),
                 'famup': (bm in low) and not ic_py(L, F, m) and famviol(),

@@ -71,6 +71,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁹²: **`saturated_shadow`**, `SatSourceBelow` (refuted), `initialPair_of_le`.
 * §34.3z¹⁹³: **`joinProbe`**, `joinProbe_split`, `sat_iter_ge`, `joinProbe_A1_ge`, `eq_meet_of_row_below`.
 * §34.3z¹⁹⁴: **`noUpCell_aResponse`**, `stationary_b_le`, `entry_of_new`, **`upCell_of_diagPost_pair`**, **`noUpCell_rowTypes`**.
+* §34.3z¹⁹⁵: `pureA_le_succ`, `pureA_mono`, `noUpCell_ascending_old`, **`noUpCell_pureA_jump`**, `old_diagPost_eq_top`,
+  **`pureA_height_le`**, **`noUpCell_not_below_pureA`**, **`noUpCell_nonAscending_terminal`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1595,6 +1597,139 @@ theorem noUpCell_rowTypes {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z �
       exact upCell_of_diagPost_pair hn hx hxk (stationary_b_le h).1.ge hxv hFv hmv
     · exact Or.inr (Or.inl h)
   · exact Or.inr (Or.inr hxa)
+
+/-! ### Non-ascending rows over the pure A-chain (§34.3z¹⁹⁵) -/
+
+theorem pureA_le_succ : ∀ n, (a F)^[n] (⊥ : α) ≤ (a F)^[n + 1] ⊥
+  | 0 => bot_le
+  | n + 1 => by
+      rw [Function.iterate_succ_apply' _ n, Function.iterate_succ_apply' _ (n + 1)]
+      exact (a F).mono (pureA_le_succ n)
+
+theorem pureA_mono : Monotone fun n => (a F)^[n] (⊥ : α) := monotone_nat_of_le_succ pureA_le_succ
+
+/-- **An ascending row whose gfp is old is stationary** (no UpCell): `a x = m` is impossible when `a x ∈ R_k ∌ m`. -/
+theorem noUpCell_ascending_old {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m x : α} (hmk : height H m = k + 1) (hnew : m ∉ Rk F k) (hnot : ¬ UpCell F H k m) (hx : x ∈ Rk F k)
+    (hxk : height H x = k) (hxa : x ≤ a F x) (haR : a F x ∈ Rk F k) : a F x = x :=
+  (noUpCell_aResponse hn hall hmk hnot hx hxk hxa).resolve_right fun h => hnew (h ▸ haR)
+
+/-- **The pure A-chain jumps over height `k`.** Without UpCell, let a height-`k` row `x ∈ R_k` be non-ascending
+(`x ≰ a x`) and lie below `c_i = a^i ⊥` with `i ≤ k` (the stage-`0` terminal case of `a_normal`). Then for some `j < i`:
+`h(c_j) < k`, `c = c_{j+1}` is an *old* element of `R_k` of height `k + 1` with `m ≰ c`, `x < c`, the A-source `c_j` is
+not below `x`, and `c = x ⊔ c_j`. (A chain element of height exactly `k` would be an ascending row with an old gfp,
+hence stationary, freezing the chain below height `k + 1`; `c_j ≤ x` would make `(x, c)` an upper cell.) -/
+theorem noUpCell_pureA_jump {k H i : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m x : α} (hmk : height H m = k + 1) (hnew : m ∉ Rk F k) (hnot : ¬ UpCell F H k m) (hx : x ∈ Rk F k)
+    (hxk : height H x = k) (hik : i ≤ k) (hxc : x ≤ (a F)^[i] ⊥) (hna : ¬ x ≤ a F x) :
+    ∃ j, j < i ∧ height H ((a F)^[j] (⊥ : α)) < k ∧ height H ((a F)^[j + 1] (⊥ : α)) = k + 1 ∧
+      x < (a F)^[j + 1] ⊥ ∧ (a F)^[j + 1] ⊥ ∈ Rk F k ∧ ¬ m ≤ (a F)^[j + 1] ⊥ ∧ ¬ (a F)^[j] (⊥ : α) ≤ x ∧
+      x ⊔ (a F)^[j] ⊥ = (a F)^[j + 1] ⊥ := by
+  classical
+  set c : ℕ → α := fun n => (a F)^[n] ⊥ with hc
+  have hcR : ∀ n, n ≤ k → c n ∈ Rk F k := fun n hn' => by
+    have := aIter_mem (F := F) (j := 0) (q := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) n
+    rw [zero_add] at this; exact Rk_mono hn' this
+  have hh1 : ∀ n, n ≤ k → height H (c n) ≤ k + 1 := fun n hn' => hall _ (Rk_mono (Nat.le_succ k) (hcR n hn'))
+  have hsucc : ∀ n, c (n + 1) = a F (c n) := fun n => Function.iterate_succ_apply' _ n _
+  have hne : c i ≠ x := fun e => hna (by rw [← e, ← hsucc]; exact pureA_le_succ i)
+  have hxlt : x < c i := lt_of_le_of_ne hxc (Ne.symm hne)
+  have hPi : k + 1 ≤ height H (c i) := by have := height_strictMono hn hxlt; omega
+  have hex : ∃ n, k + 1 ≤ height H (c n) := ⟨i, hPi⟩
+  set n0 := Nat.find hex
+  have hn0i : n0 ≤ i := Nat.find_min' hex hPi
+  have hP0 : k + 1 ≤ height H (c n0) := Nat.find_spec hex
+  have hn00 : n0 ≠ 0 := fun e => by
+    have h0 : c 0 = ⊥ := rfl
+    rw [e, h0, height_bot_eq_zero] at hP0; omega
+  obtain ⟨j, hj⟩ : ∃ j, n0 = j + 1 := ⟨n0 - 1, by omega⟩
+  have hnotj : ¬ k + 1 ≤ height H (c j) := Nat.find_min hex (by omega)
+  have hcj1 : height H (c (j + 1)) = k + 1 := by
+    have := hh1 (j + 1) (by omega); rw [← hj]; rw [← hj] at this; omega
+  have hcji : c (j + 1) = c i := by
+    have hle : c (j + 1) ≤ c i := pureA_mono (by omega)
+    by_contra hne'
+    have := height_strictMono hn (lt_of_le_of_ne hle hne'); have := hh1 i hik; omega
+  have hjk : height H (c j) < k := by
+    by_contra hge
+    have hcjk : height H (c j) = k := by omega
+    have hst := noUpCell_ascending_old hn hall hmk hnew hnot (hcR j (by omega)) hcjk
+      ((pureA_le_succ j).trans (hsucc j).le) ((hsucc j) ▸ hcR (j + 1) (by omega))
+    have : c (j + 1) = c j := (hsucc j).trans hst
+    rw [this] at hcj1; omega
+  have hxc' : x < c (j + 1) := hcji ▸ hxlt
+  have hcRk : c (j + 1) ∈ Rk F k := hcR (j + 1) (by omega)
+  have hmc : ¬ m ≤ c (j + 1) := fun hle => by
+    rcases eq_or_lt_of_le hle with e | hlt
+    · exact hnew (e ▸ hcRk)
+    · have := height_strictMono hn hlt; omega
+  have hrow : F (c j) (c (j + 1)) = c (j + 1) := by rw [hsucc]; exact row_a _
+  have hcjx : ¬ c j ≤ x := fun hle =>
+    hnot ⟨x, hx, hxk, c (j + 1), hxc', hmc, Or.inr (hrow.symm.le.trans ((F.mono hle) _))⟩
+  have hjoin : x ⊔ c j = c (j + 1) := by
+    have hle : x ⊔ c j ≤ c (j + 1) := sup_le hxc'.le ((pureA_le_succ j))
+    have hlt : x < x ⊔ c j := lt_of_le_of_ne le_sup_left fun e => hcjx (le_sup_right.trans e.symm.le)
+    by_contra hne'
+    have := height_strictMono hn hlt; have := height_strictMono hn (lt_of_le_of_ne hle hne'); omega
+  exact ⟨j, by omega, hjk, hcj1, hxc', hcRk, hmc, hcjx, hjoin⟩
+
+/-- **An old diagonal post-fixed element of height `k + 1` is `⊤`**: `c ∈ R_k`, `h(c) = k + 1`, `c ≤ F c c` and `R_{k+1}`
+tight force `c = ⊤` (otherwise `upc_of_le_diag` gives `c` an interval cell, which `old_top_no_cell` forbids). -/
+theorem old_diagPost_eq_top [WellFoundedLT α] {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {c : α} (hc : c ∈ Rk F k) (hck : height H c = k + 1)
+    (hd : c ≤ F c c) : c = ⊤ := by
+  by_contra ht
+  exact old_top_no_cell hn hall hc hck (upc_of_le_diag hd ht)
+
+/-- **The pure A-chain stays below height `k + 1` up to stage `k`** whenever some element of `R_{k+1}` is new
+(`m ∉ R_k`): an element `c = a^n ⊥` (`n ≤ k`) of height `k + 1` would satisfy `a c = c` (heights), so `F c c = c`, so
+`c = ⊤` (`old_diagPost_eq_top`), putting `m` into `R_k`. (SAT check: R_K tight plus a new rank-`K` element already
+exclude the jump on every Moore family on 4 points.) -/
+theorem pureA_height_le [WellFoundedLT α] {k H n : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m : α} (hnew : m ∉ Rk F k) (hnk : n ≤ k) :
+    height H ((a F)^[n] (⊥ : α)) ≤ k := by
+  set c := (a F)^[n] (⊥ : α)
+  have hcR : c ∈ Rk F k := by
+    have := aIter_mem (F := F) (j := 0) (q := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) n
+    rw [zero_add] at this; exact Rk_mono hnk this
+  have hcK := hall c (Rk_mono (Nat.le_succ k) hcR)
+  by_contra hgt
+  have hck : height H c = k + 1 := by omega
+  have hca : c ≤ a F c := by
+    have := pureA_le_succ (F := F) n; rwa [Function.iterate_succ_apply'] at this
+  have hac : a F c = c := by
+    by_contra hne
+    have := height_strictMono hn (lt_of_le_of_ne hca (Ne.symm hne))
+    have := hall _ (mem_succ_of_a hcR le_rfl); omega
+  have hd : c ≤ F c c := by
+    have := row_a (F := F) c; rw [hac] at this; exact this.ge
+  have htop := old_diagPost_eq_top hn hall hcR hck hd
+  exact hnew (Rk_down k le_top (htop ▸ hcR))
+
+/-- **Stage-`0` terminal case closed.** Without UpCell, a non-ascending height-`k` row is never below `a^i ⊥`,
+`i ≤ k` (`noUpCell_pureA_jump` would produce a chain element of height `k + 1` in `R_k`). Hence its A-normal terminal
+source (`a_normal`) is B-entered at a positive stage. -/
+theorem noUpCell_not_below_pureA [WellFoundedLT α] {k H i : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m x : α} (hmk : height H m = k + 1) (hnew : m ∉ Rk F k)
+    (hnot : ¬ UpCell F H k m) (hx : x ∈ Rk F k) (hxk : height H x = k) (hik : i ≤ k) (hna : ¬ x ≤ a F x) :
+    ¬ x ≤ (a F)^[i] ⊥ := fun hxc => by
+  obtain ⟨j, hji, -, hj1, -⟩ := noUpCell_pureA_jump hn hall hmk hnew hnot hx hxk hik hxc hna
+  have := pureA_height_le hn hall hnew (n := j + 1) (by omega); omega
+
+/-- **The terminal source of a non-ascending row is B-entered** (no UpCell): in `a_normal`'s form
+`x ≤ a^i q'` (`t + i ≤ k`, `ATerminal t q'`) the stage `t` is positive, `q'` is new at `t`, B-entered and not A-entered. -/
+theorem noUpCell_nonAscending_terminal [WellFoundedLT α] {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m x : α} (hmk : height H m = k + 1) (hnew : m ∉ Rk F k)
+    (hnot : ¬ UpCell F H k m) (hx : x ∈ Rk F k) (hxk : height H x = k) (hna : ¬ x ≤ a F x) :
+    ∃ i t' q', t' + 1 + i ≤ k ∧ q' ∈ Rk F (t' + 1) ∧ x ≤ (a F)^[i] q' ∧ q' ∉ Rk F t' ∧ b F q' ∈ Rk F t' ∧
+      ¬ ∃ r ∈ Rk F t', q' ≤ a F r := by
+  obtain ⟨i, t, q', hti, hq', hle, ht⟩ := a_normal k x hx
+  rcases ht with h0 | ⟨t', rfl, h1, h2, h3⟩
+  · subst h0
+    have hq : q' = ⊥ := le_bot_iff.1 hq'
+    subst hq
+    exact absurd hle (noUpCell_not_below_pureA hn hall hmk hnew hnot hx hxk (by omega) hna)
+  · exact ⟨i, t', q', hti, hq', hle, h1, h2, h3⟩
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

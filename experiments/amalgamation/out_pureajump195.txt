@@ -1,0 +1,36 @@
+== pureajump_probe.py (§34.3z¹⁹⁵): non-ascending height-k rows below the pure A-chain a^i(⊥), i ≤ k; mode=icok (¬IC(m) dropped, ¬UpCell) and mode=min (MinUpCell hypotheses); rank-3 closure 5 10 1, 5 11 4/14, 5 12 8, 6 12 9/18, 6 13 13; rank-4 closure 6 13 11; sweep 4 16; summed
+('models', 'icok') 1094
+('non-ascending row', 'icok', 'below the pure A-chain', False) 2599
+('models', 'min') 981
+('non-ascending row', 'min', 'below the pure A-chain', False) 2509
+
+== second run with the chain-height counter (rank-3 closure 5 10 1, 5 11 4, 6 12 9; rank-4 6 13 11; sweep 4 16)
+('non-ascending row', 'icok', 'below the pure A-chain', False) 1446
+('non-ascending row', 'min', 'below the pure A-chain', False) 1370
+('pure A-chain', 'icok', 'rigid (a ⊥ = ⊥)', False, 'h(c_k) − k', -1, 'some c_i (i ≤ k) of height k', False) 47
+('pure A-chain', 'icok', 'rigid (a ⊥ = ⊥)', False, 'h(c_k) − k', -2, 'some c_i (i ≤ k) of height k', False) 12
+('pure A-chain', 'icok', 'rigid (a ⊥ = ⊥)', False, 'h(c_k) − k', -3, 'some c_i (i ≤ k) of height k', False) 2
+('pure A-chain', 'icok', 'rigid (a ⊥ = ⊥)', False, 'h(c_k) − k', 0, 'some c_i (i ≤ k) of height k', True) 126
+('pure A-chain', 'icok', 'rigid (a ⊥ = ⊥)', True, 'h(c_k) − k', -1, 'some c_i (i ≤ k) of height k', False) 312
+('pure A-chain', 'icok', 'rigid (a ⊥ = ⊥)', True, 'h(c_k) − k', -2, 'some c_i (i ≤ k) of height k', False) 202
+('pure A-chain', 'icok', 'rigid (a ⊥ = ⊥)', True, 'h(c_k) − k', -3, 'some c_i (i ≤ k) of height k', False) 71
+('pure A-chain', 'icok', 'rigid (a ⊥ = ⊥)', True, 'h(c_k) − k', -4, 'some c_i (i ≤ k) of height k', False) 13
+('pure A-chain', 'min', 'rigid (a ⊥ = ⊥)', False, 'h(c_k) − k', -1, 'some c_i (i ≤ k) of height k', False) 47
+('pure A-chain', 'min', 'rigid (a ⊥ = ⊥)', False, 'h(c_k) − k', -2, 'some c_i (i ≤ k) of height k', False) 17
+('pure A-chain', 'min', 'rigid (a ⊥ = ⊥)', False, 'h(c_k) − k', -3, 'some c_i (i ≤ k) of height k', False) 2
+('pure A-chain', 'min', 'rigid (a ⊥ = ⊥)', False, 'h(c_k) − k', 0, 'some c_i (i ≤ k) of height k', True) 103
+('pure A-chain', 'min', 'rigid (a ⊥ = ⊥)', True, 'h(c_k) − k', -1, 'some c_i (i ≤ k) of height k', False) 293
+('pure A-chain', 'min', 'rigid (a ⊥ = ⊥)', True, 'h(c_k) − k', -2, 'some c_i (i ≤ k) of height k', False) 159
+('pure A-chain', 'min', 'rigid (a ⊥ = ⊥)', True, 'h(c_k) − k', -3, 'some c_i (i ≤ k) of height k', False) 57
+('pure A-chain', 'min', 'rigid (a ⊥ = ⊥)', True, 'h(c_k) − k', -4, 'some c_i (i ≤ k) of height k', False) 9
+
+== single_claims.py pajump (exact): MinUpCell hypotheses (multi notop nofeeder notightK1) + a^i(⊥) of rank K for some i ≤ K − 1
+cl4: claim pajump: {'none': 10}
+cl_5_10_1_10: claim pajump: {'none': 10}
+cl_5_11_4_10: claim pajump: {'none': 10}
+cl_5_12_8_10: claim pajump: {'none': 10}
+cl_6_12_9_10: claim pajump: {'none': 10}
+sw: claim pajump: {'none': 179}
+sw_icok: claim pajump: {'none': 179}
+control (i ≤ K): sweep 4 16: {'none': 11, 'counterexample': 168}, smallest |L| = 4
+bare (R_K tight + a new rank-K element of R_K, no other hypothesis): sweep 4 16, all K: 0 sat / 439 unsat

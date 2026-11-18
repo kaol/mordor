@@ -55,6 +55,27 @@ for L in lattices([a for a in sys.argv[1:] if a not in FLAGS and not a.startswit
             C[('genuine configuration', 'a(c) a height-k row of R_k', ac in X, 'h(a(c)) − k', h[ac] - k, 'a(c) ≤ u', le[ac][u_], 'a(c) ≤ t', le[ac][t_],
                't = c ⊔ a(c)', t_ == jn[c_][ac], 'a(c) forbidden', ac in fset, 'p < a(c)', le[p_][ac] and p_ != ac,
                'some forbidden row x < t', any(le[x][t_] for x in fset))] += 1
+            orb = [c_]; seenp = {c_}
+            while True:
+                nx = A(orb[-1])
+                if nx in seenp: break
+                orb.append(nx); seenp.add(nx)
+            orbit_forb = [x for x in orb[1:] if x in fset]
+            first_asc = next((x for x in orb[1:] if le[x][A(x)]), None)
+            C[('A-orbit of c', 'a forbidden row on the orbit', bool(orbit_forb), 'first ascending iterate exists', first_asc is not None,
+               'first ascending iterate is a forbidden row', first_asc in fset if first_asc is not None else None,
+               'first ascending iterate: height-k row of R_k', first_asc in X if first_asc is not None else None,
+               'its a(x)', ('= x' if A(first_asc) == first_asc else '= m' if A(first_asc) == m else 'other') if first_asc is not None else None,
+               'non-local case', not any(le[x][ac] or le[x][t_] for x in fset))] += 1
+            if not orbit_forb: keep('orbit_misses', n, dict(D, p=p_, c=c_, u=u_))
+            orbset = set(orb[1:])
+            afib = [x for x in fset if x in orbset or A(x) in orbset]
+            C[('A-orbit fibre of c (x on the orbit or a(x) on it)', 'contains a forbidden row', bool(afib),
+               'non-local case', not any(le[x][ac] or le[x][t_] for x in fset))] += 1
+            if not afib: keep('afibre_misses', n, dict(D, p=p_, c=c_, u=u_))
+            union = bool(afib) or any(le[x][ac] or le[x][t_] for x in fset)
+            C[('union selector (A-orbit fibre ∪ ↓a(c) ∪ ↓t)', 'contains a forbidden row', union)] += 1
+            if not union: keep('union_misses', n, dict(D, p=p_, c=c_, u=u_))
             below = [x for x in fset if le[x][ac]]
             C[('genuine configuration: forbidden row below a(c)', bool(below), 'with a(x) = a(c)', any(A(x) == ac for x in below),
                'forbidden row below t', any(le[x][t_] for x in fset))] += 1

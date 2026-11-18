@@ -82,6 +82,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `a1Cert_of_cleanFibre`, **`upCell_of_a1Cert`**, `A1RowTypeCert`, **`noUpCell_a1_fibre_empty`**.
 * §34.3z²⁰⁰: `A1BadForbidden`, **`a1RowTypeCert_iff`**, `a1_rowValue_ge`, `nonAscending_gfp_incomparable`.
 * §34.3z²⁰¹: `A1SelfUpCell`, **`noUpCell_a1_fibre_empty'`**.
+* §34.3z²⁰²: `DominantA1` (refuted).
 -/
 
 namespace Mordor.OrbitHeight
@@ -2141,6 +2142,18 @@ theorem noUpCell_a1_fibre_empty' {k H : ℕ} (hn : NoChain α (H + 1)) (hself : 
       hnot (upCell_of_diagPost_pair hn hx hxk (stationary_b_le hax).1.ge hxv hFv hmv)
   obtain ⟨z, hcz, hmz, hcell⟩ := hself k m hall hm hmk hnew ht hno hasc hstat c u hc hck hcov hna hu hmu hcu
   exact hnot ⟨c, hc, hck, z, hcz, hmz, hcell⟩
+
+/-- **`DominantA1` (refuted, §34.3z²⁰²)**: the dominant-branch statement. For a genuine A1 configuration with
+`y = a c` a height-`k` row of `R_k` and `F c u = c ⊔ y`, either an `A1Cert` exists or `y` itself is a forbidden row. It
+holds on every Moore family on 4 points but fails at rank 3 (`|L| = 14`), where the forbidden row is the next A-iterate
+`a y`. -/
+def DominantA1 (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k m, (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k → m ≠ ⊤ →
+    (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) →
+    ∀ c u, c ∈ Rk F k → height H c = k → b F c ⋖ c → ¬ c ≤ a F c → F (b F c) u = c → ¬ m ≤ u → c < u →
+      a F c ∈ Rk F k → height H (a F c) = k → F c u = c ⊔ a F c →
+      A1Cert F H k m ∨ (a F c ≤ a F (a F c) ∧ a F (a F c) ≠ a F c ∧ a F (a F c) ≠ m) ∨
+        (a F (a F c) = a F c ∧ ∃ v, a F c < v ∧ F (a F c) v ≤ v ∧ ¬ m ≤ v)
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

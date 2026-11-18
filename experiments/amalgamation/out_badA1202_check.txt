@@ -1,0 +1,21 @@
+== bad1_ac_forbidden_t_ne_join_min9.json: |L| = 9, K = 2; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {}, c = {0}, u = {03}, t = F(c, u) = {01}, a(c) = {2}, c ⊔ a(c) = {012}; forbidden rows [('{2}', 'other ascending, a(x) = {12}')]
+== bad1_ac_not_forbidden_min10.json: |L| = 10, K = 2; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {}, c = {0}, u = {03}, t = F(c, u) = {01}, a(c) = {12}, c ⊔ a(c) = {012}; forbidden rows [('{1}', 'other ascending, a(x) = {12}')]
+== bad1_afibre_misses_min12.json: |L| = 12, K = 2; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {}, c = {1}, u = {12}, t = F(c, u) = {01}, a(c) = {03}, c ⊔ a(c) = {013}; forbidden rows [('{0}', "stationary, columns ['{01}', '{013}']")]
+== bad1_example_min7.json: |L| = 7, K = 2; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {}, c = {0}, u = {03}, t = F(c, u) = {01}, a(c) = {1}, c ⊔ a(c) = {01}; forbidden rows [('{1}', 'other ascending, a(x) = {01}')]
+== bad1_none_below_ac_min12.json: |L| = 12, K = 3; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {0}, c = {03}, u = {023}, t = F(c, u) = {013}, a(c) = {}, c ⊔ a(c) = {03}; forbidden rows [('{01}', "stationary, columns ['{013}']")]
+== bad1_orbit_misses_min10.json: |L| = 10, K = 2; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {}, c = {0}, u = {03}, t = F(c, u) = {01}, a(c) = {12}, c ⊔ a(c) = {012}; forbidden rows [('{1}', 'other ascending, a(x) = {12}')]
+== bad1_union_misses_min20.json: |L| = 20, K = 3; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {4}, c = {34}, u = {234}, t = F(c, u) = {034}, a(c) = {}, c ⊔ a(c) = {34}; forbidden rows [('{01}', 'other ascending, a(x) = {012}')]
+== single_claim_dominant_notop_multi_notightK1_nofeeder_rmin3_min14.json: |L| = 14, K = 3; monotone True, R_K tight True, m new True, ¬IC(m) True, m = {013}
+   genuine ({0} ⋖ {02}), u = {012}, t = F(c,u) = {0234}, y = a(c) = {34} (h 2), c ⊔ y = {0234}, a(y) = {04}
+   row {01}: a = {34}, ascending False
+   row {02}: a = {34}, ascending False
+   row {03}: a = {04}, ascending False
+   row {04}: a = {04}, ascending True, initial pairs ['{034}', '{0234}']
+   row {34}: a = {04}, ascending False

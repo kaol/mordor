@@ -1,0 +1,25 @@
+== §34.3z²⁰² exact search 'dominant' (single_claims.py; MinUpCell hypotheses: multi notop nofeeder notightK1)
+cl_5_10_1_10: claim dominant: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 17, rank(m) = 3
+cl_5_10_2_10: claim dominant: {'none': 7, 'counterexample': 3}; smallest counterexample |L| = 15, rank(m) = 3
+cl_5_11_4_10: claim dominant: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 14, rank(m) = 3
+sw: claim dominant: {'none': 179}
+
+== badA1_probe.py selectors over the exact counterexamples of 'a1cert genuine' (per genuine bad configuration; runs: sweep 4 16 + rank-3 closure lists, two batches)
+-- A-orbit of c
+251 ('A-orbit of c', 'a forbidden row on the orbit', True, 'first ascending iterate exists', True, 'first ascending iterate is a forbidden row', True, 'first ascending iterate: height-k row of R_k', True, 'its a(x)', 'other', 'non-local case', False)
+225 ('A-orbit of c', 'a forbidden row on the orbit', True, 'first ascending iterate exists', True, 'first ascending iterate is a forbidden row', True, 'first ascending iterate: height-k row of R_k', True, 'its a(x)', '= x', 'non-local case', False)
+47 ('A-orbit of c', 'a forbidden row on the orbit', False, 'first ascending iterate exists', True, 'first ascending iterate is a forbidden row', False, 'first ascending iterate: height-k row of R_k', False, 'its a(x)', '= x', 'non-local case', False)
+24 ('A-orbit of c', 'a forbidden row on the orbit', True, 'first ascending iterate exists', True, 'first ascending iterate is a forbidden row', False, 'first ascending iterate: height-k row of R_k', False, 'its a(x)', 'other', 'non-local case', False)
+22 ('A-orbit of c', 'a forbidden row on the orbit', False, 'first ascending iterate exists', True, 'first ascending iterate is a forbidden row', False, 'first ascending iterate: height-k row of R_k', False, 'its a(x)', 'other', 'non-local case', False)
+5 ('A-orbit of c', 'a forbidden row on the orbit', False, 'first ascending iterate exists', True, 'first ascending iterate is a forbidden row', False, 'first ascending iterate: height-k row of R_k', False, 'its a(x)', '= x', 'non-local case', True)
+1 ('A-orbit of c', 'a forbidden row on the orbit', True, 'first ascending iterate exists', True, 'first ascending iterate is a forbidden row', False, 'first ascending iterate: height-k row of R_k', False, 'its a(x)', 'other', 'non-local case', True)
+1 ('A-orbit of c', 'a forbidden row on the orbit', False, 'first ascending iterate exists', True, 'first ascending iterate is a forbidden row', False, 'first ascending iterate: height-k row of R_k', False, 'its a(x)', 'other', 'non-local case', True)
+1 ('A-orbit of c', 'a forbidden row on the orbit', True, 'first ascending iterate exists', True, 'first ascending iterate is a forbidden row', True, 'first ascending iterate: height-k row of R_k', True, 'its a(x)', 'other', 'non-local case', True)
+-- A-orbit fibre
+519 ('A-orbit fibre of c (x on the orbit or a(x) on it)', 'contains a forbidden row', True, 'non-local case', False)
+50 ('A-orbit fibre of c (x on the orbit or a(x) on it)', 'contains a forbidden row', False, 'non-local case', False)
+6 ('A-orbit fibre of c (x on the orbit or a(x) on it)', 'contains a forbidden row', False, 'non-local case', True)
+2 ('A-orbit fibre of c (x on the orbit or a(x) on it)', 'contains a forbidden row', True, 'non-local case', True)
+-- union (sweep 4 16 + rank-3 5 10 1, 5 11 4, 6 12 9)
+4 ('union selector (A-orbit fibre ∪ ↓a(c) ∪ ↓t)', 'contains a forbidden row', False)
+435 ('union selector (A-orbit fibre ∪ ↓a(c) ∪ ↓t)', 'contains a forbidden row', True)

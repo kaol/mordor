@@ -60,7 +60,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('a1gen', 'a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('dominant', 'a1gen', 'a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -102,7 +102,35 @@ def query(L, m, claim, ahead=False):
         if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
             for x in range(n):
                 if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
-        if claim == 'a1gen':                         # §34.3z²⁰¹: a model of the hypotheses with a genuine A1 configuration with a fibre column
+        if claim == 'dominant':                      # §34.3z²⁰²: MinUpCell hypotheses + a genuine A1 configuration (p, c, u) with y = a(c) a height-k
+            E.S.add_clause([-ic(m)])                       # row of R_k and F(c, u) = c ⊔ y; violation: no A1Cert anywhere and y not forbidden
+            sels = []                                      # (one-directional selectors o → …; the no-A1Cert part is universal)
+            for c in range(n):
+                if rk[c] != K - 1: continue
+                for p in L.covers_dn[c]:
+                    for y in range(n):
+                        if rk[y] != K - 1 or le[c][y] or le[y][c]: continue
+                        for u in range(n):
+                            if not (le[c][u] and u != c and not le[m][u]): continue
+                            o = E.v('dsel', p, c, y, u); sels.append(o)
+                            for lit in (r(K - 1, c), f(p, c, p), f(p, u, c), B(c, p), A(c, y), r(K - 1, y), f(c, u, jn[c][y])): E.S.add_clause([-o, lit])
+                            for g in range(n):             # y not other-ascending
+                                if le[y][g] and g != y and g != m: E.S.add_clause([-o, -A(y, g)])
+                            for v in range(n):             # y stationary ⇒ no initial pair
+                                if le[y][v] and v != y and not le[m][v]: E.S.add_clause([-o, -A(y, y), -fle(y, v, v)])
+            if not sels: E.S.delete(); return None
+            bad.extend(sels)
+            for c in range(n):                             # no A1Cert anywhere
+                if rk[c] != K - 1: continue
+                for p in L.covers_dn[c]:
+                    for u in range(n):
+                        if not (le[c][u] and u != c and not le[m][u]): continue
+                        nb = [-r(K - 1, c), -f(p, c, p), -f(p, u, c)]
+                        for z in range(n):
+                            if not (le[c][z] and z != c and le[z][u]): continue
+                            E.S.add_clause(nb + [-fle(c, z, c)]); E.S.add_clause(nb + [-yle(c, z)])
+                            E.S.add_clause(nb + [-fle(c, z, z)] + [f(p, e, p) for e in range(n) if le[c][e] and e != c and le[e][z]])
+        elif claim == 'a1gen':                         # §34.3z²⁰¹: a model of the hypotheses with a genuine A1 configuration with a fibre column
             if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])   # (and, with 'rowtypes', the ¬UpCell row types); no claim about A1Cert
             for c in range(n):
                 if rk[c] != K - 1: continue
@@ -610,7 +638,31 @@ def query(L, m, claim, ahead=False):
                 tops = [c2 for c2 in range(n) if rk[c2] == K - 1 and inR(c2, K - 1) and le[p_][c2]]
                 if not any(le[c2][z] and z != c2 and not le[m][z] and (le[F[c2][z]][c2] or le[z][F[c2][z]]) for c2 in tops for z in range(n)): return True
             return False
-        viol = {'a1gen': ((abovepnocell() if 'abovepnocell' in sys.argv else sibnocell() if 'sibnocell' in sys.argv else selfnocell()) and rowtypes_ok()) if 'selfnocell' in sys.argv else True, 'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
+        def dominantviol():
+            if a1nocert_any() is False: return False
+            for c in range(n):
+                if rk[c] != K - 1 or not inR(c, K - 1): continue
+                p_ = b_of(L, F, c); y = a_of(L, F, c)
+                if p_ not in L.covers_dn[c] or rk[y] != K - 1 or not inR(y, K - 1) or le[c][y] or le[y][c]: continue
+                for u in range(n):
+                    if le[c][u] and u != c and not le[m][u] and F[p_][u] == c and F[c][u] == L.join[c][y]:
+                        ay = a_of(L, F, y)
+                        forb = (le[y][ay] and ay not in (y, m)) or (ay == y and any(le[y][v] and v != y and not le[m][v] and le[F[y][v]][v] for v in range(n)))
+                        if not forb: return True
+            return False
+        def a1nocert_any():
+            for c in range(n):
+                if rk[c] != K - 1 or not inR(c, K - 1): continue
+                for p_ in L.covers_dn[c]:
+                    if F[p_][c] != p_: continue
+                    for u in range(n):
+                        if not (le[c][u] and u != c and not le[m][u] and F[p_][u] == c): continue
+                        for z in range(n):
+                            if not (le[c][z] and z != c and le[z][u]): continue
+                            if le[F[c][z]][c] or le[z][F[c][z]]: return False
+                            if le[F[c][z]][z] and not any(le[c][e] and e != c and le[e][z] and F[p_][e] == p_ for e in range(n)): return False
+            return True
+        viol = {'dominant': not ic_py(L, F, m) and dominantviol(), 'a1gen': ((abovepnocell() if 'abovepnocell' in sys.argv else sibnocell() if 'sibnocell' in sys.argv else selfnocell()) and rowtypes_ok()) if 'selfnocell' in sys.argv else True, 'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
                 'pairjump': (bm in low) and not ic_py(L, F, m) and fjviol('pair'),
                 'topfibre': (bm in low) and not ic_py(L, F, m) and not topfib(),
                 'famup': (bm in low) and not ic_py(L, F, m) and famviol(),

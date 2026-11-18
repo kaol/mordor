@@ -1,0 +1,6 @@
+== bg_icok_pureB_min4.json: |L| = 4, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = True; UpCell = False; m = {01}
+   row x = {0} (a(x) = {}, non-ascending: True); terminal source q′ = {0} (stage 1, height 1, q′ ≤ a(q′): False), x ≤ q′: True
+   B-chain: [('{0}', 'stage 1', 'h 1')] → b = {} (⊥: True)
+== bg_min_pureB_min6.json: |L| = 6, K = 2; MinUpCell hypotheses except ¬IC(m) hold: True; IC(m) = False; UpCell = True; m = {01}
+   row x = {1} (a(x) = {02}, non-ascending: True); terminal source q′ = {1} (stage 1, height 1, q′ ≤ a(q′): False), x ≤ q′: True
+   B-chain: [('{1}', 'stage 1', 'h 1')] → b = {} (⊥: True)

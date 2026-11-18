@@ -73,6 +73,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁹⁴: **`noUpCell_aResponse`**, `stationary_b_le`, `entry_of_new`, **`upCell_of_diagPost_pair`**, **`noUpCell_rowTypes`**.
 * §34.3z¹⁹⁵: `pureA_le_succ`, `pureA_mono`, `noUpCell_ascending_old`, **`noUpCell_pureA_jump`**, `old_diagPost_eq_top`,
   **`pureA_height_le`**, **`noUpCell_not_below_pureA`**, **`noUpCell_nonAscending_terminal`**.
+* §34.3z¹⁹⁶: `terminalSource_new`, **`terminalBAncestry`**, **`ascending_height_le`**, `row_below_ascending_eq`, `a_ascending`,
+  **`nonAscending_chain`**, `noUpCell_nonAscending_terminal'`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1730,6 +1732,107 @@ theorem noUpCell_nonAscending_terminal [WellFoundedLT α] {k H : ℕ} (hn : NoCh
     subst hq
     exact absurd hle (noUpCell_not_below_pureA hn hall hmk hnew hnot hx hxk (by omega) hna)
   · exact ⟨i, t', q', hti, hq', hle, h1, h2, h3⟩
+
+/-! ### The B-source genealogy of a terminal source (§34.3z¹⁹⁶) -/
+
+/-- **`terminalSource_new`**: the B-source of a terminal source new at stage `t' + 1` (`t' = t'' + 1 > 0`) is new at stage
+`t'` (an instance of `source_new`: `b q' ∈ R_{t''}` would put `q'` into `R_{t'}`). -/
+theorem terminalSource_new {t'' : ℕ} {q : α} (hq : q ∉ Rk F (t'' + 1)) : b F q ∉ Rk F t'' := source_new hq
+
+/-- **`terminalBAncestry`.** A source `q` new at stage `s + 1` (`q ∈ R_{s+1} ∖ R_s`) has a B-source chain
+`q_j = b^j q` with `q_j` new at stage `s + 1 − j` and not A-entered, for `j < d`, ending at `q_d` (`s = d + e`), new at
+stage `e + 1`, which is either **A-entered** (`q_d ≤ a r`, `r ∈ R_e`) or **pure-B at the bottom stage** (`e = 0`,
+`b q_d ∈ R_0`, i.e. `b q_d = ⊥`). The stage index strictly decreases along the chain. -/
+theorem terminalBAncestry : ∀ (s : ℕ) (q : α), q ∈ Rk F (s + 1) → q ∉ Rk F s →
+    ∃ d e, s = d + e ∧ (b F)^[d] q ∈ Rk F (e + 1) ∧ (b F)^[d] q ∉ Rk F e ∧
+      (∀ j < d, ¬ ∃ r ∈ Rk F (s - j), (b F)^[j] q ≤ a F r) ∧
+      ((∃ r ∈ Rk F e, (b F)^[d] q ≤ a F r) ∨ (e = 0 ∧ b F ((b F)^[d] q) ∈ Rk F 0))
+  | 0, q, hq, hnew => by
+      refine ⟨0, 0, rfl, hq, hnew, fun j hj => absurd hj (Nat.not_lt_zero _), ?_⟩
+      rcases mem_succ_iff.1 hq with h | h | h
+      · exact absurd h hnew
+      · exact Or.inl h
+      · exact Or.inr ⟨rfl, h⟩
+  | s + 1, q, hq, hnew => by
+      by_cases hA : ∃ r ∈ Rk F (s + 1), q ≤ a F r
+      · exact ⟨0, s + 1, by omega, hq, hnew, fun j hj => absurd hj (Nat.not_lt_zero _), Or.inl hA⟩
+      · have hb : b F q ∈ Rk F (s + 1) := by
+          rcases mem_succ_iff.1 hq with h | h | h
+          · exact absurd h hnew
+          · exact absurd h hA
+          · exact h
+        obtain ⟨d, e, hse, h1, h2, h3, h4⟩ := terminalBAncestry s (b F q) hb (source_new hnew)
+        refine ⟨d + 1, e, by omega, ?_, ?_, ?_, ?_⟩
+        · rw [Function.iterate_succ_apply]; exact h1
+        · rw [Function.iterate_succ_apply]; exact h2
+        · intro j hj
+          rcases j with _ | j
+          · simpa using hA
+          · rw [Function.iterate_succ_apply]
+            have := h3 j (by omega)
+            rwa [show s + 1 - (j + 1) = s - j by omega]
+        · rw [Function.iterate_succ_apply]; exact h4
+
+/-- **Ascending elements of `R_k` have height `≤ k`** (`R_{k+1}` tight, some `m ∉ R_k`): `c ≤ a c` and `h(c) = k + 1` give
+`a c = c` (heights), so `F c c = c`, so `c = ⊤` (`old_diagPost_eq_top`) and `m ∈ R_k`. Generalizes `pureA_height_le`;
+no UpCell hypothesis. -/
+theorem ascending_height_le [WellFoundedLT α] {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m c : α} (hnew : m ∉ Rk F k) (hc : c ∈ Rk F k)
+    (hca : c ≤ a F c) : height H c ≤ k := by
+  have hcK := hall c (Rk_mono (Nat.le_succ k) hc)
+  by_contra hgt
+  have hck : height H c = k + 1 := by omega
+  have hac : a F c = c := by
+    by_contra hne
+    have := height_strictMono hn (lt_of_le_of_ne hca (Ne.symm hne))
+    have := hall _ (mem_succ_of_a hc le_rfl); omega
+  have hd : c ≤ F c c := by
+    have := row_a (F := F) c; rw [hac] at this; exact this.ge
+  exact hnew (Rk_down k le_top (old_diagPost_eq_top hn hall hc hck hd ▸ hc))
+
+/-- A height-`k` row below an ascending element of `R_k` *is* that element. -/
+theorem row_below_ascending_eq [WellFoundedLT α] {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m c x : α} (hnew : m ∉ Rk F k) (hc : c ∈ Rk F k)
+    (hca : c ≤ a F c) (hxk : height H x = k) (hxc : x ≤ c) : x = c := by
+  have := ascending_height_le hn hall hnew hc hca
+  by_contra hne
+  have := height_strictMono hn (lt_of_le_of_ne hxc hne); omega
+
+/-- `a` preserves ascent: `y ≤ a y` gives `a y ≤ a (a y)`. -/
+theorem a_ascending {y : α} (h : y ≤ a F y) : a F y ≤ a F (a F y) := (a F).mono h
+
+/-- **The A-chain above a non-ascending row is non-ascending throughout** (unconditional: no UpCell hypothesis). If a
+non-ascending height-`k` row `x` lies below `a^i q'` with `q' ∈ R_t`, `t + i ≤ k`, then no `a^n q'` (`n ≤ i`) is
+ascending; in particular the terminal source `q'` itself satisfies `q' ≰ a q'`. (An ascending `a^n q'` makes every later
+iterate ascending, and `x` below the ascending `a^i q' ∈ R_k` would equal it.) This subsumes the stage-`0` case
+(`⊥ ≤ a ⊥`). -/
+theorem nonAscending_chain [WellFoundedLT α] {k H t i : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m x q : α} (hnew : m ∉ Rk F k) (hxk : height H x = k)
+    (hna : ¬ x ≤ a F x) (hq : q ∈ Rk F t) (hti : t + i ≤ k) (hxc : x ≤ (a F)^[i] q) :
+    ∀ n ≤ i, ¬ (a F)^[n] q ≤ a F ((a F)^[n] q) := by
+  intro n hni hasc
+  have hup : ∀ l, (a F)^[n + l] q ≤ a F ((a F)^[n + l] q) := by
+    intro l
+    induction l with
+    | zero => simpa using hasc
+    | succ l ih =>
+      rw [show n + (l + 1) = (n + l) + 1 by omega, Function.iterate_succ_apply']
+      exact a_ascending ih
+  have hci := hup (i - n)
+  rw [show n + (i - n) = i by omega] at hci
+  have hR : (a F)^[i] q ∈ Rk F k := Rk_mono hti (aIter_mem hq i)
+  have he := row_below_ascending_eq hn hall hnew hR hci hxk hxc
+  exact hna (he ▸ hci)
+
+/-- **The terminal source of a non-ascending row is non-ascending**, and B-entered at a positive stage under ¬UpCell
+(combining `noUpCell_nonAscending_terminal` and `nonAscending_chain`). -/
+theorem noUpCell_nonAscending_terminal' [WellFoundedLT α] {k H : ℕ} (hn : NoChain α (H + 1))
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m x : α} (hmk : height H m = k + 1) (hnew : m ∉ Rk F k)
+    (hnot : ¬ UpCell F H k m) (hx : x ∈ Rk F k) (hxk : height H x = k) (hna : ¬ x ≤ a F x) :
+    ∃ i t' q', t' + 1 + i ≤ k ∧ q' ∈ Rk F (t' + 1) ∧ x ≤ (a F)^[i] q' ∧ q' ∉ Rk F t' ∧ b F q' ∈ Rk F t' ∧
+      (¬ ∃ r ∈ Rk F t', q' ≤ a F r) ∧ ∀ n ≤ i, ¬ (a F)^[n] q' ≤ a F ((a F)^[n] q') := by
+  obtain ⟨i, t', q', h1, h2, h3, h4, h5, h6⟩ := noUpCell_nonAscending_terminal hn hall hmk hnew hnot hx hxk hna
+  exact ⟨i, t', q', h1, h2, h3, h4, h5, h6, nonAscending_chain hn hall hnew hxk hna h2 h1 h3⟩
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

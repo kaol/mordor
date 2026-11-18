@@ -81,6 +81,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁹⁹: `exceptional_same_source`, **`exception_join_dichotomy`**, `A1CleanFibre`, **`upCell_of_a1CleanFibre`**, `A1Cert`,
   `a1Cert_of_cleanFibre`, **`upCell_of_a1Cert`**, `A1RowTypeCert`, **`noUpCell_a1_fibre_empty`**.
 * §34.3z²⁰⁰: `A1BadForbidden`, **`a1RowTypeCert_iff`**, `a1_rowValue_ge`, `nonAscending_gfp_incomparable`.
+* §34.3z²⁰¹: `A1SelfUpCell`, **`noUpCell_a1_fibre_empty'`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2113,6 +2114,33 @@ theorem nonAscending_gfp_incomparable {H : ℕ} (hn : NoChain α (H + 1)) {c : �
   rcases eq_or_lt_of_le hle with e | hlt
   · exact hna e.ge
   · have := height_strictMono hn hlt; omega
+
+/-- **`A1SelfUpCell` (refuted, §34.3z²⁰¹)**: under the hypotheses of `A1RowTypeCert`, the genuine A1 top `c` itself
+carries an off-`m` cell. Refuted at `|L| = 7` with the row types imposed (the certificate there comes from a sibling top
+with the same source); the same-source sibling rescue is refuted at `|L| = 10`. An earlier SAT encoding that reported no
+counterexample was wrong (an `↔` selector made it demand *every* genuine top lack a cell). Kept to record the
+statement; `noUpCell_a1_fibre_empty'` is a conditional consequence only. -/
+def A1SelfUpCell (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k m, (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k → m ≠ ⊤ →
+    (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) →
+    (∀ x ∈ Rk F k, height H x = k → x ≤ a F x → a F x = x ∨ a F x = m) →
+    (∀ x ∈ Rk F k, height H x = k → a F x = x → ¬ ∃ v, x < v ∧ F x v ≤ v ∧ ¬ m ≤ v) →
+    ∀ c u, c ∈ Rk F k → height H c = k → b F c ⋖ c → ¬ c ≤ a F c → F (b F c) u = c → ¬ m ≤ u → c < u →
+      ∃ z, c < z ∧ ¬ m ≤ z ∧ (F c z ≤ c ∨ z ≤ F c z)
+
+/-- **`A1SelfUpCell` also empties the genuine A1 fibres under ¬UpCell** (same shape as `noUpCell_a1_fibre_empty`). -/
+theorem noUpCell_a1_fibre_empty' {k H : ℕ} (hn : NoChain α (H + 1)) (hself : A1SelfUpCell F H)
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m : α} (hm : m ∈ Rk F (k + 1)) (hmk : height H m = k + 1)
+    (hnew : m ∉ Rk F k) (ht : m ≠ ⊤) (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) (hnot : ¬ UpCell F H k m)
+    {c u : α} (hc : c ∈ Rk F k) (hck : height H c = k) (hcov : b F c ⋖ c) (hna : ¬ c ≤ a F c)
+    (hu : F (b F c) u = c) (hmu : ¬ m ≤ u) (hcu : c < u) : False := by
+  have hasc : ∀ x ∈ Rk F k, height H x = k → x ≤ a F x → a F x = x ∨ a F x = m :=
+    fun x hx hxk hxa => noUpCell_aResponse hn hall hmk hnot hx hxk hxa
+  have hstat : ∀ x ∈ Rk F k, height H x = k → a F x = x → ¬ ∃ v, x < v ∧ F x v ≤ v ∧ ¬ m ≤ v :=
+    fun x hx hxk hax ⟨v, hxv, hFv, hmv⟩ =>
+      hnot (upCell_of_diagPost_pair hn hx hxk (stationary_b_le hax).1.ge hxv hFv hmv)
+  obtain ⟨z, hcz, hmz, hcell⟩ := hself k m hall hm hmk hnew ht hno hasc hstat c u hc hck hcov hna hu hmu hcu
+  exact hnot ⟨c, hc, hck, z, hcz, hmz, hcell⟩
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

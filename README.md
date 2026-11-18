@@ -285,7 +285,8 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     counterexample; both ¬IC(m) and the exclusions are necessary). Under ¬UpCell it would leave every genuine A1
     configuration with an empty fibre (`noUpCell_a1_fibre_empty`) (§34.3z¹⁹⁹). It is equivalent to its forbidden-row form (`a1RowTypeCert_iff`) and has no
     counterexample on the sweep or 15 complete closure lists. The forbidden row is usually a(c) itself, but no
-    construction from the configuration's own data yields it in every case (§34.3z²⁰⁰).
+    construction from the configuration's own data yields it in every case (§34.3z²⁰⁰). Its certificate is not tied to the configuration, to c's same-source siblings,
+    or to the up-set of p: each of those localizations is refuted (|L| = 7, 10, 14) (§34.3z²⁰¹).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

@@ -60,7 +60,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('a1gen', 'a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -102,7 +102,45 @@ def query(L, m, claim, ahead=False):
         if 'nopostlayer' in sys.argv:                # §34.3z¹⁶⁵: no rank-(K−1) element of R_{K−1} is diagonal post-fixed
             for x in range(n):
                 if rk[x] == K - 1: E.S.add_clause([-r(K - 1, x), -yle(x, x)])
-        if claim == 'a1cert':                        # §34.3z¹⁹⁹: hypotheses (as minhyp) + some A1-shape configuration (p ⋖ c, F(p,c) = p,
+        if claim == 'a1gen':                         # §34.3z²⁰¹: a model of the hypotheses with a genuine A1 configuration with a fibre column
+            if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])   # (and, with 'rowtypes', the ¬UpCell row types); no claim about A1Cert
+            for c in range(n):
+                if rk[c] != K - 1: continue
+                for p in L.covers_dn[c]:
+                    for u in range(n):
+                        if not (le[c][u] and u != c and not le[m][u]): continue
+                        na = E.v('nonasc', c); E.iff_or(na, [A(c, g) for g in range(n) if not le[c][g]])
+                        if 'selfnocell' in sys.argv:         # §34.3z²⁰¹: this genuine configuration's top c carries no off-m cell at all
+                            o = E.v('a1selS', p, c, u)           # (one-directional selector: o → base ∧ no cell; corrected §34.3z²⁰¹)
+                            for lit in (r(K - 1, c), f(p, c, p), f(p, u, c), B(c, p), na): E.S.add_clause([-o, lit])
+                            for z in range(n):
+                                if le[c][z] and z != c and not le[m][z]:
+                                    E.S.add_clause([-o, -fle(c, z, c)]); E.S.add_clause([-o, -yle(c, z)])
+                            if 'abovepnocell' in sys.argv:   # §34.3z²⁰¹: and no height-k top c′ ≥ p of R_k carries an off-m cell
+                                for c2 in range(n):
+                                    if rk[c2] != K - 1 or not le[p][c2] or c2 == c: continue
+                                    for z in range(n):
+                                        if le[c2][z] and z != c2 and not le[m][z]:
+                                            E.S.add_clause([-o, -r(K - 1, c2), -fle(c2, z, c2)]); E.S.add_clause([-o, -r(K - 1, c2), -yle(c2, z)])
+                            if 'sibnocell' in sys.argv:      # §34.3z²⁰¹: and no same-source top c′ (b(c′) = p, p ⋖ c′) carries an off-m cell
+                                for c2 in range(n):
+                                    if rk[c2] != K - 1 or p not in L.covers_dn[c2] or c2 == c: continue
+                                    for z in range(n):
+                                        if le[c2][z] and z != c2 and not le[m][z]:
+                                            E.S.add_clause([-o, -r(K - 1, c2), -B(c2, p), -fle(c2, z, c2)])
+                                            E.S.add_clause([-o, -r(K - 1, c2), -B(c2, p), -yle(c2, z)])
+                            bad.append(o)
+                        else:
+                            o = E.v('a1sel', p, c, u); E.iff_and(o, [r(K - 1, c), f(p, c, p), f(p, u, c), B(c, p), na]); bad.append(o)
+            if not bad: E.S.delete(); return None
+            if 'rowtypes' in sys.argv:
+                for x in range(n):
+                    if rk[x] != K - 1: continue
+                    for g in range(n):
+                        if le[x][g] and g != x and g != m: E.S.add_clause([-r(K - 1, x), -A(x, g)])
+                    for v in range(n):
+                        if le[x][v] and v != x and not le[m][v]: E.S.add_clause([-r(K - 1, x), -A(x, x), -fle(x, v, v)])
+        elif claim == 'a1cert':                        # §34.3z¹⁹⁹: hypotheses (as minhyp) + some A1-shape configuration (p ⋖ c, F(p,c) = p,
             if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])   # c of rank K − 1 in R_{K−1}) with a fibre column u (F(p,u) = c, m ≰ u)
             sels = []                                             # and no A1Cert anywhere
             for c in range(n):
@@ -548,7 +586,31 @@ def query(L, m, claim, ahead=False):
                 if le[x][ax] and ax not in (x, m): return False
                 if ax == x and any(le[x][v] and v != x and not le[m][v] and le[F[x][v]][v] for v in range(n)): return False
             return True
-        viol = {'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
+        def selfnocell():
+            for c in range(n):
+                if rk[c] != K - 1 or not inR(c, K - 1) or le[c][a_of(L, F, c)]: continue
+                p_ = b_of(L, F, c)
+                if p_ not in L.covers_dn[c]: continue
+                if any(le[c][u] and u != c and not le[m][u] and F[p_][u] == c for u in range(n)) and \
+                   not any(le[c][z] and z != c and not le[m][z] and (le[F[c][z]][c] or le[z][F[c][z]]) for z in range(n)): return True
+            return False
+        def sibnocell():
+            for c in range(n):
+                if rk[c] != K - 1 or not inR(c, K - 1) or le[c][a_of(L, F, c)]: continue
+                p_ = b_of(L, F, c)
+                if p_ not in L.covers_dn[c] or not any(le[c][u] and u != c and not le[m][u] and F[p_][u] == c for u in range(n)): continue
+                tops = [c2 for c2 in range(n) if rk[c2] == K - 1 and inR(c2, K - 1) and b_of(L, F, c2) == p_ and p_ in L.covers_dn[c2]]
+                if not any(le[c2][z] and z != c2 and not le[m][z] and (le[F[c2][z]][c2] or le[z][F[c2][z]]) for c2 in tops for z in range(n)): return True
+            return False
+        def abovepnocell():
+            for c in range(n):
+                if rk[c] != K - 1 or not inR(c, K - 1) or le[c][a_of(L, F, c)]: continue
+                p_ = b_of(L, F, c)
+                if p_ not in L.covers_dn[c] or not any(le[c][u] and u != c and not le[m][u] and F[p_][u] == c for u in range(n)): continue
+                tops = [c2 for c2 in range(n) if rk[c2] == K - 1 and inR(c2, K - 1) and le[p_][c2]]
+                if not any(le[c2][z] and z != c2 and not le[m][z] and (le[F[c2][z]][c2] or le[z][F[c2][z]]) for c2 in tops for z in range(n)): return True
+            return False
+        viol = {'a1gen': ((abovepnocell() if 'abovepnocell' in sys.argv else sibnocell() if 'sibnocell' in sys.argv else selfnocell()) and rowtypes_ok()) if 'selfnocell' in sys.argv else True, 'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
                 'pairjump': (bm in low) and not ic_py(L, F, m) and fjviol('pair'),
                 'topfibre': (bm in low) and not ic_py(L, F, m) and not topfib(),
                 'famup': (bm in low) and not ic_py(L, F, m) and famviol(),
@@ -588,7 +650,7 @@ RMIN = next((int(a[5:]) for a in sys.argv if a.startswith('rmin=')), 1)
 
 if __name__ == '__main__':
     claim = sys.argv[1]; ahead = 'ahead' in sys.argv; C = collections.Counter(); best = None
-    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes') and not a.startswith('rmin=')]):
+    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes', 'selfnocell', 'sibnocell', 'abovepnocell') and not a.startswith('rmin=')]):
         if L.height < 2: continue
         hit = None
         for m in range(L.n):
@@ -599,4 +661,4 @@ if __name__ == '__main__':
         if hit and (best is None or L.n < best[0].n): best = (L, hit)
     print(f"claim {claim}{' ahead' if ahead else ''}: {dict(C)}" + (f"; smallest counterexample |L| = {best[0].n}, rank(m) = {best[0].rank[best[1][0]]}" if best else ''), flush=True)
     if best:
-        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))
+        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes', 'selfnocell', 'sibnocell', 'abovepnocell') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))

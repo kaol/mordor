@@ -1,0 +1,41 @@
+== §34.3z²⁰¹ exact searches (single_claims.py; flags multi notop nofeeder notightK1 = MinUpCell hypotheses); no result line = 580 s cap
+-- A1RowTypeCert ('a1cert genuine rowtypes'), fresh random closure families (cnt 3–4 each)
+cl_5_12_34_4: claim a1cert: {'none': 4}
+cl_6_12_33_3: claim a1cert: {'none': 3}
+cl_6_13_30_3: claim a1cert: {'none': 3}
+cl_6_14_31_3: claim a1cert: {'none': 3}
+cl4_6_13_36_3: claim a1cert: {'none': 3}
+cl4_6_14_37_3: 
+cl_7_14_32_2: 
+cl_7_15_35_2: 
+-- A1SelfUpCell ('a1gen rowtypes selfnocell', corrected one-directional selector)
+cl_5_10_1_10: claim a1gen: {'none': 4, 'counterexample': 6}; smallest counterexample |L| = 17, rank(m) = 3
+cl_5_11_4_10: claim a1gen: {'none': 3, 'counterexample': 7}; smallest counterexample |L| = 14, rank(m) = 3
+cl_6_12_9_10: claim a1gen: {'counterexample': 10}; smallest counterexample |L| = 16, rank(m) = 3
+sw: claim a1gen: {'none': 107, 'counterexample': 72}; smallest counterexample |L| = 7, rank(m) = 2
+-- ... without rowtypes (sweep): claim a1gen: {'none': 107, 'counterexample': 72}; smallest counterexample |L| = 7, rank(m) = 2
+-- same-source sibling rescue ('a1gen rowtypes selfnocell sibnocell')
+cl_5_10_1_10: claim a1gen: {'none': 4, 'counterexample': 6}; smallest counterexample |L| = 17, rank(m) = 3
+cl_5_11_4_10: claim a1gen: {'none': 3, 'counterexample': 7}; smallest counterexample |L| = 14, rank(m) = 3
+cl_6_12_9_10: claim a1gen: {'counterexample': 10}; smallest counterexample |L| = 16, rank(m) = 3
+sw: claim a1gen: {'none': 171, 'counterexample': 8}; smallest counterexample |L| = 10, rank(m) = 3
+-- rescue by a top above p ('a1gen rowtypes selfnocell abovepnocell')
+cl_5_10_1_10: claim a1gen: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 17, rank(m) = 3
+cl_5_11_4_10: claim a1gen: {'none': 5, 'counterexample': 5}; smallest counterexample |L| = 14, rank(m) = 3
+cl_6_12_9_10: claim a1gen: {'counterexample': 8, 'none': 2}; smallest counterexample |L| = 18, rank(m) = 4
+sw: claim a1gen: {'none': 178, 'counterexample': 1}; smallest counterexample |L| = 16, rank(m) = 3
+
+== a1gen_probe.py (row-typed models with a genuine A1 configuration; sweep 4 16 and rank-3 closure 5 10 1, 5 11 4, 6 12 9 / 5 12 8)
+('genuine configuration certifies itself', False, 'certifying top c′ vs c', '=', 'c′ vs a(c)', '>', 'same top, other column', True, 'c′ genuine', True, 'kind', 'cell') 17
+('genuine configuration certifies itself', False, 'certifying top c′ vs c', '∥', 'c′ vs a(c)', '=', 'same top, other column', False, 'c′ genuine', True, 'kind', 'cell') 1
+('genuine configuration certifies itself', False, 'certifying top c′ vs c', '∥', 'c′ vs a(c)', '>', 'same top, other column', False, 'c′ genuine', True, 'kind', 'cell') 3
+('genuine configuration certifies itself', True, 'kinds', ('cell', 'pre-fixed, clean')) 302
+('genuine configuration certifies itself', True, 'kinds', ('cell',)) 1871
+('genuine configuration: cell at u', False, 'u is a lower / upper cell', None, 'cell at t = F(c,u)', False, 'some cell ≤ u', False, 'some upper cell', False, 'some lower cell', False, 't vs u', '∥') 2
+('genuine configuration: cell at u', False, 'u is a lower / upper cell', None, 'cell at t = F(c,u)', False, 'some cell ≤ u', False, 'some upper cell', False, 'some lower cell', True, 't vs u', '∥') 1
+('genuine configuration: cell at u', False, 'u is a lower / upper cell', None, 'cell at t = F(c,u)', False, 'some cell ≤ u', True, 'some upper cell', False, 'some lower cell', True, 't vs u', '∥') 10
+('genuine configuration: cell at u', False, 'u is a lower / upper cell', None, 'cell at t = F(c,u)', True, 'some cell ≤ u', False, 'some upper cell', False, 'some lower cell', True, 't vs u', '∥') 12
+('genuine configuration: cell at u', False, 'u is a lower / upper cell', None, 'cell at t = F(c,u)', True, 'some cell ≤ u', True, 'some upper cell', False, 'some lower cell', True, 't vs u', '<') 178
+('genuine configuration: cell at u', False, 'u is a lower / upper cell', None, 'cell at t = F(c,u)', True, 'some cell ≤ u', True, 'some upper cell', False, 'some lower cell', True, 't vs u', '∥') 5
+('genuine configuration: cell at u', True, 'u is a lower / upper cell', 'lower', 'cell at t = F(c,u)', False, 'some cell ≤ u', True, 'some upper cell', False, 'some lower cell', True, 't vs u', '<') 913
+models 1271

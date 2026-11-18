@@ -1,0 +1,108 @@
+== badA1_probe.py (§34.3z²⁰⁰): exact counterexamples of 'a1cert genuine' (MinUpCell hypotheses, genuine A1 configuration, no A1Cert), every qualifying m; rank-3 closure 5 10 1/2, 5 11 4/5/14, 5 12 8, 6 12 9/18; sweep 4 16; summed
+('configuration', 'F(c,u) = t vs u', '<', 't vs c', '>', 'h(t) − k', 1, 'a(c) vs c', '<') 1
+('configuration', 'F(c,u) = t vs u', '<', 't vs c', '>', 'h(t) − k', 1, 'a(c) vs c', '∥') 4
+('configuration', 'F(c,u) = t vs u', '∥', 't vs c', '>', 'h(t) − k', 1, 'a(c) vs c', '<') 55
+('configuration', 'F(c,u) = t vs u', '∥', 't vs c', '>', 'h(t) − k', 1, 'a(c) vs c', '∥') 517
+('configuration', 'F(c,u) = t vs u', '∥', 't vs c', '>', 'h(t) − k', 2, 'a(c) vs c', '<') 13
+('configuration', 'F(c,u) = t vs u', '∥', 't vs c', '>', 'h(t) − k', 2, 'a(c) vs c', '∥') 45
+('configuration', 'F(c,u) = t vs u', '∥', 't vs c', '>', 'h(t) − k', 3, 'a(c) vs c', '∥') 9
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '<', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', True) 2
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '<', 'x vs t', '<', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', True) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '<', 'x vs t', '<', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', True) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '<', 'x vs t', '∥', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', True) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', False) 10
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', True) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', False) 3
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 5
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', True) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', False) 11
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', True, 'b(x) = p', False) 12
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', False) 219
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 16
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', False) 5
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', False) 36
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', True) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', True) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', True) 2
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', True, 'b(x) = p', False) 2
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 6
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', True, 'b(x) = p', False) 4
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', True) 3
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '<', 'x vs t', '∥', 'x vs a(c)', '∥', 'witness w vs u', '=', 'w vs t', '∥', 'w = c ⊔ x', True, 'b(x) = p', True) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', False) 4
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', True) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', False) 2
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', False) 6
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', True) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', False) 1
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', False) 2
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', True) 7
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 7
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 3
+('forbidden row', 'other ascending', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '∥', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', True) 3
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', False) 1
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', False) 1
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 2
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', False) 7
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', True, 'b(x) = p', False) 6
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', False) 180
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 38
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '=', 'w = c ⊔ x', True, 'b(x) = p', False) 38
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 4
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 2
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '<', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', True, 'b(x) = p', False) 1
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 4
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '=', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', True, 'b(x) = p', False) 6
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '>', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 1
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '<', 'w = c ⊔ x', False, 'b(x) = p', False) 6
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '<', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 1
+('forbidden row', 'stationary with pair', 'x vs c', '∥', 'x vs p', '∥', 'x vs u', '∥', 'x vs t', '∥', 'x vs a(c)', '>', 'witness w vs u', '∥', 'w vs t', '∥', 'w = c ⊔ x', False, 'b(x) = p', False) 2
+('forbidden rows', 'kinds', ('other ascending', 'stationary with pair')) 11
+('forbidden rows', 'kinds', ('other ascending',)) 344
+('forbidden rows', 'kinds', ('stationary with pair',)) 289
+models 644
+-- per genuine configuration (second run)
+('genuine configuration', 'a(c) a height-k row of R_k', True, 'h(a(c)) − k', 0, 'a(c) ≤ u', False, 'a(c) ≤ t', True, 't = c ⊔ a(c)', True, 'a(c) forbidden', True, 'p < a(c)', True, 'some forbidden row x < t', True) 481
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', -2, 'a(c) ≤ u', True, 'a(c) ≤ t', True, 't = c ⊔ a(c)', False, 'a(c) forbidden', False, 'p < a(c)', False, 'some forbidden row x < t', True) 51
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', -1, 'a(c) ≤ u', False, 'a(c) ≤ t', True, 't = c ⊔ a(c)', True, 'a(c) forbidden', False, 'p < a(c)', False, 'some forbidden row x < t', True) 28
+('genuine configuration', 'a(c) a height-k row of R_k', True, 'h(a(c)) − k', 0, 'a(c) ≤ u', False, 'a(c) ≤ t', True, 't = c ⊔ a(c)', False, 'a(c) forbidden', True, 'p < a(c)', True, 'some forbidden row x < t', True) 28
+('genuine configuration', 'a(c) a height-k row of R_k', True, 'h(a(c)) − k', 0, 'a(c) ≤ u', False, 'a(c) ≤ t', False, 't = c ⊔ a(c)', False, 'a(c) forbidden', True, 'p < a(c)', True, 'some forbidden row x < t', False) 20
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', -3, 'a(c) ≤ u', True, 'a(c) ≤ t', True, 't = c ⊔ a(c)', False, 'a(c) forbidden', False, 'p < a(c)', False, 'some forbidden row x < t', True) 12
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', 1, 'a(c) ≤ u', False, 'a(c) ≤ t', True, 't = c ⊔ a(c)', True, 'a(c) forbidden', False, 'p < a(c)', True, 'some forbidden row x < t', True) 12
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', 1, 'a(c) ≤ u', False, 'a(c) ≤ t', False, 't = c ⊔ a(c)', False, 'a(c) forbidden', False, 'p < a(c)', True, 'some forbidden row x < t', True) 12
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', -2, 'a(c) ≤ u', True, 'a(c) ≤ t', True, 't = c ⊔ a(c)', False, 'a(c) forbidden', False, 'p < a(c)', False, 'some forbidden row x < t', False) 6
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', -2, 'a(c) ≤ u', False, 'a(c) ≤ t', True, 't = c ⊔ a(c)', True, 'a(c) forbidden', False, 'p < a(c)', False, 'some forbidden row x < t', True) 4
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', 1, 'a(c) ≤ u', False, 'a(c) ≤ t', False, 't = c ⊔ a(c)', False, 'a(c) forbidden', False, 'p < a(c)', True, 'some forbidden row x < t', False) 4
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', -1, 'a(c) ≤ u', False, 'a(c) ≤ t', True, 't = c ⊔ a(c)', True, 'a(c) forbidden', False, 'p < a(c)', False, 'some forbidden row x < t', False) 3
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', -4, 'a(c) ≤ u', True, 'a(c) ≤ t', True, 't = c ⊔ a(c)', False, 'a(c) forbidden', False, 'p < a(c)', False, 'some forbidden row x < t', True) 1
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', 1, 'a(c) ≤ u', False, 'a(c) ≤ t', True, 't = c ⊔ a(c)', True, 'a(c) forbidden', False, 'p < a(c)', False, 'some forbidden row x < t', True) 1
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', -1, 'a(c) ≤ u', False, 'a(c) ≤ t', False, 't = c ⊔ a(c)', False, 'a(c) forbidden', False, 'p < a(c)', False, 'some forbidden row x < t', True) 1
+('genuine configuration', 'a(c) a height-k row of R_k', False, 'h(a(c)) − k', 0, 'a(c) ≤ u', False, 'a(c) ≤ t', True, 't = c ⊔ a(c)', True, 'a(c) forbidden', False, 'p < a(c)', True, 'some forbidden row x < t', False) 1
+('genuine configuration', 'a(c) a height-k row of R_k', True, 'h(a(c)) − k', 0, 'a(c) ≤ u', False, 'a(c) ≤ t', True, 't = c ⊔ a(c)', False, 'a(c) forbidden', False, 'p < a(c)', True, 'some forbidden row x < t', False) 1
+('genuine configuration', 'a(c) a height-k row of R_k', True, 'h(a(c)) − k', 0, 'a(c) ≤ u', False, 'a(c) ≤ t', False, 't = c ⊔ a(c)', False, 'a(c) forbidden', True, 'p < a(c)', True, 'some forbidden row x < t', True) 1
+
+== single_claims.py a1cert genuine rowtypes (A1RowTypeCert, exact): further closure lists (flags multi notop nofeeder notightK1 genuine rowtypes); no result line = 580 s cap
+cl4_6_12_10_10: claim a1cert: {'none': 10}
+cl4_6_12_9_10: claim a1cert: {'none': 10}
+cl_5_10_3_10: claim a1cert: {'none': 10}
+cl_5_11_15_10: claim a1cert: {'none': 10}
+cl_5_11_7_10: claim a1cert: {'none': 10}
+cl_5_12_16_10: claim a1cert: {'none': 10}
+cl_5_12_17_10: claim a1cert: {'none': 10}
+cl_6_11_6_10: 
+cl_6_12_10_10: 
+cl_6_12_12_10: 
+cl_6_12_18_10: 
+cl_6_13_20_10: 
+cl_6_13_21_10: 
+
+== third run (same seeds): forbidden rows below a(c) / below t per genuine bad configuration
+('genuine configuration: forbidden row below a(c)', False, 'with a(x) = a(c)', False, 'forbidden row below t', False) 11
+('genuine configuration: forbidden row below a(c)', False, 'with a(x) = a(c)', False, 'forbidden row below t', True) 97
+('genuine configuration: forbidden row below a(c)', True, 'with a(x) = a(c)', False, 'forbidden row below t', False) 12
+('genuine configuration: forbidden row below a(c)', True, 'with a(x) = a(c)', False, 'forbidden row below t', True) 280
+('genuine configuration: forbidden row below a(c)', True, 'with a(x) = a(c)', True, 'forbidden row below t', False) 12
+('genuine configuration: forbidden row below a(c)', True, 'with a(x) = a(c)', True, 'forbidden row below t', True) 255

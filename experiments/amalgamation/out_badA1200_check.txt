@@ -1,0 +1,8 @@
+== bad1_ac_forbidden_t_ne_join_min9.json: |L| = 9, K = 2; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {}, c = {0}, u = {03}, t = F(c, u) = {01}, a(c) = {2}, c ⊔ a(c) = {012}; forbidden rows [('{2}', 'other ascending, a(x) = {12}')]
+== bad1_ac_not_forbidden_min10.json: |L| = 10, K = 2; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {}, c = {0}, u = {03}, t = F(c, u) = {01}, a(c) = {12}, c ⊔ a(c) = {012}; forbidden rows [('{1}', 'other ascending, a(x) = {12}')]
+== bad1_example_min7.json: |L| = 7, K = 2; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {}, c = {0}, u = {03}, t = F(c, u) = {01}, a(c) = {1}, c ⊔ a(c) = {01}; forbidden rows [('{1}', 'other ascending, a(x) = {01}')]
+== bad1_none_below_ac_min12.json: |L| = 12, K = 3; MinUpCell hypotheses hold: True; genuine A1 (p = b(c) ⋖ c, c non-ascending, F(p,u) = c, m ≰ u): True
+   p = {0}, c = {03}, u = {023}, t = F(c, u) = {013}, a(c) = {}, c ⊔ a(c) = {03}; forbidden rows [('{01}', "stationary, columns ['{013}']")]

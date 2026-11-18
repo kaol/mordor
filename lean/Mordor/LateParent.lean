@@ -80,6 +80,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z¹⁹⁸: `source_row_or`, `exceptional_column`, **`upCell_of_rowConst`**, **`a1_upCell_or_exceptional`**.
 * §34.3z¹⁹⁹: `exceptional_same_source`, **`exception_join_dichotomy`**, `A1CleanFibre`, **`upCell_of_a1CleanFibre`**, `A1Cert`,
   `a1Cert_of_cleanFibre`, **`upCell_of_a1Cert`**, `A1RowTypeCert`, **`noUpCell_a1_fibre_empty`**.
+* §34.3z²⁰⁰: `A1BadForbidden`, **`a1RowTypeCert_iff`**, `a1_rowValue_ge`, `nonAscending_gfp_incomparable`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2060,6 +2061,58 @@ theorem noUpCell_a1_fibre_empty {k H : ℕ} (hn : NoChain α (H + 1)) (hc4 : A1R
     fun x hx hxk hax ⟨v, hxv, hFv, hmv⟩ =>
       hnot (upCell_of_diagPost_pair hn hx hxk (stationary_b_le hax).1.ge hxv hFv hmv)
   exact hnot (upCell_of_a1Cert hn (hc4 k m hall hm hmk hnew ht hno hasc hstat c u hc hck hcov hna hu hmu hcu))
+
+/-! ### The forbidden-row form of A1RowTypeCert (§34.3z²⁰⁰) -/
+
+/-- **`A1BadForbidden`** (the brief's `badA1_forces_forbiddenRowType`): under the MinUpCell hypotheses, a genuine A1
+configuration with a nonempty fibre and *no* `A1Cert` forces a forbidden row: an ascending height-`k` row with
+`a x ∉ {x, m}`, or a stationary height-`k` row with an initial pair. -/
+def A1BadForbidden (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k m, (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k → m ≠ ⊤ →
+    (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) →
+    ∀ c u, c ∈ Rk F k → height H c = k → b F c ⋖ c → ¬ c ≤ a F c → F (b F c) u = c → ¬ m ≤ u → c < u →
+      ¬ A1Cert F H k m →
+      (∃ x ∈ Rk F k, height H x = k ∧ x ≤ a F x ∧ a F x ≠ x ∧ a F x ≠ m) ∨
+      (∃ x ∈ Rk F k, height H x = k ∧ a F x = x ∧ ∃ v, x < v ∧ F x v ≤ v ∧ ¬ m ≤ v)
+
+/-- **`A1RowTypeCert ↔ A1BadForbidden`** (the two forms are contrapositives of each other). -/
+theorem a1RowTypeCert_iff : A1RowTypeCert F H ↔ A1BadForbidden F H := by
+  constructor
+  · intro h k m hall hm hmk hnew ht hno c u hc hck hcov hna hu hmu hcu hnc
+    by_contra hcon
+    push_neg at hcon
+    obtain ⟨h1, h2⟩ := hcon
+    refine hnc (h k m hall hm hmk hnew ht hno (fun x hx hxk hxa => ?_) (fun x hx hxk hax hv => ?_)
+      c u hc hck hcov hna hu hmu hcu)
+    · by_contra hne
+      push_neg at hne
+      exact hne.2 (h1 x hx hxk hxa hne.1)
+    · obtain ⟨v, hxv, hFv, hmv⟩ := hv
+      exact hmv (h2 x hx hxk hax v hxv hFv)
+  · intro h k m hall hm hmk hnew ht hno hasc hstat c u hc hck hcov hna hu hmu hcu
+    by_contra hnc
+    rcases h k m hall hm hmk hnew ht hno c u hc hck hcov hna hu hmu hcu hnc with
+      ⟨x, hx, hxk, hxa, h1, h2⟩ | ⟨x, hx, hxk, hax, hv⟩
+    · rcases hasc x hx hxk hxa with e | e
+      · exact h1 e
+      · exact h2 e
+    · exact hstat x hx hxk hax hv
+
+/-- **The A1 row value**: `F c u ≥ c` (from `F (b c) u = c`), and `F c u ≥ c ⊔ a c` when `a c ≤ u`. In the exact
+counterexamples the forbidden row is most often `a c` itself, with `F c u = c ⊔ a c` (§34.3z²⁰⁰). -/
+theorem a1_rowValue_ge {c u : α} (hu : F (b F c) u = c) (hbc : b F c ≤ c) :
+    c ≤ F c u ∧ (a F c ≤ u → c ⊔ a F c ≤ F c u) := by
+  have h1 : c ≤ F c u := hu.symm.le.trans ((F.mono hbc) u)
+  refine ⟨h1, fun hau => sup_le h1 ?_⟩
+  exact (row_a c).symm.le.trans ((F c).mono hau)
+
+/-- The gfp of a non-ascending height-`k` row, if it is itself a height-`k` row, is incomparable with it. -/
+theorem nonAscending_gfp_incomparable {H : ℕ} (hn : NoChain α (H + 1)) {c : α} (hna : ¬ c ≤ a F c)
+    (hh : height H (a F c) = height H c) : ¬ c ≤ a F c ∧ ¬ a F c ≤ c := by
+  refine ⟨hna, fun hle => ?_⟩
+  rcases eq_or_lt_of_le hle with e | hlt
+  · exact hna e.ge
+  · have := height_strictMono hn hlt; omega
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

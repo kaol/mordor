@@ -1,0 +1,19 @@
+# gapcut.py (§34.3z²¹⁸). NOTE: the first wit/witx runs were void (string-replacement slip; the claim and G clauses
+# were not applied); the lines below are the corrected runs.
+[gk_a] local GapCutStep (orbit): {'none': 184} smallest None
+[gk_b] local GapCutStep (post): {'none': 184} smallest None
+[gk_c] local GapCutStep (orbit): {'none': 10, 'counterexample': 2} smallest 16
+[gk_d] local GapCutStep (full): {'none': 12} smallest None
+[gw_a] local GapCutStep (wit): {'none': 167, 'counterexample': 17} smallest 9
+[gw_b] local GapCutStep (witx): {'none': 184} smallest None
+[gw_c] local GapCutStep (wit): {'none': 7, 'counterexample': 5} smallest 12
+[gw_d] local GapCutStep (witx): {'none': 12} smallest None
+[gx_a] local GapCutStep (witx0): {'none': 141, 'counterexample': 43} smallest 8
+[gx_b] local GapCutStep (witx0): {'none': 4, 'counterexample': 8} smallest 9
+[gx_c] local GapCutStep (witx): {'none': 12} smallest None
+[gx_d] local GapCutStep (witx): {'none': 4} smallest None
+[gl_a] local GapCutStep (lc1): {'none': 167, 'counterexample': 17} smallest 9
+[gl_b] local GapCutStep (lc2): {'none': 167, 'counterexample': 17} smallest 9
+[gl_c] local GapCutStep (lc1): {'none': 7, 'counterexample': 5} smallest 12
+[gl_d] local GapCutStep (lc2): {'none': 7, 'counterexample': 5} smallest 12
+(a: sweep 4 16 / closure 5 7 1 12 as listed in the log; gx_c closure 5 7 2 12, gx_d closure 6 8 1 4)

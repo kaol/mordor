@@ -315,7 +315,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     element above w outside y* (§34.3z²¹⁴). That element is usually y* ⊔ F(x, y*), but restricting the property
     to such joins fails at |L| = 16 (§34.3z²¹⁵). Orbit families fail at |L| = 20: the property cannot be localized, because a
     restricted version admits a non-greatest fixed point of m (§34.3z²¹⁶). With T1b on (x, ⊤] only, the IC-lemma reduces to excluding the gap for the
-    greatest fixed point y* (`ic_of_noGap_up`); for any other fixed point the gap is forced (`exists_gap_up`) (§34.3z²¹⁷).
+    greatest fixed point y* (`ic_of_noGap_up`); for any other fixed point the gap is forced (`exists_gap_up`) (§34.3z²¹⁷). At the
+    final transition of g ⊓ u_n along m's column orbit, T1b↑ elsewhere forces F(⊥, g ⊓ u_n) = ⊥ (exact, non-vacuous);
+    without y = y* the local step is refuted at |L| = 16 (§34.3z²¹⁸).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

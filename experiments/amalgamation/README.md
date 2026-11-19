@@ -81,3 +81,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²¹⁴: `ic_core.py` (minimal cores of IC↑ over guarded G / CF / T instances; `out_iccore214.txt`, `out_iccore214_small.txt`).
 - §34.3z²¹⁵: `ic_gname.py` (names the G column of the IC↑ cores), `ic_gtest.py` (IC↑ with the greatest-fixed-point property restricted to named columns: `ys`, `fam`, `full`). Output `out_gname215.txt`.
 - §34.3z²¹⁶: `ic_gtest.py` modes colchain / xorb (refuted at |L| = 20); `ic_core_one.py` (core and G-column names for a stored triple). Output `out_gtest216.txt`.
+- §34.3z²¹⁷: `gap_gtest.py` (excluding the gap with restricted greatest-fixed-point instances; `out_gapgtest217.txt`).

@@ -1,0 +1,6 @@
+# gap_gtest.py (§34.3z²¹⁷)
+[gg_a] gap excluded with G restricted (yg): {'none': 184} smallest None
+[gg_b] gap excluded with G restricted (ygs): {'none': 184} smallest None
+[gg_c] gap excluded with G restricted (yg): {'none': 10, 'counterexample': 2} smallest 16
+[gg_d] gap excluded with G restricted (full): {'none': 12} smallest None
+(gg_a yg sweep; gg_b ygs sweep; gg_c yg closure 5 7 1 12; gg_d full closure 5 7 1 12)

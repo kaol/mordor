@@ -90,6 +90,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `noIC_of_not_secondEntry`, `bot_row_le_side`, `a_bot_of_not_secondEntry_one`, **`exists_cellFree_off_one`**.
 * §34.3z²⁰⁵ (k = 1 bottom-row descent): **`row_cell_of_bot_le_one`**, `mem_one_of_bot_value`, `upCell_of_bot_side_one`,
   **`upCell_of_bot_side_le_one`**, `bot_side_residue_one`, `LTPair`, **`secondEntry_of_LTPair`**, `MinLT`, **`secondEntry_one_of_minLT`**.
+* §34.3z²⁰⁶ (the row of the bottom-row descent): `bot_iter_le`, **`exists_bot_descent_atom`**, `RowLT2`,
+  **`secondEntry_one_of_rowLT2`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2440,6 +2442,69 @@ theorem secondEntry_one_of_minLT {H : ℕ} (hn : NoChain α (H + 1)) (h : MinLT 
   by_contra hse
   exact hse (secondEntry_of_LTPair hn hall hnew
     (h m hall (tight_of_not_secondEntry hall hnew hse) hm hmk hnew ht hno))
+
+/-! ### RowLT2: the row of the bottom-row descent from `w*` (§34.3z²⁰⁶) -/
+
+/-- The bottom-row iterates of a `⊥`-pre-fixed column decrease. -/
+theorem bot_iter_le {v : α} (hv : F ⊥ v ≤ v) : ∀ i, (F ⊥)^[i + 1] v ≤ (F ⊥)^[i] v
+  | 0 => hv
+  | i + 1 => by
+      have h := bot_iter_le hv i
+      rw [Function.iterate_succ_apply'] at h
+      rw [Function.iterate_succ_apply', Function.iterate_succ_apply']
+      exact (F ⊥).mono h
+
+/-- **The bottom-row descent passes through height 1.** With `R_1` tight and `a ⊥ = ⊥`, the descent `v ↦ F ⊥ v` from a
+`⊥`-pre-fixed `v ≠ ⊥` reaches `⊥` (its fixed point lies below `a ⊥`), and its last nonzero term has height 1: it is sent
+to `⊥`, so it lies in `R_1`. -/
+theorem exists_bot_descent_atom {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1)
+    (hab : a F ⊥ = ⊥) {v : α} (hv : F ⊥ v ≤ v) (hvb : v ≠ ⊥) : ∃ i, height H ((F ⊥)^[i] v) = 1 := by
+  classical
+  obtain ⟨N, hN⟩ := exists_iter_fix hn (x := ⊥) H (height_le _) hv
+  have hs : (F ⊥)^[N] v = ⊥ := le_bot_iff.1 ((le_a hN.ge).trans hab.le)
+  have hex : ∃ i, (F ⊥)^[i] v = ⊥ := ⟨N, hs⟩
+  obtain ⟨j, hj, hmin⟩ : ∃ j, (F ⊥)^[j] v = ⊥ ∧ ∀ i < j, (F ⊥)^[i] v ≠ ⊥ :=
+    ⟨Nat.find hex, Nat.find_spec hex, fun i hi => Nat.find_min hex hi⟩
+  rcases j with _ | i
+  · exact absurd hj hvb
+  have hi := hmin i (Nat.lt_succ_self i)
+  rw [Function.iterate_succ_apply'] at hj
+  have hR := mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (y := (F ⊥)^[i] v)
+    (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl (Or.inl hj.le)
+  have h1 := hk1 _ hR
+  have h0 := height_strictMono hn (bot_lt_iff_ne_bot.2 hi)
+  rw [height_bot_eq_zero] at h0
+  exact ⟨i, by omega⟩
+
+/-- **RowLT2 (conjectural).** At k = 1, let `y` be the greatest post-fixed point of `y ↦ m ⊔ F m y` with `w = F m y ≱ m`,
+and let `x` be a height-1 term of the bottom-row descent from `w`. If `m` has no interval cell, row `x` carries an LT
+pair. No counterexample (exact search, §34.3z²⁰⁶); `¬IC(m)` is needed (`|L| = 4` without it). Fixing the column instead
+is refuted: `v = w` (DescLT, `|L| = 7`) and the orbit of `x` from `w` (OrbitLT, `|L| = 10`). -/
+def RowLT2 (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ m y, (∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) → (∀ z ∈ Rk F 1, height H z ≤ 1) → m ∈ Rk F (1 + 1) →
+    height H m = 1 + 1 → m ∉ Rk F 1 → (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) →
+    m ⊔ F m y = y → (∀ z, z ≤ m ⊔ F m z → z ≤ y) → ¬ m ≤ F m y →
+    ∀ i, height H ((F ⊥)^[i] (F m y)) = 1 →
+      ∃ v, (F ⊥)^[i] (F m y) < v ∧ ¬ m ≤ v ∧ F ((F ⊥)^[i] (F m y)) v ≤ v ∧ F ⊥ v ≤ (F ⊥)^[i] (F m y)
+
+/-- **RowLT2 gives MinSecondEntry at k = 1.** Without a second top, `R_1` is tight and `a ⊥ = ⊥`, the column orbit gives
+`y*`, the bottom-row descent from `w*` passes through height 1, and RowLT2 supplies an LT pair there. -/
+theorem secondEntry_one_of_rowLT2 [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (h : RowLT2 F H) {m : α}
+    (hall : ∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) (hm : m ∈ Rk F (1 + 1)) (hmk : height H m = 1 + 1)
+    (hnew : m ∉ Rk F 1) (ht : m ≠ ⊤) (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : SecondEntry F H 1 m := by
+  by_contra hse
+  have hk1 := tight_of_not_secondEntry hall hnew hse
+  have hab := a_bot_of_not_secondEntry_one hn hall hnew ht hno hse
+  rcases colOrb_dichotomy (F := F) ht with hc | ⟨n, -, hfix, hgfp, hmw, hwm⟩
+  · exact hno hc
+  have hpre : F ⊥ (F m (colOrb F m n)) ≤ F m (colOrb F m n) := feeder_le_side bot_le hfix
+  have hwb : F m (colOrb F m n) ≠ ⊥ := fun e => hwm (e.le.trans bot_le)
+  obtain ⟨i, hi1⟩ := exists_bot_descent_atom hn hk1 hab hpre hwb
+  obtain ⟨v, hxv, hmv, hFv, hbv⟩ := h m _ hall hk1 hm hmk hnew hno hfix hgfp hmw i hi1
+  have hxx := bot_iter_le hpre i
+  rw [Function.iterate_succ_apply'] at hxx
+  have hxR := mem_one_of_bot_value hn hi1 le_rfl hxx
+  exact hse (secondEntry_of_LTPair hn hall hnew ⟨_, hxR, hi1, v, hxv, hmv, hFv, hbv⟩)
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

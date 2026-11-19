@@ -7,7 +7,7 @@ x = F(⊥, v) of height 1); (meet) x = m ⊓ w, v = w; (sat) x = g = F(c, q), v 
 import sys, collections, json
 sys.argv += ['multi', 'notop', 'nofeeder']
 sys.path.insert(0, '../separation')
-from rstages import stages
+from rstages import stages, b_of, a_of
 from gfp_top import ystar
 from tight_probe import lattices
 import single_claims as sc
@@ -33,9 +33,11 @@ for L in lattices([a for a in sys.argv[1:] if a not in FLAGS]):
             if x == v: break
             if h[x] <= 1: pair = (x, v) if h[x] == 1 else None; break
             v = x
-        if pair is None: C[('desc: no height-1 end', 'last', h[v])] += 1
+        if pair is None: C[('desc: no height-1 end', 'last', h[v], 'F(⊥,w) = w', F[bot][w] == w)] += 1
         else:
             x, v = pair
+            C[('desc pair: b(v) ≤ v', le[b_of(L, F, v)][v], 'F(v,v) ≤ v', le[F[v][v]][v], 'x ≤ m', le[x][m], 'v = w', v == w)] += 1
+            if v == w: C[('desc pair v = w: F(y*,w) ≤ w', le[F[ys][w]][w], 'F(w,y*) ≤ w', le[F[w][ys]][w], 'b(w) = x', b_of(L, F, w) == x)] += 1
             C[('desc pair (x, v)', 'LT', LT(x, v), 'F(x,v) ≤ v', le[F[x][v]][v], 'x ≤ m', le[x][m], 'v = w', v == w)] += 1
             if not LT(x, v): keep('descfail', n, dict(sets=L.S, F=F, m=m, w=w, x=x, v=v))
         chain = [w]

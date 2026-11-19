@@ -1,0 +1,8 @@
+models 220
+('any LT pair (MinLT)', True) 220
+('violation', 'y = y*', False, 'x ∥ m', True, 'LT(x, t)', False, 'x-orbit hits LT', False, 'LT on row x', False) 2
+('violation', 'y = y*', False, 'x ∥ m', True, 'LT(x, t)', False, 'x-orbit hits LT', False, 'LT on row x', True) 4
+('violation', 'y = y*', False, 'x ∥ m', True, 'LT(x, t)', True, 'x-orbit hits LT', True, 'LT on row x', True) 26
+('violation', 'y = y*', True, 'x ∥ m', True, 'LT(x, t)', False, 'x-orbit hits LT', True, 'LT on row x', True) 21
+('violation', 'y = y*', True, 'x ∥ m', True, 'LT(x, t)', True, 'x-orbit hits LT', True, 'LT on row x', True) 167
+MIN noxt 8

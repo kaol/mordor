@@ -1,0 +1,14 @@
+# exact claims, k = 1 (single_claims.py), flags multi notop nofeeder (+ listed)
+desclt sweep 4 16:            claim desclt: {'none': 112, 'counterexample': 67}; smallest |L| = 7 (single_claim_desclt_notop_multi_nofeeder_min7_abot_fails.json, a(⊥) ≠ ⊥)
+desclt sweep 4 16 abot:       claim desclt: {'none': 112, 'counterexample': 67}; smallest |L| = 7 (single_claim_desclt_notop_multi_nofeeder_abot_min7.json)
+orbitlt sweep 4 16 abot:      claim orbitlt: {'none': 163, 'counterexample': 16}; smallest |L| = 10 (single_claim_orbitlt_notop_multi_nofeeder_abot_min10.json)
+rowlt sweep 4 16 abot:        claim rowlt: {'none': 179}
+rl_a: claim rowlt: {'none': 12}
+rl_b: claim rowlt: {'none': 12}
+rl_noabot: claim rowlt: {'none': 179}
+rl_icok: claim rowlt: {'none': 179}
+r2_a: claim rowlt2: {'none': 12}
+r2_b: claim rowlt2: {'none': 12}
+r2_icok: claim rowlt2: {'none': 17, 'counterexample': 162}; smallest counterexample |L| = 4, rank(m) = 2
+rowlt2 sweep 4 16:            claim rowlt2: {'none': 179}
+(rl_a/rl_b: rowlt closure 5 7 seeds 1/2 cnt 12 abot; rl_noabot: rowlt sweep without abot; rl_icok: rowlt sweep abot icok; r2_a/r2_b: rowlt2 closure 5 7 seeds 1/2 cnt 12; r2_icok: rowlt2 sweep icok, smallest counterexample degenerate: y* = m)

@@ -25,6 +25,11 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
   'ahead': index-sensitivity test, m placed at stage J = K − 1 (one ahead): R_J ranks ≤ K with unique rank-K
            element m ∉ R_{J−1}, R_{J−1} ranks ≤ K − 1, ⊤ ∉ R_{J+1}, feeders/entries from R_{J−1}.
   §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
+  §34.3z²⁰⁶ orbitlt (k = 1 only): MinUpCell hypotheses, w = F(m, y*), x = F(⊥, w) ≠ w of rank 1, no LT pair (x, v) on the orbit v ↦ F(x, v) from w
+  §34.3z²⁰⁶ rowlt2 (k = 1 only): no LT pair on the row of the rank-1 element of the ⊥-descent from w*
+  §34.3z²⁰⁶ rowlt (k = 1 only): as orbitlt, but no LT pair (x, v) on row x = F(⊥, w*) at all
+  §34.3z²⁰⁶ desclt (k = 1 only): MinUpCell hypotheses and a column fixed point y = m ⊔ F(m,y), w = F(m,y) ≱ m, with x = F(⊥,w) ≠ w of
+             rank 1 and F(x,w) ≰ w ('parm': x ∥ m)
   §34.3z²⁰⁵ lt (k = 1 only): MinUpCell hypotheses and no LT pair (x ∈ R_1 of rank 1, v ≱ m, x < v, F(x,v) ≤ v, F(⊥,v) ≤ x)
   §34.3z¹⁷³ (with 'multi'): bcup   some top x with b(x) ∈ R_{K−2}, b(x) < x has an upward cell away from m
                             sibup  some top x ≠ m′ with b(x) = b(m′) has an upward cell away from m
@@ -61,7 +66,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('lt', 'dominant', 'a1gen', 'a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('rowlt2', 'rowlt', 'orbitlt', 'desclt', 'lt', 'dominant', 'a1gen', 'a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -212,8 +217,78 @@ def query(L, m, claim, ahead=False):
                 for g in range(n):
                     if rk[g] == K: bad.append(Sc(i, g))
             if not bad: E.S.delete(); return None
+        elif claim == 'rowlt2':                        # §34.3z²⁰⁶ (k = 1 only): hypotheses (as minhyp), y = y*, w = F(m, y*) ≱ m, x the rank-1
+            if K != 2: E.S.delete(); return None           # element of the ⊥-descent v ↦ F(⊥, v) from w (chain positions P(i, v)),
+            if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])   # and no LT pair (x, v) on row x
+            bot_ = rk.index(0); sels = []
+            if 'abot' in sys.argv: E.S.add_clause([A(bot_, bot_)])
+            for w_ in range(n):
+                if le[m][w_]: continue
+                y_ = jn[m][w_]
+                ow = E.v('r2w', w_)
+                E.S.add_clause([-ow, f(m, y_, w_)])
+                for z in range(n):
+                    if le[z][y_]: continue
+                    for g in range(n):
+                        if le[z][jn[m][g]]: E.S.add_clause([-ow, -f(m, z, g)])
+                P = lambda i, v: E.v('r2P', w_, i, v)
+                E.S.add_clause([-ow, P(0, w_)])
+                for i in range(n):
+                    for v in range(n):
+                        for u in range(n): E.S.add_clause([-P(i, v), -f(bot_, v, u), P(i + 1, u)])
+                        for u in range(v + 1, n): E.S.add_clause([-P(i, v), -P(i, u)])   # at most one per position: P is the chain
+                for x in range(n):
+                    if rk[x] != 1 or not le[x][w_]: continue
+                    o = E.v('r2sel', w_, x); sels.append(o)
+                    E.S.add_clause([-o, ow]); E.S.add_clause([-o] + [P(i, x) for i in range(n)])
+                    for v in range(n):
+                        if le[x][v] and v != x and not le[m][v]:
+                            E.S.add_clause([-o, -r(1, x), -fle(x, v, v), -fle(bot_, v, x)])
+            if not sels: E.S.delete(); return None
+            bad.extend(sels)
+        elif claim in ('orbitlt', 'rowlt'):                       # §34.3z²⁰⁶ (k = 1 only): hypotheses (as minhyp), y = y* (the greatest post-fixed point of
+            if K != 2: E.S.delete(); return None           # y ↦ m ⊔ F(m, y)), w = F(m, y*) ≱ m, x = F(⊥, w) ≠ w of rank 1, and no LT pair (x, v)
+            if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])   # on the row-x orbit v ↦ F(x, v) from w (encoded as a closed set)
+            bot_ = rk.index(0); sels = []
+            if 'abot' in sys.argv: E.S.add_clause([A(bot_, bot_)])
+            for w_ in range(n):
+                if le[m][w_]: continue
+                y_ = jn[m][w_]
+                for x in range(n):
+                    if rk[x] != 1 or x == w_ or not le[x][w_]: continue
+                    o = E.v('olsel', w_, x); sels.append(o)
+                    E.S.add_clause([-o, f(m, y_, w_)]); E.S.add_clause([-o, f(bot_, w_, x)])
+                    for z in range(n):                     # y is the greatest post-fixed point
+                        if le[z][y_]: continue
+                        for g in range(n):
+                            if le[z][jn[m][g]]: E.S.add_clause([-o, -f(m, z, g)])
+                    orb = lambda v: E.v('orb', w_, x, v)
+                    E.S.add_clause([-o, orb(w_)])
+                    for v in range(n):
+                        if claim == 'orbitlt':
+                            for u in range(n): E.S.add_clause([-orb(v), -f(x, v, u), orb(u)])
+                        if le[x][v] and v != x and not le[m][v]:   # 'rowlt': no LT pair on row x at all
+                            E.S.add_clause([-orb(v) if claim == 'orbitlt' else -o, -r(1, x), -fle(x, v, v), -fle(bot_, v, x)])
+            if not sels: E.S.delete(); return None
+            bad.extend(sels)
+        elif claim == 'desclt':                        # §34.3z²⁰⁶ (k = 1 only): hypotheses (as minhyp) and a column fixed point y = m ⊔ F(m, y)
+            if K != 2: E.S.delete(); return None           # with w = F(m, y) ≱ m whose bottom-row value x = F(⊥, w) ≠ w has rank 1
+            if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])   # but F(x, w) ≰ w (DescLT at v = w; with 'parm': x ∥ m only)
+            bot_ = rk.index(0); sels = []
+            if 'abot' in sys.argv: E.S.add_clause([A(bot_, bot_)])   # a(⊥) = ⊥ (forced by uniqueness at k = 1)
+            for w_ in range(n):
+                if le[m][w_]: continue
+                y_ = jn[m][w_]
+                for x in range(n):
+                    if rk[x] != 1 or x == w_ or not le[x][w_]: continue
+                    if 'parm' in sys.argv and le[x][m]: continue
+                    o = E.v('dlsel', w_, x); sels.append(o)
+                    for lit in (f(m, y_, w_), f(bot_, w_, x), -fle(x, w_, w_)): E.S.add_clause([-o, lit])
+            if not sels: E.S.delete(); return None
+            bad.extend(sels)
         elif claim == 'lt':                            # §34.3z²⁰⁵ (k = 1 only): hypotheses (as minhyp) and no LT pair: no x ∈ R_1 of rank 1 and
-            if K != 2: E.S.delete(); return None           # v ≱ m with x < v, F(x, v) ≤ v, F(⊥, v) ≤ x (Lean `row_cell_of_bot_le_one`
+            if K != 2: E.S.delete(); return None
+            if 'abot' in sys.argv: E.S.add_clause([A(rk.index(0), rk.index(0))])           # v ≱ m with x < v, F(x, v) ≤ v, F(⊥, v) ≤ x (Lean `row_cell_of_bot_le_one`
             o = E.v('true'); E.S.add_clause([o]); bad.append(o)   # turns an LT pair into a cell of row x in (x, v])
             if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])
             bot_ = rk.index(0)
@@ -648,6 +723,20 @@ def query(L, m, claim, ahead=False):
                 tops = [c2 for c2 in range(n) if rk[c2] == K - 1 and inR(c2, K - 1) and le[p_][c2]]
                 if not any(le[c2][z] and z != c2 and not le[m][z] and (le[F[c2][z]][c2] or le[z][F[c2][z]]) for c2 in tops for z in range(n)): return True
             return False
+        def rowlt2viol():
+            bot_ = rk.index(0); ys_ = ystar(L, F, m); w_ = F[m][ys_]
+            if le[m][w_]: return False
+            ch = [w_]
+            while F[bot_][ch[-1]] not in ch: ch.append(F[bot_][ch[-1]])
+            xs = [x for x in ch if rk[x] == 1]
+            return any(not any(inR(x, 1) and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v] and le[F[bot_][v]][x] for v in range(n)) for x in xs)
+        def orbitviol(row=False):
+            bot_ = rk.index(0); ys_ = ystar(L, F, m); w_ = F[m][ys_]; x = F[bot_][w_]
+            if le[m][w_] or rk[x] != 1 or x == w_: return False
+            orb = [w_]
+            while F[x][orb[-1]] not in orb: orb.append(F[x][orb[-1]])
+            if row: orb = list(range(n))
+            return not any(inR(x, 1) and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v] and le[F[bot_][v]][x] for v in orb)
         def dominantviol():
             if a1nocert_any() is False: return False
             for c in range(n):
@@ -672,7 +761,7 @@ def query(L, m, claim, ahead=False):
                             if le[F[c][z]][c] or le[z][F[c][z]]: return False
                             if le[F[c][z]][z] and not any(le[c][e] and e != c and le[e][z] and F[p_][e] == p_ for e in range(n)): return False
             return True
-        viol = {'dominant': not ic_py(L, F, m) and dominantviol(), 'a1gen': ((abovepnocell() if 'abovepnocell' in sys.argv else sibnocell() if 'sibnocell' in sys.argv else selfnocell()) and rowtypes_ok()) if 'selfnocell' in sys.argv else True, 'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'lt': ('icok' in sys.argv or not ic_py(L, F, m)) and not any(inR(x, 1) and rk[x] == 1 and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v] and le[F[rk.index(0)][v]][x] for x in range(n) for v in range(n)), 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
+        viol = {'dominant': not ic_py(L, F, m) and dominantviol(), 'a1gen': ((abovepnocell() if 'abovepnocell' in sys.argv else sibnocell() if 'sibnocell' in sys.argv else selfnocell()) and rowtypes_ok()) if 'selfnocell' in sys.argv else True, 'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'orbitlt': ('icok' in sys.argv or not ic_py(L, F, m)) and orbitviol(), 'rowlt': ('icok' in sys.argv or not ic_py(L, F, m)) and orbitviol(True), 'rowlt2': ('icok' in sys.argv or not ic_py(L, F, m)) and rowlt2viol(), 'desclt': ('icok' in sys.argv or not ic_py(L, F, m)) and any(not le[m][w_] and F[m][L.join[m][w_]] == w_ and rk[F[rk.index(0)][w_]] == 1 and F[rk.index(0)][w_] != w_ and not le[F[F[rk.index(0)][w_]][w_]][w_] for w_ in range(n)), 'lt': ('icok' in sys.argv or not ic_py(L, F, m)) and not any(inR(x, 1) and rk[x] == 1 and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v] and le[F[rk.index(0)][v]][x] for x in range(n) for v in range(n)), 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
                 'pairjump': (bm in low) and not ic_py(L, F, m) and fjviol('pair'),
                 'topfibre': (bm in low) and not ic_py(L, F, m) and not topfib(),
                 'famup': (bm in low) and not ic_py(L, F, m) and famviol(),
@@ -712,7 +801,7 @@ RMIN = next((int(a[5:]) for a in sys.argv if a.startswith('rmin=')), 1)
 
 if __name__ == '__main__':
     claim = sys.argv[1]; ahead = 'ahead' in sys.argv; C = collections.Counter(); best = None
-    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes', 'selfnocell', 'sibnocell', 'abovepnocell') and not a.startswith('rmin=')]):
+    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes', 'selfnocell', 'sibnocell', 'abovepnocell', 'abot', 'parm') and not a.startswith('rmin=')]):
         if L.height < 2: continue
         hit = None
         for m in range(L.n):
@@ -723,4 +812,4 @@ if __name__ == '__main__':
         if hit and (best is None or L.n < best[0].n): best = (L, hit)
     print(f"claim {claim}{' ahead' if ahead else ''}: {dict(C)}" + (f"; smallest counterexample |L| = {best[0].n}, rank(m) = {best[0].rank[best[1][0]]}" if best else ''), flush=True)
     if best:
-        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes', 'selfnocell', 'sibnocell', 'abovepnocell') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))
+        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes', 'selfnocell', 'sibnocell', 'abovepnocell', 'abot', 'parm') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))

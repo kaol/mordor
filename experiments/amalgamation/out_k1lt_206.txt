@@ -1,0 +1,31 @@
+models 372
+('K2 along the whole ⊥-descent from w', False) 70
+('K2 along the whole ⊥-descent from w', True) 302
+('K2 for every v ≤ w with F(⊥,v) ≤ v', False) 71
+('K2 for every v ≤ w with F(⊥,v) ≤ v', True) 301
+('K2 for every v ≱ m with F(⊥,v) ≤ v', False) 110
+('K2 for every v ≱ m with F(⊥,v) ≤ v', True) 262
+('LT rows', ('∥m', '≤m')) 46
+('LT rows', ('∥m',)) 114
+('LT rows', ('≤m',)) 212
+('LT with v ≤ w', False, 'v ≤ y*', False, 'any', True) 3
+('LT with v ≤ w', True, 'v ≤ y*', True, 'any', True) 369
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', False, 'v = w', False) 11
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', False, 'v = w', True) 127
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', True, 'v = w', False) 20
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', True, 'v = w', True) 211
+('desc pair v = w: F(y*,w) ≤ w', False, 'F(w,y*) ≤ w', False, 'b(w) = x', False) 99
+('desc pair v = w: F(y*,w) ≤ w', False, 'F(w,y*) ≤ w', False, 'b(w) = x', True) 5
+('desc pair v = w: F(y*,w) ≤ w', False, 'F(w,y*) ≤ w', True, 'b(w) = x', False) 212
+('desc pair v = w: F(y*,w) ≤ w', False, 'F(w,y*) ≤ w', True, 'b(w) = x', True) 21
+('desc pair v = w: F(y*,w) ≤ w', True, 'F(w,y*) ≤ w', True, 'b(w) = x', True) 1
+('desc pair: b(v) ≤ v', False, 'F(v,v) ≤ v', False, 'x ≤ m', False, 'v = w', True) 4
+('desc pair: b(v) ≤ v', False, 'F(v,v) ≤ v', False, 'x ≤ m', True, 'v = w', True) 29
+('desc pair: b(v) ≤ v', True, 'F(v,v) ≤ v', False, 'x ≤ m', False, 'v = w', True) 2
+('desc pair: b(v) ≤ v', True, 'F(v,v) ≤ v', False, 'x ≤ m', True, 'v = w', True) 29
+('desc pair: b(v) ≤ v', True, 'F(v,v) ≤ v', True, 'x ≤ m', False, 'v = w', False) 11
+('desc pair: b(v) ≤ v', True, 'F(v,v) ≤ v', True, 'x ≤ m', False, 'v = w', True) 121
+('desc pair: b(v) ≤ v', True, 'F(v,v) ≤ v', True, 'x ≤ m', True, 'v = w', False) 20
+('desc pair: b(v) ≤ v', True, 'F(v,v) ≤ v', True, 'x ≤ m', True, 'v = w', True) 153
+('desc: no height-1 end', 'last', 1, 'F(⊥,w) = w', False) 1
+('desc: no height-1 end', 'last', 1, 'F(⊥,w) = w', True) 2

@@ -19,6 +19,8 @@ point of y ↦ m ⊔ F(m, y), w = F(m, y*) ≱ m, x = F(⊥, w) ≠ w of rank 1.
   'gp'  : x = F(⊥, w) cell-free and no u with x < u ≤ y and u ≤ x ⊔ F(x, u) (the claim U*: such u exists);
   'yxw' : x = F(⊥, w) cell-free and F(⊥, y_x) ≰ w (claim: F(⊥, y_x) ≤ w, making y_x a key-lemma column);
   'kl2u': as kl2 with candidates z ∈ {descent u_i of u ↦ y ⊓ (x ⊔ F(x, u)) from y, F(x, u_i), y_x, t, w, y};
+  'kl3' : x = F(⊥, w) cell-free and no z > x with F(⊥, z) ≤ w and either F(x, z) ≤ z or (x ≰ F(x, z), w ⊓ F(x, z) ≤ x);
+  'mx'  : x = F(⊥, w) cell-free and z = m ⊔ x is not a KL3 column (x ≤ F(x, z) or w ⊓ F(x, z) ≰ x);
   'deep': x a rank-1 term of the ⊥-descent from w with x ≤ m and x ≠ F(⊥, w) (no conclusion: is a deep atom below m possible?);
   'ic3' : x a rank-1 term of the ⊥-descent from w, conclusion IC(x) (no interval cell at all is the violation);
   'ic2' : as 'cell2' (x a rank-1 term of the ⊥-descent from w, conclusion a cell off m), intended with t1b only;
@@ -69,6 +71,13 @@ def check1(L, F, m, w):
     if 't2b' in HYP and any(inR(b_of(L, F, z), 1) and L.rank[z] > 2 for z in range(n)): return False
     if NOIC and any(le[m][y] and y != m and (le[F[m][y]][m] or le[y][F[m][y]]) for y in range(n)): return False
     if mode == 'deep': return any(le[x][m] and x != F[bot][w] for x in xs)
+    if mode in ('kl3', 'mx'):
+        mt_ = lambda a, b: L.S.index(L.S[a] & L.S[b])
+        kl3 = lambda x, z: le[F[bot][z]][w] and not le[x][F[x][z]] and le[mt_(w, F[x][z])][x]
+        def ok(x):
+            if mode == 'mx': return kl3(x, L.join[m][x])
+            return any(le[x][z] and z != x and ((le[F[bot][z]][w] and le[F[x][z]][z]) or kl3(x, z)) for z in range(n))
+        return any(not any(le[x][z] and z != x and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n)) and not ok(x) for x in xs)
     if mode == 'yxw':
         def yx_(x):
             y_ = L.top
@@ -230,6 +239,13 @@ for L in lattices(args):
                         if le[x][u] and u != x and le[u][y]:
                             for g in range(n):
                                 if le[u][jn[x][g]]: E.S.add_clause([-o, -f(x, u, g)])
+                if mode in ('kl3', 'mx'):
+                    for z in range(n):
+                        if not (le[x][z] and z != x): continue
+                        if mode == 'mx' and z != jn[m][x]: continue
+                        if mode == 'kl3': E.S.add_clause([-o, -fle(x, z, z), -fle(bot, z, w)])
+                        for g in range(n):        # F(x, z) = g with x ≰ g and w ⊓ g ≤ x is forbidden (given F(⊥, z) ≤ w)
+                            if not le[x][g] and le[L.S.index(L.S[w] & L.S[g])][x]: E.S.add_clause([-o, -fle(bot, z, w), -f(x, z, g)])
                 if mode == 'prefw':
                     for z in range(n):
                         if le[x][z] and z != x: E.S.add_clause([-o, -fle(x, z, z), -fle(bot, z, w)])
@@ -247,8 +263,8 @@ for L in lattices(args):
                 if mode == 'tbot':
                     for t_ in range(n): E.S.add_clause([-o, -f(x, w, t_), -f(bot, t_, bot)])
                 for z in range(n):
-                    if not (le[x][z] and z != x and (mode in ('ic', 'tbot', 'yxbot', 'tyx', 'ic3', 'xorbz', 'gxorbz', 'prefx', 'prefw', 'kl2', 'kl2t', 'kl2c', 'gp', 'yxw', 'kl2u') or not le[m][z])): continue
-                    if mode in ('cell', 'cell2', 'ic', 'tbot', 'yxbot', 'tyx', 'ic2', 'ic3', 'xorbz', 'gxorbz', 'prefx', 'prefw', 'kl2', 'kl2t', 'kl2c', 'gp', 'yxw', 'kl2u'): E.S.add_clause([-o, -fle(x, z, x)]); E.S.add_clause([-o, -yle(x, z)])
+                    if not (le[x][z] and z != x and (mode in ('ic', 'tbot', 'yxbot', 'tyx', 'ic3', 'xorbz', 'gxorbz', 'prefx', 'prefw', 'kl2', 'kl2t', 'kl2c', 'gp', 'yxw', 'kl2u', 'kl3', 'mx') or not le[m][z])): continue
+                    if mode in ('cell', 'cell2', 'ic', 'tbot', 'yxbot', 'tyx', 'ic2', 'ic3', 'xorbz', 'gxorbz', 'prefx', 'prefw', 'kl2', 'kl2t', 'kl2c', 'gp', 'yxw', 'kl2u', 'kl3', 'mx'): E.S.add_clause([-o, -fle(x, z, x)]); E.S.add_clause([-o, -yle(x, z)])
                     else: E.S.add_clause([-o, -fle(x, z, z), -fle(bot, z, x)])
         if not sels: E.S.delete(); continue
         E.S.add_clause(sels)

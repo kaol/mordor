@@ -1,0 +1,16 @@
+# gap_probe.py exact runs (§34.3z²¹²)
+[t_a] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 689, 'counterexample': 63} smallest 9
+[t_b] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 96, 'counterexample': 20} smallest 12
+[t_c] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 56, 'counterexample': 38} smallest 13
+[t_d] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 35, 'counterexample': 19} smallest 13
+[u_a] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 462, 'counterexample': 3} smallest 9
+[u_b] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 752} smallest None
+[u_c] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 116} smallest None
+[u_d] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 54} smallest None
+(t_*: gap ⇒ F(⊥,g) = ⊥, T1b dropped; u_a: same on sweep 4 10; u_b–u_d: with T1b on every rank-≥2 z ≠ g ('t1bx'). t_a/u_b sweep 4 16; t_b/u_c closure 5 7 1 12; t_c closure 5 7 2 12; t_d/u_d closure 6 8 1 4)
+# bare_rowcell.py kl3 / mx
+[v_a] bare kl3 par: {'none': 184}
+[v_b] bare mx par: {'none': 92, 'counterexample': 92}; smallest |L| = 7, rank(m) = 1
+[v_c] bare kl3 par: {'none': 11, 'counterexample': 1}; smallest |L| = 18, rank(m) = 1
+[v_d] bare mx par: {'counterexample': 12}; smallest |L| = 8, rank(m) = 2
+(v_a, v_b sweep 4 16; v_c, v_d closure 5 7 1 12)

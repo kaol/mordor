@@ -98,6 +98,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`no_preColumn_of_cellFree`**, **`ic_of_preColumn`**, `ic_of_preColumn_le`.
 * §34.3z²¹⁰ (the KL2 reduction): **`no_kl2Column`**, `KL2E`, **`ic_of_KL2E`**.
 * §34.3z²¹¹ (the gap configuration): `exists_iter_fix_mono`, **`exists_gap`**.
+* §34.3z²¹² (localization at g): `no_kl3Column`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2736,6 +2737,18 @@ theorem ic_of_KL2E [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hk : 
   obtain ⟨z, hxz, hbz, hz | ⟨hzy, hxF⟩⟩ := hk m y _ hy hgfp hmw hx1 hxm hfix hg hxw hcf
   · exact no_preColumn_of_cellFree hn ht1b hx1 hpre hcf H (height_le _) hxz hz hbz
   · exact no_kl2Column hn ht1b hy hx1 hfix hxw hxz hbz hzy hxF
+
+/-- **The KL3 column (general form).** Under T1b, with `x = F ⊥ w` of height 1, no `z > x` has `F ⊥ z ≤ w`,
+`x ≰ F x z` and `w ⊓ F x z ≤ x`: then `F ⊥ z ≤ w ⊓ F x z ≤ x` and `F ⊥ z ≤ F x z`, so `F ⊥ z ≤ x ⊓ F x z = ⊥`. The KL2 column
+(`F x z ≤ y_x`, via `w ⊓ y_x = x`) and the second branch of the key lemma (`F x z ≤ z`, via `w ⊓ z = x`) are instances. -/
+theorem no_kl3Column {H : ℕ} (hn : NoChain α (H + 1)) (ht1b : ∀ z, F ⊥ z = ⊥ → height H z ≤ 1) {w z : α}
+    (hx1 : height H (F ⊥ w) = 1) (hxz : F ⊥ w < z) (hbz : F ⊥ z ≤ w) (hxF : ¬ F ⊥ w ≤ F (F ⊥ w) z)
+    (hwF : w ⊓ F (F ⊥ w) z ≤ F ⊥ w) : False := by
+  have hb : F ⊥ z ≤ F (F ⊥ w) z := (F.mono bot_le) z
+  have h0 : F ⊥ z = ⊥ :=
+    le_bot_iff.1 ((le_inf ((le_inf hbz hb).trans hwF) hb).trans (inf_eq_bot_of_height_one hn hx1 hxF).le)
+  have := ht1b z h0
+  have := height_strictMono hn hxz; omega
 
 /-- A monotone self-map's iteration from a pre-fixed point stabilizes (finite edge-height). -/
 theorem exists_iter_fix_mono {H : ℕ} (hn : NoChain α (H + 1)) {φ : α → α} (hφ : Monotone φ) :

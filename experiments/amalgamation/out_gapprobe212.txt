@@ -1,0 +1,23 @@
+models 608
+('F(m,v⊔g)', 'in Z', False) 608
+('F(x,g) vs g', '∥') 24
+('F(x,g) vs g', '≤') 584
+('F(x,g)', 'in Z', False) 604
+('F(x,g)', 'in Z', True) 4
+('F(x,v⊔g)', 'in Z', False) 8
+('F(x,v⊔g)', 'in Z', True) 600
+('F(⊥,g)', '⊥') 608
+('g', 'in Z', True) 608
+('g⊓(m⊔F(m,g))', 'in Z', False) 608
+('g⊓F(x,g)', 'in Z', False) 608
+('v⊔F(x,g)', 'in Z', False) 608
+('v⊔g', 'in Z', False) 608
+('x⊔F(m,g)', 'in Z', False) 608
+('x⊔F(⊥,g)', 'in Z', False) 608
+('|Z|', 1) 40
+('|Z|', 2) 112
+('|Z|', 3) 168
+('|Z|', 4) 140
+('|Z|', 5) 80
+('|Z|', 6) 36
+('|Z|', 7) 32

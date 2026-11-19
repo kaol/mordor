@@ -1,0 +1,15 @@
+# bare_rowcell.py (no orbit hypotheses unless flagged); one line per run
+cell noic rank=2 sweep 4 16 (no orbit hypotheses): bare cell noic rank=2: {'none': 103, 'counterexample': 81}; smallest |L| = 7
+bare cell noic new t1 t2 rank=2: {'none': 184}   [bare_new_t1_t2]
+bare cell noic new t1 rank=2: {'none': 126, 'counterexample': 58}; smallest |L| = 7, rank(m) = 2   [bare_new_t1]
+bare cell noic new t2 rank=2: {'none': 168, 'counterexample': 16}; smallest |L| = 10, rank(m) = 2   [bare_new_t2]
+bare cell noic t1 t2 rank=2: {'none': 184}   [bare_t1_t2]
+bare cell t1 t2 rank=2: {'none': 184}   [b2_a]
+bare cell noic t1 t2: {'none': 78, 'counterexample': 106}; smallest |L| = 6, rank(m) = 1   [b2_b]
+bare lt noic t1 t2 rank=2: {'none': 184}   [b2_c]
+bare cell noic t1 t2 rank=2: {'none': 12}   [b2_d]
+bare cell2 noic t1 t2 rank=2: {'none': 184}   [b3_a]
+bare cell2 t1 t2 rank=2: {'none': 22, 'counterexample': 162}; smallest |L| = 4, rank(m) = 2   [b3_b]
+bare cell2 noic t1 t2 rank=2: {'none': 12}   [b3_c]
+bare cell noic t1 t2 rank=2: {'none': 4}   [b3_d]
+(b2_d, b3_c: closure 5 7 seed 1 / 2, 12 lattices; b3_d: closure 6 8 1 4)

@@ -1,0 +1,17 @@
+DescLT holds at y* (violation only at another y) 32
+DescLT violated at y* 188
+('some LT column = t', False, '≤ w', True, '≤ y*', True, 'lower cell F(x,v)=x', False, 'in R_2', True) 1
+('some LT column = t', False, '≤ w', True, '≤ y*', True, 'lower cell F(x,v)=x', True, 'in R_2', True) 20
+('some LT column = t', True, '≤ w', False, '≤ y*', False, 'lower cell F(x,v)=x', False, 'in R_2', True) 7
+('some LT column = t', True, '≤ w', False, '≤ y*', False, 'lower cell F(x,v)=x', True, 'in R_2', True) 4
+('some LT column = t', True, '≤ w', False, '≤ y*', True, 'lower cell F(x,v)=x', False, 'in R_2', True) 22
+('some LT column = t', True, '≤ w', False, '≤ y*', True, 'lower cell F(x,v)=x', True, 'in R_2', True) 133
+('some LT column = t', True, '≤ w', True, '≤ y*', True, 'lower cell F(x,v)=x', True, 'in R_2', True) 1
+('some LT column minimal pre-fixed above x', True, 'all minimal pre-fixed are LT', True) 188
+('t vs w', 'incomparable', 't ≤ y*', False, 'F(⊥,t) ≤ x', True, 'F(x,t) ≤ t', True) 16
+('t vs w', 'incomparable', 't ≤ y*', True, 'F(⊥,t) ≤ x', False, 'F(x,t) ≤ t', True) 13
+('t vs w', 'incomparable', 't ≤ y*', True, 'F(⊥,t) ≤ x', True, 'F(x,t) ≤ t', True) 159
+('w ⊓ t', '>x') 22
+('w ⊓ t', 'x') 166
+('x ∥ m', True, 'F(x,x) ≤ x', False, 'some LT column', True) 9
+('x ∥ m', True, 'F(x,x) ≤ x', True, 'some LT column', True) 179

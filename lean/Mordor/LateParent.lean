@@ -92,6 +92,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`upCell_of_bot_side_le_one`**, `bot_side_residue_one`, `LTPair`, **`secondEntry_of_LTPair`**, `MinLT`, **`secondEntry_one_of_minLT`**.
 * §34.3z²⁰⁶ (the row of the bottom-row descent): `bot_iter_le`, **`exists_bot_descent_atom`**, `RowLT2`,
   **`secondEntry_one_of_rowLT2`**.
+* §34.3z²⁰⁷ (bare two-stage form): `TightRowCell2`, **`secondEntry_one_of_tightRowCell2`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2505,6 +2506,38 @@ theorem secondEntry_one_of_rowLT2 [WellFoundedLT α] {H : ℕ} (hn : NoChain α 
   rw [Function.iterate_succ_apply'] at hxx
   have hxR := mem_one_of_bot_value hn hi1 le_rfl hxx
   exact hse (secondEntry_of_LTPair hn hall hnew ⟨_, hxR, hi1, v, hxv, hmv, hFv, hbv⟩)
+
+/-! ### TightRowCell2: a bare two-stage lemma (§34.3z²⁰⁷) -/
+
+/-- **TightRowCell2 (conjectural).** Let `R_1` and `R_2` be tight and `m` of height 2 with no interval cell. Let `y` be
+the greatest post-fixed point of `y ↦ m ⊔ F m y`, with `w = F m y ≱ m`, and let `x` be a height-1 term of the
+bottom-row descent from `w`. Then row `x` has an interval cell at some `z > x` with `m ≰ z`. Neither `m ∈ R_2` nor
+`m ∉ R_1` is assumed. No counterexample (exact, `bare_rowcell.py cell2`, §34.3z²⁰⁷). It fails without `R_1` tightness
+(`|L| = 10`), without `R_2` tightness (`|L| = 7`), and without `¬IC(m)` (the degenerate `y* = m`). -/
+def TightRowCell2 (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ m y, (∀ z ∈ Rk F 1, height H z ≤ 1) → (∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) → height H m = 1 + 1 →
+    (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) → m ⊔ F m y = y → (∀ z, z ≤ m ⊔ F m z → z ≤ y) → ¬ m ≤ F m y →
+    ∀ i, height H ((F ⊥)^[i] (F m y)) = 1 →
+      ∃ z, (F ⊥)^[i] (F m y) < z ∧ ¬ m ≤ z ∧ (F ((F ⊥)^[i] (F m y)) z ≤ (F ⊥)^[i] (F m y) ∨ z ≤ F ((F ⊥)^[i] (F m y)) z)
+
+/-- **TightRowCell2 gives MinSecondEntry at k = 1.** As in `secondEntry_one_of_rowLT2`, with the cell given directly:
+the descent term is in `R_1`, so its cell is a top of `R_2` other than `m`. -/
+theorem secondEntry_one_of_tightRowCell2 [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (h : TightRowCell2 F H)
+    {m : α} (hall : ∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) (hmk : height H m = 1 + 1) (hnew : m ∉ Rk F 1)
+    (ht : m ≠ ⊤) (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : SecondEntry F H 1 m := by
+  by_contra hse
+  have hk1 := tight_of_not_secondEntry hall hnew hse
+  have hab := a_bot_of_not_secondEntry_one hn hall hnew ht hno hse
+  rcases colOrb_dichotomy (F := F) ht with hc | ⟨n, -, hfix, hgfp, hmw, hwm⟩
+  · exact hno hc
+  have hpre : F ⊥ (F m (colOrb F m n)) ≤ F m (colOrb F m n) := feeder_le_side bot_le hfix
+  have hwb : F m (colOrb F m n) ≠ ⊥ := fun e => hwm (e.le.trans bot_le)
+  obtain ⟨i, hi1⟩ := exists_bot_descent_atom hn hk1 hab hpre hwb
+  obtain ⟨z, hxz, hmz, hc⟩ := h m _ hk1 hall hmk hno hfix hgfp hmw i hi1
+  have hxx := bot_iter_le hpre i
+  rw [Function.iterate_succ_apply'] at hxx
+  have hxR := mem_one_of_bot_value hn hi1 le_rfl hxx
+  exact hmz ((cell_eq_of_not_secondEntry hn hall hse hxR hi1 hxz hc) ▸ le_rfl)
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

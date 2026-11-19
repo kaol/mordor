@@ -97,6 +97,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁰⁹ (IC-lemma structure): `inf_eq_bot_of_height_one`, `eq_of_le_height_one`, `icLemma_meets`,
   **`no_preColumn_of_cellFree`**, **`ic_of_preColumn`**, `ic_of_preColumn_le`.
 * §34.3z²¹⁰ (the KL2 reduction): **`no_kl2Column`**, `KL2E`, **`ic_of_KL2E`**.
+* §34.3z²¹¹ (the gap configuration): `exists_iter_fix_mono`, **`exists_gap`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2735,6 +2736,93 @@ theorem ic_of_KL2E [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hk : 
   obtain ⟨z, hxz, hbz, hz | ⟨hzy, hxF⟩⟩ := hk m y _ hy hgfp hmw hx1 hxm hfix hg hxw hcf
   · exact no_preColumn_of_cellFree hn ht1b hx1 hpre hcf H (height_le _) hxz hz hbz
   · exact no_kl2Column hn ht1b hy hx1 hfix hxw hxz hbz hzy hxF
+
+/-- A monotone self-map's iteration from a pre-fixed point stabilizes (finite edge-height). -/
+theorem exists_iter_fix_mono {H : ℕ} (hn : NoChain α (H + 1)) {φ : α → α} (hφ : Monotone φ) :
+    ∀ (k : ℕ) {v : α}, height H v ≤ k → φ v ≤ v → ∃ N, φ (φ^[N] v) = φ^[N] v
+  | 0, v, hv, hφv => by
+      refine ⟨0, le_antisymm hφv ?_⟩
+      by_contra hne
+      have := height_strictMono hn (lt_of_le_not_ge hφv hne); omega
+  | k + 1, v, hv, hφv => by
+      by_cases he : φ v = v
+      · exact ⟨0, he⟩
+      have hlt : φ v < v := lt_of_le_of_ne hφv he
+      have := height_strictMono hn hlt
+      obtain ⟨N, hN⟩ := exists_iter_fix_mono hn hφ k (by omega) (hφ hφv)
+      exact ⟨N + 1, by rw [Function.iterate_succ_apply]; exact hN⟩
+
+/-- **The gap configuration.** Under T1b, let `y = m ⊔ F m y`, `w = F m y ≱ m`, `x = F ⊥ w` of height 1 with `x ≰ m`,
+and let `y_x = x ⊔ F x y_x` be the greatest post-fixed point of `u ↦ x ⊔ F x u` with `x ≰ F x y_x` (as for a cell-free
+`x`). Then some `v` with `x < v ≤ y` has `F ⊥ v = x`, `x ≤ F x v` and `y ⊓ F x v = x`. Proof: the descent
+`u ↦ y ⊓ (x ⊔ F x u)` from `y` stabilizes at a post-fixed point of `u ↦ x ⊔ F x u`, hence below `y ⊓ y_x = x`
+(`icLemma_meets`); at its last step above `x`, `F ⊥ v ≤ w ⊓ (x ⊔ F x v) ≤ x`, and T1b excludes `F ⊥ v = ⊥`. So the
+IC-lemma for such `x` is equivalent to the impossibility of this configuration. -/
+theorem exists_gap {H : ℕ} (hn : NoChain α (H + 1)) (ht1b : ∀ z, F ⊥ z = ⊥ → height H z ≤ 1) {m y yx : α}
+    (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) (hx1 : height H (F ⊥ (F m y)) = 1) (hxm : ¬ F ⊥ (F m y) ≤ m)
+    (hyx : F ⊥ (F m y) ⊔ F (F ⊥ (F m y)) yx = yx) (hgx : ∀ z, z ≤ F ⊥ (F m y) ⊔ F (F ⊥ (F m y)) z → z ≤ yx)
+    (hxw : ¬ F ⊥ (F m y) ≤ F (F ⊥ (F m y)) yx) :
+    ∃ v, F ⊥ (F m y) < v ∧ v ≤ y ∧ F ⊥ v = F ⊥ (F m y) ∧ F ⊥ (F m y) ≤ F (F ⊥ (F m y)) v ∧
+      y ⊓ F (F ⊥ (F m y)) v = F ⊥ (F m y) := by
+  classical
+  set w := F m y with hw
+  set x := F ⊥ w with hxdef
+  obtain ⟨-, -, hc⟩ := icLemma_meets hn ht1b hy hx1 hyx hxw
+  have hxw' : x ≤ w := feeder_le_side bot_le hy
+  have hwy : w ≤ y := le_sup_right.trans hy.le
+  have hxy : x ≤ y := hxw'.trans hwy
+  let φ : α → α := fun u => y ⊓ (x ⊔ F x u)
+  have hφ : Monotone φ := fun a b hab => inf_le_inf_left _ (sup_le_sup_left ((F x).mono hab) _)
+  have hφy : ∀ u, φ u ≤ y := fun u => inf_le_left
+  have hxφ : ∀ u, x ≤ φ u := fun u => le_inf hxy le_sup_left
+  have hiy : ∀ i, φ^[i] y ≤ y := fun i => by
+    cases i with
+    | zero => exact le_rfl
+    | succ i => rw [Function.iterate_succ_apply']; exact hφy _
+  have hix : ∀ i, x ≤ φ^[i] y := fun i => by
+    cases i with
+    | zero => exact hxy
+    | succ i => rw [Function.iterate_succ_apply']; exact hxφ _
+  obtain ⟨N, hN⟩ := exists_iter_fix_mono hn hφ H (height_le _) (hφy y)
+  -- the limit is post-fixed for `u ↦ x ⊔ F x u`, hence `≤ y ⊓ y_x = x`
+  have hlim : φ^[N] y ≤ x := by
+    have h1 : φ^[N] y ≤ x ⊔ F x (φ^[N] y) := hN.symm.le.trans inf_le_right
+    exact hc.le.trans' (le_inf (hiy N) (hgx _ h1))
+  have hex : ∃ i, φ^[i] y ≤ x := ⟨N, hlim⟩
+  obtain ⟨j, hj, hmin⟩ : ∃ j, φ^[j] y ≤ x ∧ ∀ i < j, ¬ φ^[i] y ≤ x :=
+    ⟨Nat.find hex, Nat.find_spec hex, fun i hi => Nat.find_min hex hi⟩
+  have hyx' : ¬ y ≤ x := by
+    intro h
+    have hmx : m ≤ x := le_sup_left.trans (hy.le.trans h)
+    rcases eq_or_lt_of_le hmx with e | hlt
+    · exact hxm e.ge
+    · have := height_strictMono hn hlt
+      have hm0 : m = ⊥ := by
+        by_contra hne
+        have := height_strictMono hn (bot_lt_iff_ne_bot.2 hne); rw [height_bot_eq_zero] at this; omega
+      exact hmw (hm0 ▸ bot_le)
+  rcases j with _ | i
+  · exact absurd hj hyx'
+  set v := φ^[i] y with hv
+  have hvx : ¬ v ≤ x := hmin i (Nat.lt_succ_self i)
+  have hxv : x < v := lt_of_le_not_ge (hix i) hvx
+  have hφv : φ v ≤ x := by rw [hv, ← Function.iterate_succ_apply' φ i y]; exact hj
+  have hvy : v ≤ y := hiy i
+  have hbv : F ⊥ v ≤ x := by
+    have h1 : F ⊥ v ≤ w := ((F.mono bot_le) v).trans ((F m).mono hvy)
+    exact (le_inf (h1.trans hwy) (((F.mono bot_le) v).trans le_sup_right)).trans hφv
+  have hbx : F ⊥ v = x := by
+    by_contra hne
+    have hlt : F ⊥ v < x := lt_of_le_of_ne hbv hne
+    have h3 := height_strictMono hn hlt
+    have h0 : F ⊥ v = ⊥ := by
+      by_contra h0
+      have := height_strictMono hn (bot_lt_iff_ne_bot.2 h0); rw [height_bot_eq_zero] at this; omega
+    have := ht1b v h0
+    have := height_strictMono hn hxv; omega
+  have hxF : x ≤ F x v := hbx.symm.le.trans ((F.mono bot_le) v)
+  refine ⟨v, hxv, hvy, hbx, hxF, le_antisymm ?_ (le_inf hxy hxF)⟩
+  exact (inf_le_inf_left _ le_sup_right).trans hφv
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

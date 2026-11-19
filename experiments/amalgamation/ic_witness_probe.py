@@ -67,6 +67,15 @@ for L in lattices(args):
             kc = {'w': [w], 't': [t], 'y*': [ys], 'x-orbit from w': orb, 'y* ⊓ colchain': [mt(ys, c) for c in chain],
                   'y* ⊓ x-orbit': [mt(ys, v) for v in orb], 'w ⊔ t ⊓ y*': [mt(jn[w][t], ys)], 'colchain': chain}
             for k_, vs in kc.items(): C[('KL2 column', k_, any(v in K for v in vs))] += 1
+            dsc = [ys]
+            while True:
+                u2 = mt(ys, jn[x][F[x][dsc[-1]]])
+                if u2 == dsc[-1]: break
+                dsc.append(u2)
+            dd = {'descent u_i (u ↦ y*⊓(x⊔F(x,u)))': dsc, 'F(x,u_i)': [F[x][u] for u in dsc], 'y*': [ys], 'y_x': [yx],
+                  'descent ∪ {y_x}': dsc + [yx], 'descent ∪ {y_x, t}': dsc + [yx, t], 'descent ∪ {y_x, t, F(x,u_i)}': dsc + [yx, t] + [F[x][u] for u in dsc],
+                  'x ⊔ F(⊥, u_i)': [jn[x][F[bot][u]] for u in dsc]}
+            for k_, vs in dd.items(): C[('KL2 col in', k_, any(v in K for v in vs))] += 1
             # first element of the x-orbit from w that is a KL2 column, kind
             for v in orb:
                 if v in K: C[('first KL2 column on x-orbit', 'pre-fixed' if le[F[x][v]][v] else 'KL2', 'index', orb.index(v))] += 1; break

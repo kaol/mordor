@@ -1,0 +1,13 @@
+# bare_rowcell.py runs of §34.3z²¹¹ (one line per run; [scratch log])
+bare yxw par: {'none': 170, 'counterexample': 14}; smallest |L| = 9, rank(m) = 1   [q_a]
+bare yxw par: {'none': 7, 'counterexample': 5}; smallest |L| = 11, rank(m) = 1   [q_b]
+bare yxw noic par rank=2: {'none': 174, 'counterexample': 10}; smallest |L| = 11, rank(m) = 2   [q_c]
+bare kl2u par: {'none': 174, 'counterexample': 10}; smallest |L| = 11, rank(m) = 1   [r_a]
+bare kl2u par: {'none': 8, 'counterexample': 4}; smallest |L| = 12, rank(m) = 1   [r_b]
+bare kl2u par: {'none': 8, 'counterexample': 4}; smallest |L| = 14, rank(m) = 1   [r_c]
+bare kl2u par: {'counterexample': 2, 'none': 2}; smallest |L| = 15, rank(m) = 1   [r_d]
+bare kl2u par rank=2: {'none': 179, 'counterexample': 5}; smallest |L| = 13, rank(m) = 2   [s_a]
+bare kl2u par rank=2: {'none': 10, 'counterexample': 2}; smallest |L| = 16, rank(m) = 2   [s_b]
+bare kl2u par rank=2: {'none': 8, 'counterexample': 4}; smallest |L| = 14, rank(m) = 2   [s_c]
+bare kl2u par rank=2: {'counterexample': 2, 'none': 2}; smallest |L| = 15, rank(m) = 2   [s_d]
+(q_b, r_b, s_b: closure 5 7 1 12; r_c, s_c: closure 5 7 2 12; r_d, s_d: closure 6 8 1 4; others sweep 4 16)

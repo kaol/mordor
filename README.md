@@ -306,7 +306,8 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     needs ¬IC(m) and R_2 tightness), both without counterexample; `secondEntry_one_of_IC3_deepFree` (§34.3z²⁰⁸). Key lemma proved: under T1b a cell-free row x = F(⊥, w) has no pre-fixed column z > x with F(⊥, z) ≤ w
     (`no_preColumn_of_cellFree`), so the IC-lemma holds whenever the column fixed point of x lies below y*
     (`ic_of_preColumn_le`) (§34.3z²⁰⁹). A second excluded column type (`no_kl2Column`) reduces the IC-lemma to **KL2E**, an existence statement
-    that does not mention T1b and has no counterexample (`ic_of_KL2E`) (§34.3z²¹⁰).
+    that does not mention T1b and has no counterexample (`ic_of_KL2E`) (§34.3z²¹⁰). KL2E has no canonical witness (exact refutations), but under T1b a cell-free row always yields a
+    one-column **gap configuration** (`exists_gap`), so the IC-lemma is equivalent to its impossibility (§34.3z²¹¹).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

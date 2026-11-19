@@ -99,6 +99,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²¹⁰ (the KL2 reduction): **`no_kl2Column`**, `KL2E`, **`ic_of_KL2E`**.
 * §34.3z²¹¹ (the gap configuration): `exists_iter_fix_mono`, **`exists_gap`**.
 * §34.3z²¹² (localization at g): `no_kl3Column`.
+* §34.3z²¹⁴ (the `w`-gap, T1b on `(x, ⊤]` only): **`exists_wgap`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2835,6 +2836,61 @@ theorem exists_gap {H : ℕ} (hn : NoChain α (H + 1)) (ht1b : ∀ z, F ⊥ z = 
     have := height_strictMono hn hxv; omega
   have hxF : x ≤ F x v := hbx.symm.le.trans ((F.mono bot_le) v)
   refine ⟨v, hxv, hvy, hbx, hxF, le_antisymm ?_ (le_inf hxy hxF)⟩
+  exact (inf_le_inf_left _ le_sup_right).trans hφv
+
+/-- **The `w`-gap (no `y*`).** Let `x = F ⊥ w` have height 1 with `F ⊥ w ≤ w` and `x ≠ w`, assume T1b on `(x, ⊤]`, and let
+row `x` have no interval cell. Then some `v` with `x < v ≤ w` has `F ⊥ v = x`, `x ≤ F x v` and `w ⊓ F x v = x`. The descent
+`u ↦ w ⊓ (x ⊔ F x u)` from `w` cannot stop above `x`: a fixed point `u > x` has `F ⊥ u = x` (T1b, `F ⊥ u ≤ F ⊥ w`), so
+`u ≤ F x u`, an upper cell. -/
+theorem exists_wgap {H : ℕ} (hn : NoChain α (H + 1)) {w : α}
+    (ht1b : ∀ z, F ⊥ w < z → F ⊥ z ≠ ⊥) (hx1 : height H (F ⊥ w) = 1) (hpre : F ⊥ w ≤ w) (hxw : F ⊥ w ≠ w)
+    (hcf : ¬ ∃ z, F ⊥ w < z ∧ (F (F ⊥ w) z ≤ F ⊥ w ∨ z ≤ F (F ⊥ w) z)) :
+    ∃ v, F ⊥ w < v ∧ v ≤ w ∧ F ⊥ v = F ⊥ w ∧ F ⊥ w ≤ F (F ⊥ w) v ∧ w ⊓ F (F ⊥ w) v = F ⊥ w := by
+  classical
+  set x := F ⊥ w with hxdef
+  -- on `(x, w]` the bottom row is `x`
+  have hbot : ∀ u, x < u → u ≤ w → F ⊥ u = x := by
+    intro u hxu huw
+    have hle : F ⊥ u ≤ x := (F ⊥).mono huw
+    by_contra hne
+    have h0 : F ⊥ u = ⊥ := by
+      by_contra h0
+      have h1 := height_strictMono hn (bot_lt_iff_ne_bot.2 h0)
+      have h2 := height_strictMono hn (lt_of_le_of_ne hle hne)
+      rw [height_bot_eq_zero] at h1; omega
+    exact ht1b u hxu h0
+  let φ : α → α := fun u => w ⊓ (x ⊔ F x u)
+  have hφ : Monotone φ := fun a b hab => inf_le_inf_left _ (sup_le_sup_left ((F x).mono hab) _)
+  have hφw : ∀ u, φ u ≤ w := fun u => inf_le_left
+  have hxφ : ∀ u, x ≤ φ u := fun u => le_inf hpre le_sup_left
+  have hiw : ∀ i, φ^[i] w ≤ w := fun i => by
+    cases i with
+    | zero => exact le_rfl
+    | succ i => rw [Function.iterate_succ_apply']; exact hφw _
+  have hix : ∀ i, x ≤ φ^[i] w := fun i => by
+    cases i with
+    | zero => exact hpre
+    | succ i => rw [Function.iterate_succ_apply']; exact hxφ _
+  obtain ⟨N, hN⟩ := exists_iter_fix_mono hn hφ H (height_le _) (hφw w)
+  have hlim : φ^[N] w ≤ x := by
+    by_contra hnot
+    have hxu : x < φ^[N] w := lt_of_le_not_ge (hix N) hnot
+    have hb := hbot _ hxu (hiw N)
+    have hxF : x ≤ F x (φ^[N] w) := hb.symm.le.trans ((F.mono bot_le) _)
+    have hup : φ^[N] w ≤ F x (φ^[N] w) := hN.symm.le.trans (inf_le_right.trans (sup_le hxF le_rfl))
+    exact hcf ⟨_, hxu, Or.inr hup⟩
+  have hex : ∃ i, φ^[i] w ≤ x := ⟨N, hlim⟩
+  obtain ⟨j, hj, hmin⟩ : ∃ j, φ^[j] w ≤ x ∧ ∀ i < j, ¬ φ^[i] w ≤ x :=
+    ⟨Nat.find hex, Nat.find_spec hex, fun i hi => Nat.find_min hex hi⟩
+  rcases j with _ | i
+  · exact absurd (le_antisymm hj hpre) (Ne.symm hxw)
+  set v := φ^[i] w with hv
+  have hxv : x < v := lt_of_le_not_ge (hix i) (hmin i (Nat.lt_succ_self i))
+  have hφv : φ v ≤ x := by rw [hv, ← Function.iterate_succ_apply' φ i w]; exact hj
+  have hvw : v ≤ w := hiw i
+  have hb := hbot v hxv hvw
+  have hxF : x ≤ F x v := hb.symm.le.trans ((F.mono bot_le) v)
+  refine ⟨v, hxv, hvw, hb, hxF, le_antisymm ?_ (le_inf hpre hxF)⟩
   exact (inf_le_inf_left _ le_sup_right).trans hφv
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/

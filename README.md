@@ -288,7 +288,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     construction from the configuration's own data yields it in every case (§34.3z²⁰⁰). Its certificate is not tied to the configuration, to c's same-source siblings,
     or to the up-set of p: each of those localizations is refuted (|L| = 7, 10, 14) (§34.3z²⁰¹). The dominant branch (the forbidden row is a(c)) is refuted at rank 3 (|L| = 14).
     Following the A-orbit of c finds the forbidden row in about 90% of cases, but at |L| = 20 it is disconnected from the
-    configuration in every sense tested (§34.3z²⁰²).
+    configuration in every sense tested (§34.3z²⁰²). Any forbidden row or A1Cert forces a second top (`secondEntry_of_A1BadForbidden`).
+    SingletonLower already follows from the weaker **MinSecondEntry** (`singletonLower_of_minSecondEntry`), which has no
+    counterexample (§34.3z²⁰³).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

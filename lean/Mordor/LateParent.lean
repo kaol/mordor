@@ -83,6 +83,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁰⁰: `A1BadForbidden`, **`a1RowTypeCert_iff`**, `a1_rowValue_ge`, `nonAscending_gfp_incomparable`.
 * §34.3z²⁰¹: `A1SelfUpCell`, **`noUpCell_a1_fibre_empty'`**.
 * §34.3z²⁰²: `DominantA1` (refuted).
+* §34.3z²⁰³: `secondEntry_of_upCell`, `upCell_of_otherAscending`, **`secondEntry_of_A1BadForbidden`**, `SecondEntryOfGenuineA1`,
+  `secondEntryOfGenuineA1_of_badForbidden`, `MinSecondEntry`, `minSecondEntry_of_minUpCell`,
+  **`singletonLower_of_minSecondEntry`**, `secondEntryOfGenuineA1_of_min`, `minSecondEntry_zero`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2154,6 +2157,84 @@ def DominantA1 (F : α →o α →o α) (H : ℕ) : Prop :=
       a F c ∈ Rk F k → height H (a F c) = k → F c u = c ⊔ a F c →
       A1Cert F H k m ∨ (a F c ≤ a F (a F c) ∧ a F (a F c) ≠ a F c ∧ a F (a F c) ≠ m) ∨
         (a F (a F c) = a F c ∧ ∃ v, a F c < v ∧ F (a F c) v ≤ v ∧ ¬ m ≤ v)
+
+/-! ### From forbidden rows to SecondEntry (§34.3z²⁰³) -/
+
+/-- UpCell gives SecondEntry (`canonical_of_upCell`, `secondEntry_of_canonical`). -/
+theorem secondEntry_of_upCell {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m : α} (h : UpCell F H k m) : SecondEntry F H k m :=
+  secondEntry_of_canonical (canonical_of_upCell hn hall h)
+
+/-- **An other-ascending row is an UpCell row**: `x < a x ≠ m`; `a x ∈ R_{k+1}` has height `k + 1 = h(m)`, so `m ≰ a x`, and
+`F x (a x) = a x` is an upper cell. -/
+theorem upCell_of_otherAscending {k H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m x : α} (hmk : height H m = k + 1) (hx : x ∈ Rk F k) (hxk : height H x = k) (hxa : x ≤ a F x)
+    (h1 : a F x ≠ x) (h2 : a F x ≠ m) : UpCell F H k m := by
+  have hlt : x < a F x := lt_of_le_of_ne hxa (Ne.symm h1)
+  have hR := hall _ (mem_succ_of_a hx le_rfl)
+  have hma : ¬ m ≤ a F x := fun hle => by
+    rcases eq_or_lt_of_le hle with e | hl
+    · exact h2 e.symm
+    · have := height_strictMono hn hl; omega
+  exact ⟨x, hx, hxk, a F x, hlt, hma, Or.inr (row_a x).ge⟩
+
+/-- **`secondEntry_of_A1BadForbidden`**: under the MinUpCell hypotheses, if `A1BadForbidden` holds, every genuine A1
+configuration with a nonempty off-`m` fibre forces a second top (`SecondEntry`): an `A1Cert` gives UpCell
+(`upCell_of_a1Cert`); an other-ascending row gives UpCell (`upCell_of_otherAscending`); a stationary row with an
+initial pair gives UpCell (`upCell_of_diagPost_pair`). -/
+theorem secondEntry_of_A1BadForbidden {k H : ℕ} (hn : NoChain α (H + 1)) (hbf : A1BadForbidden F H)
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) {m : α} (hm : m ∈ Rk F (k + 1)) (hmk : height H m = k + 1)
+    (hnew : m ∉ Rk F k) (ht : m ≠ ⊤) (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y))
+    {c u : α} (hc : c ∈ Rk F k) (hck : height H c = k) (hcov : b F c ⋖ c) (hna : ¬ c ≤ a F c)
+    (hu : F (b F c) u = c) (hmu : ¬ m ≤ u) (hcu : c < u) : SecondEntry F H k m := by
+  refine secondEntry_of_upCell hn hall ?_
+  by_cases hcert : A1Cert F H k m
+  · exact upCell_of_a1Cert hn hcert
+  · rcases hbf k m hall hm hmk hnew ht hno c u hc hck hcov hna hu hmu hcu hcert with
+      ⟨x, hx, hxk, hxa, h1, h2⟩ | ⟨x, hx, hxk, hax, v, hxv, hFv, hmv⟩
+    · exact upCell_of_otherAscending hn hall hmk hx hxk hxa h1 h2
+    · exact upCell_of_diagPost_pair hn hx hxk (stationary_b_le hax).1.ge hxv hFv hmv
+
+/-- **`SecondEntryOfGenuineA1` (conjectural, §34.3z²⁰³)**: the direct target — under the MinUpCell hypotheses a genuine
+A1 configuration with a nonempty off-`m` fibre forces a second top. Implied by `A1BadForbidden`
+(`secondEntry_of_A1BadForbidden`). -/
+def SecondEntryOfGenuineA1 (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k m, (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k → m ≠ ⊤ →
+    (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) →
+    ∀ c u, c ∈ Rk F k → height H c = k → b F c ⋖ c → ¬ c ≤ a F c → F (b F c) u = c → ¬ m ≤ u → c < u →
+      SecondEntry F H k m
+
+theorem secondEntryOfGenuineA1_of_badForbidden {H : ℕ} (hn : NoChain α (H + 1)) (hbf : A1BadForbidden F H) :
+    SecondEntryOfGenuineA1 F H := fun _ _ hall hm hmk hnew ht hno _ _ hc hck hcov hna hu hmu hcu =>
+  secondEntry_of_A1BadForbidden hn hbf hall hm hmk hnew ht hno hc hck hcov hna hu hmu hcu
+
+/-- **`MinSecondEntry`** (conjectural): the MinUpCell hypotheses force a second top. Weaker than `MinUpCell` (UpCell
+gives SecondEntry), and still sufficient for SingletonLower, which only uses the second top against the uniqueness of
+`m`. Exact search (§34.3z²⁰³): no model of the MinUpCell hypotheses with `m` the unique top on sweep 4 16 and rank-3
+closure lists. -/
+def MinSecondEntry (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k m, (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k → m ≠ ⊤ →
+    (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) → SecondEntry F H k m
+
+theorem minSecondEntry_of_minUpCell {H : ℕ} (hn : NoChain α (H + 1)) (h : MinUpCell F H) : MinSecondEntry F H :=
+  fun k m hall hm hmk hnew ht hno => secondEntry_of_upCell hn hall (h k m hall hm hmk hnew ht hno)
+
+/-- **SingletonLower from MinSecondEntry** (the second top contradicts the uniqueness of `m`). -/
+theorem singletonLower_of_minSecondEntry (h : MinSecondEntry F H) : SingletonLower F H := by
+  intro k htop _ hall m huniq hm hmk hnew _ _ _ _ _
+  by_contra hno
+  obtain ⟨z, hzm, hz, hzR⟩ := h k m hall hm hmk hnew (fun e => htop (e ▸ Rk_mono (Nat.le_succ _) hm)) hno
+  exact hzm (huniq z hzR hz)
+
+/-- **MinSecondEntry at `k = 0`** (from `upCell_zero`). -/
+theorem minSecondEntry_zero [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) {m : α}
+    (hall : ∀ z ∈ Rk F 1, height H z ≤ 1) (ht : m ≠ ⊤) (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) :
+    SecondEntry F H 0 m :=
+  secondEntry_of_upCell hn hall (upCell_zero hn ht hno)
+
+/-- `SecondEntryOfGenuineA1` is a special case of `MinSecondEntry`. -/
+theorem secondEntryOfGenuineA1_of_min {H : ℕ} (h : MinSecondEntry F H) : SecondEntryOfGenuineA1 F H :=
+  fun k m hall hm hmk hnew ht hno _ _ _ _ _ _ _ _ _ => h k m hall hm hmk hnew ht hno
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

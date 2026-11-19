@@ -1,0 +1,25 @@
+== §34.3z²⁰³ exact searches (single_claims.py; flags notop nofeeder notightK1, WITHOUT multi = m the unique top of R_K)
+-- SecondEntryOfGenuineA1: 'a1gen' (a genuine A1 configuration with a fibre column) has no model
+cl_5_10_1_10: claim a1gen: {'none': 10}
+cl_5_11_4_10: claim a1gen: {'none': 10}
+cl_5_11_5_10: claim a1gen: {'none': 10}
+cl_5_12_8_10: claim a1gen: {'none': 10}
+cl_6_12_9_10: claim a1gen: {'none': 10}
+ctrl_cl_icok: claim a1gen: {'counterexample': 9, 'none': 1}; smallest counterexample |L| = 12, rank(m) = 4
+ctrl_sw_icok: claim a1gen: {'none': 50, 'counterexample': 129}; smallest counterexample |L| = 5, rank(m) = 2
+sw: claim a1gen: {'none': 179}
+-- MinSecondEntry: 'minhyp' (the hypotheses alone) has no model
+cl_5_10_1: claim minhyp: {'none': 10}
+cl_5_11_4: claim minhyp: {'none': 10}
+sw: claim minhyp: {'none': 179}
+sw_icok: claim minhyp: {'counterexample': 179}; smallest counterexample |L| = 3, rank(m) = 1
+   (ctrl_* / *_icok: ¬IC(m) dropped — satisfiable, so all content sits in ¬IC(m))
+
+== badA1_probe.py: the detector m ≤ F(x, m ⊔ u) over genuine bad configurations (sweep 4 16 + rank-3 5 10 1, 5 11 4, 6 12 9)
+350 ('detector m ≤ F(x, m ⊔ u)', 'catches a forbidden row', False, 'catches a non-forbidden row', False, 'non-local case', False)
+47 ('detector m ≤ F(x, m ⊔ u)', 'catches a forbidden row', True, 'catches a non-forbidden row', True, 'non-local case', False)
+30 ('detector m ≤ F(x, m ⊔ u)', 'catches a forbidden row', False, 'catches a non-forbidden row', True, 'non-local case', False)
+7 ('detector m ≤ F(x, m ⊔ u)', 'catches a forbidden row', True, 'catches a non-forbidden row', False, 'non-local case', False)
+3 ('detector m ≤ F(x, m ⊔ u)', 'catches a forbidden row', False, 'catches a non-forbidden row', True, 'non-local case', True)
+1 ('detector m ≤ F(x, m ⊔ u)', 'catches a forbidden row', True, 'catches a non-forbidden row', False, 'non-local case', True)
+1 ('detector m ≤ F(x, m ⊔ u)', 'catches a forbidden row', False, 'catches a non-forbidden row', False, 'non-local case', True)

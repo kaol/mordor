@@ -73,6 +73,11 @@ for L in lattices([a for a in sys.argv[1:] if a not in FLAGS and not a.startswit
             C[('A-orbit fibre of c (x on the orbit or a(x) on it)', 'contains a forbidden row', bool(afib),
                'non-local case', not any(le[x][ac] or le[x][t_] for x in fset))] += 1
             if not afib: keep('afibre_misses', n, dict(D, p=p_, c=c_, u=u_))
+            mu = jn[m][u_]
+            det = [x for x in X if le[m][F[x][mu]]]
+            C[('detector m ≤ F(x, m ⊔ u)', 'catches a forbidden row', any(x in fset for x in det), 'catches a non-forbidden row', any(x not in fset for x in det),
+               'non-local case', not any(le[x][ac] or le[x][t_] for x in fset))] += 1
+            if not any(x in fset for x in det): keep('detector_misses', n, dict(D, p=p_, c=c_, u=u_))
             union = bool(afib) or any(le[x][ac] or le[x][t_] for x in fset)
             C[('union selector (A-orbit fibre ∪ ↓a(c) ∪ ↓t)', 'contains a forbidden row', union)] += 1
             if not union: keep('union_misses', n, dict(D, p=p_, c=c_, u=u_))

@@ -88,6 +88,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`singletonLower_of_minSecondEntry`**, `secondEntryOfGenuineA1_of_min`, `minSecondEntry_zero`.
 * §34.3z²⁰⁴ (uniqueness consequences, k = 1 anatomy): **`tight_of_not_secondEntry`**, `cell_eq_of_not_secondEntry`,
   `noIC_of_not_secondEntry`, `bot_row_le_side`, `a_bot_of_not_secondEntry_one`, **`exists_cellFree_off_one`**.
+* §34.3z²⁰⁵ (k = 1 bottom-row descent): **`row_cell_of_bot_le_one`**, `mem_one_of_bot_value`, `upCell_of_bot_side_one`,
+  **`upCell_of_bot_side_le_one`**, `bot_side_residue_one`, `LTPair`, **`secondEntry_of_LTPair`**, `MinLT`, **`secondEntry_one_of_minLT`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2334,6 +2336,110 @@ theorem exists_cellFree_off_one [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H
       have := height_strictMono hn hlt1; have := height_strictMono hn (lt_of_le_of_ne hle hne); omega
     exact hmw (heq.ge.trans ((sup_le hdq.le (hzg.trans hFq)).trans hqw))
   exact ⟨_, hfix, hmw, z, hzR, hz1, hzg.trans (hFq.trans hqw), hzm, hcf z hzR hz1 hzm⟩
+
+/-! ### The k = 1 bottom-row descent and LT pairs (§34.3z²⁰⁵) -/
+
+/-- **Bottom-row descent at k = 1.** With `R_1` tight, let `x` have height 1, `x < v`, `F x v ≤ v` and `F ⊥ v ≤ x`.
+Then row `x` has a cell in `(x, v]`. Along the descent `u ↦ F x u` from `v`, each `u > x` has height `≥ 2`, so `u ∉ R_1`
+and `F ⊥ u ≠ ⊥`; since `F ⊥ u ≤ F ⊥ v ≤ x` and `x` has height 1, `F ⊥ u = x`, whence `x ≤ F x u`. (The descent-witness
+condition of `DescentWitness` is thus supplied by the bottom row.) -/
+theorem row_cell_of_bot_le_one {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1) {x : α}
+    (hx1 : height H x = 1) :
+    ∀ (n : ℕ) {v : α}, height H v ≤ n → x < v → F x v ≤ v → F ⊥ v ≤ x →
+      ∃ z, x < z ∧ z ≤ v ∧ (F x z ≤ x ∨ z ≤ F x z)
+  | 0, v, hv, hxv, _, _ => by have := height_strictMono hn hxv; omega
+  | n + 1, v, hv, hxv, hFv, hbv => by
+      by_cases h1 : F x v ≤ x
+      · exact ⟨v, hxv, le_rfl, Or.inl h1⟩
+      by_cases h2 : v ≤ F x v
+      · exact ⟨v, hxv, le_rfl, Or.inr h2⟩
+      have hvx := height_strictMono hn hxv
+      have hbx : F ⊥ v = x := by
+        rcases eq_or_ne (F ⊥ v) ⊥ with h0 | h0
+        · have hvR : v ∈ Rk F 1 :=
+            mem_succ_of_cell (k := 0) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl (Or.inl h0.le)
+          have := hk1 v hvR; omega
+        · by_contra hne
+          have h3 := height_strictMono hn (lt_of_le_of_ne hbv hne)
+          have h4 := height_strictMono hn (bot_lt_iff_ne_bot.2 h0)
+          rw [height_bot_eq_zero] at h4; omega
+      have hxg : x < F x v := lt_of_le_not_ge (hbx.symm.le.trans ((F.mono bot_le) v)) h1
+      have hgv : F x v < v := lt_of_le_not_ge hFv h2
+      have := height_strictMono hn hgv
+      obtain ⟨z, hz1, hz2, hz3⟩ := row_cell_of_bot_le_one hn hk1 hx1 n (by omega) hxg ((F x).mono hFv)
+        (((F ⊥).mono hgv.le).trans hbv)
+      exact ⟨z, hz1, hz2.trans hgv.le, hz3⟩
+
+/-- **A height-1 bound of a bottom-row value lies in `R_1`**: if `F ⊥ v ≤ x ≤ v` and `h(x) = 1`, then `F ⊥ x ≤ x`, so
+`F ⊥ x ∈ {⊥, x}` is a cell of row `⊥` at `x`. -/
+theorem mem_one_of_bot_value {H : ℕ} (hn : NoChain α (H + 1)) {x v : α} (hx1 : height H x = 1) (hxv : x ≤ v)
+    (hbv : F ⊥ v ≤ x) : x ∈ Rk F 1 := by
+  have hpre : F ⊥ x ≤ x := ((F ⊥).mono hxv).trans hbv
+  refine mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (y := x) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl ?_
+  by_cases he : F ⊥ x = x
+  · exact Or.inr he.ge
+  · left
+    by_contra h0
+    have h3 := height_strictMono hn (lt_of_le_of_ne hpre he)
+    have h4 := height_strictMono hn (bot_lt_iff_ne_bot.2 fun e => h0 e.le)
+    rw [height_bot_eq_zero] at h4; omega
+
+/-- **UpCell at k = 1 from the bottom-row value of `w`** (no uniqueness). Let `y = m ⊔ F m y`, `w = F m y ≱ m`, and
+`x = F ⊥ w ≠ w` of height 1 with `F x w ≤ w`. Then `(x, w)` is an LT pair, and row `x ∈ R_1` has a cell in `(x, w]`. -/
+theorem upCell_of_bot_side_one {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1) {m y : α}
+    (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) (hx1 : height H (F ⊥ (F m y)) = 1) (hne : F ⊥ (F m y) ≠ F m y)
+    (hpre : F (F ⊥ (F m y)) (F m y) ≤ F m y) : UpCell F H 1 m := by
+  have hxw : F ⊥ (F m y) < F m y := lt_of_le_of_ne (feeder_le_side bot_le hy) hne
+  have hxR := mem_one_of_bot_value hn hx1 hxw.le le_rfl
+  obtain ⟨z, hz1, hz2, hz3⟩ := row_cell_of_bot_le_one hn hk1 hx1 H (height_le _) hxw hpre le_rfl
+  exact ⟨_, hxR, hx1, z, hz1, fun h => hmw (h.trans hz2), hz3⟩
+
+/-- **The same when `F ⊥ w ≤ m`**: then `F (F ⊥ w) w ≤ F m y = w` automatically (`feeder_le_side`). -/
+theorem upCell_of_bot_side_le_one {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1) {m y : α}
+    (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) (hwm : ¬ F m y ≤ m) (hx1 : height H (F ⊥ (F m y)) = 1)
+    (hxm : F ⊥ (F m y) ≤ m) : UpCell F H 1 m :=
+  upCell_of_bot_side_one hn hk1 hy hmw hx1 (fun e => hwm (e.symm.le.trans hxm)) (feeder_le_side hxm hy)
+
+/-- **The k = 1 residue of the bottom-row value.** Without a second top at stage 1, the bottom-row value `x = F ⊥ w` of
+any column output `w = F m y ≱ m` (`y = m ⊔ F m y`) is `w` itself, or not of height 1, or has `F x w ≰ w`. -/
+theorem bot_side_residue_one {H : ℕ} (hn : NoChain α (H + 1)) {m y : α}
+    (hall : ∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) (hnew : m ∉ Rk F 1) (hse : ¬ SecondEntry F H 1 m)
+    (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) :
+    F ⊥ (F m y) = F m y ∨ height H (F ⊥ (F m y)) ≠ 1 ∨ ¬ F (F ⊥ (F m y)) (F m y) ≤ F m y := by
+  by_contra h
+  push_neg at h
+  obtain ⟨hne, hx1, hpre⟩ := h
+  exact hse (secondEntry_of_upCell hn hall
+    (upCell_of_bot_side_one hn (tight_of_not_secondEntry hall hnew hse) hy hmw hx1 hne hpre))
+
+/-- **LT pair** at stage 1: `x ∈ R_1` of height 1 and `v ≱ m` with `x < v`, `F x v ≤ v`, `F ⊥ v ≤ x`. -/
+def LTPair (F : α →o α →o α) (H : ℕ) (m : α) : Prop :=
+  ∃ x ∈ Rk F 1, height H x = 1 ∧ ∃ v, x < v ∧ ¬ m ≤ v ∧ F x v ≤ v ∧ F ⊥ v ≤ x
+
+/-- **An LT pair gives a second top** (k = 1; no uniqueness, no tightness of `R_1` assumed: without a second top it
+holds by `tight_of_not_secondEntry`). -/
+theorem secondEntry_of_LTPair {H : ℕ} (hn : NoChain α (H + 1)) {m : α}
+    (hall : ∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) (hnew : m ∉ Rk F 1) (h : LTPair F H m) : SecondEntry F H 1 m := by
+  by_contra hse
+  obtain ⟨x, hx, hx1, v, hxv, hmv, hFv, hbv⟩ := h
+  have hk1 := tight_of_not_secondEntry hall hnew hse
+  obtain ⟨z, hz1, hz2, hz3⟩ := row_cell_of_bot_le_one hn hk1 hx1 H (height_le _) hxv hFv hbv
+  have hzm := cell_eq_of_not_secondEntry hn hall hse hx hx1 hz1 hz3
+  exact hmv (hzm ▸ hz2)
+
+/-- **MinLT (conjectural)**: the MinUpCell hypotheses at k = 1, with `R_1` tight and uniqueness dropped, give an LT
+pair. No counterexample (exact search, §34.3z²⁰⁵). -/
+def MinLT (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ m, (∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) → (∀ z ∈ Rk F 1, height H z ≤ 1) → m ∈ Rk F (1 + 1) →
+    height H m = 1 + 1 → m ∉ Rk F 1 → m ≠ ⊤ → (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) → LTPair F H m
+
+/-- **MinLT gives MinSecondEntry at k = 1.** -/
+theorem secondEntry_one_of_minLT {H : ℕ} (hn : NoChain α (H + 1)) (h : MinLT F H) {m : α}
+    (hall : ∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) (hm : m ∈ Rk F (1 + 1)) (hmk : height H m = 1 + 1)
+    (hnew : m ∉ Rk F 1) (ht : m ≠ ⊤) (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : SecondEntry F H 1 m := by
+  by_contra hse
+  exact hse (secondEntry_of_LTPair hn hall hnew
+    (h m hall (tight_of_not_secondEntry hall hnew hse) hm hmk hnew ht hno))
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

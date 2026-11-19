@@ -293,7 +293,11 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     counterexample (§34.3z²⁰³). In a proof of MinSecondEntry by contradiction, R_k is tight (`tight_of_not_secondEntry`)
     and rows off m have no cells. At k = 1 a counterexample contains a second cell-free element e ∈ R_1 below
     w = F(m, y*), off m (`exists_cellFree_off_one`); that pair alone is not contradictory without uniqueness (|L| = 7)
-    (§34.3z²⁰⁴).
+    (§34.3z²⁰⁴). At k = 1 the bottom row supplies the descent-witness condition (`row_cell_of_bot_le_one`): an **LT pair**
+    (x ∈ R_1 of height 1, v ≱ m, x < v, F(x, v) ≤ v, F(⊥, v) ≤ x) gives SecondEntry (`secondEntry_of_LTPair`), and UpCell
+    holds outright when F(⊥, w) is an atom below m (`upCell_of_bot_side_le_one`). The uniqueness-free **MinLT**, which
+    implies MinSecondEntry at k = 1 (`secondEntry_one_of_minLT`), has no counterexample (exact; sweep and 5- and
+    6-point closures) (§34.3z²⁰⁵).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

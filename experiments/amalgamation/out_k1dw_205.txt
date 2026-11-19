@@ -1,0 +1,19 @@
+c has a cell on its saturation path 296
+models 372
+saturated shadow reached (no cell of c on the path) 62
+('DW anywhere', True, 'DW with v ≤ y*', False, 'DW with v ≤ w', False) 3
+('DW anywhere', True, 'DW with v ≤ y*', True, 'DW with v ≤ w', True) 369
+('F(⊥,w) atom ∥ m: F(F(⊥,w), w) ≤ w', False) 2
+('F(⊥,w) atom ∥ m: F(F(⊥,w), w) ≤ w', True) 127
+('F(⊥,w)', 'atom ∥ m') 129
+('F(⊥,w)', 'atom ≤ m') 211
+('F(⊥,w)', 'height ≥ 2') 32
+('LW: ∃ x ∈ R_1, x < v ≤ w, F(x,v) ≤ v, F(⊥,v) ≤ x', False, 'LT: same with m ≰ v', True) 3
+('LW: ∃ x ∈ R_1, x < v ≤ w, F(x,v) ≤ v, F(⊥,v) ≤ x', True, 'LT: same with m ≰ v', True) 369
+('e ≤ g: e ≤ F(e,q)', True, 'F(e,q) ≤ q', True, 'F(e,w) ≤ w', True, 'DW(e,q)', True, 'DW(e,w)', True, 'e ≤ F(⊥,q)', True, 'IC(e)', True) 62
+('shadow: F(⊥,q) = g', True, 'g an atom', True, 'q = w', False) 4
+('shadow: F(⊥,q) = g', True, 'g an atom', True, 'q = w', True) 58
+('shadow: F(⊥,w) = g', False, 'F(⊥,w) ≤ g', False, 'F(g,w) ≤ w', True, 'g < w', True) 2
+('shadow: F(⊥,w) = g', True, 'F(⊥,w) ≤ g', True, 'F(g,w) ≤ w', True, 'g < w', True) 60
+MIN noLW 9
+MIN nodw_w 9

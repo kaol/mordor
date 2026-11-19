@@ -1,0 +1,17 @@
+branch d ≤ m absent (m ⊓ w ∉ R_1 atoms) 14
+branch: c = m ⊓ w ∈ R_1 358
+('UpCell carriers', ('c', '∥m≤w')) 104
+('UpCell carriers', ('c',)) 197
+('UpCell carriers', ('∥m≤w', '∥m≤w')) 2
+('UpCell carriers', ('∥m≤w',)) 55
+('cell of c in (c,w]: a(c) ∈ (c, w]', False, 'some lower cell in (c,w]', True) 52
+('cell of c in (c,w]: a(c) ∈ (c, w]', True, 'some lower cell in (c,w]', False) 229
+('cell of c in (c,w]: a(c) ∈ (c, w]', True, 'some lower cell in (c,w]', True) 17
+('row c has a cell in (c, w]', False) 60
+('row c has a cell in (c, w]', True) 298
+('row c has a cell in (c, y*] off m', False) 60
+('row c has a cell in (c, y*] off m', True) 298
+('row c has a cell off m', False) 57
+('row c has a cell off m', True) 301
+MIN nocoff 7
+MIN nocw 7

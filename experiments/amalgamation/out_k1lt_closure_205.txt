@@ -1,0 +1,34 @@
+# k1_lt_probe.py closure 5 7 1 12
+models 47
+('K2 along the whole ⊥-descent from w', False) 3
+('K2 along the whole ⊥-descent from w', True) 44
+('K2 for every v ≤ w with F(⊥,v) ≤ v', False) 7
+('K2 for every v ≤ w with F(⊥,v) ≤ v', True) 40
+('K2 for every v ≱ m with F(⊥,v) ≤ v', False) 16
+('K2 for every v ≱ m with F(⊥,v) ≤ v', True) 31
+('LT rows', ('∥m', '≤m')) 6
+('LT rows', ('∥m',)) 14
+('LT rows', ('≤m',)) 27
+('LT with v ≤ w', True, 'v ≤ y*', True, 'any', True) 47
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', False, 'v = w', False) 5
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', False, 'v = w', True) 12
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', True, 'v = w', False) 4
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', True, 'v = w', True) 26
+# closure 5 7 2 12
+models 42
+('K2 along the whole ⊥-descent from w', False) 4
+('K2 along the whole ⊥-descent from w', True) 38
+('K2 for every v ≤ w with F(⊥,v) ≤ v', False) 6
+('K2 for every v ≤ w with F(⊥,v) ≤ v', True) 36
+('K2 for every v ≱ m with F(⊥,v) ≤ v', False) 12
+('K2 for every v ≱ m with F(⊥,v) ≤ v', True) 30
+('LT rows', ('∥m', '≤m')) 11
+('LT rows', ('∥m',)) 11
+('LT rows', ('≤m',)) 20
+('LT with v ≤ w', False, 'v ≤ y*', True, 'any', True) 1
+('LT with v ≤ w', True, 'v ≤ y*', True, 'any', True) 41
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', False, 'v = w', False) 8
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', False, 'v = w', True) 12
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', True, 'v = w', False) 3
+('desc pair (x, v)', 'LT', True, 'F(x,v) ≤ v', True, 'x ≤ m', True, 'v = w', True) 18
+('desc: no height-1 end', 'last', 1) 1

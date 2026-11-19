@@ -1,0 +1,13 @@
+# exact claim 'lt' (k = 1), flags multi notop nofeeder
+sweep 4 16:
+claim lt: {'none': 179}
+closure 5 7 1 12:
+claim lt: {'none': 12}
+closure 5 7 2 12:
+claim lt: {'none': 12}
+closure 6 8 1 4:
+claim lt: {'none': 4}
+sweep 4 16 icok (control, ¬IC(m) dropped):
+claim lt: {'none': 17, 'counterexample': 162}; smallest counterexample |L| = 4, rank(m) = 2
+sweep 4 16 notightK1:
+claim lt: {'none': 179}

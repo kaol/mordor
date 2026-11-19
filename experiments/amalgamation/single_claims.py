@@ -25,6 +25,7 @@ Each claim is tested by asking for a configuration violating it (SAT = counterex
   'ahead': index-sensitivity test, m placed at stage J = K − 1 (one ahead): R_J ranks ≤ K with unique rank-K
            element m ∉ R_{J−1}, R_{J−1} ranks ≤ K − 1, ⊤ ∉ R_{J+1}, feeders/entries from R_{J−1}.
   §34.3z¹⁶⁴ claims (use with 'multi'): side_w  w ∈ R_K;  side  (m′, w] ∩ R_K ≠ ∅;  below_w  a height-K element of R_K below w
+  §34.3z²⁰⁵ lt (k = 1 only): MinUpCell hypotheses and no LT pair (x ∈ R_1 of rank 1, v ≱ m, x < v, F(x,v) ≤ v, F(⊥,v) ≤ x)
   §34.3z¹⁷³ (with 'multi'): bcup   some top x with b(x) ∈ R_{K−2}, b(x) < x has an upward cell away from m
                             sibup  some top x ≠ m′ with b(x) = b(m′) has an upward cell away from m
   §34.3z¹⁸⁹ (with 'multi'): stabletop  every stage-(K−1) sibling configuration (p, c) whose fibre has a maximum U (F(p,U) = c, m ≰ U,
@@ -60,7 +61,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('dominant', 'a1gen', 'a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('lt', 'dominant', 'a1gen', 'a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -211,6 +212,15 @@ def query(L, m, claim, ahead=False):
                 for g in range(n):
                     if rk[g] == K: bad.append(Sc(i, g))
             if not bad: E.S.delete(); return None
+        elif claim == 'lt':                            # §34.3z²⁰⁵ (k = 1 only): hypotheses (as minhyp) and no LT pair: no x ∈ R_1 of rank 1 and
+            if K != 2: E.S.delete(); return None           # v ≱ m with x < v, F(x, v) ≤ v, F(⊥, v) ≤ x (Lean `row_cell_of_bot_le_one`
+            o = E.v('true'); E.S.add_clause([o]); bad.append(o)   # turns an LT pair into a cell of row x in (x, v])
+            if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])
+            bot_ = rk.index(0)
+            for x in range(n):
+                if rk[x] != 1: continue
+                for v in range(n):
+                    if le[x][v] and v != x and not le[m][v]: E.S.add_clause([-r(1, x), -fle(x, v, v), -fle(bot_, v, x)])
         elif claim == 'minhyp':                        # §34.3z¹⁹²: a model of the hypotheses only (¬IC(m); with nofeeder / notightK1 / notop
             o = E.v('true'); E.S.add_clause([o]); bad.append(o)   #  these are the MinUpCell hypotheses); 'icok' drops ¬IC(m)
             if 'icok' not in sys.argv: E.S.add_clause([-ic(m)])
@@ -662,7 +672,7 @@ def query(L, m, claim, ahead=False):
                             if le[F[c][z]][c] or le[z][F[c][z]]: return False
                             if le[F[c][z]][z] and not any(le[c][e] and e != c and le[e][z] and F[p_][e] == p_ for e in range(n)): return False
             return True
-        viol = {'dominant': not ic_py(L, F, m) and dominantviol(), 'a1gen': ((abovepnocell() if 'abovepnocell' in sys.argv else sibnocell() if 'sibnocell' in sys.argv else selfnocell()) and rowtypes_ok()) if 'selfnocell' in sys.argv else True, 'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
+        viol = {'dominant': not ic_py(L, F, m) and dominantviol(), 'a1gen': ((abovepnocell() if 'abovepnocell' in sys.argv else sibnocell() if 'sibnocell' in sys.argv else selfnocell()) and rowtypes_ok()) if 'selfnocell' in sys.argv else True, 'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'lt': ('icok' in sys.argv or not ic_py(L, F, m)) and not any(inR(x, 1) and rk[x] == 1 and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v] and le[F[rk.index(0)][v]][x] for x in range(n) for v in range(n)), 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
                 'pairjump': (bm in low) and not ic_py(L, F, m) and fjviol('pair'),
                 'topfibre': (bm in low) and not ic_py(L, F, m) and not topfib(),
                 'famup': (bm in low) and not ic_py(L, F, m) and famviol(),

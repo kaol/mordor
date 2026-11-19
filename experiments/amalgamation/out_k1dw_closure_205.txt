@@ -1,0 +1,34 @@
+# k1_dwit_probe.py closure 5 7 s 6, s = 1..4 (before the F(⊥,w) / LW columns were added)
+## seed 1
+c has a cell on its saturation path 16
+models 22
+saturated shadow reached (no cell of c on the path) 6
+('DW anywhere', True, 'DW with v ≤ y*', True, 'DW with v ≤ w', True) 22
+('e ≤ g: e ≤ F(e,q)', True, 'F(e,q) ≤ q', False, 'F(e,w) ≤ w', True, 'DW(e,q)', False, 'DW(e,w)', True, 'e ≤ F(⊥,q)', True, 'IC(e)', True) 1
+('e ≤ g: e ≤ F(e,q)', True, 'F(e,q) ≤ q', True, 'F(e,w) ≤ w', True, 'DW(e,q)', True, 'DW(e,w)', True, 'e ≤ F(⊥,q)', True, 'IC(e)', True) 5
+('shadow: F(⊥,q) = g', True, 'g an atom', True, 'q = w', False) 1
+('shadow: F(⊥,q) = g', True, 'g an atom', True, 'q = w', True) 5
+## seed 2
+c has a cell on its saturation path 15
+models 22
+saturated shadow reached (no cell of c on the path) 5
+('DW anywhere', True, 'DW with v ≤ y*', True, 'DW with v ≤ w', False) 1
+('DW anywhere', True, 'DW with v ≤ y*', True, 'DW with v ≤ w', True) 21
+('e ≤ g: e ≤ F(e,q)', True, 'F(e,q) ≤ q', True, 'F(e,w) ≤ w', True, 'DW(e,q)', True, 'DW(e,w)', True, 'e ≤ F(⊥,q)', True, 'IC(e)', True) 5
+('shadow: F(⊥,q) = g', True, 'g an atom', True, 'q = w', False) 2
+('shadow: F(⊥,q) = g', True, 'g an atom', True, 'q = w', True) 3
+MIN nodw_w 20
+## seed 3
+c has a cell on its saturation path 13
+models 24
+saturated shadow reached (no cell of c on the path) 8
+('DW anywhere', True, 'DW with v ≤ y*', False, 'DW with v ≤ w', False) 3
+('DW anywhere', True, 'DW with v ≤ y*', True, 'DW with v ≤ w', True) 21
+('e ≤ g: e ≤ F(e,q)', True, 'F(e,q) ≤ q', True, 'F(e,w) ≤ w', True, 'DW(e,q)', True, 'DW(e,w)', True, 'e ≤ F(⊥,q)', True, 'IC(e)', True) 8
+('shadow: F(⊥,q) = g', True, 'g an atom', True, 'q = w', False) 1
+('shadow: F(⊥,q) = g', True, 'g an atom', True, 'q = w', True) 7
+MIN nodw_w 12
+## seed 4
+c has a cell on its saturation path 19
+models 19
+('DW anywhere', True, 'DW with v ≤ y*', True, 'DW with v ≤ w', True) 19

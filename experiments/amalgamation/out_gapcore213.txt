@@ -1,0 +1,3 @@
+inconsistent without T1b 660
+('core', ('m⊔x',)) 145
+('core', ('x⊔e (e atom ≤ m, e ≰ w)',)) 105

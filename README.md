@@ -309,7 +309,8 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     that does not mention T1b and has no counterexample (`ic_of_KL2E`) (§34.3z²¹⁰). KL2E has no canonical witness (exact refutations), but under T1b a cell-free row always yields a
     one-column **gap configuration** (`exists_gap`), so the IC-lemma is equivalent to its impossibility (§34.3z²¹¹). In a
     gap, T1b on all other elements forces F(⊥, g) = ⊥ at g = F(x, v) (exact), so the contradiction is localized at g;
-    `no_kl3Column` unifies the column lemmas (§34.3z²¹²).
+    `no_kl3Column` unifies the column lemmas (§34.3z²¹²). Every T1b instance used lies above x, and the
+    IC-lemma holds with T1b restricted to (x, ⊤] (exact) (§34.3z²¹³).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

@@ -51,9 +51,15 @@ for L in lattices(args):
                         for (a, A), (b, B) in itertools.combinations(names.items(), 2):
                             expr.setdefault(jn[A][B], []).append(f'{a}⊔{b}'); expr.setdefault(mt(A, B), []).append(f'{a}⊓{b}')
                         for a, A in names.items(): expr.setdefault(A, []).insert(0, a)
-                        desc = tuple(sorted(expr.get(z, ['?'])[0] for z in zs))
+                        def cls(z):
+                            if expr.get(z): return expr[z][0]
+                            atoms_m = [e for e in range(n) if h[e] == 1 and le[e][m]]
+                            for e in atoms_m:
+                                if jn[x][e] == z: return 'x⊔e (e atom ≤ m' + (', e ≰ w)' if not le[e][w] else ', e ≤ w)')
+                            return ('≤x⊔m' if le[z][jn[x][m]] else '≰x⊔m') + (', ≤y' if le[z][y] else ', ≰y') + (', ≥x' if le[x][z] else ', ≱x')
+                        desc = tuple(sorted(cls(z) for z in zs))
                         C[('core', desc)] += 1
-                        if shown < LIM and '?' in desc:
+                        if shown < LIM and not all(d.startswith('x⊔e') or d == 'm⊔x' for d in desc):
                             shown += 1; print(f'|L|={n} m={nm(m)} w={nm(w)} y={nm(y)} x={nm(x)} v={nm(v)} g={nm(g)} core={[nm(z) for z in zs]}', [expr.get(z, ['?']) for z in zs])
                         E.S.delete()
 for k_, v_ in sorted(C.items(), key=lambda kv: -kv[1]): print(k_, v_)

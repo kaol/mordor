@@ -12,7 +12,8 @@ from tight_probe import helpers, lattices
 from gfp_top import ystar
 PER = next((int(a[4:]) for a in sys.argv if a.startswith('per=')), 4)
 EXACT = 'exact' in sys.argv; T1BX = 't1bx' in sys.argv   # 't1bx': T1b on every rank-≥2 element except g
-args = [a for a in sys.argv[1:] if not a.startswith('per=') and a not in ('exact', 't1bx')]
+T1BE = 't1be' in sys.argv   # 't1be': T1b only at x ⊔ e for the atoms e ≤ m with e ≰ w (the elements of the minimal cores)
+args = [a for a in sys.argv[1:] if not a.startswith('per=') and a not in ('exact', 't1bx', 't1be')]
 CE = collections.Counter(); best = None
 C = collections.Counter()
 for L in lattices(args):
@@ -33,6 +34,9 @@ for L in lattices(args):
                         o = E.v('sel', w, x, v, g); sels.append(o)
                         for lit in (f(m, y, w), f(bot, w, x), f(bot, v, x), f(x, v, g)): E.S.add_clause([-o, lit])
                         if EXACT: E.S.add_clause([-o, -f(bot, g, bot)])
+                        if T1BE:
+                            for e in range(n):
+                                if h[e] == 1 and le[e][m] and not le[e][w] and h[jn[x][e]] >= 2: E.S.add_clause([-o, -f(bot, jn[x][e], bot)])
                         if T1BX:
                             for z in range(n):
                                 if h[z] >= 2 and z != g: E.S.add_clause([-o, -f(bot, z, bot)])
@@ -49,7 +53,7 @@ for L in lattices(args):
                 best = n; print('COUNTEREXAMPLE |L| =', n, 'm =', m, flush=True)
                 mod = set(l for l in E.S.get_model() if l > 0)
                 F = [[next(v for v in range(n) if E.vars[('f', a, b, v)] in mod) for b in range(n)] for a in range(n)]
-                import json; json.dump(dict(sets=L.S, F=F, m=m, sel=list(next(t for t in E.vars if t[0] == 'sel' and E.vars[t] in mod)[1:])), open(f"gap_exact{'_t1bx' if 'T1BX' in globals() and T1BX else ''}_min{n}.json", 'w'))
+                import json; json.dump(dict(sets=L.S, F=F, m=m, sel=list(next(t for t in E.vars if t[0] == 'sel' and E.vars[t] in mod)[1:])), open(f"gap_exact{'_t1bx' if T1BX else ''}{'_t1be' if T1BE else ''}_min{n}.json", 'w'))
             E.S.delete(); continue
         while k < PER and E.S.solve():
             mod = set(l for l in E.S.get_model() if l > 0); k += 1

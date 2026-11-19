@@ -36,9 +36,9 @@ from amalg_sat import Enc
 from tight_probe import helpers, lattices
 from gfp_top import ystar
 from rstages import stages, a_of, b_of
-mode = sys.argv[1]; NOIC = 'noic' in sys.argv; HYP = [a for a in ('new', 't1', 't2', 't1a', 't1b', 't2a', 't2b', 'par', 'ax', 'bx', 'anyfix', 'yxny') if a in sys.argv]
+mode = sys.argv[1]; NOIC = 'noic' in sys.argv; HYP = [a for a in ('new', 't1', 't2', 't1a', 't1b', 't2a', 't2b', 'par', 'ax', 'bx', 'anyfix', 'yxny', 't1bup') if a in sys.argv]
 RANK = next((int(a[5:]) for a in sys.argv if a.startswith('rank=')), None)
-args = [a for a in sys.argv[2:] if a not in ('noic', 'new', 't1', 't2', 't1a', 't1b', 't2a', 't2b', 'par', 'ax', 'bx', 'anyfix', 'yxny') and not a.startswith('rank=')]
+args = [a for a in sys.argv[2:] if a not in ('noic', 'new', 't1', 't2', 't1a', 't1b', 't2a', 't2b', 'par', 'ax', 'bx', 'anyfix', 'yxny', 't1bup') and not a.startswith('rank=')]
 C = collections.Counter(); best = None
 def check(L, F, m):
     n = L.n; le = L.le; bot = L.rank.index(0)
@@ -58,6 +58,7 @@ def check1(L, F, m, w):
     else:
         xs = [F[bot][w]] if L.rank[F[bot][w]] == 1 and F[bot][w] != w else []
     if 'par' in HYP: xs = [x for x in xs if not le[x][m]]
+    if 't1bup' in HYP: xs = [x for x in xs if not any(le[x][z] and z != x and F[bot][z] == bot for z in range(n))]
     if 'ax' in HYP: xs = [x for x in xs if L.rank[a_of(L, F, x)] <= 2]
     if 'bx' in HYP: xs = [x for x in xs if not any(le[b_of(L, F, z)][x] and L.rank[z] > 2 for z in range(n))]
     if not xs: return False
@@ -164,6 +165,9 @@ for L in lattices(args):
                     if 'bx' in HYP:
                         for g in range(n):
                             if le[g][x]: E.S.add_clause([-o, -E.v('B', z, g)])
+                if 't1bup' in HYP:                # T1b only on (x, ⊤]: F(⊥, z) ≠ ⊥ for z > x
+                    for z in range(n):
+                        if le[x][z] and z != x: E.S.add_clause([-o, -f(bot, z, bot)])
                 if mode in ('cell2', 'ic2', 'ic3', 'deep'): E.S.add_clause([-o, P(0, w)]); E.S.add_clause([-o] + [P(i, x) for i in range(n)])
                 else: E.S.add_clause([-o, f(bot, w, x)])
                 for z in range(n):

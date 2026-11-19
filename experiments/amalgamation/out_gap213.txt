@@ -1,0 +1,58 @@
+# §34.3z²¹³ runs
+## gap_probe.py exact t1be (T1b only at x ⊔ e, e atom ≤ m, e ≰ w)
+[w_a] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 752} smallest None
+[w_b] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 100, 'counterexample': 16} smallest 16
+[w_c] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 73, 'counterexample': 21} smallest 13
+[w_d] exact gap ⇒ F(⊥, g) = ⊥ (per (L, m) with a gap): {'none': 46, 'counterexample': 8} smallest 13
+## bare_rowcell.py ic par t1bup (T1b only on (x, ⊤])
+[y_a] bare ic par t1bup: {'none': 184}
+[y_b] bare ic par t1bup: {'none': 12}
+[y_c] bare ic par t1bup: {'none': 12}
+[y_d] bare ic par t1bup: {'none': 4}
+(w_a, y_a sweep 4 16; w_b, y_b closure 5 7 1 12; w_c, y_c closure 5 7 2 12; w_d, y_d closure 6 8 1 4)
+## gap_core.py on closures (core element classes)
+[x_a]
+inconsistent without T1b 52
+('core', ('m⊔x',)) 10
+('core', ('x⊔e (e atom ≤ m, e ≰ w)',)) 8
+('core', ('≰x⊔m, ≤y, ≥x',)) 6
+('core', ('m⊔x', '≰x⊔m, ≤y, ≥x')) 6
+('core', ('m⊔x', '≰x⊔m, ≰y, ≥x')) 6
+('core', ('x⊔e (e atom ≤ m, e ≰ w)', '≤x⊔m, ≤y, ≥x')) 4
+('core', ('≤x⊔m, ≤y, ≥x',)) 4
+('core', ('x⊔e (e atom ≤ m, e ≰ w)', 'x⊔e (e atom ≤ m, e ≰ w)')) 2
+[x_b]
+inconsistent without T1b 187
+('core', ('x⊔e (e atom ≤ m, e ≰ w)',)) 94
+('core', ('m⊔x',)) 68
+('core', ('≰x⊔m, ≰y, ≥x',)) 34
+('core', ('x⊔e (e atom ≤ m, e ≤ w)',)) 14
+('core', ('≰x⊔m, ≤y, ≥x',)) 12
+('core', ('m⊔x', '≰x⊔m, ≤y, ≥x')) 11
+('core', ('m⊔x', '≰x⊔m, ≰y, ≥x')) 10
+('core', ('x⊔e (e atom ≤ m, e ≤ w)', 'x⊔e (e atom ≤ m, e ≰ w)')) 9
+('core', ('x⊔e (e atom ≤ m, e ≰ w)', '≰x⊔m, ≰y, ≥x')) 6
+('core', ('x⊔e (e atom ≤ m, e ≰ w)', 'x⊔e (e atom ≤ m, e ≰ w)')) 6
+('core', ('≤x⊔m, ≤y, ≥x',)) 4
+('core', ('x⊔e (e atom ≤ m, e ≤ w)', '≰x⊔m, ≤y, ≥x')) 4
+('core', ('≰x⊔m, ≰y, ≥x', '≰x⊔m, ≰y, ≥x')) 3
+('core', ('x⊔e (e atom ≤ m, e ≤ w)', 'x⊔e (e atom ≤ m, e ≤ w)')) 3
+('core', ('m⊔x', 'w⊓v')) 2
+('core', ('m⊔x', '≰x⊔m, ≰y, ≥x', '≰x⊔m, ≰y, ≥x')) 2
+('core', ('w⊓v', 'x⊔e (e atom ≤ m, e ≰ w)')) 2
+('core', ('x⊔e (e atom ≤ m, e ≤ w)', '≤x⊔m, ≤y, ≥x')) 2
+('core', ('x⊔e (e atom ≤ m, e ≰ w)', '≰x⊔m, ≤y, ≥x')) 2
+('core', ('≰x⊔m, ≤y, ≥x', '≰x⊔m, ≤y, ≥x')) 1
+('core', ('w⊓v', '≰x⊔m, ≤y, ≥x')) 1
+[x_c]
+inconsistent without T1b 118
+('core', ('m⊔x',)) 40
+('core', ('x⊔e (e atom ≤ m, e ≰ w)',)) 15
+('core', ('≰x⊔m, ≰y, ≥x',)) 7
+('core', ('≰x⊔m, ≤y, ≥x',)) 3
+('core', ('m⊔x', '≰x⊔m, ≰y, ≥x')) 2
+('core', ('m⊔x', '≰x⊔m, ≤y, ≥x')) 2
+('core', ('≤x⊔m, ≤y, ≥x',)) 2
+('core', ('x⊔e (e atom ≤ m, e ≰ w)', '≰x⊔m, ≰y, ≥x')) 1
+[x_d]
+inconsistent without T1b 14

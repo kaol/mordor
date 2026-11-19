@@ -1,0 +1,129 @@
+# §34.3z²¹⁵
+## ic_gname.py (naming the single G instance of IC↑ cores)
+== [gn_a]
+cores with one G instance: 295
+('F(x,y)', 'always = zG', False) 289
+('F(x,y)', 'always = zG', True) 6
+('a⊔s (a ∈ {⊥,x,w,m,y*}, s ∈ {F(x,y*), t})', 'always = zG', False) 5
+('a⊔s (a ∈ {⊥,x,w,m,y*}, s ∈ {F(x,y*), t})', 'always = zG', True) 290
+('m⊔F(m,y⊔F(x,y))', 'always = zG', False) 61
+('m⊔F(m,y⊔F(x,y))', 'always = zG', True) 234
+('m⊔F(x,y)', 'always = zG', False) 104
+('m⊔F(x,y)', 'always = zG', True) 191
+('m⊔F(x,⊤)', 'always = zG', False) 96
+('m⊔F(x,⊤)', 'always = zG', True) 199
+('m⊔t', 'always = zG', False) 145
+('m⊔t', 'always = zG', True) 150
+('t', 'always = zG', False) 291
+('t', 'always = zG', True) 4
+('w⊔F(x,y)', 'always = zG', False) 111
+('w⊔F(x,y)', 'always = zG', True) 184
+('w⊔F(x,⊤)', 'always = zG', False) 118
+('w⊔F(x,⊤)', 'always = zG', True) 177
+('w⊔t', 'always = zG', False) 165
+('w⊔t', 'always = zG', True) 130
+('x⊔F(m,⊤)', 'always = zG', False) 123
+('x⊔F(m,⊤)', 'always = zG', True) 172
+('y⊔F(x,y)', 'always = zG', False) 61
+('y⊔F(x,y)', 'always = zG', True) 234
+('y⊔F(x,⊤)', 'always = zG', False) 61
+('y⊔F(x,⊤)', 'always = zG', True) 234
+('y⊔t', 'always = zG', False) 111
+('y⊔t', 'always = zG', True) 184
+('zG ≥ w', 'always = zG', False) 17
+('zG ≥ w', 'always = zG', True) 278
+== [gn_b]
+cores with one G instance: 12
+('F(x,y)', 'always = zG', False) 12
+('a⊔s (a ∈ {⊥,x,w,m,y*}, s ∈ {F(x,y*), t})', 'always = zG', True) 12
+('m⊔F(m,y⊔F(x,y))', 'always = zG', False) 2
+('m⊔F(m,y⊔F(x,y))', 'always = zG', True) 10
+('m⊔F(x,y)', 'always = zG', False) 3
+('m⊔F(x,y)', 'always = zG', True) 9
+('m⊔F(x,⊤)', 'always = zG', False) 2
+('m⊔F(x,⊤)', 'always = zG', True) 10
+('m⊔t', 'always = zG', False) 5
+('m⊔t', 'always = zG', True) 7
+('t', 'always = zG', False) 12
+('w⊔F(x,y)', 'always = zG', False) 4
+('w⊔F(x,y)', 'always = zG', True) 8
+('w⊔F(x,⊤)', 'always = zG', False) 4
+('w⊔F(x,⊤)', 'always = zG', True) 8
+('w⊔t', 'always = zG', False) 4
+('w⊔t', 'always = zG', True) 8
+('x⊔F(m,⊤)', 'always = zG', False) 4
+('x⊔F(m,⊤)', 'always = zG', True) 8
+('y⊔F(x,y)', 'always = zG', False) 2
+('y⊔F(x,y)', 'always = zG', True) 10
+('y⊔F(x,⊤)', 'always = zG', False) 2
+('y⊔F(x,⊤)', 'always = zG', True) 10
+('y⊔t', 'always = zG', False) 2
+('y⊔t', 'always = zG', True) 10
+('zG ≥ w', 'always = zG', True) 12
+== [gn_c]
+cores with one G instance: 60
+('F(x,y)', 'always = zG', False) 58
+('F(x,y)', 'always = zG', True) 2
+('a⊔s (a ∈ {⊥,x,w,m,y*}, s ∈ {F(x,y*), t})', 'always = zG', False) 3
+('a⊔s (a ∈ {⊥,x,w,m,y*}, s ∈ {F(x,y*), t})', 'always = zG', True) 57
+('m⊔F(m,y⊔F(x,y))', 'always = zG', False) 17
+('m⊔F(m,y⊔F(x,y))', 'always = zG', True) 43
+('m⊔F(x,y)', 'always = zG', False) 27
+('m⊔F(x,y)', 'always = zG', True) 33
+('m⊔F(x,⊤)', 'always = zG', False) 29
+('m⊔F(x,⊤)', 'always = zG', True) 31
+('m⊔t', 'always = zG', False) 36
+('m⊔t', 'always = zG', True) 24
+('t', 'always = zG', False) 60
+('w⊔F(x,y)', 'always = zG', False) 40
+('w⊔F(x,y)', 'always = zG', True) 20
+('w⊔F(x,⊤)', 'always = zG', False) 23
+('w⊔F(x,⊤)', 'always = zG', True) 37
+('w⊔t', 'always = zG', False) 56
+('w⊔t', 'always = zG', True) 4
+('x⊔F(m,⊤)', 'always = zG', False) 25
+('x⊔F(m,⊤)', 'always = zG', True) 35
+('y⊔F(x,y)', 'always = zG', False) 16
+('y⊔F(x,y)', 'always = zG', True) 44
+('y⊔F(x,⊤)', 'always = zG', False) 31
+('y⊔F(x,⊤)', 'always = zG', True) 29
+('y⊔t', 'always = zG', False) 24
+('y⊔t', 'always = zG', True) 36
+('zG ≥ w', 'always = zG', False) 4
+('zG ≥ w', 'always = zG', True) 56
+== [gn_d]
+cores with one G instance: 26
+('F(x,y)', 'always = zG', False) 26
+('a⊔s (a ∈ {⊥,x,w,m,y*}, s ∈ {F(x,y*), t})', 'always = zG', True) 26
+('m⊔F(m,y⊔F(x,y))', 'always = zG', False) 3
+('m⊔F(m,y⊔F(x,y))', 'always = zG', True) 23
+('m⊔F(x,y)', 'always = zG', False) 3
+('m⊔F(x,y)', 'always = zG', True) 23
+('m⊔F(x,⊤)', 'always = zG', False) 3
+('m⊔F(x,⊤)', 'always = zG', True) 23
+('m⊔t', 'always = zG', False) 9
+('m⊔t', 'always = zG', True) 17
+('t', 'always = zG', False) 26
+('w⊔F(x,y)', 'always = zG', False) 10
+('w⊔F(x,y)', 'always = zG', True) 16
+('w⊔F(x,⊤)', 'always = zG', False) 9
+('w⊔F(x,⊤)', 'always = zG', True) 17
+('w⊔t', 'always = zG', False) 12
+('w⊔t', 'always = zG', True) 14
+('x⊔F(m,⊤)', 'always = zG', False) 10
+('x⊔F(m,⊤)', 'always = zG', True) 16
+('y⊔F(x,y)', 'always = zG', False) 3
+('y⊔F(x,y)', 'always = zG', True) 23
+('y⊔F(x,⊤)', 'always = zG', False) 3
+('y⊔F(x,⊤)', 'always = zG', True) 23
+('y⊔t', 'always = zG', False) 5
+('y⊔t', 'always = zG', True) 21
+('zG ≥ w', 'always = zG', True) 26
+(gn_a sweep 4 16; gn_b closure 5 7 1 3; gn_c closure 5 7 2 3; gn_d closure 6 8 1 2)
+## ic_gtest.py (IC↑ with G restricted)
+[gt_a] IC↑ with G restricted (ys): {'none': 184} smallest None
+[gt_b] IC↑ with G restricted (fam): {'none': 184} smallest None
+[gt_c] IC↑ with G restricted (ys): {'none': 10, 'counterexample': 2} smallest 16
+[gt_d] IC↑ with G restricted (fam): {'none': 10, 'counterexample': 2} smallest 16
+[gt_e] IC↑ with G restricted (full): {'none': 12} smallest None
+(gt_a ys sweep; gt_b fam sweep; gt_c ys closure 5 7 1 12; gt_d fam closure 5 7 1 12; gt_e full closure 5 7 1 12)

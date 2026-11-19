@@ -79,3 +79,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²¹²: `gap_probe.py` (gap models; `exact`: gap ⇒ F(⊥, g) = ⊥, flag `t1bx` = T1b on all z ≠ g), `gap_core.py` (minimal T1b cores of the gap), `gap_backbone.py` (forced F-values); `bare_rowcell.py` modes kl3 / mx. Outputs `out_gap212.txt`, `out_gapprobe212.txt`, `out_gapcore212.txt`, `out_gapbackbone212.txt`.
 - §34.3z²¹³: `gap_probe.py` flag `t1be` (GapE, refuted at |L| = 13), `gap_core.py` core-element classes, `bare_rowcell.py` flag `t1bup` (T1b only on (x, ⊤]; IC-lemma holds). Outputs `out_gap213.txt`, `out_gapcore213.txt`.
 - §34.3z²¹⁴: `ic_core.py` (minimal cores of IC↑ over guarded G / CF / T instances; `out_iccore214.txt`, `out_iccore214_small.txt`).
+- §34.3z²¹⁵: `ic_gname.py` (names the G column of the IC↑ cores), `ic_gtest.py` (IC↑ with the greatest-fixed-point property restricted to named columns: `ys`, `fam`, `full`). Output `out_gname215.txt`.

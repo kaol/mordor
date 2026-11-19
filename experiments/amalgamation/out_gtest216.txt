@@ -1,0 +1,27 @@
+# §34.3z²¹⁶ ic_gtest.py runs
+[gc_a] IC↑ with G restricted (colchain): {'none': 184} smallest None
+[gc_b] IC↑ with G restricted (xorb): {'none': 184} smallest None
+[gc_c] IC↑ with G restricted (colchain): {'none': 12} smallest None
+[gc_d] IC↑ with G restricted (xorb): {'none': 12} smallest None
+[gd_a] IC↑ with G restricted (colchain): {'none': 11, 'counterexample': 1} smallest 20
+[gd_b] IC↑ with G restricted (xorb): {'none': 11, 'counterexample': 1} smallest 20
+[gd_c] IC↑ with G restricted (colchain): {'none': 4} smallest None
+[gd_d] IC↑ with G restricted (xorb): {'none': 4} smallest None
+(gc_a/b sweep 4 16; gc_c/d closure 5 7 1 12; gd_a/b closure 5 7 2 12; gd_c/d closure 6 8 1 4; a/c colchain, b/d xorb)
+# ic_core_one.py on the stored failures
+== ic_gtest_fam_min16_31_16.json
+lattice ['{}', '{0}', '{1}', '{3}', '{4}', '{12}', '{04}', '{14}', '{34}', '{012}', '{123}', '{124}', '{034}', '{0124}', '{1234}', '{01234}']
+m {12} w {14} y {124} x {4}
+core: CF{04} CF{14} CF{34} CF{034} CF{0124} CF{1234} CF{01234} G{0124} G{1234} T{04} T{34}
+   G {0124} always equals: ['y⊔s', 'w⊔s', 'm⊔s', 'y⊔F(x,s)', 'w⊔F(x,s)', 'y⊔F(x,t)', 'w⊔F(x,t)', 'y⊔y_x', 'm⊔y_x', 'w⊔y_x', 'y⊔w_x', 'F(x,⊤)', 'm⊔F(x,⊤)', 'm⊔F(⊥,⊤)'] (6 models)
+   G {1234} always equals: ['y⊔s', 'w⊔s', 'm⊔s', 'y⊔F(x,s)', 'w⊔F(x,s)', 'y⊔F(x,t)', 'w⊔F(x,t)', 'y⊔y_x', 'm⊔y_x', 'w⊔y_x', 'y⊔w_x', 'F(x,⊤)', 'm⊔F(x,⊤)', 'F(⊥,⊤)', 'm⊔F(⊥,⊤)'] (6 models)
+== ic_gtest_fam_min18_31_18.json
+lattice ['{}', '{0}', '{2}', '{3}', '{4}', '{02}', '{12}', '{03}', '{23}', '{24}', '{34}', '{012}', '{123}', '{024}', '{234}', '{0234}', '{1234}', '{01234}']
+m {0} w {24} y {024} x {2}
+core: CF{02} CF{12} CF{23} CF{24} CF{012} CF{123} CF{024} CF{234} CF{01234} G{0234} T{02} T{23}
+   G {0234} always equals: ['y⊔F(x,s)', 'y⊔F(x,t)', 'y⊔y_x', 'm⊔y_x', 'y⊔w_x', 'm⊔F(⊥,⊤)'] (6 models)
+== ic_gtest_colchain_min20_31_20.json
+lattice ['{}', '{0}', '{1}', '{3}', '{4}', '{01}', '{02}', '{03}', '{13}', '{04}', '{14}', '{34}', '{013}', '{014}', '{024}', '{034}', '{134}', '{0124}', '{0134}', '{01234}']
+m {1} w {34} y {134} x {4}
+core: CF{04} CF{14} CF{34} CF{014} CF{034} CF{134} CF{0134} G{0134} T{04} T{14}
+   G {0134} always equals: ['y⊔s', 'y⊔F(x,s)', 'y⊔F(x,t)', 'y⊔y_x', 'y⊔w_x', 'F(x,⊤)', 'm⊔F(x,⊤)'] (6 models)

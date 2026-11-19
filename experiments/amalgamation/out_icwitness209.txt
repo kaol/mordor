@@ -1,0 +1,51 @@
+models 1851
+('F(x, col)', 'hits Z', True) 1851
+('F(x, x-orbit)', 'hits Z', True) 1851
+('F(x,t)', 'in Z', False) 1774
+('F(x,t)', 'in Z', True) 77
+('F(x,y*)', 'in Z', False) 42
+('F(x,y*)', 'in Z', True) 1809
+('F(x,·) ⊓ w on orbit', 'hits Z', False) 1158
+('F(x,·) ⊓ w on orbit', 'hits Z', True) 693
+('F(x,⊤)', 'in Z', False) 117
+('F(x,⊤)', 'in Z', True) 1734
+('G_x orbit from w', 'hits Z', True) 1851
+('G_x orbit ⊓ y*', 'hits Z', False) 41
+('G_x orbit ⊓ y*', 'hits Z', True) 1810
+('col orbit of x from ⊤', 'hits Z', True) 1851
+('col orbit ⊓ w', 'hits Z', False) 1158
+('col orbit ⊓ w', 'hits Z', True) 693
+('col orbit ⊓ y*', 'hits Z', False) 41
+('col orbit ⊓ y*', 'hits Z', True) 1810
+('some T1b violation', True) 1851
+('t', 'in Z', True) 1851
+('t⊓y_x', 'in Z', True) 1851
+('w ⊓ y_x = x', False, 'w ≰ y_x', True) 693
+('w ⊓ y_x = x', True, 'w ≰ y_x', True) 1158
+('w_x', 'in Z', False) 1767
+('w_x', 'in Z', True) 84
+('w_x⊓y*', 'in Z', False) 1770
+('w_x⊓y*', 'in Z', True) 81
+('x-orbit from w', 'hits Z', True) 1851
+('x-orbit ⊓ y*', 'hits Z', False) 41
+('x-orbit ⊓ y*', 'hits Z', True) 1810
+('x⊔F(⊥,y_x)', 'in Z', False) 1851
+('x⊔w_x⊓w', 'in Z', False) 1179
+('x⊔w_x⊓w', 'in Z', True) 672
+('y_x ≤ y*', False) 44
+('y_x ≤ y*', True) 1807
+('y_x ≰ y*', 'F(m,y_x)', 'in Z', False) 44
+('y_x ≰ y*', 'G_x(y*) ⊓ y_x', 'in Z', True) 44
+('y_x ≰ y*', 't', 'in Z', True) 44
+('y_x ≰ y*', 'w_x', 'in Z', False) 41
+('y_x ≰ y*', 'w_x', 'in Z', True) 3
+('y_x ≰ y*', 'x ⊔ (w_x ⊓ F(m,y_x))', 'in Z', False) 44
+('y_x ≰ y*', 'y* = ⊤', False) 44
+('y_x ≰ y*', 'y_x ⊓ (y* ⊔ w_x)', 'in Z', True) 44
+('y_x ≰ y*', 'y_x ⊓ F(m,y_x)', 'in Z', False) 44
+('y_x ≰ y*', 'y_x ⊓ G_m(y_x)', 'in Z', False) 44
+('y_x ≰ y*', 'y_x', 'in Z', True) 44
+('y_x', 'in Z', True) 1851
+('y_x⊓w⊔?', 'in Z', True) 1851
+('y_x⊓y*', 'in Z', False) 41
+('y_x⊓y*', 'in Z', True) 1810

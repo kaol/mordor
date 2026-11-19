@@ -94,6 +94,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`secondEntry_one_of_rowLT2`**.
 * §34.3z²⁰⁷ (bare two-stage form): `TightRowCell2`, **`secondEntry_one_of_tightRowCell2`**.
 * §34.3z²⁰⁸ (split): `IC3`, `DeepFree`, **`secondEntry_one_of_IC3_deepFree`**.
+* §34.3z²⁰⁹ (IC-lemma structure): `inf_eq_bot_of_height_one`, `eq_of_le_height_one`, `icLemma_meets`,
+  **`no_preColumn_of_cellFree`**, **`ic_of_preColumn`**, `ic_of_preColumn_le`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2587,6 +2589,108 @@ theorem secondEntry_one_of_IC3_deepFree [WellFoundedLT α] {H : ℕ} (hn : NoCha
   · obtain ⟨z, hxz, hc⟩ := h3 m _ ht1b hfix hgfp hmw i hi1 hxm
     have hzm := cell_eq_of_not_secondEntry hn hall hse hxR hi1 hxz hc
     exact hxm (hzm ▸ hxz.le)
+
+/-! ### The IC-lemma: meet facts for a cell-free row (§34.3z²⁰⁹) -/
+
+/-- A height-1 element meets anything it does not lie below in `⊥`. -/
+theorem inf_eq_bot_of_height_one {H : ℕ} (hn : NoChain α (H + 1)) {x v : α} (hx1 : height H x = 1)
+    (hxv : ¬ x ≤ v) : x ⊓ v = ⊥ := by
+  by_contra h
+  have h1 := height_strictMono hn (bot_lt_iff_ne_bot.2 h)
+  have h2 := height_strictMono hn (lt_of_le_of_ne inf_le_left fun e => hxv (e.symm.le.trans inf_le_right))
+  rw [height_bot_eq_zero] at h1; omega
+
+/-- An element above a height-1 element `x` with height `≤ 1` is `x`. -/
+theorem eq_of_le_height_one {H : ℕ} (hn : NoChain α (H + 1)) {x z : α} (hx1 : height H x = 1) (hxz : x ≤ z)
+    (hz : height H z ≤ 1) : z = x := by
+  by_contra hne
+  have := height_strictMono hn (lt_of_le_of_ne hxz (Ne.symm hne)); omega
+
+/-- **Meet facts for the IC-lemma.** Let `y = m ⊔ F m y`, `w = F m y`, `x = F ⊥ w` of height 1, and let `y_x = x ⊔ F x y_x`
+be a column fixed point of `x` whose output `w_x = F x y_x` is not above `x` (as for a cell-free `x`). If `F ⊥ z = ⊥`
+forces height `≤ 1` (T1b), then `w ⊓ y_x = x`, `w ⊓ w_x = ⊥` and `y ⊓ y_x = x`. Proof: `F ⊥` is bounded by `w` on `↓y`
+and by `w_x` on `↓y_x`, and `x ⊓ w_x = ⊥`. No greatest-fixed-point property is used. -/
+theorem icLemma_meets {H : ℕ} (hn : NoChain α (H + 1)) (ht1b : ∀ z, F ⊥ z = ⊥ → height H z ≤ 1) {m y yx : α}
+    (hy : m ⊔ F m y = y) (hx1 : height H (F ⊥ (F m y)) = 1) (hyx : F ⊥ (F m y) ⊔ F (F ⊥ (F m y)) yx = yx)
+    (hxw : ¬ F ⊥ (F m y) ≤ F (F ⊥ (F m y)) yx) :
+    F m y ⊓ yx = F ⊥ (F m y) ∧ F m y ⊓ F (F ⊥ (F m y)) yx = ⊥ ∧ y ⊓ yx = F ⊥ (F m y) := by
+  set w := F m y with hw
+  set x := F ⊥ w with hxdef
+  set wx := F x yx with hwx
+  have hxw' : x ≤ w := feeder_le_side bot_le hy
+  have hwy : w ≤ y := le_sup_right.trans hy.le
+  have hxyx : x ≤ yx := le_sup_left.trans hyx.le
+  have hwxyx : wx ≤ yx := le_sup_right.trans hyx.le
+  have hxwx : x ⊓ wx = ⊥ := inf_eq_bot_of_height_one hn hx1 hxw
+  have bY : ∀ z, z ≤ y → F ⊥ z ≤ w := fun z hz => ((F.mono bot_le) z).trans ((F m).mono hz)
+  have bX : ∀ z, z ≤ yx → F ⊥ z ≤ wx := fun z hz => ((F.mono bot_le) z).trans ((F x).mono hz)
+  -- (a) w ⊓ y_x = x
+  have ha : w ⊓ yx = x := by
+    have h0 : F ⊥ (w ⊓ yx) = ⊥ :=
+      le_bot_iff.1 ((le_inf ((F ⊥).mono inf_le_left) (bX _ inf_le_right)).trans hxwx.le)
+    exact eq_of_le_height_one hn hx1 (le_inf hxw' hxyx) (ht1b _ h0)
+  -- (b) w ⊓ w_x = ⊥
+  have hb : w ⊓ wx = ⊥ := by
+    have h0 : F ⊥ (w ⊓ wx) = ⊥ :=
+      le_bot_iff.1 ((le_inf ((F ⊥).mono inf_le_left) (bX _ (inf_le_right.trans hwxyx))).trans hxwx.le)
+    have hc1 := ht1b _ h0
+    have hle : x ⊔ w ⊓ wx ≤ x := (le_inf (sup_le hxw' inf_le_left) (sup_le hxyx (inf_le_right.trans hwxyx))).trans ha.le
+    have hcx : w ⊓ wx ≤ x := le_sup_right.trans hle
+    exact le_bot_iff.1 ((le_inf hcx inf_le_right).trans hxwx.le)
+  -- (c) y ⊓ y_x = x
+  have hc : y ⊓ yx = x := by
+    have h0 : F ⊥ (y ⊓ yx) = ⊥ := le_bot_iff.1 ((le_inf (bY _ inf_le_left) (bX _ inf_le_right)).trans hb.le)
+    exact eq_of_le_height_one hn hx1 (le_inf (hxw'.trans hwy) hxyx) (ht1b _ h0)
+  exact ⟨ha, hb, hc⟩
+
+/-- **Key lemma of the IC-lemma.** Let `x = F ⊥ w` have height 1, `F ⊥ w ≤ w`, and assume T1b (`F ⊥ z = ⊥` forces
+height `≤ 1`). If row `x` has no interval cell, then it has no pre-fixed column `z > x` with `F ⊥ z ≤ w`. Proof: if
+`x ≤ F x z`, descend to `F x z` (a cell unless `x < F x z < z`; `F ⊥` stays below `w`). Otherwise `x ⊓ F x z = ⊥`, so
+`F ⊥ (w ⊓ z) ≤ x ⊓ F x z = ⊥` and T1b gives `w ⊓ z = x`; then `w ⊓ F x z ≤ x ⊓ F x z = ⊥`, so `F ⊥ z ≤ w ⊓ F x z = ⊥`,
+and T1b contradicts `z > x`. No greatest-fixed-point property and no hypothesis on `m` is used. -/
+theorem no_preColumn_of_cellFree {H : ℕ} (hn : NoChain α (H + 1)) (ht1b : ∀ z, F ⊥ z = ⊥ → height H z ≤ 1) {w : α}
+    (hx1 : height H (F ⊥ w) = 1) (hpre : F ⊥ w ≤ w)
+    (hcf : ¬ ∃ z, F ⊥ w < z ∧ (F (F ⊥ w) z ≤ F ⊥ w ∨ z ≤ F (F ⊥ w) z)) :
+    ∀ (n : ℕ) {z : α}, height H z ≤ n → F ⊥ w < z → F (F ⊥ w) z ≤ z → F ⊥ z ≤ w → False
+  | 0, z, hz, hxz, _, _ => by have := height_strictMono hn hxz; omega
+  | n + 1, z, hz, hxz, hFz, hbz => by
+      by_cases hxF : F ⊥ w ≤ F (F ⊥ w) z
+      · by_cases h1 : F (F ⊥ w) z ≤ F ⊥ w
+        · exact hcf ⟨z, hxz, Or.inl h1⟩
+        by_cases h2 : z ≤ F (F ⊥ w) z
+        · exact hcf ⟨z, hxz, Or.inr h2⟩
+        have hlt : F (F ⊥ w) z < z := lt_of_le_not_ge hFz h2
+        have := height_strictMono hn hlt
+        exact no_preColumn_of_cellFree hn ht1b hx1 hpre hcf n (by omega) (lt_of_le_not_ge hxF h1)
+          ((F (F ⊥ w)).mono hFz) (((F ⊥).mono hlt.le).trans hbz)
+      · have hm := inf_eq_bot_of_height_one hn hx1 hxF
+        have ha : w ⊓ z = F ⊥ w := by
+          have h0 : F ⊥ (w ⊓ z) = ⊥ := le_bot_iff.1 ((le_inf ((F ⊥).mono inf_le_left)
+            (((F.mono bot_le) _).trans ((F (F ⊥ w)).mono inf_le_right))).trans hm.le)
+          exact eq_of_le_height_one hn hx1 (le_inf hpre hxz.le) (ht1b _ h0)
+        have hc : w ⊓ F (F ⊥ w) z = ⊥ :=
+          le_bot_iff.1 ((le_inf ((le_inf inf_le_left (inf_le_right.trans hFz)).trans ha.le) inf_le_right).trans hm.le)
+        have h0 : F ⊥ z = ⊥ := le_bot_iff.1 ((le_inf hbz ((F.mono bot_le) z)).trans hc.le)
+        have := ht1b z h0
+        have := height_strictMono hn hxz; omega
+
+/-- **The IC-lemma from a pre-fixed column.** Under T1b, with `x = F ⊥ w` of height 1 and `F ⊥ w ≤ w`, any pre-fixed
+column `z > x` of row `x` with `F ⊥ z ≤ w` forces an interval cell of row `x`. -/
+theorem ic_of_preColumn {H : ℕ} (hn : NoChain α (H + 1)) (ht1b : ∀ z, F ⊥ z = ⊥ → height H z ≤ 1) {w z : α}
+    (hx1 : height H (F ⊥ w) = 1) (hpre : F ⊥ w ≤ w) (hxz : F ⊥ w < z) (hFz : F (F ⊥ w) z ≤ z) (hbz : F ⊥ z ≤ w) :
+    ∃ z, F ⊥ w < z ∧ (F (F ⊥ w) z ≤ F ⊥ w ∨ z ≤ F (F ⊥ w) z) := by
+  by_contra hcf
+  exact no_preColumn_of_cellFree hn ht1b hx1 hpre hcf H (height_le _) hxz hFz hbz
+
+/-- **The IC-lemma below `y`.** For `y = m ⊔ F m y`, `w = F m y` and `x = F ⊥ w` of height 1, under T1b, any pre-fixed
+column of row `x` in `(x, y]` forces an interval cell of row `x` (`F ⊥ z ≤ F m z ≤ F m y`). In particular this holds when
+`F x y ≤ y`, or when a column fixed point `y_x` of `x` lies below `y`. -/
+theorem ic_of_preColumn_le {H : ℕ} (hn : NoChain α (H + 1)) (ht1b : ∀ z, F ⊥ z = ⊥ → height H z ≤ 1) {m y z : α}
+    (hy : m ⊔ F m y = y) (hx1 : height H (F ⊥ (F m y)) = 1) (hxz : F ⊥ (F m y) < z) (hzy : z ≤ y)
+    (hFz : F (F ⊥ (F m y)) z ≤ z) :
+    ∃ z, F ⊥ (F m y) < z ∧ (F (F ⊥ (F m y)) z ≤ F ⊥ (F m y) ∨ z ≤ F (F ⊥ (F m y)) z) :=
+  ic_of_preColumn hn ht1b hx1 (feeder_le_side bot_le hy) hxz hFz
+    (((F.mono bot_le) z).trans ((F m).mono hzy))
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

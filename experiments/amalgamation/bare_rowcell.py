@@ -8,6 +8,10 @@ point of y ↦ m ⊔ F(m, y), w = F(m, y*) ≱ m, x = F(⊥, w) ≠ w of rank 1.
   'tbot': row x has no interval cell and F(⊥, F(x, w)) ≠ ⊥ (the claim: a cell-free x forces F(⊥, t) = ⊥);
   'yxbot': row x has no interval cell and F(⊥, y_x) ≠ ⊥, y_x the greatest post-fixed point of y ↦ x ⊔ F(x, y);
   'tyx' : row x has no interval cell and not (t ⊓ y_x > x and F(⊥, t ⊓ y_x) = ⊥), t = F(x, w);
+  'xorbz': x = F(⊥, w) cell-free and no element v of the x-orbit v ↦ F(x, v) from w has rank ≥ 2 and F(⊥, v) = ⊥;
+  'gxorbz': the same for the orbit u ↦ x ⊔ F(x, u) from w;
+  'prefx': x = F(⊥, w) cell-free and row x has no pre-fixed column z with x < z ≤ y (F(x, z) ≤ z);
+  'prefw': x = F(⊥, w) cell-free and row x has no pre-fixed column z > x with F(⊥, z) ≤ w;
   'deep': x a rank-1 term of the ⊥-descent from w with x ≤ m and x ≠ F(⊥, w) (no conclusion: is a deep atom below m possible?);
   'ic3' : x a rank-1 term of the ⊥-descent from w, conclusion IC(x) (no interval cell at all is the violation);
   'ic2' : as 'cell2' (x a rank-1 term of the ⊥-descent from w, conclusion a cell off m), intended with t1b only;
@@ -23,9 +27,9 @@ from amalg_sat import Enc
 from tight_probe import helpers, lattices
 from gfp_top import ystar
 from rstages import stages, a_of, b_of
-mode = sys.argv[1]; NOIC = 'noic' in sys.argv; HYP = [a for a in ('new', 't1', 't2', 't1a', 't1b', 't2a', 't2b', 'par', 'ax', 'bx', 'anyfix') if a in sys.argv]
+mode = sys.argv[1]; NOIC = 'noic' in sys.argv; HYP = [a for a in ('new', 't1', 't2', 't1a', 't1b', 't2a', 't2b', 'par', 'ax', 'bx', 'anyfix', 'yxny') if a in sys.argv]
 RANK = next((int(a[5:]) for a in sys.argv if a.startswith('rank=')), None)
-args = [a for a in sys.argv[2:] if a not in ('noic', 'new', 't1', 't2', 't1a', 't1b', 't2a', 't2b', 'par', 'ax', 'bx', 'anyfix') and not a.startswith('rank=')]
+args = [a for a in sys.argv[2:] if a not in ('noic', 'new', 't1', 't2', 't1a', 't1b', 't2a', 't2b', 'par', 'ax', 'bx', 'anyfix', 'yxny') and not a.startswith('rank=')]
 C = collections.Counter(); best = None
 def check(L, F, m):
     n = L.n; le = L.le; bot = L.rank.index(0)
@@ -58,12 +62,26 @@ def check1(L, F, m, w):
     if 't2b' in HYP and any(inR(b_of(L, F, z), 1) and L.rank[z] > 2 for z in range(n)): return False
     if NOIC and any(le[m][y] and y != m and (le[F[m][y]][m] or le[y][F[m][y]]) for y in range(n)): return False
     if mode == 'deep': return any(le[x][m] and x != F[bot][w] for x in xs)
+    if mode == 'prefw':
+        return any(not any(le[x][z] and z != x and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n)) and not any(le[x][z] and z != x and le[F[x][z]][z] and le[F[bot][z]][w] for z in range(n)) for x in xs)
+    if mode == 'prefx':
+        yy = L.join[m][w]
+        return any(not any(le[x][z] and z != x and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n)) and not any(le[x][z] and z != x and le[z][yy] and le[F[x][z]][z] for z in range(n)) for x in xs)
+    if mode in ('xorbz', 'gxorbz'):
+        def orbz(x):
+            ob = [w]
+            while True:
+                u = F[x][ob[-1]] if mode == 'xorbz' else L.join[x][F[x][ob[-1]]]
+                if u in ob: break
+                ob.append(u)
+            return any(L.rank[v] >= 2 and F[bot][v] == bot for v in ob)
+        return any(not any(le[x][z] and z != x and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n)) and not orbz(x) for x in xs)
     if mode in ('ic', 'tbot', 'yxbot', 'tyx', 'ic3'):
         def yx_(x):
             y_ = L.top
             while L.join[x][F[x][y_]] != y_: y_ = L.join[x][F[x][y_]]
             return y_
-        return any(not any(le[x][z] and z != x and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n)) and (mode in ('ic', 'ic3') or (mode == 'tbot' and F[bot][F[x][w]] != bot) or (mode == 'yxbot' and F[bot][yx_(x)] != bot) or (mode == 'tyx' and not (L.rank[L.S.index(L.S[F[x][w]] & L.S[yx_(x)])] >= 2 and F[bot][L.S.index(L.S[F[x][w]] & L.S[yx_(x)])] == bot))) for x in xs)
+        return any(not any(le[x][z] and z != x and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n)) and (mode in ('ic', 'ic3') or (mode == 'tbot' and F[bot][F[x][w]] != bot) or (mode == 'yxbot' and F[bot][yx_(x)] != bot and not ('yxny' in HYP and le[yx_(x)][L.join[m][w]])) or (mode == 'tyx' and not (L.rank[L.S.index(L.S[F[x][w]] & L.S[yx_(x)])] >= 2 and F[bot][L.S.index(L.S[F[x][w]] & L.S[yx_(x)])] == bot))) for x in xs)
     if mode in ('cell', 'cell2', 'ic2'): return any(not any(le[x][z] and z != x and not le[m][z] and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n)) for x in xs)
     return any(not any(le[x][v] and v != x and not le[m][v] and le[F[x][v]][v] and le[F[bot][v]][x] for v in range(n)) for x in xs)
 for L in lattices(args):
@@ -112,7 +130,7 @@ for L in lattices(args):
                 if mode in ('yxbot', 'tyx'):
                     yl = []
                     for yx in range(n):
-                        if not (le[x][yx] and yx != x): continue
+                        if not (le[x][yx] and yx != x) or ('yxny' in HYP and le[yx][y]): continue
                         for wx in range(n):
                             if jn[x][wx] != yx: continue
                             p_ = E.v('yxsel', w, x, yx, wx); yl.append(p_)
@@ -127,11 +145,25 @@ for L in lattices(args):
                                 for g in range(n):
                                     if le[z][jn[x][g]]: E.S.add_clause([-p_, -f(x, z, g)])
                     E.S.add_clause([-o] + yl)
+                if mode == 'prefw':
+                    for z in range(n):
+                        if le[x][z] and z != x: E.S.add_clause([-o, -fle(x, z, z), -fle(bot, z, w)])
+                if mode == 'prefx':
+                    for z in range(n):
+                        if le[x][z] and z != x and le[z][y]: E.S.add_clause([-o, -fle(x, z, z)])
+                if mode in ('xorbz', 'gxorbz'):
+                    ob = lambda v: E.v('xo', w, x, v)
+                    E.S.add_clause([-o, ob(w)])
+                    for v in range(n):
+                        for u in range(n):
+                            tgt = u if mode == 'xorbz' else jn[x][u]
+                            E.S.add_clause([-ob(v), -f(x, v, u), ob(tgt)])
+                        if L.rank[v] >= 2: E.S.add_clause([-ob(v), -f(bot, v, bot)])
                 if mode == 'tbot':
                     for t_ in range(n): E.S.add_clause([-o, -f(x, w, t_), -f(bot, t_, bot)])
                 for z in range(n):
-                    if not (le[x][z] and z != x and (mode in ('ic', 'tbot', 'yxbot', 'tyx', 'ic3') or not le[m][z])): continue
-                    if mode in ('cell', 'cell2', 'ic', 'tbot', 'yxbot', 'tyx', 'ic2', 'ic3'): E.S.add_clause([-o, -fle(x, z, x)]); E.S.add_clause([-o, -yle(x, z)])
+                    if not (le[x][z] and z != x and (mode in ('ic', 'tbot', 'yxbot', 'tyx', 'ic3', 'xorbz', 'gxorbz', 'prefx', 'prefw') or not le[m][z])): continue
+                    if mode in ('cell', 'cell2', 'ic', 'tbot', 'yxbot', 'tyx', 'ic2', 'ic3', 'xorbz', 'gxorbz', 'prefx', 'prefw'): E.S.add_clause([-o, -fle(x, z, x)]); E.S.add_clause([-o, -yle(x, z)])
                     else: E.S.add_clause([-o, -fle(x, z, z), -fle(bot, z, x)])
         if not sels: E.S.delete(); continue
         E.S.add_clause(sels)

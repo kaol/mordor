@@ -48,6 +48,24 @@ for L in lattices(args):
             yx = gfp_col(L, F, x); wx = F[x][yx]; t = F[x][w]
             cand = {'t': t, 'F(x,t)': F[x][t], 'y_x': yx, 'w_x': wx, 'y_x⊓y*': mt(yx, ys), 't⊓y_x': mt(t, yx), 'x⊔w_x⊓w': jn[x][mt(wx, w)],
                     'y_x⊓w⊔?': mt(yx, jn[w][t]), 'F(x,y*)': F[x][ys], 'F(x,⊤)': F[x][L.top], 'w_x⊓y*': mt(wx, ys), 'x⊔F(⊥,y_x)': jn[x][F[bot][yx]]}
+            orb = [w]
+            while F[x][orb[-1]] not in orb: orb.append(F[x][orb[-1]])
+            col = [L.top]
+            while jn[x][F[x][col[-1]]] not in col: col.append(jn[x][F[x][col[-1]]])
+            sat = [w]
+            while jn[x][F[x][sat[-1]]] not in sat: sat.append(jn[x][F[x][sat[-1]]])
+            fam = {'x-orbit from w': orb, 'x-orbit ⊓ y*': [mt(v, ys) for v in orb], 'col orbit of x from ⊤': col,
+                   'col orbit ⊓ y*': [mt(v, ys) for v in col], 'G_x orbit from w': sat, 'G_x orbit ⊓ y*': [mt(v, ys) for v in sat],
+                   'F(x, x-orbit)': [F[x][v] for v in orb], 'F(x,·) ⊓ w on orbit': [mt(F[x][v], w) for v in orb],
+                   'col orbit ⊓ w': [mt(v, w) for v in col], 'F(x, col)': [F[x][v] for v in col]}
+            for k_, vs in fam.items(): C[(k_, 'hits Z', any(v in Z for v in vs))] += 1
+            C[('y_x ≤ y*', le[yx][ys])] += 1
+            if not le[yx][ys]:
+                gm = lambda z: jn[m][F[m][z]]
+                cand2 = {'y_x ⊓ G_m(y_x)': mt(yx, gm(yx)), 't': t, 'y_x': yx, 'w_x': wx, 'F(m,y_x)': F[m][yx], 'y_x ⊓ F(m,y_x)': mt(yx, F[m][yx]),
+                         'x ⊔ (w_x ⊓ F(m,y_x))': jn[x][mt(wx, F[m][yx])], 'G_x(y*) ⊓ y_x': mt(jn[x][F[x][ys]], yx), 'y_x ⊓ (y* ⊔ w_x)': mt(yx, jn[ys][wx])}
+                for k_, v in cand2.items(): C[('y_x ≰ y*', k_, 'in Z', v in Z)] += 1
+                C[('y_x ≰ y*', 'y* = ⊤', ys == L.top)] += 1
             C['models'] += 1
             C[('some T1b violation', bool(Z))] += 1
             for k_, v in cand.items(): C[(k_, 'in Z', v in Z)] += 1

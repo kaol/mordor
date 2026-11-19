@@ -1,0 +1,17 @@
+# bare_rowcell.py runs of §34.3z²¹⁰ (one line per run; [scratch log])
+bare kl2 par: {'none': 184}   [m_a]
+bare kl2 par: {'none': 12}   [m_b]
+bare kl2 par: {'none': 12}   [m_c]
+bare kl2 par: {'none': 4}   [m_d]
+bare kl2t par: {'none': 141, 'counterexample': 43}; smallest |L| = 8, rank(m) = 1   [n_a]
+bare kl2c par: {'none': 170, 'counterexample': 14}; smallest |L| = 9, rank(m) = 1   [n_b]
+bare kl2t par: {'none': 5, 'counterexample': 7}; smallest |L| = 11, rank(m) = 1   [n_c]
+bare kl2c par: {'none': 7, 'counterexample': 5}; smallest |L| = 11, rank(m) = 1   [n_d]
+bare kl2 par anyfix: {'none': 141, 'counterexample': 43}; smallest |L| = 8, rank(m) = 1   [o_a]
+bare kl2: {'none': 184}   [o_b]
+bare kl2 par: {'none': 12}   [o_c]
+bare kl2 par: {'none': 4}   [o_d]
+bare gp par: {'none': 141, 'counterexample': 43}; smallest |L| = 8, rank(m) = 1   [p_a]
+bare gp par: {'none': 4, 'counterexample': 8}; smallest |L| = 9, rank(m) = 1   [p_b]
+bare gp noic par rank=2: {'none': 157, 'counterexample': 27}; smallest |L| = 9, rank(m) = 2   [p_c]
+(m_b, n_c, n_d, p_b: closure 5 7 1 12; m_c: closure 5 7 2 12; m_d: closure 6 8 1 4; o_c: closure 5 8 3 12; o_d: closure 6 9 2 4; others sweep 4 16)

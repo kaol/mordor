@@ -96,6 +96,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁰⁸ (split): `IC3`, `DeepFree`, **`secondEntry_one_of_IC3_deepFree`**.
 * §34.3z²⁰⁹ (IC-lemma structure): `inf_eq_bot_of_height_one`, `eq_of_le_height_one`, `icLemma_meets`,
   **`no_preColumn_of_cellFree`**, **`ic_of_preColumn`**, `ic_of_preColumn_le`.
+* §34.3z²¹⁰ (the KL2 reduction): **`no_kl2Column`**, `KL2E`, **`ic_of_KL2E`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2691,6 +2692,49 @@ theorem ic_of_preColumn_le {H : ℕ} (hn : NoChain α (H + 1)) (ht1b : ∀ z, F 
     ∃ z, F ⊥ (F m y) < z ∧ (F (F ⊥ (F m y)) z ≤ F ⊥ (F m y) ∨ z ≤ F (F ⊥ (F m y)) z) :=
   ic_of_preColumn hn ht1b hx1 (feeder_le_side bot_le hy) hxz hFz
     (((F.mono bot_le) z).trans ((F m).mono hzy))
+
+/-- **The KL2 branch.** Under T1b, with `y = m ⊔ F m y`, `w = F m y`, `x = F ⊥ w` of height 1 and a column fixed point
+`y_x = x ⊔ F x y_x` with `x ≰ F x y_x`: no `z > x` has `F ⊥ z ≤ w`, `F x z ≤ y_x` and `x ≰ F x z`. For
+`F ⊥ z ≤ w ⊓ F x z ≤ w ⊓ y_x = x` (`icLemma_meets`) and `x ⊓ F x z = ⊥`, so `F ⊥ z = ⊥`, against T1b. -/
+theorem no_kl2Column {H : ℕ} (hn : NoChain α (H + 1)) (ht1b : ∀ z, F ⊥ z = ⊥ → height H z ≤ 1) {m y yx z : α}
+    (hy : m ⊔ F m y = y) (hx1 : height H (F ⊥ (F m y)) = 1) (hyx : F ⊥ (F m y) ⊔ F (F ⊥ (F m y)) yx = yx)
+    (hxw : ¬ F ⊥ (F m y) ≤ F (F ⊥ (F m y)) yx) (hxz : F ⊥ (F m y) < z) (hbz : F ⊥ z ≤ F m y)
+    (hzy : F (F ⊥ (F m y)) z ≤ yx) (hxF : ¬ F ⊥ (F m y) ≤ F (F ⊥ (F m y)) z) : False := by
+  obtain ⟨ha, -, -⟩ := icLemma_meets hn ht1b hy hx1 hyx hxw
+  have hb : F ⊥ z ≤ F (F ⊥ (F m y)) z := (F.mono bot_le) z
+  have h1 : F ⊥ z ≤ F ⊥ (F m y) := (le_inf hbz (hb.trans hzy)).trans ha.le
+  have h0 : F ⊥ z = ⊥ := le_bot_iff.1 ((le_inf h1 hb).trans (inf_eq_bot_of_height_one hn hx1 hxF).le)
+  have := ht1b z h0
+  have := height_strictMono hn hxz; omega
+
+/-- **KL2E (conjectural; no T1b).** For `y*` the greatest post-fixed point of `y ↦ m ⊔ F m y` with `w = F m y* ≱ m`,
+`x = F ⊥ w` of height 1 with `x ≰ m`, and `y_x` the greatest post-fixed point of `y ↦ x ⊔ F x y` with `x ≰ F x y_x`: if
+row `x` has no interval cell, some `z > x` with `F ⊥ z ≤ w` has `F x z ≤ z` or (`F x z ≤ y_x` and `x ≰ F x z`). No
+counterexample (exact, `bare_rowcell.py kl2`: sweep 184, closures 28, §34.3z²¹⁰). The canonical choices `z ∈ {w, F x w}` and
+`z` on the column orbit of `x` are refuted (`|L| = 8`, `9`). -/
+def KL2E (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ m y yx, m ⊔ F m y = y → (∀ z, z ≤ m ⊔ F m z → z ≤ y) → ¬ m ≤ F m y → height H (F ⊥ (F m y)) = 1 →
+    ¬ F ⊥ (F m y) ≤ m → F ⊥ (F m y) ⊔ F (F ⊥ (F m y)) yx = yx →
+    (∀ z, z ≤ F ⊥ (F m y) ⊔ F (F ⊥ (F m y)) z → z ≤ yx) → ¬ F ⊥ (F m y) ≤ F (F ⊥ (F m y)) yx →
+    (¬ ∃ z, F ⊥ (F m y) < z ∧ (F (F ⊥ (F m y)) z ≤ F ⊥ (F m y) ∨ z ≤ F (F ⊥ (F m y)) z)) →
+    ∃ z, F ⊥ (F m y) < z ∧ F ⊥ z ≤ F m y ∧
+      (F (F ⊥ (F m y)) z ≤ z ∨ (F (F ⊥ (F m y)) z ≤ yx ∧ ¬ F ⊥ (F m y) ≤ F (F ⊥ (F m y)) z))
+
+/-- **KL2E gives the IC-lemma.** Under T1b, with `y*`, `w`, `x = F ⊥ w` as in `KL2E`, row `x` has an interval cell: if
+not, `colOrb_dichotomy` gives `y_x`, KL2E gives a column, and both kinds are excluded (`no_preColumn_of_cellFree`,
+`no_kl2Column`). -/
+theorem ic_of_KL2E [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hk : KL2E F H)
+    (ht1b : ∀ z, F ⊥ z = ⊥ → height H z ≤ 1) {m y : α} (hy : m ⊔ F m y = y) (hgfp : ∀ z, z ≤ m ⊔ F m z → z ≤ y)
+    (hmw : ¬ m ≤ F m y) (hx1 : height H (F ⊥ (F m y)) = 1) (hxm : ¬ F ⊥ (F m y) ≤ m) :
+    ∃ z, F ⊥ (F m y) < z ∧ (F (F ⊥ (F m y)) z ≤ F ⊥ (F m y) ∨ z ≤ F (F ⊥ (F m y)) z) := by
+  by_contra hcf
+  have hpre : F ⊥ (F m y) ≤ F m y := feeder_le_side bot_le hy
+  have hxt : F ⊥ (F m y) ≠ ⊤ := fun e => hmw (le_top.trans (e ▸ hpre))
+  rcases colOrb_dichotomy (F := F) hxt with hc | ⟨n, -, hfix, hg, hxw, -⟩
+  · exact hcf hc
+  obtain ⟨z, hxz, hbz, hz | ⟨hzy, hxF⟩⟩ := hk m y _ hy hgfp hmw hx1 hxm hfix hg hxw hcf
+  · exact no_preColumn_of_cellFree hn ht1b hx1 hpre hcf H (height_le _) hxz hz hbz
+  · exact no_kl2Column hn ht1b hy hx1 hfix hxw hxz hbz hzy hxF
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

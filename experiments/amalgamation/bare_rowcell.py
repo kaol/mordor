@@ -12,6 +12,11 @@ point of y ↦ m ⊔ F(m, y), w = F(m, y*) ≱ m, x = F(⊥, w) ≠ w of rank 1.
   'gxorbz': the same for the orbit u ↦ x ⊔ F(x, u) from w;
   'prefx': x = F(⊥, w) cell-free and row x has no pre-fixed column z with x < z ≤ y (F(x, z) ≤ z);
   'prefw': x = F(⊥, w) cell-free and row x has no pre-fixed column z > x with F(⊥, z) ≤ w;
+  'kl2' : x = F(⊥, w) cell-free (y_x its greatest column fixed point) and no z > x with F(⊥, z) ≤ w and either
+          F(x, z) ≤ z (key-lemma column) or F(x, z) ≤ y_x, x ≰ F(x, z) (KL2 column);
+  'kl2t': as kl2 but only the candidates z = w (pre-fixed) and z = t = F(x, w);
+  'kl2c': as kl2 but only the candidates on the orbit u ↦ x ⊔ F(x, u) from ⊤ (positions encoded exactly);
+  'gp'  : x = F(⊥, w) cell-free and no u with x < u ≤ y and u ≤ x ⊔ F(x, u) (the claim U*: such u exists);
   'deep': x a rank-1 term of the ⊥-descent from w with x ≤ m and x ≠ F(⊥, w) (no conclusion: is a deep atom below m possible?);
   'ic3' : x a rank-1 term of the ⊥-descent from w, conclusion IC(x) (no interval cell at all is the violation);
   'ic2' : as 'cell2' (x a rank-1 term of the ⊥-descent from w, conclusion a cell off m), intended with t1b only;
@@ -62,6 +67,23 @@ def check1(L, F, m, w):
     if 't2b' in HYP and any(inR(b_of(L, F, z), 1) and L.rank[z] > 2 for z in range(n)): return False
     if NOIC and any(le[m][y] and y != m and (le[F[m][y]][m] or le[y][F[m][y]]) for y in range(n)): return False
     if mode == 'deep': return any(le[x][m] and x != F[bot][w] for x in xs)
+    if mode == 'gp':
+        yy = L.join[m][w]
+        return any(not any(le[x][z] and z != x and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n)) and not any(le[x][u] and u != x and le[u][yy] and le[u][L.join[x][F[x][u]]] for u in range(n)) for x in xs)
+    if mode in ('kl2', 'kl2t', 'kl2c'):
+        def yx_(x):
+            y_ = L.top
+            while L.join[x][F[x][y_]] != y_: y_ = L.join[x][F[x][y_]]
+            return y_
+        def ok(x):
+            yx = yx_(x)
+            if mode == 'kl2t': cands = [w, F[x][w]]
+            elif mode == 'kl2c':
+                cands = [L.top]
+                while L.join[x][F[x][cands[-1]]] not in cands: cands.append(L.join[x][F[x][cands[-1]]])
+            else: cands = range(n)
+            return any(le[x][z] and z != x and le[F[bot][z]][w] and (le[F[x][z]][z] or (le[F[x][z]][yx] and not le[x][F[x][z]])) for z in cands)
+        return any(not any(le[x][z] and z != x and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n)) and not ok(x) for x in xs)
     if mode == 'prefw':
         return any(not any(le[x][z] and z != x and (le[F[x][z]][x] or le[z][F[x][z]]) for z in range(n)) and not any(le[x][z] and z != x and le[F[x][z]][z] and le[F[bot][z]][w] for z in range(n)) for x in xs)
     if mode == 'prefx':
@@ -127,6 +149,38 @@ for L in lattices(args):
                     if le[z][y] or 'anyfix' in HYP: continue
                     for g in range(n):
                         if le[z][jn[m][g]]: E.S.add_clause([-o, -f(m, z, g)])
+                if mode in ('kl2', 'kl2t', 'kl2c'):
+                    def xle(z):
+                        k_ = ('xle', x, z)
+                        if k_ not in E.vars: q = E.v(*k_); E.iff_or(q, [f(x, z, v) for v in range(n) if le[x][v]])
+                        return E.vars[k_]
+                    cz = lambda z: [] if mode == 'kl2' else ([f(x, w, z)] if mode == 'kl2t' and z != w else [] if mode == 'kl2t' else [Q(z)])   # candidacy literals
+                    if mode == 'kl2c':
+                        Pc = lambda i, v: E.v('Pc', w, x, i, v)
+                        E.S.add_clause([Pc(0, L.top)])
+                        for i in range(n):
+                            for v in range(n):
+                                for g in range(n): E.S.add_clause([-Pc(i, v), -f(x, v, g), Pc(i + 1, jn[x][g])])
+                                for u in range(v + 1, n): E.S.add_clause([-Pc(i, v), -Pc(i, u)])
+                        def Q(z):
+                            k_ = ('Qc', w, x, z)
+                            if k_ not in E.vars: q = E.v(*k_); E.iff_or(q, [Pc(i, z) for i in range(n + 1)])
+                            return E.vars[k_]
+                    for z in range(n):
+                        if le[x][z] and z != x: E.S.add_clause([-o, -fle(x, z, z), -fle(bot, z, w)] + [-l for l in cz(z)])
+                    yl = []
+                    for yx in range(n):
+                        if not (le[x][yx] and yx != x): continue
+                        for wx in range(n):
+                            if jn[x][wx] != yx: continue
+                            p_ = E.v('k2sel', w, x, yx, wx); yl.append(p_)
+                            E.S.add_clause([-p_, f(x, yx, wx)])
+                            for z in range(n):
+                                if not le[z][yx]:
+                                    for g in range(n):
+                                        if le[z][jn[x][g]]: E.S.add_clause([-p_, -f(x, z, g)])
+                                if le[x][z] and z != x: E.S.add_clause([-p_, -fle(bot, z, w), -fle(x, z, yx), xle(z)] + [-l for l in cz(z)])
+                    E.S.add_clause([-o] + yl)
                 if mode in ('yxbot', 'tyx'):
                     yl = []
                     for yx in range(n):
@@ -145,6 +199,11 @@ for L in lattices(args):
                                 for g in range(n):
                                     if le[z][jn[x][g]]: E.S.add_clause([-p_, -f(x, z, g)])
                     E.S.add_clause([-o] + yl)
+                if mode == 'gp':
+                    for u in range(n):
+                        if le[x][u] and u != x and le[u][y]:
+                            for g in range(n):
+                                if le[u][jn[x][g]]: E.S.add_clause([-o, -f(x, u, g)])
                 if mode == 'prefw':
                     for z in range(n):
                         if le[x][z] and z != x: E.S.add_clause([-o, -fle(x, z, z), -fle(bot, z, w)])
@@ -162,8 +221,8 @@ for L in lattices(args):
                 if mode == 'tbot':
                     for t_ in range(n): E.S.add_clause([-o, -f(x, w, t_), -f(bot, t_, bot)])
                 for z in range(n):
-                    if not (le[x][z] and z != x and (mode in ('ic', 'tbot', 'yxbot', 'tyx', 'ic3', 'xorbz', 'gxorbz', 'prefx', 'prefw') or not le[m][z])): continue
-                    if mode in ('cell', 'cell2', 'ic', 'tbot', 'yxbot', 'tyx', 'ic2', 'ic3', 'xorbz', 'gxorbz', 'prefx', 'prefw'): E.S.add_clause([-o, -fle(x, z, x)]); E.S.add_clause([-o, -yle(x, z)])
+                    if not (le[x][z] and z != x and (mode in ('ic', 'tbot', 'yxbot', 'tyx', 'ic3', 'xorbz', 'gxorbz', 'prefx', 'prefw', 'kl2', 'kl2t', 'kl2c', 'gp') or not le[m][z])): continue
+                    if mode in ('cell', 'cell2', 'ic', 'tbot', 'yxbot', 'tyx', 'ic2', 'ic3', 'xorbz', 'gxorbz', 'prefx', 'prefw', 'kl2', 'kl2t', 'kl2c', 'gp'): E.S.add_clause([-o, -fle(x, z, x)]); E.S.add_clause([-o, -yle(x, z)])
                     else: E.S.add_clause([-o, -fle(x, z, z), -fle(bot, z, x)])
         if not sels: E.S.delete(); continue
         E.S.add_clause(sels)

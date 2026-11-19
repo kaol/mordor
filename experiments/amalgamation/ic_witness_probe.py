@@ -60,6 +60,16 @@ for L in lattices(args):
                    'col orbit ⊓ w': [mt(v, w) for v in col], 'F(x, col)': [F[x][v] for v in col]}
             for k_, vs in fam.items(): C[(k_, 'hits Z', any(v in Z for v in vs))] += 1
             C[('y_x ≤ y*', le[yx][ys])] += 1
+            K = [z for z in range(n) if le[x][z] and z != x and le[F[bot][z]][w] and (le[F[x][z]][z] or (le[F[x][z]][yx] and not le[x][F[x][z]]))]
+            C[('KL2E holds', bool(K))] += 1
+            chain = [L.top]
+            while jn[x][F[x][chain[-1]]] != chain[-1]: chain.append(jn[x][F[x][chain[-1]]])
+            kc = {'w': [w], 't': [t], 'y*': [ys], 'x-orbit from w': orb, 'y* ⊓ colchain': [mt(ys, c) for c in chain],
+                  'y* ⊓ x-orbit': [mt(ys, v) for v in orb], 'w ⊔ t ⊓ y*': [mt(jn[w][t], ys)], 'colchain': chain}
+            for k_, vs in kc.items(): C[('KL2 column', k_, any(v in K for v in vs))] += 1
+            # first element of the x-orbit from w that is a KL2 column, kind
+            for v in orb:
+                if v in K: C[('first KL2 column on x-orbit', 'pre-fixed' if le[F[x][v]][v] else 'KL2', 'index', orb.index(v))] += 1; break
             if not le[yx][ys]:
                 gm = lambda z: jn[m][F[m][z]]
                 cand2 = {'y_x ⊓ G_m(y_x)': mt(yx, gm(yx)), 't': t, 'y_x': yx, 'w_x': wx, 'F(m,y_x)': F[m][yx], 'y_x ⊓ F(m,y_x)': mt(yx, F[m][yx]),

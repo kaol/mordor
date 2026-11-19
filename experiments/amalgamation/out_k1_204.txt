@@ -1,0 +1,18 @@
+cell-free pair (m, e): e ∈ R_1 ∩ ↓w, e ∥ m, ¬IC(e) 67
+models 372
+('#atoms of R_1 below w ∥ m', 0) 130
+('#atoms of R_1 below w ∥ m', 1) 225
+('#atoms of R_1 below w ∥ m', 2) 17
+('a(⊥) = ⊥', False) 111
+('a(⊥) = ⊥', True) 261
+('some atom e ∥ m (anywhere) has a cell at a top', False) 197
+('some atom e ∥ m (anywhere) has a cell at a top', True) 175
+('some atom e ≤ m has a cell at a top', False) 71
+('some atom e ≤ m has a cell at a top', True) 301
+('some atom e ≤ w, e ∥ m has IC(e)', False) 197
+('some atom e ≤ w, e ∥ m has IC(e)', True) 175
+('some atom e ≤ w, e ∥ m has a cell at a top ≠ m', False) 197
+('some atom e ≤ w, e ∥ m has a cell at a top ≠ m', True) 175
+('x0 = F(⊥,m) ∈ R_1 atom, x0 ≤ m ⊓ w', False) 18
+('x0 = F(⊥,m) ∈ R_1 atom, x0 ≤ m ⊓ w', True) 354
+MIN cellfree_pair 7

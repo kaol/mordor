@@ -86,6 +86,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁰³: `secondEntry_of_upCell`, `upCell_of_otherAscending`, **`secondEntry_of_A1BadForbidden`**, `SecondEntryOfGenuineA1`,
   `secondEntryOfGenuineA1_of_badForbidden`, `MinSecondEntry`, `minSecondEntry_of_minUpCell`,
   **`singletonLower_of_minSecondEntry`**, `secondEntryOfGenuineA1_of_min`, `minSecondEntry_zero`.
+* §34.3z²⁰⁴ (uniqueness consequences, k = 1 anatomy): **`tight_of_not_secondEntry`**, `cell_eq_of_not_secondEntry`,
+  `noIC_of_not_secondEntry`, `bot_row_le_side`, `a_bot_of_not_secondEntry_one`, **`exists_cellFree_off_one`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2235,6 +2237,103 @@ theorem minSecondEntry_zero [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1
 /-- `SecondEntryOfGenuineA1` is a special case of `MinSecondEntry`. -/
 theorem secondEntryOfGenuineA1_of_min {H : ℕ} (h : MinSecondEntry F H) : SecondEntryOfGenuineA1 F H :=
   fun k m hall hm hmk hnew ht hno _ _ _ _ _ _ _ _ _ => h k m hall hm hmk hnew ht hno
+
+/-! ### Uniqueness consequences and the k = 1 anatomy (§34.3z²⁰⁴) -/
+
+/-- **Without a second top, `R_k` is tight.** A height-`(k + 1)` element of `R_k ⊆ R_{k+1}` would be `m`, and
+`m ∉ R_k`. So the extra `R_k` tightness needed by `topLayerEntry_iff_fixed_edge` and `secondEntry_iff_switching` is
+free in any proof of `MinSecondEntry` by contradiction. -/
+theorem tight_of_not_secondEntry {H k : ℕ} {m : α} (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    (hnew : m ∉ Rk F k) (hse : ¬ SecondEntry F H k m) : ∀ z ∈ Rk F k, height H z ≤ k := by
+  intro z hz
+  have h1 := hall z (Rk_mono (Nat.le_succ k) hz)
+  by_contra hlt
+  by_cases hzm : z = m
+  · exact hnew (hzm ▸ hz)
+  · exact hse ⟨z, hzm, by omega, Rk_mono (Nat.le_succ k) hz⟩
+
+/-- **Without a second top, every cell of a height-`k` row of `R_k` above the row is at `m`.** -/
+theorem cell_eq_of_not_secondEntry {H k : ℕ} (hn : NoChain α (H + 1)) {m x z : α}
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) (hse : ¬ SecondEntry F H k m)
+    (hx : x ∈ Rk F k) (hxk : height H x = k) (hxz : x < z) (hc : F x z ≤ x ∨ z ≤ F x z) : z = m := by
+  by_contra hzm
+  have hzR := mem_succ_of_cell hx le_rfl hc
+  have := height_strictMono hn hxz; have := hall z hzR
+  exact hse ⟨z, hzm, by omega, hzR⟩
+
+/-- **Without a second top, a height-`k` row of `R_k` off `m` has no interval cell.** -/
+theorem noIC_of_not_secondEntry {H k : ℕ} (hn : NoChain α (H + 1)) {m x : α}
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) (hse : ¬ SecondEntry F H k m)
+    (hx : x ∈ Rk F k) (hxk : height H x = k) (hxm : ¬ x ≤ m) : ¬ ∃ z, x < z ∧ (F x z ≤ x ∨ z ≤ F x z) :=
+  fun ⟨_, hxz, hc⟩ => hxm ((cell_eq_of_not_secondEntry hn hall hse hx hxk hxz hc) ▸ hxz.le)
+
+/-- **`F ⊥ m ≤ w`** for every column fixed point `y = m ⊔ F m y` (`w = F m y`); no hypothesis on `m`. -/
+theorem bot_row_le_side {m y : α} (hy : m ⊔ F m y = y) : F ⊥ m ≤ F m y :=
+  ((F ⊥).mono (le_sup_left.trans hy.le)).trans ((F.mono bot_le) y)
+
+/-- **k = 1: `a ⊥ = ⊥` without a second top** (else `a ⊥` is a diagonal post-fixed top of `R_1`,
+`secondEntry_of_post_layer`). -/
+theorem a_bot_of_not_secondEntry_one [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) {m : α}
+    (hall : ∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) (hnew : m ∉ Rk F 1) (ht : m ≠ ⊤)
+    (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) (hse : ¬ SecondEntry F H 1 m) : a F ⊥ = ⊥ := by
+  by_contra hne
+  have hk1 := tight_of_not_secondEntry hall hnew hse
+  have haR : a F ⊥ ∈ Rk F 1 := mem_succ_of_a (k := 0) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl
+  have h0 := height_strictMono hn (bot_lt_iff_ne_bot.2 hne)
+  rw [height_bot_eq_zero] at h0
+  have h1 : height H (a F ⊥) = 1 := by have := hk1 _ haR; omega
+  exact hse (secondEntry_of_post_layer hn hall hnew ht hno
+    ⟨a F ⊥, haR, h1, (row_a ⊥).symm.le.trans ((F.mono bot_le) _)⟩)
+
+/-- **k = 1 anatomy without a second top.** If `m` has no interval cell and there is no second top at stage 1, then
+for the column fixed point `y*` (output `w = F m y*`, `m ≰ w`) some `e ∈ R_1` of height 1 lies below `w`, off `m`, and
+has no interval cell. Proof: the `⊥`-row descent from `w` gives `d ∈ R_1 ∩ ↓w`; if `d ≤ m`, the saturated shadow of
+row `d` from `w` gives `q = d ⊔ g ≤ w` with `g = F d q ∥ d`, and the `⊥`-descent from `g` gives `e ≤ g`. Were `e ≤ m`,
+`d ⊔ e = m ≤ w` by heights. -/
+theorem exists_cellFree_off_one [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) {m : α}
+    (hall : ∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) (hmk : height H m = 2) (hnew : m ∉ Rk F 1) (ht : m ≠ ⊤)
+    (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) (hse : ¬ SecondEntry F H 1 m) :
+    ∃ y, m ⊔ F m y = y ∧ ¬ m ≤ F m y ∧ ∃ e ∈ Rk F 1, height H e = 1 ∧ e ≤ F m y ∧ ¬ e ≤ m ∧
+      ¬ ∃ z, e < z ∧ (F e z ≤ e ∨ z ≤ F e z) := by
+  rcases colOrb_dichotomy (F := F) ht with hc | ⟨n, -, hfix, -, hmw, hwm⟩
+  · exact (hno hc).elim
+  have hk1 := tight_of_not_secondEntry hall hnew hse
+  have desc : ∀ v, ⊥ < v → F ⊥ v ≤ v → ∃ z ∈ Rk F 1, height H z = 1 ∧ z ≤ v := by
+    intro v hv hFv
+    obtain ⟨z, hz1, hz2, hz3⟩ := row_cell_of_diag_post hn (x := ⊥) bot_le H (height_le _) hv hFv
+    have hzR : z ∈ Rk F 1 := mem_succ_of_cell (k := 0) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl hz3
+    have h0 := height_strictMono hn hz1
+    rw [height_bot_eq_zero] at h0
+    have := hk1 z hzR
+    exact ⟨z, hzR, by omega, hz2⟩
+  have hcf : ∀ e ∈ Rk F 1, height H e = 1 → ¬ e ≤ m → ¬ ∃ z, e < z ∧ (F e z ≤ e ∨ z ≤ F e z) :=
+    fun e he he1 hem => noIC_of_not_secondEntry hn hall hse he he1 hem
+  have hwb : ⊥ < F m (colOrb F m n) := bot_lt_iff_ne_bot.2 fun e => hwm (e ▸ bot_le)
+  obtain ⟨d, hdR, hd1, hdw⟩ := desc _ hwb (feeder_le_side bot_le hfix)
+  by_cases hdm : d ≤ m
+  swap
+  · exact ⟨_, hfix, hmw, d, hdR, hd1, hdw, hdm, hcf d hdR hd1 hdm⟩
+  have hnot : ¬ UpCell F H 1 m := fun h => hse (secondEntry_of_upCell hn hall h)
+  have hdlt : d < F m (colOrb F m n) := lt_of_le_of_ne hdw fun e => hwm (e ▸ hdm)
+  obtain ⟨q, hdq, hqw, -, hFq, -, hdg, hgd⟩ :=
+    saturated_shadow (v := F m (colOrb F m n)) hn hnot hdR hd1 H (height_le _) hdlt le_rfl
+      (feeder_le_side hdm hfix) hmw
+  have hFg : F ⊥ (F d q) ≤ F d q := ((F.mono bot_le) _).trans ((F d).mono hFq)
+  have hgb : ⊥ < F d q := bot_lt_iff_ne_bot.2 fun e => hgd (e ▸ bot_le)
+  obtain ⟨z, hzR, hz1, hzg⟩ := desc _ hgb hFg
+  have hzm : ¬ z ≤ m := by
+    intro hzm
+    have hzd : ¬ z ≤ d := fun h => by
+      have : z = d := by
+        by_contra hne; have := height_strictMono hn (lt_of_le_of_ne h hne); omega
+      exact hdg (this ▸ hzg)
+    have hlt1 : d < d ⊔ z := lt_of_le_of_ne le_sup_left fun e => hzd (e ▸ le_sup_right)
+    have hle : d ⊔ z ≤ m := sup_le hdm hzm
+    have heq : d ⊔ z = m := by
+      by_contra hne
+      have := height_strictMono hn hlt1; have := height_strictMono hn (lt_of_le_of_ne hle hne); omega
+    exact hmw (heq.ge.trans ((sup_le hdq.le (hzg.trans hFq)).trans hqw))
+  exact ⟨_, hfix, hmw, z, hzR, hz1, hzg.trans (hFq.trans hqw), hzm, hcf z hzR hz1 hzm⟩
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

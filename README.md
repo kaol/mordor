@@ -290,7 +290,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     Following the A-orbit of c finds the forbidden row in about 90% of cases, but at |L| = 20 it is disconnected from the
     configuration in every sense tested (§34.3z²⁰²). Any forbidden row or A1Cert forces a second top (`secondEntry_of_A1BadForbidden`).
     SingletonLower already follows from the weaker **MinSecondEntry** (`singletonLower_of_minSecondEntry`), which has no
-    counterexample (§34.3z²⁰³).
+    counterexample (§34.3z²⁰³). In a proof of MinSecondEntry by contradiction, R_k is tight (`tight_of_not_secondEntry`)
+    and rows off m have no cells. At k = 1 a counterexample contains a second cell-free element e ∈ R_1 below
+    w = F(m, y*), off m (`exists_cellFree_off_one`); that pair alone is not contradictory without uniqueness (|L| = 7)
+    (§34.3z²⁰⁴).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

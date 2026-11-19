@@ -301,7 +301,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     atom where the ⊥-descent from w* passes height 1. **RowLT2** (that row carries an LT pair) has no counterexample
     and implies MinSecondEntry at k = 1 (`secondEntry_one_of_rowLT2`) (§34.3z²⁰⁶). The k = 1 content is a **bare two-stage lemma**: with R_1 and R_2 tight and h(m) = 2 (m need not be new),
     that row has an interval cell off m (**TightRowCell2**, no counterexample, exact; each hypothesis essential), and it
-    implies MinSecondEntry at k = 1 (`secondEntry_one_of_tightRowCell2`) (§34.3z²⁰⁷).
+    implies MinSecondEntry at k = 1 (`secondEntry_one_of_tightRowCell2`) (§34.3z²⁰⁷). It splits into **IC3** (the descent atom off m has an interval
+    cell, from the single hypothesis that b(z) = ⊥ forces h(z) ≤ 1) and **DeepFree** (a descent atom below m is F(⊥, w*);
+    needs ¬IC(m) and R_2 tightness), both without counterexample; `secondEntry_one_of_IC3_deepFree` (§34.3z²⁰⁸).
 - **The orbit-height property OHAt H** (⊤ ∈ R_H for every monotone map at edge-height ≤ H; `HeightInduction.OHAt`):
   - **H ≤ 3:** ordinary Lean proofs (`ohAt_two`, `ohAt_three`, §34.3z¹⁵⁸).
   - **H = 4:** three independent `bv_decide` certificates. Like `cut_height5`, each trusts `Lean.ofReduceBool` and

@@ -93,6 +93,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁰⁶ (the row of the bottom-row descent): `bot_iter_le`, **`exists_bot_descent_atom`**, `RowLT2`,
   **`secondEntry_one_of_rowLT2`**.
 * §34.3z²⁰⁷ (bare two-stage form): `TightRowCell2`, **`secondEntry_one_of_tightRowCell2`**.
+* §34.3z²⁰⁸ (split): `IC3`, `DeepFree`, **`secondEntry_one_of_IC3_deepFree`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -2538,6 +2539,54 @@ theorem secondEntry_one_of_tightRowCell2 [WellFoundedLT α] {H : ℕ} (hn : NoCh
   rw [Function.iterate_succ_apply'] at hxx
   have hxR := mem_one_of_bot_value hn hi1 le_rfl hxx
   exact hmz ((cell_eq_of_not_secondEntry hn hall hse hxR hi1 hxz hc) ▸ le_rfl)
+
+/-! ### The split IC3 + DeepFree (§34.3z²⁰⁸) -/
+
+/-- **IC3 (conjectural).** Let `y` be the greatest post-fixed point of `y ↦ m ⊔ F m y` with `w = F m y ≱ m`, and let `x`
+be a height-1 term of the bottom-row descent from `w` with `x ≰ m`. If every `z` with `F ⊥ z = ⊥` has height `≤ 1`, then
+row `x` has an interval cell. Nothing else is assumed: no stage, no height of `m`, no `¬IC(m)`. No counterexample
+(exact, `bare_rowcell.py ic3`, §34.3z²⁰⁸). -/
+def IC3 (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ m y, (∀ z, F ⊥ z = ⊥ → height H z ≤ 1) → m ⊔ F m y = y → (∀ z, z ≤ m ⊔ F m z → z ≤ y) → ¬ m ≤ F m y →
+    ∀ i, height H ((F ⊥)^[i] (F m y)) = 1 → ¬ (F ⊥)^[i] (F m y) ≤ m →
+      ∃ z, (F ⊥)^[i] (F m y) < z ∧ (F ((F ⊥)^[i] (F m y)) z ≤ (F ⊥)^[i] (F m y) ∨ z ≤ F ((F ⊥)^[i] (F m y)) z)
+
+/-- **DeepFree (conjectural).** With `R_2` tight, `h(m) = 2` and `¬IC(m)`, a height-1 term of the bottom-row descent from
+`w = F m y*` that lies below `m` is the first term `F ⊥ w`. No counterexample (exact, `bare_rowcell.py deep`); it fails
+without `¬IC(m)` (`|L| = 4`) and without `R_2` tightness (`|L| = 6`), §34.3z²⁰⁸. -/
+def DeepFree (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ m y, (∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) → height H m = 1 + 1 → (¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) →
+    m ⊔ F m y = y → (∀ z, z ≤ m ⊔ F m z → z ≤ y) → ¬ m ≤ F m y →
+    ∀ i, height H ((F ⊥)^[i] (F m y)) = 1 → (F ⊥)^[i] (F m y) ≤ m → (F ⊥)^[i] (F m y) = F ⊥ (F m y)
+
+/-- **IC3 and DeepFree give MinSecondEntry at k = 1.** Without a second top, take the height-1 descent term `x` from `w*`
+(`exists_bot_descent_atom`), which lies in `R_1`. If `x ≰ m`, IC3 (with `F ⊥ z = ⊥ ⇒ z ∈ R_1`) gives a cell of `x`,
+necessarily at `m` (`cell_eq_of_not_secondEntry`), so `x ≤ m`: contradiction. If `x ≤ m`, DeepFree makes `x = F ⊥ w*`, and
+`upCell_of_bot_side_le_one` gives UpCell. -/
+theorem secondEntry_one_of_IC3_deepFree [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (h3 : IC3 F H)
+    (hd : DeepFree F H) {m : α} (hall : ∀ z ∈ Rk F (1 + 1), height H z ≤ 1 + 1) (hmk : height H m = 1 + 1)
+    (hnew : m ∉ Rk F 1) (ht : m ≠ ⊤) (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : SecondEntry F H 1 m := by
+  by_contra hse
+  have hk1 := tight_of_not_secondEntry hall hnew hse
+  have hab := a_bot_of_not_secondEntry_one hn hall hnew ht hno hse
+  have ht1b : ∀ z, F ⊥ z = ⊥ → height H z ≤ 1 := fun z hz =>
+    hk1 z (mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (y := z) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl
+      (Or.inl hz.le))
+  rcases colOrb_dichotomy (F := F) ht with hc | ⟨n, -, hfix, hgfp, hmw, hwm⟩
+  · exact hno hc
+  have hpre : F ⊥ (F m (colOrb F m n)) ≤ F m (colOrb F m n) := feeder_le_side bot_le hfix
+  have hwb : F m (colOrb F m n) ≠ ⊥ := fun e => hwm (e.le.trans bot_le)
+  obtain ⟨i, hi1⟩ := exists_bot_descent_atom hn hk1 hab hpre hwb
+  have hxx := bot_iter_le hpre i
+  rw [Function.iterate_succ_apply'] at hxx
+  have hxR := mem_one_of_bot_value hn hi1 le_rfl hxx
+  by_cases hxm : (F ⊥)^[i] (F m (colOrb F m n)) ≤ m
+  · have he := hd m _ hall hmk hno hfix hgfp hmw i hi1 hxm
+    rw [he] at hi1 hxm
+    exact hse (secondEntry_of_upCell hn hall (upCell_of_bot_side_le_one hn hk1 hfix hmw hwm hi1 hxm))
+  · obtain ⟨z, hxz, hc⟩ := h3 m _ ht1b hfix hgfp hmw i hi1 hxm
+    have hzm := cell_eq_of_not_secondEntry hn hall hse hxR hi1 hxz hc
+    exact hxm (hzm ▸ hxz.le)
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

@@ -83,3 +83,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²¹⁶: `ic_gtest.py` modes colchain / xorb (refuted at |L| = 20); `ic_core_one.py` (core and G-column names for a stored triple). Output `out_gtest216.txt`.
 - §34.3z²¹⁷: `gap_gtest.py` (excluding the gap with restricted greatest-fixed-point instances; `out_gapgtest217.txt`).
 - §34.3z²¹⁸: `gapcut.py` (GapCutStep, local and with y = y*: modes orbit / post / full / wit / witx / witx0 / lc1 / lc2; `out_gapcut218.txt`, `gapcut_*_min*.json`).
+- §34.3z²¹⁹: `gapcut_core.py` (minimal T1b↑ cores of TransitionWitness; `out_gapcutcore219.txt`).

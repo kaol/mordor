@@ -1,0 +1,68 @@
+# gapcut_core.py (§34.3z²¹⁹): minimal T1b↑ cores of TransitionWitness
+## sweep 4 16
+inconsistent without T1b↑ 660
+('transition at u = ⊤', True) 250
+('core', ('m⊔x',)) 145
+('core', ('≥x,≤y,≤x⊔m',)) 105
+== [gcc_a]
+inconsistent without T1b↑ 48
+('transition at u = ⊤', True) 46
+('core', ('≥x,≤y,≤x⊔m',)) 12
+('core', ('m⊔x',)) 10
+('core', ('≥x,≤y',)) 6
+('core', ('m⊔x', '≥x,≤y')) 6
+('core', ('m⊔x', '≥x,≰y')) 6
+('core', ('≥x,≤y,≤x⊔m', '≥x,≤y,≤x⊔m')) 6
+== [gcc_b]
+|L|=20 m={0} w={13} y={013} x={1} v={13} g={14} u={0134} u2={013} c={14} core=['{01}']
+|L|=20 m={0} w={13} y={013} x={1} v={013} g={14} u={0134} u2={013} c={14} core=['{01}']
+|L|=20 m={0} w={13} y={013} x={3} v={13} g={34} u={0134} u2={013} c={34} core=['{03}']
+|L|=20 m={0} w={13} y={013} x={3} v={013} g={34} u={0134} u2={013} c={34} core=['{03}']
+('transition at u = ⊤', True) 313
+inconsistent without T1b↑ 253
+('core', ('≥x,≤y,≤x⊔m',)) 168
+('core', ('m⊔x',)) 120
+('transition at u = ⊤', False) 116
+('core', ('≥x,≰y',)) 36
+('core', ('≥x,≤y,≤x⊔m', '≥x,≤y,≤x⊔m')) 20
+('core', ('≥x,≰y,≤c,≤g',)) 16
+('core', ('≥x,≤y',)) 12
+('core', ('m⊔x', '≥x,≰y')) 12
+('core', ('m⊔x', '≥x,≤y')) 11
+('core', ('≥x,≤y', '≥x,≤y,≤x⊔m')) 6
+('core', ('m⊔x', '≥x,≰y,≤c,≤g')) 4
+('core', ('≥x,≤y,≤x⊔m', '≥x,≰y')) 4
+('core', ('≥x,≤y,≤x⊔m', '≥x,≰y,≤c,≤g')) 4
+('core', ('≥x,≰y,≤g',)) 3
+('core', ('≥x,≰y,≤c,≤g', '≥x,≰y,≤c,≤g')) 3
+('core', ('m⊔x', 'w⊓v')) 2
+('core', ('m⊔x', '≥x,≰y,≤g')) 2
+('core', ('m⊔x', '≥x,≰y,≤c,≤g', '≥x,≰y,≤c,≤g')) 2
+('core', ('w⊓v', '≥x,≤y,≤x⊔m')) 2
+('core', ('≥x,≤y', '≥x,≤y')) 1
+('core', ('w⊓v', '≥x,≤y')) 1
+== [gcc_c]
+inconsistent without T1b↑ 88
+('transition at u = ⊤', True) 60
+('core', ('m⊔x',)) 32
+('core', ('≥x,≤y,≤x⊔m',)) 13
+('core', ('≥x,≰y',)) 5
+('core', ('≥x,≤y',)) 3
+('core', ('m⊔x', '≥x,≰y')) 2
+('core', ('m⊔x', '≥x,≤y')) 2
+('core', ('≥x,≰y,≤c,≤g',)) 2
+('core', ('≥x,≤y,≤x⊔m', '≥x,≰y')) 1
+== [gcc_d]
+|L|=16 m={23} w={34} y={234} x={4} v={34} g={14} u={1234} u2={234} c={14} core=['{45}']
+|L|=16 m={23} w={34} y={234} x={4} v={34} g={14} u={01234} u2={234} c={14} core=['{45}']
+|L|=16 m={23} w={34} y={234} x={4} v={34} g={145} u={1234} u2={234} c={14} core=['{45}']
+|L|=16 m={23} w={34} y={234} x={4} v={34} g={145} u={01234} u2={234} c={14} core=['{45}']
+inconsistent without T1b↑ 171
+('transition at u = ⊤', True) 27
+('core', ('m⊔x',)) 12
+('core', ('≥x,≰y,≤c,≤g',)) 9
+('core', ('≥x,≰y',)) 8
+('transition at u = ⊤', False) 8
+('core', ('≥x,≰y,≤g',)) 4
+('core', ('≥x,≤y,≤x⊔m',)) 2
+(gcc_a closure 5 7 1 3; gcc_b closure 5 7 2 3; gcc_c closure 5 7 3 3; gcc_d closure 6 8 1 2)

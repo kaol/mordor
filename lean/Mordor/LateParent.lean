@@ -102,6 +102,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²¹⁴ (the `w`-gap, T1b on `(x, ⊤]` only): **`exists_wgap`**.
 * §34.3z²¹⁷ (T1b on `(x, ⊤]`; reduction to the gap): `eq_of_bot_zero_up`, `icLemma_meets_up`, `exists_gap_up`,
   **`ic_of_noGap_up`**.
+* §34.3z²¹⁹ (the final transition): `colOrb_ge_fix`, **`exists_final_transition`**, `TransitionWitness`,
+  **`ic_of_transitionWitness`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3009,6 +3011,66 @@ theorem ic_of_noGap_up [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) {m
   rcases colOrb_dichotomy (F := F) hxt with hc | ⟨n, -, hfix, hg, hxw, -⟩
   · exact hcf hc
   exact hng (exists_gap_up hn ht hy hmw hx1 hxm hfix hg hxw)
+
+/-! ### The final transition of `g ⊓ u_n` along the column orbit of `m` (§34.3z²¹⁹) -/
+
+/-- Every column-orbit element of `m` lies above every fixed point of `u ↦ m ⊔ F m u`. -/
+theorem colOrb_ge_fix {m y : α} (hy : m ⊔ F m y = y) : ∀ i, y ≤ colOrb F m i
+  | 0 => le_top
+  | i + 1 => by
+      rw [colOrb_succ]
+      exact hy.symm.le.trans (sup_le_sup_left ((F m).mono (colOrb_ge_fix hy i)) _)
+
+/-- **The final transition exists.** If the column orbit of `m` reaches the fixed point `y = colOrb F m N`, and
+`x < g` with `y ⊓ g = x`, then some `n` has `x < g ⊓ u_n` and `g ⊓ u_{n+1} = x` (`u_n = colOrb F m n`). -/
+theorem exists_final_transition {m g x : α} {N : ℕ} (hfix : m ⊔ F m (colOrb F m N) = colOrb F m N) (hxg : x < g)
+    (hgy : colOrb F m N ⊓ g = x) : ∃ n, x < g ⊓ colOrb F m n ∧ g ⊓ colOrb F m (n + 1) = x := by
+  classical
+  have hxy : x ≤ colOrb F m N := hgy.symm.le.trans inf_le_left
+  have hxu : ∀ i, x ≤ g ⊓ colOrb F m i := fun i => le_inf hxg.le (hxy.trans (colOrb_ge_fix hfix i))
+  have hex : ∃ i, g ⊓ colOrb F m i ≤ x := ⟨N, (inf_comm g _).le.trans hgy.le⟩
+  obtain ⟨j, hj, hmin⟩ : ∃ j, g ⊓ colOrb F m j ≤ x ∧ ∀ i < j, ¬ g ⊓ colOrb F m i ≤ x :=
+    ⟨Nat.find hex, Nat.find_spec hex, fun i hi => Nat.find_min hex hi⟩
+  rcases j with _ | n
+  · exact absurd ((inf_eq_left.2 le_top).symm.le.trans (by simpa [colOrb_zero] using hj)) (not_le_of_gt hxg)
+  exact ⟨n, lt_of_le_not_ge (hxu n) (hmin n (Nat.lt_succ_self n)), le_antisymm hj (hxu (n + 1))⟩
+
+/-- **TransitionWitness (conjectural).** At the final transition of `g ⊓ u_n` for a gap `(v, g = F x v)` of the greatest
+fixed point `y* = colOrb F m N`, with row `x` cell-free and T1b on `(x, ⊤]` away from `c = g ⊓ u_n`, the bottom row kills
+`c`. No counterexample (exact, `gapcut.py witx`, §34.3z²¹⁸); the configuration without this claim is satisfiable. -/
+def TransitionWitness (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ (m x v : α) (N n : ℕ),
+    m ⊔ F m (colOrb F m N) = colOrb F m N → (∀ z, z ≤ m ⊔ F m z → z ≤ colOrb F m N) →
+    ¬ m ≤ F m (colOrb F m N) → F ⊥ (F m (colOrb F m N)) = x → height H x = 1 → ¬ x ≤ m →
+    (¬ ∃ z, x < z ∧ (F x z ≤ x ∨ z ≤ F x z)) →
+    x < v → v ≤ colOrb F m N → F ⊥ v = x → x ≤ F x v → colOrb F m N ⊓ F x v = x →
+    x < F x v ⊓ colOrb F m n → F x v ⊓ colOrb F m (n + 1) = x →
+    (∀ z, x < z → z ≠ F x v ⊓ colOrb F m n → F ⊥ z ≠ ⊥) →
+    F ⊥ (F x v ⊓ colOrb F m n) = ⊥
+
+/-- **TransitionWitness gives IC↑.** With T1b on `(x, ⊤]`, `y* = colOrb F m N` the greatest post-fixed point of
+`u ↦ m ⊔ F m u`, `w = F m y* ≱ m` and `x = F ⊥ w` of height 1 with `x ≰ m`, row `x` has an interval cell. Without one,
+`exists_gap_up` gives a gap `(v, g = F x v)` (`g > x`, else a lower cell at `v`), `exists_final_transition` gives the
+last index with `g ⊓ u_n > x`, and TransitionWitness puts `c = g ⊓ u_n > x` into `F ⊥`'s kernel, against T1b. -/
+theorem ic_of_transitionWitness [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hT : TransitionWitness F H)
+    {m : α} {N : ℕ} (hfix : m ⊔ F m (colOrb F m N) = colOrb F m N) (hgfp : ∀ z, z ≤ m ⊔ F m z → z ≤ colOrb F m N)
+    (hmw : ¬ m ≤ F m (colOrb F m N)) (hx1 : height H (F ⊥ (F m (colOrb F m N))) = 1)
+    (hxm : ¬ F ⊥ (F m (colOrb F m N)) ≤ m)
+    (ht : ∀ z, F ⊥ (F m (colOrb F m N)) < z → F ⊥ z ≠ ⊥) :
+    ∃ z, F ⊥ (F m (colOrb F m N)) < z ∧
+      (F (F ⊥ (F m (colOrb F m N))) z ≤ F ⊥ (F m (colOrb F m N)) ∨ z ≤ F (F ⊥ (F m (colOrb F m N))) z) := by
+  by_contra hcf
+  have hpre : F ⊥ (F m (colOrb F m N)) ≤ F m (colOrb F m N) := feeder_le_side bot_le hfix
+  have hxt : F ⊥ (F m (colOrb F m N)) ≠ ⊤ := fun e => hmw (le_top.trans (e ▸ hpre))
+  rcases colOrb_dichotomy (F := F) hxt with hc | ⟨k, -, hyx, hg, hxw, -⟩
+  · exact hcf hc
+  obtain ⟨v, hxv, hvy, hbv, hxF, hgap⟩ := exists_gap_up hn ht hfix hmw hx1 hxm hyx hg hxw
+  have hxg : F ⊥ (F m (colOrb F m N)) < F (F ⊥ (F m (colOrb F m N))) v :=
+    lt_of_le_of_ne hxF fun e => hcf ⟨v, hxv, Or.inl e.symm.le⟩
+  obtain ⟨n, hn1, hn2⟩ := exists_final_transition hfix hxg hgap
+  have h0 := hT m _ v N n hfix hgfp hmw rfl hx1 hxm hcf hxv hvy hbv hxF hgap hn1 hn2
+    (fun z hz _ => ht z hz)
+  exact ht _ hn1 h0
 
 /-- At the terminal index a top with any outgoing top edge (to stage `k + 1`) is good (`upCell_of_topEdge` locally). -/
 theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) m c y) : Good F H k m (k - 1) c := by

@@ -1,0 +1,37 @@
+== §34.3z²²⁹ (exact; models re-checked in Python)
+-- dich1_orbcore.py: MinH2Orbit cores, orbit guarded per index (OL(n): F(m, u_n) ≰ m; OU(n): u_n ≰ F(m, u_n))
+   [oc1]
+     cores 282
+     ('uses T2', True) 145
+     ('halves', ('OL0', 'OL1', 'OU1')) 109
+     ('halves', ('OL0', 'OU0')) 96
+     degenerate 77
+     ('uses T2', False) 60
+   [oc2]
+     cores 47
+     ('uses T2', True) 44
+     ('halves', ('OL0', 'OL1', 'OU1')) 23
+     ('halves', ('OL0', 'OL1', 'OL2', 'OU2')) 15
+     ('halves', ('OL0', 'OU0')) 9
+     ('uses T2', False) 3
+   [oc3]
+     cores 44
+     ('uses T2', True) 43
+     ('halves', ('OL0', 'OL1', 'OL2', 'OU2')) 21
+     ('halves', ('OL0', 'OL1', 'OU1')) 18
+     ('halves', ('OL0', 'OU0')) 4
+     degenerate 1
+   [oc4]
+     cores 63
+     ('uses T2', True) 63
+     ('halves', ('OL0', 'OL1', 'OU1')) 29
+     ('halves', ('OL0', 'OL1', 'OL2', 'OU2')) 28
+     ('halves', ('OL0', 'OU0')) 5
+     ('halves', ('OL0', 'OL1', 'OL2', 'OU4')) 1
+   (oc1 = sweep 4 10, oc2 = closure 5 7 1 12, oc3 = closure 5 8 2 12, oc4 = closure 5 9 3 12)
+-- icstar (F(m, u_i) ≰ m for all i; upper half only at the limit y* = u_N) ⟺ w = F(m, y*) ∥ m; R_2 tight, no feeder, no R_1 tightness, no nopostlayer:
+   minh2 nonpl ['icstar', 'nofeed', 'not1'] {'holds': 365} smallest violation None [sweep 4 12]; minh2 nonpl ['icstar', 'nofeed', 'not1'] {'holds': 47} smallest violation None [5 7 1]; minh2 nonpl ['icstar', 'nofeed', 'not1'] {'holds': 44} smallest violation None [5 8 2]; minh2 nonpl ['icstar', 'nofeed', 'not1'] {'holds': 63} smallest violation None [5 9 3]
+-- the same without ⊤ ∉ R_3 (MinH2W): minh2 nonpl ['icstar', 'nofeed', 'not1', 'notop'] {'holds': 365} smallest violation None [sweep 4 12]; minh2 nonpl ['icstar', 'nofeed', 'not1', 'notop'] {'holds': 47} smallest violation None [5 7 1]; minh2 nonpl ['icstar', 'nofeed', 'not1', 'notop'] {'holds': 44} smallest violation None [5 8 2];
+   minh2 nonpl ['icstar', 'nofeed', 'not1', 'notop'] {'holds': 63} smallest violation None [5 9 3]; minh2 nonpl ['icstar', 'nofeed', 'not1', 'notop'] {'holds': 38} smallest violation None [6 8 1 8]
+-- without R_2 tightness: minh2 nonpl ['icstar', 'nofeed', 'not1', 'not2'] {'violated': 27, 'holds': 20} smallest violation 10 [5 7 1]
+-- witness location relative to ↓y* (B2): only y ≤ y*: minh2in nonpl ['icstar', 'nofeed', 'not1'] {'holds': 30, 'violated': 17} smallest violation 11; only y ≰ y*: minh2out nonpl ['icstar', 'nofeed', 'not1'] {'violated': 43, 'holds': 4} smallest violation 9  [5 7 1]

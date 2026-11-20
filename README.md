@@ -274,7 +274,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     height-2 column that is not a gap. It implies UpCell(1) with no tightness (`upCell_one_of_minH2`) (§34.3z²²⁶). It needs R_2 tightness
     (|L| = 11 without it; the claim in §34.3z²²⁶ that H₀ alone suffices is corrected in §34.3z²²⁸) but no R_1 tightness,
     feeder or nopostlayer. Its ¬IC(m) hypothesis is needed only along m's **column orbit**, the object of Strategy B:
-    `MinH2Orbit` has no counterexample, and `secondEntry_one_of_minH2Orbit` (§34.3z²²⁸). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    `MinH2Orbit` has no counterexample, and `secondEntry_one_of_minH2Orbit` (§34.3z²²⁸). Its cores reduce the orbit hypothesis to the limit: **MinH2W** needs only m ∈ R_2 \ R_1 of height 2,
+    R_2 tight and w = F(m, y*) ∥ m, the gfp hypotheses of the IC↑ route (557 instances; `w_incomparable_of_orbitNoCell`,
+    `secondEntry_one_of_minH2W`). Its witness lies inside ↓y* in some models and outside in others (§34.3z²²⁹). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations

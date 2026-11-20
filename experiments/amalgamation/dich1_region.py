@@ -14,9 +14,15 @@ import sys, collections, json
 sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import helpers, lattices
-CLAIM = sys.argv[1]; NONPL = 'nonpl' in sys.argv; ABL = {a for a in sys.argv if a in ('nofeed', 'notop', 'not1', 'not2', 'icok', 'icj', 'ictop', 'icorb', 'icorb1')}
+CLAIM = sys.argv[1]; NONPL = 'nonpl' in sys.argv; ABL = {a for a in sys.argv if a in ('nofeed', 'notop', 'not1', 'not2', 'icok', 'icj', 'ictop', 'icorb', 'icorb1', 'icstar')}
 args = [a for a in sys.argv[2:] if a != 'nonpl' and a not in ABL]
 C = collections.Counter(); best = None
+def sc_ystar(L, F, m):                                 # greatest post-fixed point of u ↦ m ⊔ F(m, u) by iteration from ⊤
+    u = L.top
+    while True:
+        v = L.join[m][F[m][u]]
+        if v == u: return u
+        u = v
 for L in lattices(args):
     n = L.n; le = L.le; h = L.rank; bot = h.index(0)
     for m in range(n):
@@ -25,7 +31,7 @@ for L in lattices(args):
         if not feeders: continue
         E = Enc(L, 3); fle, yle, ic = helpers(E, L); f = lambda a, b, u: E.v('f', a, b, u); r = lambda j, z: E.v('r', j, z); add = E.S.add_clause
         add([r(2, m)]); add([-r(1, m)])
-        if 'icorb' in ABL or 'icorb1' in ABL:          # ¬IC(m) only along m's column orbit u_0 = ⊤, u_{n+1} = m ⊔ F(m, u_n) ('icorb1': u_0, u_1 only)
+        if 'icorb' in ABL or 'icorb1' in ABL or 'icstar' in ABL:   # 'icstar': F(m, u_i) ≰ m for all i, and only at the limit y* = u_N: y* ≰ F(m, y*)          # ¬IC(m) only along m's column orbit u_0 = ⊤, u_{n+1} = m ⊔ F(m, u_n) ('icorb1': u_0, u_1 only)
             U = lambda i, z: E.v('U', i, z); NO = 2 if 'icorb1' in ABL else L.height + 1
             for z in range(n): add([U(0, z)] if z == L.top else [-U(0, z)])
             for i in range(NO - 1):
@@ -37,7 +43,9 @@ for L in lattices(args):
                     E.iff_or(U(i + 1, z), lits)
             for i in range(NO):
                 for z in range(n):
-                    if le[m][z] and z != m: add([-U(i, z), -fle(m, z, m)]); add([-U(i, z), -yle(m, z)])
+                    if le[m][z] and z != m:
+                        add([-U(i, z), -fle(m, z, m)])
+                        if 'icstar' not in ABL or i == NO - 1: add([-U(i, z), -yle(m, z)])
         elif 'icj' in ABL or 'ictop' in ABL:             # ¬IC(m) only at ⊤ ('ictop') or at J = {⊤} ∪ {m ∨ y : h(y) = 2} ('icj')
             J = {L.top} | ({L.join[m][y] for y in range(n) if h[y] == 2 and not le[m][y]} if 'icj' in ABL else set())
             for z in J: add([-fle(m, z, m)]); add([-yle(m, z)])
@@ -69,12 +77,19 @@ for L in lattices(args):
         elif CLAIM in ('maxall', 'minall'): add([E.v('sel', y) for y in inY]); [add([-E.v('sel', y), ext[y]]) or add([-E.v('sel', y), -comp[y]]) for y in inY]
         elif CLAIM in ('maxex', 'minex'): [add([-ext[y], -comp[y]]) for y in inY]
         elif CLAIM == 'minh2': [add([-inY[y], -comp[y]]) for y in inY if h[y] == 2]      # some height-2 point of Y₁ is comparable
+        elif CLAIM in ('minh2in', 'minh2out'):          # witness inside ↓y* ('in') / outside ('out'); y* = u_NO−1 (needs an icorb/icstar flag)
+            for y in inY:
+                if h[y] != 2: continue
+                for z in range(n):
+                    if le[y][z] == (CLAIM == 'minh2in'): add([-U(NO - 1, z), -inY[y], -comp[y]])
         if E.S.solve():
             F = E.decode(); G = lambda y: F[F[bot][y]][y]
             Y = [y for y in range(n) if not le[m][y] and h[F[bot][y]] == 1 and le[F[bot][y]][y] and F[bot][y] != y]
             cp = lambda y: le[G(y)][y] or le[y][G(y)]
             mx = [y for y in Y if not any(y2 != y and (le[y][y2] if CLAIM.startswith('max') else le[y2][y]) for y2 in Y)]
-            ok = {'minh2': not any(cp(y) for y in Y if h[y] == 2), 'region': not any(cp(y) for y in Y), 'maxall': any(not cp(y) for y in mx), 'minall': any(not cp(y) for y in mx),
+            ys = sc_ystar(L, F, m) if CLAIM in ('minh2in', 'minh2out') else None
+            ok = {'minh2in': not any(cp(y) for y in Y if h[y] == 2 and le[y][ys]) if ys is not None else True, 'minh2out': not any(cp(y) for y in Y if h[y] == 2 and not le[y][ys]) if ys is not None else True,
+                  'minh2': not any(cp(y) for y in Y if h[y] == 2), 'region': not any(cp(y) for y in Y), 'maxall': any(not cp(y) for y in mx), 'minall': any(not cp(y) for y in mx),
                   'maxex': not any(cp(y) for y in mx), 'minex': not any(cp(y) for y in mx)}[CLAIM]
             assert ok, 'SAT/Python mismatch'
             C['violated'] += 1

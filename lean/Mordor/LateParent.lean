@@ -113,6 +113,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²²⁴ (cores at k = 2): **`secondEntry_two_of_dichotomy`**.
 * §34.3z²²⁶ (k = 1 as one monotone map): `MinH2`, **`upCell_one_of_minH2`**, `secondEntry_one_of_minH2`.
 * §34.3z²²⁸ (the column orbit): `OrbitNoCell`, `orbitNoCell_of_noCell`, `MinH2Orbit`, **`secondEntry_one_of_minH2Orbit`**.
+* §34.3z²²⁹ (A meets B): **`w_incomparable_of_orbitNoCell`**, `MinH2W`, **`secondEntry_one_of_minH2W`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3318,5 +3319,46 @@ theorem secondEntry_one_of_minH2Orbit {H : ℕ} (hn : NoChain α (H + 1)) (hM : 
     (hm2 : m ∈ Rk F 2) (hm1 : m ∉ Rk F 1) (hmh : height H m = 2) (htop : ⊤ ∉ Rk F 3)
     (hall : ∀ z ∈ Rk F 2, height H z ≤ 2) (hnocell : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : SecondEntry F H 1 m :=
   secondEntry_one_of_minH2 hn hall (hM m hm2 hm1 hmh htop hall (orbitNoCell_of_noCell hnocell))
+
+/-! ### MinH2W: the k = 1 meeting point of Strategies A and B (§34.3z²²⁹)
+
+Minimal cores of MinH2Orbit use the lower halves of OrbitNoCell at an initial segment of the orbit and the upper half
+at its last index. At the limit `y* = u_N` both reduce to `w = F m y*` being incomparable with `m`. These are exactly the
+hypotheses `hmw` and `w ≰ m` of the IC↑ route (`ic_of_transitionWitness`). -/
+
+/-- **OrbitNoCell makes `w` incomparable with `m`** (`m ≠ ⊤`, `u_N` a fixed point): the orbit stays strictly above `m`,
+so the lower half at `N` gives `w ≰ m`. The upper half gives `m ≰ w`, since `m ≤ w` would make `u_N = m ⊔ w = w ≤ F m u_N`. -/
+theorem w_incomparable_of_orbitNoCell {m : α} (hm : m ≠ ⊤) (hO : OrbitNoCell F m) {N : ℕ}
+    (hfix : m ⊔ F m (colOrb F m N) = colOrb F m N) :
+    ¬ m ≤ F m (colOrb F m N) ∧ ¬ F m (colOrb F m N) ≤ m := by
+  have hlt : ∀ n, m < colOrb F m n := by
+    intro n
+    induction n with
+    | zero => exact lt_top_iff_ne_top.2 hm
+    | succ n ih =>
+      rw [colOrb_succ]
+      refine lt_of_le_of_ne le_sup_left fun e => (hO n ih).1 ?_
+      exact le_sup_right.trans e.symm.le
+  obtain ⟨hl, hu⟩ := hO N (hlt N)
+  refine ⟨fun hmw => hu ?_, hl⟩
+  have : colOrb F m N = F m (colOrb F m N) := hfix.symm.trans (sup_eq_right.2 hmw)
+  exact this.le
+
+/-- **MinH2W (conjectural)**: `m ∈ R_2 \ R_1` of height 2, `R_2` tight, and `w = F m y*` incomparable with `m` at the
+greatest fixed point `y*` of `u ↦ m ⊔ F m u`, give MinH2. No ¬IC(m) beyond `w ∥ m`, and no `⊤ ∉ R_3`, feeder, `R_1`
+tightness or nopostlayer. No counterexample (exact, 557 instances: the 4–12 sweep; closure 5 7 1, 5 8 2, 5 9 3, 6 8 1;
+§34.3z²²⁹). Without `R_2` tightness it fails (|L| = 10). -/
+def MinH2W (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ m N, m ∈ Rk F 2 → m ∉ Rk F 1 → height H m = 2 → (∀ z ∈ Rk F 2, height H z ≤ 2) →
+    m ⊔ F m (colOrb F m N) = colOrb F m N → (∀ z, z ≤ m ⊔ F m z → z ≤ colOrb F m N) →
+    ¬ m ≤ F m (colOrb F m N) → ¬ F m (colOrb F m N) ≤ m → MinH2 F H m
+
+/-- **MinH2W gives SecondEntry at `k = 1`** in the no-cell case. -/
+theorem secondEntry_one_of_minH2W {H : ℕ} (hn : NoChain α (H + 1)) (hM : MinH2W F H) {m : α} {N : ℕ}
+    (hm2 : m ∈ Rk F 2) (hm1 : m ∉ Rk F 1) (hmh : height H m = 2) (hmt : m ≠ ⊤) (hall : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    (hfix : m ⊔ F m (colOrb F m N) = colOrb F m N) (hgfp : ∀ z, z ≤ m ⊔ F m z → z ≤ colOrb F m N)
+    (hnocell : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : SecondEntry F H 1 m := by
+  obtain ⟨h1, h2⟩ := w_incomparable_of_orbitNoCell hmt (orbitNoCell_of_noCell hnocell) hfix
+  exact secondEntry_one_of_minH2 hn hall (hM m N hm2 hm1 hmh hall hfix hgfp h1 h2)
 
 end Mordor.OrbitHeight

@@ -110,6 +110,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²²² (atom roots): `AtomGood`, **`upCell_of_atomGood`**, `atomGood_of_topGoal`, **`atomGood_one_iff`**.
 * §34.3z²²³ (k = 2): **`upAt_of_fibreCell`**, `TopFibreNew`, `topFibre_of_new`, `topFibreNew_of_tight`,
   **`atomGood_two_of_topFibreNew`**.
+* §34.3z²²⁴ (cores at k = 2): **`secondEntry_two_of_dichotomy`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3232,5 +3233,22 @@ theorem atomGood_two_of_topFibreNew {H : ℕ} (hn : NoChain α (H + 1))
   have hU : UpAt F m c := upAt_of_fibreCell (j := 1) hn hk2 hp hch (covBy_of_height hn hpc (by omega)) hpcp hpv hmv
     ⟨y, hcy, hyv, hcell⟩
   exact ⟨p, hp, hph, Good.step (Or.inl hS) (Good.term hU)⟩
+
+/-! ### The k = 2 dichotomy (§34.3z²²⁴)
+
+Minimal cores of TopFibreNew(1) pair, for every height-2 top `c` they use, the exclusion of all fibre certificates at
+`c` with the nopostlayer instance `c ≰ F c c` (26/26 cores). TopFibreNew(1) itself fails without nopostlayer
+(|L| = 11, a diagonal post-fixed height-2 top). The statement the cores support is the disjunction below; each
+disjunct gives SecondEntry. -/
+
+/-- **The k = 2 reduction**: a diagonal post-fixed height-2 element of `R_2`, or TopFibreNew at stage 1, gives
+SecondEntry at `k = 2` (no cell at `m`, `m ∉ R_2`, `R_2` and `R_3` tight). -/
+theorem secondEntry_two_of_dichotomy [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1))
+    (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (hall : ∀ z ∈ Rk F 3, height H z ≤ 3) {m : α} (hmk : m ∉ Rk F 2)
+    (htop : m ≠ ⊤) (hnocell : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y))
+    (h : (∃ x ∈ Rk F 2, height H x = 2 ∧ x ≤ F x x) ∨ TopFibreNew F H 1 m) : SecondEntry F H 2 m := by
+  rcases h with hp | ht
+  · exact secondEntry_of_post_layer hn hall hmk htop hnocell hp
+  · exact secondEntry_of_upCell hn hall (upCell_of_atomGood (by omega) (atomGood_two_of_topFibreNew hn hk2 ht))
 
 end Mordor.OrbitHeight

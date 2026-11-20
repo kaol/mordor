@@ -1,0 +1,16 @@
+== ag2f_core.py (§34.3z²²⁴): deletion-minimal cores of TopFibreNew(1), rank(m) = 3, over guards NOIC, TOP, FEED, T3(z), T2(z),
+   NPL(x), CFG(p, c); closure 5 10 1 / 5 10 2 / 5 11 4 / 5 12 8 (10 each)
+   cores: 139; with CFG guards: 104 (max 16 configurations in one core); degenerate (no CFG: the hypotheses alone are
+   UNSAT on that (L, m)): 35; CFG cores containing NOIC 77, TOP 30, FEED 13
+   rerun on 5 10 1 with the set statistics: NPL set = set of CFG tops in 26/26 cores; core uses every configuration 10/26, some 16/26
+   |L|=12 m={012}: FEED NOIC
+   |L|=14 m={012}: CFG{0}{03} CFG{0}{04} CFG{3}{03} CFG{3}{34} CFG{4}{04} CFG{4}{34} NPL{03} NPL{04} NPL{34} TOP
+   |L|=14 m={013}: CFG{0}{03} CFG{0}{04} CFG{3}{03} CFG{3}{34} CFG{4}{04} CFG{4}{34} NPL{03} NPL{04} NPL{34} TOP
+== ag2f_local.py (§34.3z²²⁴): per-element dichotomy "c ≤ F(c, c) or a certificate at c" (hypotheses hard, nopostlayer for x ≠ c)
+   any {'local dichotomy fails': 150, 'holds': 47} smallest 11
+   cover {'local dichotomy fails': 56, 'holds': 16} smallest 11
+   feeder {'holds': 28, 'local dichotomy fails': 44} smallest 11
+   cover {'holds': 32, 'local dichotomy fails': 38} smallest 14
+   (closure 5 10 1, except the last line: 5 11 4); model ag2f_local_min11.json
+== single_claims.py ag2f WITHOUT nopostlayer (multi nofi rmin=3 rmax=3): 5 10 1: refuted 9/10, |L| = 11; 5 11 4: refuted 5/10, |L| = 14
+   (single_claim_ag2f_nonpl_min11.json: m = {024}, the height-2 element {24} ∈ R_2 is diagonal post-fixed)

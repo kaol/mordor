@@ -265,7 +265,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     hypothesis on m (exact, ranks 3 and 4). It implies UpCell (`upCell_of_atomGood`) and equals it at k = 1
     (`atomGood_one_iff`), so its base case is IC↑ (§34.3z²²²). At k = 2, B-edges suffice. Canonical choices of the good atom (below w) and of the witness (below w) are
     refuted, but a comparable fibre column gives UpAt in its own row (`upAt_of_fibreCell`). So **TopFibreNew(1)**
-    implies AtomGood(2) (`atomGood_two_of_topFibreNew`), and it has no counterexample (80 rank-3 lattices) (§34.3z²²³). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    implies AtomGood(2) (`atomGood_two_of_topFibreNew`), and it has no counterexample (80 rank-3 lattices) (§34.3z²²³). Its minimal cores are global: up to 16 configurations, each top paired with its nopostlayer instance. Without
+    nopostlayer it fails (|L| = 11), and the per-element form fails. The supported statement is the dichotomy
+    "a diagonal post-fixed height-2 top or a fibre certificate", and it implies SecondEntry at k = 2
+    (`secondEntry_two_of_dichotomy`) (§34.3z²²⁴). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations

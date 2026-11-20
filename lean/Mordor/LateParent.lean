@@ -124,6 +124,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²³⁶ (response coverage): `pre_iff_lower_or_fixed`, **`fixed_of_responseCover`**.
 * §34.3z²³⁷ (atoms below m): `response_le_w`, **`upCell_one_of_atom_le_m`**, `upCell_one_of_atom_le_m_post`.
 * §34.3z²⁴⁰ (TopDescPre, case `a ⊥` an atom): **`preCover_of_a_bot_atom`**.
+* §34.3z²⁴¹ (case `a ⊥ = ⊥`): `lowerFibre_of_lower`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3696,5 +3697,26 @@ theorem preCover_of_a_bot_atom {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z 
     · have := height_strictMono hn hlt
       have := height_strictMono hn (lt_of_le_of_ne hhi htop)
       omega
+
+/-- **A lower cell of an atom row is a lower fibre cover** (with `R_1`, `R_2` tight). If `c ∈ R_1` is an atom, `c < u`
+and `F c u = c`, then `u ∈ R_2` (b-route), so `h(u) = 2`. Also `F ⊥ u = c`: it is below `F c u = c`, and not `⊥`, since
+that would put `u` into `R_1`. This is the witness when the row-`c` descent from `⊤` passes through `c`. -/
+theorem lowerFibre_of_lower {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1)
+    (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) {c u : α} (hcR : c ∈ Rk F 1) (hc1 : height H c = 1) (hcu : c < u)
+    (hlow : F c u = c) : height H u = 2 ∧ F ⊥ u = c ∧ F c u ≤ u := by
+  have huR : u ∈ Rk F 2 := mem_succ_of_cell (k := 1) hcR le_rfl (Or.inl hlow.le)
+  have h2 : height H u = 2 := by
+    have := hk2 u huR; have := height_strictMono hn hcu; omega
+  refine ⟨h2, ?_, hlow.le.trans hcu.le⟩
+  have hle : F ⊥ u ≤ c := ((F.mono bot_le) u).trans hlow.le
+  by_contra hne
+  have h0 := height_strictMono hn (lt_of_le_of_ne hle hne)
+  have hbot : F ⊥ u = ⊥ := by
+    by_contra hb
+    have := height_strictMono hn (bot_lt_iff_ne_bot.2 hb)
+    omega
+  have := hk1 u (mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl
+    (Or.inl hbot.le))
+  omega
 
 end Mordor.OrbitHeight

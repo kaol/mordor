@@ -10,3 +10,9 @@
    minimal model rc_imgatom_top_min6.json: the failing atom {0} has fibre cover {02} ∉ R_2 (stage 3) with F({0}, {02}) = {01} a gap; the ⊤-descent atom {1} has the fixed fibre cover {01}
    a(⊥) = ⊥ and TopDescPre fails (abotbot): 'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]
    a(⊥) = ⊥ and a(c*) not a fibre cover of c* (acfib): 'SAT': 47} smallest 8 [5 7 1]; 'SAT': 326} smallest 4 [sweep 4 11]
+-- §34.3z²⁴¹ (m-free; start = ⊤; R_1, R_2 tight; case a(⊥) = ⊥ unless noted):
+   belowp (no pre-fixed column of the row c* in (c*, p]): 'SAT': 38, 'UNSAT': 9} smallest 10 [5 7 1]; 'UNSAT': 186, 'SAT': 140} smallest 6 [sweep 4 11]; 'UNSAT': 3, 'SAT': 41} smallest 8 [5 8 2]
+   chit (the row-c* descent from ⊤ never equals c*): 'SAT': 47} smallest 8 [5 7 1]; 'SAT': 326} smallest 4 [sweep 4 11]; 'SAT': 44} smallest 8 [5 8 2]
+   resid240 (misses c*, p ≰ a(c*) or a(c*) ≯ c*, and no pre-fixed column in (c*, p]): 'SAT': 38, 'UNSAT': 9} smallest 10 [5 7 1]; 'UNSAT': 186, 'SAT': 140} smallest 6 [sweep 4 11]; 'UNSAT': 3, 'SAT': 41} smallest 8 [5 8 2]; 'SAT': 60, 'UNSAT': 3} smallest 11 [5 9 3]
+   caseA (c* < a(c*) but F(⊥, a(c*)) ≠ c*): 'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]
+   caseC (a(c*) ≯ c*, the row-c* descent misses c*, no pre-fixed column in (c*, p]): 'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]

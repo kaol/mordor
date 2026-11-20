@@ -83,6 +83,66 @@ for L in lattices(args):
                 add([-E.v('vsel', c, v), o])
                 for z in range(n):
                     if le[v][z]: add([-E.v('vsel', c, v), -U(NO - 1, z)])
+        elif MODE in ('caseA', 'caseC'):                  # a(⊥) = ⊥; caseA: c* < a(c*) but F(⊥, a(c*)) ≠ c*; caseC: a(c*) ≱ c* (or = c*) and the row-c* descent misses c*, and no pre-fixed column in (c*, p]
+            add([A_(bot, bot)])
+            for c in atoms:
+                if MODE == 'caseA':
+                    add([-At[c]] + [A_(c, g) for g in range(n) if le[c][g] and g != c])
+                    for g in range(n):
+                        if le[c][g] and g != c: add([-At[c], -A_(c, g), -f(bot, g, c)])
+                    continue
+                for g in range(n):
+                    if le[c][g] and g != c: add([-At[c], -A_(c, g)])
+                UC = lambda k, z: E.v('UC', c, k, z)
+                for z in range(n): add([UC(0, z)] if z == top else [-UC(0, z)])
+                for k in range(NO):
+                    for z in range(n):
+                        lits = []
+                        for v in range(n): o = E.v('UCs', c, k, v, z); E.iff_and(o, [UC(k, v), f(c, v, z)]); lits.append(o)
+                        E.iff_or(UC(k + 1, z), lits)
+                for k in range(NO + 1): add([-At[c], -UC(k, c)])
+                for i in range(NO):
+                    for pv in range(n):
+                        if not (le[c][pv] and pv != c): continue
+                        for u in range(n):
+                            if le[c][u] and u != c and le[u][pv]: add([-At[c], -D(i, pv), -f(bot, pv, c), -fle(c, u, u)])
+        elif MODE == 'resid240':                          # a(⊥) = ⊥, the row-c* descent misses c*, and the ⊥-descent predecessor p ≰ a(c*) or a(c*) ≯ c*
+            add([A_(bot, bot)])
+            for c in atoms:
+                UC = lambda k, z: E.v('UC', c, k, z)
+                for z in range(n): add([UC(0, z)] if z == top else [-UC(0, z)])
+                for k in range(NO):
+                    for z in range(n):
+                        lits = []
+                        for v in range(n): o = E.v('UCs', c, k, v, z); E.iff_and(o, [UC(k, v), f(c, v, z)]); lits.append(o)
+                        E.iff_or(UC(k + 1, z), lits)
+                for k in range(NO + 1): add([-At[c], -UC(k, c)])
+                for i in range(NO):
+                    for pv in range(n):
+                        if not (le[c][pv] and pv != c): continue
+                        for g in range(n):
+                            if le[c][g] and g != c and le[pv][g]: add([-At[c], -D(i, pv), -f(bot, pv, c), -A_(c, g)])
+                        for u in range(n):                # and the row c* is pre-fixed nowhere in (c*, p] (that case is regionCell_of_fibre_pre)
+                            if le[c][u] and u != c and le[u][pv]: add([-At[c], -D(i, pv), -f(bot, pv, c), -fle(c, u, u)])
+        elif MODE in ('chit', 'chit_any'):                # the row-c* descent ⊤ ≥ F(c*, ⊤) ≥ … never equals c* [chit: with a(⊥) = ⊥]
+            if MODE == 'chit': add([A_(bot, bot)])
+            for c in atoms:
+                UC = lambda k, z: E.v('UC', c, k, z)
+                for z in range(n): add([UC(0, z)] if z == top else [-UC(0, z)])
+                for k in range(NO):
+                    for z in range(n):
+                        lits = []
+                        for v in range(n): o = E.v('UCs', c, k, v, z); E.iff_and(o, [UC(k, v), f(c, v, z)]); lits.append(o)
+                        E.iff_or(UC(k + 1, z), lits)
+                for k in range(NO + 1): add([-At[c], -UC(k, c)])
+        elif MODE in ('belowp', 'belowp_any'):            # a(⊥) = ⊥ ['belowp'] / any ['belowp_any']; no pre-fixed column of row c* in (c*, p], p the descent predecessor
+            if MODE == 'belowp': add([A_(bot, bot)])
+            for i in range(NO):
+                for pv in range(n):
+                    for c in atoms:
+                        if not (le[c][pv] and pv != c): continue
+                        for u in range(n):
+                            if le[c][u] and u != c and le[u][pv]: add([-D(i, pv), -f(bot, pv, c), -fle(c, u, u)])
         elif MODE in ('acfib', 'abotbot'):                # 'abotbot': a(⊥) = ⊥ and DescPre2 fails; 'acfib': a(⊥) = ⊥ and a(c*) is not a fibre cover of c*
             add([A_(bot, bot)])
             if MODE == 'abotbot':
@@ -237,7 +297,29 @@ for L in lattices(args):
                     if not any(le[F[c2][v]][v] for v in vs): return True
                 return False
             ac = a_of(L, F, c)
-            ok = {'acfib': a_of(L, F, bot) == bot and not (le[c][ac] and ac != c and F[bot][ac] == c), 'abotbot': a_of(L, F, bot) == bot and not any(le[F[c][v]][v] for v in Vs), 'imgatom': ia(False), 'imgatom_any': ia(True), 'peratomw': paw(), 'peratom': pa(False), 'peratom_le': pa(True), 'residual': not any(above(c) for c in cand), 'residual_post': not any(le[c][F[bot][c]] for c in cand), 'descpre2yfail': not any(le[F[c][v]][v] and le[v][u_] for v in Vs), 'vley': any(not le[v][u_] for v in Vs), 'descpre2fail': not any(le[F[c][v]][v] for v in Vs), 'ercfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Clp) for u in Clp), 'nonempty': not Vs, 'allgap': bool(Vs) and all(gap(v) for v in Vs),
+            def bp():
+                v = {'w': w, 'ystar': u_, 'top': top}[START]; seen = set()
+                while v not in seen:
+                    seen.add(v); x = F[bot][v]
+                    if x == c and v != c: return not any(le[c][uu] and uu != c and le[uu][v] and le[F[c][uu]][uu] for uu in range(n))
+                    v = x
+                return False
+            def chit():
+                v = top; seen = set()
+                while v not in seen:
+                    seen.add(v)
+                    if v == c: return True
+                    v = F[c][v]
+                return False
+            def pred():
+                v = top; seen = set()
+                while v not in seen:
+                    seen.add(v); x = F[bot][v]
+                    if x == c and v != c: return v
+                    v = x
+            pp = pred(); acc = a_of(L, F, c)
+            ok = {'caseA': a_of(L, F, bot) == bot and le[c][acc] and acc != c and F[bot][acc] != c,
+                  'caseC': a_of(L, F, bot) == bot and not (le[c][acc] and acc != c) and not chit() and bp(), 'resid240': a_of(L, F, bot) == bot and not chit() and not (pp is not None and le[c][acc] and acc != c and le[pp][acc]) and bp(), 'chit': a_of(L, F, bot) == bot and not chit(), 'chit_any': not chit(), 'belowp': a_of(L, F, bot) == bot and bp(), 'belowp_any': bp(), 'acfib': a_of(L, F, bot) == bot and not (le[c][ac] and ac != c and F[bot][ac] == c), 'abotbot': a_of(L, F, bot) == bot and not any(le[F[c][v]][v] for v in Vs), 'imgatom': ia(False), 'imgatom_any': ia(True), 'peratomw': paw(), 'peratom': pa(False), 'peratom_le': pa(True), 'residual': not any(above(c) for c in cand), 'residual_post': not any(le[c][F[bot][c]] for c in cand), 'descpre2yfail': not any(le[F[c][v]][v] and le[v][u_] for v in Vs), 'vley': any(not le[v][u_] for v in Vs), 'descpre2fail': not any(le[F[c][v]][v] for v in Vs), 'ercfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Clp) for u in Clp), 'nonempty': not Vs, 'allgap': bool(Vs) and all(gap(v) for v in Vs),
                   'rcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Vs) for u in Vs),
                   'xrcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[d][v2]] for d, v2 in W) for u in Vs)}[MODE]
             assert ok, 'SAT/Python mismatch'

@@ -105,3 +105,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²³⁸: `descpre2_core.py` flag `cnle`; `rc_test.py` modes `peratom`, `peratom_le`, `peratomw` (all refuted). Output `out_cnle238.txt`.
 - §34.3z²³⁹: `rc_test.py` options `start=ystar|top`, `nowpar`, `nomem`, `nomv` (TopDescPre: m-free, no counterexample). Output `out_start239.txt`.
 - §34.3z²⁴⁰: `rc_test.py` modes `imgatom`, `imgatom_any` (refuted, `rc_imgatom_top_min6.json`), `acfib`, `abotbot`. Output appended to `out_start239.txt`.
+- §34.3z²⁴¹: `rc_test.py` modes `belowp`, `chit`, `resid240`, `caseA`, `caseC` (the case a(⊥) = ⊥ of TopDescPre). Output appended to `out_start239.txt`.

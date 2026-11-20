@@ -263,7 +263,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     tightness (`topReach_of_liftReach_of_tight`) (§34.3z²²¹). A single lift at the root is not enough (early roots need two lifts inside R_1), but every lift lands on an
     atom of R_1. **AtomGood** (some atom of R_1 is Good; no descent) has no counterexample with ¬IC(m) as the only
     hypothesis on m (exact, ranks 3 and 4). It implies UpCell (`upCell_of_atomGood`) and equals it at k = 1
-    (`atomGood_one_iff`), so its base case is IC↑ (§34.3z²²²). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    (`atomGood_one_iff`), so its base case is IC↑ (§34.3z²²²). At k = 2, B-edges suffice. Canonical choices of the good atom (below w) and of the witness (below w) are
+    refuted, but a comparable fibre column gives UpAt in its own row (`upAt_of_fibreCell`). So **TopFibreNew(1)**
+    implies AtomGood(2) (`atomGood_two_of_topFibreNew`), and it has no counterexample (80 rank-3 lattices) (§34.3z²²³). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations

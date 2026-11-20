@@ -1,0 +1,15 @@
+== single_claims.py (§34.3z²²³): exact; every SAT model re-checked in Python (bonly_check); hypotheses multi nopostlayer + ¬IC(m)
+   (nofi: no feeder condition) unless noted; rmax=3 restricts to rank(m) = 3 (k = 2)
+-- topgoal atomroot bedges (AtomGood with B-edges only):
+   rank 3 (rmax=3): 5 11 5, 6 11 6, 6 12 9, 6 12 11: none 40; (rmin=3, no rmax, ranks 3–4) 5 10 1/2/3, 5 11 4, 5 12 8: none 50
+   rank 4: 6 12 9 (rmin=4) refuted 4/10, |L| = 18 (single_claim_atomgood_bedges_rank4_min18.json); 6 11 6, 6 12 11 (rmin=3) refuted at rank 4
+-- sampled features (k2feat.py, one hypothesis model per (L, m), rank 3; 103 models over 5 10 1, 5 11 4, 5 10 2 nofi, 5 12 8 nofi):
+   every good B-pair (s, x) has s ≤ w (103/103); some pair has x ≤ w ∧ x ≤ F(s, w) (101/103)  — hypotheses only, tested below
+-- belowW (some stage-k top x ≤ w = F(m, y*) has UpAt): refuted — 5 10 1 3/10 (|L| = 19), 5 11 4 3/10 (|L| = 17,
+   single_claim_belowW_min17.json), rank 4 6 12 9 2/10 (|L| = 18)
+-- topgoal atomroot atomw (AtomGood with roots the atoms ≤ w): 5 10 1, 5 11 4, 5 12 8, 6 12 9 (rmin=4), 6 12 10 (rmin=4): none;
+   with bedges 5 10 1, 5 11 4: none; 6 11 6 (rmin=3): refuted 2/10, |L| = 29, rank 3 (single_claim_atomgoodw_min29.json:
+   the only good atom {4} ≰ w, ≰ m; F(⊥, w) = {02} has height 2)
+-- ag2f (TopFibreNew at j = 1: an atom p ∈ R_1, a new top c ∈ R_2 \ R_1 of height 2, F(p, c) = p, a fibre column v ≱ m
+   with F(p, v) = c, a column y ∈ (c, v] comparable with F(c, y)), rank 3 only:
+   5 10 1, 5 10 2, 5 10 3, 5 11 4, 5 12 8, 6 11 6, 6 12 9, 6 12 11: none 80

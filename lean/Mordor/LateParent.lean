@@ -108,6 +108,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `liftReach_top`, `liftedTopGoal_of_topGoal`, **`upCell_of_liftedTopGoal`**, **`liftEdge_not_tight`**,
   **`topReach_of_liftReach_of_tight`**, `topGoal_of_liftedTopGoal_of_tight`.
 * §34.3z²²² (atom roots): `AtomGood`, **`upCell_of_atomGood`**, `atomGood_of_topGoal`, **`atomGood_one_iff`**.
+* §34.3z²²³ (k = 2): **`upAt_of_fibreCell`**, `TopFibreNew`, `topFibre_of_new`, `topFibreNew_of_tight`,
+  **`atomGood_two_of_topFibreNew`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3189,5 +3191,46 @@ theorem atomGood_of_topGoal {H k : ℕ} {m s : α} (hs : s ∈ Rk F 1) (hsh : he
 /-- **At `k = 1`, AtomGood is UpCell.** -/
 theorem atomGood_one_iff {H : ℕ} {m : α} : AtomGood F H 1 m ↔ UpCell F H 1 m :=
   ⟨upCell_of_atomGood le_rfl, fun ⟨x, hx, hxh, z, hxz, hmz, hz⟩ => ⟨x, hx, hxh, Good.term ⟨z, hxz, hmz, hz⟩⟩⟩
+
+/-! ### The k = 2 case of AtomGood is TopFibre at stage 1 (§34.3z²²³) -/
+
+/-- **Row-level SiblingShadowCell**: the comparable case of `siblingShadow_upCell` gives an upward cell in the row `c`
+itself (UpAt `c`), not just some UpCell witness. -/
+theorem upAt_of_fibreCell {j H : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {m p c u : α} (hp : p ∈ Rk F j) (hck : height H c = j + 1) (hcov : p ⋖ c)
+    (hpc : F p c = p) (hpu : F p u = c) (hmu : ¬ m ≤ u)
+    (hcase : ∃ z, c < z ∧ z ≤ u ∧ (F c z ≤ z ∨ z ≤ F c z)) : UpAt F m c := by
+  obtain ⟨z, hcz, hzu, h | h⟩ := hcase
+  · obtain ⟨y, hy1, hy2, hy3⟩ := row_cell_of_above hn (x := c) (v := z) (fun y hcy hyz _ =>
+      (source_row_const hn hk hp hck hcov hpc hpu hcy (hyz.trans hzu)).symm.le.trans ((F.mono hcov.le) y))
+      H (height_le _) hcz le_rfl h
+    exact ⟨y, hy1, fun hm => hmu (hm.trans (hy2.trans hzu)), hy3⟩
+  · exact ⟨z, hcz, fun hm => hmu (hm.trans hzu), Or.inr h⟩
+
+/-- **TopFibreNew** (conjectural at `j = 1`): TopFibre with a *new* top `c ∉ R_j`. At `j = 1` (`k = 2`) no
+counterexample with `¬IC(m)` the only hypothesis on `m` (exact, `single_claims.py ag2f`, §34.3z²²³). -/
+def TopFibreNew (F : α →o α →o α) (H j : ℕ) (m : α) : Prop :=
+  ∃ p c v y, p ∈ Rk F j ∧ height H p = j ∧ c ∈ Rk F (j + 1) ∧ c ∉ Rk F j ∧ height H c = j + 1 ∧ p < c ∧ F p c = p ∧
+    F p v = c ∧ ¬ m ≤ v ∧ c < y ∧ y ≤ v ∧ (F c y ≤ y ∨ y ≤ F c y)
+
+theorem topFibre_of_new {H j : ℕ} {m : α} (h : TopFibreNew F H j m) : TopFibre F H j m :=
+  let ⟨p, c, v, y, hp, hph, hc, _, hch, hpc, hpcp, hpv, hmv, hcy, hyv, hcell⟩ := h
+  ⟨p, c, v, y, hp, hph, hc, hch, hpc, hpcp, hpv, hmv, hcy, hyv, hcell⟩
+
+/-- With `R_j` tight, TopFibre is TopFibreNew (a top of height `j + 1` is not in `R_j`). -/
+theorem topFibreNew_of_tight {H j : ℕ} {m : α} (hk : ∀ z ∈ Rk F j, height H z ≤ j) (h : TopFibre F H j m) :
+    TopFibreNew F H j m :=
+  let ⟨p, c, v, y, hp, hph, hc, hch, hpc, hpcp, hpv, hmv, hcy, hyv, hcell⟩ := h
+  ⟨p, c, v, y, hp, hph, hc, fun h => by have := hk c h; omega, hch, hpc, hpcp, hpv, hmv, hcy, hyv, hcell⟩
+
+/-- **TopFibreNew at stage 1 gives AtomGood at `k = 2`** (with `R_2` tight): the configuration `(p, c)` is a
+`SibConfig` out of the atom `p`, and its comparable fibre column makes `c` an UpAt top. -/
+theorem atomGood_two_of_topFibreNew {H : ℕ} (hn : NoChain α (H + 1))
+    (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) {m : α} (h : TopFibreNew F H 1 m) : AtomGood F H 2 m := by
+  obtain ⟨p, c, v, y, hp, hph, hc, hcnew, hch, hpc, hpcp, hpv, hmv, hcy, hyv, hcell⟩ := h
+  have hS : SibConfig F H 1 m p c := ⟨hp, hph, hc, hcnew, hch, hpc, hpcp, ⟨v, lt_of_lt_of_le hcy hyv, hmv, hpv⟩⟩
+  have hU : UpAt F m c := upAt_of_fibreCell (j := 1) hn hk2 hp hch (covBy_of_height hn hpc (by omega)) hpcp hpv hmv
+    ⟨y, hcy, hyv, hcell⟩
+  exact ⟨p, hp, hph, Good.step (Or.inl hS) (Good.term hU)⟩
 
 end Mordor.OrbitHeight

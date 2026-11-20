@@ -14,8 +14,8 @@ sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import helpers, lattices
 from rstages import stages, a_of
-MODE = sys.argv[1]; NOT2 = 'not2' in sys.argv; ATS = 'acstar' in sys.argv; ATA = 'aatoms' in sys.argv; BT = 'broute' in sys.argv; CLE = 'cle' in sys.argv; CNLE = 'cnle' in sys.argv; START = next((a[6:] for a in sys.argv if a.startswith('start=')), 'w'); NOWPAR = 'nowpar' in sys.argv; NOMEM = 'nomem' in sys.argv; NOMV = 'nomv' in sys.argv   # start=w|ystar|top: start of the ⊥-descent
-args = [a for a in sys.argv[2:] if a not in ('not2', 'acstar', 'aatoms', 'broute', 'cle', 'cnle') and not a.startswith('start=') and a not in ('nowpar', 'nomem', 'nomv')]   # nowpar: drop w ∥ m; nomem: drop m ∈ R_2 \\ R_1; nomv: drop m ≰ v in V*   # cle / cnle: restrict to c* ≤ m / c* ≰ m   # acstar: h(a(c*)) ≤ 2 only; aatoms: h(a(d)) ≤ 2 for atoms d ∈ R_1
+MODE = sys.argv[1]; NOT2 = 'not2' in sys.argv; ATS = 'acstar' in sys.argv; ATA = 'aatoms' in sys.argv; BT = 'broute' in sys.argv; CLE = 'cle' in sys.argv; CNLE = 'cnle' in sys.argv; START = next((a[6:] for a in sys.argv if a.startswith('start=')), 'w'); NOWPAR = 'nowpar' in sys.argv; NOMEM = 'nomem' in sys.argv; NOMV = 'nomv' in sys.argv; YSC = 'ysc' in sys.argv; CLW = 'clw' in sys.argv; YSU = 'ysu' in sys.argv   # start=w|ystar|top: start of the ⊥-descent
+args = [a for a in sys.argv[2:] if a not in ('not2', 'acstar', 'aatoms', 'broute', 'cle', 'cnle') and not a.startswith('start=') and a not in ('nowpar', 'nomem', 'nomv', 'ysc', 'clw', 'ysu')]   # nowpar: drop w ∥ m; nomem: drop m ∈ R_2 \\ R_1; nomv: drop m ≰ v in V*   # cle / cnle: restrict to c* ≤ m / c* ≰ m   # acstar: h(a(c*)) ≤ 2 only; aatoms: h(a(d)) ≤ 2 for atoms d ∈ R_1
 C = collections.Counter(); best = None
 for L in lattices(args):
     n = L.n; le = L.le; h = L.rank; bot = h.index(0); top = L.top; jn = L.join
@@ -83,6 +83,40 @@ for L in lattices(args):
                 add([-E.v('vsel', c, v), o])
                 for z in range(n):
                     if le[v][z]: add([-E.v('vsel', c, v), -U(NO - 1, z)])
+        elif MODE == 'witm':                             # the TopDescPre witness (a(c*) if c* < a(c*), else the row-c* predecessor of c*) is m
+            sel = []
+            for c in atoms:
+                if not le[c][m]: continue
+                UC = lambda k, z: E.v('UC', c, k, z)
+                for z in range(n): add([UC(0, z)] if z == top else [-UC(0, z)])
+                for k in range(NO):
+                    for z in range(n):
+                        lits = []
+                        for v in range(n): o = E.v('UCs', c, k, v, z); E.iff_and(o, [UC(k, v), f(c, v, z)]); lits.append(o)
+                        E.iff_or(UC(k + 1, z), lits)
+                s1 = E.v('wsel1', c); E.iff_and(s1, [At[c], A_(c, m)]); sel.append(s1)
+                hit = E.v('whit', c); E.iff_or(hit, [UC(k, m) for k in range(NO + 1)])
+                s2 = E.v('wsel2', c); add([-s2, At[c]]); add([-s2, hit]); add([-s2, f(c, m, c)])
+                for g in range(n):
+                    if le[c][g] and g != c: add([-s2, -A_(c, g)])
+                sel.append(s2)
+                if YSC:                                  # 'ysc': case 2 only, with F(c*, y*) ≰ c*
+                    add([-s1])
+                    for z in range(n): add([-s2, -U(NO - 1, z), -fle(c, z, c)])
+                if YSU:                                  # 'ysu': case 2 only, with y* ≰ the row-c* predecessor p of m
+                    add([-s1])
+                    for pv in range(n):
+                        if pv == m or not le[m][pv]: continue
+                        hp = E.v('whp', c, pv); E.iff_or(hp, [UC(k, pv) for k in range(NO + 1)])
+                        for z in range(n):
+                            if not le[z][pv]: continue
+                            add([-s2, -hp, -f(c, pv, m), -U(NO - 1, z)])
+                if CLW:                                  # 'clw': case 2 only, with c* ≤ w
+                    add([-s1])
+                    for yv in range(n):
+                        for z in range(n):
+                            if not le[c][z]: add([-s2, -U(NO - 1, yv), -f(m, yv, z)])
+            add(sel)
         elif MODE in ('caseC2', 'caseC2any'):              # c* ≰ a(c*) and the row-c* descent from ⊤ never meets c* [caseC2: with a(⊥) = ⊥]
             if MODE == 'caseC2': add([A_(bot, bot)])
             for c in atoms:
@@ -331,7 +365,22 @@ for L in lattices(args):
                     if x == c and v != c: return v
                     v = x
             pp = pred(); acc = a_of(L, F, c)
-            ok = {'caseC2': a_of(L, F, bot) == bot and not le[c][acc] and not chit(), 'caseC2any': not le[c][acc] and not chit(), 'caseA': a_of(L, F, bot) == bot and le[c][acc] and acc != c and F[bot][acc] != c,
+            def ysu_ok():
+                v = top; seen = set()
+                while v not in seen:
+                    seen.add(v); x = F[c][v]
+                    if x == m and v != m: return not le[u_][v]
+                    v = x
+                return False
+            def witm():
+                if le[c][acc] and acc != c: return acc == m
+                v = top; seen = set()
+                while v not in seen:
+                    seen.add(v); x = F[c][v]
+                    if x == c and v != c: return v == m
+                    v = x
+                return False
+            ok = {'witm': witm() and (not YSC or not le[F[c][u_]][c]) and (not CLW or le[c][w]) and (not YSU or ysu_ok()), 'caseC2': a_of(L, F, bot) == bot and not le[c][acc] and not chit(), 'caseC2any': not le[c][acc] and not chit(), 'caseA': a_of(L, F, bot) == bot and le[c][acc] and acc != c and F[bot][acc] != c,
                   'caseC': a_of(L, F, bot) == bot and not (le[c][acc] and acc != c) and not chit() and bp(), 'resid240': a_of(L, F, bot) == bot and not chit() and not (pp is not None and le[c][acc] and acc != c and le[pp][acc]) and bp(), 'chit': a_of(L, F, bot) == bot and not chit(), 'chit_any': not chit(), 'belowp': a_of(L, F, bot) == bot and bp(), 'belowp_any': bp(), 'acfib': a_of(L, F, bot) == bot and not (le[c][ac] and ac != c and F[bot][ac] == c), 'abotbot': a_of(L, F, bot) == bot and not any(le[F[c][v]][v] for v in Vs), 'imgatom': ia(False), 'imgatom_any': ia(True), 'peratomw': paw(), 'peratom': pa(False), 'peratom_le': pa(True), 'residual': not any(above(c) for c in cand), 'residual_post': not any(le[c][F[bot][c]] for c in cand), 'descpre2yfail': not any(le[F[c][v]][v] and le[v][u_] for v in Vs), 'vley': any(not le[v][u_] for v in Vs), 'descpre2fail': not any(le[F[c][v]][v] for v in Vs), 'ercfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Clp) for u in Clp), 'nonempty': not Vs, 'allgap': bool(Vs) and all(gap(v) for v in Vs),
                   'rcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Vs) for u in Vs),
                   'xrcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[d][v2]] for d, v2 in W) for u in Vs)}[MODE]
@@ -340,5 +389,5 @@ for L in lattices(args):
             if best is None or n < best[0]: best = (n, dict(sets=L.S, F=F, m=m))
         else: C['UNSAT'] += 1
         E.S.delete()
-print(MODE, 'not2' if NOT2 else '', 'acstar' if ATS else '', 'aatoms' if ATA else '', 'broute' if BT else '', 'cle' if CLE else '', 'cnle' if CNLE else '', 'start=' + START, 'nowpar' if NOWPAR else '', 'nomem' if NOMEM else '', 'nomv' if NOMV else '', dict(C), 'smallest', best[0] if best else None)
-if best: json.dump(best[1], open(f'rc_{MODE}{"_not2" if NOT2 else ""}{"_acstar" if ATS else ""}{"_aatoms" if ATA else ""}{"_broute" if BT else ""}{"_cle" if CLE else ""}{"_cnle" if CNLE else ""}{"" if START == "w" else "_" + START}_min{best[0]}.json', 'w'))
+print(MODE, 'not2' if NOT2 else '', 'acstar' if ATS else '', 'aatoms' if ATA else '', 'broute' if BT else '', 'cle' if CLE else '', 'cnle' if CNLE else '', 'start=' + START, 'nowpar' if NOWPAR else '', 'nomem' if NOMEM else '', 'nomv' if NOMV else '', 'ysc' if YSC else '', 'clw' if CLW else '', 'ysu' if YSU else '', dict(C), 'smallest', best[0] if best else None)
+if best: json.dump(best[1], open(f'rc_{MODE}{"_not2" if NOT2 else ""}{"_acstar" if ATS else ""}{"_aatoms" if ATA else ""}{"_broute" if BT else ""}{"_cle" if CLE else ""}{"_cnle" if CNLE else ""}{"" if START == "w" else "_" + START}{"_nowpar" if NOWPAR else ""}{"_ysc" if YSC else ""}{"_clw" if CLW else ""}{"_ysu" if YSU else ""}_min{best[0]}.json', 'w'))

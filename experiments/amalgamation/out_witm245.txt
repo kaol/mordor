@@ -1,0 +1,12 @@
+== §34.3z²⁴⁵ rc_test.py witm (exact; models replayed in Python; UNSAT = the claim holds)
+   Hypotheses unless dropped: h(m) = 2, m ∈ R_2 \ R_1, R_1 tight, R_2 tight, w = F(m, y*) ∥ m; start=top (c = atom of the ⊥-descent from ⊤).
+   witm: the TopDescPre witness (a(c) if c < a(c), else the row-c predecessor of c) equals m.
+   witm start=top:            'UNSAT': 213 [closure 5 7 1 60]; 'UNSAT': 326 [sweep 4 11]
+   witm start=top nomem:      'UNSAT': 326 [sweep 4 11]           (m ∈ R_2 \ R_1 not needed)
+   witm start=top nowpar:     'SAT': 213 smallest 6 [closure 5 7 1 60]; 'SAT': 326 smallest 4 [sweep 4 11]   (w ∥ m needed)
+   witm start=top not2:       'UNSAT': 207, 'SAT': 119 smallest 6 [sweep 4 11]   (R_2 tightness needed; rc_witm_not2_top_min6.json)
+-- mechanism probes (case 2: the witness is the row-c predecessor and equals m; without R_2 tightness)
+   ysc (F(c, y*) ≰ c):        'UNSAT': 213 [closure 5 7 1 60]; 'UNSAT': 326 [sweep 4 11]; with nowpar: 'SAT': 326 smallest 4
+   clw (c ≤ w):               'SAT': 153, 'UNSAT': 60 smallest 8 [closure 5 7 1 60]; 'SAT': 119, 'UNSAT': 207 smallest 6 [sweep 4 11]
+   ysu (y* ≰ the row-c predecessor of m): 'UNSAT': 326 [sweep 4 11]; 'UNSAT': 188, 'SAT': 25 smallest 10 [closure 5 7 1 60]  (refuted)
+   All of these are superseded by the Lean proof (topDescPre_offM).

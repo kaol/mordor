@@ -109,3 +109,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁴²: `caseA_core.py` (cores of ¬(A); flag `catom`), `caseA_near.py`. Output `out_caseA242.txt`.
 - §34.3z²⁴³: `caseA_atom_near.py` (near-models of the atom case: the instance is always a(c)); `caseA_core.py` flag `as2` (inconsistent; proved as `botDesc_a_fibre`). Output appended to `out_caseA242.txt`.
 - §34.3z²⁴⁴: `caseC_core.py` (cores of ¬(C′); flag `dropbot`), `caseC_near.py`; `rc_test.py` modes `caseC2`, `caseC2any`. Output `out_caseC244.txt`.
+- §34.3z²⁴⁵: `rc_test.py` mode `witm` (is the TopDescPre witness m?), flags `ysc`, `clw`, `ysu` (case-2 probes; output files now tagged `_nowpar`, `_ysc`, `_clw`, `_ysu`). Output `out_witm245.txt`, `rc_witm_not2_top_min6.json`. Superseded by the Lean proof `topDescPre_offM`.

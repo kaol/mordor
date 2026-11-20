@@ -1,0 +1,19 @@
+# §34.3z²²⁰ gapcut.py witfx / witxo
+[gf_a] local GapCutStep (witfx): {'none': 167, 'counterexample': 17} smallest 9
+[gf_b] local GapCutStep (witxo): {'none': 167, 'counterexample': 17} smallest 9
+[gf_c] local GapCutStep (witfx): {'counterexample': 3, 'none': 1} smallest 15
+[gf_d] local GapCutStep (witxo): {'none': 7, 'counterexample': 5} smallest 12
+(gf_a witfx sweep 4 16; gf_b witxo sweep 4 16; gf_c witfx closure 6 8 1 4; gf_d witxo closure 5 7 1 12)
+# gapcut_core.py closure 6 8 1 2: the 8 genuine transitions (u_n ≠ ⊤), with sampled relaxed models
+   model: F(⊥,c)={4} F(x,c)={45} F(m,u)={234} F(⊥,z0)={} F(x,z0)={5} F(m,z0)={01234} F(⊥,g)={4} F(x,g)={45}  z0 vs c: ∥, z0 vs g: ∥, z0 vs u: ∥/≥, z0 vs u2: ≰, z0 = x ⊔ F(⊥,c)? False, z0 = c ⊔ F(x,c)?False
+   model: F(⊥,c)={4} F(x,c)={45} F(m,u)={234} F(⊥,z0)={} F(x,z0)={5} F(m,z0)={} F(⊥,g)={4} F(x,g)={45}  z0 vs c: ∥, z0 vs g: ∥, z0 vs u: ∥/≥, z0 vs u2: ≰, z0 = x ⊔ F(⊥,c)? False, z0 = c ⊔ F(x,c)?False
+   model: F(⊥,c)={4} F(x,c)={45} F(m,u)={234} F(⊥,z0)={} F(x,z0)={5} F(m,z0)={} F(⊥,g)={4} F(x,g)={45}  z0 vs c: ∥, z0 vs g: ∥, z0 vs u: ∥/≥, z0 vs u2: ≰, z0 = x ⊔ F(⊥,c)? False, z0 = c ⊔ F(x,c)?False
+   model: F(⊥,c)={4} F(x,c)={45} F(m,u)={234} F(⊥,z0)={} F(x,z0)={5} F(m,z0)={} F(⊥,g)={4} F(x,g)={45}  z0 vs c: ∥, z0 vs g: ∥, z0 vs u: ∥/≥, z0 vs u2: ≰, z0 = x ⊔ F(⊥,c)? False, z0 = c ⊔ F(x,c)?False
+|L|=16 m={23} w={34} y={234} x={4} v={34} g={14} u={1234} u2={234} c={14} core=['{45}']
+   model: F(⊥,c)={4} F(x,c)={45} F(m,u)={234} F(⊥,z0)={} F(x,z0)={5} F(m,z0)={01234} F(⊥,g)={4} F(x,g)={45}  z0 vs c: ∥, z0 vs g: ∥, z0 vs u: ∥/≥, z0 vs u2: ≰, z0 = x ⊔ F(⊥,c)? False, z0 = c ⊔ F(x,c)?False
+   model: F(⊥,c)={4} F(x,c)={45} F(m,u)={234} F(⊥,z0)={} F(x,z0)={5} F(m,z0)={} F(⊥,g)={4} F(x,g)={45}  z0 vs c: ∥, z0 vs g: ∥, z0 vs u: ∥/≥, z0 vs u2: ≰, z0 = x ⊔ F(⊥,c)? False, z0 = c ⊔ F(x,c)?False
+   model: F(⊥,c)={4} F(x,c)={45} F(m,u)={234} F(⊥,z0)={} F(x,z0)={5} F(m,z0)={} F(⊥,g)={4} F(x,g)={45}  z0 vs c: ∥, z0 vs g: ∥, z0 vs u: ∥/≥, z0 vs u2: ≰, z0 = x ⊔ F(⊥,c)? False, z0 = c ⊔ F(x,c)?False
+   model: F(⊥,c)={4} F(x,c)={45} F(m,u)={234} F(⊥,z0)={} F(x,z0)={5} F(m,z0)={} F(⊥,g)={4} F(x,g)={45}  z0 vs c: ∥, z0 vs g: ∥, z0 vs u: ∥/≥, z0 vs u2: ≰, z0 = x ⊔ F(⊥,c)? False, z0 = c ⊔ F(x,c)?False
+|L|=16 m={23} w={34} y={234} x={4} v={34} g={14} u={01234} u2={234} c={14} core=['{45}']
+   model: F(⊥,c)={4} F(x,c)={45} F(m,u)={234} F(⊥,z0)={} F(x,z0)={5} F(m,z0)={01234} F(⊥,g)={4} F(x,g)={45}  z0 vs c: ∥, z0 vs g: ≤, z0 vs u: ∥/≥, z0 vs u2: ≰, z0 = x ⊔ F(⊥,c)? False, z0 = c ⊔ F(x,c)?False
+   model: F(⊥,c)={4} F(x,c)={45} F(m,u)={234} F(⊥,z0)={} F(x,z0)={5} F(m,z0)={} F(⊥,g)={4} F(x,g)={45}  z0 vs c: ∥, z0 vs g: ≤, z0 vs u: ∥/≥, z0 vs u2: ≰, z0 = x ⊔ F(⊥,c)? False, z0 = c ⊔ F(x,c)?False

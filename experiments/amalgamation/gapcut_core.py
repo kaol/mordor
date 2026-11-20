@@ -63,6 +63,14 @@ for L in lattices(args):
         C[('transition at u = ⊤', u == L.top)] += 1
         C[('core', desc)] += 1
         if shown < LIM and u != L.top:
+            # sample relaxed models (core minus its single instance) and print relations
+            if len(zs) == 1:
+                z0 = zs[0]; blk = []; k = 0
+                while k < 4 and E.S.solve(assumptions=blk):
+                    mod = set(l for l in E.S.get_model() if l > 0); k += 1
+                    Fv = lambda a, b: next(q for q in range(n) if E.vars[('f', a, b, q)] in mod)
+                    print(f'   model: F(⊥,c)={nm(Fv(bot,c))} F(x,c)={nm(Fv(x,c))} F(m,u)={nm(Fv(m,u))} F(⊥,z0)={nm(Fv(bot,z0))} F(x,z0)={nm(Fv(x,z0))} F(m,z0)={nm(Fv(m,z0))} F(⊥,g)={nm(Fv(bot,g))} F(x,g)={nm(Fv(x,g))}  z0 vs c: {"≤" if le[z0][c] else "≥" if le[c][z0] else "∥"}, z0 vs g: {"≤" if le[z0][g] else "≥" if le[g][z0] else "∥"}, z0 vs u: {"≤" if le[z0][u] else "∥/≥"}, z0 vs u2: {"≤" if le[z0][u2] else "≰"}, z0 = x ⊔ F(⊥,c)? {z0 == jn[x][Fv(bot,c)]}, z0 = c ⊔ F(x,c)?{z0 == jn[c][Fv(x,c)]}')
+                    cl = E.v('blk', k, z0); E.S.add_clause([-cl] + [-E.vars[('f', a, b, Fv(a, b))] for a in (bot, x, m) for b in range(n)]); blk.append(cl)
             shown += 1; print(f'|L|={n} m={nm(m)} w={nm(w)} y={nm(y)} x={nm(x)} v={nm(v)} g={nm(g)} u={nm(u)} u2={nm(u2)} c={nm(c)} core={[nm(z) for z in zs]}')
         E.S.delete()
 for k_, v_ in sorted(C.items(), key=lambda kv: -kv[1])[:25]: print(k_, v_)

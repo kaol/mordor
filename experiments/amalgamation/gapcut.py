@@ -6,7 +6,8 @@ y ⊓ g = x; and a final transition of g ⊓ u_n along a column orbit element u 
 Modes: 'orbit' (u on the column orbit of m from ⊤, positions exact), 'post' (any u ≥ y with m ⊔ F(m, u) ≤ u),
 'full' (orbit + y greatest; control); 'wit' (orbit + y greatest, T1b↑ dropped, claim: F(⊥, g ⊓ u) = ⊥ at the
 transition); 'witx' (as 'wit' with T1b↑ kept on every z > x except g ⊓ u); 'witx0' (as 'witx' without the claim: is the
-configuration satisfiable at all?); 'lc1' / 'lc2' (T1b↑ dropped; claim F(⊥, g ⊓ u) ≤ g / ≤ x).  A model is a counterexample to the local GapCutStep.
+configuration satisfiable at all?); 'lc1' / 'lc2' (T1b↑ dropped; claim F(⊥, g ⊓ u) ≤ g / ≤ x); 'witfx' (T1b↑ only
+at F(x, c); claim F(⊥, c) = ⊥); 'witxo' (T1b↑ only on the x-orbit F(x, c), F(x, F(x, c)), ... above x; same claim).  A model is a counterexample to the local GapCutStep.
    python3 gapcut.py (orbit|post|full) (sweep N MAX | closure K M SEED CNT)
 """
 import sys, collections, json
@@ -21,7 +22,7 @@ for L in lattices(sys.argv[2:]):
         if m == L.top or hit: continue
         E = Enc(L, 1); fle, yle, ic = helpers(E, L); f = lambda a, b, q: E.v('f', a, b, q); sels = []
         P = lambda i, u: E.v('P', i, u)
-        if mode in ('orbit', 'full', 'wit', 'witx', 'witx0', 'lc1', 'lc2'):
+        if mode in ('orbit', 'full', 'wit', 'witx', 'witx0', 'lc1', 'lc2', 'witfx', 'witxo'):
             E.S.add_clause([P(0, L.top)])
             for i in range(n):
                 for u in range(n):
@@ -44,15 +45,25 @@ for L in lattices(sys.argv[2:]):
                                 for lit in (f(m, y, w), f(bot, w, x), f(bot, v, x), f(x, v, g)): E.S.add_clause([-o, lit])
                                 for q in range(n):
                                     if jn[m][q] != u2: E.S.add_clause([-o, -f(m, u, q)])   # u2 = m ⊔ F(m, u)
-                                if mode in ('orbit', 'full', 'wit', 'witx', 'witx0', 'lc1', 'lc2'): E.S.add_clause([-o] + [P(i, u) for i in range(n)])
+                                if mode in ('orbit', 'full', 'wit', 'witx', 'witx0', 'lc1', 'lc2', 'witfx', 'witxo'): E.S.add_clause([-o] + [P(i, u) for i in range(n)])
                                 c = mt(g, u)
-                                if mode in ('wit', 'witx'): E.S.add_clause([-o, -f(bot, c, bot)])
+                                if mode in ('wit', 'witx', 'witfx', 'witxo'): E.S.add_clause([-o, -f(bot, c, bot)])
+                                if mode == 'witfx':
+                                    for d_ in range(n):
+                                        if le[x][d_] and d_ != x: E.S.add_clause([-o, -f(x, c, d_), -f(bot, d_, bot)])
+                                if mode == 'witxo':
+                                    Q = lambda i, z_: E.v('Qx', w, x, v, g, u, u2, i, z_)
+                                    for d_ in range(n): E.S.add_clause([-o, -f(x, c, d_), Q(0, d_)])
+                                    for i in range(n):
+                                        for z_ in range(n):
+                                            if le[x][z_] and z_ != x: E.S.add_clause([-Q(i, z_), -f(bot, z_, bot)])
+                                            for d_ in range(n): E.S.add_clause([-Q(i, z_), -f(x, z_, d_), Q(i + 1, d_)])
                                 if mode in ('lc1', 'lc2'): E.S.add_clause([-o, -fle(bot, c, g if mode == 'lc1' else x)])
                                 for z in range(n):
                                     if le[x][z] and z != x:
                                         E.S.add_clause([-o, -fle(x, z, x)]); E.S.add_clause([-o, -yle(x, z)])
-                                        if mode not in ('wit', 'witx', 'witx0', 'lc1', 'lc2') or (mode in ('witx', 'witx0') and z != c): E.S.add_clause([-o, -f(bot, z, bot)])
-                                    if mode in ('full', 'wit', 'witx', 'witx0', 'lc1', 'lc2') and not le[z][y]:
+                                        if mode not in ('wit', 'witx', 'witx0', 'lc1', 'lc2', 'witfx', 'witxo') or (mode in ('witx', 'witx0') and z != c): E.S.add_clause([-o, -f(bot, z, bot)])
+                                    if mode in ('full', 'wit', 'witx', 'witx0', 'lc1', 'lc2', 'witfx', 'witxo') and not le[z][y]:
                                         for gg in range(n):
                                             if le[z][jn[m][gg]]: E.S.add_clause([-o, -f(m, z, gg)])
         if not sels: E.S.delete(); continue

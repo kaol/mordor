@@ -129,6 +129,10 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁴⁵ (TopDescPre and the m-step): **`drop_bot`** (the drop lemma), `rowIter_succ_le`, `rowIter_le_start`, `botDesc_atom_mem_one`, `botDesc_atom_exists`, **`rowDesc_meets`** ((C′)),
   `lowerCover_of_pre`, **`topDescPre`**, **`topDescPre_offM`**, `preFibre_of_w_incomparable`,
   **`minLevel_one_of_w_incomparable`**, `upCell_one_of_w_incomparable`.
+* §34.3z²⁴⁶ (every level, all stages tight): `eq_of_le_of_height_ge`, `rowIter_antitone`, `le_of_rowDesc`, **`drop_lv`**,
+  `a_fibre_lv`, `lowerFibre_lv`, `rowDesc_meets_lv`, `lowerCover_lv`, `DescChain`, `descChain_zero`,
+  **`descChain_succ`**, **`descChain_exists`**, **`offM_lv`**, **`minLevel_of_w_incomparable`**,
+  `upCell_of_w_incomparable`, **`minUpCell_full`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3416,7 +3420,8 @@ theorem minLevel_one_of_minH2 {H : ℕ} (hn : NoChain α (H + 1)) {m : α} (h : 
 greatest fixed point `y* = u_N` of `u ↦ m ⊔ F m u`, and `w = F m y*` incomparable with `m`, MinLevel holds at `k`. No
 counterexample (exact; with the stronger certificate `p ∈ R_{k−1}`, `h(p) = k − 1`, `p < c`): `k = 1` on 557
 instances, `k = 2` on 204 (all 34 of closure 5 10 1 have models), `k = 3` on 88 (all 30 of closure 6 12 9 have
-models); §34.3z²³⁰. The case `k = 1` is proved with `R_1` tight: `minLevel_one_of_w_incomparable` (§34.3z²⁴⁵). -/
+models); §34.3z²³⁰. The case `k = 1` is proved with `R_1` tight: `minLevel_one_of_w_incomparable` (§34.3z²⁴⁵). Every `k` is
+proved when all stages up to `k + 1` are tight: `minLevel_of_w_incomparable` (§34.3z²⁴⁶). -/
 def MinLevelW (F : α →o α →o α) (H : ℕ) : Prop :=
   ∀ k m N, 1 ≤ k → (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k →
     m ⊔ F m (colOrb F m N) = colOrb F m N → (∀ z, z ≤ m ⊔ F m z → z ≤ colOrb F m N) →
@@ -4041,5 +4046,300 @@ theorem upCell_one_of_w_incomparable {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : 
     (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) {m y : α} (hm2 : height H m = 2) (hy : m ⊔ F m y = y)
     (hmw : ¬ m ≤ F m y) (hwm : ¬ F m y ≤ m) : UpCell F H 1 m :=
   upCell_of_minLevel hn (minLevel_one_of_w_incomparable hn hk1 hk2 hm2 hy hmw hwm)
+
+/-! ### Every level: descent chains and MinLevel (§34.3z²⁴⁶) -/
+
+theorem eq_of_le_of_height_ge {H : ℕ} (hn : NoChain α (H + 1)) {x z : α} (hxz : x ≤ z)
+    (hh : height H z ≤ height H x) : x = z := by
+  by_contra hne
+  have := height_strictMono hn (lt_of_le_of_ne hxz hne); omega
+
+theorem rowIter_antitone {x s : α} (hs : F x s ≤ s) {i j : ℕ} (h : i ≤ j) : (F x)^[j] s ≤ (F x)^[i] s :=
+  antitone_nat_of_succ_le (f := fun n => (F x)^[n] s) (fun n => rowIter_succ_le hs n) h
+
+/-- **The descent lemma in row `p`.** If `c` lies on the row-`p` descent from `⊤` and `y ≤ F p (c ⊔ y)`, then
+`y ≤ c`. -/
+theorem le_of_rowDesc {p c y : α} {N : ℕ} (hN : (F p)^[N] (⊤ : α) = c) (hy : y ≤ F p (c ⊔ y)) : y ≤ c := by
+  have key : ∀ i, i ≤ N → y ≤ (F p)^[i] (⊤ : α) := by
+    intro i
+    induction i with
+    | zero => intro _; exact le_top
+    | succ i ih =>
+      intro hi
+      have hci : c ≤ (F p)^[i] (⊤ : α) := hN ▸ rowIter_antitone (F := F) (le_top) (show i ≤ N by omega)
+      rw [Function.iterate_succ_apply']
+      exact hy.trans ((F p).mono (sup_le hci (ih (by omega))))
+  exact hN ▸ key N le_rfl
+
+/-- **The drop lemma at level `k`.** Let `p ∈ R_k` have height `k`, let `c` of height `k + 1` lie on the row-`p` descent
+from `⊤`, with `p ≤ F p c`, and let `R_{k+1}` be tight. If `p ≤ y`, `c ≰ y` and `F p (c ⊔ y) ≤ y`, then `y = p`.
+(`drop_bot` is the case `p = ⊥`.) -/
+theorem drop_lv {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {p c : α} {N : ℕ} (hpR : p ∈ Rk F k) (hp : height H p = k) (hc : height H c = k + 1)
+    (hpFc : p ≤ F p c) (hN : (F p)^[N] (⊤ : α) = c) :
+    ∀ (n : ℕ) (y : α), height H y ≤ n → p ≤ y → ¬ c ≤ y → F p (c ⊔ y) ≤ y → y = p := by
+  have small : ∀ y : α, p ≤ y → y ≤ c → ¬ c ≤ y → y = p := by
+    intro y hpy hyc hcy
+    have h1 := height_strictMono hn (lt_of_le_of_ne hyc (fun e => hcy (le_of_eq e.symm)))
+    exact (eq_of_le_of_height_ge hn hpy (by omega)).symm
+  intro n
+  induction n with
+  | zero =>
+    intro y hy hpy _ _
+    exact (eq_of_le_of_height_ge hn hpy (by omega)).symm
+  | succ n ih =>
+    intro y hy hpy hcy hF
+    have hpy' : p ≤ F p (c ⊔ y) := hpFc.trans ((F p).mono le_sup_left)
+    by_cases he : F p (c ⊔ y) = y
+    · exact small y hpy (le_of_rowDesc hN he.symm.le) hcy
+    · have hlt : F p (c ⊔ y) < y := lt_of_le_of_ne hF he
+      have hcy' : ¬ c ≤ F p (c ⊔ y) := fun h => hcy (h.trans hF)
+      have hF' : F p (c ⊔ F p (c ⊔ y)) ≤ F p (c ⊔ y) := (F p).mono (sup_le_sup_left hF c)
+      have h0 := ih (F p (c ⊔ y)) (by have := height_strictMono hn hlt; omega) hpy' hcy' hF'
+      have hR : c ⊔ y ∈ Rk F (k + 1) :=
+        mem_succ_of_cell (k := k) (m := p) (x := p) hpR le_rfl (Or.inl h0.le)
+      have hyc : y ≤ c := by
+        by_contra hyc
+        have hlt2 : c < c ⊔ y := lt_of_le_of_ne le_sup_left fun e => hyc (e ▸ le_sup_right)
+        have := hk1 _ hR
+        have := height_strictMono hn hlt2
+        omega
+      exact small y hpy hyc hcy
+
+/-- **Statement (A) at level `k`** (`botDesc_a_fibre` is `p = ⊥`): if `c < a c`, then `F p (a c) = c` and
+`h(a c) = k + 2`. -/
+theorem a_fibre_lv {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    (hk2 : ∀ z ∈ Rk F (k + 2), height H z ≤ k + 2) {p c : α} {N : ℕ} (hpR : p ∈ Rk F k)
+    (hp : height H p = k) (hcR : c ∈ Rk F (k + 1)) (hc : height H c = k + 1) (hpc : p ≤ c) (hpFc : p ≤ F p c)
+    (hN : (F p)^[N] (⊤ : α) = c) (hca : c < a F c) : F p (a F c) = c ∧ height H (a F c) = k + 2 := by
+  have haR : a F c ∈ Rk F (k + 2) := mem_succ_of_a hcR le_rfl
+  have ha2 : height H (a F c) = k + 2 := by
+    have := hk2 _ haR; have := height_strictMono hn hca; omega
+  refine ⟨?_, ha2⟩
+  have hxa : F p (a F c) ≤ a F c := ((F.mono hpc) (a F c)).trans (row_a c).le
+  have hpx : p ≤ F p (a F c) := hpFc.trans ((F p).mono hca.le)
+  have hxne : F p (a F c) ≠ a F c := by
+    intro e
+    have hle : a F c ≤ a F p := le_a e.symm.le
+    have := hk1 _ (mem_succ_of_a hpR hle)
+    omega
+  have hxp : F p (a F c) ≠ p := by
+    intro e
+    have := hk1 _ (mem_succ_of_cell (k := k) (m := p) (x := p) hpR le_rfl (Or.inl e.le))
+    omega
+  have hx1 : height H (F p (a F c)) = k + 1 := by
+    have h1 := height_strictMono hn (lt_of_le_of_ne hxa hxne)
+    have h2 := height_strictMono hn (lt_of_le_of_ne hpx (Ne.symm hxp))
+    omega
+  by_contra hne
+  have hxc : ¬ F p (a F c) ≤ c := fun h => hne (eq_of_le_of_height_ge hn h (by omega))
+  have hcx : c < c ⊔ F p (a F c) := lt_of_le_of_ne le_sup_left fun e => hxc (le_of_le_of_eq le_sup_right e.symm)
+  have hjoin : c ⊔ F p (a F c) = a F c := by
+    by_contra hj
+    have := height_strictMono hn hcx
+    have := height_strictMono hn (lt_of_le_of_ne (sup_le hca.le hxa) hj)
+    omega
+  exact hxc (le_of_rowDesc hN (by rw [hjoin]))
+
+/-- **A lower cover is a fibre cover at level `k`** (`lowerFibre_of_lower` is `p = ⊥`). -/
+theorem lowerFibre_lv {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    (hk2 : ∀ z ∈ Rk F (k + 2), height H z ≤ k + 2) {p c u : α} (hpR : p ∈ Rk F k) (hp : height H p = k)
+    (hcR : c ∈ Rk F (k + 1)) (hc : height H c = k + 1) (hpc : p ≤ c) (hpFc : p ≤ F p c) (hcu : c < u)
+    (hlow : F c u = c) : height H u = k + 2 ∧ F p u = c ∧ F c u ≤ u := by
+  have huR : u ∈ Rk F (k + 2) := mem_succ_of_cell (k := k + 1) hcR le_rfl (Or.inl hlow.le)
+  have h2 : height H u = k + 2 := by
+    have := hk2 u huR; have := height_strictMono hn hcu; omega
+  refine ⟨h2, ?_, hlow.le.trans hcu.le⟩
+  have hle : F p u ≤ c := ((F.mono hpc) u).trans hlow.le
+  have hpu : p ≤ F p u := hpFc.trans ((F p).mono hcu.le)
+  by_contra hne
+  have h0 := height_strictMono hn (lt_of_le_of_ne hle hne)
+  have he : p = F p u := eq_of_le_of_height_ge hn hpu (by omega)
+  have := hk1 u (mem_succ_of_cell (k := k) (m := p) (x := p) hpR le_rfl (Or.inl he.symm.le))
+  omega
+
+/-- **(C′) at level `k`** (`rowDesc_meets` is `p = ⊥`). -/
+theorem rowDesc_meets_lv {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {p c : α} {N : ℕ} (hpR : p ∈ Rk F k) (hp : height H p = k) (hc : height H c = k + 1) (hpc : p ≤ c)
+    (hpFc : p ≤ F p c) (hN : (F p)^[N] (⊤ : α) = c) (hca : ¬ c < a F c) {s : α} (hcs : c ≤ s)
+    (hs : F c s ≤ s) : ∃ j, (F c)^[j] s = c := by
+  obtain ⟨M, hM⟩ := exists_iter_fix_mono hn (F c).mono H (height_le s) hs
+  by_cases hall : ∀ k ≤ M, c ≤ (F c)^[k] s
+  · have hcu : c ≤ (F c)^[M] s := hall M le_rfl
+    have hua : (F c)^[M] s ≤ a F c := le_a hM.symm.le
+    have hac : a F c = c := by
+      by_contra hne; exact hca (lt_of_le_of_ne (hcu.trans hua) (Ne.symm hne))
+    exact ⟨M, le_antisymm (hua.trans hac.le) hcu⟩
+  · push_neg at hall
+    classical
+    have hk0 : Nat.find hall ≤ M ∧ ¬ c ≤ (F c)^[Nat.find hall] s := Nat.find_spec hall
+    have hk0pos : Nat.find hall ≠ 0 := by
+      intro e; rw [e] at hk0; exact hk0.2 hcs
+    obtain ⟨j, hj⟩ : ∃ j, Nat.find hall = j + 1 := ⟨Nat.find hall - 1, by omega⟩
+    have hcz : c ≤ (F c)^[j] s := by
+      by_contra hcz
+      exact Nat.find_min hall (show j < Nat.find hall by omega) ⟨by omega, hcz⟩
+    have hnext : (F c)^[j + 1] s = F c ((F c)^[j] s) := Function.iterate_succ_apply' _ _ _
+    have hdrop : ¬ c ≤ F c ((F c)^[j] s) := by rw [← hnext, ← hj]; exact hk0.2
+    have hyF : F p ((F c)^[j] s) ≤ F c ((F c)^[j] s) := (F.mono hpc) _
+    have hFz : F c ((F c)^[j] s) ≤ (F c)^[j] s := by rw [← hnext]; exact rowIter_succ_le hs j
+    have hcy : ¬ c ≤ F p ((F c)^[j] s) := fun h => hdrop (h.trans hyF)
+    have hpy : p ≤ F p ((F c)^[j] s) := hpFc.trans ((F p).mono hcz)
+    have hsup : c ⊔ F p ((F c)^[j] s) ≤ (F c)^[j] s := sup_le hcz (hyF.trans hFz)
+    have hy0 := drop_lv hn hk1 hpR hp hc hpFc hN H (F p ((F c)^[j] s)) (height_le _) hpy hcy ((F p).mono hsup)
+    have hzR : (F c)^[j] s ∈ Rk F (k + 1) :=
+      mem_succ_of_cell (k := k) (m := p) (x := p) hpR le_rfl (Or.inl hy0.le)
+    exact ⟨j, (eq_of_le_of_height_ge hn hcz (by have := hk1 _ hzR; omega)).symm⟩
+
+/-- **A lower fibre cover below any pre-fixed start, at level `k`** (`lowerCover_of_pre` is `p = ⊥`). It is
+returned with its position on the row-`c` descent from `s`. -/
+theorem lowerCover_lv {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    (hk2 : ∀ z ∈ Rk F (k + 2), height H z ≤ k + 2) {p c : α} {N : ℕ} (hpR : p ∈ Rk F k)
+    (hp : height H p = k) (hcR : c ∈ Rk F (k + 1)) (hc : height H c = k + 1) (hpc : p ≤ c) (hpFc : p ≤ F p c)
+    (hN : (F p)^[N] (⊤ : α) = c) (hca : ¬ c < a F c) {s : α} (hcs : c < s) (hs : F c s ≤ s) :
+    ∃ q, (∃ j, (F c)^[j] s = q) ∧ c < q ∧ q ≤ s ∧ height H q = k + 2 ∧ F p q = c ∧ F c q = c := by
+  have hmeet := rowDesc_meets_lv hn hk1 hpR hp hc hpc hpFc hN hca hcs.le hs
+  classical
+  have hk1' : (F c)^[Nat.find hmeet] s = c := Nat.find_spec hmeet
+  have hk1pos : Nat.find hmeet ≠ 0 := by intro e; rw [e] at hk1'; exact hcs.ne hk1'.symm
+  obtain ⟨j, hj⟩ : ∃ j, Nat.find hmeet = j + 1 := ⟨Nat.find hmeet - 1, by omega⟩
+  have hFu : F c ((F c)^[j] s) = c := by
+    rw [hj, Function.iterate_succ_apply'] at hk1'; exact hk1'
+  have hcu : c ≤ (F c)^[j] s := by
+    have := rowIter_succ_le hs j
+    rw [Function.iterate_succ_apply', hFu] at this
+    exact this
+  have hne : (F c)^[j] s ≠ c := fun e => Nat.find_min hmeet (show j < Nat.find hmeet by omega) e
+  have hlt : c < (F c)^[j] s := lt_of_le_of_ne hcu (Ne.symm hne)
+  obtain ⟨h2, hbot, -⟩ := lowerFibre_lv hn hk1 hk2 hpR hp hcR hc hpc hpFc hlt hFu
+  exact ⟨_, ⟨j, rfl⟩, hlt, rowIter_le_start hs j, h2, hbot, hFu⟩
+
+/-- **Descent chain at level `k`**: `p ∈ R_k` of height `k`, `c ∈ R_{k+1}` of height `k + 1` on the row-`p` descent from
+`⊤`, with `p ≤ c` and `p ≤ F p c` (the descent has not yet fallen below `p`). -/
+def DescChain (F : α →o α →o α) (H k : ℕ) (p c : α) : Prop :=
+  p ∈ Rk F k ∧ height H p = k ∧ c ∈ Rk F (k + 1) ∧ height H c = k + 1 ∧ p ≤ c ∧ p ≤ F p c ∧
+    ∃ N, (F p)^[N] (⊤ : α) = c
+
+/-- The base of the tower: `⊥` and the atom of the `⊥`-descent from `⊤`. -/
+theorem descChain_zero {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1)
+    (hbt : (⊥ : α) < ⊤) : ∃ c, DescChain F H 0 ⊥ c := by
+  obtain ⟨N, c, hN, hc1⟩ := botDesc_atom_exists hn hk1 hbt
+  exact ⟨c, show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl, height_bot_eq_zero, botDesc_atom_mem_one hn hN hc1, hc1,
+    bot_le, bot_le, N, hN⟩
+
+/-- **The tower step** (with `R_{k+1}`, `R_{k+2}` tight). A descent chain `(p, c)` at level `k` with `c ≠ ⊤` extends to
+`(c, c′)` at level `k + 1`. If `c < a c`, then `c′ = a c`, which is the limit of the row-`c` descent from `⊤`.
+Otherwise `c′` is the lower fibre cover below `⊤`. -/
+theorem descChain_succ {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    (hk2 : ∀ z ∈ Rk F (k + 2), height H z ≤ k + 2) {p c : α} (h : DescChain F H k p c) (hct : c ≠ ⊤) :
+    ∃ c', DescChain F H (k + 1) c c' := by
+  obtain ⟨hpR, hp, hcR, hc, hpc, hpFc, N, hN⟩ := h
+  by_cases hca : c < a F c
+  · obtain ⟨-, h2⟩ := a_fibre_lv hn hk1 hk2 hpR hp hcR hc hpc hpFc hN hca
+    obtain ⟨M, hM⟩ := exists_iter_fix_mono hn (F c).mono H (height_le (⊤ : α)) le_top
+    have hle : (F c)^[M] (⊤ : α) ≤ a F c := le_a hM.symm.le
+    have hge : a F c ≤ (F c)^[M] (⊤ : α) := a_le_iter le_top M
+    refine ⟨a F c, hcR, hc, mem_succ_of_a hcR le_rfl, h2, hca.le, ?_, M, le_antisymm hle hge⟩
+    rw [row_a]; exact hca.le
+  · obtain ⟨q, ⟨j, hj⟩, hcq, -, h2, -, hlow⟩ :=
+      lowerCover_lv hn hk1 hk2 hpR hp hcR hc hpc hpFc hN hca (lt_top_iff_ne_top.2 hct) le_top
+    exact ⟨q, hcR, hc, mem_succ_of_cell (k := k + 1) hcR le_rfl (Or.inl hlow.le), h2, hcq.le, hlow.symm.le,
+      j, hj⟩
+
+/-- **The tower** (with `R_0, …, R_{k+1}` tight and `h(⊤) > k`): a descent chain exists at every level `k`. -/
+theorem descChain_exists {H : ℕ} (hn : NoChain α (H + 1)) : ∀ k : ℕ,
+    (∀ i ≤ k + 1, ∀ z ∈ Rk F i, height H z ≤ i) → k < height H (⊤ : α) → ∃ p c, DescChain F H k p c
+  | 0, ht, hH => by
+    have hbt : (⊥ : α) < ⊤ := bot_lt_iff_ne_bot.2 (fun e => by rw [e, height_bot_eq_zero] at hH; omega)
+    obtain ⟨c, hc⟩ := descChain_zero hn (ht 1 le_rfl) hbt
+    exact ⟨⊥, c, hc⟩
+  | k + 1, ht, hH => by
+    obtain ⟨p, c, hc⟩ := descChain_exists hn k (fun i hi => ht i (by omega)) (by omega)
+    have hct : c ≠ ⊤ := fun e => by have := hc.2.2.2.1; rw [e] at this; omega
+    obtain ⟨c', hc'⟩ := descChain_succ hn (ht (k + 1) (by omega)) (ht (k + 2) (by omega)) hc hct
+    exact ⟨c, c', hc'⟩
+
+/-- **The m-step at level `k`** (`topDescPre_offM` is `k = 0`). With `R_{k+1}`, `R_{k+2}` tight, a descent chain `(p, c)`
+with `c ≠ ⊤`, `h(m) = k + 2`, `m ⊔ F m y = y` and `w = F m y ∥ m`, there is `v ≻ c` of height `k + 2` with `F p v = c`,
+`F c v ≤ v` and `m ≰ v`. -/
+theorem offM_lv {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    (hk2 : ∀ z ∈ Rk F (k + 2), height H z ≤ k + 2) {p c : α} (h : DescChain F H k p c) (hct : c ≠ ⊤)
+    {m y : α} (hm : height H m = k + 2) (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) (hwm : ¬ F m y ≤ m) :
+    ∃ v, c < v ∧ height H v = k + 2 ∧ F p v = c ∧ F c v ≤ v ∧ ¬ m ≤ v := by
+  obtain ⟨hpR, hp, hcR, hc, hpc, hpFc, N, hN⟩ := h
+  have hmy : m ≤ y := le_of_le_of_eq le_sup_left hy
+  have hwy : F m y ≤ y := le_of_le_of_eq le_sup_right hy
+  have heq : ∀ v, height H v = k + 2 → m ≤ v → v = m := fun v hv hmv =>
+    (eq_of_le_of_height_ge hn hmv (by omega)).symm
+  by_cases hca : c < a F c
+  · obtain ⟨h1, h2⟩ := a_fibre_lv hn hk1 hk2 hpR hp hcR hc hpc hpFc hN hca
+    refine ⟨a F c, hca, h2, h1, (row_a c).le, fun hma => hmw ?_⟩
+    have he := heq _ h2 hma
+    have hfix : F c m = m := by have := row_a (F := F) c; rw [he] at this; exact this
+    have hcm : c ≤ m := by rw [← he]; exact hca.le
+    calc m = F c m := hfix.symm
+      _ ≤ F m m := F.mono hcm m
+      _ ≤ F m y := (F m).mono hmy
+  obtain ⟨q, -, hcq, -, h2, hbot, hlow⟩ :=
+    lowerCover_lv hn hk1 hk2 hpR hp hcR hc hpc hpFc hN hca (lt_top_iff_ne_top.2 hct) le_top
+  by_cases hqm : q = m
+  swap
+  · exact ⟨q, hcq, h2, hbot, hlow.le.trans hcq.le, fun hmq => hqm (heq q h2 hmq)⟩
+  have hcm : c < m := by rw [← hqm]; exact hcq
+  have hty : F c y ≤ F m y := F.mono hcm.le y
+  have hty' : F c y ≤ y := hty.trans hwy
+  have hcy : c ≤ y := hcm.le.trans hmy
+  have hpt : F c (F c y) ≤ F c y := (F c).mono hty'
+  have hcontra : ¬ F c y ≤ c := by
+    intro htc
+    have hyR : y ∈ Rk F (k + 2) := mem_succ_of_cell (k := k + 1) (m := c) (x := c) hcR le_rfl (Or.inl htc)
+    have hmy' : m < y := lt_of_le_of_ne hmy (fun e => hwm (le_of_le_of_eq hwy e.symm))
+    have := hk2 y hyR
+    have := height_strictMono hn hmy'
+    omega
+  by_cases hct' : c ≤ F c y
+  · have hlt : c < F c y := lt_of_le_of_ne hct' (fun e => hcontra (le_of_eq e.symm))
+    obtain ⟨q', -, hcq', hq't, h2', hbot', hlow'⟩ :=
+      lowerCover_lv hn hk1 hk2 hpR hp hcR hc hpc hpFc hN hca hlt hpt
+    exact ⟨q', hcq', h2', hbot', hlow'.le.trans hcq'.le, fun hmq => hmw (hmq.trans (hq't.trans hty))⟩
+  · exfalso
+    have hpt0 : p ≤ F c y := hpFc.trans (((F p).mono hcy).trans ((F.mono hpc) y))
+    have hF : F p (c ⊔ F c y) ≤ F c y :=
+      ((F.mono hpc) (c ⊔ F c y)).trans ((F c).mono (sup_le hcy hty'))
+    have h0 := drop_lv hn hk1 hpR hp hc hpFc hN H (F c y) (height_le _) hpt0 hct' hF
+    exact hcontra (h0.le.trans hpc)
+
+/-- **MinLevel at every level from `w ∥ m`** (with `R_0, …, R_{k+2}` tight and `h(m) = k + 2`). This is MinLevelW at
+level `k + 1` with all lower stages tight, and without `m ∈ R_{k+2} \ R_{k+1}` or the greatest fixed point.
+Chain: `descChain_exists` (level `k`), then `offM_lv`. -/
+theorem minLevel_of_w_incomparable {H k : ℕ} (hn : NoChain α (H + 1))
+    (ht : ∀ i ≤ k + 2, ∀ z ∈ Rk F i, height H z ≤ i) {m y : α} (hm : height H m = k + 2)
+    (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) (hwm : ¬ F m y ≤ m) : MinLevel F H (k + 1) m := by
+  have htop := (height_strictMono hn).monotone (le_top : m ≤ ⊤)
+  obtain ⟨p, c, hc⟩ := descChain_exists hn k (fun i hi => ht i (by omega)) (by omega)
+  have hct : c ≠ ⊤ := fun e => by have := hc.2.2.2.1; rw [e] at this; omega
+  obtain ⟨v, hcv, hv, hpv, hpre, hmv⟩ :=
+    offM_lv hn (ht (k + 1) (by omega)) (ht (k + 2) le_rfl) hc hct hm hy hmw hwm
+  obtain ⟨-, -, hcR, hc1, hpc, -, -⟩ := hc
+  exact ⟨p, c, v, hpc, hcR, hc1, hcv, hv, hmv, hpv, Or.inl hpre⟩
+
+/-- **UpCell at every level from `w ∥ m`** (with `R_0, …, R_{k+2}` tight and `h(m) = k + 2`). -/
+theorem upCell_of_w_incomparable {H k : ℕ} (hn : NoChain α (H + 1))
+    (ht : ∀ i ≤ k + 2, ∀ z ∈ Rk F i, height H z ≤ i) {m y : α} (hm : height H m = k + 2)
+    (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) (hwm : ¬ F m y ≤ m) : UpCell F H (k + 1) m :=
+  upCell_of_minLevel hn (minLevel_of_w_incomparable hn ht hm hy hmw hwm)
+
+/-- **MinUpCell with every stage up to `k + 1` tight** (proved). `k = 0` is `upCell_zero`. For `k ≥ 1`,
+`colOrb_dichotomy` gives `w ∥ m` at the greatest fixed point, and `upCell_of_w_incomparable` applies. `MinUpCell`
+itself assumes only `R_{k+1}` tight, so the remaining gap to it is the tightness of the lower stages, which the
+descent tower uses from `R_1` on. -/
+theorem minUpCell_full [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) {k : ℕ} {m : α}
+    (ht : ∀ i ≤ k + 1, ∀ z ∈ Rk F i, height H z ≤ i) (hmk : height H m = k + 1) (htop : m ≠ ⊤)
+    (hno : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : UpCell F H k m := by
+  rcases k with _ | j
+  · exact upCell_zero hn htop hno
+  rcases colOrb_dichotomy (F := F) htop with hc | ⟨N, -, hfix, -, h1, h2⟩
+  · exact absurd hc hno
+  · exact upCell_of_w_incomparable hn ht hmk hfix h1 h2
 
 end Mordor.OrbitHeight

@@ -1,0 +1,8 @@
+== §34.3z²⁴⁶ lv_base.py (exact; models replayed in Python)
+   Hypotheses (MinLevelW at K): h(m) = K + 1, m ∈ R_{K+1} \ R_K, R_K and R_{K+1} tight, w = F(m, y*) ∥ m ('full': also R_1 … R_{K−1} tight).
+   base (SAT = no p ∈ R_{K−1} of height K − 1 has p ≤ a(p)):
+     K = 1:        'UNSAT': 326 [sweep 4 11]                 (p = ⊥ always works)
+     K = 2:        'UNSAT': 50, 'SAT': 85 smallest 6 [sweep 4 12]; 'SAT': 140, 'UNSAT': 1 smallest 11 [closure 5 10 1 40]
+     K = 2 full:   'SAT': 140, 'UNSAT': 1 smallest 11 [closure 5 10 1 40]
+   r1nt (SAT = R_1 non-tight is consistent with the hypotheses):
+     K = 2:        'UNSAT': 62, 'SAT': 73 smallest 7 [sweep 4 12]; 'SAT': 140, 'UNSAT': 1 smallest 11 [closure 5 10 1 40]

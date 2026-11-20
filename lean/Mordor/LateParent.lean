@@ -116,6 +116,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²²⁹ (A meets B): **`w_incomparable_of_orbitNoCell`**, `MinH2W`, **`secondEntry_one_of_minH2W`**.
 * §34.3z²³⁰ (every k): `MinLevel`, **`upCell_of_minLevel`**, `minLevel_one_of_minH2`, `MinLevelW`,
   **`minUpCell_of_minLevelW`**, **`singletonLower_of_minLevelW`**.
+* §34.3z²³¹ (height-free form): `RegionCell`, **`minH2_of_regionCell`**, `regionCell_of_minH2`, `RegionCellK`,
+  **`minLevel_of_regionCellK`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3424,5 +3426,59 @@ theorem minUpCell_of_minLevelW [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H 
 theorem singletonLower_of_minLevelW [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hM : MinLevelW F H) :
     SingletonLower F H :=
   singletonLower_of_minUpCell hn (minUpCell_of_minLevelW hn hM)
+
+/-! ### MinH2 as a region-cell statement (§34.3z²³¹) -/
+
+/-- **RegionCell**: some column `g ≱ m` whose row-`⊥` value `c = F ⊥ g` is an atom below it is a cell of the row `c`
+(lower `F c g ≤ c` or upper `g ≤ F c g`), with no height condition on `g`. -/
+def RegionCell (F : α →o α →o α) (H : ℕ) (m : α) : Prop :=
+  ∃ g, ¬ m ≤ g ∧ height H (F ⊥ g) = 1 ∧ F ⊥ g < g ∧ (F (F ⊥ g) g ≤ F ⊥ g ∨ g ≤ F (F ⊥ g) g)
+
+/-- **With `R_2` tight, RegionCell gives MinH2.** The atom `c = F ⊥ g` is in `R_1`, so a cell of its row puts `g` into
+`R_2` (`mem_succ_of_cell`), and tightness forces `h(g) = 2`. -/
+theorem minH2_of_regionCell {H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F 2, height H z ≤ 2) {m : α}
+    (h : RegionCell F H m) : MinH2 F H m := by
+  obtain ⟨g, hmg, hc1, hcg, hcell⟩ := h
+  have hcR : F ⊥ g ∈ Rk F 1 := mem_one_of_bot_value hn hc1 hcg.le le_rfl
+  have hgR : g ∈ Rk F 2 := mem_succ_of_cell (k := 1) hcR le_rfl hcell
+  have h2 := hall g hgR
+  have h3 := height_strictMono hn hcg
+  refine ⟨g, by omega, hmg, hc1, hcg, ?_⟩
+  rcases hcell with hl | hu
+  · exact Or.inl (hl.trans hcg.le)
+  · exact Or.inr hu
+
+/-- Conversely, MinH2 gives RegionCell (a pre-fixed `F c g ≤ g` over a cover is `c` or `g`). -/
+theorem regionCell_of_minH2 {H : ℕ} (hn : NoChain α (H + 1)) {m : α} (h : MinH2 F H m) : RegionCell F H m := by
+  obtain ⟨y', hy2, hmy', hc1, hcy', hcmp⟩ := h
+  have hlo : F ⊥ y' ≤ F (F ⊥ y') y' := (F.mono bot_le) y'
+  refine ⟨y', hmy', hc1, hcy', ?_⟩
+  rcases hcmp with hle | hge
+  · by_cases hey : F (F ⊥ y') y' = y'
+    · exact Or.inr hey.symm.le
+    · left
+      by_contra hne
+      have h1 : F ⊥ y' < F (F ⊥ y') y' := lt_of_le_of_ne hlo fun e => hne (e ▸ le_rfl)
+      have h2 : F (F ⊥ y') y' < y' := lt_of_le_of_ne hle hey
+      have := height_strictMono hn h1
+      have := height_strictMono hn h2
+      omega
+  · exact Or.inr hge
+
+/-- **RegionCell at stage `k`**: a column `g ≱ m` whose value `c = F p g` in a row `p ≤ c` is a height-`k` element of
+`R_k` below `g`, and `g` is a cell of the row `c`. No height condition on `g`. -/
+def RegionCellK (F : α →o α →o α) (H k : ℕ) (m : α) : Prop :=
+  ∃ p c g, p ≤ c ∧ c ∈ Rk F k ∧ height H c = k ∧ c < g ∧ ¬ m ≤ g ∧ F p g = c ∧ (F c g ≤ c ∨ g ≤ F c g)
+
+/-- **With `R_{k+1}` tight, RegionCellK gives MinLevel**: the cell puts `g` into `R_{k+1}`, so `h(g) = k + 1`. -/
+theorem minLevel_of_regionCellK {H k : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {m : α} (h : RegionCellK F H k m) : MinLevel F H k m := by
+  obtain ⟨p, c, g, hpc, hcR, hch, hcg, hmg, hpg, hcell⟩ := h
+  have h2 := hall g (mem_succ_of_cell hcR le_rfl hcell)
+  have h3 := height_strictMono hn hcg
+  refine ⟨p, c, g, hpc, hcR, hch, hcg, by omega, hmg, hpg, ?_⟩
+  rcases hcell with hl | hu
+  · exact Or.inl (hl.trans hcg.le)
+  · exact Or.inr hu
 
 end Mordor.OrbitHeight

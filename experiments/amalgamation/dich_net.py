@@ -18,7 +18,7 @@ from rstages import stages
 k = int(sys.argv[1]); MODE = sys.argv[2]; K = k + 1
 OUT = next((a[4:] for a in sys.argv if a.startswith('out=')), None); MINLEVEL = 'minlevel' in sys.argv; NONPL = 'nonpl' in sys.argv
 ABL = {a for a in sys.argv if a in ('wpar', 'nofeed', 'notop', 'notk1', 'minh3', 'vac')}   # vac: drop the certificate exclusions (count models)   # minh3 (k = 2): certificates (p, y) with c = F(p, y) ∈ R_2, no F(p, c) = p / newness   # wpar: ¬IC(m) → w = F(m, y*) ∥ m; drop feeder / ⊤ ∉ R_{K+1} / R_{K−1} tightness
-args = [a for a in sys.argv[3:] if not a.startswith('out=') and a not in ('minlevel', 'nonpl') and a not in ABL]
+args = [a for a in sys.argv[3:] if not a.startswith('out=') and a not in ('minlevel', 'nonpl', 'progress') and a not in ABL]
 C = collections.Counter(); best = None; outf = open(OUT, 'w') if OUT else None
 
 def py_violated(L, F, m):
@@ -103,6 +103,7 @@ for L in lattices(args):
                 C['violated'] += 1
                 if best is None or n < best[0]: best = (n, dict(sets=L.S, F=F, m=m))
             else: C['holds'] += 1
+            if 'progress' in sys.argv: print('  progress', n, dict(C), flush=True)
             E.S.delete(); continue
         if not E.S.solve(): C['inconsistent without guards'] += 1; E.S.delete(); continue
         if E.S.solve(assumptions=list(guards)): C['violated'] += 1; E.S.delete(); continue

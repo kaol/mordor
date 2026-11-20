@@ -279,7 +279,9 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     `secondEntry_one_of_minH2W`). Its witness lies inside ↓y* in some models and outside in others (§34.3z²²⁹). The statement generalizes to every stage. **MinLevelW**: with R_{k+1} tight, m ∈ R_{k+1} \ R_k of height k + 1
     and w ∥ m, some height-(k + 1) column y ≱ m covers c = F(p, y) ∈ R_k, p ≤ c, with F(c, y) comparable with y. It has no
     counterexample at k = 1, 2, 3 (557 / 204 / 88 instances). In Lean it gives **SingletonLower**
-    (`upCell_of_minLevel`, `minUpCell_of_minLevelW`, `singletonLower_of_minLevelW`) (§34.3z²³⁰). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    (`upCell_of_minLevel`, `minUpCell_of_minLevelW`, `singletonLower_of_minLevelW`) (§34.3z²³⁰). Under R_{k+1} tightness the height condition is automatic, giving the height-free **RegionCellK**: some column
+    g ≱ m is a cell of the row c = F(p, g) ∈ R_k (`minLevel_of_regionCellK`). Larger ground sets keep MinLevelW
+    (k = 1: 640, k = 2: 248, k = 3: 116 instances) (§34.3z²³¹). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations

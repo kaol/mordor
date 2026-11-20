@@ -1,0 +1,10 @@
+== §34.3z²³¹ (exact; models re-checked in Python)
+-- MinLevelW on wider corpora (dich_net.py k test closure … minh3 nonpl wpar nofeed notop notk1):
+   k = 1, closure 6 9 1 10: 'holds': 59} smallest violation None   (vacuity: 'violated': 59} smallest violation 12)
+   k = 1, closure 7 10 1 3: 'holds': 24} smallest violation None
+   k = 2, closure 6 10 2 10: 'holds': 44} smallest violation None   (vacuity: 'violated': 43, 'holds': 1} smallest violation 16)
+   k = 3, closure 6 13 12 10: 'holds': 28} smallest violation None
+   (closure 7 10 1 8 at k = 1 and 7 11 1 6 at k = 2 timed out at 575 s)
+-- G-fixed points (dich1_region.py, MinH2W hypotheses: icstar nofeed not1 notop):
+   gfix (some g ≱ m with F(F(⊥, g), g) = g, F(⊥, g) an atom ≠ g): 'holds': 36, 'violated': 290} smallest violation 5 [sweep 4 11]; 'violated': 47} smallest violation 8 [5 7 1]
+   gfixlow (… or F(F(⊥, g), g) = F(⊥, g)): 'holds': 326} smallest violation None [sweep 4 11]; 'holds': 47} smallest violation None [5 7 1]

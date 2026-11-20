@@ -77,6 +77,13 @@ for L in lattices(args):
         elif CLAIM in ('maxall', 'minall'): add([E.v('sel', y) for y in inY]); [add([-E.v('sel', y), ext[y]]) or add([-E.v('sel', y), -comp[y]]) for y in inY]
         elif CLAIM in ('maxex', 'minex'): [add([-ext[y], -comp[y]]) for y in inY]
         elif CLAIM == 'minh2': [add([-inY[y], -comp[y]]) for y in inY if h[y] == 2]      # some height-2 point of Y₁ is comparable
+        elif CLAIM in ('gfix', 'gfixlow'):              # 'gfix': some g ≱ m with F(F(⊥, g), g) = g and F(⊥, g) an atom ≠ g; 'gfixlow': or a lower point
+            for g in range(n):
+                if le[m][g]: continue
+                for c in range(n):
+                    if h[c] != 1 or not le[c][g] or c == g: continue
+                    add([-f(bot, g, c), -f(c, g, g)])
+                    if CLAIM == 'gfixlow': add([-f(bot, g, c), -f(c, g, c)])
         elif CLAIM in ('minh2in', 'minh2out'):          # witness inside ↓y* ('in') / outside ('out'); y* = u_NO−1 (needs an icorb/icstar flag)
             for y in inY:
                 if h[y] != 2: continue
@@ -88,7 +95,8 @@ for L in lattices(args):
             cp = lambda y: le[G(y)][y] or le[y][G(y)]
             mx = [y for y in Y if not any(y2 != y and (le[y][y2] if CLAIM.startswith('max') else le[y2][y]) for y2 in Y)]
             ys = sc_ystar(L, F, m) if CLAIM in ('minh2in', 'minh2out') else None
-            ok = {'minh2in': not any(cp(y) for y in Y if h[y] == 2 and le[y][ys]) if ys is not None else True, 'minh2out': not any(cp(y) for y in Y if h[y] == 2 and not le[y][ys]) if ys is not None else True,
+            gf = lambda g: not le[m][g] and h[F[bot][g]] == 1 and F[bot][g] != g and le[F[bot][g]][g] and (F[F[bot][g]][g] == g or (CLAIM == 'gfixlow' and F[F[bot][g]][g] == F[bot][g]))
+            ok = {'gfix': not any(gf(g) for g in range(n)), 'gfixlow': not any(gf(g) for g in range(n)), 'minh2in': not any(cp(y) for y in Y if h[y] == 2 and le[y][ys]) if ys is not None else True, 'minh2out': not any(cp(y) for y in Y if h[y] == 2 and not le[y][ys]) if ys is not None else True,
                   'minh2': not any(cp(y) for y in Y if h[y] == 2), 'region': not any(cp(y) for y in Y), 'maxall': any(not cp(y) for y in mx), 'minall': any(not cp(y) for y in mx),
                   'maxex': not any(cp(y) for y in mx), 'minex': not any(cp(y) for y in mx)}[CLAIM]
             assert ok, 'SAT/Python mismatch'

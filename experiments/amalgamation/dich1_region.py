@@ -14,7 +14,7 @@ import sys, collections, json
 sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import helpers, lattices
-CLAIM = sys.argv[1]; NONPL = 'nonpl' in sys.argv; ABL = {a for a in sys.argv if a in ('nofeed', 'notop', 'not1', 'not2', 'icok', 'icj', 'ictop')}
+CLAIM = sys.argv[1]; NONPL = 'nonpl' in sys.argv; ABL = {a for a in sys.argv if a in ('nofeed', 'notop', 'not1', 'not2', 'icok', 'icj', 'ictop', 'icorb', 'icorb1')}
 args = [a for a in sys.argv[2:] if a != 'nonpl' and a not in ABL]
 C = collections.Counter(); best = None
 for L in lattices(args):
@@ -25,7 +25,20 @@ for L in lattices(args):
         if not feeders: continue
         E = Enc(L, 3); fle, yle, ic = helpers(E, L); f = lambda a, b, u: E.v('f', a, b, u); r = lambda j, z: E.v('r', j, z); add = E.S.add_clause
         add([r(2, m)]); add([-r(1, m)])
-        if 'icj' in ABL or 'ictop' in ABL:             # ¬IC(m) only at ⊤ ('ictop') or at J = {⊤} ∪ {m ∨ y : h(y) = 2} ('icj')
+        if 'icorb' in ABL or 'icorb1' in ABL:          # ¬IC(m) only along m's column orbit u_0 = ⊤, u_{n+1} = m ⊔ F(m, u_n) ('icorb1': u_0, u_1 only)
+            U = lambda i, z: E.v('U', i, z); NO = 2 if 'icorb1' in ABL else L.height + 1
+            for z in range(n): add([U(0, z)] if z == L.top else [-U(0, z)])
+            for i in range(NO - 1):
+                for z in range(n):
+                    lits = []
+                    for v in range(n):
+                        for g in range(n):
+                            if L.join[m][g] == z: o = E.v('Ust', i, v, g); E.iff_and(o, [U(i, v), f(m, v, g)]); lits.append(o)
+                    E.iff_or(U(i + 1, z), lits)
+            for i in range(NO):
+                for z in range(n):
+                    if le[m][z] and z != m: add([-U(i, z), -fle(m, z, m)]); add([-U(i, z), -yle(m, z)])
+        elif 'icj' in ABL or 'ictop' in ABL:             # ¬IC(m) only at ⊤ ('ictop') or at J = {⊤} ∪ {m ∨ y : h(y) = 2} ('icj')
             J = {L.top} | ({L.join[m][y] for y in range(n) if h[y] == 2 and not le[m][y]} if 'icj' in ABL else set())
             for z in J: add([-fle(m, z, m)]); add([-yle(m, z)])
         elif 'icok' not in ABL: add([-ic(m)])

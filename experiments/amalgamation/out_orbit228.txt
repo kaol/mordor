@@ -1,0 +1,16 @@
+== §34.3z²²⁸ (exact; models re-checked in Python)
+-- dich1_near.py on the single-column cores of out_h0core227 (sweep 4 10): near-model (H₀ minus ¬IC(m) at z, plus ¬MinH2)
+   SAT for 78 (UNSAT for 97: another core avoids z). In all 78: z = F(m, ⊤) = m ⊔ F(m, ⊤) = u_1, h(z) = 3;
+   z = a(m) in 43 (the cell at z is upper), lower in 35
+-- CORRECTION of §34.3z²²⁶: MinH2 under H₀ alone is FALSE:
+   minh2 nonpl ['nofeed', 'not1', 'not2'] {'violated': 27, 'holds': 20} smallest violation 10   [closure 5 7 1 12]
+   minh2 nonpl ['not1', 'not2'] {'violated': 25, 'holds': 22} smallest violation 10   [closure 5 7 1 12]
+   minh2 nonpl ['not2'] {'holds': 26, 'violated': 21} smallest violation 11   [closure 5 7 1 12]
+   with R_2 tight (no feeder, no R_1 tightness): minh2 nonpl ['nofeed', 'not1'] {'holds': 47} smallest violation None [5 7 1]; minh2 nonpl ['nofeed', 'not1'] {'holds': 44} smallest violation None [5 8 2]; minh2 nonpl ['nofeed', 'not1'] {'holds': 63} smallest violation None [5 9 3]
+-- ¬IC(m) only along the column orbit u_n (icorb):
+   minh2 nonpl ['icorb', 'nofeed', 'not1', 'not2'] {'holds': 365} smallest violation None   [sweep 4 12, no tightness at all]
+   minh2 nonpl ['icorb', 'nofeed', 'not1', 'not2'] {'violated': 27, 'holds': 20} smallest violation 10   [closure 5 7 1, no tightness — H₀ itself fails there]
+   minh2 nonpl ['icorb', 'nofeed', 'not1'] {'holds': 47} smallest violation None   [closure 5 7 1, R_2 tight]
+   minh2 nonpl ['icorb', 'nofeed', 'not1'] {'holds': 44} smallest violation None   [closure 5 8 2, R_2 tight]
+   minh2 nonpl ['icorb', 'nofeed', 'not1'] {'holds': 38} smallest violation None   [closure 6 8 1 8, R_2 tight]
+-- ¬IC(m) only at u_0 = ⊤ and u_1 (icorb1): minh2 nonpl ['icorb1', 'nofeed', 'not1', 'not2'] {'holds': 326} smallest violation None [sweep 4 11]; minh2 nonpl ['icorb1', 'nofeed', 'not1'] {'holds': 32, 'violated': 15} smallest violation 10 [closure 5 7 1, R_2 tight]

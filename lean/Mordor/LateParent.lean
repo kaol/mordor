@@ -112,6 +112,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`atomGood_two_of_topFibreNew`**.
 * §34.3z²²⁴ (cores at k = 2): **`secondEntry_two_of_dichotomy`**.
 * §34.3z²²⁶ (k = 1 as one monotone map): `MinH2`, **`upCell_one_of_minH2`**, `secondEntry_one_of_minH2`.
+* §34.3z²²⁸ (the column orbit): `OrbitNoCell`, `orbitNoCell_of_noCell`, `MinH2Orbit`, **`secondEntry_one_of_minH2Orbit`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3260,8 +3261,8 @@ At `k = 1` every configuration has source `⊥`, and under `R_1` tightness its f
 `G`-comparable. -/
 
 /-- **MinH2 (conjectural)**: some height-2 column `y ≱ m` whose row-`⊥` value `c = F ⊥ y` is an atom below it is
-comparable with its row-`c` value. No counterexample (exact, rank(m) = 2: the 4–12 sweep and closure 5 7 1, with or
-without nopostlayer, §34.3z²²⁶). -/
+comparable with its row-`c` value. No counterexample under the Dichotomy(1) hypotheses (exact, rank(m) = 2: the 4–12
+sweep and closure 5 7 1, with or without nopostlayer, §34.3z²²⁶). Without R_2 tightness it fails (|L| = 11, §34.3z²²⁸). -/
 def MinH2 (F : α →o α →o α) (H : ℕ) (m : α) : Prop :=
   ∃ y, height H y = 2 ∧ ¬ m ≤ y ∧ height H (F ⊥ y) = 1 ∧ F ⊥ y < y ∧ (F (F ⊥ y) y ≤ y ∨ y ≤ F (F ⊥ y) y)
 
@@ -3289,5 +3290,33 @@ theorem upCell_one_of_minH2 {H : ℕ} (hn : NoChain α (H + 1)) {m : α} (h : Mi
 theorem secondEntry_one_of_minH2 {H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F 2, height H z ≤ 2) {m : α}
     (h : MinH2 F H m) : SecondEntry F H 1 m :=
   secondEntry_of_upCell hn hall (upCell_one_of_minH2 hn h)
+
+/-! ### MinH2 lives on m's column orbit (§34.3z²²⁸)
+
+Near-models of the minimal cores place the one excluded cell of m's row at `u_1 = m ⊔ F m ⊤`. Exactly, MinH2 survives
+when `¬IC(m)` is weakened to *no cell of m's row along its column orbit* `u_n = colOrb F m n`, the orbit of Strategy B.
+It fails when only `u_0`, `u_1` are kept (|L| = 10). It needs `R_2` tightness (|L| = 11 without it) but neither `R_1`
+tightness nor a feeder nor nopostlayer. -/
+
+/-- **No cell of m's row along its column orbit.** -/
+def OrbitNoCell (F : α →o α →o α) (m : α) : Prop :=
+  ∀ n, m < colOrb F m n → ¬ F m (colOrb F m n) ≤ m ∧ ¬ colOrb F m n ≤ F m (colOrb F m n)
+
+theorem orbitNoCell_of_noCell {m : α} (h : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : OrbitNoCell F m :=
+  fun _ hn => ⟨fun h1 => h ⟨_, hn, Or.inl h1⟩, fun h2 => h ⟨_, hn, Or.inr h2⟩⟩
+
+/-- **MinH2 on the column orbit (conjectural)**: with `m ∈ R_2 \ R_1` of height 2, `⊤ ∉ R_3`, `R_2` tight and no cell of
+m's row along its column orbit, MinH2 holds. No counterexample (exact: the 4–12 sweep; closure 5 7 1, 5 8 2, 6 8 1;
+§34.3z²²⁸). -/
+def MinH2Orbit (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ m, m ∈ Rk F 2 → m ∉ Rk F 1 → height H m = 2 → ⊤ ∉ Rk F 3 → (∀ z ∈ Rk F 2, height H z ≤ 2) → OrbitNoCell F m →
+    MinH2 F H m
+
+/-- **MinH2Orbit gives SecondEntry at `k = 1`** in the no-cell case. Only R_2 tightness is used beyond the orbit
+hypothesis: no R_1 tightness, feeder or nopostlayer. -/
+theorem secondEntry_one_of_minH2Orbit {H : ℕ} (hn : NoChain α (H + 1)) (hM : MinH2Orbit F H) {m : α}
+    (hm2 : m ∈ Rk F 2) (hm1 : m ∉ Rk F 1) (hmh : height H m = 2) (htop : ⊤ ∉ Rk F 3)
+    (hall : ∀ z ∈ Rk F 2, height H z ≤ 2) (hnocell : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : SecondEntry F H 1 m :=
+  secondEntry_one_of_minH2 hn hall (hM m hm2 hm1 hmh htop hall (orbitNoCell_of_noCell hnocell))
 
 end Mordor.OrbitHeight

@@ -1,0 +1,36 @@
+== §34.3z²²⁶: Dichotomy(1), the k = 1 configuration network as one monotone map, MinH2 (exact; models re-checked in Python)
+-- dich_net.py (Dichotomy(k); hypotheses of ag2f_core.py at rank k + 1):
+   k=1 test {'holds': 365} smallest violation None      [sweep 4 12]
+   k=1 core {'cores': 326, ('has CFG', False): 129, ('has CFG', True): 197} smallest violation None      [sweep 4 11; 129 cores without CFG = hypotheses alone UNSAT]
+   k=2 test {'holds': 34} smallest violation None      [closure 5 10 1]
+   k=2 core {'cores': 34, ('has CFG', True): 27, ('has CFG', False): 7} smallest violation None      [closure 5 10 1]
+   minlevel (point certificates y = v, h(y) = k + 1), k = 2: closure 5 10 1 / 5 11 4 / 5 12 8 / 6 11 6: holds 34 / 32 / 43 / 54
+-- k = 1 cores (197 with configuration exclusions): NPL set = configuration atoms 197/197; core uses every configurable atom 161/197;
+   the feeder is among the core atoms 189/197
+-- dich1_region.py (G(y) = F(F(⊥, y), y), Y₁ = {y ≱ m : F(⊥, y) an atom < y}), sweep 4 12 unless noted:
+   maxall {'holds': 199, 'violated': 166} smallest violation 7   [rg_maxall]
+   maxex {'holds': 295, 'violated': 70} smallest violation 7   [rg_maxex]
+   minex {'holds': 365} smallest violation None   [rg_minex]
+   region {'holds': 365} smallest violation None   [rg_region]
+   minall {'holds': 209, 'violated': 156} smallest violation 7   [rg2_minall]
+   minex {'holds': 385} smallest violation None   [rg2_minex13]
+   minex {'holds': 47} smallest violation None   [rg2_minexc]
+   minh2 {'holds': 365} smallest violation None   [rg2_minh2]
+   minh2 without nopostlayer: minh2 nonpl {'holds': 365} smallest violation None [sweep 4 12]; minh2 nonpl {'holds': 47} smallest violation None [closure 5 7 1 12]
+-- MinH2 ablations (sweep 4 11, nonpl):
+   minh2 nonpl ['not1', 'not2'] {'holds': 326} smallest violation None
+   minh2 nonpl ['not1', 'not2', 'notop'] {'holds': 48, 'violated': 278} smallest violation 5
+   minh2 nonpl ['nofeed', 'not1', 'not2'] {'holds': 326} smallest violation None
+   minh2 nonpl ['nofeed', 'not1', 'not2', 'notop'] {'holds': 13, 'violated': 313} smallest violation 5
+   minh2 nonpl ['not1', 'notop'] {'holds': 326} smallest violation None
+   minh2 nonpl ['not2', 'notop'] {'holds': 164, 'violated': 162} smallest violation 7
+   minh2 nonpl ['nofeed', 'not1', 'not2'] {'holds': 365} smallest violation None
+   minh2 nonpl ['icok'] {'holds': 174, 'violated': 152} smallest violation 5
+   minh2 nonpl ['nofeed'] {'holds': 326} smallest violation None
+   minh2 nonpl ['not1'] {'holds': 326} smallest violation None
+   minh2 nonpl ['not2'] {'holds': 326} smallest violation None
+   minh2 nonpl ['notop'] {'holds': 326} smallest violation None
+   ⇒ minimal hypothesis set H₀ = {m ∈ R_2 \ R_1, h(m) = 2, ¬IC(m), ⊤ ∉ R_3}: holds on sweep 4 12 (365)
+-- dich1_core.py (MinH2 cores, sweep 4 11): 326 cores, 113 degenerate; X(y) for every candidate y in 181/213; no core uses
+   nopostlayer; commonest shapes NOIC + T1(y) + X(y) (44), NOIC + T1 ×2 + X ×2 (27), TOP + X (17 + 14 + 3)
+-- dich1_t.py (t = F(m, ⊤), sweep 4 11): mlet  {'P holds': 207, '¬P model': 119} smallest ¬P 6; h2  {'P holds': 161, '¬P model': 165} smallest ¬P 6; tpoint  {'P holds': 161, '¬P model': 165} smallest ¬P 6; below  {'P holds': 305, '¬P model': 21} smallest ¬P 8; 

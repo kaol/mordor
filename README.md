@@ -269,7 +269,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     nopostlayer it fails (|L| = 11), and the per-element form fails. The supported statement is the dichotomy
     "a diagonal post-fixed height-2 top or a fibre certificate", and it implies SecondEntry at k = 2
     (`secondEntry_two_of_dichotomy`) (§34.3z²²⁴). No canonical top decides it: the natural candidate c = F(b(c), w) fails exactly (|L| = 11, and |L| = 17 with
-    atom sources), so both strategies now end at global existential statements (§34.3z²²⁵). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    atom sources), so both strategies now end at global existential statements (§34.3z²²⁵). At k = 1 the configuration network collapses to one monotone map G(y) = F(F(⊥, y), y) on
+    {y ≱ m : F(⊥, y) an atom < y}. Among global extremal choices only the minimal level survives. **MinH2** asks for a
+    height-2 column that is not a gap. It implies UpCell(1) with no tightness (`upCell_one_of_minH2`), and it has no
+    counterexample under just m ∈ R_2 \ R_1, ¬IC(m) and ⊤ ∉ R_3 (§34.3z²²⁶). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations

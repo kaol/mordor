@@ -111,6 +111,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²²³ (k = 2): **`upAt_of_fibreCell`**, `TopFibreNew`, `topFibre_of_new`, `topFibreNew_of_tight`,
   **`atomGood_two_of_topFibreNew`**.
 * §34.3z²²⁴ (cores at k = 2): **`secondEntry_two_of_dichotomy`**.
+* §34.3z²²⁶ (k = 1 as one monotone map): `MinH2`, **`upCell_one_of_minH2`**, `secondEntry_one_of_minH2`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3250,5 +3251,43 @@ theorem secondEntry_two_of_dichotomy [WellFoundedLT α] {H : ℕ} (hn : NoChain 
   rcases h with hp | ht
   · exact secondEntry_of_post_layer hn hall hmk htop hnocell hp
   · exact secondEntry_of_upCell hn hall (upCell_of_atomGood (by omega) (atomGood_two_of_topFibreNew hn hk2 ht))
+
+/-! ### MinH2: the k = 1 network as one monotone map (§34.3z²²⁶)
+
+At `k = 1` every configuration has source `⊥`, and under `R_1` tightness its fibre collapses to a point
+(`source_row_const`). All configurations are then governed by the single monotone map `G y = F (F ⊥ y) y` on the region
+`{y | m ≰ y, F ⊥ y an atom < y}`. Its minimal points are height-2 columns. **MinH2** asks for one of them that is
+`G`-comparable. -/
+
+/-- **MinH2 (conjectural)**: some height-2 column `y ≱ m` whose row-`⊥` value `c = F ⊥ y` is an atom below it is
+comparable with its row-`c` value. No counterexample (exact, rank(m) = 2: the 4–12 sweep and closure 5 7 1, with or
+without nopostlayer, §34.3z²²⁶). -/
+def MinH2 (F : α →o α →o α) (H : ℕ) (m : α) : Prop :=
+  ∃ y, height H y = 2 ∧ ¬ m ≤ y ∧ height H (F ⊥ y) = 1 ∧ F ⊥ y < y ∧ (F (F ⊥ y) y ≤ y ∨ y ≤ F (F ⊥ y) y)
+
+/-- **MinH2 gives UpCell at stage 1**, with no tightness or nopostlayer hypothesis. The atom `c = F ⊥ y` is in `R_1`
+(`mem_one_of_bot_value`). Since `c ≤ F c y` and `y` covers `c`, a pre-fixed `F c y ≤ y` is `c` (a lower cell) or `y`
+(an upper cell). -/
+theorem upCell_one_of_minH2 {H : ℕ} (hn : NoChain α (H + 1)) {m : α} (h : MinH2 F H m) : UpCell F H 1 m := by
+  obtain ⟨y, hy2, hmy, hc1, hcy, hcmp⟩ := h
+  have hcR : F ⊥ y ∈ Rk F 1 := mem_one_of_bot_value hn hc1 hcy.le le_rfl
+  have hlo : F ⊥ y ≤ F (F ⊥ y) y := (F.mono bot_le) y
+  refine ⟨F ⊥ y, hcR, hc1, y, hcy, hmy, ?_⟩
+  rcases hcmp with hle | hge
+  · by_cases hey : F (F ⊥ y) y = y
+    · exact Or.inr hey.symm.le
+    · left
+      by_contra hne
+      have h1 : F ⊥ y < F (F ⊥ y) y := lt_of_le_of_ne hlo fun e => hne (e ▸ le_rfl)
+      have h2 : F (F ⊥ y) y < y := lt_of_le_of_ne hle hey
+      have := height_strictMono hn h1
+      have := height_strictMono hn h2
+      omega
+  · exact Or.inr hge
+
+/-- MinH2 gives SecondEntry at `k = 1` (with `R_2` tight). -/
+theorem secondEntry_one_of_minH2 {H : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F 2, height H z ≤ 2) {m : α}
+    (h : MinH2 F H m) : SecondEntry F H 1 m :=
+  secondEntry_of_upCell hn hall (upCell_one_of_minH2 hn h)
 
 end Mordor.OrbitHeight

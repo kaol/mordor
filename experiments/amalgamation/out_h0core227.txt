@@ -1,0 +1,36 @@
+== dich1_h0core.py (§34.3z²²⁷): MinH2 cores under H₀ only, sweep 4 10; guards NL(z)/NU(z) (¬IC(m) split per column z > m),
+   TR / TA(x) / TB(g) (⊤ ∉ R_3 split by generation route), X(y)
+   cores 282
+   ('TB', 'other', 'h(x)', 3) 194
+   ('TA', 'other', 'h(x)', 3) 193
+   ('TB', 'x ∈ X', 'h(x)', 2) 111
+   ('NL', 'z = m ∨ y, y ∈ X', 'h(z)', 3) 104
+   ('NU', 'z = m ∨ y, y ∈ X', 'h(z)', 3) 104
+   ('TB', 'x ≤ m', 'h(x)', 1) 93
+   degenerate (no X) 77
+   ('TB', 'other', 'h(x)', 1) 77
+   ('NU', 'z = ⊤', 'h(z)', 4) 66
+   ('NL', 'z = ⊤', 'h(z)', 3) 61
+   ('NU', 'z = ⊤', 'h(z)', 3) 61
+   ('NL', 'z = ⊤', 'h(z)', 4) 36
+   ('shape', (('NL', 1), ('NU', 1), ('TR', 1), ('X', 2))) 30
+   ('NL', 'other', 'h(z)', 3) 29
+   ('NU', 'other', 'h(z)', 3) 29
+   ('shape', (('NL', 1), ('NU', 1), ('TA', 1), ('TB', 1), ('TR', 1), ('X', 1))) 24
+   ('shape', (('NL', 1), ('NU', 1), ('TA', 1), ('TB', 1), ('TR', 1), ('X', 2))) 23
+   ('TA', 'other', 'h(x)', 2) 17
+   ('TB', 'other', 'h(x)', 2) 17
+   ('shape', (('NL', 1), ('NU', 1), ('TR', 1), ('X', 1))) 14
+   ('shape', (('NL', 1), ('NU', 1), ('TR', 1), ('X', 3))) 14
+   ('shape', (('NL', 1), ('NU', 1), ('TA', 2), ('TB', 7), ('X', 2))) 8
+   ('shape', (('NL', 1), ('NU', 1), ('TA', 2), ('TB', 6), ('X', 2))) 7
+   ('shape', (('NL', 1), ('NU', 1), ('TA', 1), ('TB', 6), ('X', 2))) 6
+   ('shape', (('NL', 1), ('NU', 1), ('TA', 2), ('TB', 6), ('X', 1))) 6
+   ('shape', (('NL', 1), ('NU', 1), ('TA', 2), ('TB', 5), ('X', 1))) 5
+   ('shape', (('NL', 1), ('NU', 1), ('TA', 2), ('TB', 7), ('X', 1))) 5
+   ('shape', (('NL', 2), ('NU', 3), ('TA', 2), ('TB', 2), ('TR', 1), ('X', 2))) 5
+   ('shape', (('NL', 1), ('NU', 2), ('TR', 1), ('X', 1))) 4
+-- column statistics over the 205 non-degenerate cores: one ¬IC column 175, two 5, three 25; some column carries both NL and NU 205/205;
+   all ¬IC columns in J = {⊤} ∪ {m ∨ y : y ∈ X} 178/205; TR used 132/205
+-- sharpening (dich1_region.py minh2, sweep 4 11, nonpl): ¬IC(m) only on J: refuted 45/326, |L| = 5 (dich1_minh2_nonpl_icj_min5.json);
+   only at ⊤: refuted 152/326, |L| = 5 (dich1_minh2_nonpl_ictop_min5.json)

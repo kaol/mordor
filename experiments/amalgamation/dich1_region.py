@@ -14,7 +14,7 @@ import sys, collections, json
 sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import helpers, lattices
-CLAIM = sys.argv[1]; NONPL = 'nonpl' in sys.argv; ABL = {a for a in sys.argv if a in ('nofeed', 'notop', 'not1', 'not2', 'icok')}
+CLAIM = sys.argv[1]; NONPL = 'nonpl' in sys.argv; ABL = {a for a in sys.argv if a in ('nofeed', 'notop', 'not1', 'not2', 'icok', 'icj', 'ictop')}
 args = [a for a in sys.argv[2:] if a != 'nonpl' and a not in ABL]
 C = collections.Counter(); best = None
 for L in lattices(args):
@@ -25,7 +25,10 @@ for L in lattices(args):
         if not feeders: continue
         E = Enc(L, 3); fle, yle, ic = helpers(E, L); f = lambda a, b, u: E.v('f', a, b, u); r = lambda j, z: E.v('r', j, z); add = E.S.add_clause
         add([r(2, m)]); add([-r(1, m)])
-        if 'icok' not in ABL: add([-ic(m)])
+        if 'icj' in ABL or 'ictop' in ABL:             # ¬IC(m) only at ⊤ ('ictop') or at J = {⊤} ∪ {m ∨ y : h(y) = 2} ('icj')
+            J = {L.top} | ({L.join[m][y] for y in range(n) if h[y] == 2 and not le[m][y]} if 'icj' in ABL else set())
+            for z in J: add([-fle(m, z, m)]); add([-yle(m, z)])
+        elif 'icok' not in ABL: add([-ic(m)])
         if 'notop' not in ABL: add([-r(3, L.top)])
         low = []
         for p in feeders: o = E.v('low', p); E.iff_and(o, [r(1, p), fle(p, m, p)]); low.append(o)

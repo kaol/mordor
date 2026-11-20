@@ -6,3 +6,6 @@
 ('#fibre covers', 2, '#pre-fixed', 1, '#gap', 1) 1
 pre-fixed covers by kind: one fixed (= a(c*)) + lower: 330; lower only: 6 (a(c*) ∈ {⊥, c*} there)
 the gap model: |L| = 12, m = {04}, y* = ⊤, w = {12}, c* = {1}, a(c*) = {14} (fixed cover), {12} = w a gap (F(c*, w) = {14})
+-- exact (dich1_region.py; hypotheses m ∈ R_2 \ R_1, h(m) = 2, R_1 and R_2 tight, w ∥ m):
+   desclow1 (c* ≰ F(c*, c*) ⟹ a lower fibre cover): 'violated': 47} smallest violation 8 [5 7 1]; 'holds': 36, 'violated': 290} smallest violation 5 [sweep 4 11]
+   desclow2 (a(c*) > c* not a fibre cover ⟹ a lower fibre cover): 'holds': 47} smallest violation None [5 7 1]; 'holds': 326} smallest violation None [sweep 4 11]

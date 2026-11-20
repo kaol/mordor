@@ -291,7 +291,7 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     and each alone fails. Response coverage itself is not forced by the gaps, because responses leave the fibre
     (§34.3z²³⁶). Without m the statement still holds: the atom of the ⊥-descent from ⊤ has a pre-fixed fibre cover whenever
     R_1 and R_2 are tight (**TopDescPre**, exact, 373 instances). The hypotheses on m only keep the witness off m
-    (§34.3z²³⁹). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    (§34.3z²³⁹). TopDescPre is proved when a(⊥) is an atom (`preCover_of_a_bot_atom`); the open case is a(⊥) = ⊥ (§34.3z²⁴⁰). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations

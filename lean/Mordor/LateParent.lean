@@ -123,6 +123,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²³⁴ (fibre covers): **`eq_a_of_fixed_top`**.
 * §34.3z²³⁶ (response coverage): `pre_iff_lower_or_fixed`, **`fixed_of_responseCover`**.
 * §34.3z²³⁷ (atoms below m): `response_le_w`, **`upCell_one_of_atom_le_m`**, `upCell_one_of_atom_le_m_post`.
+* §34.3z²⁴⁰ (TopDescPre, case `a ⊥` an atom): **`preCover_of_a_bot_atom`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3652,5 +3653,48 @@ theorem upCell_one_of_atom_le_m_post {H : ℕ} (hn : NoChain α (H + 1)) {m c : 
     (hpost : c ≤ F ⊥ c) : UpCell F H 1 m :=
   upCell_one_of_atom_le_m hn hfix hmw hcR hc1 hcm hcw fun u hcu _ _ =>
     hpost.trans (((F ⊥).mono hcu.le).trans ((F.mono bot_le) u))
+
+/-! ### TopDescPre when `a ⊥` is an atom (§34.3z²⁴⁰) -/
+
+/-- **A pre-fixed fibre cover of the atom `a ⊥`** (with `R_1`, `R_2` tight). Let `c = a ⊥` be an atom below `⊤`. Then
+`F ⊥ c = c`, so the row `c` stays above `c` everywhere above `c`, and `row_cell_of_above` from `⊤` gives a cell
+`z > c`.
+* A lower cell has `F ⊥ z = c`, and `h(z) = 2` by `R_2` tightness.
+* An upper cell lies below `a c ∈ R_2`, which covers `c`, is fixed, and has `F ⊥ (a c) = c`. The value cannot be
+  `a c`, since `a c ≤ a ⊥ = c` is impossible.
+
+No hypothesis on `m` is used. -/
+theorem preCover_of_a_bot_atom {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1)
+    (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (hc1 : height H (a F (⊥ : α)) = 1) (hct : a F (⊥ : α) < ⊤) :
+    ∃ v, a F ⊥ < v ∧ height H v = 2 ∧ F ⊥ v = a F ⊥ ∧ F (a F ⊥) v ≤ v := by
+  set c := a F (⊥ : α) with hc
+  have hcR : c ∈ Rk F 1 := mem_succ_of_a (k := 0) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl
+  have hfixc : F ⊥ c = c := row_a _
+  have habove : ∀ u, c < u → u ≤ ⊤ → F c u ≤ u → c ≤ F c u := fun u hcu _ _ =>
+    hfixc.symm.le.trans (((F ⊥).mono hcu.le).trans ((F.mono bot_le) u))
+  obtain ⟨z, hz1, -, hz3⟩ := row_cell_of_above hn habove H (height_le _) hct le_top le_top
+  have hzR : z ∈ Rk F 2 := mem_succ_of_cell (k := 1) hcR le_rfl hz3
+  have hz2 : height H z = 2 := by
+    have := hk2 z hzR; have := height_strictMono hn hz1; omega
+  rcases hz3 with hl | hu
+  · refine ⟨z, hz1, hz2, le_antisymm ?_ ?_, hl.trans hz1.le⟩
+    · exact ((F.mono bot_le) z).trans hl
+    · exact hfixc.symm.le.trans ((F ⊥).mono hz1.le)
+  · have hza : z ≤ a F c := le_a hu
+    have haR : a F c ∈ Rk F 2 := mem_succ_of_a hcR le_rfl
+    have hca : c < a F c := lt_of_lt_of_le hz1 hza
+    have ha2 : height H (a F c) = 2 := by
+      have := hk2 _ haR; have := height_strictMono hn hca; omega
+    refine ⟨a F c, hca, ha2, ?_, (row_a c).le⟩
+    have hlo : c ≤ F ⊥ (a F c) := hfixc.symm.le.trans ((F ⊥).mono hca.le)
+    have hhi : F ⊥ (a F c) ≤ a F c := ((F.mono bot_le) (a F c)).trans (row_a c).le
+    by_contra hne
+    have hlt : c < F ⊥ (a F c) := lt_of_le_of_ne hlo (Ne.symm hne)
+    by_cases htop : F ⊥ (a F c) = a F c
+    · have : a F c ≤ c := le_a htop.symm.le
+      exact absurd (lt_of_lt_of_le hca this) (lt_irrefl _)
+    · have := height_strictMono hn hlt
+      have := height_strictMono hn (lt_of_le_of_ne hhi htop)
+      omega
 
 end Mordor.OrbitHeight

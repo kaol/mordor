@@ -4,3 +4,9 @@
    start = ⊤, without w ∥ m: 'SAT': 47} smallest 8 [5 7 1]
    start = ⊤, without w ∥ m and m ∈ R_2 \ R_1: 'SAT': 47} smallest 8 [5 7 1]
    start = ⊤, without w ∥ m, m ∈ R_2 \ R_1 and m ≰ v (m-free; hypotheses R_1, R_2 tight only): 'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]
+-- §34.3z²⁴⁰ (m-free; start = ⊤; hypotheses R_1, R_2 tight only):
+   imgatom (every atom c ∈ R_1 with c = F(⊥, p), p > c, has a pre-fixed fibre cover): 'SAT': 47} smallest 8 [5 7 1]; 'UNSAT': 76, 'SAT': 250} smallest 6 [sweep 4 11]; 'UNSAT': 1, 'SAT': 43} smallest 8 [5 8 2]
+   imgatom_any (every atom c ∈ R_1 with a height-2 fibre cover): 'UNSAT': 76, 'SAT': 250} smallest 6 [sweep 4 11]
+   minimal model rc_imgatom_top_min6.json: the failing atom {0} has fibre cover {02} ∉ R_2 (stage 3) with F({0}, {02}) = {01} a gap; the ⊤-descent atom {1} has the fixed fibre cover {01}
+   a(⊥) = ⊥ and TopDescPre fails (abotbot): 'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]
+   a(⊥) = ⊥ and a(c*) not a fibre cover of c* (acfib): 'SAT': 47} smallest 8 [5 7 1]; 'SAT': 326} smallest 4 [sweep 4 11]

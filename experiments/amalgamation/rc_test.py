@@ -13,7 +13,7 @@ import sys, collections, json
 sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import helpers, lattices
-from rstages import stages
+from rstages import stages, a_of
 MODE = sys.argv[1]; NOT2 = 'not2' in sys.argv; ATS = 'acstar' in sys.argv; ATA = 'aatoms' in sys.argv; BT = 'broute' in sys.argv; CLE = 'cle' in sys.argv; CNLE = 'cnle' in sys.argv; START = next((a[6:] for a in sys.argv if a.startswith('start=')), 'w'); NOWPAR = 'nowpar' in sys.argv; NOMEM = 'nomem' in sys.argv; NOMV = 'nomv' in sys.argv   # start=w|ystar|top: start of the ⊥-descent
 args = [a for a in sys.argv[2:] if a not in ('not2', 'acstar', 'aatoms', 'broute', 'cle', 'cnle') and not a.startswith('start=') and a not in ('nowpar', 'nomem', 'nomv')]   # nowpar: drop w ∥ m; nomem: drop m ∈ R_2 \\ R_1; nomv: drop m ≰ v in V*   # cle / cnle: restrict to c* ≤ m / c* ≰ m   # acstar: h(a(c*)) ≤ 2 only; aatoms: h(a(d)) ≤ 2 for atoms d ∈ R_1
 C = collections.Counter(); best = None
@@ -83,6 +83,23 @@ for L in lattices(args):
                 add([-E.v('vsel', c, v), o])
                 for z in range(n):
                     if le[v][z]: add([-E.v('vsel', c, v), -U(NO - 1, z)])
+        elif MODE in ('acfib', 'abotbot'):                # 'abotbot': a(⊥) = ⊥ and DescPre2 fails; 'acfib': a(⊥) = ⊥ and a(c*) is not a fibre cover of c*
+            add([A_(bot, bot)])
+            if MODE == 'abotbot':
+                for (c, v), o in inV.items(): add([-o, -fle(c, v, v)])
+            else:
+                for c in atoms:
+                    for g in range(n):
+                        if le[c][g] and g != c: add([-At[c], -A_(c, g), -f(bot, g, c)])
+        elif MODE in ('imgatom', 'imgatom_any'):          # m-free: some atom c ∈ R_1 with c = F(⊥, p) for some p > c ('imgatom'; 'imgatom_any': any atom c ∈ R_1 with V_c ≠ ∅) and no pre-fixed fibre cover
+            sel = []
+            for c in atoms:
+                vs = [v for v in L.covers_up[c] if h[v] == 2]
+                s_ = E.v('iasel', c); sel.append(s_); add([-s_, r(1, c)])
+                if MODE == 'imgatom': add([-s_] + [f(bot, pv, c) for pv in range(n) if le[c][pv] and pv != c])
+                else: add([-s_] + [f(bot, v, c) for v in vs])
+                for v in vs: add([-s_, -f(bot, v, c), -fle(c, v, v)])
+            add(sel)
         elif MODE == 'peratomw':                         # some atom c ∈ R_1, c ≰ m, c = F(⊥, p) for some p ≤ w with c < p, and no pre-fixed v ∈ V_c
             Ws = {}
             for wv in range(n):
@@ -211,7 +228,16 @@ for L in lattices(args):
                     vs = [v for v in L.covers_up[c2] if h[v] == 2 and not le[m][v] and F[bot][v] == c2]
                     if not any(le[F[c2][v]][v] for v in vs): return True
                 return False
-            ok = {'peratomw': paw(), 'peratom': pa(False), 'peratom_le': pa(True), 'residual': not any(above(c) for c in cand), 'residual_post': not any(le[c][F[bot][c]] for c in cand), 'descpre2yfail': not any(le[F[c][v]][v] and le[v][u_] for v in Vs), 'vley': any(not le[v][u_] for v in Vs), 'descpre2fail': not any(le[F[c][v]][v] for v in Vs), 'ercfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Clp) for u in Clp), 'nonempty': not Vs, 'allgap': bool(Vs) and all(gap(v) for v in Vs),
+            def ia(any_):
+                for c2 in atoms:
+                    if not inR1(c2): continue
+                    vs = [v for v in L.covers_up[c2] if h[v] == 2 and F[bot][v] == c2]
+                    if any_ and not vs: continue
+                    if not any_ and not any(le[c2][pv] and pv != c2 and F[bot][pv] == c2 for pv in range(n)): continue
+                    if not any(le[F[c2][v]][v] for v in vs): return True
+                return False
+            ac = a_of(L, F, c)
+            ok = {'acfib': a_of(L, F, bot) == bot and not (le[c][ac] and ac != c and F[bot][ac] == c), 'abotbot': a_of(L, F, bot) == bot and not any(le[F[c][v]][v] for v in Vs), 'imgatom': ia(False), 'imgatom_any': ia(True), 'peratomw': paw(), 'peratom': pa(False), 'peratom_le': pa(True), 'residual': not any(above(c) for c in cand), 'residual_post': not any(le[c][F[bot][c]] for c in cand), 'descpre2yfail': not any(le[F[c][v]][v] and le[v][u_] for v in Vs), 'vley': any(not le[v][u_] for v in Vs), 'descpre2fail': not any(le[F[c][v]][v] for v in Vs), 'ercfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Clp) for u in Clp), 'nonempty': not Vs, 'allgap': bool(Vs) and all(gap(v) for v in Vs),
                   'rcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Vs) for u in Vs),
                   'xrcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[d][v2]] for d, v2 in W) for u in Vs)}[MODE]
             assert ok, 'SAT/Python mismatch'

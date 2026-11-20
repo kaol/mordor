@@ -2,7 +2,7 @@
    (nofi: no feeder condition) unless noted; rmax=3 restricts to rank(m) = 3 (k = 2)
 -- topgoal atomroot bedges (AtomGood with B-edges only):
    rank 3 (rmax=3): 5 11 5, 6 11 6, 6 12 9, 6 12 11: none 40; (rmin=3, no rmax, ranks 3–4) 5 10 1/2/3, 5 11 4, 5 12 8: none 50
-   rank 4: 6 12 9 (rmin=4) refuted 4/10, |L| = 18 (single_claim_atomgood_bedges_rank4_min18.json); 6 11 6, 6 12 11 (rmin=3) refuted at rank 4
+   rank 4: 6 12 9 (rmin=4) refuted 4/10, |L| = 18; 6 11 6 (|L| = 19), 6 12 11 (|L| = 14, single_claim_atomgood_bedges_rank4_min14.json) (rmin=3) refuted at rank 4
 -- sampled features (k2feat.py, one hypothesis model per (L, m), rank 3; 103 models over 5 10 1, 5 11 4, 5 10 2 nofi, 5 12 8 nofi):
    every good B-pair (s, x) has s ≤ w (103/103); some pair has x ≤ w ∧ x ≤ F(s, w) (101/103)  — hypotheses only, tested below
 -- belowW (some stage-k top x ≤ w = F(m, y*) has UpAt): refuted — 5 10 1 3/10 (|L| = 19), 5 11 4 3/10 (|L| = 17,

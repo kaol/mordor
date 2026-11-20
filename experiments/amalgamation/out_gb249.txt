@@ -1,0 +1,14 @@
+== §34.3z²⁴⁹ (exact; models replayed in Python; UNSAT = the claim holds)
+-- sl_tight.py k J: the SingletonLower configuration at k (without its conclusion) with R_J non-tight
+   k = 2, J = 1: 'SAT': 81, 'UNSAT': 60 smallest 11 [closure 5 10 1 40]; vac (configuration alone): 'SAT': 81, 'UNSAT': 60
+                 [sweep 4 14: configuration vacuous, 148/148]
+   ⇒ the singleton configuration does not force R_1 tight (sltight_k2_J1_min11.json).
+-- gb1.py any (GoodBase at j = 1, R_2 tight only, a(⊥) = ⊥): 'UNSAT': 40 [closure 5 11 4 40]; 'UNSAT': 40 [closure 5 12 8 40];
+   'UNSAT': 15 [closure 6 13 11 15]; anyn (without a(⊥) = ⊥): 'UNSAT': 15 [closure 6 12 9 15]
+-- refuted strengthenings (closure 5 10 1 40):
+   Q1/Q2 (for every z with F(⊥, z) ≠ ⊥ [Q2: F(⊥, z) ≤ z], some good atom of R_1 lies below F(⊥, z)): 'SAT': 40 smallest 10 (with and without a(⊥) = ⊥)
+   Q3/Q4 (for every atom p ∈ R_1 and drop column z of its row descent with F(⊥, z) ≠ ⊥, a good atom of R_1 lies below
+          F(⊥, z) [Q3] / F(p, z) [Q4]): 'SAT': 32, 'UNSAT': 8 smallest 12 (both; with and without a(⊥) = ⊥) (gb1_Q3_min12.json)
+   (Sampling, R_1 forced non-tight, up to 10 models per lattice, suggested Q3 on 960/960 bad atoms; the sample was biased.)
+-- inspection: gb1.py one / one2 (exactly one good atom, R_1 non-tight [one2: ⊥-descent missing every atom]): 'SAT': 82 / 63 of 96, smallest 6
+   (gb1_one2_min6.json: the single atom p has F(p, p) = p, so p ≤ a(p)).

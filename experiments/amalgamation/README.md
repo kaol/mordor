@@ -113,3 +113,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁴⁶: `lv_base.py` (with the MinLevelW hypotheses at K: is there a cheap tower base p ∈ R_{K−1} with p ≤ a(p)? flag `r1nt`: is R_1 non-tight consistent?). Output `out_lvbase246.txt`.
 - §34.3z²⁴⁷: `lv_chain.py` (does a level-(K − 1) descent chain exist / is there a good base; flags `r1nt`, `nowpar`, `nomem`, `onlyK`, `noai`, `vac`), `lv_desc.py noatom` (the ⊥-descent can miss every atom when R_1 is non-tight). Output `out_good247.txt`, `lvdesc_noatom_min6.json`.
 - §34.3z²⁴⁸: `gb1.py` (GoodBase at j = 1 with R_2 tight: modes any/dtwo/datom/r1/r3/ex/exp/L1–L4/pq), `gb1_core.py` (R_2-tightness cores and near-models; flags `dtwo`, `show`). Output `out_gb248.txt`, `gb1_*_min*.json`.
+- §34.3z²⁴⁹: `sl_tight.py` (is R_J non-tight consistent with the SingletonLower configuration?), `gb1.py` modes `Q1`–`Q4` (refuted strengthenings), `one`, `one2` (inspection). Output `out_gb249.txt`.

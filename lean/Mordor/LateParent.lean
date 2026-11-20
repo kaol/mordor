@@ -136,6 +136,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁴⁷ (good bases): **`descChain_of_good`**, `good_of_descChain`, `le_a_of_interval`, `GoodBase` (conjecture),
   `minLevel_of_goodBase`, **`singletonLower_of_goodBase`**.
 * §34.3z²⁴⁸: `good_of_full` (GoodBase's conclusion under full tightness).
+* §34.3z²⁴⁹: `minLevel_top_new` (MinLevel certificate tops are new at their stage).
 -/
 
 namespace Mordor.OrbitHeight
@@ -4442,5 +4443,24 @@ theorem good_of_full {H : ℕ} (hn : NoChain α (H + 1)) (j : ℕ) (ht : ∀ i �
   · exact ⟨⊥, show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl, height_bot_eq_zero, Or.inl bot_le⟩
   obtain ⟨p, c, hc⟩ := descChain_exists hn i (fun l hl => ht l (by omega)) (by omega)
   exact ⟨c, hc.2.2.1, hc.2.2.2.1, good_of_descChain hn (ht (i + 1) (by omega)) hc⟩
+
+/-- **MinLevel certificates are new.** With `R_{k+1}` tight, a certificate `(p, c, y)` of `MinLevel (k + 1)` (with
+`h(c) = k + 1`, `h(y) = k + 2`, `c ≤ F c y` and `F c y` comparable with `y`) has `c ∉ R_k`. Otherwise `(c, y)`, which
+is a lower cell `F c y = c` or an upper cell, would put `y` into `R_{k+1}`. In particular, at `k + 1 = 2` the
+non-tight height-2 elements of `R_1` are never certificate tops. -/
+theorem minLevel_top_new {H k : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {c y : α} (hc : height H c = k + 1) (hcy : c < y) (hy : height H y = k + 2) (hlo : c ≤ F c y)
+    (hcell : F c y ≤ y ∨ y ≤ F c y) : c ∉ Rk F k := by
+  intro hcR
+  have hyR : y ∈ Rk F (k + 1) := by
+    rcases hcell with hle | hup
+    · by_cases he : F c y = y
+      · exact mem_succ_of_cell (k := k) hcR le_rfl (Or.inr he.symm.le)
+      · have h1 := height_strictMono hn (lt_of_le_of_ne hle he)
+        have hcF : c = F c y := eq_of_le_of_height_ge hn hlo (by omega)
+        exact mem_succ_of_cell (k := k) hcR le_rfl (Or.inl hcF.symm.le)
+    · exact mem_succ_of_cell (k := k) hcR le_rfl (Or.inr hup)
+  have := hk y hyR
+  omega
 
 end Mordor.OrbitHeight

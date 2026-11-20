@@ -118,6 +118,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`minUpCell_of_minLevelW`**, **`singletonLower_of_minLevelW`**.
 * §34.3z²³¹ (height-free form): `RegionCell`, **`minH2_of_regionCell`**, `regionCell_of_minH2`, `RegionCellK`,
   **`minLevel_of_regionCellK`**.
+* §34.3z²³² (the row x = F(⊥, w) below m): **`regionCell_of_x_le_m`**, **`regionCell_of_fibre_pre`**, `PreFibre`,
+  **`upCell_one_of_preFibre`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3480,5 +3482,85 @@ theorem minLevel_of_regionCellK {H k : ℕ} (hn : NoChain α (H + 1)) (hall : �
   rcases hcell with hl | hu
   · exact Or.inl (hl.trans hcg.le)
   · exact Or.inr hu
+
+/-! ### The case `x = F ⊥ w ≤ m` (§34.3z²³²) -/
+
+/-- **RegionCell when the row-`⊥` value of `w` is an atom below `m`** (with `R_1` tight and `w ∥ m`). On `(x, w]` the
+row `⊥` takes the value `x`: it is below `x` by monotonicity, and not `⊥` because that would put a height-≥ 2 column
+into `R_1`. So the row `x` stays above `x` there. It is pre-fixed at `w`, since `F x w ≤ F m y* = w`, and
+`row_cell_of_above` gives a cell `z ∈ (x, w]`, with `F ⊥ z = x` and `m ≰ z`. -/
+theorem regionCell_of_x_le_m {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1) {m : α} {N : ℕ}
+    (hfix : m ⊔ F m (colOrb F m N) = colOrb F m N) (hmw : ¬ m ≤ F m (colOrb F m N))
+    (hwm : ¬ F m (colOrb F m N) ≤ m) (hx1 : height H (F ⊥ (F m (colOrb F m N))) = 1)
+    (hxm : F ⊥ (F m (colOrb F m N)) ≤ m) : RegionCell F H m := by
+  set w := F m (colOrb F m N) with hw
+  set x := F ⊥ w with hx
+  have hwy : w ≤ colOrb F m N := le_sup_right.trans hfix.le
+  have hxw : x < w := lt_of_le_of_ne (((F.mono bot_le) w).trans ((F m).mono hwy)) fun e => hwm (e ▸ hxm)
+  have key : ∀ u, x < u → u ≤ w → F ⊥ u = x := by
+    intro u hxu huw
+    have hle : F ⊥ u ≤ x := (F ⊥).mono huw
+    by_contra hne
+    have hlt : F ⊥ u < x := lt_of_le_of_ne hle hne
+    have h0 := height_strictMono hn hlt
+    have hbot : F ⊥ u = ⊥ := by
+      by_contra hb
+      have := height_strictMono hn (bot_lt_iff_ne_bot.2 hb)
+      omega
+    have hu1 : u ∈ Rk F 1 :=
+      mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl (Or.inl hbot.le)
+    have := hk1 u hu1
+    have := height_strictMono hn hxu
+    omega
+  have hpre : F x w ≤ w := ((F.mono hxm) w).trans ((F m).mono hwy)
+  obtain ⟨z, hz1, hz2, hz3⟩ := row_cell_of_above hn (x := x) (v := w)
+    (fun u h1 h2 _ => (key u h1 h2).symm.le.trans ((F.mono bot_le) u)) H (height_le _) hxw le_rfl hpre
+  have hzx := key z hz1 hz2
+  refine ⟨z, fun hmz => hmw (hmz.trans hz2), ?_, ?_, ?_⟩
+  · rw [hzx]; exact hx1
+  · rw [hzx]; exact hz1
+  · rw [hzx]; exact hz3
+
+/-- **A pre-fixed fibre column gives a RegionCell** (with `R_1` tight). If the atom `c = F ⊥ v` lies below `v`,
+`F c v ≤ v` and `m ≰ v`, the row `⊥` is constant `c` on `(c, v]`, so the row `c` stays above `c` there.
+`row_cell_of_above` then gives a cell `z ∈ (c, v]` with `F ⊥ z = c`. `regionCell_of_x_le_m` is the case `v = w`,
+`c ≤ m`. -/
+theorem regionCell_of_fibre_pre {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1) {m v : α}
+    (hc1 : height H (F ⊥ v) = 1) (hcv : F ⊥ v < v) (hpre : F (F ⊥ v) v ≤ v) (hmv : ¬ m ≤ v) : RegionCell F H m := by
+  set c := F ⊥ v with hc
+  have key : ∀ u, c < u → u ≤ v → F ⊥ u = c := by
+    intro u hcu huv
+    have hle : F ⊥ u ≤ c := (F ⊥).mono huv
+    by_contra hne
+    have h0 := height_strictMono hn (lt_of_le_of_ne hle hne)
+    have hbot : F ⊥ u = ⊥ := by
+      by_contra hb
+      have := height_strictMono hn (bot_lt_iff_ne_bot.2 hb)
+      omega
+    have := hk1 u (mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl
+      (Or.inl hbot.le))
+    have := height_strictMono hn hcu
+    omega
+  obtain ⟨z, hz1, hz2, hz3⟩ := row_cell_of_above hn (x := c) (v := v)
+    (fun u h1 h2 _ => (key u h1 h2).symm.le.trans ((F.mono bot_le) u)) H (height_le _) hcv le_rfl hpre
+  have hzc := key z hz1 hz2
+  refine ⟨z, fun hmz => hmv (hmz.trans hz2), ?_, ?_, ?_⟩
+  · rw [hzc]; exact hc1
+  · rw [hzc]; exact hz1
+  · rw [hzc]; exact hz3
+
+/-- **PreFibre (conjectural at `k = 1`)**: some column `v ≱ m` whose row-`⊥` value is an atom `c < v` is pre-fixed in
+the row `c`. With `R_1`, `R_2` tight and `w ∥ m` it has no counterexample, already at the atom `c*` of the `⊥`-descent
+from `w` (exact, 480 instances, §34.3z²³²). It holds outright when `F ⊥ w` is an atom below `m`
+(`regionCell_of_x_le_m`, `v = w`). -/
+def PreFibre (F : α →o α →o α) (H : ℕ) (m : α) : Prop :=
+  ∃ v, ¬ m ≤ v ∧ height H (F ⊥ v) = 1 ∧ F ⊥ v < v ∧ F (F ⊥ v) v ≤ v
+
+/-- **PreFibre gives UpCell at stage 1** (with `R_1`, `R_2` tight): `regionCell_of_fibre_pre`, then
+`minH2_of_regionCell`, then `upCell_one_of_minH2`. -/
+theorem upCell_one_of_preFibre {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1)
+    (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) {m : α} (h : PreFibre F H m) : UpCell F H 1 m :=
+  let ⟨_, hmv, hc1, hcv, hpre⟩ := h
+  upCell_one_of_minH2 hn (minH2_of_regionCell hn hk2 (regionCell_of_fibre_pre hn hk1 hc1 hcv hpre hmv))
 
 end Mordor.OrbitHeight

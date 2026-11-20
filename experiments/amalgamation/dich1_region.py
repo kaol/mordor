@@ -77,6 +77,79 @@ for L in lattices(args):
         elif CLAIM in ('maxall', 'minall'): add([E.v('sel', y) for y in inY]); [add([-E.v('sel', y), ext[y]]) or add([-E.v('sel', y), -comp[y]]) for y in inY]
         elif CLAIM in ('maxex', 'minex'): [add([-ext[y], -comp[y]]) for y in inY]
         elif CLAIM == 'minh2': [add([-inY[y], -comp[y]]) for y in inY if h[y] == 2]      # some height-2 point of Y₁ is comparable
+        elif CLAIM in ('descrc', 'descpre'):                          # the atom c* on the ⊥-descent from w has a RegionCell (z ≱ m, F(⊥, z) = c*, cell of row c* at z)
+            D = lambda i, z: E.v('D', i, z)
+            for z in range(n):
+                lits = []
+                for yv in range(n): o = E.v('D0', yv, z); E.iff_and(o, [U(NO - 1, yv), f(m, yv, z)]); lits.append(o)
+                E.iff_or(D(0, z), lits)
+            for i in range(NO):
+                for z in range(n):
+                    lits = []
+                    for v in range(n): o = E.v('Ds', i, v, z); E.iff_and(o, [D(i, v), f(bot, v, z)]); lits.append(o)
+                    E.iff_or(D(i + 1, z), lits)
+            At = {}
+            for c in range(n):
+                if h[c] == 1: At[c] = E.v('datom', c); E.iff_or(At[c], [D(i, c) for i in range(NO + 1)])
+            add([E.v('dsel', c) for c in At])
+            for c in At:
+                add([-E.v('dsel', c), At[c]])
+                for z in range(n):
+                    if not le[c][z] or z == c or le[m][z]: continue
+                    if CLAIM == 'descpre': add([-E.v('dsel', c), -f(bot, z, c), -fle(c, z, z)]); continue
+                    add([-E.v('dsel', c), -f(bot, z, c), -fle(c, z, c)]); add([-E.v('dsel', c), -f(bot, z, c), -yle(c, z)])
+        elif CLAIM == 'xle1':                            # h(x) ≤ 1
+            for yv in range(n):
+                for wv in range(n): add([-U(NO - 1, yv), -f(m, yv, wv)] + [f(bot, wv, c) for c in range(n) if h[c] > 1])
+        elif CLAIM == 'wcell':                           # x = F(⊥, w) = ⊥ ⟹ row w has a RegionCell (z ≱ m, F(⊥, z) = w, cell of row w at z)
+            Wc = {}
+            for c in range(n):
+                if h[c] != 1: continue
+                lits = []
+                for yv in range(n):
+                    o = E.v('wis0', c, yv); E.iff_and(o, [U(NO - 1, yv), f(m, yv, c), f(bot, c, bot)]); lits.append(o)
+                Wc[c] = E.v('wis', c); E.iff_or(Wc[c], lits)
+            add(list(Wc.values()))
+            for c, wl in Wc.items():
+                for z in range(n):
+                    if not le[c][z] or z == c or le[m][z]: continue
+                    add([-wl, -f(bot, z, c), -fle(c, z, c)]); add([-wl, -f(bot, z, c), -yle(c, z)])
+        elif CLAIM == 'xnotbot':                         # x = F(⊥, w) ≠ ⊥
+            for yv in range(n):
+                for wv in range(n): add([-U(NO - 1, yv), -f(m, yv, wv), f(bot, wv, bot)])
+        elif CLAIM == 'xatom':                           # x = F(⊥, w) is an atom
+            for yv in range(n):
+                for wv in range(n): add([-U(NO - 1, yv), -f(m, yv, wv)] + [f(bot, wv, c) for c in range(n) if h[c] != 1])
+        elif CLAIM in ('xicw', 'xicy'):                  # x = F(⊥, w) an atom; row x has a cell in (x, w] ('xicw') / (x, y*] ('xicy')
+            for yv in range(n):
+                for wv in range(n):
+                    for c in range(n):
+                        if h[c] != 1: continue
+                        base = [-U(NO - 1, yv), -f(m, yv, wv), -f(bot, wv, c)]
+                        bound = wv if CLAIM == 'xicw' else yv
+                        for z in range(n):
+                            if le[c][z] and z != c and le[z][bound]: add(base + [-fle(c, z, c)]); add(base + [-yle(c, z)])
+            add([E.v('xa', yv, wv, c) for yv in range(n) for wv in range(n) for c in range(n) if h[c] == 1])
+            for yv in range(n):
+                for wv in range(n):
+                    for c in range(n):
+                        if h[c] == 1: E.iff_and(E.v('xa', yv, wv, c), [U(NO - 1, yv), f(m, yv, wv), f(bot, wv, c)])
+        elif CLAIM in ('xcell', 'xcellm', 'xic'):        # x = F(⊥, w) an atom ['xcellm': and x ≰ m]; 'xcell(m)': row x has a RegionCell; 'xic': row x has any cell z > x
+            Xc = {}
+            for c in range(n):
+                if h[c] != 1 or (CLAIM == 'xcellm' and le[c][m]): continue
+                lits = []
+                for yv in range(n):
+                    for wv in range(n):
+                        o = E.v('xw', c, yv, wv); E.iff_and(o, [U(NO - 1, yv), f(m, yv, wv), f(bot, wv, c)]); lits.append(o)
+                Xc[c] = E.v('xis', c); E.iff_or(Xc[c], lits)
+            add(list(Xc.values()))
+            for c, xl in Xc.items():
+                for z in range(n):
+                    if not le[c][z] or z == c: continue
+                    if CLAIM == 'xic': add([-xl, -fle(c, z, c)]); add([-xl, -yle(c, z)]); continue
+                    if le[m][z]: continue
+                    add([-xl, -f(bot, z, c), -fle(c, z, c)]); add([-xl, -f(bot, z, c), -yle(c, z)])
         elif CLAIM in ('gfix', 'gfixlow'):              # 'gfix': some g ≱ m with F(F(⊥, g), g) = g and F(⊥, g) an atom ≠ g; 'gfixlow': or a lower point
             for g in range(n):
                 if le[m][g]: continue
@@ -96,7 +169,22 @@ for L in lattices(args):
             mx = [y for y in Y if not any(y2 != y and (le[y][y2] if CLAIM.startswith('max') else le[y2][y]) for y2 in Y)]
             ys = sc_ystar(L, F, m) if CLAIM in ('minh2in', 'minh2out') else None
             gf = lambda g: not le[m][g] and h[F[bot][g]] == 1 and F[bot][g] != g and le[F[bot][g]][g] and (F[F[bot][g]][g] == g or (CLAIM == 'gfixlow' and F[F[bot][g]][g] == F[bot][g]))
-            ok = {'gfix': not any(gf(g) for g in range(n)), 'gfixlow': not any(gf(g) for g in range(n)), 'minh2in': not any(cp(y) for y in Y if h[y] == 2 and le[y][ys]) if ys is not None else True, 'minh2out': not any(cp(y) for y in Y if h[y] == 2 and not le[y][ys]) if ys is not None else True,
+            ysx = sc_ystar(L, F, m); xx = F[bot][F[m][ysx]]
+            cellx = lambda z: le[xx][z] and z != xx and (le[F[xx][z]][xx] or le[z][F[xx][z]])
+            ww = F[m][ysx]
+            cellw = lambda z: le[ww][z] and z != ww and (le[F[ww][z]][ww] or le[z][F[ww][z]])
+            def desc_atoms():
+                v, seen, out = ww, set(), []
+                while v not in seen:
+                    seen.add(v)
+                    if h[v] == 1: out.append(v)
+                    v = F[bot][v]
+                return out
+            rc = lambda c: any(le[c][z] and z != c and not le[m][z] and F[bot][z] == c and (le[F[c][z]][c] or le[z][F[c][z]]) for z in range(n))
+            pf = lambda c: any(le[c][z] and z != c and not le[m][z] and F[bot][z] == c and le[F[c][z]][z] for z in range(n))
+            ok = {'descpre': any(not pf(c) for c in desc_atoms()), 'descrc': any(not rc(c) for c in desc_atoms()), 'xle1': h[xx] > 1, 'wcell': xx == bot and h[ww] == 1 and not any(cellw(z) and not le[m][z] and F[bot][z] == ww for z in range(n)), 'xnotbot': xx == bot, 'xatom': h[xx] != 1, 'xicw': h[xx] == 1 and not any(cellx(z) and le[z][ww] for z in range(n)), 'xicy': h[xx] == 1 and not any(cellx(z) and le[z][ysx] for z in range(n)), 'xcell': h[xx] == 1 and not any(cellx(z) and not le[m][z] and F[bot][z] == xx for z in range(n)),
+                  'xcellm': h[xx] == 1 and not le[xx][m] and not any(cellx(z) and not le[m][z] and F[bot][z] == xx for z in range(n)),
+                  'xic': h[xx] == 1 and not any(cellx(z) for z in range(n)), 'gfix': not any(gf(g) for g in range(n)), 'gfixlow': not any(gf(g) for g in range(n)), 'minh2in': not any(cp(y) for y in Y if h[y] == 2 and le[y][ys]) if ys is not None else True, 'minh2out': not any(cp(y) for y in Y if h[y] == 2 and not le[y][ys]) if ys is not None else True,
                   'minh2': not any(cp(y) for y in Y if h[y] == 2), 'region': not any(cp(y) for y in Y), 'maxall': any(not cp(y) for y in mx), 'minall': any(not cp(y) for y in mx),
                   'maxex': not any(cp(y) for y in mx), 'minex': not any(cp(y) for y in mx)}[CLAIM]
             assert ok, 'SAT/Python mismatch'

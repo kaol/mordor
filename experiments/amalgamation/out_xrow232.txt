@@ -1,0 +1,18 @@
+== §34.3z²³² (exact; dich1_region.py; MinH2W hypotheses: m ∈ R_2 \ R_1, h(m) = 2, R_2 tight, w ∥ m; no feeder, ⊤ ∉ R_3, nopostlayer)
+-- without R_1 tightness (flags nonpl nofeed not1 notop icstar):
+   xcell  (x = F(⊥, w) an atom ⟹ row x has a RegionCell: z ≱ m, F(⊥, z) = x, cell at z): 'holds': 319, 'violated': 7} smallest violation 10 [sweep 4 11]
+   xcellm (the same with x ≰ m): 'holds': 325, 'violated': 1} smallest violation 11 [sweep 4 11]; 'holds': 42, 'violated': 5} smallest violation 16 [5 7 1]
+   xic    (x an atom ⟹ row x has any cell z > x): 'holds': 30, 'violated': 17} smallest violation 11 [5 7 1]
+-- with R_1 tight (nonpl nofeed notop icstar):
+   xcellm: 'holds': 326} smallest violation None [sweep 4 11]; 'holds': 47} smallest violation None [5 7 1]
+   xcell: 'holds': 47} smallest violation None [5 7 1];  xic: 'holds': 47} smallest violation None [5 7 1]
+   xatom  (x is an atom): 'violated': 46, 'holds': 1} smallest violation 8 [5 7 1]
+   xicw   (row x has a cell in (x, w]): 'violated': 46, 'holds': 1} smallest violation 8 [5 7 1]; 'holds': 97, 'violated': 229} smallest violation 6 [sweep 4 11]
+   xicy   (row x has a cell in (x, y*]): 'holds': 26, 'violated': 21} smallest violation 9 [5 7 1]
+-- with R_1 tight: xnotbot (x ≠ ⊥): violated 46/47, |L| = 8 [5 7 1] (x = ⊥: w is an atom of R_1); xle1 (h(x) ≤ 1): 'violated': 38, 'holds': 9} smallest violation 9 [5 7 1]; 'holds': 234, 'violated': 92} smallest violation 6 [sweep 4 11]
+   wcell (x = ⊥ ⟹ row w has a RegionCell): 'holds': 47} smallest violation None [5 7 1]; 'holds': 326} smallest violation None [sweep 4 11]; 'holds': 44} smallest violation None [5 8 2]
+   xcellm: 'holds': 44} smallest violation None [5 8 2]
+-- the atom c* of the ⊥-descent w ≥ F(⊥, w) ≥ … (unique under R_1 tightness):
+   descrc (row c* has a RegionCell): 'holds': 47} smallest violation None; 'holds': 326} smallest violation None; 'holds': 44} smallest violation None; 'holds': 63} smallest violation None; 
+   descpre (row c* has a pre-fixed fibre column v ≱ m: F(⊥, v) = c* < v, F(c*, v) ≤ v): 'holds': 47} smallest violation None; 'holds': 326} smallest violation None; 'holds': 44} smallest violation None; 'holds': 63} smallest violation None; 
+   (order: closure 5 7 1, sweep 4 11, closure 5 8 2, closure 5 9 3)

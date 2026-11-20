@@ -120,6 +120,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`minLevel_of_regionCellK`**.
 * §34.3z²³² (the row x = F(⊥, w) below m): **`regionCell_of_x_le_m`**, **`regionCell_of_fibre_pre`**, `PreFibre`,
   **`upCell_one_of_preFibre`**.
+* §34.3z²³⁴ (fibre covers): **`eq_a_of_fixed_top`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3562,5 +3563,19 @@ theorem upCell_one_of_preFibre {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z 
     (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) {m : α} (h : PreFibre F H m) : UpCell F H 1 m :=
   let ⟨_, hmv, hc1, hcv, hpre⟩ := h
   upCell_one_of_minH2 hn (minH2_of_regionCell hn hk2 (regionCell_of_fibre_pre hn hk1 hc1 hcv hpre hmv))
+
+/-! ### The fixed fibre cover is the A-child (§34.3z²³⁴) -/
+
+/-- **A fixed column of a stage-`k` row is its A-child at the top height.** With `R_{k+1}` tight, if `c ∈ R_k` and
+`F c v = v` with `h(v) = k + 1`, then `v = a c`. Indeed `v ≤ a c ∈ R_{k+1}`, so `h(a c) ≤ k + 1 = h(v)`. Hence a
+pre-fixed fibre cover of the descent atom (DescPre2) is either `a c*` or a lower cover `F c* v = c*`. -/
+theorem eq_a_of_fixed_top {H k : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {c v : α} (hc : c ∈ Rk F k) (hfix : F c v = v) (hv : height H v = k + 1) : v = a F c := by
+  have hle : v ≤ a F c := le_a hfix.symm.le
+  have haR : a F c ∈ Rk F (k + 1) := mem_succ_of_a hc le_rfl
+  by_contra hne
+  have := height_strictMono hn (lt_of_le_of_ne hle hne)
+  have := hall _ haR
+  omega
 
 end Mordor.OrbitHeight

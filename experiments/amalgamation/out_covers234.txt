@@ -1,0 +1,8 @@
+== §34.3z²³⁴ cover_sample.py (sampled: one model per (L, m); closure 5 7 1, 5 8 2, sweep 4 10; 336 models)
+('#fibre covers', 1, '#pre-fixed', 1, '#gap', 0) 229
+('#fibre covers', 2, '#pre-fixed', 2, '#gap', 0) 85
+('#fibre covers', 3, '#pre-fixed', 3, '#gap', 0) 18
+('#fibre covers', 4, '#pre-fixed', 4, '#gap', 0) 3
+('#fibre covers', 2, '#pre-fixed', 1, '#gap', 1) 1
+pre-fixed covers by kind: one fixed (= a(c*)) + lower: 330; lower only: 6 (a(c*) ∈ {⊥, c*} there)
+the gap model: |L| = 12, m = {04}, y* = ⊤, w = {12}, c* = {1}, a(c*) = {14} (fixed cover), {12} = w a gap (F(c*, w) = {14})

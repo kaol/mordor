@@ -14,7 +14,7 @@ import sys, collections, json
 sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import helpers, lattices
-CLAIM = sys.argv[1]; NONPL = 'nonpl' in sys.argv; ABL = {a for a in sys.argv if a in ('nofeed', 'notop', 'not1', 'not2', 'icok', 'icj', 'ictop', 'icorb', 'icorb1', 'icstar')}
+CLAIM = sys.argv[1]; NONPL = 'nonpl' in sys.argv; ABL = {a for a in sys.argv if a in ('nofeed', 'notop', 'not1', 'not2', 'icok', 'icj', 'ictop', 'icorb', 'icorb1', 'icstar', 'routeA', 'routeB')}
 args = [a for a in sys.argv[2:] if a != 'nonpl' and a not in ABL]
 C = collections.Counter(); best = None
 def sc_ystar(L, F, m):                                 # greatest post-fixed point of u ↦ m ⊔ F(m, u) by iteration from ⊤
@@ -31,6 +31,8 @@ for L in lattices(args):
         if not feeders: continue
         E = Enc(L, 3); fle, yle, ic = helpers(E, L); f = lambda a, b, u: E.v('f', a, b, u); r = lambda j, z: E.v('r', j, z); add = E.S.add_clause
         add([r(2, m)]); add([-r(1, m)])
+        if 'routeA' in ABL: add([E.v('ra', 1, x, g) for x in range(n) for g in range(n) if le[m][g]])
+        if 'routeB' in ABL: add([E.v('rb', 1, g, hh) for g in range(n) for hh in range(n) if le[m][g]])
         if 'icorb' in ABL or 'icorb1' in ABL or 'icstar' in ABL:   # 'icstar': F(m, u_i) ≰ m for all i, and only at the limit y* = u_N: y* ≰ F(m, y*)          # ¬IC(m) only along m's column orbit u_0 = ⊤, u_{n+1} = m ⊔ F(m, u_n) ('icorb1': u_0, u_1 only)
             U = lambda i, z: E.v('U', i, z); NO = 2 if 'icorb1' in ABL else L.height + 1
             for z in range(n): add([U(0, z)] if z == L.top else [-U(0, z)])
@@ -102,7 +104,7 @@ for L in lattices(args):
                             col = wv if CLAIM == 'descw' else yv
                             o = E.v('pw', yv, wv, c); E.iff_and(o, [U(NO - 1, yv), f(m, yv, wv), f(bot, wv, c), -fle(c, col, col)]); viol.append(o)
             add(viol)
-        elif CLAIM in ('descrc', 'descpre', 'descpre2', 'desclow1', 'desclow2'):   # desclow1: c* ≰ F(c*, c*) ⟹ a lower fibre cover; desclow2: a(c*) > c* not a fibre cover ⟹ a lower fibre cover                          # the atom c* on the ⊥-descent from w has a RegionCell (z ≱ m, F(⊥, z) = c*, cell of row c* at z)
+        elif CLAIM in ('descrc', 'descpre', 'descpre2', 'desclow1', 'desclow2', 'descA', 'descB'):   # descA: a fixed fibre cover (= a(c*)); descB: a lower fibre cover   # desclow1: c* ≰ F(c*, c*) ⟹ a lower fibre cover; desclow2: a(c*) > c* not a fibre cover ⟹ a lower fibre cover                          # the atom c* on the ⊥-descent from w has a RegionCell (z ≱ m, F(⊥, z) = c*, cell of row c* at z)
             D = lambda i, z: E.v('D', i, z)
             for z in range(n):
                 lits = []
@@ -128,8 +130,9 @@ for L in lattices(args):
                 add([-E.v('dsel', c), At[c]])
                 for z in range(n):
                     if not le[c][z] or z == c or le[m][z]: continue
-                    if CLAIM in ('descpre2', 'desclow1', 'desclow2') and h[z] != 2: continue
-                    if CLAIM in ('desclow1', 'desclow2'): add([-E.v('dsel', c), -f(bot, z, c), -f(c, z, c)]); continue
+                    if CLAIM in ('descpre2', 'desclow1', 'desclow2', 'descA', 'descB') and h[z] != 2: continue
+                    if CLAIM in ('desclow1', 'desclow2', 'descB'): add([-E.v('dsel', c), -f(bot, z, c), -f(c, z, c)]); continue
+                    if CLAIM == 'descA': add([-E.v('dsel', c), -f(bot, z, c), -f(c, z, z)]); continue
                     if CLAIM in ('descpre', 'descpre2'): add([-E.v('dsel', c), -f(bot, z, c), -fle(c, z, z)]); continue
                     add([-E.v('dsel', c), -f(bot, z, c), -fle(c, z, c)]); add([-E.v('dsel', c), -f(bot, z, c), -yle(c, z)])
         elif CLAIM == 'xle1':                            # h(x) ≤ 1
@@ -230,7 +233,8 @@ for L in lattices(args):
             def d2(c):
                 g = _a_of(L, F, c)
                 return le[c][g] and g != c and not (h[g] == 2 and not le[m][g] and F[bot][g] == c)
-            ok = {'desclow1': any(not le[c][F[c][c]] and not lowc(c) for c in desc_atoms()), 'desclow2': any(d2(c) and not lowc(c) for c in desc_atoms()), 'descpre2': any(not pf2(c) for c in desc_atoms()), 'descpred': dp is not None and not le[F[dp[1]][dp[0]]][dp[0]], 'descw': h[xx] == 1 and not le[F[xx][ww]][ww], 'descy': h[xx] == 1 and not le[F[xx][ysx]][ysx], 'descpre': any(not pf(c) for c in desc_atoms()), 'descrc': any(not rc(c) for c in desc_atoms()), 'xle1': h[xx] > 1, 'wcell': xx == bot and h[ww] == 1 and not any(cellw(z) and not le[m][z] and F[bot][z] == ww for z in range(n)), 'xnotbot': xx == bot, 'xatom': h[xx] != 1, 'xicw': h[xx] == 1 and not any(cellx(z) and le[z][ww] for z in range(n)), 'xicy': h[xx] == 1 and not any(cellx(z) and le[z][ysx] for z in range(n)), 'xcell': h[xx] == 1 and not any(cellx(z) and not le[m][z] and F[bot][z] == xx for z in range(n)),
+            fixc = lambda c: any(h[z] == 2 and le[c][z] and z != c and not le[m][z] and F[bot][z] == c and F[c][z] == z for z in range(n))
+            ok = {'descA': any(not fixc(c) for c in desc_atoms()), 'descB': any(not lowc(c) for c in desc_atoms()), 'desclow1': any(not le[c][F[c][c]] and not lowc(c) for c in desc_atoms()), 'desclow2': any(d2(c) and not lowc(c) for c in desc_atoms()), 'descpre2': any(not pf2(c) for c in desc_atoms()), 'descpred': dp is not None and not le[F[dp[1]][dp[0]]][dp[0]], 'descw': h[xx] == 1 and not le[F[xx][ww]][ww], 'descy': h[xx] == 1 and not le[F[xx][ysx]][ysx], 'descpre': any(not pf(c) for c in desc_atoms()), 'descrc': any(not rc(c) for c in desc_atoms()), 'xle1': h[xx] > 1, 'wcell': xx == bot and h[ww] == 1 and not any(cellw(z) and not le[m][z] and F[bot][z] == ww for z in range(n)), 'xnotbot': xx == bot, 'xatom': h[xx] != 1, 'xicw': h[xx] == 1 and not any(cellx(z) and le[z][ww] for z in range(n)), 'xicy': h[xx] == 1 and not any(cellx(z) and le[z][ysx] for z in range(n)), 'xcell': h[xx] == 1 and not any(cellx(z) and not le[m][z] and F[bot][z] == xx for z in range(n)),
                   'xcellm': h[xx] == 1 and not le[xx][m] and not any(cellx(z) and not le[m][z] and F[bot][z] == xx for z in range(n)),
                   'xic': h[xx] == 1 and not any(cellx(z) for z in range(n)), 'gfix': not any(gf(g) for g in range(n)), 'gfixlow': not any(gf(g) for g in range(n)), 'minh2in': not any(cp(y) for y in Y if h[y] == 2 and le[y][ys]) if ys is not None else True, 'minh2out': not any(cp(y) for y in Y if h[y] == 2 and not le[y][ys]) if ys is not None else True,
                   'minh2': not any(cp(y) for y in Y if h[y] == 2), 'region': not any(cp(y) for y in Y), 'maxall': any(not cp(y) for y in mx), 'minall': any(not cp(y) for y in mx),

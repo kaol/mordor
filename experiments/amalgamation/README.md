@@ -99,3 +99,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²³²: `dich1_region.py` claims on the row x = F(⊥, w) (`xcell`, `xcellm`, `xic`, `xatom`, `xicw`, `xicy`, `xnotbot`, `xle1`; refutations `dich1_x*_min*.json`), `wcell`, and the ⊥-descent atom (`descrc`, `descpre`: no counterexample). Output `out_xrow232.txt`.
 - §34.3z²³³: `descpre_core.py` (DescPre cores: every excluded column a height-2 cover); `dich1_region.py` claims `descpred` / `descw` / `descy` (refuted) and `descpre2` (no counterexample). Output `out_descpre233.txt`.
 - §34.3z²³⁴: `cover_sample.py` (sampled fibre-cover structure of the descent atom). Output `out_covers234.txt`.
+- §34.3z²³⁵: `dich1_region.py` claims `descA` / `descB`, flags `routeA` / `routeB` (each alternative alone refuted under either route). Output appended to `out_covers234.txt`.

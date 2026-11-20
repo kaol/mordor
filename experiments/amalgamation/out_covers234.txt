@@ -9,3 +9,6 @@ the gap model: |L| = 12, m = {04}, y* = ⊤, w = {12}, c* = {1}, a(c*) = {14} (f
 -- exact (dich1_region.py; hypotheses m ∈ R_2 \ R_1, h(m) = 2, R_1 and R_2 tight, w ∥ m):
    desclow1 (c* ≰ F(c*, c*) ⟹ a lower fibre cover): 'violated': 47} smallest violation 8 [5 7 1]; 'holds': 36, 'violated': 290} smallest violation 5 [sweep 4 11]
    desclow2 (a(c*) > c* not a fibre cover ⟹ a lower fibre cover): 'holds': 47} smallest violation None [5 7 1]; 'holds': 326} smallest violation None [sweep 4 11]
+-- §34.3z²³⁵, m's entry route forced (routeA: m ≤ a(x), x ∈ R_1; routeB: b(m)-route):
+   descA (a fixed fibre cover = a(c*) exists): 'violated': 45, 'holds': 2} smallest violation 8 [routeA]; 'violated': 47} smallest violation 8 [routeB]
+   descB (a lower fibre cover exists): 'violated': 45, 'holds': 2} smallest violation 8 [routeA]; 'violated': 47} smallest violation 8 [routeB]   (closure 5 7 1)

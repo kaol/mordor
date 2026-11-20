@@ -268,7 +268,8 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     implies AtomGood(2) (`atomGood_two_of_topFibreNew`), and it has no counterexample (80 rank-3 lattices) (§34.3z²²³). Its minimal cores are global: up to 16 configurations, each top paired with its nopostlayer instance. Without
     nopostlayer it fails (|L| = 11), and the per-element form fails. The supported statement is the dichotomy
     "a diagonal post-fixed height-2 top or a fibre certificate", and it implies SecondEntry at k = 2
-    (`secondEntry_two_of_dichotomy`) (§34.3z²²⁴). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    (`secondEntry_two_of_dichotomy`) (§34.3z²²⁴). No canonical top decides it: the natural candidate c = F(b(c), w) fails exactly (|L| = 11, and |L| = 17 with
+    atom sources), so both strategies now end at global existential statements (§34.3z²²⁵). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations

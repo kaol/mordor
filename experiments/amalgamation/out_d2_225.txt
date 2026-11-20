@@ -1,0 +1,19 @@
+== §34.3z²²⁵: canonical choices for Dichotomy(2), rank(m) = 3, multi nopostlayer (exact; models re-checked in Python)
+-- d2_features.py (sampled, one hypothesis model per (L, m); 124 models over closure 5 10 1, 5 11 4, 5 12 8 nofi, 6 11 6 nofi):
+   'c = F(b(c), w)': nonempty in 101 models and then all such c good (101/101); no certificate feature holds in all models
+   (c ≤ w 120/124, p ≤ m 104/124, v ≤ y* 97/124, y ≤ c ∨ w 87/124, p = F(⊥, w) 77/124)
+-- d2fbw (every height-2 c ∈ R_2 with c = F(b(c), w) is new and certified):
+   fbw_5_10_1_nofi: claim d2fbw: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 11, rank(m) = 3
+   fbw_5_10_1_x: claim d2fbw: {'counterexample': 7, 'none': 3}; smallest counterexample |L| = 11, rank(m) = 3
+   fbw_5_11_4_nofi: claim d2fbw: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 14, rank(m) = 3
+   fbw_6_11_6_nofi: claim d2fbw: {'none': 1, 'counterexample': 9}; smallest counterexample |L| = 15, rank(m) = 3
+   single_claim_d2fbw_min11.json: c = {23} ∈ R_1 (early) with b(c) = ⊥, F(⊥, w) = c
+-- d2fbw batom (only c with b(c) an atom):
+   fbwa_5_10_1: claim d2fbw: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 18, rank(m) = 3
+   fbwa_5_11_4: claim d2fbw: {'none': 7, 'counterexample': 3}; smallest counterexample |L| = 17, rank(m) = 3
+   fbwa_5_12_8: claim d2fbw: {'none': 6, 'counterexample': 4}; smallest counterexample |L| = 19, rank(m) = 3
+   fbwa_6_11_6: claim d2fbw: {'none': 2, 'counterexample': 8}; smallest counterexample |L| = 18, rank(m) = 3
+   single_claim_d2fbw_batom_min17.json: c = {04}, b(c) = {3} ≰ c, F(b(c), w) = c, empty fibre
+-- harness fix: the BOnlyGoodChild violation block in the bonly/topgoal branch now runs only for 'bonly' (before, its selectors
+   were also offered to the violation clause of the other claims of the branch; topgoal/belowW/ag2f force their own
+   violation literal, so their results are unchanged; backreach's counterexample was Python-verified)

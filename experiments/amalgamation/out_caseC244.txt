@@ -1,0 +1,44 @@
+== §34.3z²⁴⁴ (exact; m-free; R_1, R_2 tight unless guarded)
+-- rc_test.py caseC2 (c ≰ a(c) and the row-c descent from ⊤ never meets c; with a(⊥) = ⊥): 'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]
+   caseC2any (without a(⊥) = ⊥): 'UNSAT': 44} smallest None [5 8 2]; 'UNSAT': 59} smallest None [6 9 1]
+-- caseC_core.py (cores of ¬(C′), guards T1, T2):
+   [sweep 4 10] cores 133
+   [sweep 4 10] ('shape', (('T2', 1),)) 81
+   [sweep 4 10] ('shape', (('T1', 1),)) 23
+   [sweep 4 10] ('shape', (('T2', 2),)) 16
+   [sweep 4 10] ('shape', (('T1', 2),)) 3
+   [sweep 4 10] ('shape', (('T1', 3),)) 3
+   [sweep 4 10] ('shape', (('T1', 1), ('T2', 1))) 3
+   [sweep 4 10] ('shape', (('T1', 4),)) 2
+   [sweep 4 10] ('shape', (('T1', 2), ('T2', 2))) 1
+   [sweep 4 10] ('shape', (('T2', 3),)) 1
+   [closure 5 7 1] cores 12
+   [closure 5 7 1] ('shape', (('T2', 1),)) 4
+   [closure 5 7 1] ('shape', (('T2', 4),)) 2
+   [closure 5 7 1] ('shape', (('T2', 2),)) 2
+   [closure 5 7 1] ('shape', (('T2', 3),)) 1
+   [closure 5 7 1] ('shape', (('T1', 3),)) 1
+   [closure 5 7 1] ('shape', (('T1', 1), ('T2', 3))) 1
+   [closure 5 7 1] ('shape', (('T1', 2), ('T2', 4))) 1
+-- caseC_near.py (near-models, labelled; u_K = last row-c descent element ≥ c, z* = fixed point of z ↦ c ∨ F(c, z) from u_K):
+   [sweep 4 10] ('T2', 'g ≥ z*', 'h(g)', 3, 'h(z*)', 1, 'F(⊥,z*)=⊥') 53
+   [sweep 4 10] ('T1', 'g = u_K', 'h(g)', 2, 'h(z*)', 1, 'F(⊥,z*)=⊥') 42
+   [sweep 4 10] ('T2', 'g = p', 'h(g)', 3, 'h(z*)', 1, 'F(⊥,z*)=⊥') 32
+   [sweep 4 10] ('T2', 'g = p', 'h(g)', 3, 'h(z*)', 2, 'F(⊥,z*)=⊥') 19
+   [sweep 4 10] ('T2', 'g ≥ z*', 'h(g)', 3, 'h(z*)', 2, 'F(⊥,z*)=⊥') 8
+   [sweep 4 10] ('T2', 'g = z*', 'h(g)', 3, 'h(z*)', 3, 'F(⊥,z*)=⊥') 8
+   [sweep 4 10] ('T1', 'g = z*', 'h(g)', 2, 'h(z*)', 2, 'F(⊥,z*)=⊥') 7
+   [sweep 4 10] ('T1', 'other', 'h(g)', 2, 'h(z*)', 1, 'F(⊥,z*)=⊥') 1
+   [sweep 4 10] ('T1', 'other', 'h(g)', 2, 'h(z*)', 3, 'F(⊥,z*)=⊥') 1
+   [sweep 4 10] ('T2', 'other', 'h(g)', 3, 'h(z*)', 1, 'F(⊥,z*)=⊥') 1
+   [closure 5 7 1] ('T2', 'g ≥ z*', 'h(g)', 3, 'h(z*)', 1, 'F(⊥,z*)=⊥') 14
+   [closure 5 7 1] ('T2', 'g = p', 'h(g)', 3, 'h(z*)', 1, 'F(⊥,z*)=⊥') 7
+   [closure 5 7 1] ('T1', 'g = u_K', 'h(g)', 2, 'h(z*)', 1, 'F(⊥,z*)=⊥') 3
+   [closure 5 7 1] ('T2', 'g ≥ z*', 'h(g)', 3, 'h(z*)', 2, 'F(⊥,z*)=⊥') 2
+   [closure 5 7 1] ('T1', 'g = z*', 'h(g)', 2, 'h(z*)', 2, 'F(⊥,z*)=⊥') 2
+   [closure 5 7 1] ('T2', 'other', 'h(g)', 3, 'h(z*)', 1, 'F(⊥,z*)=⊥') 1
+   [closure 5 7 1] ('T2', 'g = p', 'h(g)', 3, 'h(z*)', 2, 'F(⊥,z*)=⊥') 1
+   [closure 5 7 1] ('T2', 'other', 'h(g)', 3, 'h(z*)', 2, 'F(⊥,z*)=⊥') 1
+   [closure 5 7 1] ('T1', 'g ≥ z*', 'h(g)', 2, 'h(z*)', 1, 'F(⊥,z*)=⊥') 1
+-- dropbot (a row-c descent element z ≥ c with F(c, z) ≱ c has F(⊥, z) = ⊥; no tightness, the misses-c hypothesis dropped):
+   sweep 4 10: inconsistent 133; closure 5 7 1: inconsistent 10, cores 2 (one or two T1 instances at height 2)

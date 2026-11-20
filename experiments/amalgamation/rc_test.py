@@ -83,6 +83,19 @@ for L in lattices(args):
                 add([-E.v('vsel', c, v), o])
                 for z in range(n):
                     if le[v][z]: add([-E.v('vsel', c, v), -U(NO - 1, z)])
+        elif MODE in ('caseC2', 'caseC2any'):              # c* ≰ a(c*) and the row-c* descent from ⊤ never meets c* [caseC2: with a(⊥) = ⊥]
+            if MODE == 'caseC2': add([A_(bot, bot)])
+            for c in atoms:
+                for g in range(n):
+                    if le[c][g]: add([-At[c], -A_(c, g)])
+                UC = lambda k, z: E.v('UC', c, k, z)
+                for z in range(n): add([UC(0, z)] if z == top else [-UC(0, z)])
+                for k in range(NO):
+                    for z in range(n):
+                        lits = []
+                        for v in range(n): o = E.v('UCs', c, k, v, z); E.iff_and(o, [UC(k, v), f(c, v, z)]); lits.append(o)
+                        E.iff_or(UC(k + 1, z), lits)
+                for k in range(NO + 1): add([-At[c], -UC(k, c)])
         elif MODE in ('caseA', 'caseC'):                  # a(⊥) = ⊥; caseA: c* < a(c*) but F(⊥, a(c*)) ≠ c*; caseC: a(c*) ≱ c* (or = c*) and the row-c* descent misses c*, and no pre-fixed column in (c*, p]
             add([A_(bot, bot)])
             for c in atoms:
@@ -318,7 +331,7 @@ for L in lattices(args):
                     if x == c and v != c: return v
                     v = x
             pp = pred(); acc = a_of(L, F, c)
-            ok = {'caseA': a_of(L, F, bot) == bot and le[c][acc] and acc != c and F[bot][acc] != c,
+            ok = {'caseC2': a_of(L, F, bot) == bot and not le[c][acc] and not chit(), 'caseC2any': not le[c][acc] and not chit(), 'caseA': a_of(L, F, bot) == bot and le[c][acc] and acc != c and F[bot][acc] != c,
                   'caseC': a_of(L, F, bot) == bot and not (le[c][acc] and acc != c) and not chit() and bp(), 'resid240': a_of(L, F, bot) == bot and not chit() and not (pp is not None and le[c][acc] and acc != c and le[pp][acc]) and bp(), 'chit': a_of(L, F, bot) == bot and not chit(), 'chit_any': not chit(), 'belowp': a_of(L, F, bot) == bot and bp(), 'belowp_any': bp(), 'acfib': a_of(L, F, bot) == bot and not (le[c][ac] and ac != c and F[bot][ac] == c), 'abotbot': a_of(L, F, bot) == bot and not any(le[F[c][v]][v] for v in Vs), 'imgatom': ia(False), 'imgatom_any': ia(True), 'peratomw': paw(), 'peratom': pa(False), 'peratom_le': pa(True), 'residual': not any(above(c) for c in cand), 'residual_post': not any(le[c][F[bot][c]] for c in cand), 'descpre2yfail': not any(le[F[c][v]][v] and le[v][u_] for v in Vs), 'vley': any(not le[v][u_] for v in Vs), 'descpre2fail': not any(le[F[c][v]][v] for v in Vs), 'ercfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Clp) for u in Clp), 'nonempty': not Vs, 'allgap': bool(Vs) and all(gap(v) for v in Vs),
                   'rcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Vs) for u in Vs),
                   'xrcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[d][v2]] for d, v2 in W) for u in Vs)}[MODE]

@@ -293,7 +293,8 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     R_1 and R_2 are tight (**TopDescPre**, exact, 373 instances). The hypotheses on m only keep the witness off m
     (§34.3z²³⁹). TopDescPre is proved when a(⊥) is an atom (`preCover_of_a_bot_atom`); the open case is a(⊥) = ⊥ (§34.3z²⁴⁰). That case reduces to two exact statements about the row-c descent from ⊤: (A) c < a(c) ⟹ F(⊥, a(c)) = c, and
     (C) a(c) ≯ c ⟹ the descent hits c or the row c is pre-fixed below p (§34.3z²⁴¹). (A) is proved (`botDesc_a_fibre`) by the **descent lemma** (`le_of_botDesc`): if c lies on the ⊥-descent from ⊤
-    and y ≤ F(⊥, c ∨ y), then y ≤ c. So TopDescPre holds whenever c < a(c); (C) remains (§34.3z²⁴³). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    and y ≤ F(⊥, c ∨ y), then y ≤ c. So TopDescPre holds whenever c < a(c); (C) remains (§34.3z²⁴³). (C) sharpens to (C′): if c ≰ a(c), the row-c descent from ⊤ meets c. It has no counterexample, and it follows from a
+    nearly tightness-free drop lemma, F(⊥, z) = ⊥ at the row-c descent's drop columns (§34.3z²⁴⁴). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations

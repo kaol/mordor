@@ -80,6 +80,34 @@ for L in lattices(args):
                 add([-E.v('vsel', c, v), o])
                 for z in range(n):
                     if le[v][z]: add([-E.v('vsel', c, v), -U(NO - 1, z)])
+        elif MODE == 'peratomw':                         # some atom c ∈ R_1, c ≰ m, c = F(⊥, p) for some p ≤ w with c < p, and no pre-fixed v ∈ V_c
+            Ws = {}
+            for wv in range(n):
+                lits = []
+                for yv in range(n): o = E.v('Wsel0', yv, wv); E.iff_and(o, [U(NO - 1, yv), f(m, yv, wv)]); lits.append(o)
+                Ws[wv] = E.v('Wsel', wv); E.iff_or(Ws[wv], lits)
+            sel = []
+            for c in atoms:
+                if le[c][m]: continue
+                vs = [v for v in L.covers_up[c] if h[v] == 2 and not le[m][v]]
+                img = []
+                for wv in range(n):
+                    for pv in range(n):
+                        if le[c][pv] and pv != c and le[pv][wv]: o = E.v('img', c, wv, pv); E.iff_and(o, [Ws[wv], f(bot, pv, c)]); img.append(o)
+                if not img: continue
+                s_ = E.v('pwsel', c); sel.append(s_); add([-s_, r(1, c)]); add([-s_] + img)
+                for v in vs: add([-s_, -f(bot, v, c), -fle(c, v, v)])
+            add(sel)
+        elif MODE in ('peratom', 'peratom_le'):          # some atom c ∈ R_1 with c ≰ m ('peratom') / c ≤ m ('peratom_le'), V_c ≠ ∅, no pre-fixed v ∈ V_c
+            sel = []
+            for c in atoms:
+                if le[c][m] != (MODE == 'peratom_le'): continue
+                vs = [v for v in L.covers_up[c] if h[v] == 2 and not le[m][v]]
+                if not vs: continue
+                s_ = E.v('pasel', c); sel.append(s_); add([-s_, r(1, c)])
+                add([-s_] + [f(bot, v, c) for v in vs])
+                for v in vs: add([-s_, -f(bot, v, c), -fle(c, v, v)])
+            add(sel)
         elif MODE in ('residual', 'residual_post'):    # no atom c ∈ R_1 with c ≤ m, c < w whose row stays above c on (c, w] ('residual') / with c ≤ F(⊥, c) ('residual_post')
             Ws = {}
             for wv in range(n):
@@ -166,7 +194,20 @@ for L in lattices(args):
                         if u not in Clp and le[u][F[c][v]]: Clp.add(u); ch = True
             above = lambda c: all(le[c][F[c][uu]] for uu in range(n) if le[c][uu] and uu != c and le[uu][w] and le[F[c][uu]][uu])
             cand = [c for c in atoms if le[c][m] and le[c][w] and c != w and inR1(c)]
-            ok = {'residual': not any(above(c) for c in cand), 'residual_post': not any(le[c][F[bot][c]] for c in cand), 'descpre2yfail': not any(le[F[c][v]][v] and le[v][u_] for v in Vs), 'vley': any(not le[v][u_] for v in Vs), 'descpre2fail': not any(le[F[c][v]][v] for v in Vs), 'ercfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Clp) for u in Clp), 'nonempty': not Vs, 'allgap': bool(Vs) and all(gap(v) for v in Vs),
+            def pa(le_flag):
+                for c2 in atoms:
+                    if le[c2][m] != le_flag or not inR1(c2): continue
+                    vs = [v for v in L.covers_up[c2] if h[v] == 2 and not le[m][v] and F[bot][v] == c2]
+                    if vs and not any(le[F[c2][v]][v] for v in vs): return True
+                return False
+            def paw():
+                for c2 in atoms:
+                    if le[c2][m] or not inR1(c2): continue
+                    if not any(le[c2][pv] and pv != c2 and le[pv][w] and F[bot][pv] == c2 for pv in range(n)): continue
+                    vs = [v for v in L.covers_up[c2] if h[v] == 2 and not le[m][v] and F[bot][v] == c2]
+                    if not any(le[F[c2][v]][v] for v in vs): return True
+                return False
+            ok = {'peratomw': paw(), 'peratom': pa(False), 'peratom_le': pa(True), 'residual': not any(above(c) for c in cand), 'residual_post': not any(le[c][F[bot][c]] for c in cand), 'descpre2yfail': not any(le[F[c][v]][v] and le[v][u_] for v in Vs), 'vley': any(not le[v][u_] for v in Vs), 'descpre2fail': not any(le[F[c][v]][v] for v in Vs), 'ercfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Clp) for u in Clp), 'nonempty': not Vs, 'allgap': bool(Vs) and all(gap(v) for v in Vs),
                   'rcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Vs) for u in Vs),
                   'xrcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[d][v2]] for d, v2 in W) for u in Vs)}[MODE]
             assert ok, 'SAT/Python mismatch'

@@ -9,7 +9,8 @@ sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import helpers, lattices
 LIM = next((int(a[6:]) for a in sys.argv if a.startswith('limit=')), 10)
-args = [a for a in sys.argv[1:] if not a.startswith('limit=')]
+CNLE = 'cnle' in sys.argv
+args = [a for a in sys.argv[1:] if not a.startswith('limit=') and a != 'cnle']   # cnle: only descent atoms c* ≰ m
 C = collections.Counter(); shown = 0
 for L in lattices(args):
     n = L.n; le = L.le; h = L.rank; bot = h.index(0); top = L.top; jn = L.join
@@ -40,6 +41,9 @@ for L in lattices(args):
         At = {}
         for c in range(n):
             if h[c] == 1: At[c] = E.v('datom', c); E.iff_or(At[c], [D(i, c) for i in range(NO + 1)])
+        if CNLE:
+            for c in At:
+                if le[c][m]: add([-At[c]])
         guards = {}
         def guard(tag, clauses):
             s_ = E.v('g', *tag); guards[s_] = tag
@@ -71,7 +75,10 @@ for L in lattices(args):
         for t in tags:
             if t[0] == 'BT':
                 g = t[1]
-                C[('BT column', 'g = m ∨ v (v ∈ P)' if any(jn[m][v] == g for v in Pv) else ('g = v ∨ v′ (P covers)' if any(jn[v][v2] == g for v in Pv for v2 in Pv if v != v2) else ('g ≥ m' if le[m][g] else 'other')), 'h', h[g])] += 1
+                lab = ('m ∨ v' if any(jn[m][v] == g for v in Pv) else 'm ∨ c' if any(jn[m][c] == g for c in Pc) else
+                       'v ∨ v′' if any(jn[v][v2] == g for v in Pv for v2 in Pv if v != v2) else 'v ∨ c′' if any(jn[v][c2] == g for v in Pv for c2 in range(n) if h[c2] == 1) else
+                       ('≥ m' if le[m][g] else '≥ some P cover' if any(le[v][g] for v in Pv) else 'other'))
+                C[('BT column', lab, 'h', h[g])] += 1
         C[('uses AS', any(t[0] == 'AS' for t in tags))] += 1
         C[('P column = c ∨ another atom', tuple(sorted(sum(1 for a in range(n) if h[a] == 1 and a != t[1] and jn[t[1]][a] == t[2]) > 0 for t in P)))] += 1
         C[('shape', tuple(sorted(collections.Counter(t[0] for t in tags).items())))] += 1

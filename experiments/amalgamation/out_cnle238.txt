@@ -1,0 +1,30 @@
+== §34.3z²³⁸ (exact; models replayed in Python; hypotheses m ∈ R_2 \ R_1, h(m) = 2, R_1, R_2 tight, w ∥ m)
+-- descpre2_core.py cnle (cores of DescPre2 restricted to descent atoms c* ≰ m; guards WL, WU, T1, BT, AS, P):
+   [closure 5 7 1] {'cores': 47, 'degenerate': 1}
+   [closure 5 7 1] ('uses AS', True) 46
+   [closure 5 7 1] ('P columns heights', (2, 2, 2)) 16
+   [closure 5 7 1] ('#P', 3, '#atoms in P', 2) 12
+   [closure 5 7 1] ('shape', (('AS', 1), ('BT', 1), ('P', 3), ('T1', 3))) 9
+   [closure 5 7 1] ('P column = c ∨ another atom', (True, True, True)) 8
+   [closure 5 7 1] ('BT column', 'other', 'h', 3) 8
+   [closure 5 7 1] ('#P', 1, '#atoms in P', 1) 7
+   [closure 5 7 1] ('P columns heights', (2,)) 7
+   [closure 5 7 1] ('P column = c ∨ another atom', (True,)) 7
+   [sweep 4 10] {'inconsistent': 13, 'cores': 269, 'degenerate': 84}
+   [sweep 4 10] ('uses AS', True) 185
+   [sweep 4 10] ('#P', 1, '#atoms in P', 1) 78
+   [sweep 4 10] ('P columns heights', (2,)) 78
+   [sweep 4 10] ('P columns heights', (2, 2)) 75
+   [sweep 4 10] ('P column = c ∨ another atom', (True,)) 70
+   [sweep 4 10] ('P column = c ∨ another atom', (True, True)) 63
+   [sweep 4 10] ('#P', 2, '#atoms in P', 1) 49
+   [sweep 4 10] ('shape', (('AS', 1), ('P', 2), ('T1', 2))) 47
+   [sweep 4 10] ('shape', (('AS', 1), ('P', 1), ('T1', 1))) 34
+   [sweep 4 10] ('shape', (('AS', 1), ('P', 1), ('T1', 2))) 26
+   [sweep 4 10] ('#P', 2, '#atoms in P', 2) 26
+   [sweep 4 10] ('P columns heights', (2, 2, 2)) 20
+   [sweep 4 10] ('P column = c ∨ another atom', (True, True, True)) 17
+   no core uses WL or WU (w ∥ m)
+-- rc_test.py peratom (every atom c ∈ R_1, c ≰ m, V_c ≠ ∅ has a pre-fixed fibre cover): 'UNSAT': 4, 'SAT': 43} smallest 8 [5 7 1]; 'UNSAT': 205, 'SAT': 121} smallest 7 [sweep 4 11]; 'UNSAT': 9, 'SAT': 35} smallest 10 [5 8 2]
+   peratom_le (the same for c ≤ m): 'UNSAT': 19, 'SAT': 28} smallest 11 [5 7 1]
+   peratomw (atoms c ≰ m with c = F(⊥, p), c < p ≤ w): 'UNSAT': 30, 'SAT': 17} smallest 11 [5 7 1]; 'UNSAT': 305, 'SAT': 21} smallest 8 [sweep 4 11]; 'UNSAT': 20, 'SAT': 24} smallest 10 [5 8 2]; 'SAT': 45, 'UNSAT': 18} smallest 11 [5 9 3]

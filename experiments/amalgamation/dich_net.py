@@ -17,11 +17,16 @@ from tight_probe import helpers, lattices
 from rstages import stages
 k = int(sys.argv[1]); MODE = sys.argv[2]; K = k + 1
 OUT = next((a[4:] for a in sys.argv if a.startswith('out=')), None); MINLEVEL = 'minlevel' in sys.argv; NONPL = 'nonpl' in sys.argv
-args = [a for a in sys.argv[3:] if not a.startswith('out=') and a not in ('minlevel', 'nonpl')]
+ABL = {a for a in sys.argv if a in ('wpar', 'nofeed', 'notop', 'notk1', 'minh3', 'vac')}   # vac: drop the certificate exclusions (count models)   # minh3 (k = 2): certificates (p, y) with c = F(p, y) ∈ R_2, no F(p, c) = p / newness   # wpar: ¬IC(m) → w = F(m, y*) ∥ m; drop feeder / ⊤ ∉ R_{K+1} / R_{K−1} tightness
+args = [a for a in sys.argv[3:] if not a.startswith('out=') and a not in ('minlevel', 'nonpl') and a not in ABL]
 C = collections.Counter(); best = None; outf = open(OUT, 'w') if OUT else None
 
 def py_violated(L, F, m):
     n = L.n; le = L.le; h = L.rank; st = stages(L, F); inR = lambda x, j: st[x] is not None and st[x] <= j
+    if 'minh3' in ABL:
+        if not NONPL and any(h[x] == k and inR(x, k) and le[x][F[x][x]] for x in range(n)): return False
+        return not any(h[y] == K and not le[m][y] and h[p] == k - 1 and inR(p, k - 1) and le[p][y] and h[F[p][y]] == k and inR(F[p][y], k)
+                       and le[F[p][y]][y] and F[p][y] != y and le[p][F[p][y]] and p != F[p][y] and (le[F[F[p][y]][y]][y] or le[y][F[F[p][y]][y]]) for y in range(n) for p in range(n))
     if not NONPL and any(h[x] == k and inR(x, k) and le[x][F[x][x]] for x in range(n)): return False
     for p in range(n):
         for c in range(n):
@@ -47,15 +52,39 @@ for L in lattices(args):
                 return
             s_ = E.v('g', *tag); guards[s_] = tag
             for c_ in clauses: E.S.add_clause([-s_] + c_)
-        guard(('NOIC',), [[-ic(m)]]); guard(('TOP',), [[-r(K + 1, L.top)]])
+        if 'wpar' in ABL:
+            U = lambda i, z: E.v('U', i, z); NO = L.height + 1
+            for z in range(n): E.S.add_clause([U(0, z)] if z == L.top else [-U(0, z)])
+            for i in range(NO - 1):
+                for z in range(n):
+                    lits = []
+                    for v in range(n):
+                        for g in range(n):
+                            if L.join[m][g] == z: o = E.v('Ust', i, v, g); E.iff_and(o, [U(i, v), f(m, v, g)]); lits.append(o)
+                    E.iff_or(U(i + 1, z), lits)
+            guard(('WL',), [[-U(NO - 1, z), -f(m, z, g)] for z in range(n) for g in range(n) if le[g][m]])
+            guard(('WU',), [[-U(NO - 1, z), -f(m, z, g)] for z in range(n) for g in range(n) if le[m][g]])
+        else: guard(('NOIC',), [[-ic(m)]])
+        if 'notop' not in ABL: guard(('TOP',), [[-r(K + 1, L.top)]])
         low = []
         for p in feeders: o = E.v('low', p); E.iff_and(o, [r(K - 1, p), fle(p, m, p)]); low.append(o)
-        guard(('FEED',), [low])
+        if 'nofeed' not in ABL: guard(('FEED',), [low])
         for z in range(n):
             if h[z] > K: guard(('TK', z), [[-r(K, z)]])
-            if h[z] > K - 1: guard(('TK1', z), [[-r(K - 1, z)]])
+            if h[z] > K - 1 and 'notk1' not in ABL: guard(('TK1', z), [[-r(K - 1, z)]])
             if h[z] == k and not NONPL: guard(('NPL', z), [[-r(k, z), -yle(z, z)]])
-        for p in range(n):
+        if 'minh3' in ABL:
+            for y in range(n):
+                if h[y] != K or le[m][y]: continue
+                cl = []
+                for p in range(n):
+                    if h[p] != k - 1 or not le[p][y]: continue
+                    for c in L.covers_dn[y]:
+                        if h[c] == k and le[p][c] and p != c:
+                            base = [-r(k - 1, p), -f(p, y, c), -r(k, c)]
+                            cl += [base + [-fle(c, y, y)], base + [-yle(c, y)]]
+                if cl and 'vac' not in ABL: guard(('X', y), cl)
+        for p in (range(n) if 'minh3' not in ABL else []):
             if h[p] != k - 1: continue
             for c in range(n):
                 if h[c] != k or not le[p][c]: continue
@@ -70,7 +99,7 @@ for L in lattices(args):
                 if cl: guard(('CFG', p, c), cl)
         if MODE == 'test':
             if E.S.solve():
-                F = E.decode(); assert py_violated(L, F, m)
+                F = E.decode(); assert 'vac' in ABL or py_violated(L, F, m)
                 C['violated'] += 1
                 if best is None or n < best[0]: best = (n, dict(sets=L.S, F=F, m=m))
             else: C['holds'] += 1
@@ -87,5 +116,5 @@ for L in lattices(args):
         allcfg = sorted(t for t in guards.values() if t[0] == 'CFG')
         if outf: outf.write(json.dumps(dict(sets=L.S, m=m, core=tags, allcfg=allcfg)) + '\n')
         E.S.delete()
-print(f'k={k} {MODE}', dict(C), 'smallest violation', best[0] if best else None)
-if best: json.dump(best[1], open(f'dich{k}_violation_min{best[0]}.json', 'w'))
+print(f'k={k} {MODE}', sorted(ABL), 'minlevel' if MINLEVEL else '', 'nonpl' if NONPL else '', dict(C), 'smallest violation', best[0] if best else None)
+if best: json.dump(best[1], open(f'dich{k}_violation{"_minlevel" if MINLEVEL else ""}{"_nonpl" if NONPL else ""}{"".join("_" + a for a in sorted(ABL))}_min{best[0]}.json', 'w'))

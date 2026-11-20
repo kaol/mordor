@@ -114,6 +114,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²²⁶ (k = 1 as one monotone map): `MinH2`, **`upCell_one_of_minH2`**, `secondEntry_one_of_minH2`.
 * §34.3z²²⁸ (the column orbit): `OrbitNoCell`, `orbitNoCell_of_noCell`, `MinH2Orbit`, **`secondEntry_one_of_minH2Orbit`**.
 * §34.3z²²⁹ (A meets B): **`w_incomparable_of_orbitNoCell`**, `MinH2W`, **`secondEntry_one_of_minH2W`**.
+* §34.3z²³⁰ (every k): `MinLevel`, **`upCell_of_minLevel`**, `minLevel_one_of_minH2`, `MinLevelW`,
+  **`minUpCell_of_minLevelW`**, **`singletonLower_of_minLevelW`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3360,5 +3362,67 @@ theorem secondEntry_one_of_minH2W {H : ℕ} (hn : NoChain α (H + 1)) (hM : MinH
     (hnocell : ¬ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y)) : SecondEntry F H 1 m := by
   obtain ⟨h1, h2⟩ := w_incomparable_of_orbitNoCell hmt (orbitNoCell_of_noCell hnocell) hfix
   exact secondEntry_one_of_minH2 hn hall (hM m N hm2 hm1 hmh hall hfix hgfp h1 h2)
+
+/-! ### MinLevel: one conjecture for every k (§34.3z²³⁰)
+
+MinH2 generalizes to every stage: a column `y` of height `k + 1`, off `m`, whose value `c = F p y` in some row `p ≤ c`
+is a height-`k` element of `R_k` covered by `y`, with `F c y` comparable with `y`. With `m`'s column-orbit hypothesis
+(`w ∥ m`, Strategy B's `hmw`) and `R_{k+1}` tight, it has no counterexample at `k = 1, 2, 3`, none of them vacuous. It
+needs no nopostlayer, no feeder, no `⊤ ∉ R_{k+2}` and no lower-stage tightness. Through `colOrb_dichotomy` it gives
+MinUpCell, hence SingletonLower. -/
+
+/-- **A minimal-level certificate at stage `k`.** -/
+def MinLevel (F : α →o α →o α) (H k : ℕ) (m : α) : Prop :=
+  ∃ p c y, p ≤ c ∧ c ∈ Rk F k ∧ height H c = k ∧ c < y ∧ height H y = k + 1 ∧ ¬ m ≤ y ∧ F p y = c ∧
+    (F c y ≤ y ∨ y ≤ F c y)
+
+/-- **MinLevel gives UpCell** at the same stage. `c = F p y ≤ F c y`, and `y` covers `c` by heights, so a pre-fixed
+`F c y ≤ y` is `c` (a lower cell) or `y` (an upper cell). -/
+theorem upCell_of_minLevel {H k : ℕ} (hn : NoChain α (H + 1)) {m : α} (h : MinLevel F H k m) : UpCell F H k m := by
+  obtain ⟨p, c, y, hpc, hcR, hch, hcy, hyh, hmy, hpy, hcmp⟩ := h
+  have hlo : c ≤ F c y := hpy ▸ (F.mono hpc) y
+  refine ⟨c, hcR, hch, y, hcy, hmy, ?_⟩
+  rcases hcmp with hle | hge
+  · by_cases hey : F c y = y
+    · exact Or.inr hey.symm.le
+    · left
+      by_contra hne
+      have h1 : c < F c y := lt_of_le_of_ne hlo fun e => hne (e ▸ le_rfl)
+      have h2 : F c y < y := lt_of_le_of_ne hle hey
+      have := height_strictMono hn h1
+      have := height_strictMono hn h2
+      omega
+  · exact Or.inr hge
+
+/-- MinH2 is MinLevel at `k = 1` (row `⊥`). -/
+theorem minLevel_one_of_minH2 {H : ℕ} (hn : NoChain α (H + 1)) {m : α} (h : MinH2 F H m) : MinLevel F H 1 m :=
+  let ⟨y, hy2, hmy, hc1, hcy, hcmp⟩ := h
+  ⟨⊥, F ⊥ y, y, bot_le, mem_one_of_bot_value hn hc1 hcy.le le_rfl, hc1, hcy, hy2, hmy, rfl, hcmp⟩
+
+/-- **MinLevelW (conjectural)**: for every `k ≥ 1`, with `R_{k+1}` tight, `m ∈ R_{k+1} \ R_k` of height `k + 1`, the
+greatest fixed point `y* = u_N` of `u ↦ m ⊔ F m u`, and `w = F m y*` incomparable with `m`, MinLevel holds at `k`. No
+counterexample (exact; with the stronger certificate `p ∈ R_{k−1}`, `h(p) = k − 1`, `p < c`): `k = 1` on 557
+instances, `k = 2` on 204 (all 34 of closure 5 10 1 have models), `k = 3` on 88 (all 30 of closure 6 12 9 have
+models); §34.3z²³⁰. -/
+def MinLevelW (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k m N, 1 ≤ k → (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → m ∈ Rk F (k + 1) → height H m = k + 1 → m ∉ Rk F k →
+    m ⊔ F m (colOrb F m N) = colOrb F m N → (∀ z, z ≤ m ⊔ F m z → z ≤ colOrb F m N) →
+    ¬ m ≤ F m (colOrb F m N) → ¬ F m (colOrb F m N) ≤ m → MinLevel F H k m
+
+/-- **MinLevelW gives MinUpCell** (`colOrb_dichotomy` supplies the fixed point and `w ∥ m` from ¬IC(m); `k = 0` is
+`upCell_zero`). -/
+theorem minUpCell_of_minLevelW [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hM : MinLevelW F H) :
+    MinUpCell F H := by
+  intro k m hall hm hmk hnew ht hno
+  rcases Nat.eq_zero_or_pos k with rfl | hk
+  · exact upCell_zero hn ht hno
+  rcases colOrb_dichotomy (F := F) ht with hc | ⟨N, -, hfix, hgfp, h1, h2⟩
+  · exact absurd hc hno
+  · exact upCell_of_minLevel hn (hM k m N hk hall hm hmk hnew hfix hgfp h1 h2)
+
+/-- **MinLevelW gives SingletonLower.** -/
+theorem singletonLower_of_minLevelW [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hM : MinLevelW F H) :
+    SingletonLower F H :=
+  singletonLower_of_minUpCell hn (minUpCell_of_minLevelW hn hM)
 
 end Mordor.OrbitHeight

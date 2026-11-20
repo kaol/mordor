@@ -1,0 +1,41 @@
+== §34.3z²³⁰ (exact; models re-checked in Python)
+-- dich1_wcore.py: MinH2W cores (guards WL, WU, T2(z), X(y)):
+   [closure 5 7 1] [] {'cores': 47}
+   [closure 5 7 1] ('T2 at', 'z ∥ m', 'h', 3) 66
+   [closure 5 7 1] ('uses WL', True, 'uses WU', True) 47
+   [closure 5 7 1] ('T2 at', 'z = m ∨ y (y ∈ X)', 'h', 3) 38
+   [closure 5 7 1] ('shape', (('T2', 4), ('WL', 1), ('WU', 1), ('X', 5))) 12
+   [closure 5 7 1] ('T2 at', 'z ≥ m', 'h', 3) 9
+   [closure 5 7 1] ('shape', (('T2', 1), ('WL', 1), ('WU', 1), ('X', 3))) 9
+   [closure 5 7 1] ('shape', (('T2', 2), ('WL', 1), ('WU', 1), ('X', 3))) 7
+   [closure 5 7 1] ('shape', (('T2', 1), ('WL', 1), ('WU', 1), ('X', 2))) 6
+   [closure 5 7 1] ('shape', (('T2', 4), ('WL', 1), ('WU', 1), ('X', 3))) 4
+   [closure 5 7 1] ('shape', (('T2', 3), ('WL', 1), ('WU', 1), ('X', 3))) 4
+   [closure 5 7 1] ('shape', (('T2', 3), ('WL', 1), ('WU', 1), ('X', 2))) 3
+   [sweep 4 10] [] {'cores': 282, 'degenerate': 36}
+   [sweep 4 10] ('uses WL', True, 'uses WU', True) 246
+   [sweep 4 10] ('T2 at', 'z = m ∨ y (y ∈ X)', 'h', 3) 104
+   [sweep 4 10] ('T2 at', 'z = ⊤', 'h', 3) 101
+   [sweep 4 10] ('shape', (('T2', 1), ('WL', 1), ('WU', 1), ('X', 2))) 88
+   [sweep 4 10] ('shape', (('T2', 1), ('WL', 1), ('WU', 1), ('X', 1))) 86
+   [sweep 4 10] ('T2 at', 'z ∥ m', 'h', 3) 70
+   [sweep 4 10] ('shape', (('T2', 2), ('WL', 1), ('WU', 1), ('X', 2))) 26
+   [sweep 4 10] ('T2 at', 'z ≥ m', 'h', 3) 25
+   [sweep 4 10] ('shape', (('T2', 1), ('WL', 1), ('WU', 1), ('X', 3))) 24
+   [sweep 4 10] ('shape', (('T2', 2), ('WL', 1), ('WU', 1), ('X', 1))) 16
+   [sweep 4 10] ('shape', (('T2', 3), ('WL', 1), ('WU', 1), ('X', 2))) 6
+   m's entry route forced: ['routeA', 'test'] {'holds': 47}; ['routeB', 'test'] {'holds': 47}   [closure 5 7 1]
+-- MinLevelW (dich_net.py … minh3 nonpl wpar nofeed notop [notk1]): certificate p ∈ R_{k−1}, h(p) = k − 1, c = F(p, y) ∈ R_k of height k,
+   p < c < y, h(y) = k + 1, m ≰ y, F(c, y) comparable with y; hypotheses m ∈ R_{k+1} \ R_k, h(m) = k + 1, R_{k+1} tight, w ∥ m (+ R_k tight unless notk1)
+   k=2 test ['minh3']  nonpl {'holds': 34} smallest violation None
+   k=2 test ['minh3', 'nofeed', 'notop', 'wpar']  nonpl {'holds': 34} smallest violation None
+   k=2 test ['minh3', 'nofeed', 'notk1', 'notop', 'wpar']  nonpl {'holds': 34} smallest violation None
+   k=2 test ['minh3', 'nofeed', 'notop', 'wpar']  nonpl {'holds': 32} smallest violation None
+   k=2 test ['minh3', 'nofeed', 'notop', 'wpar']  nonpl {'holds': 43} smallest violation None
+   k=2 test ['minh3', 'nofeed', 'notk1', 'notop', 'wpar']  nonpl {'holds': 54} smallest violation None
+   k=2 test ['minh3', 'nofeed', 'notk1', 'notop', 'wpar']  nonpl {'holds': 41} smallest violation None
+   k=3 test ['minh3', 'nofeed', 'notop', 'wpar']  nonpl {'holds': 30} smallest violation None
+   k=3 test ['minh3', 'nofeed', 'notk1', 'notop', 'wpar']  nonpl {'holds': 32} smallest violation None
+   k=3 test ['minh3', 'nofeed', 'notk1', 'notop', 'wpar']  nonpl {'holds': 26} smallest violation None
+   (slices in order: 5 10 1 [no wpar], 5 10 1, 5 10 1 notk1, 5 11 4, 5 12 8, 6 11 6, 5 10 3 | k = 3: 6 12 9, 6 12 10, 6 13 11)
+   vacuity (certificate exclusions dropped): k=2 test ['minh3', 'nofeed', 'notop', 'vac', 'wpar']  nonpl {'violated': 34} smallest violation 11 [k = 2, 5 10 1]; k=3 test ['minh3', 'nofeed', 'notop', 'vac', 'wpar']  nonpl {'violated': 30} smallest violation 18 [k = 3, 6 12 9]

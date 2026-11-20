@@ -1,0 +1,14 @@
+== single_claims.py topgoal / backreach (§34.3z²²²): exact; every SAT model re-checked in Python (bonly_check)
+-- rootlift (lift edges from the descent root only): min17 lattice 1/6, regenerated 5 10 1 |L| = 20 lattice 1/6,
+   cone_early_min28 3/13 — refuted (the min17 failure: early root {34} needs two lifts {34} → {3} → {1} inside R_1)
+-- atomroot (AtomGood: roots = all atoms of R_1, no descent), full hypotheses (noic_fi multi nopostlayer, rmin=3):
+   5 10 1, 5 10 2, 5 11 4, 5 11 5, 5 11 7, 5 12 8: none 60; lattices of single_claim_bonly_min17 (0/6), fork_root_bad_L_min19 (0/5),
+   cone_early_min28 (0/13)
+-- atomroot nofi (only ¬IC(m) on m): 5 10 1, 5 10 2, 5 10 3, 5 11 4, 5 12 8, 6 11 6: none 60;
+   5 10 1 without nopostlayer: none 10; 5 10 1 with notightK1: none 10; 5 10 1 with notop: none 10;
+   rank 4 (rmin=4): 6 12 9, 6 12 10, 6 13 11: none 30 (vacuity: 15/30 lattices have models)
+   sweep 4 13: none 175 — VACUOUS (vacuity: no rank-3 model at all)
+-- ablations that fail: bare (no feeder, no ¬IC) 9/10 on 5 10 1, |L| = 11; icok (keep feeder, drop ¬IC) 9/10, |L| = 11
+   (single_claim_atomgood_icok_min11.json: IC(m) holds and there is no stage-k UpAt top at all, i.e. UpCell(k) itself fails)
+-- backreach (every stage-k UpAt top backward-reachable from an R_1 atom): refuted 7/10 on 5 10 1 nofi, |L| = 11
+   (single_claim_backreach_min11.json: the witness {23} has no in-edge; the other witness {24} is reached from the atom {4})

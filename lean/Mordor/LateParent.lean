@@ -107,6 +107,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²²¹ (BOnlyGoodChild refuted; lifted reachability): `LiftEdge`, `LiftReach`, `LiftedTopGoal`, `liftReach_of_topReach`,
   `liftReach_top`, `liftedTopGoal_of_topGoal`, **`upCell_of_liftedTopGoal`**, **`liftEdge_not_tight`**,
   **`topReach_of_liftReach_of_tight`**, `topGoal_of_liftedTopGoal_of_tight`.
+* §34.3z²²² (atom roots): `AtomGood`, **`upCell_of_atomGood`**, `atomGood_of_topGoal`, **`atomGood_one_iff`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3163,5 +3164,30 @@ theorem topGoal_of_liftedTopGoal_of_tight {H k j₀ : ℕ} (hn : NoChain α (H +
     (h0 : c₀ ∈ Rk F (j₀ + 1) ∧ height H c₀ = j₀ + 1) (ht : ∀ i, ∀ z ∈ Rk F (i + 1), height H z ≤ i + 1)
     (h : LiftedTopGoal F H k m j₀ c₀) : TopGoal F H k m j₀ c₀ :=
   let ⟨c, hr, hz⟩ := h; ⟨c, topReach_of_liftReach_of_tight hn h0 ht hr, hz⟩
+
+/-! ### Atom roots (§34.3z²²²)
+
+Rooting the top graph at the descent root fails (§34.3z²²¹). A single lift at the root is not enough either:
+early roots need two lifts inside `R_1`. Every lift in the counterexamples lands on an atom of `R_1`, which suggests
+rooting at all atoms at once. -/
+
+/-- **AtomGood (conjectural)**: some atom of `R_1` is good, i.e. the top graph from `R_1`'s atoms reaches a stage-`k`
+top with an upward cell away from `m`. No counterexample (exact, §34.3z²²²), with `¬IC(m)` as the only hypothesis
+on `m`; it fails without `¬IC(m)` (|L| = 11). -/
+def AtomGood (F : α →o α →o α) (H k : ℕ) (m : α) : Prop := ∃ s ∈ Rk F 1, height H s = 1 ∧ Good F H k m 0 s
+
+/-- **AtomGood gives UpCell at stage `k`** (`k ≥ 1`). -/
+theorem upCell_of_atomGood {H k : ℕ} {m : α} (hk : 1 ≤ k) (h : AtomGood F H k m) : UpCell F H k m :=
+  let ⟨_, hs, hsh, hg⟩ := h
+  upCell_of_topGoal hk ⟨hs, hsh⟩ (topGoal_of_good hg)
+
+/-- TopGoal from an atom root gives AtomGood. -/
+theorem atomGood_of_topGoal {H k : ℕ} {m s : α} (hs : s ∈ Rk F 1) (hsh : height H s = 1)
+    (h : TopGoal F H k m 0 s) : AtomGood F H k m :=
+  ⟨s, hs, hsh, good_iff_topGoal.2 h⟩
+
+/-- **At `k = 1`, AtomGood is UpCell.** -/
+theorem atomGood_one_iff {H : ℕ} {m : α} : AtomGood F H 1 m ↔ UpCell F H 1 m :=
+  ⟨upCell_of_atomGood le_rfl, fun ⟨x, hx, hxh, z, hxz, hmz, hz⟩ => ⟨x, hx, hxh, Good.term ⟨z, hxz, hmz, hz⟩⟩⟩
 
 end Mordor.OrbitHeight

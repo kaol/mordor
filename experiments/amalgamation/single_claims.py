@@ -68,7 +68,7 @@ from rstages import stages, a_of, b_of
 from tight_probe import helpers, lattices
 from gfp_top import ystar, gfp_ok
 
-A_CLAIMS = ('topgoal', 'bonly', 'rowlt2', 'rowlt', 'orbitlt', 'desclt', 'lt', 'dominant', 'a1gen', 'a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
+A_CLAIMS = ('backreach', 'topgoal', 'bonly', 'rowlt2', 'rowlt', 'orbitlt', 'desclt', 'lt', 'dominant', 'a1gen', 'a1cert', 'pajump', 'minhyp', 'stabletop', 'pairjump', 'topfibre', 'famup', 'bcupnew', 'bcup', 'sibup', 'upcell', 'abovea', 'fxq', 'ontime', 'latejoin', 'dropbelow', 'dwit', 'mech', 'bdom', 'alltops', 'topparent', 'sibling', 'soleB', 'soleA', 'below_w', 'side', 'side_w', 'feeder_post', 'noic_fi', 'C_bm_eq_feeder', 'C_a_feeder_le', 'bm_eq_feeder', 'w_ge_bm', 'top_ge_bm', 'a_feeder_le', 'fmm_le', 'gfp')
 B_CLAIMS = ('bentry', 'bm_le_x', 'bm_le_meet', 'meet_pre', 'fmm_le_B', 'fmm_in')
 
 def ys_block(E, L, m, f):
@@ -99,6 +99,26 @@ def bonly_check(L, F, m):
     aed = lambda x, y: inR(x, h[x]) and le[x][y] and y != x and le[y][F[x][y]] and not le[m][y] and new(y, h[x] + 1)
     upat = lambda x: any(le[x][u] and u != x and not le[m][u] and (le[F[x][u]][x] or le[u][F[x][u]]) for u in range(n))
     Bf = lambda y: b_of(L, F, y); mp = Bf(m); w = F[m][ystar(L, F, m)]
+    if 'BACKREACH' in sys.argv:                    # 'backreach' (§34.3z²²²): some stage-k UpAt top has no backward path to an R_1 atom
+        X = [x for x in range(n) if node(x)]
+        par = {y: [x for x in X if h[y] == h[x] + 1 and (sib(x, y) or aed(x, y))] for y in X}
+        def back(x):
+            seen = {x}; todo = [x]
+            while todo:
+                y = todo.pop()
+                for p_ in par.get(y, []):
+                    if p_ not in seen: seen.add(p_); todo.append(p_)
+            return any(h[y] == 1 for y in seen)
+        return any(inR(x, k) and h[x] == k and upat(x) and not back(x) for x in range(n))
+    if 'atomroot' in sys.argv:                     # roots: every atom of R_1
+        X = [x for x in range(n) if node(x)]
+        kids = {x: [y for y in range(n) if h[y] == h[x] + 1 and (sib(x, y) or aed(x, y))] for x in X}
+        seen = {x for x in X if h[x] == 1}; todo = list(seen)
+        while todo:
+            x = todo.pop()
+            for y in kids.get(x, []):
+                if y not in seen: seen.add(y); todo.append(y)
+        return 'vacuity' in sys.argv or not any(h[x] == k and upat(x) for x in seen)
     r_, e, i = mp, w, 0
     for _ in range(4 * n):
         t = F[r_][e]
@@ -125,7 +145,7 @@ def bonly_check(L, F, m):
             if y not in seen and node(y): seen.add(y); todo.append(y)
     if 'TOPGOAL' in sys.argv:                      # 'topgoal' (§34.3z²²¹): no stage-k UpAt top reachable from the root
         jedge = (lambda x, y: h[x] == h[y] and x != y and inR(y, h[y]) and inR(L.join[x][y], h[x])) if 'joinedge' in sys.argv else \
-                (lambda x, y: h[y] <= h[x] and x != y and inR(y, h[y]) and inR(L.join[x][y], h[y])) if 'liftedge' in sys.argv else (lambda x, y: False)
+                (lambda x, y: h[y] <= h[x] and x != y and inR(y, h[y]) and inR(L.join[x][y], h[y]) and ('rootlift' not in sys.argv or x == root)) if 'liftedge' in sys.argv else (lambda x, y: False)
         seen = {root}; todo = [root]
         while todo:
             x = todo.pop()
@@ -629,10 +649,11 @@ def query(L, m, claim, ahead=False):
                                 E.S.add_clause([-Y, -f(m, y, wv), -E.v('fi', p), -r(K, z)])
         elif claim == 'feeder_post':                 # §34.3z¹⁶³: is every lower feeder diagonal post-fixed (m' ≤ F(m', m'))?
             for p in feeders: o = E.v('fp', p); E.iff_and(o, [low[p], -yle(p, p)]); bad.append(o)
-        elif claim in ('bonly', 'topgoal'):          # §34.3z²²¹: BOnlyGoodChild at the seeded root, exact (see docstring of bonly_check)
+        elif claim in ('bonly', 'topgoal', 'backreach'):   # §34.3z²²¹: BOnlyGoodChild at the seeded root, exact (see docstring of bonly_check)
             fis = []
             for p in feeders: o = E.v('fi', p); E.iff_and(o, [low[p], B(m, p)]); fis.append(o)
-            E.S.add_clause(fis); E.S.add_clause([-ic(m)])
+            if 'bare' not in sys.argv and 'nofi' not in sys.argv: E.S.add_clause(fis)        # 'bare' drops both; 'nofi' the feeder
+            if 'bare' not in sys.argv and 'icok' not in sys.argv: E.S.add_clause([-ic(m)])   # 'icok' drops ¬IC(m)
             k = K - 1; bot_ = rk.index(0)
             if k < 2: E.S.delete(); return None
             Y = lambda yv: E.v('ystar', yv)                # y* = greatest post-fixed point of u ↦ m ⊔ F(m, u)
@@ -646,57 +667,64 @@ def query(L, m, claim, ahead=False):
                     if le[z][yv]: continue
                     for g in range(n):
                         if le[z][jn[m][g]]: E.S.add_clause([-Y(yv), -f(m, z, g)])
-            D = next((int(a[5:]) for a in sys.argv if a.startswith('dmul=')), 4) * n     # descent horizon ('dmul=4' matches bonly_check)
-            S = lambda i, a_, e_, bb: E.v('dS', i, a_, e_, bb)   # forward-forced; soundness via at-most-one root below   # descent state (row, column, B-step taken)
-            for rv in range(n):
-                for yv in range(n):
-                    for ev in range(n): E.S.add_clause([-B(m, rv), -Y(yv), -f(m, yv, ev), S(0, rv, ev, 0)])
-            stop = collections.defaultdict(list)           # (r, z) → derivation literals (with a B-step)
-            def rge(a_, e_):                               # r ≤ F(r, e)
-                k_ = ('rge', a_, e_)
-                if k_ not in E.vars: o = E.v(*k_); E.iff_or(o, [f(a_, e_, t) for t in range(n) if le[a_][t]])
-                return E.vars[k_]
-            def stp(a_, e_):                               # F(r, e) ≤ r or e ≤ F(r, e)
-                k_ = ('stp', a_, e_)
-                if k_ not in E.vars: o = E.v(*k_); E.iff_or(o, [fle(a_, e_, a_), yle(a_, e_)])
-                return E.vars[k_]
-            Tq = lambda i, q, e_: E.v('dT', i, q, e_)      # after a B-step: row q = b(r), column e (before F(q, e))
-            for i in range(D):
-                for a_ in range(n):
-                    for e_ in range(n):
-                        for bb in (0, 1):
-                            st_ = S(i, a_, e_, bb)
-                            if bb: o = E.v('dstop1', i, a_, e_); E.iff_and(o, [st_, stp(a_, e_)]); stop[(a_, e_)].append(o)
-                            else: E.S.add_clause([-st_, -stp(a_, e_)])   # a stop with no B-step: bonly_check returns False
-                            for t in range(n):
-                                if le[a_][t] and not le[t][a_] and not le[e_][t]: E.S.add_clause([-st_, -f(a_, e_, t), S(i + 1, a_, t, bb)])
-                            for q in range(n): E.S.add_clause([-st_, stp(a_, e_), rge(a_, e_), -B(a_, q), Tq(i, q, e_)])
-                for q in range(n):
-                    for e_ in range(n):
-                        tq = Tq(i, q, e_)
-                        o = E.v('dstop2', i, q, e_); E.iff_and(o, [tq, fle(q, e_, q)]); stop[(q, e_)].append(o)
-                        for e2 in range(n):
-                            if not le[e2][q]: E.S.add_clause([-tq, -f(q, e_, e2), S(i + 1, q, e2, 1)])
-            for a_ in range(n):                            # past the horizon: bonly_check returns False (exact for dmul=4)
-                for e_ in range(n):
-                    for bb in (0, 1): E.S.add_clause([-S(D, a_, e_, bb)])
             node = lambda x: 1 <= rk[x] <= k
-            rootd = collections.defaultdict(list)
-            for (a_, z_), lits in stop.items():
-                sv = E.v('stopv', a_, z_); E.iff_or(sv, lits)
-                for t in range(n):
-                    upper = le[z_][t] and not le[t][a_]
-                    if upper and node(a_):
-                        o = E.v('rootA', a_, z_, t); E.iff_and(o, [sv, f(a_, z_, t), r(rk[a_], a_)]); rootd[a_].append(o)
-                        o2 = E.v('rootB', a_, z_, t); E.iff_and(o2, [sv, f(a_, z_, t), -r(rk[a_], a_)]); rootd[z_].append(o2)
-                    else:
-                        o = E.v('rootC', a_, z_, t); E.iff_and(o, [sv, f(a_, z_, t)]); rootd[z_].append(o)
-            Root = lambda x: E.v('root', x)
-            for a_, b_ in itertools.combinations(range(n), 2): E.S.add_clause([-Root(a_), -Root(b_)])
-            for x in range(n):
-                E.iff_or(Root(x), rootd.get(x, []))
-                if not node(x): E.S.add_clause([-Root(x)])
-                else: E.S.add_clause([-Root(x), r(rk[x], x)])
+            if 'atomroot' in sys.argv or claim == 'backreach':   # roots: every atom of R_1 (no descent)
+                Root = lambda x: E.v('root', x)
+                for x in range(n):
+                    if rk[x] == 1: E.iff_and(Root(x), [r(1, x)])
+                    else: E.S.add_clause([-Root(x)])
+            else:
+                D = next((int(a[5:]) for a in sys.argv if a.startswith('dmul=')), 4) * n     # descent horizon ('dmul=4' matches bonly_check)
+                S = lambda i, a_, e_, bb: E.v('dS', i, a_, e_, bb)   # forward-forced; soundness via at-most-one root below   # descent state (row, column, B-step taken)
+                for rv in range(n):
+                    for yv in range(n):
+                        for ev in range(n): E.S.add_clause([-B(m, rv), -Y(yv), -f(m, yv, ev), S(0, rv, ev, 0)])
+                stop = collections.defaultdict(list)           # (r, z) → derivation literals (with a B-step)
+                def rge(a_, e_):                               # r ≤ F(r, e)
+                    k_ = ('rge', a_, e_)
+                    if k_ not in E.vars: o = E.v(*k_); E.iff_or(o, [f(a_, e_, t) for t in range(n) if le[a_][t]])
+                    return E.vars[k_]
+                def stp(a_, e_):                               # F(r, e) ≤ r or e ≤ F(r, e)
+                    k_ = ('stp', a_, e_)
+                    if k_ not in E.vars: o = E.v(*k_); E.iff_or(o, [fle(a_, e_, a_), yle(a_, e_)])
+                    return E.vars[k_]
+                Tq = lambda i, q, e_: E.v('dT', i, q, e_)      # after a B-step: row q = b(r), column e (before F(q, e))
+                for i in range(D):
+                    for a_ in range(n):
+                        for e_ in range(n):
+                            for bb in (0, 1):
+                                st_ = S(i, a_, e_, bb)
+                                if bb: o = E.v('dstop1', i, a_, e_); E.iff_and(o, [st_, stp(a_, e_)]); stop[(a_, e_)].append(o)
+                                else: E.S.add_clause([-st_, -stp(a_, e_)])   # a stop with no B-step: bonly_check returns False
+                                for t in range(n):
+                                    if le[a_][t] and not le[t][a_] and not le[e_][t]: E.S.add_clause([-st_, -f(a_, e_, t), S(i + 1, a_, t, bb)])
+                                for q in range(n): E.S.add_clause([-st_, stp(a_, e_), rge(a_, e_), -B(a_, q), Tq(i, q, e_)])
+                    for q in range(n):
+                        for e_ in range(n):
+                            tq = Tq(i, q, e_)
+                            o = E.v('dstop2', i, q, e_); E.iff_and(o, [tq, fle(q, e_, q)]); stop[(q, e_)].append(o)
+                            for e2 in range(n):
+                                if not le[e2][q]: E.S.add_clause([-tq, -f(q, e_, e2), S(i + 1, q, e2, 1)])
+                for a_ in range(n):                            # past the horizon: bonly_check returns False (exact for dmul=4)
+                    for e_ in range(n):
+                        for bb in (0, 1): E.S.add_clause([-S(D, a_, e_, bb)])
+                node = lambda x: 1 <= rk[x] <= k
+                rootd = collections.defaultdict(list)
+                for (a_, z_), lits in stop.items():
+                    sv = E.v('stopv', a_, z_); E.iff_or(sv, lits)
+                    for t in range(n):
+                        upper = le[z_][t] and not le[t][a_]
+                        if upper and node(a_):
+                            o = E.v('rootA', a_, z_, t); E.iff_and(o, [sv, f(a_, z_, t), r(rk[a_], a_)]); rootd[a_].append(o)
+                            o2 = E.v('rootB', a_, z_, t); E.iff_and(o2, [sv, f(a_, z_, t), -r(rk[a_], a_)]); rootd[z_].append(o2)
+                        else:
+                            o = E.v('rootC', a_, z_, t); E.iff_and(o, [sv, f(a_, z_, t)]); rootd[z_].append(o)
+                Root = lambda x: E.v('root', x)
+                for a_, b_ in itertools.combinations(range(n), 2): E.S.add_clause([-Root(a_), -Root(b_)])
+                for x in range(n):
+                    E.iff_or(Root(x), rootd.get(x, []))
+                    if not node(x): E.S.add_clause([-Root(x)])
+                    else: E.S.add_clause([-Root(x), r(rk[x], x)])
             newv = lambda y_, j: [r(j, y_), -r(j - 1, y_)] if rk[y_] == j else None
             Be, Ae = {}, {}
             for x in range(n):
@@ -727,12 +755,25 @@ def query(L, m, claim, ahead=False):
                     for x in range(n):
                         if not node(x): continue
                         for y_ in range(n):
-                            if y_ != x and node(y_) and rk[y_] <= rk[x]: E.S.add_clause([-Cl(x), -r(rk[x], x), -r(rk[y_], y_), -r(rk[y_], jn[x][y_]), Cl(y_)])
+                            if y_ != x and node(y_) and rk[y_] <= rk[x]: E.S.add_clause([-(Root(x) if 'rootlift' in sys.argv else Cl(x)), -r(rk[x], x), -r(rk[y_], y_), -r(rk[y_], jn[x][y_]), Cl(y_)])
                 for x in range(n):
-                    if rk[x] != k: continue
+                    if rk[x] != k or 'vacuity' in sys.argv: continue          # 'vacuity': count models of the hypotheses
                     for z in range(n):
                         if le[x][z] and z != x and not le[m][z]: E.S.add_clause([-Cl(x), -fle(x, z, x)]); E.S.add_clause([-Cl(x), -yle(x, z)])
                 o = E.v('tgbad'); E.S.add_clause([o]); bad.append(o)
+            if claim == 'backreach':                       # §34.3z²²²: a stage-k UpAt top not backward-reachable from R_1's atoms
+                Bk = lambda x: E.v('back', x)
+                for (x, y_), ed in Edge.items(): E.S.add_clause([-Bk(y_), -ed, Bk(x)])
+                for x in range(n):
+                    if rk[x] == 1: E.S.add_clause([-Bk(x), -r(1, x)])
+                for x in range(n):
+                    if rk[x] != k: continue
+                    ups = []
+                    for z in range(n):
+                        if le[x][z] and z != x and not le[m][z]: ups += [fle(x, z, x), yle(x, z)]
+                    if not ups: continue
+                    o = E.v('backsel', x); bad.append(o)
+                    E.S.add_clause([-o, Bk(x)]); E.S.add_clause([-o, r(k, x)]); E.S.add_clause([-o] + ups)
             Rch = lambda x: E.v('reach', x)
             for x in range(n):
                 sup = [Root(x)]
@@ -949,7 +990,7 @@ def query(L, m, claim, ahead=False):
                             if le[F[c][z]][c] or le[z][F[c][z]]: return False
                             if le[F[c][z]][z] and not any(le[c][e] and e != c and le[e][z] and F[p_][e] == p_ for e in range(n)): return False
             return True
-        viol = {'dominant': not ic_py(L, F, m) and dominantviol(), 'a1gen': ((abovepnocell() if 'abovepnocell' in sys.argv else sibnocell() if 'sibnocell' in sys.argv else selfnocell()) and rowtypes_ok()) if 'selfnocell' in sys.argv else True, 'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'bonly': (bonly_check(L, F, m) if claim == 'bonly' else False), 'topgoal': (bonly_check(L, F, m) if claim == 'topgoal' else False), 'orbitlt': ('icok' in sys.argv or not ic_py(L, F, m)) and orbitviol(), 'rowlt': ('icok' in sys.argv or not ic_py(L, F, m)) and orbitviol(True), 'rowlt2': ('icok' in sys.argv or not ic_py(L, F, m)) and rowlt2viol(), 'desclt': ('icok' in sys.argv or not ic_py(L, F, m)) and any(not le[m][w_] and F[m][L.join[m][w_]] == w_ and rk[F[rk.index(0)][w_]] == 1 and F[rk.index(0)][w_] != w_ and not le[F[F[rk.index(0)][w_]][w_]][w_] for w_ in range(n)), 'lt': ('icok' in sys.argv or not ic_py(L, F, m)) and not any(inR(x, 1) and rk[x] == 1 and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v] and le[F[rk.index(0)][v]][x] for x in range(n) for v in range(n)), 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
+        viol = {'dominant': not ic_py(L, F, m) and dominantviol(), 'a1gen': ((abovepnocell() if 'abovepnocell' in sys.argv else sibnocell() if 'sibnocell' in sys.argv else selfnocell()) and rowtypes_ok()) if 'selfnocell' in sys.argv else True, 'a1cert': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and a1nocert() and rowtypes_ok(), 'pajump': (True if 'icok' in sys.argv else not ic_py(L, F, m)) and pachain(), 'minhyp': True, 'bonly': (bonly_check(L, F, m) if claim == 'bonly' else False), 'topgoal': (bonly_check(L, F, m) if claim == 'topgoal' else False), 'backreach': (bonly_check(L, F, m) if claim == 'backreach' else False), 'orbitlt': ('icok' in sys.argv or not ic_py(L, F, m)) and orbitviol(), 'rowlt': ('icok' in sys.argv or not ic_py(L, F, m)) and orbitviol(True), 'rowlt2': ('icok' in sys.argv or not ic_py(L, F, m)) and rowlt2viol(), 'desclt': ('icok' in sys.argv or not ic_py(L, F, m)) and any(not le[m][w_] and F[m][L.join[m][w_]] == w_ and rk[F[rk.index(0)][w_]] == 1 and F[rk.index(0)][w_] != w_ and not le[F[F[rk.index(0)][w_]][w_]][w_] for w_ in range(n)), 'lt': ('icok' in sys.argv or not ic_py(L, F, m)) and not any(inR(x, 1) and rk[x] == 1 and le[x][v] and v != x and not le[m][v] and le[F[x][v]][v] and le[F[rk.index(0)][v]][x] for x in range(n) for v in range(n)), 'stabletop': (bm in low) and not ic_py(L, F, m) and fjviol('stable'),
                 'pairjump': (bm in low) and not ic_py(L, F, m) and fjviol('pair'),
                 'topfibre': (bm in low) and not ic_py(L, F, m) and not topfib(),
                 'famup': (bm in low) and not ic_py(L, F, m) and famviol(),
@@ -992,7 +1033,8 @@ RMIN = next((int(a[5:]) for a in sys.argv if a.startswith('rmin=')), 1)
 if __name__ == '__main__':
     claim = sys.argv[1]; ahead = 'ahead' in sys.argv; C = collections.Counter(); best = None
     if claim == 'topgoal': sys.argv.append('TOPGOAL')
-    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes', 'selfnocell', 'sibnocell', 'abovepnocell', 'abot', 'parm', 'vacuity', 'bdebug', 'alltight', 'joinedge', 'liftedge', 'TOPGOAL') and not a.endswith('.json') and not a.startswith('rmin=') and not a.startswith('dmul=')]):
+    if claim == 'backreach': sys.argv.append('BACKREACH')
+    for L in lattices([a for a in sys.argv[2:] if a not in ('ahead', 'notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'k2', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes', 'selfnocell', 'sibnocell', 'abovepnocell', 'abot', 'parm', 'vacuity', 'bdebug', 'alltight', 'joinedge', 'liftedge', 'rootlift', 'atomroot', 'bare', 'TOPGOAL', 'BACKREACH') and not a.endswith('.json') and not a.startswith('rmin=') and not a.startswith('dmul=')]):
         if L.height < 2: continue
         hit = None
         for m in range(L.n):
@@ -1003,4 +1045,4 @@ if __name__ == '__main__':
         if hit and (best is None or L.n < best[0].n): best = (L, hit)
     print(f"claim {claim}{' ahead' if ahead else ''}: {dict(C)}" + (f"; smallest counterexample |L| = {best[0].n}, rank(m) = {best[0].rank[best[1][0]]}" if best else ''), flush=True)
     if best:
-        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes', 'selfnocell', 'sibnocell', 'abovepnocell', 'abot', 'parm', 'vacuity', 'alltight', 'joinedge', 'liftedge') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))
+        import json; json.dump(dict(sets=best[0].S, F=best[1][1], m=best[1][0]), open(f"single_claim_{claim}{'_ahead' if ahead else ''}{''.join('_' + f for f in ('notop', 'multi', 'post', 'strictpre', 'nopostlayer', 'nofi', 'icok', 'notightK1', 'nofeeder', 'needcfg', 'genuine', 'rowtypes', 'selfnocell', 'sibnocell', 'abovepnocell', 'abot', 'parm', 'vacuity', 'alltight', 'joinedge', 'liftedge', 'rootlift', 'atomroot', 'bare') if f in sys.argv)}{f'_rmin{RMIN}' if RMIN > 1 else ''}_min{best[0].n}.json", 'w'))

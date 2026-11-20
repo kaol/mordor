@@ -85,3 +85,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²¹⁸: `gapcut.py` (GapCutStep, local and with y = y*: modes orbit / post / full / wit / witx / witx0 / lc1 / lc2; `out_gapcut218.txt`, `gapcut_*_min*.json`).
 - §34.3z²¹⁹: `gapcut_core.py` (minimal T1b↑ cores of TransitionWitness; `out_gapcutcore219.txt`).
 - §34.3z²²⁰: `gapcut.py` modes witfx / witxo (T1b↑ only at F(x, c) / along the x-orbit; refuted), `gapcut_core.py` relaxed-model sampling. Output `out_gapcut220.txt`.
+- §34.3z²²¹: `single_claims.py` claims `bonly` (BOnlyGoodChild at the seeded root, exact; refuted, `single_claim_bonly_min17.json`, rank 4: `single_claim_bonly_rank4_min20.json`) and `topgoal` (TopGoal / LiftedTopGoal at the seeded root; flags `joinedge`, `liftedge`), flags `alltight` (every lower stage tight), `vacuity`, `dmul=`, `bdebug`. Output `out_bonly221.txt`.

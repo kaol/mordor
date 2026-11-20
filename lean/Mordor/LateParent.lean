@@ -104,6 +104,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`ic_of_noGap_up`**.
 * §34.3z²¹⁹ (the final transition): `colOrb_ge_fix`, **`exists_final_transition`**, `TransitionWitness`,
   **`ic_of_transitionWitness`**.
+* §34.3z²²¹ (BOnlyGoodChild refuted; lifted reachability): `LiftEdge`, `LiftReach`, `LiftedTopGoal`, `liftReach_of_topReach`,
+  `liftReach_top`, `liftedTopGoal_of_topGoal`, **`upCell_of_liftedTopGoal`**, **`liftEdge_not_tight`**,
+  **`topReach_of_liftReach_of_tight`**, `topGoal_of_liftedTopGoal_of_tight`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -1129,8 +1132,9 @@ configuration strictly below stage `k` has a B-successor. -/
 def SeededStepB (F : α →o α →o α) (H k : ℕ) (m : α) (j₀ : ℕ) (p₀ c₀ : α) : Prop :=
   ∀ j p c, SeedReach F H m j₀ p₀ c₀ j p c → j + 1 < k → ∃ y, SeedEdge F H j m p c y
 
-/-- **Top-graph goal** (conjectural; 68/68 seeded roots below `k` in the sweep): the top graph from the seeded root
-reaches a stage-`k` top that is an UpCell witness. -/
+/-- **Top-graph goal** (68/68 seeded roots below `k` in the sweep; **refuted** at non-early seeded roots, exact,
+§34.3z²²¹, `single_claim_bonly_min17.json`): the top graph from the seeded root reaches a stage-`k` top that is an UpCell
+witness. See `LiftedTopGoal`. -/
 def TopGoal (F : α →o α →o α) (H k : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : Prop :=
   ∃ c, TopReach F H m j₀ c₀ (k - 1) c ∧ ∃ z, c < z ∧ ¬ m ≤ z ∧ (F c z ≤ c ∨ z ≤ F c z)
 
@@ -1270,8 +1274,9 @@ theorem good_aChild_term {H k : ℕ} {m c y : α} (h : AEdge F H (k - 2) m c y) 
 def AGoodFrom (F : α →o α →o α) (H k : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : Prop :=
   ∀ j c y, TopReach F H m j₀ c₀ j c → j < k - 1 → AEdge F H j m c y → Good F H k m (j + 1) y
 
-/-- **BOnlyGoodChild (rooted, conjectural)**: a reachable top below the terminal index with a B-child and no A-child
-has a good B-child. -/
+/-- **BOnlyGoodChild (rooted)**: a reachable top below the terminal index with a B-child and no A-child has a good
+B-child. 152/152 sampled; **refuted** exactly at the seeded root (§34.3z²²¹, `single_claim_bonly_min17.json`, |L| = 17,
+rank 3; the failure needs a non-tight lower stage). -/
 def BOnlyGoodChild (F : α →o α →o α) (H k : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : Prop :=
   ∀ j c, TopReach F H m j₀ c₀ j c → j < k - 1 → (∃ y, SibConfig F H (j + 1) m c y) →
     (¬ ∃ y, AEdge F H j m c y) → ∃ y, SibConfig F H (j + 1) m c y ∧ Good F H k m (j + 1) y
@@ -3078,5 +3083,85 @@ theorem good_term_of_topEdge {H k : ℕ} {m c y : α} (he : TopEdge F H (k - 1) 
   rcases he with ⟨-, -, -, -, -, hcy, hcyc, v, hyv, hmv, -⟩ | ⟨-, -, hcy, hU, hmy, -⟩
   · exact ⟨y, hcy, fun hmy => hmv (hmy.trans hyv.le), Or.inl hcyc.le⟩
   · exact ⟨y, hcy, hmy, Or.inr hU⟩
+
+/-! ### Lifted reachability (§34.3z²²¹)
+
+`BOnlyGoodChild`, `NonemptyForkGoodChild`, `ConeForkGood` and `TopGoal` all fail at the seeded root (exact search,
+`single_claims.py bonly` / `topgoal`; minimized model `single_claim_bonly_min17.json`). The failing B-only forks need
+a non-tight lower stage. A **lift edge** records the sideways jump the counterexamples need: from a top `c` to a top
+`s` of no larger height with `c ⊔ s` already in `s`'s stage. -/
+
+/-- **A lift edge** `c → s` from index `j` to index `i ≤ j`: `s` is a top of stage `i + 1` and height `i + 1`, and
+`c ⊔ s ∈ R_{i+1}`. -/
+def LiftEdge (F : α →o α →o α) (H : ℕ) (j i : ℕ) (c s : α) : Prop :=
+  i ≤ j ∧ c ≠ s ∧ s ∈ Rk F (i + 1) ∧ height H s = i + 1 ∧ c ⊔ s ∈ Rk F (i + 1)
+
+/-- **Lifted reachability**: top edges (index `+1`) and lift edges (index down or level). -/
+inductive LiftReach (F : α →o α →o α) (H : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : ℕ → α → Prop
+  | root : LiftReach F H m j₀ c₀ j₀ c₀
+  | step {j c y} : LiftReach F H m j₀ c₀ j c → TopEdge F H j m c y → LiftReach F H m j₀ c₀ (j + 1) y
+  | lift {j i c s} : LiftReach F H m j₀ c₀ j c → LiftEdge F H j i c s → LiftReach F H m j₀ c₀ i s
+
+/-- **LiftedTopGoal (conjectural)**: lifted reachability from the seeded root reaches a stage-`k` top with an upward cell
+away from `m`. No counterexample at the seeded root (exact, §34.3z²²¹). -/
+def LiftedTopGoal (F : α →o α →o α) (H k : ℕ) (m : α) (j₀ : ℕ) (c₀ : α) : Prop :=
+  ∃ c, LiftReach F H m j₀ c₀ (k - 1) c ∧ UpAt F m c
+
+theorem liftReach_of_topReach {H j₀ j : ℕ} {m c₀ c : α} (h : TopReach F H m j₀ c₀ j c) :
+    LiftReach F H m j₀ c₀ j c := by
+  induction h with
+  | root => exact .root
+  | step _ he ih => exact .step ih he
+
+/-- Lifted-reached tops are tops at stage `j + 1` of height `j + 1`. -/
+theorem liftReach_top {H j₀ j : ℕ} {m c₀ c : α} (h0 : c₀ ∈ Rk F (j₀ + 1) ∧ height H c₀ = j₀ + 1)
+    (h : LiftReach F H m j₀ c₀ j c) : c ∈ Rk F (j + 1) ∧ height H c = j + 1 := by
+  induction h with
+  | root => exact h0
+  | step _ he _ =>
+    rcases he with ⟨-, -, hy, -, hyh, -⟩ | ⟨-, -, -, -, -, hy, -, hyh⟩
+    · exact ⟨hy, hyh⟩
+    · exact ⟨hy, hyh⟩
+  | lift _ he _ => exact ⟨he.2.2.1, he.2.2.2.1⟩
+
+/-- `TopGoal` implies `LiftedTopGoal`. -/
+theorem liftedTopGoal_of_topGoal {H k j₀ : ℕ} {m c₀ : α} (h : TopGoal F H k m j₀ c₀) : LiftedTopGoal F H k m j₀ c₀ :=
+  let ⟨c, hr, hz⟩ := h; ⟨c, liftReach_of_topReach hr, hz⟩
+
+/-- **LiftedTopGoal gives UpCell at stage `k`** (`k ≥ 1`). -/
+theorem upCell_of_liftedTopGoal {H k j₀ : ℕ} {m c₀ : α} (hk : 1 ≤ k)
+    (h0 : c₀ ∈ Rk F (j₀ + 1) ∧ height H c₀ = j₀ + 1) (h : LiftedTopGoal F H k m j₀ c₀) : UpCell F H k m := by
+  obtain ⟨c, hr, z, hcz, hmz, hz⟩ := h
+  obtain ⟨hc, hch⟩ := liftReach_top h0 hr
+  have e : k - 1 + 1 = k := by omega
+  rw [e] at hc hch
+  exact ⟨c, hc, hch, z, hcz, hmz, hz⟩
+
+/-- **A lift edge out of a top makes its target stage non-tight**: `c ⊔ s ∈ R_{i+1}` has height `> i + 1`. -/
+theorem liftEdge_not_tight {H j i : ℕ} (hn : NoChain α (H + 1)) {c s : α} (hch : height H c = j + 1)
+    (he : LiftEdge F H j i c s) : ¬ ∀ z ∈ Rk F (i + 1), height H z ≤ i + 1 := by
+  obtain ⟨hij, hcs, -, hsh, hj⟩ := he
+  have hlt : s < c ⊔ s := by
+    refine lt_of_le_of_ne le_sup_right fun e => ?_
+    have hcs' : c < s := lt_of_le_of_ne (e ▸ le_sup_left) hcs
+    have := height_strictMono hn hcs'
+    omega
+  have := height_strictMono hn hlt
+  exact fun ht => by have := ht _ hj; omega
+
+/-- **Under lower-stage tightness, lifted reachability is top reachability.** -/
+theorem topReach_of_liftReach_of_tight {H j₀ j : ℕ} (hn : NoChain α (H + 1)) {m c₀ c : α}
+    (h0 : c₀ ∈ Rk F (j₀ + 1) ∧ height H c₀ = j₀ + 1) (ht : ∀ i, ∀ z ∈ Rk F (i + 1), height H z ≤ i + 1)
+    (h : LiftReach F H m j₀ c₀ j c) : TopReach F H m j₀ c₀ j c := by
+  induction h with
+  | root => exact .root
+  | step _ he ih => exact .step ih he
+  | lift _ he ih => exact absurd (ht _) (liftEdge_not_tight hn (topReach_top h0 ih).2 he)
+
+/-- Under lower-stage tightness, `LiftedTopGoal` and `TopGoal` coincide. -/
+theorem topGoal_of_liftedTopGoal_of_tight {H k j₀ : ℕ} (hn : NoChain α (H + 1)) {m c₀ : α}
+    (h0 : c₀ ∈ Rk F (j₀ + 1) ∧ height H c₀ = j₀ + 1) (ht : ∀ i, ∀ z ∈ Rk F (i + 1), height H z ≤ i + 1)
+    (h : LiftedTopGoal F H k m j₀ c₀) : TopGoal F H k m j₀ c₀ :=
+  let ⟨c, hr, hz⟩ := h; ⟨c, topReach_of_liftReach_of_tight hn h0 ht hr, hz⟩
 
 end Mordor.OrbitHeight

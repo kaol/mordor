@@ -255,7 +255,12 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     observed is a fixed point of a, so A-children continue by B-edges. All 17 all-bad forks in rooted models lie
     outside the root's upper cone (`topReach_ge`), which leaves **ConeForkGood** as the order-theoretic gap. The early
     column is genuine, since `htf` gives no lower-stage tightness, and in 2/2 cases it transfers to a Good B-source
-    below z (§34.3z¹⁸⁸). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    below z (§34.3z¹⁸⁸). An exact test refutes BOnlyGoodChild at the seeded root (|L| = 17, rank 3, minimized), and with it NonemptyForkGoodChild,
+    ConeForkGood and TopGoal at non-early roots. Every counterexample needs a non-tight lower stage: none survives when all
+    R_j are tight. The rescue is a **lift edge** c → s (h(s) ≤ h(c), c ⊔ s ∈ R_{h(s)}), which always witnesses
+    non-tightness (`liftEdge_not_tight`). **LiftedTopGoal** (top edges plus lift edges) has no counterexample (exact, 65
+    corpus lattices and the 6 counterexample lattices), implies UpCell (`upCell_of_liftedTopGoal`), and equals TopGoal under
+    tightness (`topReach_of_liftReach_of_tight`) (§34.3z²²¹). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations

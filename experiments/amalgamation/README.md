@@ -101,3 +101,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²³⁴: `cover_sample.py` (sampled fibre-cover structure of the descent atom). Output `out_covers234.txt`.
 - §34.3z²³⁵: `dich1_region.py` claims `descA` / `descB`, flags `routeA` / `routeB` (each alternative alone refuted under either route). Output appended to `out_covers234.txt`.
 - §34.3z²³⁶: `rc_test.py` (V* ≠ ∅, gap models, response coverage / cross-atom / response closure, tightness splits `acstar` / `aatoms` / `broute`), `descpre2_core.py` (cores with b-route and a(c*) guards). Output `out_rc236.txt`, models `rc_*_min*.json`.
+- §34.3z²³⁷: `rc_test.py` modes `vley`, `descpre2yfail`, `residual`, `residual_post`, flags `cle` / `cnle` (the trapped case c* ≤ m). Output `out_trap237.txt`.

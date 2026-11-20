@@ -122,6 +122,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`upCell_one_of_preFibre`**.
 * §34.3z²³⁴ (fibre covers): **`eq_a_of_fixed_top`**.
 * §34.3z²³⁶ (response coverage): `pre_iff_lower_or_fixed`, **`fixed_of_responseCover`**.
+* §34.3z²³⁷ (atoms below m): `response_le_w`, **`upCell_one_of_atom_le_m`**, `upCell_one_of_atom_le_m_post`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3623,5 +3624,33 @@ theorem fixed_of_responseCover {H k : ℕ} (hn : NoChain α (H + 1)) (hall : ∀
   refine ⟨Set.eq_singleton_iff_unique_mem.2 ⟨?_, hmem⟩, row_a _⟩
   obtain ⟨v, hv⟩ := hne
   exact hmem v hv ▸ hv
+
+/-! ### Atoms below m: the trapped case (§34.3z²³⁷) -/
+
+/-- **The trap**: rows below `m` respond below `w` on columns below `y*`. -/
+theorem response_le_w {m c v : α} {N : ℕ} (hcm : c ≤ m) (hvy : v ≤ colOrb F m N) :
+    F c v ≤ F m (colOrb F m N) :=
+  ((F.mono hcm) v).trans ((F m).mono hvy)
+
+/-- **UpCell(1) from an atom of `R_1` below `m` whose row stays above it under `w`.** If `c ∈ R_1` has height 1,
+`c ≤ m`, `c < w` and `m ≰ w`, then the row `c` is pre-fixed at `w` by `response_le_w`. If moreover the row stays above
+`c` on its pre-fixed columns in `(c, w]`, then `row_cell_of_above` gives a cell `z ∈ (c, w]`, off `m` because
+`z ≤ w`. No fibre condition, R_1 tightness or R_2 tightness is used. -/
+theorem upCell_one_of_atom_le_m {H : ℕ} (hn : NoChain α (H + 1)) {m c : α} {N : ℕ}
+    (hfix : m ⊔ F m (colOrb F m N) = colOrb F m N) (hmw : ¬ m ≤ F m (colOrb F m N))
+    (hcR : c ∈ Rk F 1) (hc1 : height H c = 1) (hcm : c ≤ m) (hcw : c < F m (colOrb F m N))
+    (habove : ∀ u, c < u → u ≤ F m (colOrb F m N) → F c u ≤ u → c ≤ F c u) : UpCell F H 1 m := by
+  have hwy : F m (colOrb F m N) ≤ colOrb F m N := le_sup_right.trans hfix.le
+  obtain ⟨z, hz1, hz2, hz3⟩ := row_cell_of_above hn habove H (height_le _) hcw le_rfl (response_le_w hcm hwy)
+  exact ⟨c, hcR, hc1, z, hz1, fun hmz => hmw (hmz.trans hz2), hz3⟩
+
+/-- The `habove` hypothesis holds when `c` is post-fixed in the row `⊥` (`c ≤ F ⊥ c`): then `c ≤ F ⊥ u ≤ F c u` for
+every `u ≥ c`. -/
+theorem upCell_one_of_atom_le_m_post {H : ℕ} (hn : NoChain α (H + 1)) {m c : α} {N : ℕ}
+    (hfix : m ⊔ F m (colOrb F m N) = colOrb F m N) (hmw : ¬ m ≤ F m (colOrb F m N))
+    (hcR : c ∈ Rk F 1) (hc1 : height H c = 1) (hcm : c ≤ m) (hcw : c < F m (colOrb F m N))
+    (hpost : c ≤ F ⊥ c) : UpCell F H 1 m :=
+  upCell_one_of_atom_le_m hn hfix hmw hcR hc1 hcm hcw fun u hcu _ _ =>
+    hpost.trans (((F ⊥).mono hcu.le).trans ((F.mono bot_le) u))
 
 end Mordor.OrbitHeight

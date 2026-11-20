@@ -1,0 +1,11 @@
+== §34.3z²³⁷ rc_test.py (exact; models replayed in Python; hypotheses m ∈ R_2 \ R_1, h(m) = 2, R_1 tight, w ∥ m; R_2 tight unless not2)
+-- DescPre2 with only h(a(c*)) ≤ 2 (no b-route), split by c* ≤ m:
+   c* ≤ m: 'UNSAT': 315, 'SAT': 11} smallest 7 [sweep 4 11]; 'UNSAT': 40, 'SAT': 7} smallest 9 [5 7 1]
+   c* ≰ m: 'UNSAT': 246, 'SAT': 80} smallest 5 [sweep 4 11]
+-- c* ≤ m: some v ∈ V* with v ≰ y* (vley): 'UNSAT': 27, 'SAT': 20} smallest 11 [5 7 1]
+-- DescPre2 with the witness in ↓y* (descpre2yfail = counterexample):
+   c* ≤ m: 'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]
+   c* ≰ m: 'UNSAT': 26, 'SAT': 21} smallest 9 [5 7 1];   unrestricted: 'UNSAT': 296, 'SAT': 30} smallest 7 [sweep 4 11]
+-- residual of upCell_one_of_atom_le_m (no atom c ∈ R_1, c ≤ m, c < w, row c above c on (c, w]; SAT = residual model):
+   'SAT': 46, 'UNSAT': 1} smallest 8 [5 7 1]; 'UNSAT': 97, 'SAT': 229} smallest 6 [sweep 4 11]; 'UNSAT': 3, 'SAT': 41} smallest 8 [5 8 2]
+   with the post-fixed sufficient condition c ≤ F(⊥, c) (residual_post): 'SAT': 47} smallest 8 [5 7 1]

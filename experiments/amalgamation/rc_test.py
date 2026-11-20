@@ -14,8 +14,8 @@ sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import helpers, lattices
 from rstages import stages
-MODE = sys.argv[1]; NOT2 = 'not2' in sys.argv; ATS = 'acstar' in sys.argv; ATA = 'aatoms' in sys.argv; BT = 'broute' in sys.argv
-args = [a for a in sys.argv[2:] if a not in ('not2', 'acstar', 'aatoms', 'broute')]   # acstar: h(a(c*)) ≤ 2 only; aatoms: h(a(d)) ≤ 2 for atoms d ∈ R_1
+MODE = sys.argv[1]; NOT2 = 'not2' in sys.argv; ATS = 'acstar' in sys.argv; ATA = 'aatoms' in sys.argv; BT = 'broute' in sys.argv; CLE = 'cle' in sys.argv; CNLE = 'cnle' in sys.argv
+args = [a for a in sys.argv[2:] if a not in ('not2', 'acstar', 'aatoms', 'broute', 'cle', 'cnle')]   # cle / cnle: restrict to c* ≤ m / c* ≰ m   # acstar: h(a(c*)) ≤ 2 only; aatoms: h(a(d)) ≤ 2 for atoms d ∈ R_1
 C = collections.Counter(); best = None
 for L in lattices(args):
     n = L.n; le = L.le; h = L.rank; bot = h.index(0); top = L.top; jn = L.join
@@ -71,7 +71,36 @@ for L in lattices(args):
             for g in range(n):
                 if h[g] > 2:
                     for x in range(n): add([-E.v('B', g, x), -r(1, x)])
-        if MODE == 'descpre2fail':                     # no v ∈ V* with F(c*, v) ≤ v (DescPre2 violated)
+        for c in atoms:
+            if CLE and not le[c][m]: add([-At[c]])
+            if CNLE and le[c][m]: add([-At[c]])
+        if MODE == 'vley':                             # some v ∈ V* with v ≰ y*
+            add([E.v('vsel', c, v) for (c, v) in inV])
+            for (c, v), o in inV.items():
+                add([-E.v('vsel', c, v), o])
+                for z in range(n):
+                    if le[v][z]: add([-E.v('vsel', c, v), -U(NO - 1, z)])
+        elif MODE in ('residual', 'residual_post'):    # no atom c ∈ R_1 with c ≤ m, c < w whose row stays above c on (c, w] ('residual') / with c ≤ F(⊥, c) ('residual_post')
+            Ws = {}
+            for wv in range(n):
+                lits = []
+                for yv in range(n): o = E.v('Wsel0', yv, wv); E.iff_and(o, [U(NO - 1, yv), f(m, yv, wv)]); lits.append(o)
+                Ws[wv] = E.v('Wsel', wv); E.iff_or(Ws[wv], lits)
+            for c in atoms:
+                if not le[c][m]: continue
+                for wv in range(n):
+                    if not (le[c][wv] and c != wv): continue
+                    if MODE == 'residual_post': add([-Ws[wv], -r(1, c), -ulit(bot, c, c)]); continue
+                    fl = []
+                    for u in range(n):
+                        if le[c][u] and u != c and le[u][wv]:
+                            o = E.v('hfail', c, u); E.iff_and(o, [fle(c, u, u), -ulit(c, u, c)]); fl.append(o)
+                    add([-Ws[wv], -r(1, c)] + fl)
+        elif MODE == 'descpre2yfail':                  # no v ∈ V* ∩ ↓y* with F(c*, v) ≤ v
+            for (c, v), o in inV.items():
+                for z in range(n):
+                    if le[v][z]: add([-o, -U(NO - 1, z), -fle(c, v, v)])
+        elif MODE == 'descpre2fail':                     # no v ∈ V* with F(c*, v) ≤ v (DescPre2 violated)
             for (c, v), o in inV.items(): add([-o, -fle(c, v, v)])
         elif MODE == 'nonempty':
             for o in inV.values(): add([-o])
@@ -135,7 +164,9 @@ for L in lattices(args):
                 for v in list(Clp):
                     for u in cv2:
                         if u not in Clp and le[u][F[c][v]]: Clp.add(u); ch = True
-            ok = {'descpre2fail': not any(le[F[c][v]][v] for v in Vs), 'ercfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Clp) for u in Clp), 'nonempty': not Vs, 'allgap': bool(Vs) and all(gap(v) for v in Vs),
+            above = lambda c: all(le[c][F[c][uu]] for uu in range(n) if le[c][uu] and uu != c and le[uu][w] and le[F[c][uu]][uu])
+            cand = [c for c in atoms if le[c][m] and le[c][w] and c != w and inR1(c)]
+            ok = {'residual': not any(above(c) for c in cand), 'residual_post': not any(le[c][F[bot][c]] for c in cand), 'descpre2yfail': not any(le[F[c][v]][v] and le[v][u_] for v in Vs), 'vley': any(not le[v][u_] for v in Vs), 'descpre2fail': not any(le[F[c][v]][v] for v in Vs), 'ercfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Clp) for u in Clp), 'nonempty': not Vs, 'allgap': bool(Vs) and all(gap(v) for v in Vs),
                   'rcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[c][v]] for v in Vs) for u in Vs),
                   'xrcfail': bool(Vs) and all(gap(v) for v in Vs) and any(not any(le[u][F[d][v2]] for d, v2 in W) for u in Vs)}[MODE]
             assert ok, 'SAT/Python mismatch'
@@ -143,5 +174,5 @@ for L in lattices(args):
             if best is None or n < best[0]: best = (n, dict(sets=L.S, F=F, m=m))
         else: C['UNSAT'] += 1
         E.S.delete()
-print(MODE, 'not2' if NOT2 else '', 'acstar' if ATS else '', 'aatoms' if ATA else '', 'broute' if BT else '', dict(C), 'smallest', best[0] if best else None)
-if best: json.dump(best[1], open(f'rc_{MODE}{"_not2" if NOT2 else ""}{"_acstar" if ATS else ""}{"_aatoms" if ATA else ""}{"_broute" if BT else ""}_min{best[0]}.json', 'w'))
+print(MODE, 'not2' if NOT2 else '', 'acstar' if ATS else '', 'aatoms' if ATA else '', 'broute' if BT else '', 'cle' if CLE else '', 'cnle' if CNLE else '', dict(C), 'smallest', best[0] if best else None)
+if best: json.dump(best[1], open(f'rc_{MODE}{"_not2" if NOT2 else ""}{"_acstar" if ATS else ""}{"_aatoms" if ATA else ""}{"_broute" if BT else ""}{"_cle" if CLE else ""}{"_cnle" if CNLE else ""}_min{best[0]}.json', 'w'))

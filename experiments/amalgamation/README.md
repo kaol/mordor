@@ -103,3 +103,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²³⁶: `rc_test.py` (V* ≠ ∅, gap models, response coverage / cross-atom / response closure, tightness splits `acstar` / `aatoms` / `broute`), `descpre2_core.py` (cores with b-route and a(c*) guards). Output `out_rc236.txt`, models `rc_*_min*.json`.
 - §34.3z²³⁷: `rc_test.py` modes `vley`, `descpre2yfail`, `residual`, `residual_post`, flags `cle` / `cnle` (the trapped case c* ≤ m). Output `out_trap237.txt`.
 - §34.3z²³⁸: `descpre2_core.py` flag `cnle`; `rc_test.py` modes `peratom`, `peratom_le`, `peratomw` (all refuted). Output `out_cnle238.txt`.
+- §34.3z²³⁹: `rc_test.py` options `start=ystar|top`, `nowpar`, `nomem`, `nomv` (TopDescPre: m-free, no counterexample). Output `out_start239.txt`.

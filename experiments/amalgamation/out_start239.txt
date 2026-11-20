@@ -1,0 +1,6 @@
+== §34.3z²³⁹ rc_test.py descpre2fail with the ⊥-descent started elsewhere (exact; models replayed in Python; UNSAT = DescPre2 holds)
+   start = y*: 'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]
+   start = ⊤:  'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]
+   start = ⊤, without w ∥ m: 'SAT': 47} smallest 8 [5 7 1]
+   start = ⊤, without w ∥ m and m ∈ R_2 \ R_1: 'SAT': 47} smallest 8 [5 7 1]
+   start = ⊤, without w ∥ m, m ∈ R_2 \ R_1 and m ≰ v (m-free; hypotheses R_1, R_2 tight only): 'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]

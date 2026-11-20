@@ -1,0 +1,27 @@
+== §34.3z²³⁶ rc_test.py (exact; every model replayed in Python). Hypotheses: m ∈ R_2 \ R_1, h(m) = 2, R_1 tight, w ∥ m, R_2 tight unless 'not2'.
+-- V* ≠ ∅: nonempty 'UNSAT': 47} smallest None [closure 5 7 1; UNSAT = V* never empty]
+-- DescPre2 baseline: 'UNSAT': 47} smallest None [closure 5 7 1; UNSAT = no counterexample]
+-- without R_2 tightness:
+   allgap (V* ≠ ∅, every member a gap): 'UNSAT': 4, 'SAT': 43} smallest 8 [5 7 1]; 'UNSAT': 172, 'SAT': 154} smallest 7 [sweep 4 11]; 'UNSAT': 4, 'SAT': 40} smallest 8 [5 8 2]
+   rcfail (… and response coverage within V* fails): 'UNSAT': 4, 'SAT': 43} smallest 8 [5 7 1]; 'UNSAT': 172, 'SAT': 154} smallest 7 [sweep 4 11]
+   xrcfail (… cross-atom responses F(d, v'), d ∈ R_1, v' ∈ V_d): 'UNSAT': 4, 'SAT': 43} smallest 8 [5 7 1]; 'UNSAT': 172, 'SAT': 154} smallest 7 [sweep 4 11]
+   ercfail (… response closure of V* among all height-2 covers of c* not self-covering): 'UNSAT': 4, 'SAT': 43} smallest 8 [5 7 1]; 'UNSAT': 181, 'SAT': 145} smallest 7 [sweep 4 11]; 'UNSAT': 5, 'SAT': 39} smallest 8 [5 8 2]
+   minimal model (|L| = 7, rc_ercfail_not2_min7.json): V* = {{01}}, F(c*, {01}) = {03}, a non-fibre cover (F(⊥, {03}) = {1}), F(c*, {03}) = {1}; a(c*) = ⊤ ∈ R_2
+-- R_2 tightness split (descpre2fail = a DescPre2 counterexample):
+   only h(a(c*)) ≤ 2 (acstar): 'SAT': 24, 'UNSAT': 23} smallest 9 [5 7 1]
+   only h(a(d)) ≤ 2 for atoms d ∈ R_1 (aatoms): 'SAT': 24, 'UNSAT': 23} smallest 9 [5 7 1]; 'UNSAT': 235, 'SAT': 91} smallest 5 [sweep 4 11]
+   only b-route tightness (broute: b(g) ∈ R_1 ⟹ h(g) ≤ 2): 'SAT': 46, 'UNSAT': 1} smallest 8 [5 7 1]; 'UNSAT': 47, 'SAT': 279} smallest 5 [sweep 4 11]
+   b-route tightness + h(a(c*)) ≤ 2: 'UNSAT': 47} smallest None [5 7 1]; 'UNSAT': 326} smallest None [sweep 4 11]
+-- descpre2_core.py (guards WL, WU, T1(z), BT(g), AS, P(c, v)):
+   [closure 5 7 1] {'cores': 47}
+   [closure 5 7 1] ('uses AS', True) 46
+   [closure 5 7 1] ('BT column', 'other', 'h', 3) 20
+   [closure 5 7 1] ('P columns heights', (2, 2, 2, 2, 2)) 10
+   [closure 5 7 1] ('P column = c ∨ another atom', (False, True, True, True, True)) 10
+   [closure 5 7 1] ('#P', 9, '#atoms in P', 4) 10
+   [sweep 4 10] {'cores': 282, 'degenerate': 36}
+   [sweep 4 10] ('uses AS', True) 212
+   [sweep 4 10] ('P columns heights', (2, 2)) 73
+   [sweep 4 10] ('P columns heights', (2, 2, 2, 2)) 57
+   [sweep 4 10] ('P column = c ∨ another atom', (True, True, True, True)) 57
+   [sweep 4 10] ('#P', 2, '#atoms in P', 2) 55

@@ -100,3 +100,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²³³: `descpre_core.py` (DescPre cores: every excluded column a height-2 cover); `dich1_region.py` claims `descpred` / `descw` / `descy` (refuted) and `descpre2` (no counterexample). Output `out_descpre233.txt`.
 - §34.3z²³⁴: `cover_sample.py` (sampled fibre-cover structure of the descent atom). Output `out_covers234.txt`.
 - §34.3z²³⁵: `dich1_region.py` claims `descA` / `descB`, flags `routeA` / `routeB` (each alternative alone refuted under either route). Output appended to `out_covers234.txt`.
+- §34.3z²³⁶: `rc_test.py` (V* ≠ ∅, gap models, response coverage / cross-atom / response closure, tightness splits `acstar` / `aatoms` / `broute`), `descpre2_core.py` (cores with b-route and a(c*) guards). Output `out_rc236.txt`, models `rc_*_min*.json`.

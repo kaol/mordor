@@ -286,7 +286,10 @@ Mordor is a formal system organized as three layers — **bialgebraic axioms** (
     It gives UpCell(1) (`regionCell_of_fibre_pre`, `upCell_one_of_preFibre`), and it is proved when F(⊥, w) is an atom
     below m (`regionCell_of_x_le_m`) (§34.3z²³²). No canonical column works, but the cores show that the column can be taken to be a height-2 cover of c*:
     **DescPre2** has no counterexample (480), so at k = 1 not all covers of the descent atom inside its fibre can be gaps
-    (§34.3z²³³). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
+    (§34.3z²³³). The join argument is proved for every k: a nonempty response-covered family of height-(k + 1) elements over a row
+    c ∈ R_k collapses to {a(c)} (`fixed_of_responseCover`). DescPre2 needs exactly b-route tightness plus h(a(c*)) ≤ 2,
+    and each alone fails. Response coverage itself is not forced by the gaps, because responses leave the fibre
+    (§34.3z²³⁶). The off-target fibre is down-closed (`shadowFibre_downClosed`), so FibreTop is a property of the fibre's own points
     (`fibreTopAt_iff_mem`), and a stable fibre is the interval (c, U]. But neither branch of the fibre-join dichotomy
     forces FibreTop at a given configuration: exhaustive search refutes the stable branch at |L| = 8, where the fibre
     is a single point, and the jump branch at |L| = 11. TopFibre is existential over sibling configurations

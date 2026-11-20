@@ -121,6 +121,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²³² (the row x = F(⊥, w) below m): **`regionCell_of_x_le_m`**, **`regionCell_of_fibre_pre`**, `PreFibre`,
   **`upCell_one_of_preFibre`**.
 * §34.3z²³⁴ (fibre covers): **`eq_a_of_fixed_top`**.
+* §34.3z²³⁶ (response coverage): `pre_iff_lower_or_fixed`, **`fixed_of_responseCover`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3577,5 +3578,50 @@ theorem eq_a_of_fixed_top {H k : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z �
   have := height_strictMono hn (lt_of_le_of_ne hle hne)
   have := hall _ haR
   omega
+
+/-! ### Fibre covers and response coverage (§34.3z²³⁶) -/
+
+/-- **Pre-fixed over a cover is lower or fixed.** If `c < v` with `h(c) = k`, `h(v) = k + 1` and `c ≤ F c v`, then
+`F c v ≤ v` iff `F c v = c` or `F c v = v`. So DescPre2's conclusion is exactly the lower-cover / fixed-cover
+disjunction. -/
+theorem pre_iff_lower_or_fixed {H k : ℕ} (hn : NoChain α (H + 1)) {c v : α} (hcv : c < v) (hck : height H c = k)
+    (hvk : height H v = k + 1) (hlo : c ≤ F c v) : F c v ≤ v ↔ (F c v = c ∨ F c v = v) := by
+  constructor
+  · intro hle
+    by_cases hey : F c v = v
+    · exact Or.inr hey
+    · left
+      by_contra hne
+      have h1 : c < F c v := lt_of_le_of_ne hlo (Ne.symm hne)
+      have h2 : F c v < v := lt_of_le_of_ne hle hey
+      have := height_strictMono hn h1
+      have := height_strictMono hn h2
+      omega
+  · rintro (e | e)
+    · exact e.le.trans hcv.le
+    · exact e.le
+
+/-- **Response coverage forces the fixed cover (the join argument).** Let `c ∈ R_k` with `R_{k+1}` tight, and let `V`
+be a nonempty set of height-`(k+1)` elements. Suppose every `u ∈ V` lies below the row response `F c v` of some
+`v ∈ V`. Then `s = ⨆ V` satisfies `s ≤ F c s`, so `s ≤ a c ∈ R_{k+1}`. Every member is then `a c`, so `V = {a c}` and
+its member is a fixed cover. -/
+theorem fixed_of_responseCover {H k : ℕ} (hn : NoChain α (H + 1)) (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {c : α} (hc : c ∈ Rk F k) {V : Set α} (hV : ∀ v ∈ V, height H v = k + 1) (hne : V.Nonempty)
+    (hresp : ∀ u ∈ V, ∃ v ∈ V, u ≤ F c v) : V = {a F c} ∧ F c (a F c) = a F c := by
+  have hs : sSup V ≤ F c (sSup V) :=
+    sSup_le fun u hu => let ⟨v, hv, huv⟩ := hresp u hu; huv.trans ((F c).mono (le_sSup hv))
+  have hsa : sSup V ≤ a F c := le_a hs
+  have haR : a F c ∈ Rk F (k + 1) := mem_succ_of_a hc le_rfl
+  have hmem : ∀ v ∈ V, v = a F c := by
+    intro v hv
+    have hle : v ≤ a F c := (le_sSup hv).trans hsa
+    by_contra hne'
+    have := height_strictMono hn (lt_of_le_of_ne hle hne')
+    have := hall _ haR
+    have := hV v hv
+    omega
+  refine ⟨Set.eq_singleton_iff_unique_mem.2 ⟨?_, hmem⟩, row_a _⟩
+  obtain ⟨v, hv⟩ := hne
+  exact hmem v hv ▸ hv
 
 end Mordor.OrbitHeight

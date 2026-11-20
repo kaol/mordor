@@ -1,0 +1,25 @@
+== §34.3z²³³ (exact; models re-checked in Python; hypotheses: m ∈ R_2 \ R_1, h(m) = 2, R_1 and R_2 tight, w ∥ m)
+-- canonical pre-fixed fibre columns of the descent atom c*:
+   descpred (its descent predecessor): 'holds': 4, 'violated': 43} smallest violation 8 [5 7 1]; 'holds': 188, 'violated': 138} smallest violation 7 [sweep 4 11]
+   descw (w, when x = F(⊥, w) is an atom): 'violated': 46, 'holds': 1} smallest violation 8 [5 7 1]
+   descy (y*): 'holds': 16, 'violated': 31} smallest violation 9 [5 7 1]
+-- descpre_core.py (cores; guards WL, WU, T1(z), T2(z), P(c, v)):
+   [closure 5 7 1] {'cores': 47}
+   [closure 5 7 1] ('P columns heights', (2, 2, 2, 2, 2)) 10
+   [closure 5 7 1] ('P column = c ∨ another atom', (False, True, True, True, True)) 10
+   [closure 5 7 1] ('#P', 9, '#atoms in P', 4) 10
+   [closure 5 7 1] ('P columns heights', (2, 2, 2, 2, 2, 2, 2, 2, 2)) 10
+   [closure 5 7 1] ('P column = c ∨ another atom', (False, True, True, True, True, True, True, True, True)) 10
+   [closure 5 7 1] ('P columns heights', (2, 2, 2, 2)) 10
+   [closure 5 7 1] ('P columns heights', (2, 2, 2)) 7
+   [sweep 4 10] {'cores': 282, 'degenerate': 36}
+   [sweep 4 10] ('P columns heights', (2, 2)) 73
+   [sweep 4 10] ('P columns heights', (2, 2, 2, 2)) 57
+   [sweep 4 10] ('P column = c ∨ another atom', (True, True, True, True)) 57
+   [sweep 4 10] ('#P', 2, '#atoms in P', 2) 55
+   [sweep 4 10] ('#P', 4, '#atoms in P', 3) 54
+   [sweep 4 10] ('shape', (('P', 2), ('T2', 1), ('WL', 1), ('WU', 1))) 53
+   [sweep 4 10] ('P column = c ∨ another atom', (True, True)) 52
+   every excluded fibre column in every core has height 2
+-- descpre2 (c* has a height-2 cover v ≱ m with F(⊥, v) = c*, F(c*, v) ≤ v): 'holds': 47} smallest violation None; 'holds': 326} smallest violation None; 'holds': 44} smallest violation None; 'holds': 63} smallest violation None; 
+   (closure 5 7 1, sweep 4 11, closure 5 8 2, closure 5 9 3)

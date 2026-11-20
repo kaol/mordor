@@ -77,7 +77,32 @@ for L in lattices(args):
         elif CLAIM in ('maxall', 'minall'): add([E.v('sel', y) for y in inY]); [add([-E.v('sel', y), ext[y]]) or add([-E.v('sel', y), -comp[y]]) for y in inY]
         elif CLAIM in ('maxex', 'minex'): [add([-ext[y], -comp[y]]) for y in inY]
         elif CLAIM == 'minh2': [add([-inY[y], -comp[y]]) for y in inY if h[y] == 2]      # some height-2 point of Y₁ is comparable
-        elif CLAIM in ('descrc', 'descpre'):                          # the atom c* on the ⊥-descent from w has a RegionCell (z ≱ m, F(⊥, z) = c*, cell of row c* at z)
+        elif CLAIM in ('descpred', 'descw', 'descy'):     # pre-fixed fibre column of c* at a canonical column: the descent predecessor ('descpred'), w ('descw'), y* ('descy')
+            D = lambda i, z: E.v('D', i, z)
+            for z in range(n):
+                lits = []
+                for yv in range(n): o = E.v('D0', yv, z); E.iff_and(o, [U(NO - 1, yv), f(m, yv, z)]); lits.append(o)
+                E.iff_or(D(0, z), lits)
+            for i in range(NO):
+                for z in range(n):
+                    lits = []
+                    for v in range(n): o = E.v('Ds', i, v, z); E.iff_and(o, [D(i, v), f(bot, v, z)]); lits.append(o)
+                    E.iff_or(D(i + 1, z), lits)
+            viol = []
+            for i in range(NO):
+                for v in range(n):
+                    for c in range(n):
+                        if h[c] != 1 or v == c or not le[c][v]: continue
+                        if CLAIM == 'descpred': o = E.v('pv', i, v, c); E.iff_and(o, [D(i, v), f(bot, v, c), -fle(c, v, v)]); viol.append(o)
+            if CLAIM in ('descw', 'descy'):            # c* = F(⊥, w) [x an atom]; is F(c*, w) ≤ w / F(c*, y*) ≤ y*?
+                for yv in range(n):
+                    for wv in range(n):
+                        for c in range(n):
+                            if h[c] != 1: continue
+                            col = wv if CLAIM == 'descw' else yv
+                            o = E.v('pw', yv, wv, c); E.iff_and(o, [U(NO - 1, yv), f(m, yv, wv), f(bot, wv, c), -fle(c, col, col)]); viol.append(o)
+            add(viol)
+        elif CLAIM in ('descrc', 'descpre', 'descpre2'):                          # the atom c* on the ⊥-descent from w has a RegionCell (z ≱ m, F(⊥, z) = c*, cell of row c* at z)
             D = lambda i, z: E.v('D', i, z)
             for z in range(n):
                 lits = []
@@ -96,7 +121,8 @@ for L in lattices(args):
                 add([-E.v('dsel', c), At[c]])
                 for z in range(n):
                     if not le[c][z] or z == c or le[m][z]: continue
-                    if CLAIM == 'descpre': add([-E.v('dsel', c), -f(bot, z, c), -fle(c, z, z)]); continue
+                    if CLAIM == 'descpre2' and h[z] != 2: continue
+                    if CLAIM in ('descpre', 'descpre2'): add([-E.v('dsel', c), -f(bot, z, c), -fle(c, z, z)]); continue
                     add([-E.v('dsel', c), -f(bot, z, c), -fle(c, z, c)]); add([-E.v('dsel', c), -f(bot, z, c), -yle(c, z)])
         elif CLAIM == 'xle1':                            # h(x) ≤ 1
             for yv in range(n):
@@ -182,7 +208,16 @@ for L in lattices(args):
                 return out
             rc = lambda c: any(le[c][z] and z != c and not le[m][z] and F[bot][z] == c and (le[F[c][z]][c] or le[z][F[c][z]]) for z in range(n))
             pf = lambda c: any(le[c][z] and z != c and not le[m][z] and F[bot][z] == c and le[F[c][z]][z] for z in range(n))
-            ok = {'descpre': any(not pf(c) for c in desc_atoms()), 'descrc': any(not rc(c) for c in desc_atoms()), 'xle1': h[xx] > 1, 'wcell': xx == bot and h[ww] == 1 and not any(cellw(z) and not le[m][z] and F[bot][z] == ww for z in range(n)), 'xnotbot': xx == bot, 'xatom': h[xx] != 1, 'xicw': h[xx] == 1 and not any(cellx(z) and le[z][ww] for z in range(n)), 'xicy': h[xx] == 1 and not any(cellx(z) and le[z][ysx] for z in range(n)), 'xcell': h[xx] == 1 and not any(cellx(z) and not le[m][z] and F[bot][z] == xx for z in range(n)),
+            def desc_pred():
+                v, seen = ww, set()
+                while v not in seen:
+                    seen.add(v); u = F[bot][v]
+                    if h[u] == 1 and u != v: return v, u
+                    v = u
+                return None
+            dp = desc_pred()
+            pf2 = lambda c: any(h[z] == 2 and le[c][z] and z != c and not le[m][z] and F[bot][z] == c and le[F[c][z]][z] for z in range(n))
+            ok = {'descpre2': any(not pf2(c) for c in desc_atoms()), 'descpred': dp is not None and not le[F[dp[1]][dp[0]]][dp[0]], 'descw': h[xx] == 1 and not le[F[xx][ww]][ww], 'descy': h[xx] == 1 and not le[F[xx][ysx]][ysx], 'descpre': any(not pf(c) for c in desc_atoms()), 'descrc': any(not rc(c) for c in desc_atoms()), 'xle1': h[xx] > 1, 'wcell': xx == bot and h[ww] == 1 and not any(cellw(z) and not le[m][z] and F[bot][z] == ww for z in range(n)), 'xnotbot': xx == bot, 'xatom': h[xx] != 1, 'xicw': h[xx] == 1 and not any(cellx(z) and le[z][ww] for z in range(n)), 'xicy': h[xx] == 1 and not any(cellx(z) and le[z][ysx] for z in range(n)), 'xcell': h[xx] == 1 and not any(cellx(z) and not le[m][z] and F[bot][z] == xx for z in range(n)),
                   'xcellm': h[xx] == 1 and not le[xx][m] and not any(cellx(z) and not le[m][z] and F[bot][z] == xx for z in range(n)),
                   'xic': h[xx] == 1 and not any(cellx(z) for z in range(n)), 'gfix': not any(gf(g) for g in range(n)), 'gfixlow': not any(gf(g) for g in range(n)), 'minh2in': not any(cp(y) for y in Y if h[y] == 2 and le[y][ys]) if ys is not None else True, 'minh2out': not any(cp(y) for y in Y if h[y] == 2 and not le[y][ys]) if ys is not None else True,
                   'minh2': not any(cp(y) for y in Y if h[y] == 2), 'region': not any(cp(y) for y in Y), 'maxall': any(not cp(y) for y in mx), 'minall': any(not cp(y) for y in mx),

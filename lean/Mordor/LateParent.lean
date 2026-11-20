@@ -135,6 +135,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `upCell_of_w_incomparable`, **`minUpCell_full`**.
 * §34.3z²⁴⁷ (good bases): **`descChain_of_good`**, `good_of_descChain`, `le_a_of_interval`, `GoodBase` (conjecture),
   `minLevel_of_goodBase`, **`singletonLower_of_goodBase`**.
+* §34.3z²⁴⁸: `good_of_full` (GoodBase's conclusion under full tightness).
 -/
 
 namespace Mordor.OrbitHeight
@@ -4431,5 +4432,15 @@ theorem singletonLower_of_goodBase [WellFoundedLT α] {H : ℕ} (hn : NoChain α
   rcases colOrb_dichotomy (F := F) hmt with hc | ⟨N, -, hfix, -, h1, h2⟩
   · exact absurd hc hno
   · exact upCell_of_minLevel hn (minLevel_of_goodBase hn hgb hk hall hmk hmt hfix h1 h2)
+
+/-- **GoodBase's conclusion with every stage up to `j + 1` tight** (the tower): `j = 0` is `p = ⊥`; for `j = i + 1`,
+the top of a level-`i` descent chain is good (`good_of_descChain`). -/
+theorem good_of_full {H : ℕ} (hn : NoChain α (H + 1)) (j : ℕ) (ht : ∀ i ≤ j + 1, ∀ z ∈ Rk F i, height H z ≤ i)
+    (hH : j < height H (⊤ : α)) :
+    ∃ p ∈ Rk F j, height H p = j ∧ (p ≤ a F p ∨ ∃ i, (F p)^[i] (⊤ : α) = p) := by
+  rcases j with _ | i
+  · exact ⟨⊥, show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl, height_bot_eq_zero, Or.inl bot_le⟩
+  obtain ⟨p, c, hc⟩ := descChain_exists hn i (fun l hl => ht l (by omega)) (by omega)
+  exact ⟨c, hc.2.2.1, hc.2.2.2.1, good_of_descChain hn (ht (i + 1) (by omega)) hc⟩
 
 end Mordor.OrbitHeight

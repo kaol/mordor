@@ -1,0 +1,16 @@
+== §34.3z²⁴⁸ gb1.py — GoodBase at j = 1 with R_2 tight only (exact; models replayed in Python; UNSAT = the claim holds)
+   Hypotheses: R_2 tight, h(⊤) ≥ 4, a(⊥) = ⊥ (the case a(⊥) ≠ ⊥ is an A-interval); d = last nonzero element of the ⊥-descent from ⊤.
+   any   (no atom of R_1 good):                 'UNSAT': 96 [sweep 4 14]; 'UNSAT': 40 [closure 5 10 1 40]; 'UNSAT': 39 [closure 5 9 3 40]
+   dtwo  (h(d) = 2, no atom ≤ d good):          'UNSAT': 96; 'UNSAT': 40
+   datom (h(d) = 1, d not good):                'UNSAT': 96 [sweep]; 'SAT': 16, 'UNSAT': 24 smallest 15 [closure] (gb1_datom_min15.json); with R_1 tight (r1t): 'UNSAT': 40
+   r1    (h(d) = 2, an atom p ≤ d with F(p, d) ≤ p not good): 'SAT': 55, 'UNSAT': 41 smallest 7 [sweep]; 'SAT': 38, 'UNSAT': 2 smallest 11 [closure]
+   r3    (same with F(p, d) ≤ d):               same counts, smallest 7
+   ex / exp (h(d) = 2, no atom p ≤ d with F(p, d) ≤ d / ≤ p): 'UNSAT': 96, 40 (both)
+   L1 (F(d, d) ≰ d), L2 (d not good in its own row), L3 (no atom p < d with F(p, d) = p), L4 (no atom p < d with d on the row-p descent):
+         each 'SAT': 39, 'UNSAT': 1 smallest 11 [closure 5 10 1 40]
+   pq    (atoms p ≠ q of R_1, q on the row-p descent, q not good): 'SAT': 55, 'UNSAT': 41 smallest 8 [sweep]; 'SAT': 36, 'UNSAT': 4 [closure]
+-- gb1_core.py closure 5 10 1 40 (claim 'any'; cores over the R_2-tightness instances, deletion-minimized):
+   all core instances at height 3; core sizes 1:1, 2:9, 3:11, 4:9, 5:8, 6:1, 7:1.
+   near-models (every instance but one): the excluded height-3 element enters R_2 via a(x), x ∈ R_1 (33), via a lower cell F(x, z) ≤ x
+   with x ∈ R_1 (74), or both (34); the lower-cell rows are mostly height-2 elements of R_1 (the R_1-non-tight elements).
+   (The 'dtwo' variant printed identical core-size counts; that coincidence was not examined.)

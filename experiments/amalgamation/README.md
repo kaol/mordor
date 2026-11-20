@@ -111,3 +111,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁴⁴: `caseC_core.py` (cores of ¬(C′); flag `dropbot`), `caseC_near.py`; `rc_test.py` modes `caseC2`, `caseC2any`. Output `out_caseC244.txt`.
 - §34.3z²⁴⁵: `rc_test.py` mode `witm` (is the TopDescPre witness m?), flags `ysc`, `clw`, `ysu` (case-2 probes; output files now tagged `_nowpar`, `_ysc`, `_clw`, `_ysu`). Output `out_witm245.txt`, `rc_witm_not2_top_min6.json`. Superseded by the Lean proof `topDescPre_offM`.
 - §34.3z²⁴⁶: `lv_base.py` (with the MinLevelW hypotheses at K: is there a cheap tower base p ∈ R_{K−1} with p ≤ a(p)? flag `r1nt`: is R_1 non-tight consistent?). Output `out_lvbase246.txt`.
+- §34.3z²⁴⁷: `lv_chain.py` (does a level-(K − 1) descent chain exist / is there a good base; flags `r1nt`, `nowpar`, `nomem`, `onlyK`, `noai`, `vac`), `lv_desc.py noatom` (the ⊥-descent can miss every atom when R_1 is non-tight). Output `out_good247.txt`, `lvdesc_noatom_min6.json`.

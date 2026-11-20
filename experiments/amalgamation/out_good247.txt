@@ -1,0 +1,16 @@
+== §34.3z²⁴⁷ (exact; models replayed in Python; UNSAT = the claim holds)
+-- lv_chain.py K [flags]: hypotheses h(m) = K + 1, m ∈ R_{K+1} \ R_K, R_K and R_{K+1} tight, w ∥ m;
+   nowpar / nomem drop the m hypotheses, onlyK drops R_{K+1} tightness (an element of height K + 1 and h(⊤) ≥ K + 2 remain).
+   chain (a descent chain exists at level K − 1):
+     K = 2: 'UNSAT': 135 [sweep 4 12]; 'UNSAT': 141 [closure 5 10 1 40]; with r1nt (R_1 non-tight): 'UNSAT': 135, 'UNSAT': 141
+     K = 2 nowpar nomem [onlyK]: 'UNSAT': 135, 'UNSAT': 141 (both)
+     K = 3: 'UNSAT': 35 [closure 6 12 9 12]
+   good (GoodBase: some p ∈ R_{K−1}, h(p) = K − 1, with p ≤ a(p) or the row-p descent from ⊤ meeting p):
+     K = 2: 'UNSAT': 135 [sweep 4 12]; 'UNSAT': 141 [closure 5 10 1 40];  K = 3: 'UNSAT': 35 [closure 6 12 9 12]
+     nowpar nomem onlyK: K = 2 'UNSAT': 135, 'UNSAT': 141, with r1nt 'UNSAT': 141; K = 3 'UNSAT': 35
+     + noai (no A-interval base: every x ∈ R_{K−2} with h(x) ≤ K − 1 has h(a(x)) < K − 1): K = 2 'UNSAT': 135, 'UNSAT': 141 (r1nt too); K = 3 'UNSAT': 35
+     vacuity of noai (claim dropped): K = 2 'SAT': 135 smallest 5, 'SAT': 141 smallest 10; K = 3 'SAT': 35 smallest 16
+-- lv_desc.py noatom (R_2 tight only, height ≥ 3): the ⊥-descent from ⊤ can miss every atom:
+     'UNSAT': 97, 'SAT': 57 smallest 6 [sweep 4 12]; 'SAT': 39, 'UNSAT': 1 smallest 11 [closure 5 10 1 40]  (lvdesc_noatom_min6.json)
+-- sampled models (R_2 tight only, R_1 forced non-tight; up to 8 per lattice): a good atom below d (the last ⊥-descent element before
+   a(⊥)) exists in 232/232 [sweep 4 12] and 944/944 [closure 5 8 2 30]; not every atom below d is good (228/232, 873/944).

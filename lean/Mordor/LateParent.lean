@@ -133,6 +133,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `a_fibre_lv`, `lowerFibre_lv`, `rowDesc_meets_lv`, `lowerCover_lv`, `DescChain`, `descChain_zero`,
   **`descChain_succ`**, **`descChain_exists`**, **`offM_lv`**, **`minLevel_of_w_incomparable`**,
   `upCell_of_w_incomparable`, **`minUpCell_full`**.
+* §34.3z²⁴⁷ (good bases): **`descChain_of_good`**, `good_of_descChain`, `le_a_of_interval`, `GoodBase` (conjecture),
+  `minLevel_of_goodBase`, **`singletonLower_of_goodBase`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -4341,5 +4343,93 @@ theorem minUpCell_full [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) {k
   rcases colOrb_dichotomy (F := F) htop with hc | ⟨N, -, hfix, -, h1, h2⟩
   · exact absurd hc hno
   · exact upCell_of_w_incomparable hn ht hmk hfix h1 h2
+
+/-! ### Good bases: SingletonLower reduced to an m-free statement (§34.3z²⁴⁷) -/
+
+/-- **A descent chain from a good base** (with `R_{k+1}` tight only). If `p ∈ R_k` of height `k`, `p ≠ ⊤`, satisfies
+`p ≤ a p` or its row-`p` descent from `⊤` meets `p`, then a descent chain `(p, c)` exists at level `k`. If `p < a p`,
+then `c = a p`, the limit of the descent. Otherwise the descent meets `p`, and `c` is the element just before. -/
+theorem descChain_of_good {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {p : α} (hpR : p ∈ Rk F k) (hp : height H p = k) (hpt : p ≠ ⊤)
+    (hg : p ≤ a F p ∨ ∃ i, (F p)^[i] (⊤ : α) = p) : ∃ c, DescChain F H k p c := by
+  have meet_case : (∃ i, (F p)^[i] (⊤ : α) = p) → ∃ c, DescChain F H k p c := by
+    intro hmeet
+    classical
+    have hk1' : (F p)^[Nat.find hmeet] (⊤ : α) = p := Nat.find_spec hmeet
+    have hk1pos : Nat.find hmeet ≠ 0 := by intro e; rw [e] at hk1'; exact hpt hk1'.symm
+    obtain ⟨j, hj⟩ : ∃ j, Nat.find hmeet = j + 1 := ⟨Nat.find hmeet - 1, by omega⟩
+    have hFu : F p ((F p)^[j] (⊤ : α)) = p := by
+      rw [hj, Function.iterate_succ_apply'] at hk1'; exact hk1'
+    have hpu : p ≤ (F p)^[j] (⊤ : α) := by
+      have := rowIter_succ_le (F := F) (x := p) (s := ⊤) le_top j
+      rw [Function.iterate_succ_apply', hFu] at this
+      exact this
+    have hne : (F p)^[j] (⊤ : α) ≠ p := fun e => Nat.find_min hmeet (show j < Nat.find hmeet by omega) e
+    have huR : (F p)^[j] (⊤ : α) ∈ Rk F (k + 1) :=
+      mem_succ_of_cell (k := k) (m := p) (x := p) hpR le_rfl (Or.inl hFu.le)
+    have hu : height H ((F p)^[j] (⊤ : α)) = k + 1 := by
+      have := hk1 _ huR; have := height_strictMono hn (lt_of_le_of_ne hpu (Ne.symm hne)); omega
+    exact ⟨_, hpR, hp, huR, hu, hpu, hFu.symm.le, j, rfl⟩
+  rcases hg with hpa | hmeet
+  · obtain ⟨M, hM⟩ := exists_iter_fix_mono hn (F p).mono H (height_le (⊤ : α)) le_top
+    have hlim : (F p)^[M] (⊤ : α) = a F p := le_antisymm (le_a hM.symm.le) (a_le_iter le_top M)
+    rcases eq_or_lt_of_le hpa with he | hlt
+    · exact meet_case ⟨M, hlim.trans he.symm⟩
+    · have haR : a F p ∈ Rk F (k + 1) := mem_succ_of_a hpR le_rfl
+      have ha : height H (a F p) = k + 1 := by
+        have := hk1 _ haR; have := height_strictMono hn hlt; omega
+      refine ⟨a F p, hpR, hp, haR, ha, hpa, ?_, M, hlim⟩
+      rw [row_a]; exact hpa
+  · exact meet_case hmeet
+
+/-- The top of a descent chain is good at the next level (with `R_{k+1}` tight): `c ≤ a c`, or the row-`c` descent
+from `⊤` meets `c` (`rowDesc_meets_lv`). -/
+theorem good_of_descChain {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {p c : α} (h : DescChain F H k p c) : c ≤ a F c ∨ ∃ i, (F c)^[i] (⊤ : α) = c := by
+  obtain ⟨hpR, hp, -, hc, hpc, hpFc, N, hN⟩ := h
+  by_cases hca : c < a F c
+  · exact Or.inl hca.le
+  · exact Or.inr (rowDesc_meets_lv hn hk1 hpR hp hc hpc hpFc hN hca le_top le_top)
+
+/-- Elements of an A-interval are good: `x ≤ p ≤ a x` gives `p ≤ a p`. -/
+theorem le_a_of_interval {x p : α} (hxp : x ≤ p) (hpa : p ≤ a F x) : p ≤ a F p :=
+  hpa.trans (le_a ((row_a x).symm.le.trans ((F.mono hxp) (a F x))))
+
+/-- **GoodBase (conjecture; m-free).** If `R_{j+1}` is tight and `h(⊤) > j + 2`, then some `p ∈ R_j` of height `j` is
+good: `p ≤ a p`, or its row-`p` descent from `⊤` meets `p`. Level `0` is trivial (`p = ⊥`). With all stages
+tight, the descent tower gives it at every level (`good_of_descChain`). With only `R_{j+1}` tight there is no
+counterexample (exact, `lv_chain.py good … onlyK nowpar nomem`): `j = 1` on 135 + 141 instances, including
+R_1-non-tight ones, and `j = 2` on 35 (§34.3z²⁴⁷). -/
+def GoodBase (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ j, (∀ z ∈ Rk F (j + 1), height H z ≤ j + 1) → j + 2 < height H (⊤ : α) →
+    ∃ p ∈ Rk F j, height H p = j ∧ (p ≤ a F p ∨ ∃ i, (F p)^[i] (⊤ : α) = p)
+
+/-- **MinLevel from a good base** (with only `R_{j+1}` and `R_{j+2}` tight, `h(m) = j + 2`, `m ≠ ⊤` and `w ∥ m`). -/
+theorem minLevel_of_goodBase {H j : ℕ} (hn : NoChain α (H + 1)) (hgb : GoodBase F H)
+    (hk1 : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1) (hk2 : ∀ z ∈ Rk F (j + 2), height H z ≤ j + 2) {m y : α}
+    (hm : height H m = j + 2) (hmt : m ≠ ⊤) (hy : m ⊔ F m y = y) (hmw : ¬ m ≤ F m y) (hwm : ¬ F m y ≤ m) :
+    MinLevel F H (j + 1) m := by
+  have htop : j + 2 < height H (⊤ : α) := by
+    have := height_strictMono hn (lt_top_iff_ne_top.2 hmt); omega
+  obtain ⟨p, hpR, hp, hg⟩ := hgb j hk1 htop
+  have hpt : p ≠ ⊤ := fun e => by rw [e] at hp; omega
+  obtain ⟨c, hc⟩ := descChain_of_good hn hk1 hpR hp hpt hg
+  have hct : c ≠ ⊤ := fun e => by have := hc.2.2.2.1; rw [e] at this; omega
+  obtain ⟨v, hcv, hv, hpv, hpre, hmv⟩ := offM_lv hn hk1 hk2 hc hct hm hy hmw hwm
+  obtain ⟨-, -, hcR, hc1, hpc, -, -⟩ := hc
+  exact ⟨p, c, v, hpc, hcR, hc1, hcv, hv, hmv, hpv, Or.inl hpre⟩
+
+/-- **GoodBase gives SingletonLower.** For `k = 0`, use `upCell_zero`. For `k = j + 1`, `colOrb_dichotomy` gives
+`w ∥ m`, and then `minLevel_of_goodBase` and `upCell_of_minLevel` apply. Only the two stage tightnesses that
+`SingletonLower` supplies are used. -/
+theorem singletonLower_of_goodBase [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hgb : GoodBase F H) :
+    SingletonLower F H := by
+  refine singletonLower_of_upCell hn fun k htop hk hall m hm hmk _ _ _ _ _ _ hno => ?_
+  have hmt : m ≠ ⊤ := fun e => htop (e ▸ Rk_mono (Nat.le_succ _) hm)
+  rcases k with _ | j
+  · exact upCell_zero hn hmt hno
+  rcases colOrb_dichotomy (F := F) hmt with hc | ⟨N, -, hfix, -, h1, h2⟩
+  · exact absurd hc hno
+  · exact upCell_of_minLevel hn (minLevel_of_goodBase hn hgb hk hall hmk hmt hfix h1 h2)
 
 end Mordor.OrbitHeight

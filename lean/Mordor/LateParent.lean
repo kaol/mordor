@@ -125,6 +125,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²³⁷ (atoms below m): `response_le_w`, **`upCell_one_of_atom_le_m`**, `upCell_one_of_atom_le_m_post`.
 * §34.3z²⁴⁰ (TopDescPre, case `a ⊥` an atom): **`preCover_of_a_bot_atom`**.
 * §34.3z²⁴¹ (case `a ⊥ = ⊥`): `lowerFibre_of_lower`.
+* §34.3z²⁴³ (statement (A)): `botDesc_succ_le`, `botDesc_antitone`, **`le_of_botDesc`** (the descent lemma), **`botDesc_a_fibre`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -3718,5 +3719,83 @@ theorem lowerFibre_of_lower {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈
   have := hk1 u (mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl
     (Or.inl hbot.le))
   omega
+
+/-! ### The descent lemma and statement (A) (§34.3z²⁴³) -/
+
+/-- One step of the `⊥`-descent from `⊤` goes down. -/
+theorem botDesc_succ_le : ∀ k : ℕ, (F ⊥)^[k + 1] (⊤ : α) ≤ (F ⊥)^[k] ⊤
+  | 0 => le_top
+  | k + 1 => by
+    have ih := botDesc_succ_le k
+    rw [Function.iterate_succ_apply'] at ih
+    rw [Function.iterate_succ_apply', Function.iterate_succ_apply']
+    exact (F ⊥).mono ih
+
+/-- The `⊥`-descent from `⊤` is antitone. -/
+theorem botDesc_antitone {i j : ℕ} (h : i ≤ j) : (F ⊥)^[j] (⊤ : α) ≤ (F ⊥)^[i] ⊤ :=
+  antitone_nat_of_succ_le (f := fun n => (F ⊥)^[n] (⊤ : α)) (fun n => botDesc_succ_le n) h
+
+/-- **The descent lemma.** If `c` lies on the `⊥`-descent from `⊤` (`(F ⊥)^[N] ⊤ = c`) and `y ≤ F ⊥ (c ⊔ y)`, then
+`y ≤ c`. Every descent element up to `N` lies above `c`. An element above `y` therefore lies above `c ⊔ y`, so its
+successor lies above `F ⊥ (c ⊔ y) ≥ y`. -/
+theorem le_of_botDesc {c y : α} {N : ℕ} (hN : (F ⊥)^[N] (⊤ : α) = c) (hy : y ≤ F ⊥ (c ⊔ y)) : y ≤ c := by
+  have key : ∀ i, i ≤ N → y ≤ (F ⊥)^[i] (⊤ : α) := by
+    intro i
+    induction i with
+    | zero => intro _; exact le_top
+    | succ i ih =>
+      intro hi
+      have hci : c ≤ (F ⊥)^[i] (⊤ : α) := hN ▸ botDesc_antitone (by omega)
+      rw [Function.iterate_succ_apply']
+      exact hy.trans ((F ⊥).mono (sup_le hci (ih (by omega))))
+  exact hN ▸ key N le_rfl
+
+/-- **Statement (A)** (with `R_1`, `R_2` tight). If `c` is an atom on the `⊥`-descent from `⊤` and `c < a c`, then
+`F ⊥ (a c) = c`, so `a c` is a fixed fibre cover of `c`. The value `c′ = F ⊥ (a c)` lies below `a c`. It is not `a c`,
+since then `a c ≤ a ⊥ ∈ R_1`, and it is not `⊥`, since then `a c ∈ R_1`. So `c′` is an atom. A second atom `c′ ≠ c`
+would give `c ⊔ c′ = a c`, and the descent lemma would force `c′ ≤ c`. -/
+theorem botDesc_a_fibre {H : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 1)
+    (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) {c : α} {N : ℕ} (hN : (F ⊥)^[N] (⊤ : α) = c) (hc1 : height H c = 1)
+    (hca : c < a F c) : F ⊥ (a F c) = c ∧ height H (a F c) = 2 := by
+  have hcc : F ⊥ c ≤ c := by
+    have := botDesc_succ_le (F := F) N
+    rw [Function.iterate_succ_apply', hN] at this; exact this
+  have hcR : c ∈ Rk F 1 := mem_one_of_bot_value hn hc1 le_rfl hcc
+  have haR : a F c ∈ Rk F 2 := mem_succ_of_a hcR le_rfl
+  have ha2 : height H (a F c) = 2 := by
+    have := hk2 _ haR; have := height_strictMono hn hca; omega
+  refine ⟨?_, ha2⟩
+  set x := F ⊥ (a F c) with hx
+  have hxa : x ≤ a F c := ((F.mono bot_le) (a F c)).trans (row_a c).le
+  have hxne : x ≠ a F c := by
+    intro e
+    have hle : a F c ≤ a F ⊥ := le_a e.symm.le
+    have hbR : a F (⊥ : α) ∈ Rk F 1 := mem_succ_of_a (k := 0) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl
+    have := hk1 _ hbR
+    have := height_strictMono hn (lt_of_lt_of_le hca hle)
+    omega
+  have hxlt : x < a F c := lt_of_le_of_ne hxa hxne
+  have hxbot : x ≠ ⊥ := by
+    intro e
+    have := hk1 _ (mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl
+      (Or.inl (show F ⊥ (a F c) ≤ ⊥ from e.le)))
+    omega
+  have hx1 : height H x = 1 := by
+    have h1 := height_strictMono hn hxlt
+    have h2 := height_strictMono hn (bot_lt_iff_ne_bot.2 hxbot)
+    have : height H (⊥ : α) = 0 := by
+      by_contra hb
+      have := height_strictMono hn (bot_lt_iff_ne_bot.2 (show c ≠ ⊥ from fun e => by rw [e] at hc1; omega))
+      omega
+    omega
+  by_contra hne
+  have hxc : ¬ x ≤ c := fun h => hne (eq_of_le_height_one hn hx1 h (by omega)).symm
+  have hcx : c < c ⊔ x := lt_of_le_of_ne le_sup_left fun e => hxc (e ▸ le_sup_right)
+  have hjoin : c ⊔ x = a F c := by
+    by_contra hj
+    have := height_strictMono hn hcx
+    have := height_strictMono hn (lt_of_le_of_ne (sup_le hca.le hxa) hj)
+    omega
+  exact hxc (le_of_botDesc hN (by rw [hjoin]))
 
 end Mordor.OrbitHeight

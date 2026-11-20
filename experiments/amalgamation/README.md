@@ -107,3 +107,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁴⁰: `rc_test.py` modes `imgatom`, `imgatom_any` (refuted, `rc_imgatom_top_min6.json`), `acfib`, `abotbot`. Output appended to `out_start239.txt`.
 - §34.3z²⁴¹: `rc_test.py` modes `belowp`, `chit`, `resid240`, `caseA`, `caseC` (the case a(⊥) = ⊥ of TopDescPre). Output appended to `out_start239.txt`.
 - §34.3z²⁴²: `caseA_core.py` (cores of ¬(A); flag `catom`), `caseA_near.py`. Output `out_caseA242.txt`.
+- §34.3z²⁴³: `caseA_atom_near.py` (near-models of the atom case: the instance is always a(c)); `caseA_core.py` flag `as2` (inconsistent; proved as `botDesc_a_fibre`). Output appended to `out_caseA242.txt`.

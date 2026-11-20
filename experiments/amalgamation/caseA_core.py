@@ -7,7 +7,7 @@ sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import helpers, lattices
 LIM = next((int(a[6:]) for a in sys.argv if a.startswith('limit=')), 10)
-args = [a for a in sys.argv[1:] if not a.startswith('limit=') and a != 'catom']
+args = [a for a in sys.argv[1:] if not a.startswith('limit=') and a not in ('catom', 'as2')]
 C = collections.Counter(); shown = 0
 for L in lattices(args):
     n = L.n; le = L.le; h = L.rank; bot = h.index(0); top = L.top; jn = L.join
@@ -31,6 +31,7 @@ for L in lattices(args):
         for g in range(n):
             if le[c][g] and g != c: add([-At[c], -A_(c, g), -f(bot, g, c)])
             if 'catom' in sys.argv and le[c][g] and g != c: add([-At[c], -A_(c, g)] + [f(bot, g, c2) for c2 in atoms if c2 != c])   # c' = F(⊥, a(c)) an atom ≠ c
+            if 'as2' in sys.argv and h[g] > 2: add([-At[c], -A_(c, g)])                    # h(a(c)) ≤ 2 (hard)
     guards = {}
     def guard(tag, clauses):
         s_ = E.v('g', *tag); guards[s_] = tag

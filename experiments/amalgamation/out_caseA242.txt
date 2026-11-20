@@ -18,3 +18,22 @@
    ('T classes', (('T2', 3), ('T2', 3), ('T2', 3))) 2
    ('shape', (('T2', 2),)) 2
    ('T classes', (('T2', 3), ('T2', 3))) 2
+-- §34.3z²⁴³ caseA_atom_near.py (near-models keeping only the core's other instances; the dropped instance g):
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an1.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', 'a:h2')) 3
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an1.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', 'a:h2', 'a:h3')) 1
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an1.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', 'a:h2', 'b:h2')) 1
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an2.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', 'a:h2')) 12
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an2.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', 'a:h2', "b:c'")) 9
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an2.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', "a:c'", 'a:h1', 'a:h2')) 3
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an2.txt:('label', 'other', 'h(a(c))', 4, 'routes into R_2', ('a:c', 'a:h2', 'a:h3', 'b:⊥')) 1
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an2.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', "a:c'", 'a:h2', 'a:h3')) 1
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an2.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', 'a:h1', 'a:h2', "b:c'")) 1
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an2.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', "a:c'", 'a:h2')) 1
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an2.txt:('label', 'other', 'h(a(c))', 4, 'routes into R_2', ('a:c', 'a:h2', 'a:h3', "b:c'", 'b:⊥')) 1
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an3.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', 'a:h2')) 6
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an3.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', 'a:h2', "b:c'")) 3
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an3.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', 'a:h1', 'a:h2', 'a:h3')) 1
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an3.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', 'a:h2', 'b:h2')) 1
+   /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/r3/an3.txt:('label', 'g = a(c)', 'h(a(c))', 3, 'routes into R_2', ('a:c', "a:c'", 'a:h1', 'a:h2')) 1
+-- catom with h(a(c)) ≤ 2 hard (as2): inconsistent 12 [5 7 1]; inconsistent 10 [6 9 1]; inconsistent 12 [5 8 2]; inconsistent 10 [6 10 2]
+   (inconsistent = no model at all, from the hard constraints and h(a(c)) ≤ 2 alone; proved in Lean as le_of_botDesc / botDesc_a_fibre)

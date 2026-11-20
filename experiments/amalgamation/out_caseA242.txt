@@ -1,0 +1,20 @@
+== §34.3z²⁴² caseA_core.py (exact): minimal cores of the negation of (A) [m-free: the ⊥-descent from ⊤ with atom c, a(⊥) = ⊥, c < a(c), F(⊥, a(c)) ≠ c]
+   guards T1(z) [R_1 tightness], T2(z) [R_2 tightness]
+-- sweep 4 10: 133 cores; shapes T2 ×1: 106, T2 ×2: 25, T2 ×3: 2; no core uses T1
+   near-models (caseA_near.py, dropping the one T2 instance g): in all 162, g = a(c), i.e. the instance only bounds h(a(c))
+-- with c' = F(⊥, a(c)) forced to be an atom ≠ c (catom):
+   sweep 4 10: inconsistent from the hard constraints alone on all 133 lattices
+   closure 5 7 1 12: inconsistent 10, cores 2 (T2 ×2, ×3); closure 6 9 1 10: inconsistent 2, cores 8 (up to T2 ×6); no core uses T1
+-- closure 5 7 1 12 (without catom):
+   |L|=18: ['{}', '{0}', '{2}', '{3}', '{4}', '{02}', '{12}', '{03}', '{23}', '{24}', '{34}', '{012}', '{123}', '{024}', '{234}', '{0234}', '{1234}', '{01234}'] core T2{012} T2{123} T2{024} T2{234}
+   ('T2', 'h', 3, 'not an atom join') 15
+   cores 12
+   ('T2', 'h', 3, 'join of two atoms') 12
+   ('shape', (('T2', 1),)) 5
+   ('T classes', (('T2', 3),)) 5
+   ('shape', (('T2', 4),)) 3
+   ('T classes', (('T2', 3), ('T2', 3), ('T2', 3), ('T2', 3))) 3
+   ('shape', (('T2', 3),)) 2
+   ('T classes', (('T2', 3), ('T2', 3), ('T2', 3))) 2
+   ('shape', (('T2', 2),)) 2
+   ('T classes', (('T2', 3), ('T2', 3))) 2

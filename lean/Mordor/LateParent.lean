@@ -149,6 +149,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁵⁷: `MixedBase`, `restartGood_of_mixedBase`, `cutMaps_of_mixedBase`, `good_base_of_drop`,
   **`base_good_of_DL`** (a DL base is good), `drop_cover`, **`good_of_coverDL`** (covering and stage-maximality suffice),
   `BackGood1`, **`restartGood_of_backGood1`**.
+* §34.3z²⁵⁸: **`dl_bot_of_lt_botDesc`** (atoms below a height-2 end of the ⊥-descent are DL), `GoodAtom1`,
+  **`backGood1_one_of_goodAtom1`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -4998,5 +5000,45 @@ theorem restartGood_of_backGood1 {H : ℕ} (hn : NoChain α (H + 1)) (hb : BackG
     by_contra hne
     exact not_good_of_ahead hn hall hgR (by omega) hgt hg
   exact topGood_succ hn hall hgR hgk' hgt hg
+
+/-! ### The zero fibre's DL atoms (§34.3z²⁵⁸)
+
+At level 1 with `a ⊥ = ⊥`, `R_1` is the zero fibre `{y : F ⊥ y = ⊥}`. Atoms below a height-2 end `d` of the ⊥-descent are DL
+covers of `⊥` (`dl_bot_of_lt_botDesc`). BackGood1 at `k = 1` reduces to its one open case, a good atom of a non-tight `R_1`
+(`backGood1_one_of_goodAtom1`). -/
+
+/-- **Atoms below a height-2 end of the ⊥-descent are DL covers of ⊥** (§34.3z²⁵⁸). -/
+theorem dl_bot_of_lt_botDesc {H : ℕ} (hn : NoChain α (H + 1)) {d p : α} {N : ℕ} (hN : (F ⊥)^[N] (⊤ : α) = d)
+    (hd0 : F ⊥ d = ⊥) (hd : height H d = 2) (hp : height H p = 1) (hpd : p ≤ d) : DL F ⊥ p := by
+  intro y hy
+  have hyd : y ≤ d := le_of_botDesc hN (hy.trans ((F ⊥).mono (sup_le_sup_right hpd y)))
+  by_contra hyp
+  have hlt : p < p ⊔ y := lt_of_le_of_ne le_sup_left fun e => hyp (e ▸ le_sup_right)
+  have hle : p ⊔ y ≤ d := sup_le hpd hyd
+  have heq : p ⊔ y = d := eq_of_le_of_height_ge hn hle (by have := height_strictMono hn hlt; omega)
+  have hy0 : y ≤ ⊥ := by rw [heq, hd0] at hy; exact hy
+  exact hyp (hy0.trans bot_le)
+
+/-- **GoodAtom1**: when `a ⊥ = ⊥`, `R_2` is tight, `⊤ ∉ R_2` and `R_1` is not tight, some atom of `R_1` is good. -/
+def GoodAtom1 (F : α →o α →o α) (H : ℕ) : Prop :=
+  a F ⊥ = ⊥ → (∀ z ∈ Rk F 2, height H z ≤ 2) → (⊤ : α) ∉ Rk F 2 → ¬ (∀ z ∈ Rk F 1, height H z ≤ 1) →
+    ∃ p ∈ Rk F 1, height H p = 1 ∧ IsGood F p
+
+/-- **GoodAtom1 gives BackGood1 at k = 1**: the cases `a ⊥ ≠ ⊥` and `R_1` tight are free. -/
+theorem backGood1_one_of_goodAtom1 {H : ℕ} (hn : NoChain α (H + 1)) (hga : GoodAtom1 F H)
+    (hall : ∀ z ∈ Rk F 2, height H z ≤ 2) (htop : (⊤ : α) ∉ Rk F 2) :
+    ∃ g ∈ Rk F 1, 1 ≤ height H g ∧ g ≠ ⊤ ∧ IsGood F g := by
+  have hbot0 : (⊥ : α) ∈ Rk F 0 := show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl
+  have hne : ∀ g ∈ Rk F 1, g ≠ ⊤ := fun g hg e => htop (Rk_mono (Nat.le_succ 1) (e ▸ hg))
+  by_cases ha : a F ⊥ = ⊥
+  · by_cases ht1 : ∀ z ∈ Rk F 1, height H z ≤ 1
+    · have hbt : (⊥ : α) ≠ ⊤ := fun e => htop (Rk_mono (Nat.zero_le 2) (e ▸ hbot0))
+      obtain ⟨c, hcR, hc, hg⟩ := topGood_succ (k := 0) hn ht1 hbot0 height_bot_eq_zero hbt (Or.inl bot_le)
+      exact ⟨c, hcR, by omega, hne c hcR, hg⟩
+    · obtain ⟨p, hpR, hp, hg⟩ := hga ha hall htop ht1
+      exact ⟨p, hpR, by omega, hne p hpR, hg⟩
+  · have hR : a F ⊥ ∈ Rk F 1 := mem_succ_of_a hbot0 le_rfl
+    refine ⟨a F ⊥, hR, ?_, hne _ hR, Or.inl (le_a_of_interval bot_le le_rfl)⟩
+    have := height_strictMono hn (bot_lt_iff_ne_bot.2 ha); rw [height_bot_eq_zero] at this; omega
 
 end Mordor.OrbitHeight

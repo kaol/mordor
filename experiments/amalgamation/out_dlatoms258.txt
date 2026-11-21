@@ -1,0 +1,11 @@
+== §34.3z²⁵⁸ (exact; models replayed in Python; UNSAT = the claim holds). One instance per lattice; h(⊤) ≥ 3 (sweep includes h(⊤) = 3).
+-- dlatoms.py, world W0: a(⊥) = ⊥, R_2 tight, ⊤ ∉ R_2; n1 = R_1 non-tight (R_1 = Z = {y : F(⊥,y) = ⊥}).
+   corpus             vac n1   goodatom  dlgood  uniq n1  uniq r1t  dpart  exch4 | mutants: uniq not2  uniqany  dpartX  exch4R  exchA
+   sweep 4 12         118      UNSAT     UNSAT   UNSAT    —         UNSAT  UNSAT |          SAT 67      —        —       SAT 6   SAT 6
+   sweep 4 14         124      UNSAT 160 UNSAT   UNSAT    UNSAT     UNSAT  UNSAT |          SAT 73      SAT 107  SAT 55  SAT 11  SAT 11
+   closure 5 10 1 40  40       UNSAT 40  UNSAT   UNSAT    UNSAT     UNSAT  UNSAT |          SAT 39      SAT 40   SAT 38  SAT 29  SAT 29
+   closure 5 10 2 40  40       UNSAT 40  UNSAT   UNSAT    UNSAT     UNSAT  UNSAT |          SAT 40      SAT 40   SAT 37  SAT 22  SAT 22
+   closure 5 10 3 40  40       UNSAT 40  UNSAT   UNSAT    UNSAT     UNSAT  UNSAT |          SAT 40      SAT 39   SAT 38  SAT 26  SAT 26
+   closure 5 11 5 40  40       UNSAT 40  UNSAT   UNSAT    UNSAT     UNSAT  UNSAT |          SAT 40      SAT 40   SAT 40  SAT 30  SAT 30
+   closure 5 11 4 30  30       UNSAT 30  UNSAT   UNSAT    UNSAT     UNSAT  UNSAT |          SAT 30      SAT 30   SAT 27  SAT 22  SAT 22
+   smallest mutant models: uniq not2 |L| = 6; uniqany 6; dpartX 7; exch4R / exchA 10.

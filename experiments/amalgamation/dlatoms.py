@@ -33,8 +33,9 @@ sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import lattices
 from rstages import stages, a_of
+LANDMODES = ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall')
 FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad', 'dgood'}
-MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1'}
+MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall'}
 MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in FLG}; args = [a for a in sys.argv[2:] if a not in FLG]
 if MODE not in MODES: raise SystemExit('unknown mode')
 MEANING = {
@@ -66,6 +67,8 @@ MEANING = {
     'cellup': 'SAT = no x in Z with d <= x has an atom q <= x with q <= F(q, lambda(x)) (refutes CellUp)',
     'botupM1': 'SAT = as botup with the column F(x, lambda(x)) (mutant M1step)',
     'botupM2': 'SAT = no x in Z of height 2 with d not <= x has an atom q <= x, q <= F(bot, lambda(x)) (mutant M2anchor)',
+    'btz': 'SAT = case (a): no atom q <= d with q <= F(bot, z) and q <= F(bot, lambda(d)), z = last row-d descent element >= d (refutes BotTrack endpoint)',
+    'btall': 'SAT = case (a): no atom q <= d with q <= F(bot, y) for every row-d descent element y with lambda(d) <= y <= z (refutes BotTrack)',
     'lamz1': 'SAT = d bad atom, row d lands at the index N of d on the bot-descent (b1), and lambda(d) not in Z (refutes LamZ1)',
 }
 C = collections.Counter(); INFO = collections.Counter(); best = None
@@ -137,7 +140,7 @@ for L in lattices(args):
     if 'dgood' in FL:
         for z in range(n):
             if z != bot: add([-isd(z), gd(z)])
-    LAND = ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1')
+    LAND = LANDMODES
     if MODE in LAND:
         low = [z for z in range(n) if h[z] <= 2]
         def on(e, z):
@@ -199,6 +202,41 @@ for L in lattices(args):
                     if e != bot and e != p: E.iff_and(E.v('lprd', p, e), [isd(e), f(bot, jn[p][e], bot)])
                 E.iff_and(o, [t1, t2])
             return o
+        if MODE in ('btz', 'btall'):
+            for e in range(n):
+                if h[e] != 2: continue
+                De = descvars(e)
+                onv = {z: on(e, z) for z in range(n)}
+                # zd(z): z is the last descent element >= e (smallest such)
+                zd = {}
+                for z in range(n):
+                    if not le[e][z]: continue
+                    o = E.v('btzd', e, z); E.iff_and(o, [onv[z]] + [-onv[w] for w in range(n) if le[e][w] and le[w][z] and w != z]); zd[z] = o
+                qs = [q for q in atoms if le[q][e]]
+                ok_q = []
+                for q in qs:
+                    cov = lambda y: E.v('btcov', q, y)
+                    for y in range(n): E.iff_or(cov(y), [f(bot, y, v) for v in range(n) if le[q][v]])
+                    if MODE == 'btz':
+                        t = E.v('btq', e, q); ls = []
+                        for z in zd:
+                            for w in low:
+                                tt = E.v('btqz', e, q, z, w); E.iff_and(tt, [zd[z], lam(e, w), cov(z), cov(w)]); ls.append(tt)
+                        E.iff_or(t, ls); ok_q.append(t)
+                    else:
+                        # for every y on the descent between lambda(e) and z: cov(y)
+                        t = E.v('btq', e, q); conds = []
+                        for z in zd:
+                            for w in low:
+                                if not le[w][z]: continue
+                                bad = []
+                                for y in range(n):
+                                    if le[w][y] and le[y][z]:
+                                        b_ = E.v('btbad', e, q, z, w, y); E.iff_and(b_, [onv[y], -cov(y)]); bad.append(b_)
+                                nb = E.v('btnb', e, q, z, w); E.iff_or(nb, bad)
+                                tt = E.v('btqz', e, q, z, w); E.iff_and(tt, [zd[z], lam(e, w), -nb]); conds.append(tt)
+                        E.iff_or(t, conds); ok_q.append(t)
+                for t in ok_q: add([-isd(e), -t])
         if MODE in ('botup', 'botupL', 'cellup', 'botupM1', 'botupM2'):
             for x in range(n):
                 if x == bot or x == top: continue
@@ -337,7 +375,7 @@ for L in lattices(args):
         if 'hd2' in FL: ok = ok and d is not None and h[d] == 2
         if 'dbad' in FL: ok = ok and d is not None and not good(d)
         if 'dgood' in FL: ok = ok and d is not None and good(d)
-        if MODE in ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2'):
+        if MODE in LANDMODES:
             lamf = lambda e: next(z for z in desc(e) if h[z] <= 2)
             ld = lamf(d)
             if MODE == 'lg': reg = lambda p: le[p][ld]
@@ -366,6 +404,13 @@ for L in lattices(args):
                         if le[q][val] and (MODE != 'botupL' or le[q][ld]): return True
                     return False
                 ok = ok and not any(holds_x(x) for x in range(n))
+            elif MODE in ('btz', 'btall'):
+                dsd = desc(d); zz = [y for y in dsd if le[d][y]][-1]
+                def okq(q):
+                    if not le[q][d]: return False
+                    if MODE == 'btz': return le[q][F[bot][zz]] and le[q][F[bot][ld]]
+                    return all(le[q][F[bot][y]] for y in dsd if le[ld][y] and le[y][zz])
+                ok = ok and h[d] == 2 and not any(okq(q) for q in atoms)
             elif MODE == 'lamz1':
                 N = bd.index(d); it = top
                 for _ in range(N): it = F[d][it]

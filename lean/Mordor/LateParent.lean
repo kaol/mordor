@@ -158,6 +158,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶³: `dl_of_le_row`, **`good_of_dominating_desc`**, `good_of_dominating_desc_bot` (INH: one cell certifies an atom below a
   dominating row's height-2 descent element), `iter_row_mono`, **`landing_late_a`**, **`landing_late_b`** (row d lands late). `Cert1`, **`goodAtom1_of_cert1`**.
 * §34.3z²⁶⁵: **`botTrack_of_step`** (BotTrack along row d's descent from the step lemma StepT).
+* §34.3z²⁶⁶: **`cov_of_preDrop`** (Cov from PreDrop, by `drop_below_top` and uniqueness of the atom below d ∧ t).
 -/
 
 namespace Mordor.OrbitHeight
@@ -5273,5 +5274,25 @@ theorem botTrack_of_step {H : ℕ} {d z q : α} (hzt : F d z ≤ z) (hq0 : q ≤
     have hy : 3 ≤ height H ((F d)^[k + 1] z) := hh (k + 1) (by omega) (by omega)
     rw [Function.iterate_succ_apply']
     refine ⟨hstep _ hy h2 h3 h1, ((F d).mono h2).trans hdt, h1.trans ((F.mono bot_le) _)⟩
+
+/-- **Cov from PreDrop** (§34.3z²⁶⁶). Let `d` (height 2) lie on the ⊥-descent, `R_1` have heights `≤ 2`, and `q` be an atom
+below `d` and below `y`. If `F ⊥ y ≠ ⊥`, `F ⊥ y ≤ t` with `d ≰ t`, `q ≤ t`, and `F ⊥ (d ⊔ F ⊥ y) ≤ F ⊥ y`, then
+`q ≤ F ⊥ y`: `drop_below_top` gives an atom below `d` and `F ⊥ y`, and two distinct atoms below `d` would join to `d ≤ t`. -/
+theorem cov_of_preDrop {H N : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F 1, height H z ≤ 2) {d t q y : α}
+    (hN : (F ⊥)^[N] (⊤ : α) = d) (hd : height H d = 2) (hdt : ¬ d ≤ t) (hq : height H q = 1) (hqd : q ≤ d)
+    (hqt : q ≤ t) (hy0 : F ⊥ y ≠ ⊥) (hyt : F ⊥ y ≤ t) (hpre : F ⊥ (d ⊔ F ⊥ y) ≤ F ⊥ y) : q ≤ F ⊥ y := by
+  have hk1' : ∀ z ∈ Rk F 1, height H z ≤ height H d := fun z hz => hd ▸ hk1 z hz
+  have hdy : ¬ d ≤ F ⊥ y := fun h => hdt (h.trans hyt)
+  obtain ⟨q', hq'0, hq'y, hq'd⟩ := drop_below_top hn hN hk1' H (F ⊥ y) (height_le _) hdy hpre hy0
+  by_contra hneg
+  have hne : q' ≠ q := fun e => hneg (e ▸ hq'y)
+  have h1 : 1 ≤ height H q' := by
+    have := height_strictMono hn (bot_lt_iff_ne_bot.2 hq'0); rw [height_bot_eq_zero] at this; omega
+  have h2 := height_strictMono hn hq'd
+  have hq'1 : height H q' = 1 := by omega
+  have hnle : ¬ q' ≤ q := fun h => hne (eq_of_le_of_height_ge hn h (by omega))
+  have hlt : q < q ⊔ q' := lt_of_le_of_ne le_sup_left fun e => hnle (e ▸ le_sup_right)
+  have hjd : q ⊔ q' = d := eq_of_le_of_height_ge hn (sup_le hqd hq'd.le) (by have := height_strictMono hn hlt; omega)
+  exact hdt (hjd ▸ sup_le hqt (hq'y.trans hyt))
 
 end Mordor.OrbitHeight

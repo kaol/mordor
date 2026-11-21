@@ -130,3 +130,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁶³: `dlatoms.py` modes botup/botupL/cellup/botupM1/botupM2/lamz1 and flag dgood; every mode prints its quantifier and SAT meaning. Output `out_botup263.txt`.
 - §34.3z²⁶⁴: `dlatoms.py` replay guard fixed (it skipped every mode added after §34.3z²⁶¹), modes btz/btall/btstep/btstepP. Output `out_bottrack264.txt`.
 - §34.3z²⁶⁵: `dlatoms.py` mode btstepT with flags xT/xQ/xP/xD (StepT and its hypothesis drops). Output `out_step265.txt`.
+- §34.3z²⁶⁶: `dlatoms.py` btstepT flags cov/xC/pre/lo2 (Cov, PreDrop). Output `out_cov266.txt`.

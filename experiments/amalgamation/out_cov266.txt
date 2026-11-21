@@ -1,0 +1,10 @@
+== §34.3z²⁶⁶ (exact; SAT models replayed in Python). Case (a) = hd2, with n1. z = last row-d descent element >= d, t = F(d, z),
+   q an atom below d and t (the unique one). Mode btstepT with flags xQ xP xD and:
+-- cov  (SAT = some y with h(y) >= 3, q <= y <= t, q not <= F(bot, y)):  sweep 4 14 UNSAT 160; closure 5 11 5 40 UNSAT 40
+   mutant cov xT (y <= t dropped, d not <= y kept): closure 5 11 5 40 SAT 27, smallest 14; sweep 4 14 UNSAT (no power)
+   mutant cov xT xD: sweep 4 14 SAT 27, smallest 8
+   cov lo2 (h(y) >= 2, y != q): sweep 4 14 UNSAT 160; closure 5 11 5 40 SAT 25, smallest 14  -> Cov fails at height 2
+-- xC (StepT without the cell hypothesis q <= F(bot, y)): sweep 4 14 UNSAT 160; closure 5 11 5 40 UNSAT 40
+-- pre  (PreDrop; SAT = some y with h(y) >= 3, q <= y <= t and F(bot, d v F(bot, y)) not <= F(bot, y)):
+   sweep 4 14 UNSAT 160; closure 5 11 5 40 UNSAT 40
+   pre lo2: sweep 4 14 UNSAT 160 (closure pending);  mutant pre xT: pending

@@ -34,7 +34,7 @@ from amalg_sat import Enc
 from tight_probe import lattices
 from rstages import stages, a_of
 LANDMODES = ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall', 'btstep', 'btstepP', 'btstepT')
-FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad', 'dgood', 'xT', 'xQ', 'xP', 'xD', 'xC', 'cov', 'pre'}
+FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad', 'dgood', 'xT', 'xQ', 'xP', 'xD', 'xC', 'cov', 'pre', 'lo2'}
 MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall', 'btstep', 'btstepP', 'btstepT'}
 MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in FLG}; args = [a for a in sys.argv[2:] if a not in FLG]
 if MODE not in MODES: raise SystemExit('unknown mode')
@@ -218,7 +218,7 @@ for L in lattices(args):
                         for q in atoms:
                             if not (le[q][e] and le[q][tt]): continue
                             for y in range(n):
-                                if h[y] < 3 or ('xD' not in FL and le[e][y]) or ('xT' not in FL and not le[y][tt]) or not le[q][y]: continue
+                                if h[y] < (2 if 'lo2' in FL else 3) or y == q or ('xD' not in FL and le[e][y]) or ('xT' not in FL and not le[y][tt]) or not le[q][y]: continue
                                 for y2 in range(n):
                                     if 'xP' not in FL and not le[y2][y]: continue
                                     o = E.v('bsT', e, z, tt, q, y, y2); sel.append(o)
@@ -461,7 +461,7 @@ for L in lattices(args):
                 ok = ok and not any(holds_x(x) for x in range(n))
             elif MODE == 'btstepT':
                 dsd = desc(d); zz = [y for y in dsd if le[d][y]][-1]; tt = F[d][zz]
-                ok = ok and h[d] == 2 and any(le[q][d] and ('xQ' in FL or le[q][F[bot][zz]]) and h[y] >= 3 and ('xT' in FL or le[y][tt]) and ('xD' in FL or not le[d][y]) and le[q][y]
+                ok = ok and h[d] == 2 and any(le[q][d] and ('xQ' in FL or le[q][F[bot][zz]]) and h[y] >= (2 if 'lo2' in FL else 3) and y != q and ('xT' in FL or le[y][tt]) and ('xD' in FL or not le[d][y]) and le[q][y]
                                               and (('pre' in FL and not le[F[bot][L.join[d][F[bot][y]]]][F[bot][y]]) or ('cov' in FL and not le[q][F[bot][y]]) or ('cov' not in FL and 'pre' not in FL and ('xC' in FL or le[q][F[bot][y]]) and ('xP' in FL or le[F[d][y]][y]) and not le[q][F[bot][F[d][y]]])) for q in atoms for y in range(n))
             elif MODE in ('btstep', 'btstepP'):
                 ok = ok and h[d] == 2 and any(le[q][d] and h[y] >= 3 and (MODE == 'btstep' or le[F[d][y]][y]) and le[q][F[bot][y]] and not le[q][F[bot][F[d][y]]] for q in atoms for y in range(n))

@@ -157,6 +157,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶¹: **`good_of_desc_cover`** (one cell at a covering element of its own descent makes an atom good).
 * §34.3z²⁶³: `dl_of_le_row`, **`good_of_dominating_desc`**, `good_of_dominating_desc_bot` (INH: one cell certifies an atom below a
   dominating row's height-2 descent element), `iter_row_mono`, **`landing_late_a`**, **`landing_late_b`** (row d lands late). `Cert1`, **`goodAtom1_of_cert1`**.
+* §34.3z²⁶⁵: **`botTrack_of_step`** (BotTrack along row d's descent from the step lemma StepT).
 -/
 
 namespace Mordor.OrbitHeight
@@ -5252,5 +5253,25 @@ theorem goodAtom1_of_cert1 {H : ℕ} (hn : NoChain α (H + 1)) (hc : Cert1 F H) 
   have hqR : q ∈ Rk F 1 :=
     mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl (Or.inl hq0.le)
   exact ⟨q, hqR, hq1, good_of_dominating_desc_bot hn hall rfl hp2 hqR hq1 hqx hcell⟩
+
+/-- **BotTrack from the step** (§34.3z²⁶⁵): along row `d`'s descent from `z` (with `F d z ≤ z`), as long as it stays high,
+the cell `q ≤ F ⊥ y` is carried from `t = F d z` onward by the step lemma (StepT). -/
+theorem botTrack_of_step {H : ℕ} {d z q : α} (hzt : F d z ≤ z) (hq0 : q ≤ F ⊥ z) (ht : q ≤ F ⊥ (F d z))
+    (hstep : ∀ y, 3 ≤ height H y → y ≤ F d z → q ≤ y → q ≤ F ⊥ y → q ≤ F ⊥ (F d y)) :
+    ∀ k, (∀ j, 1 ≤ j → j < k + 1 → 3 ≤ height H ((F d)^[j] z)) →
+      q ≤ F ⊥ ((F d)^[k + 1] z) ∧ (F d)^[k + 1] z ≤ F d z ∧ q ≤ (F d)^[k + 1] z := by
+  have hdt : F d (F d z) ≤ F d z := (F d).mono hzt
+  intro k
+  induction k with
+  | zero =>
+    intro _
+    simp only [zero_add, Function.iterate_one]
+    exact ⟨ht, le_rfl, hq0.trans ((F.mono bot_le) z)⟩
+  | succ k ih =>
+    intro hh
+    obtain ⟨h1, h2, h3⟩ := ih (fun j hj hjk => hh j hj (by omega))
+    have hy : 3 ≤ height H ((F d)^[k + 1] z) := hh (k + 1) (by omega) (by omega)
+    rw [Function.iterate_succ_apply']
+    refine ⟨hstep _ hy h2 h3 h1, ((F d).mono h2).trans hdt, h1.trans ((F.mono bot_le) _)⟩
 
 end Mordor.OrbitHeight

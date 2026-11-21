@@ -1,0 +1,8 @@
+== §34.3z²⁶⁵ (exact; SAT models replayed in Python). Case (a) = hd2, with n1. z = last row-d descent element >= d, t = F(d, z).
+-- StepT (btstepT; SAT = some atom q <= d (q <= t) and some y of height >= 3 with y <= t, q <= y and q <= F(bot, y),
+   but q not <= F(bot, F(d, y)); the flags xQ/xP/xD drop the extra hypotheses q <= F(bot, z), F(d, y) <= y and d not <= y):
+   all extras kept:          sweep 4 14 UNSAT 160; closure 5 11 5 40 UNSAT 40; closure 5 10 1 40 UNSAT 40
+   only y <= t kept (xQ xP xD): sweep 4 14 UNSAT 160; closure 5 11 5 40 UNSAT 40; closure 5 10 1 40 UNSAT 40
+   each extra dropped singly: UNSAT on sweep 4 14 and closure 5 11 5 40
+   mutant: y <= t dropped (xT): closure 5 11 5 40 SAT 20, smallest 14; sweep 4 14 UNSAT 160 (no power there)
+   (closure 5 10 2 40 for the minimal form: still running when this file was written)

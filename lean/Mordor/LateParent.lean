@@ -140,6 +140,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁵⁰: **`not_good_of_ahead`** (ahead-of-schedule elements are bad), **`drop_below_top`** (the drop lemma below a
   high top).
 * §34.3z²⁵¹: `good_of_noDrop` (no drop below `q` ⟹ `q` good).
+* §34.3z²⁵²: `FeedChain` (conjecture), **`singletonLower_of_feedChain`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -4555,5 +4556,38 @@ theorem good_of_noDrop {H : ℕ} (hn : NoChain α (H + 1)) {q : α}
       exact hnd i (lt_of_le_of_ne ih (Ne.symm (hmeet i)))
   obtain ⟨M, hM⟩ := exists_iter_fix_mono hn (F q).mono H (height_le (⊤ : α)) le_top
   exact Or.inl ((hall M).trans (le_a hM.symm.le))
+
+/-! ### The feeder as chain top (§34.3z²⁵²) -/
+
+/-- **FeedChain (conjecture).** In the singleton configuration at stage `j + 1`, the lower feeder `m′` is the top of a
+level-`j` descent chain. The configuration is: `⊤ ∉ R_{j+3}`; `R_{j+1}` and `R_{j+2}` tight; `m` the unique element of
+height `j + 2` in `R_{j+2}`, with `m ∉ R_{j+1}`; and `m′ ∈ R_{j+1}` of height `j + 1` with `m′ < m` and
+`F m′ m ≤ m′`. No counterexample (exact, `sl_feed.py feed`): `j = 1` on 296 instances (171 satisfiable
+configurations, including R_1-non-tight ones), `j = 2` on 58 (15). -/
+def FeedChain (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ j, (⊤ : α) ∉ Rk F (j + 3) → (∀ z ∈ Rk F (j + 1), height H z ≤ j + 1) →
+    (∀ z ∈ Rk F (j + 2), height H z ≤ j + 2) → ∀ m, (∀ z ∈ Rk F (j + 2), height H z = j + 2 → z = m) →
+    m ∈ Rk F (j + 2) → height H m = j + 2 → m ∉ Rk F (j + 1) →
+    ∀ m' ∈ Rk F (j + 1), height H m' = j + 1 → m' < m → F m' m ≤ m' → ∃ p, DescChain F H j p m'
+
+/-- **FeedChain gives SingletonLower.** Use `upCell_zero` at stage 0. At stage `j + 1`, the chain `(p, m′)`,
+`colOrb_dichotomy` (`w ∥ m`) and `offM_lv` give MinLevel, hence UpCell. Then `canonical_of_upCell` produces a second
+height-`(j + 2)` element of `R_{j+2}`, which contradicts uniqueness. -/
+theorem singletonLower_of_feedChain [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hfc : FeedChain F H) :
+    SingletonLower F H := by
+  intro k htop hk hall m huniq hm hmk hnew m' hm' hm'k hlt hlo
+  by_contra hno
+  have hmt : m ≠ ⊤ := fun e => htop (e ▸ Rk_mono (Nat.le_succ _) hm)
+  have hup : UpCell F H k m := by
+    rcases k with _ | j
+    · exact upCell_zero hn hmt hno
+    obtain ⟨p, hc⟩ := hfc j htop hk hall m huniq hm hmk hnew m' hm' hm'k hlt hlo
+    rcases colOrb_dichotomy (F := F) hmt with hc' | ⟨N, -, hfix, -, h1, h2⟩
+    · exact absurd hc' hno
+    obtain ⟨v, hcv, hv, hpv, hpre, hmv⟩ := offM_lv hn hk hall hc (ne_top_of_lt hlt) hmk hfix h1 h2
+    obtain ⟨-, -, hcR, hc1, hpc, -, -⟩ := hc
+    exact upCell_of_minLevel hn ⟨p, m', v, hpc, hcR, hc1, hcv, hv, hmv, hpv, Or.inl hpre⟩
+  obtain ⟨z, hzm, hz, hzR⟩ := secondEntry_of_canonical (canonical_of_upCell hn hall hup)
+  exact hzm (huniq z hzR hz)
 
 end Mordor.OrbitHeight

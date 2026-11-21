@@ -1,0 +1,12 @@
+== §34.3z²⁵² (exact; models replayed in Python; UNSAT = the claim holds)
+-- dcfg.py G / G0 (D1 configuration; every u_i > q on the row-q descent with i ≥ I + 1 [G0: i ≥ I], I = index of d on the ⊥-descent,
+   has u_i ≥ F(q, z)): 'UNSAT': 96 [sweep 4 14]; 'SAT': 29, 'UNSAT': 11 smallest 11 [closure 5 10 1 40] (dcfg_G_min11.json: past
+   s = F(q, z) the row-q descent continues s → {23} → q with q ≤ F(⊥, ·) throughout).
+   Proved on paper: for i < I, u_i ≥ d_i gives F(⊥, u_i) ≥ d_{i+1} ≥ d > q, so A3 is only open on the tail i ≥ I.
+-- sl_feed.py (SingletonLower configuration at k without its conclusion: ⊤ ∉ R_{k+2}; R_k, R_{k+1} tight; m the unique height-(k+1)
+   element of R_{k+1}, m ∉ R_k; feeder m' ∈ R_k, h(m') = k, m' < m, F(m', m) ≤ m'):
+   vac:   k = 2 'SAT': 171, 'UNSAT': 125 [closure 5 10 1 40]; k = 3 'SAT': 15, 'UNSAT': 43 [closure 6 12 9 8]
+   feed (m' is the top of a descent chain at level k − 1): k = 2 'UNSAT': 296; with R_1 non-tight 'UNSAT': 296; k = 3 'UNSAT': 58
+   any  (some descent chain at level k − 1):              k = 2 'UNSAT': 296
+   refuted: feedlow (the chain can be taken with F(p, m') = p): 'SAT': 171 smallest 11; feedfix (with F(p, m') = m', i.e. m' = a(p)): 'SAT': 171 smallest 11;
+            feedm (a(p) = m', or F(p, m') = p with m on the row-p descent and F(p, m) = m'): k = 2 'SAT': 171 smallest 11; k = 3 'SAT': 15 smallest 18

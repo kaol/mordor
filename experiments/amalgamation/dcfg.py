@@ -7,6 +7,7 @@ q ≤ F(⊥, z).  Each mode asserts the negation of a claim; SAT = a counterexam
   A5  — every x ≥ q on the row-q descent satisfies x ≥ z or x ≤ F(d, z)
   A7  — every x > q on the row-q descent has x ≥ d
   A10 — every x > q on the row-q descent with x ≱ z has F(q, x) = q
+  G   — every u_i > q with i ≥ I + 1 (I = index of d on the ⊥-descent) has u_i ≥ F(q, z)   [G0: i ≥ I]
   Ca  — every x > q on the row-q descent has x ≥ F(q, z)
   Cb  — q ≤ F(⊥, F(q, z))
   B1  — the row-q descent from z never drops below q (no x > q on it with F(q, x) ≱ q)
@@ -83,6 +84,17 @@ for L in lattices(args):
                             for v in range(n):
                                 if le[q][v]: continue
                                 o = E.v('b1', z, q, i, x, v); add([-o, Dz(i, x)]); add([-o, f(q, x, v)]); lits.append(o)
+                    add([-s_] + lits)
+                elif MODE in ('G', 'G0'):                           # some i ≥ I + 1 [G0: i ≥ I] with u_i > q and u_i ≱ F(q, z)
+                    lits = []
+                    for i in range(NO + 1):
+                        for j in range(i + (0 if MODE == 'G0' else 1), NO + 1):
+                            for x in range(n):
+                                if not le[q][x] or x == q: continue
+                                for sv in range(n):
+                                    if le[sv][x]: continue
+                                    o = E.v('gg', dd, z, q, i, j, x, sv)
+                                    E.iff_and(o, [E.v('DD', bot, i, dd), E.v('DD', q, j, x), f(q, z, sv)]); lits.append(o)
                     add([-s_] + lits)
                 elif MODE == 'Cb':                                   # q ≰ F(⊥, F(q, z))
                     for sv in range(n):
@@ -167,6 +179,9 @@ for L in lattices(args):
         elif MODE == 'A1': ok = ok and any(z not in desc(q) for z, q in cf)
         elif MODE == 'A7': ok = ok and any(any(le[q][x] and x != q and not le[dd][x] for x in desc(q)) for z, q in cf)
         elif MODE == 'A10': ok = ok and any(any(le[q][x] and x != q and not le[z][x] and F[q][x] != q for x in desc(q)) for z, q in cf)
+        elif MODE in ('G', 'G0'):
+            I = bd.index(dd)
+            ok = ok and any(any(le[q][x] and x != q and not le[F[q][z]][x] for x in desc(q)[I + (0 if MODE == 'G0' else 1):]) for z, q in cf)
         elif MODE == 'Cb': ok = ok and any(not le[q][F[bot][F[q][z]]] for z, q in cf)
         elif MODE == 'Ca': ok = ok and any(any(le[q][x] and x != q and not le[F[q][z]][x] for x in desc(q)) for z, q in cf)
         elif MODE == 'B3': ok = ok and any(F[q][F[q][z]] != q and not le[F[q][z]][F[q][F[q][z]]] for z, q in cf)

@@ -5,4 +5,4 @@
    only y <= t kept (xQ xP xD): sweep 4 14 UNSAT 160; closure 5 11 5 40 UNSAT 40; closure 5 10 1 40 UNSAT 40
    each extra dropped singly: UNSAT on sweep 4 14 and closure 5 11 5 40
    mutant: y <= t dropped (xT): closure 5 11 5 40 SAT 20, smallest 14; sweep 4 14 UNSAT 160 (no power there)
-   (closure 5 10 2 40 for the minimal form: still running when this file was written)
+   minimal form on closure 5 10 2 40: UNSAT 40

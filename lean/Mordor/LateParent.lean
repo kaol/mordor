@@ -154,6 +154,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁵⁹: `iter_antitone_of_le`, **`botDesc_of_dl_max`** (a DL atom maximal in the zero fibre lies on the
   ⊥-descent), `eq_of_botDesc_zero`, **`dl_atom_unique_of_tight`** (with R_1 tight the zero fibre has one DL atom).
 * §34.3z²⁶⁰: **`overshadowed_of_bad_botEnd`** (a bad end atom of the ⊥-descent has an element of R_1 above it).
+* §34.3z²⁶¹: **`good_of_desc_cover`** (one cell at a covering element of its own descent makes an atom good).
 -/
 
 namespace Mordor.OrbitHeight
@@ -5138,5 +5139,18 @@ theorem overshadowed_of_bad_botEnd {H : ℕ} (hn : NoChain α (H + 1)) {d : α} 
     (eq_or_lt_of_le hdz).elim (fun e => e.symm) fun hlt => absurd hlt (hno z hz)
   exact hbad (good_of_coverDL hn (k := 0) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) hcov bot_le
     (dl_of_rowDesc hN) hmax).1
+
+/-- **Goodness from one cell on the own descent** (the converse half of the landing lemma, §34.3z²⁶¹): if an element `u` of
+the row-`p` descent from `⊤` lies one height above `p`, above it, and `p ≤ F p u`, then `p` is good. -/
+theorem good_of_desc_cover {H : ℕ} (hn : NoChain α (H + 1)) {p u : α} {i : ℕ} (hi : (F p)^[i] (⊤ : α) = u)
+    (hpu : p < u) (hh : height H u = height H p + 1) (hcell : p ≤ F p u) : IsGood F p := by
+  have hFu : F p u ≤ u := by
+    have := rowIter_succ_le (F := F) (x := p) (s := ⊤) le_top i
+    rw [Function.iterate_succ_apply', hi] at this; exact this
+  rcases eq_or_lt_of_le hcell with he | hlt
+  · exact Or.inr ⟨i + 1, by rw [Function.iterate_succ_apply', hi]; exact he.symm⟩
+  · rcases eq_or_lt_of_le hFu with he' | hlt'
+    · exact Or.inl (hpu.le.trans (le_a he'.symm.le))
+    · have h1 := height_strictMono hn hlt; have h2 := height_strictMono hn hlt'; omega
 
 end Mordor.OrbitHeight

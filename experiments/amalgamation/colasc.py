@@ -4,6 +4,7 @@ unless 'tK' (R_k tight).  The column-c ascent from ⊥ is e_0 = ⊥, e_{i+1} = F
   asc1 — b(c) ≠ c
   ascS — some ascent element strictly below c lies outside R_{k−1}
   asc2 — the ascent enters c from an x ∉ R_{k−1} or of height ≠ k − 1
+  stage — some ascent element e_i < c (1 ≤ i ≤ k − 1) lies outside R_i
   vac  — hypotheses only
   python3 colasc.py MODE k (sweep N MAX | closure K M SEED CNT) [tK]"""
 import sys, collections, json
@@ -31,6 +32,13 @@ for L in lattices(args):
                 for v in range(n): o = E.v('Ascs', i, v, z); E.iff_and(o, [Au(i, v), f(v, c, z)]); ls.append(o)
                 E.iff_or(Au(i + 1, z), ls)
         if MODE == 'asc1': add([-E.v('B', c, c)])
+        elif MODE == 'stage':                                  # some ascent element e_i < c with e_i ∉ R_i (i ≤ k − 1)
+            sel = []
+            for i in range(1, k):
+                for x in range(n):
+                    if x == c or not le[x][c]: continue
+                    o = E.v('st', i, x); add([-o, Au(i, x)]); add([-o, -r(i, x)]); sel.append(o)
+            add(sel)
         elif MODE in ('ascS', 'asc2'):
             sel = []
             for i in range(NO + 1):
@@ -50,6 +58,7 @@ for L in lattices(args):
             ok = inR(c, k) and le[F[c][c]][c] and not inR(bc, k - 1)
             if MODE == 'asc1': ok = ok and bc != c
             elif MODE == 'ascS': ok = ok and any(x != c and not inR(x, k - 1) for x in seq)
+            elif MODE == 'stage': ok = ok and any(seq[i] != c and not inR(seq[i], i) for i in range(1, min(k, len(seq))))
             elif MODE == 'asc2': ok = ok and c in seq and not (h[seq[seq.index(c) - 1]] == k - 1 and inR(seq[seq.index(c) - 1], k - 1))
             assert ok, 'SAT/Python mismatch'
             C['SAT'] += 1

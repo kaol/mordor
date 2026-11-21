@@ -119,3 +119,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁵²: `sl_feed.py` (is the feeder m′ a descent-chain top in the SingletonLower configuration? modes feed/any/feedlow/feedfix/feedm/vac; flag `r1nt`), `dcfg.py` modes G/G0. Output `out_feed252.txt`.
 - §34.3z²⁵³: `sl_feed.py` modes gen/lowdesc/bm/bmh/aout/U/asc1/asc2/ascS/bq/bqm/bqu and drop flags (nouniq, notop, nofeed, no2, no3, nonew), with a guard against unknown modes; `colasc.py` (the column ascent below a pure-A column, no tightness); `aout_core.py` (cores). Output `out_feed253.txt`.
 - §34.3z²⁵⁴: `bq_core.py` (cores of the B-route descent claim over the uniqueness instances), `sl_feed.py` mode bgood. Output `out_bq254.txt`.
+- §34.3z²⁵⁵: `sl_feed.py` modes pureA/pureAany, `colasc.py` mode stage (both refuted shortcuts). Output `out_bq255.txt`.

@@ -1,0 +1,9 @@
+== §34.3z²⁵⁵ (exact unless marked; UNSAT = claim holds)
+-- B-route drop-column analysis (sampled, uniqueness dropped, R_2 and R_3 tight, ≤ 8 models per configuration, closure 5 10 1 40; 1256 models):
+   candidate second tops (height 3, in R_3, ≠ m): v ∨ m' 920, u 824, F(v, u) 528, F(m', u) 392, a(v) 360, a(m') 216; none of them 72.
+   v ∨ m' = u in 1144; h(v ∨ m') = 3 in 1032, = 4 in 224 (non-graded lattices); v ∈ R_2 in 1024.
+   Proved on paper: at a drop (u ≠ m'), m ≰ u, v ≠ q, v ∥ m', and neither row q nor row m' has a cell at column v ∨ m'.
+-- sl_feed.py pureA (B-route and no pure-A column of height 2 at all): k = 2 'SAT': 171 smallest 11; k = 3 'SAT': 15 smallest 18;
+   pureAany (any route): 'SAT': 171 — the A-route lemma cannot always be applied to another column.
+-- colasc.py: ascS / asc2 at k = 3 also on closure 5 11 4 30: 'UNSAT': 102 (vac 'SAT': 102);
+   stage (the i-th ascent element lies in R_i): k = 2 'UNSAT': 207; k = 3 'SAT': 102 smallest 9 [closure 5 11 4 30], 'SAT': 47 [6 12 9 8] — refuted.

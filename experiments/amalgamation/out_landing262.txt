@@ -1,0 +1,11 @@
+== §34.3z²⁶² (exact; models replayed in Python; UNSAT = the claim holds). World W0, n1. Case (b) = hd1 dbad (d a bad atom).
+   corpus             lgE n1 (below F(⊥,u))   lamZ (case b)   lamF0 (case b)   lgPart (case b)
+   sweep 4 14         UNSAT 160               —               —                —   (no case-(b) lattice)
+   closure 5 11 5 40  SAT 22, min 13          SAT 22          SAT 22           UNSAT 40
+   closure 5 10 1 40  SAT 16, min 15          SAT 16          SAT 16           UNSAT 40
+   closure 5 10 2 40  —                       SAT 18          SAT 18           UNSAT 40
+   closure 5 10 3 40  —                       SAT 21          SAT 21           UNSAT 40
+   closure 5 11 4 30  —                       SAT 14          SAT 14           UNSAT 30
+   lgE: no good atom of R_1 below F(⊥, u), u the last element of height ≥ 3 on the row-d descent (λ(d) = F(d, u)).
+   lamZ: λ(d) is not an element of Z of height 2 above d.  lamF0: F(d, λ(d)) ≠ ⊥.
+   lgPart: no good atom q ≤ λ(d), q ≠ d, with d ⊔ q ∈ Z. Non-vacuous on exactly the case-(b) lattices (22, 16, 18, 21, 14).

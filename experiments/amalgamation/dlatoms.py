@@ -15,6 +15,10 @@ d = the last nonzero element of the ⊥-descent from ⊤; dep(x) = max{i : x ≤
   dlnotd   — a DL atom of R_1 that is not below d (goodness not required)
   lg / lgP — no good atom of R_1 below λ(d) / below F(d, λ(d)), λ(e) = the first element of height ≤ 2 on the row-e descent
              (SAT refutes LandGood / LandGood⁺, §34.3z²⁶¹)
+  lgE     — no good atom of R_1 below F(⊥, u), u = the last element of height ≥ 3 on the row-d descent (λ(d) = F(d, u))
+  lgPart  — no good atom q ≤ λ(d), q ≠ d, with d ⊔ q ∈ Z (use with hd1 dbad)
+  lamZ    — λ(d) is not an element of Z of height 2 above d (use with hd1 dbad)
+  lamF0   — F(d, λ(d)) ≠ ⊥ (use with hd1 dbad)
   lgB / lgPP — mutants: λ(⊥) in place of λ(d); one more descent step F(d, F(d, λ(d)))
   coP     — no atom q ≤ d ∧ λ(d) whose descent lands at λ(d) (SAT refutes CoLand; use with hd2)
   coC     — no good atom q ≤ d ∧ λ(d) (use with hd2)
@@ -30,7 +34,7 @@ from amalg_sat import Enc
 from tight_probe import lattices
 from rstages import stages, a_of
 FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad'}
-MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2'}
+MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart'}
 MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in FLG}; args = [a for a in sys.argv[2:] if a not in FLG]
 if MODE not in MODES: raise SystemExit('unknown mode')
 C = collections.Counter(); INFO = collections.Counter(); best = None
@@ -99,7 +103,7 @@ for L in lattices(args):
     if 'dbad' in FL:
         for z in range(n):
             if z != bot: add([-isd(z), -gd(z)])
-    LAND = ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2')
+    LAND = ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart')
     if MODE in LAND:
         low = [z for z in range(n) if h[z] <= 2]
         def on(e, z):
@@ -136,14 +140,41 @@ for L in lattices(args):
                     for v in range(n):
                         t = E.v('pddt', e, v, v2); E.iff_and(t, [isd(e), pd[v], f(e, v, v2)]); ls.append(t)
                 E.iff_or(o, ls); pdd[v2] = o
+        pe = {}
+        if MODE == 'lgE':
+            for v in range(n):
+                o = E.v('pe', v); ls = []
+                for e in range(n):
+                    if e == bot: continue
+                    for u in range(n):
+                        if h[u] < 3: continue
+                        for z in low:
+                            t = E.v('pet', e, u, z, v); E.iff_and(t, [isd(e), on(e, u), f(e, u, z), f(bot, u, v)]); ls.append(t)
+                E.iff_or(o, ls); pe[v] = o
         def region(p):
             o = E.v('reg', p)
             if MODE in ('lg', 'coP', 'coC', 'coM1'): E.iff_or(o, [lamd[z] for z in low if le[p][z]])
             elif MODE == 'lgP': E.iff_or(o, [pd[v] for v in range(n) if le[p][v]])
             elif MODE == 'lgPP': E.iff_or(o, [pdd[v] for v in range(n) if le[p][v]])
             elif MODE == 'lgB': E.iff_or(o, [on(bot, z) for z in low if le[p][z] and z != bot])
+            elif MODE == 'lgE': E.iff_or(o, [pe[v] for v in range(n) if le[p][v]])
+            elif MODE == 'lgPart':
+                t1 = E.v('lpr1', p); E.iff_or(t1, [lamd[z] for z in low if le[p][z]])
+                t2 = E.v('lpr2', p); E.iff_or(t2, [E.v('lprd', p, e) for e in range(n) if e != bot and e != p])
+                for e in range(n):
+                    if e != bot and e != p: E.iff_and(E.v('lprd', p, e), [isd(e), f(bot, jn[p][e], bot)])
+                E.iff_and(o, [t1, t2])
             return o
-        if MODE in ('lg', 'lgP', 'lgB', 'lgPP'):
+        if MODE in ('lamZ', 'lamF0'):
+            sel = []
+            for e in range(n):
+                if e == bot: continue
+                for z in low:
+                    t = E.v('lzs', e, z); sel.append(t); add([-t, isd(e)]); add([-t, lam(e, z)])
+                    if MODE == 'lamF0': add([-t, -f(e, z, bot)])
+                    elif le[e][z] and h[z] == 2: add([-t, -f(bot, z, bot)])
+            add(sel)
+        if MODE in ('lg', 'lgP', 'lgB', 'lgPP', 'lgE', 'lgPart'):
             for p in atoms: add([-r(1, p), -region(p), -gd(p)])
         elif MODE in ('coP', 'coC'):
             for q in atoms:
@@ -244,11 +275,17 @@ for L in lattices(args):
             elif MODE == 'lgP': reg = lambda p: le[p][F[d][ld]]
             elif MODE == 'lgPP': reg = lambda p: le[p][F[d][F[d][ld]]]
             elif MODE == 'lgB': reg = lambda p: le[p][lamf(bot)]
+            elif MODE == 'lgPart': reg = lambda p: p != d and le[p][ld] and F[bot][jn[p][d]] == bot
+            elif MODE == 'lgE':
+                dsd = desc(d); uu = dsd[dsd.index(ld) - 1]; ev = F[bot][uu]
+                reg = lambda p: le[p][ev]
             else: reg = lambda p: le[p][ld]
-            if MODE in ('lg', 'lgP', 'lgB', 'lgPP'): ok = ok and not any(reg(p) and good(p) for p in R1)
+            if MODE in ('lg', 'lgP', 'lgB', 'lgPP', 'lgE', 'lgPart'): ok = ok and not any(reg(p) and good(p) for p in R1)
             elif MODE == 'coP': ok = ok and not any(le[q][d] and reg(q) and lamf(q) == ld for q in R1)
             elif MODE == 'coC': ok = ok and not any(le[q][d] and reg(q) and good(q) for q in R1)
             elif MODE == 'coM1': ok = ok and any(le[p][d] and lamf(p) != ld for p in R1)
+            elif MODE == 'lamZ': ok = ok and not (le[d][ld] and h[ld] == 2 and F[bot][ld] == bot)
+            elif MODE == 'lamF0': ok = ok and F[d][ld] != bot
             elif MODE == 'coM2': ok = ok and any(le[p][d] and not le[p][F[p][ld]] for p in R1)
         if MODE == 'gdnotd': ok = ok and any(dl(p) and good(p) and not (d is not None and le[p][d]) for p in R1)
         elif MODE == 'dlnotd': ok = ok and any(dl(p) and not (d is not None and le[p][d]) for p in R1)

@@ -1,0 +1,9 @@
+== §34.3z²⁶⁴ (exact; every SAT model replayed in Python, replay guard fixed). Case (a) = hd2, with n1.
+-- BotTrack, endpoint (btz: SAT = no atom q <= d with q <= F(bot, z) and q <= F(bot, lambda(d)), z = last row-d descent element >= d)
+   and all steps (btall: SAT = no atom q <= d with q <= F(bot, y) for every row-d descent element y in [lambda(d), z]):
+   case (a): sweep 4 14  63 models | btz 0 | btall 0 | mutant M1step (column F(d, lambda(d))) 63      -> holds with power
+             closure 5 11 5 40  40 | 0 | 0 | 40;  closure 5 10 1 40  39 | 0 | 0 | 39;  closure 5 10 2 40  37 | 0 | 0 | 37
+-- Local step (refuted): btstep (SAT = some atom q <= d and some y with h(y) >= 3, q <= F(bot, y), q not <= F(bot, F(d, y))):
+   SAT 55/160 [sweep 4 14, smallest 7], 40/40 [closure 5 11 5 40, smallest 11]; btstepP (also F(d, y) <= y): the same counts.
+-- Re-verification (replay now on): lgE, lamZ, lamF0 (§34.3z²⁶²) and botupM1, botupM2 on all three branches (§34.3z²⁶³) reproduce
+   their earlier SAT counts exactly on closure 5 11 5 40 and closure 5 10 1 40, with no replay mismatch.

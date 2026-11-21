@@ -33,9 +33,9 @@ sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import lattices
 from rstages import stages, a_of
-LANDMODES = ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall')
+LANDMODES = ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall', 'btstep', 'btstepP')
 FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad', 'dgood'}
-MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall'}
+MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall', 'btstep', 'btstepP'}
 MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in FLG}; args = [a for a in sys.argv[2:] if a not in FLG]
 if MODE not in MODES: raise SystemExit('unknown mode')
 MEANING = {
@@ -69,6 +69,8 @@ MEANING = {
     'botupM2': 'SAT = no x in Z of height 2 with d not <= x has an atom q <= x, q <= F(bot, lambda(x)) (mutant M2anchor)',
     'btz': 'SAT = case (a): no atom q <= d with q <= F(bot, z) and q <= F(bot, lambda(d)), z = last row-d descent element >= d (refutes BotTrack endpoint)',
     'btall': 'SAT = case (a): no atom q <= d with q <= F(bot, y) for every row-d descent element y with lambda(d) <= y <= z (refutes BotTrack)',
+    'btstep': 'SAT = case (a): some atom q <= d and some y of height >= 3 with q <= F(bot, y) but q not <= F(bot, F(d, y)) (refutes the local BotTrack step)',
+    'btstepP': 'SAT = case (a): some atom q <= d, some y of height >= 3 with F(d, y) <= y and q <= F(bot, y) but q not <= F(bot, F(d, y))',
     'lamz1': 'SAT = d bad atom, row d lands at the index N of d on the bot-descent (b1), and lambda(d) not in Z (refutes LamZ1)',
 }
 C = collections.Counter(); INFO = collections.Counter(); best = None
@@ -202,6 +204,22 @@ for L in lattices(args):
                     if e != bot and e != p: E.iff_and(E.v('lprd', p, e), [isd(e), f(bot, jn[p][e], bot)])
                 E.iff_and(o, [t1, t2])
             return o
+        if MODE in ('btstep', 'btstepP'):
+            sel = []
+            for e in range(n):
+                if h[e] != 2: continue
+                for q in atoms:
+                    if not le[q][e]: continue
+                    for y in range(n):
+                        if h[y] < 3: continue
+                        for y2 in range(n):
+                            t = E.v('bst', e, q, y, y2); sel.append(t)
+                            add([-t, isd(e)]); add([-t, f(e, y, y2)])
+                            if MODE == 'btstepP' and not le[y2][y]: add([-t])
+                            add([-t] + [f(bot, y, v) for v in range(n) if le[q][v]])
+                            for v in range(n):
+                                if le[q][v]: add([-t, -f(bot, y2, v)])
+            add(sel)
         if MODE in ('btz', 'btall'):
             for e in range(n):
                 if h[e] != 2: continue
@@ -404,6 +422,8 @@ for L in lattices(args):
                         if le[q][val] and (MODE != 'botupL' or le[q][ld]): return True
                     return False
                 ok = ok and not any(holds_x(x) for x in range(n))
+            elif MODE in ('btstep', 'btstepP'):
+                ok = ok and h[d] == 2 and any(le[q][d] and h[y] >= 3 and (MODE == 'btstep' or le[F[d][y]][y]) and le[q][F[bot][y]] and not le[q][F[bot][F[d][y]]] for q in atoms for y in range(n))
             elif MODE in ('btz', 'btall'):
                 dsd = desc(d); zz = [y for y in dsd if le[d][y]][-1]
                 def okq(q):

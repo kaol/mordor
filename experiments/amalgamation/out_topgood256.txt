@@ -1,0 +1,15 @@
+== §34.3z²⁵⁶ (exact; models replayed in Python; UNSAT = the claim holds). One instance per lattice.
+-- topgood.py: stage k with R_k tight, ⊤ ∉ R_{k+1}, h(⊤) > k (no m). Flags: rkm1nt (R_{k−1} non-tight: the restart world), notight.
+   vac (models): k=2 closure 5 10 1 40: 40 (rkm1nt 40); sweep 4 14: 96, plus 64 empty, all at the last stage h(⊤) = k+1 (rkm1nt 82);
+                 k=3 closure 6 12 9 8: 8 (rkm1nt 8); closure 5 11 4 30: 23, plus 7 empty last-stage (rkm1nt 21); closure 6 12 1 80 rkm1nt: 78
+   topgood  (every top of T_k bad):          'UNSAT' on all of the above, with and without rkm1nt; sweep 4 16 rkm1nt 'UNSAT': 162;
+                                             closure 6 12 1 80 rkm1nt 'UNSAT': 80
+   mixedchk (DL pair with p bad):            'UNSAT' on all (the lemma `good_of_DL`)
+   mixed    (no DL pair, no A-entry below):  'UNSAT' on all
+   bdl      (no B-source DL pair, no A-entry below): 'UNSAT' on all
+   sharpness: topgood notight 'SAT': 30 / 'UNSAT': 10 [closure 5 10 1 40]; mixedchk notight 'SAT': 39 / 'UNSAT': 1
+-- colasc.py mode hs (every ascent element e < c in R_{h(e)}; c ∈ R_k, h(c) = k, F(c,c) ≤ c, pure-A unless noPA):
+   k=3: 'UNSAT' 47 [closure 6 12 9 8], 102 [closure 5 11 4 30] (also noPA); noPA 470 [closure 6 12 1 80]
+   k=4 [closure 7 14 4 8]: 'SAT': 35 of 35 (vac 35), smallest 24, with and without pure-A and with tK. Refuted.
+   Shape: ascent ⊥ → e → c with h(e) = 2 and e entering only at stage 3 (R_3 non-tight).
+   ascS at k=4 (sublemma S): 'UNSAT': 35.

@@ -142,6 +142,10 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁵¹: `good_of_noDrop` (no drop below `q` ⟹ `q` good).
 * §34.3z²⁵²: `FeedChain` (conjecture), **`singletonLower_of_feedChain`**.
 * §34.3z²⁵³: **`descChain_one_of_pureA`**, `feedChain_one_of_pureA` (FeedChain at level 1, A-route), `feeder_B_facts`.
+* §34.3z²⁵⁶: `IsGood`, `ic_of_good` (good ⟹ interval cell), **`topGood_succ`** (good tops propagate across a tight stage),
+  `RestartGood` (conjecture), `topGood_of_restartGood`, `tightIC_of_restartGood`, **`cutMaps_of_restartGood`**,
+  **`tightIC_succ_of_goodBase`**, `singletonLower_of_restartGood`, `singletonLower_of_feedChain'` (without w ∥ m), `DL`,
+  `dl_of_rowDesc`, `drop_DL`, **`good_of_DL`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -4664,5 +4668,191 @@ theorem feeder_B_facts {H : ℕ} (hn : NoChain α (H + 1)) {m m' : α} (hm'2 : h
   have h2 : b F m' = F (b F m') m := eq_of_le_of_height_ge hn hlo2 (by omega)
   have : b F m ≤ b F m' := b_le h2.symm.le
   exact hbmR (Rk_down 1 this hqR)
+
+/-! ### Good tops propagate; RestartGood (§34.3z²⁵⁶)
+
+A good top of a tight stage has an interval cell (`ic_of_good`), and goodness passes up across any tight stage
+(`topGood_succ`, from `descChain_of_good` and `good_of_descChain`). So the tight-stage interval cell, and with it Cut at
+edge-height `≤ H`, follows from **RestartGood**: a good top at every tight stage that follows a non-tight one
+(`cutMaps_of_restartGood`). This absorbs SingletonLower and the multi-top transfer. GoodBase gives TightIC at every
+non-final stage (`tightIC_succ_of_goodBase`). A DL certificate `(r, p)` makes `p` good with one tight stage
+(`good_of_DL`). -/
+
+/-- `p` is good: `p ≤ a p`, or the row-`p` descent from `⊤` meets `p`. -/
+def IsGood (F : α →o α →o α) (p : α) : Prop := p ≤ a F p ∨ ∃ i, (F p)^[i] (⊤ : α) = p
+
+/-- **A good element other than `⊤` has an interval cell.** -/
+theorem ic_of_good [WellFoundedLT α] {c : α} (hct : c ≠ ⊤) (hg : IsGood F c) :
+    ∃ y, c < y ∧ (F c y ≤ c ∨ y ≤ F c y) := by
+  rcases hg with hca | hmeet
+  · rcases eq_or_lt_of_le hca with he | hlt
+    · have hd : c ≤ F c c := by
+        have := row_a (F := F) c; rw [← he] at this; exact this.symm.le
+      exact upc_of_le_diag hd hct
+    · exact ⟨a F c, hlt, Or.inr (row_a c).symm.le⟩
+  · classical
+    have hk1' : (F c)^[Nat.find hmeet] (⊤ : α) = c := Nat.find_spec hmeet
+    have hk1pos : Nat.find hmeet ≠ 0 := by intro e; rw [e] at hk1'; exact hct hk1'.symm
+    obtain ⟨j, hj⟩ : ∃ j, Nat.find hmeet = j + 1 := ⟨Nat.find hmeet - 1, by omega⟩
+    have hFu : F c ((F c)^[j] (⊤ : α)) = c := by
+      rw [hj, Function.iterate_succ_apply'] at hk1'; exact hk1'
+    have hcu : c ≤ (F c)^[j] (⊤ : α) := by
+      have := rowIter_succ_le (F := F) (x := c) (s := ⊤) le_top j
+      rw [Function.iterate_succ_apply', hFu] at this
+      exact this
+    have hne : (F c)^[j] (⊤ : α) ≠ c := fun e => Nat.find_min hmeet (show j < Nat.find hmeet by omega) e
+    exact ⟨_, lt_of_le_of_ne hcu (Ne.symm hne), Or.inl hFu.le⟩
+
+/-- **Good tops propagate** across one tight stage. -/
+theorem topGood_succ {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {p : α} (hpR : p ∈ Rk F k) (hp : height H p = k) (hpt : p ≠ ⊤) (hg : IsGood F p) :
+    ∃ c ∈ Rk F (k + 1), height H c = k + 1 ∧ IsGood F c := by
+  obtain ⟨c, hc⟩ := descChain_of_good hn hk1 hpR hp hpt hg
+  exact ⟨c, hc.2.2.1, hc.2.2.2.1, good_of_descChain hn hk1 hc⟩
+
+/-- **RestartGood**: at a tight stage whose predecessor is not tight (and `⊤` not yet in the next stage), some top is
+good. -/
+def RestartGood (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k, (⊤ : α) ∉ Rk F (k + 2) → (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → ¬ (∀ z ∈ Rk F k, height H z ≤ k) →
+    ∃ p ∈ Rk F (k + 1), height H p = k + 1 ∧ IsGood F p
+
+/-- **TopGood from RestartGood**: every tight stage (with `⊤` not in the next) has a good top. -/
+theorem topGood_of_restartGood {H : ℕ} (hn : NoChain α (H + 1)) (hr : RestartGood F H) :
+    ∀ k, (⊤ : α) ∉ Rk F (k + 1) → (∀ z ∈ Rk F k, height H z ≤ k) →
+      ∃ p ∈ Rk F k, height H p = k ∧ IsGood F p
+  | 0, _, _ => ⟨⊥, show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl, height_bot_eq_zero, Or.inl bot_le⟩
+  | k + 1, htop, hall => by
+    by_cases hk : ∀ z ∈ Rk F k, height H z ≤ k
+    · obtain ⟨p, hpR, hp, hg⟩ :=
+        topGood_of_restartGood hn hr k (fun h => htop (Rk_mono (Nat.le_succ _) h)) hk
+      have hpt : p ≠ ⊤ := fun e => htop (Rk_mono (by omega) (e ▸ hpR))
+      exact topGood_succ hn hall hpR hp hpt hg
+    · exact hr k htop hall hk
+
+/-- **RestartGood gives TightIC**, hence (`tightUPC_of_tightIC`, `cutMaps_of_tightUPC`) the Cut Lemma at
+edge-height `≤ H`. -/
+theorem tightIC_of_restartGood [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hr : RestartGood F H) :
+    TightIC F H := by
+  intro k htop hall
+  obtain ⟨p, hpR, hp, hg⟩ := topGood_of_restartGood hn hr k htop hall
+  have hpt : p ≠ ⊤ := fun e => htop (Rk_mono (Nat.le_succ _) (e ▸ hpR))
+  exact ⟨p, hpR, hp, ic_of_good hpt hg⟩
+
+theorem cutMaps_of_restartGood [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hr : RestartGood F H) :
+    CutMaps F :=
+  cutMaps_of_tightUPC hn (tightUPC_of_tightIC (tightIC_of_restartGood hn hr))
+
+/-- **GoodBase gives the tight-stage interval cell** at every stage `k + 1` with `k + 2 < h(⊤)` (no other stage
+tightness, no uniqueness, no `w ∥ m`). -/
+theorem tightIC_succ_of_goodBase [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hgb : GoodBase F H) {k : ℕ}
+    (hall : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) (hH : k + 2 < height H (⊤ : α)) :
+    ∃ m ∈ Rk F (k + 1), height H m = k + 1 ∧ ∃ y, m < y ∧ (F m y ≤ m ∨ y ≤ F m y) := by
+  obtain ⟨p, hpR, hp, hg⟩ := hgb k hall hH
+  have hpt : p ≠ ⊤ := fun e => by rw [e] at hp; omega
+  obtain ⟨c, hcR, hc, hgc⟩ := topGood_succ hn hall hpR hp hpt hg
+  have hct : c ≠ ⊤ := fun e => by rw [e] at hc; omega
+  exact ⟨c, hcR, hc, ic_of_good hct hgc⟩
+
+/-- **RestartGood gives SingletonLower** (the unique top is the good one). -/
+theorem singletonLower_of_restartGood [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hr : RestartGood F H) :
+    SingletonLower F H := by
+  intro k htop hk hall m huniq hm hmk hnew m' hm' hm'k hlt hlo
+  obtain ⟨p, hpR, hp, hg⟩ := topGood_of_restartGood hn hr (k + 1) htop hall
+  have hpm : p = m := huniq p hpR hp
+  have hmt : m ≠ ⊤ := fun e => htop (Rk_mono (Nat.le_succ _) (e ▸ hm))
+  exact hpm ▸ ic_of_good (hpm ▸ hmt) hg
+
+/-- **FeedChain gives SingletonLower without `w ∥ m`**: the feeder is good, so the unique top is good. -/
+theorem singletonLower_of_feedChain' [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hfc : FeedChain F H) :
+    SingletonLower F H := by
+  intro k htop hk hall m huniq hm hmk hnew m' hm' hm'k hlt hlo
+  have hmt : m ≠ ⊤ := fun e => htop (Rk_mono (Nat.le_succ _) (e ▸ hm))
+  have hg' : IsGood F m' := by
+    rcases k with _ | j
+    · exact Or.inl ((show m' ≤ ⊥ from hm').trans bot_le)
+    obtain ⟨p, hc⟩ := hfc j htop hk hall m huniq hm hmk hnew m' hm' hm'k hlt hlo
+    exact good_of_descChain hn hk hc
+  obtain ⟨c, hcR, hc1, hgc⟩ := topGood_succ hn hall hm' hm'k (ne_top_of_lt hlt) hg'
+  have hcm : c = m := huniq c hcR hc1
+  exact hcm ▸ ic_of_good (hcm ▸ hmt) hgc
+
+
+/-- `DL r p`: every `y` with `y ≤ F r (p ⊔ y)` lies below `p` (the consequence of "p on the row-r descent" that the drop
+lemma uses). -/
+def DL (F : α →o α →o α) (r p : α) : Prop := ∀ y, y ≤ F r (p ⊔ y) → y ≤ p
+
+theorem dl_of_rowDesc {r p : α} {N : ℕ} (hN : (F r)^[N] (⊤ : α) = p) : DL F r p := fun _ hy => le_of_rowDesc hN hy
+
+/-- The drop lemma under `DL` (`drop_lv` with the descent replaced by `DL`). -/
+theorem drop_DL {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {r p : α} (hrR : r ∈ Rk F k) (hr : height H r = k) (hp : height H p = k + 1)
+    (hrFp : r ≤ F r p) (hdl : DL F r p) :
+    ∀ (n : ℕ) (y : α), height H y ≤ n → r ≤ y → ¬ p ≤ y → F r (p ⊔ y) ≤ y → y = r := by
+  have small : ∀ y : α, r ≤ y → y ≤ p → ¬ p ≤ y → y = r := by
+    intro y hry hyp hpy
+    have h1 := height_strictMono hn (lt_of_le_of_ne hyp (fun e => hpy (le_of_eq e.symm)))
+    exact (eq_of_le_of_height_ge hn hry (by omega)).symm
+  intro n
+  induction n with
+  | zero =>
+    intro y hy hry _ _
+    exact (eq_of_le_of_height_ge hn hry (by omega)).symm
+  | succ n ih =>
+    intro y hy hry hpy hF
+    have hry' : r ≤ F r (p ⊔ y) := hrFp.trans ((F r).mono le_sup_left)
+    by_cases he : F r (p ⊔ y) = y
+    · exact small y hry (hdl y he.symm.le) hpy
+    · have hlt : F r (p ⊔ y) < y := lt_of_le_of_ne hF he
+      have hpy' : ¬ p ≤ F r (p ⊔ y) := fun h => hpy (h.trans hF)
+      have hF' : F r (p ⊔ F r (p ⊔ y)) ≤ F r (p ⊔ y) := (F r).mono (sup_le_sup_left hF p)
+      have h0 := ih (F r (p ⊔ y)) (by have := height_strictMono hn hlt; omega) hry' hpy' hF'
+      have hR : p ⊔ y ∈ Rk F (k + 1) :=
+        mem_succ_of_cell (k := k) (m := r) (x := r) hrR le_rfl (Or.inl h0.le)
+      have hyp : y ≤ p := by
+        by_contra hyp
+        have hlt2 : p < p ⊔ y := lt_of_le_of_ne le_sup_left fun e => hyp (e ▸ le_sup_right)
+        have := hk1 _ hR
+        have := height_strictMono hn hlt2
+        omega
+      exact small y hry hyp hpy
+
+/-- **A DL certificate makes the top good** (with `R_{k+1}` tight). -/
+theorem good_of_DL {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {r p : α} (hrR : r ∈ Rk F k) (hr : height H r = k) (hp : height H p = k + 1) (hrp : r ≤ p)
+    (hrFp : r ≤ F r p) (hdl : DL F r p) : IsGood F p := by
+  by_cases hpa : p < a F p
+  · exact Or.inl hpa.le
+  right
+  have hs : F p (⊤ : α) ≤ ⊤ := le_top
+  obtain ⟨M, hM⟩ := exists_iter_fix_mono hn (F p).mono H (height_le (⊤ : α)) hs
+  by_cases hall : ∀ i ≤ M, p ≤ (F p)^[i] (⊤ : α)
+  · have hcu : p ≤ (F p)^[M] (⊤ : α) := hall M le_rfl
+    have hua : (F p)^[M] (⊤ : α) ≤ a F p := le_a hM.symm.le
+    have hac : a F p = p := by
+      by_contra hne; exact hpa (lt_of_le_of_ne (hcu.trans hua) (Ne.symm hne))
+    exact ⟨M, le_antisymm (hua.trans hac.le) hcu⟩
+  · push_neg at hall
+    classical
+    have hk0 : Nat.find hall ≤ M ∧ ¬ p ≤ (F p)^[Nat.find hall] (⊤ : α) := Nat.find_spec hall
+    have hk0pos : Nat.find hall ≠ 0 := by
+      intro e; rw [e] at hk0; exact hk0.2 le_top
+    obtain ⟨j, hj⟩ : ∃ j, Nat.find hall = j + 1 := ⟨Nat.find hall - 1, by omega⟩
+    have hcz : p ≤ (F p)^[j] (⊤ : α) := by
+      by_contra hcz
+      exact Nat.find_min hall (show j < Nat.find hall by omega) ⟨by omega, hcz⟩
+    have hnext : (F p)^[j + 1] (⊤ : α) = F p ((F p)^[j] (⊤ : α)) := Function.iterate_succ_apply' _ _ _
+    have hdrop : ¬ p ≤ F p ((F p)^[j] (⊤ : α)) := by rw [← hnext, ← hj]; exact hk0.2
+    have hyF : F r ((F p)^[j] (⊤ : α)) ≤ F p ((F p)^[j] (⊤ : α)) := (F.mono hrp) _
+    have hFz : F p ((F p)^[j] (⊤ : α)) ≤ (F p)^[j] (⊤ : α) := by rw [← hnext]; exact rowIter_succ_le hs j
+    have hcy : ¬ p ≤ F r ((F p)^[j] (⊤ : α)) := fun h => hdrop (h.trans hyF)
+    have hpy : r ≤ F r ((F p)^[j] (⊤ : α)) := hrFp.trans ((F r).mono hcz)
+    have hsup : p ⊔ F r ((F p)^[j] (⊤ : α)) ≤ (F p)^[j] (⊤ : α) := sup_le hcz (hyF.trans hFz)
+    have hy0 := drop_DL hn hk1 hrR hr hp hrFp hdl H (F r ((F p)^[j] (⊤ : α))) (height_le _) hpy hcy ((F r).mono hsup)
+    have hzR : (F p)^[j] (⊤ : α) ∈ Rk F (k + 1) :=
+      mem_succ_of_cell (k := k) (m := r) (x := r) hrR le_rfl (Or.inl hy0.le)
+    have hpz : p < (F p)^[j] (⊤ : α) ∨ p = (F p)^[j] (⊤ : α) := lt_or_eq_of_le hcz
+    rcases hpz with hlt | he
+    · have := hk1 _ hzR; have := height_strictMono hn hlt; omega
+    · exact ⟨j, he.symm⟩
 
 end Mordor.OrbitHeight

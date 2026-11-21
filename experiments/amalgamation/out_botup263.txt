@@ -1,0 +1,11 @@
+== §34.3z²⁶³ (exact, worker's encoding in dlatoms.py; the briefer's independent encoding probe9.py agreed on every run it made).
+   World W0 with n1. Branches: (a) hd2, (b) hd1 dbad, (g) hd1 dgood. Report line: branch: hypothesis models | candidate failures |
+   mutant failures (M1step / M2anchor). One instance per lattice.
+-- BotUp (SAT = no x in Z with d <= x has an atom q <= x with q <= F(bot, lambda(x))):
+   closure 5 11 5 40   (a) 40 | 0 | 40/40   (b) 22 | 0 | 22/22   (g) 40 | 0 | 40/40   -> holds with power on all three
+   closure 5 10 1 40   (a) 39 | 0 | 39/39   (b) 16 | 0 | 16/16   (g) 40 | 0 | 40/40   -> holds with power on all three
+   closure 5 10 2 40   (a) 37 | 0 | 37/37   (b) 18 | 0 | 18/18   (g) 40 | 0 | 40/40   -> holds with power on all three
+   sweep 4 14          (a) 63 | 0 | 63/63   (b) 0 (silent)        (g) 124 | 0 | 124/124
+-- BotUpL (q also <= lambda(d)), branch (b): 0 failures on 22, 16, 18 models (mutants as BotUp: 22, 16, 18).
+-- CellUp (q <= F(q, lambda(x))): (a) 0 failures on 40, 39, 37 models; (b) 0 failures on 22, 16, 18.
+-- LamZ1 (on (b1): lambda(d) in Z), branch (b): 0 failures on 22, 16, 18 lattices; silent inside (b1) (no (b1) mutant run).

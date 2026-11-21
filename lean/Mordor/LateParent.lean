@@ -156,7 +156,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶⁰: **`overshadowed_of_bad_botEnd`** (a bad end atom of the ⊥-descent has an element of R_1 above it).
 * §34.3z²⁶¹: **`good_of_desc_cover`** (one cell at a covering element of its own descent makes an atom good).
 * §34.3z²⁶³: `dl_of_le_row`, **`good_of_dominating_desc`**, `good_of_dominating_desc_bot` (INH: one cell certifies an atom below a
-  dominating row's height-2 descent element), `iter_row_mono`, **`landing_late_a`**, **`landing_late_b`** (row d lands late).
+  dominating row's height-2 descent element), `iter_row_mono`, **`landing_late_a`**, **`landing_late_b`** (row d lands late). `Cert1`, **`goodAtom1_of_cert1`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -5236,5 +5236,21 @@ theorem landing_late_b {H : ℕ} (hn : NoChain α (H + 1))
       rw [Function.iterate_succ_apply', ← hc, hcz'] at h1
       exact h1.trans ((F.mono bot_le) z)
     exact hbad (good_of_desc_cover hn (i := i + 1) rfl hdz hzh hcell)
+
+/-- **Cert1** (§34.3z²⁶³): a row `x` of the zero fibre whose descent passes a height-2 element `p`, and an atom `q ≤ x` below
+`F ⊥ p`. (BotUp asks this with `d ≤ x` and `p = λ(x)`.) -/
+def Cert1 (F : α →o α →o α) (H : ℕ) : Prop :=
+  a F ⊥ = ⊥ → (∀ z ∈ Rk F 2, height H z ≤ 2) → (⊤ : α) ∉ Rk F 2 → ¬ (∀ z ∈ Rk F 1, height H z ≤ 1) →
+    ∃ x q : α, ∃ i : ℕ, F ⊥ x = ⊥ ∧ q ≤ x ∧ height H q = 1 ∧ height H ((F x)^[i] (⊤ : α)) = 2 ∧
+      q ≤ F ⊥ ((F x)^[i] (⊤ : α))
+
+/-- **Cert1 gives GoodAtom1** (by `good_of_dominating_desc_bot`). -/
+theorem goodAtom1_of_cert1 {H : ℕ} (hn : NoChain α (H + 1)) (hc : Cert1 F H) : GoodAtom1 F H := by
+  intro ha hall htop hnt
+  obtain ⟨x, q, i, hx0, hqx, hq1, hp2, hcell⟩ := hc ha hall htop hnt
+  have hq0 : F ⊥ q = ⊥ := le_bot_iff.1 (((F ⊥).mono hqx).trans hx0.le)
+  have hqR : q ∈ Rk F 1 :=
+    mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl (Or.inl hq0.le)
+  exact ⟨q, hqR, hq1, good_of_dominating_desc_bot hn hall rfl hp2 hqR hq1 hqx hcell⟩
 
 end Mordor.OrbitHeight

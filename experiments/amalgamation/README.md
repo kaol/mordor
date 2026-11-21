@@ -127,3 +127,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁶⁰: `dlatoms.py` mode allbadbelowd and flags hd1/hd2/dbad. Output `out_dlatoms260.txt`.
 - §34.3z²⁶¹: `dlatoms.py` modes lg/lgP/lgB/lgPP and coP/coC/coM1/coM2 (landings). Output `out_landing261.txt`.
 - §34.3z²⁶²: `dlatoms.py` modes lgE, lamZ, lamF0, lgPart. Output `out_landing262.txt`.
+- §34.3z²⁶³: `dlatoms.py` modes botup/botupL/cellup/botupM1/botupM2/lamz1 and flag dgood; every mode prints its quantifier and SAT meaning. Output `out_botup263.txt`.

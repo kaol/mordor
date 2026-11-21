@@ -33,9 +33,10 @@ sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import lattices
 from rstages import stages, a_of
-LANDMODES = ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall', 'btstep', 'btstepP', 'btstepT')
-FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad', 'dgood', 'xT', 'xQ', 'xP', 'xD', 'xC', 'cov', 'pre', 'lo2'}
-MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall', 'btstep', 'btstepP', 'btstepT'}
+LANDMODES = ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall', 'btstep', 'btstepP', 'btstepT', 'btbase', 'rowdrop', 'lamnz')
+FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad', 'dgood', 'xT', 'xQ', 'xP', 'xD', 'xC', 'cov', 'pre', 'lo2', 'hyp', 'dump', 'N2', 'mz', 'N3', 'xbd', 'xad'}
+DUMP = []
+MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall', 'btstep', 'btstepP', 'btstepT', 'btbase', 'rowdrop', 'lamnz'}
 MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in FLG}; args = [a for a in sys.argv[2:] if a not in FLG]
 if MODE not in MODES: raise SystemExit('unknown mode')
 MEANING = {
@@ -71,7 +72,10 @@ MEANING = {
     'btall': 'SAT = case (a): no atom q <= d with q <= F(bot, y) for every row-d descent element y with lambda(d) <= y <= z (refutes BotTrack)',
     'btstep': 'SAT = case (a): some atom q <= d and some y of height >= 3 with q <= F(bot, y) but q not <= F(bot, F(d, y)) (refutes the local BotTrack step)',
     'btstepP': 'SAT = case (a): some atom q <= d, some y of height >= 3 with F(d, y) <= y and q <= F(bot, y) but q not <= F(bot, F(d, y))',
-    'btstepT': '[flags: xC drops q <= F(bot, y); cov tests q <= F(bot, y) itself; pre tests F(bot, d v F(bot, y)) <= F(bot, y)] SAT = case (a): z = last row-d descent element >= d, t = F(d, z), q an atom <= d ^ F(bot, z); some y of height >= 3 with y <= t, d not <= y, q <= y, q <= F(bot, y), F(d, y) <= y, but q not <= F(bot, F(d, y))',
+    'lamnz': '[hyp asserts no claim] SAT = the landing lambda(d) of row d lies in Z, i.e. F(bot, lambda(d)) = bot (refutes LamNZ)',
+    'rowdrop': '[flags: N2 / N3 require N >= 2 / 3; hyp asserts no claim; not2 drops R_2 tightness (mutant); xbd adds F(d, s) not <= d for s = F(bot, (F d)^(N-1) top); xad (with xbd) adds s not <= F(d, s)] SAT = case (a): d = (F bot)^N top, and F(bot, (F d)^(N-1) top) not <= d (refutes RowDrop)',
+    'btbase': '[flags: N2 requires d != F(bot, top); mz tests F(bot, z) instead; hyp asserts no claim] SAT = case (a): z = last row-d descent element >= d, t = F(d, z), and F(bot, t) not <= d (refutes BaseD)',
+    'btstepT': '[flags: xC drops q <= F(bot, y); cov tests q <= F(bot, y) itself; pre tests F(bot, d v F(bot, y)) <= F(bot, y); hyp asserts no claim (SAT = the hypothesis has a model)] SAT = case (a): z = last row-d descent element >= d, t = F(d, z), q an atom <= d ^ F(bot, z); some y of height >= 3 with y <= t, d not <= y, q <= y, q <= F(bot, y), F(d, y) <= y, but q not <= F(bot, F(d, y))',
     'lamz1': 'SAT = d bad atom, row d lands at the index N of d on the bot-descent (b1), and lambda(d) not in Z (refutes LamZ1)',
 }
 C = collections.Counter(); INFO = collections.Counter(); best = None
@@ -219,11 +223,14 @@ for L in lattices(args):
                             if not (le[q][e] and le[q][tt]): continue
                             for y in range(n):
                                 if h[y] < (2 if 'lo2' in FL else 3) or y == q or ('xD' not in FL and le[e][y]) or ('xT' not in FL and not le[y][tt]) or not le[q][y]: continue
-                                for y2 in range(n):
-                                    if 'xP' not in FL and not le[y2][y]: continue
+                                # pre with xP: y2 is unconstrained, so one selector per y (F total makes OR_y2 f(e,y,y2) true)
+                                for y2 in ([None] if ('pre' in FL and 'xP' in FL) else range(n)):
+                                    if y2 is not None and 'xP' not in FL and not le[y2][y]: continue
                                     o = E.v('bsT', e, z, tt, q, y, y2); sel.append(o)
-                                    add([-o, isd(e)]); add([-o, zdv]); add([-o, f(e, z, tt)]); add([-o, f(e, y, y2)])
+                                    add([-o, isd(e)]); add([-o, zdv]); add([-o, f(e, z, tt)])
+                                    if y2 is not None: add([-o, f(e, y, y2)])
                                     if 'xQ' not in FL: add([-o] + [f(bot, z, v) for v in range(n) if le[q][v]])
+                                    if 'hyp' in FL: continue
                                     if 'pre' in FL:
                                         # violation witness: F(bot, y) = w and F(bot, e v w) = w2 with w2 not <= w
                                         vs = []
@@ -240,6 +247,49 @@ for L in lattices(args):
                                     if 'xC' not in FL: add([-o] + [f(bot, y, v) for v in range(n) if le[q][v]])
                                     for v in range(n):
                                         if le[q][v]: add([-o, -f(bot, y2, v)])
+            add(sel)
+        if MODE == 'btbase':
+            sel = []
+            for e in range(n):
+                if h[e] != 2: continue
+                onv = {z: on(e, z) for z in range(n)}
+                if 'N2' in FL: add([-isd(e), -f(bot, top, e)])
+                for z in range(n):
+                    if not le[e][z]: continue
+                    zdv = E.v('tzd', e, z); E.iff_and(zdv, [onv[z]] + [-onv[w] for w in range(n) if le[e][w] and le[w][z] and w != z])
+                    for tt in range(n):
+                        o = E.v('bbs', e, z, tt); sel.append(o)
+                        add([-o, isd(e)]); add([-o, zdv]); add([-o, f(e, z, tt)])
+                        if 'hyp' in FL: continue
+                        col = z if 'mz' in FL else tt
+                        add([-o] + [f(bot, col, v) for v in range(n) if not le[v][e]])
+            add(sel)
+        if MODE == 'lamnz':
+            sel = []
+            for z in low:
+                o = E.v('lnz', z); sel.append(o); add([-o, lamd[z]])
+                if 'hyp' not in FL: add([-o, f(bot, z, bot)])
+            add(sel)
+        if MODE == 'rowdrop':
+            sel = []
+            for e in range(n):
+                if h[e] != 2: continue
+                De = descvars(e)
+                if 'N2' in FL or 'N3' in FL: add([-isd(e), -Db(1, e)])
+                if 'N3' in FL: add([-isd(e), -Db(2, e)])
+                for i in range(NO):
+                    for w in range(n):
+                        o = E.v('rds', e, i, w); sel.append(o)
+                        add([-o, isd(e)]); add([-o, Db(i + 1, e)]); add([-o, De(i, w)])
+                        if 'hyp' in FL: continue
+                        if 'xbd' in FL:   # s = F(bot, w) with s not <= e and F(e, s) not <= e
+                            for sv in range(n):
+                                if le[sv][e]: continue
+                                o2 = E.v('rdx', e, i, w, sv); add([-o2, f(bot, w, sv)]); add([-o2] + [f(e, sv, x) for x in range(n) if not le[x][e]])
+                                if 'xad' in FL: add([-o2] + [f(e, sv, x) for x in range(n) if not le[sv][x]])   # s not <= F(e, s)
+                            add([-o] + [E.v('rdx', e, i, w, sv) for sv in range(n) if not le[sv][e]])
+                            continue
+                        add([-o] + [f(bot, w, v) for v in range(n) if not le[v][e]])
             add(sel)
         if MODE in ('btstep', 'btstepP'):
             sel = []
@@ -431,7 +481,7 @@ for L in lattices(args):
         if 'dbad' in FL: ok = ok and d is not None and not good(d)
         if 'dgood' in FL: ok = ok and d is not None and good(d)
         if MODE in LANDMODES:
-            lamf = lambda e: next(z for z in desc(e) if h[z] <= 2)
+            lamf = lambda e: next((z for z in desc(e) if h[z] <= 2), None)   # None only without R_2 tightness (not2)
             ld = lamf(d)
             if MODE == 'lg': reg = lambda p: le[p][ld]
             elif MODE == 'lgP': reg = lambda p: le[p][F[d][ld]]
@@ -462,7 +512,18 @@ for L in lattices(args):
             elif MODE == 'btstepT':
                 dsd = desc(d); zz = [y for y in dsd if le[d][y]][-1]; tt = F[d][zz]
                 ok = ok and h[d] == 2 and any(le[q][d] and ('xQ' in FL or le[q][F[bot][zz]]) and h[y] >= (2 if 'lo2' in FL else 3) and y != q and ('xT' in FL or le[y][tt]) and ('xD' in FL or not le[d][y]) and le[q][y]
-                                              and (('pre' in FL and not le[F[bot][L.join[d][F[bot][y]]]][F[bot][y]]) or ('cov' in FL and not le[q][F[bot][y]]) or ('cov' not in FL and 'pre' not in FL and ('xC' in FL or le[q][F[bot][y]]) and ('xP' in FL or le[F[d][y]][y]) and not le[q][F[bot][F[d][y]]])) for q in atoms for y in range(n))
+                                              and ('hyp' in FL or ('pre' in FL and not le[F[bot][L.join[d][F[bot][y]]]][F[bot][y]]) or ('cov' in FL and not le[q][F[bot][y]]) or ('cov' not in FL and 'pre' not in FL and ('xC' in FL or le[q][F[bot][y]]) and ('xP' in FL or le[F[d][y]][y]) and not le[q][F[bot][F[d][y]]])) for q in atoms for y in range(n))
+            elif MODE == 'lamnz':
+                ok = ok and ld is not None and ('hyp' in FL or F[bot][ld] == bot)
+            elif MODE == 'rowdrop':
+                Nd = bd.index(d); vv = top
+                for _ in range(Nd - 1): vv = F[d][vv]
+                ok = ok and h[d] == 2 and ('N2' not in FL or Nd >= 2) and ('N3' not in FL or Nd >= 3) and ('hyp' in FL or not le[F[bot][vv]][d])
+                if 'xbd' in FL: ok = ok and not le[F[d][F[bot][vv]]][d]
+                if 'xad' in FL: ok = ok and not le[F[bot][vv]][F[d][F[bot][vv]]]
+            elif MODE == 'btbase':
+                dsd = desc(d); zz = [y for y in dsd if le[d][y]][-1]; tt = F[d][zz]
+                ok = ok and h[d] == 2 and ('N2' not in FL or F[bot][top] != d) and ('hyp' in FL or not le[F[bot][zz if 'mz' in FL else tt]][d])
             elif MODE in ('btstep', 'btstepP'):
                 ok = ok and h[d] == 2 and any(le[q][d] and h[y] >= 3 and (MODE == 'btstep' or le[F[d][y]][y]) and le[q][F[bot][y]] and not le[q][F[bot][F[d][y]]] for q in atoms for y in range(n))
             elif MODE in ('btz', 'btall'):
@@ -498,10 +559,12 @@ for L in lattices(args):
                 return dep(q) > dep(p) if MODE == 'exch4' else dep(p) > dep(q)
             ok = ok and any(dl(p) and not good(p) and not any(q != p and par(p, q) for q in R1) for p in R1)
         assert ok, 'SAT/Python mismatch'
+        if 'dump' in FL: DUMP.append(dict(sets=L.S, F=F))
         C['SAT'] += 1; INFO[f'h{L.height}'] += 1
         if best is None or n < best[0]: best = (n, dict(sets=L.S, F=F))
     else: C['UNSAT'] += 1
     E.S.delete()
 print(MODE, '|', MEANING.get(MODE, '?'), '|', ' '.join(sorted(FL)), args, dict(C), 'smallest', best[0] if best else None, dict(INFO))
+if DUMP: json.dump(DUMP, open(f'dump_{MODE}{"".join("_" + x for x in sorted(FL))}.json', 'w'))
 if best and MODE != 'vac':
     json.dump(best[1], open(f'dlatoms_{MODE}{"".join("_" + x for x in sorted(FL))}_min{best[0]}.json', 'w'))

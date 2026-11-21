@@ -159,6 +159,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   dominating row's height-2 descent element), `iter_row_mono`, **`landing_late_a`**, **`landing_late_b`** (row d lands late). `Cert1`, **`goodAtom1_of_cert1`**.
 * §34.3z²⁶⁵: **`botTrack_of_step`** (BotTrack along row d's descent from the step lemma StepT).
 * §34.3z²⁶⁶: **`cov_of_preDrop`** (Cov from PreDrop, by `drop_below_top` and uniqueness of the atom below d ∧ t).
+* §34.3z²⁶⁷: `eq_atom_of_le_meet`, **`cov_of_baseD`**, `preDrop_of_baseD` (Cov, PreDrop and the landing step from BaseD: F(⊥, t) ≤ d),
+  `lastIdx_ge`, **`baseD_of_rowDrop`** (BaseD from RowDrop: F(⊥, (F d)^(N−1) ⊤) ≤ d).
 -/
 
 namespace Mordor.OrbitHeight
@@ -5294,5 +5296,49 @@ theorem cov_of_preDrop {H N : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk
   have hlt : q < q ⊔ q' := lt_of_le_of_ne le_sup_left fun e => hnle (e ▸ le_sup_right)
   have hjd : q ⊔ q' = d := eq_of_le_of_height_ge hn (sup_le hqd hq'd.le) (by have := height_strictMono hn hlt; omega)
   exact hdt (hjd ▸ sup_le hqt (hq'y.trans hyt))
+
+
+/-! ### §34.3z²⁶⁷ BaseD: Cov and PreDrop from one cell, F(⊥, t) ≤ d
+
+Case (a): `d` of height 2, `t` with `d ≰ t`, `q` an atom below `d ⊓ t`. If `F(⊥, t) ≤ d`, then every `y ≤ t` with
+`F(⊥, y) ≠ ⊥` and `F(⊥, y) ≤ t` has `F(⊥, y) = q`; in particular Cov holds at `y`, and PreDrop holds whenever
+`F(⊥, d) = ⊥`. -/
+
+/-- Two atoms below a height-2 element `d` whose join is not below `t`: a nonzero `w ≤ d ⊓ t` is the atom `q`. -/
+theorem eq_atom_of_le_meet {H : ℕ} (hn : NoChain α (H + 1)) {d t q w : α} (hd : height H d = 2) (hdt : ¬ d ≤ t)
+    (hq : height H q = 1) (hqd : q ≤ d) (hqt : q ≤ t) (hw0 : w ≠ ⊥) (hwd : w ≤ d) (hwt : w ≤ t) : w = q := by
+  by_contra hne
+  have hwd' : w < d := lt_of_le_of_ne hwd fun e => hdt (e ▸ hwt)
+  have h1 : 1 ≤ height H w := by
+    have := height_strictMono hn (bot_lt_iff_ne_bot.2 hw0); rw [height_bot_eq_zero] at this; omega
+  have h2 := height_strictMono hn hwd'
+  have hnle : ¬ w ≤ q := fun h => hne (eq_of_le_of_height_ge hn h (by omega))
+  have hlt : q < q ⊔ w := lt_of_le_of_ne le_sup_left fun e => hnle (e ▸ le_sup_right)
+  have hjd : q ⊔ w = d := eq_of_le_of_height_ge hn (sup_le hqd hwd) (by have := height_strictMono hn hlt; omega)
+  exact hdt (hjd ▸ sup_le hqt hwt)
+
+/-- **Cov ⟸ BaseD.** -/
+theorem cov_of_baseD {H : ℕ} (hn : NoChain α (H + 1)) {d t q y : α} (hd : height H d = 2) (hdt : ¬ d ≤ t)
+    (hq : height H q = 1) (hqd : q ≤ d) (hqt : q ≤ t) (hbase : F ⊥ t ≤ d) (hyt : y ≤ t) (hy0 : F ⊥ y ≠ ⊥)
+    (hFyt : F ⊥ y ≤ t) : F ⊥ y = q :=
+  eq_atom_of_le_meet hn hd hdt hq hqd hqt hy0 (((F ⊥).mono hyt).trans hbase) hFyt
+
+/-- **PreDrop ⟸ BaseD**, given `F(⊥, d) = ⊥`. -/
+theorem preDrop_of_baseD {d t y : α} (hd0 : F ⊥ d = ⊥) (hbase : F ⊥ t ≤ d) (hyt : y ≤ t) :
+    F ⊥ (d ⊔ F ⊥ y) ≤ F ⊥ y := by
+  rw [sup_eq_left.2 (((F ⊥).mono hyt).trans hbase), hd0]; exact bot_le
+
+
+/-- Row `d`'s descent stays above `d` through index `N + 1` when `d = (F ⊥)^[N + 1] ⊤`; so the last index `m` with
+`d ≤ (F d)^[m] ⊤` is at least `N + 1`. -/
+theorem lastIdx_ge {d : α} {N m : ℕ} (hN : (F ⊥)^[N + 1] (⊤ : α) = d)
+    (hlast : ∀ j, d ≤ (F d)^[j] (⊤ : α) → j ≤ m) : N + 1 ≤ m :=
+  hlast (N + 1) (hN ▸ iter_row_mono bot_le (N + 1))
+
+/-- **BaseD ⟸ RowDrop.** If `F(⊥, (F d)^[N] ⊤) ≤ d` (RowDrop, `d` at index `N + 1` of the `⊥`-descent), then
+`F(⊥, (F d)^[j] ⊤) ≤ d` for every `j ≥ N`; in particular at `z` (index `m ≥ N + 1`) and at `t = F(d, z)`. -/
+theorem baseD_of_rowDrop {d : α} {N j : ℕ} (hrow : F ⊥ ((F d)^[N] (⊤ : α)) ≤ d) (hj : N ≤ j) :
+    F ⊥ ((F d)^[j] (⊤ : α)) ≤ d :=
+  ((F ⊥).mono (iter_antitone_of_le (F d).monotone le_top hj)).trans hrow
 
 end Mordor.OrbitHeight

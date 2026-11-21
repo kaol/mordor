@@ -1,0 +1,44 @@
+== §34.3z²⁶⁷ (exact; SAT models replayed in Python). Case (a) = hd2, with n1 (implied by hd2). The ⊥-descent u_k = (F bot)^k top
+   has d = u_N, F(bot, d) = bot. Row d's descent v_k = (F d)^k top; z = the last v_m >= d, t = F(d, z) = v_(m+1).
+   Flags: hyp = hypothesis only (SAT = it has a model); N2 / N3 = N >= 2 / 3; not2 = R_2 tightness dropped (mutant).
+
+-- btbase  (BaseD; SAT = F(bot, t) not <= d)
+   hyp:       sweep 4 14 SAT 63, smallest 6;   closure 5 11 5 40 SAT 40, smallest 11
+   BaseD:     sweep 4 14 UNSAT 160;            closure 5 11 5 40 UNSAT 40
+   N2 hyp:    sweep 4 14 UNSAT 160 (no model with N >= 2);  closure 5 11 5 40 SAT 34, smallest 13
+   N2 BaseD:  closure 5 11 5 40 UNSAT 40
+   mz (F(bot, z) <= d in place of F(bot, t) <= d): sweep 4 14 UNSAT 160; closure 5 11 5 40 UNSAT 40, with and without N2.
+      Not a mutant: it is a STRONGER true statement (it follows from RowDrop, as z = v_m with m >= N).
+   mutant not2 (R_2 tightness dropped): closure 5 11 5 40 SAT 36, smallest 12 (same with N2);
+      => BaseD holds with power on closure 5 11 5 40 on branch N = 2 (branch N = 1 is trivial: F(bot, t) <= F(bot, top) = d);
+         sweep 4 14 has only N = 1 and is silent.
+
+-- rowdrop  (RowDrop; SAT = F(bot, v_(N-1)) not <= d)
+   sweep 4 14: hyp SAT 63 (all N = 1, where RowDrop is F(bot, top) = d, trivial); N2 hyp UNSAT 160 (no model).
+   closure      | N2 hyp (models) | N2 RowDrop | N2 not2 (mutant) | N3 hyp | N3 RowDrop
+   5 11 5 40    | SAT 34, min 13  | UNSAT 40   | SAT 36, min 12   | UNSAT  | UNSAT
+   5 10 1 40    | SAT 25, min 11  | UNSAT 40   | SAT 30, min 11   | UNSAT  | UNSAT
+   5 10 2 40    | SAT 23, min 11  | UNSAT 40   | SAT 27, min 11   | UNSAT  | UNSAT
+   5 10 3 40    | SAT 24, min 13  | UNSAT 40   | SAT 25, min 13   | UNSAT  | UNSAT
+   5 11 4 30    | SAT 19, min 10  | UNSAT 30   | SAT 23, min 10   | UNSAT  | UNSAT
+   (N2 not2 hyp on 5 11 5 40: SAT 40.)
+   => RowDrop holds with power on branch N = 2 on all five closure corpora. Branch N >= 3 has no model on any corpus (silent).
+   Smallest mutant model: dlatoms_rowdrop_N2_hd2_n1_not2_min10.json.
+
+-- How the mutant fails (the four smallest not2 models, one per size 10..13): s = F(bot, v_1) has height 3,
+   d < s <= u_1, F(bot, s) = d and F(d, s) = d, so b(s) <= d is in Z = R_1 and s enters R_2 at height 3.
+   With R_2 tight that route is closed. It is NOT the only route: see 'Routes' below (s <= a(d) also occurs).
+
+-- Sampled census of the PreDrop hypothesis models (one per lattice; suggestive only):
+   every high y in [q, t] has F(bot, y) = q, F(bot, t) = q, so d v F(bot, y) = d and PreDrop is F(bot, d) = bot.
+
+-- Routes (rowdrop N2 not2 with extra flags; SAT = RowDrop fails without tightness, with the named route also forbidden):
+   xbd (F(d, s) not <= d, so b(s) is not <= d):      closure 5 11 5 40 SAT 36, min 12;  5 11 4 30 SAT 23, min 10
+   xbd xad (also s not <= F(d, s)):                  closure 5 11 5 40 SAT 27, min 13;  5 11 4 30 SAT 16, min 10;  5 10 1 40 SAT 21, min 12
+   smallest xbd xad model (|L| = 10): N = 3, a(d) = v_1 of height 4, s <= a(d), s of height 3.
+   Files: dlatoms_rowdrop_N2_hd2_n1_not2_xbd_min10.json, dlatoms_rowdrop_N2_hd2_n1_not2_xad_xbd_min10.json.
+
+-- lamnz  (LamNZ; SAT = lambda(d) in Z), closure 5 11 5 40:
+   case (a) hd2: UNSAT 40 (hypothesis models: btbase hyp SAT 40); mutant not2: SAT 40, min 11
+   case (b) hd1: SAT 22, min 13 (dlatoms_lamnz_hd1_n1_min13.json): LamNZ is specific to case (a)
+   sweep 4 14: hd2 UNSAT 160 (hyp SAT 63), hd1 UNSAT 160 (hyp SAT 124): no power.

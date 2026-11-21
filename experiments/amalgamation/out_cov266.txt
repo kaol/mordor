@@ -7,4 +7,11 @@
 -- xC (StepT without the cell hypothesis q <= F(bot, y)): sweep 4 14 UNSAT 160; closure 5 11 5 40 UNSAT 40
 -- pre  (PreDrop; SAT = some y with h(y) >= 3, q <= y <= t and F(bot, d v F(bot, y)) not <= F(bot, y)):
    sweep 4 14 UNSAT 160; closure 5 11 5 40 UNSAT 40
-   pre lo2: sweep 4 14 UNSAT 160 (closure pending);  mutant pre xT: pending
+   pre lo2 (h(y) >= 2, y != q): sweep 4 14 UNSAT 160; closure 5 11 5 40 UNSAT 40
+   mutant pre xT (y <= t dropped): closure 5 11 5 40 SAT 32, smallest 13
+   vacuity (flag hyp = the hypothesis alone; SAT = it has a model):
+     hyp:     sweep 4 14 UNSAT 160 (NO MODEL: sweep 4 14 is silent for pre and cov); closure 5 11 5 40 SAT 36, smallest 12
+     hyp lo2: closure 5 11 5 40 SAT 40, smallest 11
+   => PreDrop holds with power on closure 5 11 5 40 only.
+   (Encoding note: with pre and xP the y2 loop is collapsed to one selector per y; F is total, so OR_y2 f(e, y, y2) is true.
+    The collapsed encoding reproduces sweep 4 14 UNSAT 160; the uncollapsed one ran out of memory on the closure corpus.)

@@ -3,6 +3,7 @@ SingletonLower configuration at k (without its conclusion): ⊤ ∉ R_{k+2}; R_k
 element of R_{k+1}; m ∈ R_{k+1} \\ R_k; a feeder m' ∈ R_k, h(m') = k, m' < m, F(m', m) ≤ m'.
   feed  — no p ∈ R_{k−1} of height k − 1 with p ≤ m', p ≤ F(p, m') and m' on the row-p descent from ⊤ (SAT = feeder is not a chain top)
   any   — no descent chain at level k − 1 at all
+  bgood   — B-route with q = b(m') not good (q ≰ a(q), row-q descent misses q)
   bqu     — B-route with a drop column u of the row-q descent outside R_{k+1}
   bq / bqm — B-route (q = b(m') ∈ R_{k−1}) with m' / m off the row-q descent from ⊤
   asc1 / asc2 — pure A-route with b(m') ≠ m' / with the column-m' ascent from ⊥ entering m' from an x ∉ R_{k−1} or of height ≠ k − 1
@@ -22,7 +23,7 @@ from tight_probe import helpers, lattices
 from rstages import stages
 FL = {a for a in sys.argv[3:] if a in ('r1nt', 'nouniq', 'notop', 'nofeed', 'no3', 'nonew', 'no2')}   # drop: uniqueness / ⊤ ∉ R_{k+2} / F(m', m) ≤ m' / R_{k+1} tight / m ∉ R_k
 MODE = sys.argv[1]; k = int(sys.argv[2]); R1NT = 'r1nt' in FL; args = [a for a in sys.argv[3:] if a not in FL]
-MODES = {'feed', 'any', 'vac', 'feedlow', 'feedfix', 'feedm', 'uniq', 'uniqvac', 'gen', 'lowdesc', 'bm', 'bmh', 'aout', 'U', 'asc1', 'asc2', 'ascS', 'bq', 'bqm', 'bqu'}
+MODES = {'feed', 'any', 'vac', 'feedlow', 'feedfix', 'feedm', 'uniq', 'uniqvac', 'gen', 'lowdesc', 'bm', 'bmh', 'aout', 'U', 'asc1', 'asc2', 'ascS', 'bq', 'bqm', 'bqu', 'bgood'}
 if MODE not in MODES: raise SystemExit('unknown mode ' + MODE)
 C = collections.Counter(); best = None
 for L in lattices(args):
@@ -51,6 +52,16 @@ for L in lattices(args):
                         for v in range(n): o = E.v('DDs', p, i, v, z); E.iff_and(o, [D(i, v), f(p, v, z)]); lits.append(o)
                         E.iff_or(D(i + 1, z), lits)
                 return D
+            if MODE == 'bgood':                                 # B-route with q = b(m') not good (q ≰ a(q) and the row-q descent from ⊤ misses q)
+                sel = []
+                for q in range(n):
+                    if not le[q][mp] or q == mp: continue
+                    D = descvars(q); o = E.v('bg', q); sel.append(o)
+                    add([-o, E.v('B', mp, q)]); add([-o, r(k - 1, q)])
+                    for i in range(NO + 1): add([-o, -D(i, q)])
+                    for g in range(n):
+                        if le[q][g]: add([-o, -E.v('A', q, g)])
+                add(sel)
             if MODE == 'bqu':                                   # B-route with a drop column u of the row-q descent (u ≥ m', u ≠ m', F(q, u) ≱ m') and u ∉ R_{k+1}
                 sel = []
                 for q in range(n):
@@ -160,7 +171,11 @@ for L in lattices(args):
                     while v not in seen: seen.append(v); v = F[p][v]
                     return seen
                 ok = inR(m, k + 1) and ('nonew' in FL or not inR(m, k)) and inR(mp, k) and ('nofeed' in FL or le[F[mp][m]][mp]) and ('notop' in FL or not inR(top, k + 2))
-                if MODE == 'bqu':
+                if MODE == 'bgood':
+                    from rstages import b_of, a_of
+                    q = b_of(L, F, mp)
+                    ok = ok and q != mp and inR(q, k - 1) and q not in desc(q) and not le[q][a_of(L, F, q)]
+                elif MODE == 'bqu':
                     from rstages import b_of
                     q = b_of(L, F, mp)
                     ok = ok and q != mp and inR(q, k - 1) and any(le[mp][u] and u != mp and not le[mp][F[q][u]] and not inR(u, k + 1) for u in desc(q))

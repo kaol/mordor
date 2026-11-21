@@ -1,0 +1,10 @@
+== §34.3z²⁵⁴ the B-route descent claim bq (exact; SAT models replayed in Python; UNSAT = claim holds)
+   bq_core.py closure 5 10 1 40 (uniqueness of m as one assumption per height-3 z ≠ m; R_2, R_3 tight; B-route; m' off the row-q descent):
+     vacuous 139; cores: size 1: 59, 2: 44, 3: 32, 4: 10, 5: 6, 6: 6
+     near-models (all uniqueness instances but one): the excluded z lies above v = F(q, u) in almost every case (u = drop column);
+     it enters R_3 through v's row (a(v) ≥ z or a lower cell of row v) most often, also through a(m') or another height-2 row;
+     frequent shapes: z = u (> m', > v) via low(v) or a(v); z > x0 (the element before q on its descent, often x0 = v).
+   sl_feed.py bgood (B-route with q = b(m') not good): k = 2 'UNSAT': 296; without uniqueness 'SAT': 139 smallest 12;
+     also without ⊤ ∉ R_4, R_3 tightness and m ∉ R_2: 'SAT': 206 — needs uniqueness, like bq.
+   Sampled (uniqueness dropped, R_2, R_3 tight; ≤ 6 models per configuration, 942 models): drop column h(u) = 3 in 690, u ∈ R_3 in 618;
+     v ∈ R_2 in 768; F(v, u) = v in 450.

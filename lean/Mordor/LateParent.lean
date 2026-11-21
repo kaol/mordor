@@ -153,6 +153,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`backGood1_one_of_goodAtom1`**.
 * §34.3z²⁵⁹: `iter_antitone_of_le`, **`botDesc_of_dl_max`** (a DL atom maximal in the zero fibre lies on the
   ⊥-descent), `eq_of_botDesc_zero`, **`dl_atom_unique_of_tight`** (with R_1 tight the zero fibre has one DL atom).
+* §34.3z²⁶⁰: **`overshadowed_of_bad_botEnd`** (a bad end atom of the ⊥-descent has an element of R_1 above it).
 -/
 
 namespace Mordor.OrbitHeight
@@ -5122,5 +5123,20 @@ theorem dl_atom_unique_of_tight {H : ℕ} (hn : NoChain α (H + 1)) (ht1 : ∀ z
   obtain ⟨M', hM'⟩ := botDesc_of_dl_max hn hq'1 hq'0 hdl' (hmax hq'1)
   have hne : ∀ {p : α}, height H p = 1 → p ≠ ⊥ := fun hp e => by rw [e, height_bot_eq_zero] at hp; omega
   exact eq_of_botDesc_zero hM hM' hq0 hq'0 (hne hq1) (hne hq'1)
+
+/-- **A bad end atom of the ⊥-descent is overshadowed** (§34.3z²⁶⁰): if the ⊥-descent ends at an atom `d` (`F ⊥ d = ⊥`) and
+`d` is bad, some element of `R_1` lies strictly above `d` (`good_of_coverDL` with `r = ⊥`). -/
+theorem overshadowed_of_bad_botEnd {H : ℕ} (hn : NoChain α (H + 1)) {d : α} {N : ℕ} (hN : (F ⊥)^[N] (⊤ : α) = d)
+    (hd1 : height H d = 1) (hbad : ¬ IsGood F d) : ∃ z ∈ Rk F 1, d < z := by
+  by_contra hno
+  push_neg at hno
+  have hdb : (⊥ : α) < d := bot_lt_iff_ne_bot.2 fun e => by rw [e, height_bot_eq_zero] at hd1; omega
+  have hcov : (⊥ : α) ⋖ d := ⟨hdb, fun c hc hcd => by
+    have h1 := height_strictMono hn hc; have h2 := height_strictMono hn hcd
+    rw [height_bot_eq_zero] at h1; omega⟩
+  have hmax : ∀ z ∈ Rk F 1, d ≤ z → z = d := fun z hz hdz =>
+    (eq_or_lt_of_le hdz).elim (fun e => e.symm) fun hlt => absurd hlt (hno z hz)
+  exact hbad (good_of_coverDL hn (k := 0) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) hcov bot_le
+    (dl_of_rowDesc hN) hmax).1
 
 end Mordor.OrbitHeight

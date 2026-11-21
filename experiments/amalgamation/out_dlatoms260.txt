@@ -1,0 +1,10 @@
+== §34.3z²⁶⁰ (exact; models replayed in Python; UNSAT = the claim holds). World W0 with n1 (R_1 non-tight). Flags hd1/hd2 fix h(d).
+   corpus             vac hd2   allbadbelowd hd2   vac hd1 dbad   allbadbelowd hd1 (= d bad)   goodatom hd1 dbad   dpart hd1 dbad
+   sweep 4 14         63        UNSAT 160          0 (vacuous)    UNSAT 160                    UNSAT 160           UNSAT 160
+   closure 5 10 1 40  39        UNSAT 40           16             SAT 16, min 15               UNSAT 40            UNSAT 40
+   closure 5 11 5 40  40        UNSAT 40           22             SAT 22, min 13               UNSAT 40            UNSAT 40
+   closure 5 10 2 40  —         UNSAT 40           —              SAT 18, min 13               —                   —
+   Note: `badbelowd` (some atom below d is bad) is SAT where it is not vacuous; it is not the statement "every atom below d is bad",
+   which is `allbadbelowd`.
+-- Samples (inline census, 1698 models with h(d) = 2): exactly one atom below d is good; its certificate is a(q) in 243 and a descent
+   predecessor other than d in 1455; F(q, d) = q for no good q with d on its descent.

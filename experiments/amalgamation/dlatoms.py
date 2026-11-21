@@ -13,16 +13,18 @@ d = the last nonzero element of the ⊥-descent from ⊤; dep(x) = max{i : x ≤
   exch4R   — mutant: 'deeper' reversed;  exchA — mutant: partner must be good
   gdnotd   — a good DL atom of R_1 that is not below d (SAT refutes 'the good DL atom lies below d')
   dlnotd   — a DL atom of R_1 that is not below d (goodness not required)
+  allbadbelowd — every atom below d is bad (SAT refutes 'some atom below d is good')
   badbelowd — some atom below d is bad (mutant-like control for gdnotd)
-Flags: n1 (R_1 non-tight), r1t (R_1 tight), not2 (drop R_2 tightness: mutant), h3 (only h(⊤) = 3), h4 (only h(⊤) ≥ 4).
+Flags: n1 (R_1 non-tight), r1t (R_1 tight), not2 (drop R_2 tightness: mutant), h3 (only h(⊤) = 3), h4 (only h(⊤) ≥ 4),
+       hd1 / hd2 (h(d) = 1 / 2), dbad (d is bad).
   python3 dlatoms.py MODE (sweep N MAX | closure K M SEED CNT) [flags]"""
 import sys, collections, json
 sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import lattices
 from rstages import stages, a_of
-FLG = {'n1', 'r1t', 'not2', 'h3', 'h4'}
-MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd'}
+FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad'}
+MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd'}
 MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in FLG}; args = [a for a in sys.argv[2:] if a not in FLG]
 if MODE not in MODES: raise SystemExit('unknown mode')
 C = collections.Counter(); INFO = collections.Counter(); best = None
@@ -86,6 +88,14 @@ for L in lattices(args):
                 t = E.v('deepi', q, p, i); E.iff_and(t, [Pd(q, i), -Pd(p, i)]); ls.append(t)
             E.iff_or(o, ls)
         return o
+    if 'hd1' in FL: add([isd(z) for z in range(n) if h[z] == 1])
+    if 'hd2' in FL: add([isd(z) for z in range(n) if h[z] == 2])
+    if 'dbad' in FL:
+        for z in range(n):
+            if z != bot: add([-isd(z), -gd(z)])
+    if MODE == 'allbadbelowd':
+        for p in atoms: add([-belowd(p), -gd(p)])
+        add([belowd(p) for p in atoms])
     if MODE in ('gdnotd', 'badbelowd', 'dlnotd'):
         sel = []
         for p in atoms:
@@ -150,8 +160,12 @@ for L in lattices(args):
         if 'not2' not in FL: ok = ok and all(h[z] <= 2 for z in range(n) if inR(z, 2))
         if 'n1' in FL: ok = ok and any(h[z] > 1 for z in range(n) if inR(z, 1))
         if 'r1t' in FL: ok = ok and all(h[z] <= 1 for z in range(n) if inR(z, 1))
+        if 'hd1' in FL: ok = ok and d is not None and h[d] == 1
+        if 'hd2' in FL: ok = ok and d is not None and h[d] == 2
+        if 'dbad' in FL: ok = ok and d is not None and not good(d)
         if MODE == 'gdnotd': ok = ok and any(dl(p) and good(p) and not (d is not None and le[p][d]) for p in R1)
         elif MODE == 'dlnotd': ok = ok and any(dl(p) and not (d is not None and le[p][d]) for p in R1)
+        elif MODE == 'allbadbelowd': ok = ok and d is not None and not any(le[p][d] and good(p) for p in atoms)
         elif MODE == 'badbelowd': ok = ok and any(d is not None and le[p][d] and not good(p) for p in atoms)
         if MODE == 'baddl': ok = ok and any(dl(p) and not good(p) for p in R1)
         elif MODE == 'goodatom': ok = ok and not any(good(p) for p in R1)

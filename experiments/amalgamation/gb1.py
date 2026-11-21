@@ -53,14 +53,65 @@ for L in lattices(args):
             if h[z] == 2:
                 for p in atoms:
                     if le[p][z]: add([-isd[z], -good[p]])
-    elif MODE in ('one', 'one2'):                                # exactly one atom of R_1 good, R_1 non-tight (for inspection)
+    elif MODE in ('D1', 'D2', 'D3', 'D3all'):                          # h(d) = 2; z = a drop column of the row-d descent (z ≥ d, F(d, z) ≱ d);
+        add([isd[z] for z in range(n) if h[z] == 2])     # D1: some atom q < d with q ≤ F(⊥, z) is not good; D2: no atom q < d lies below F(⊥, z)
+        sel = []
+        for e in range(n):
+            if h[e] != 2: continue
+            W = descvars(e)
+            for z in range(n):
+                if not le[e][z]: continue
+                for v in range(n):
+                    qs = [q for q in atoms if le[q][e] and le[q][v]]
+                    if MODE in ('D3', 'D3all'):                  # t = F(d, z) not post-fixed in row q [D3all: drop z need not be ... (same)]
+                        for q in qs:
+                            for t in range(n):
+                                for w in range(n):
+                                    if le[t][w]: continue
+                                    s_ = E.v('d3', e, z, v, q, t, w); sel.append(s_)
+                                    add([-s_, isd[e]]); add([-s_, f(bot, z, v)]); add([-s_, f(e, z, t)]); add([-s_, f(q, t, w)])
+                                    add([-s_] + [W(i, z) for i in range(NO + 1)])
+                                    for w2 in range(n):
+                                        if le[e][w2]: add([-s_, -f(e, z, w2)])
+                    elif MODE == 'D1':
+                        for q in qs:
+                            s_ = E.v('d1', e, z, v, q); sel.append(s_)
+                            add([-s_, isd[e]]); add([-s_, f(bot, z, v)]); add([-s_, -good[q]]); add([-s_] + [W(i, z) for i in range(NO + 1)])
+                            for w in range(n):
+                                if le[e][w]: add([-s_, -f(e, z, w)])
+                    else:
+                        if qs: continue
+                        s_ = E.v('d2', e, z, v); sel.append(s_)
+                        add([-s_, isd[e]]); add([-s_, f(bot, z, v)]); add([-s_] + [W(i, z) for i in range(NO + 1)])
+                        for w in range(n):
+                            if le[e][w]: add([-s_, -f(e, z, w)])
+        add(sel)
+    elif MODE in ('T1', 'T1n'):                        # some e ∈ R_1 of height 2 with no good atom below it
+        sel = []
+        for e in range(n):
+            if h[e] != 2: continue
+            s_ = E.v('t1', e); sel.append(s_); add([-s_, r(1, e)])
+            for q in atoms:
+                if le[q][e]: add([-s_, -good[q]])
+        add(sel)
+    elif MODE in ('C12', 'C1', 'C12n', 'C1n'):         # no atom p ∈ R_1 with p ≤ F(p, p), and [C12] the ⊥-descent atom (if any) is not good
+        for p in atoms:
+            for v in range(n):
+                if le[p][v]: add([-r(1, p), -f(p, p, v)])
+            if MODE.startswith('C12'):
+                for i in range(NO + 1): add([-E.v('DD', bot, i, p), -good[p]])
+    elif MODE in ('one', 'one2', 'hard'):                                # exactly one atom of R_1 good, R_1 non-tight (for inspection)
         add([r(1, z) for z in range(n) if h[z] > 1])
         gs = []
         for p in atoms: o = E.v('g1', p); E.iff_and(o, [r(1, p), good[p]]); gs.append(o)
         add(gs)
         for i in range(len(gs)):
             for j in range(i + 1, len(gs)): add([-gs[i], -gs[j]])
-        if MODE == 'one2':                                # and the ⊥-descent from ⊤ misses every atom
+        if MODE == 'hard':                                # no self-fixed atom of R_1 (the unique good atom meets its own descent)
+            for p in atoms:
+                for v in range(n):
+                    if le[p][v]: add([-r(1, p), -f(p, p, v)])
+        if MODE in ('one2', 'hard'):                                # and the ⊥-descent from ⊤ misses every atom
             for p in atoms:
                 for i in range(NO + 1): add([-E.v('DD', bot, i, p)])
     elif MODE in ('Q3', 'Q3n', 'Q4', 'Q4n'):          # an atom p ∈ R_1 with drop column z (z ≥ p on the row-p descent, F(p, z) ≱ p) and no good atom of R_1 below F(⊥, z) [Q3] / below F(p, z) [Q4]
@@ -143,7 +194,17 @@ for L in lattices(args):
         ok = (MODE.endswith('n') or a_of(L, F, bot) == bot) and all(h[z] <= 2 for z in range(n) if st[z] is not None and st[z] <= 2)
         if MODE == 'datom': ok = ok and h[d] == 1 and not gd(d)
         elif MODE == 'dtwo': ok = ok and h[d] == 2 and not any(gd(p) for p in atoms if le[p][d])
-        elif MODE in ('one', 'one2'): ok = ok and sum(1 for p in atoms if st[p] is not None and st[p] <= 1 and gd(p)) == 1
+        elif MODE in ('D1', 'D2', 'D3', 'D3all'):
+            dd = desc(d); drops = [z for z in dd if le[d][z] and not le[d][F[d][z]]]
+            if MODE == 'D1': ok = ok and h[d] == 2 and any(le[q][d] and le[q][F[bot][z]] and not gd(q) for z in drops for q in atoms)
+            elif MODE.startswith('D3'): ok = ok and h[d] == 2 and any(le[q][d] and le[q][F[bot][z]] and not le[F[d][z]][F[q][F[d][z]]] for z in drops for q in atoms)
+            else: ok = ok and h[d] == 2 and any(not any(le[q][d] and le[q][F[bot][z]] for q in atoms) for z in drops)
+        elif MODE.startswith('T1'):
+            ok = ok and any(h[e] == 2 and st[e] is not None and st[e] <= 1 and not any(le[q][e] and gd(q) for q in atoms) for e in range(n))
+        elif MODE.startswith('C1'):
+            inR1 = lambda q: st[q] is not None and st[q] <= 1
+            ok = ok and not any(inR1(p) and le[p][F[p][p]] for p in atoms) and (not MODE.startswith('C12') or not any(p in bd and gd(p) for p in atoms))
+        elif MODE in ('one', 'one2', 'hard'): ok = ok and (MODE != 'hard' or not any(st[p] is not None and st[p] <= 1 and le[p][F[p][p]] for p in atoms)) and sum(1 for p in atoms if st[p] is not None and st[p] <= 1 and gd(p)) == 1
         elif MODE[:2] in ('Q3', 'Q4'):
             inR1 = lambda q: st[q] is not None and st[q] <= 1
             ok = ok and any(inR1(p) and le[p][z] and z in desc(p) and not le[p][F[p][z]] and F[bot][z] != bot and not any(le[q][F[bot if MODE[1] == '3' else p][z]] and inR1(q) and gd(q) for q in atoms) for p in atoms for z in range(n))

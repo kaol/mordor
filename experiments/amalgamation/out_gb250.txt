@@ -1,0 +1,13 @@
+== §34.3z²⁵⁰ gb1.py (R_2 tight only, h(⊤) ≥ 4, a(⊥) = ⊥ unless 'n'; exact; models replayed in Python; UNSAT = the claim holds)
+   C12 (no atom p ∈ R_1 with p ≤ F(p, p), and the ⊥-descent atom, if any, not good): 'SAT': 63, 'UNSAT': 33 smallest 6 [sweep 4 14];
+        'SAT': 39, 'UNSAT': 1 smallest 11 [closure 5 10 1 40]; same counts without a(⊥) = ⊥ (C12n)
+   hard (exactly one good atom, R_1 non-tight, ⊥-descent missing every atom, no self-fixed atom): 'SAT': 63 smallest 6 [sweep]; 'SAT': 39 smallest 11 [closure]
+        (gb1_hard_min6.json: the single atom p is good by p ≤ a(p))
+   T1 (some e ∈ R_1 of height 2 has no good atom below it): 'SAT': 73, 'UNSAT': 23 smallest 7 [sweep]; 'SAT': 40 smallest 10 [closure 5 10 1 40];
+        'SAT': 40 smallest 9 [closure 5 11 4 40]; T1n: 'SAT': 40
+   With h(d) = 2 and z a drop column of the row-d descent from ⊤ (z ≥ d, F(d, z) ≱ d):
+   D2 (no atom q < d lies below F(⊥, z)):     'UNSAT': 96 [sweep 4 14]; 'UNSAT': 40 [closure 5 10 1 40]     — proved (drop_below_top + not_good_of_ahead)
+   D1 (some atom q < d below F(⊥, z) is not good): 'UNSAT': 96; 'UNSAT': 40; 'UNSAT': 40 [closure 5 11 4 40]  — open
+   D3 (t = F(d, z) not post-fixed in row q for such q): 'SAT': 63 smallest 6 [sweep]; 'SAT': 39, 'UNSAT': 1 smallest 11 [closure]
+        (gb1_D3_min6.json: q = {0} is good by its descent meeting q, not by q ≤ a(q))
+-- sampled models (biased; hints only): q ≤ a(q), z on the row-q descent, F(q, z) = F(d, z) in 80/80 samples.

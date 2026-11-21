@@ -137,6 +137,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `minLevel_of_goodBase`, **`singletonLower_of_goodBase`**.
 * §34.3z²⁴⁸: `good_of_full` (GoodBase's conclusion under full tightness).
 * §34.3z²⁴⁹: `minLevel_top_new` (MinLevel certificate tops are new at their stage).
+* §34.3z²⁵⁰: **`not_good_of_ahead`** (ahead-of-schedule elements are bad), **`drop_below_top`** (the drop lemma below a
+  high top).
 -/
 
 namespace Mordor.OrbitHeight
@@ -4462,5 +4464,75 @@ theorem minLevel_top_new {H k : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ R
     · exact mem_succ_of_cell (k := k) hcR le_rfl (Or.inr hup)
   have := hk y hyR
   omega
+
+/-! ### Ahead elements are bad; the drop lemma below a high top (§34.3z²⁵⁰) -/
+
+/-- **Ahead-of-schedule elements are never good.** With `R_{j+1}` tight, an element `x ∈ R_j` with `h(x) ≥ j + 1`,
+`x ≠ ⊤`, has neither `x ≤ a x` nor a row-`x` descent from `⊤` through `x`. Either would put an element of height
+`> h(x)` into `R_{j+1}`: `a x` if `x < a x`, and otherwise the element just before `x` on the descent. -/
+theorem not_good_of_ahead {H j : ℕ} (hn : NoChain α (H + 1)) (hk : ∀ z ∈ Rk F (j + 1), height H z ≤ j + 1)
+    {x : α} (hxR : x ∈ Rk F j) (hx : j + 1 ≤ height H x) (hxt : x ≠ ⊤) :
+    ¬ (x ≤ a F x ∨ ∃ i, (F x)^[i] (⊤ : α) = x) := by
+  have meet_false : ¬ ∃ i, (F x)^[i] (⊤ : α) = x := by
+    intro hmeet
+    classical
+    have hk1' : (F x)^[Nat.find hmeet] (⊤ : α) = x := Nat.find_spec hmeet
+    have hk1pos : Nat.find hmeet ≠ 0 := by intro e; rw [e] at hk1'; exact hxt hk1'.symm
+    obtain ⟨i, hi⟩ : ∃ i, Nat.find hmeet = i + 1 := ⟨Nat.find hmeet - 1, by omega⟩
+    have hFu : F x ((F x)^[i] (⊤ : α)) = x := by
+      rw [hi, Function.iterate_succ_apply'] at hk1'; exact hk1'
+    have hxu : x ≤ (F x)^[i] (⊤ : α) := by
+      have := rowIter_succ_le (F := F) (x := x) (s := ⊤) le_top i
+      rw [Function.iterate_succ_apply', hFu] at this
+      exact this
+    have hne : (F x)^[i] (⊤ : α) ≠ x := fun e => Nat.find_min hmeet (show i < Nat.find hmeet by omega) e
+    have huR : (F x)^[i] (⊤ : α) ∈ Rk F (j + 1) :=
+      mem_succ_of_cell (k := j) (m := x) (x := x) hxR le_rfl (Or.inl hFu.le)
+    have := hk _ huR
+    have := height_strictMono hn (lt_of_le_of_ne hxu (Ne.symm hne))
+    omega
+  rintro (hxa | hmeet)
+  · rcases eq_or_lt_of_le hxa with he | hlt
+    · obtain ⟨M, hM⟩ := exists_iter_fix_mono hn (F x).mono H (height_le (⊤ : α)) le_top
+      have hlim : (F x)^[M] (⊤ : α) = a F x := le_antisymm (le_a hM.symm.le) (a_le_iter le_top M)
+      exact meet_false ⟨M, hlim.trans he.symm⟩
+    · have := hk _ (mem_succ_of_a hxR le_rfl)
+      have := height_strictMono hn hlt
+      omega
+  · exact meet_false hmeet
+
+/-- **The drop lemma below a high top.** Let `c` lie on the `⊥`-descent from `⊤`, and let every element of `R_1` have
+height `≤ h(c)`. If `c ≰ y`, `F ⊥ (c ⊔ y) ≤ y` and `y ≠ ⊥`, then some `q ≠ ⊥` with `q < c` lies below `y`. For an atom
+`c` this is impossible, which recovers `drop_bot`. For `h(c) = 2` with `R_2` tight, it gives an atom below `y`
+(§34.3z²⁵⁰, case h(d) = 2 of GoodBase(1)). -/
+theorem drop_below_top {H : ℕ} (hn : NoChain α (H + 1)) {c : α} {N : ℕ} (hN : (F ⊥)^[N] (⊤ : α) = c)
+    (hk1 : ∀ z ∈ Rk F 1, height H z ≤ height H c) :
+    ∀ (n : ℕ) (y : α), height H y ≤ n → ¬ c ≤ y → F ⊥ (c ⊔ y) ≤ y → y ≠ ⊥ → ∃ q, q ≠ ⊥ ∧ q ≤ y ∧ q < c := by
+  have small : ∀ y : α, y ≤ c → ¬ c ≤ y → y ≠ ⊥ → ∃ q, q ≠ ⊥ ∧ q ≤ y ∧ q < c := fun y hyc hcy hyb =>
+    ⟨y, hyb, le_rfl, lt_of_le_of_ne hyc (fun e => hcy (le_of_eq e.symm))⟩
+  intro n
+  induction n with
+  | zero =>
+    intro y hy _ _ hyb
+    exact absurd (height_strictMono hn (bot_lt_iff_ne_bot.2 hyb)) (by omega)
+  | succ n ih =>
+    intro y hy hcy hF hyb
+    by_cases he : F ⊥ (c ⊔ y) = y
+    · exact small y (le_of_botDesc hN he.symm.le) hcy hyb
+    · have hlt : F ⊥ (c ⊔ y) < y := lt_of_le_of_ne hF he
+      by_cases hb : F ⊥ (c ⊔ y) = ⊥
+      · have hR : c ⊔ y ∈ Rk F 1 :=
+          mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl (Or.inl hb.le)
+        have hyc : y ≤ c := by
+          by_contra hyc
+          have := hk1 _ hR
+          have := height_strictMono hn (lt_of_le_of_ne le_sup_left fun e => hyc (le_of_le_of_eq le_sup_right e.symm))
+          omega
+        exact small y hyc hcy hyb
+      · have hcy' : ¬ c ≤ F ⊥ (c ⊔ y) := fun h => hcy (h.trans hF)
+        have hF' : F ⊥ (c ⊔ F ⊥ (c ⊔ y)) ≤ F ⊥ (c ⊔ y) := (F ⊥).mono (sup_le_sup_left hF c)
+        obtain ⟨q, hq, hqy, hqc⟩ :=
+          ih (F ⊥ (c ⊔ y)) (by have := height_strictMono hn hlt; omega) hcy' hF' hb
+        exact ⟨q, hq, hqy.trans hF, hqc⟩
 
 end Mordor.OrbitHeight

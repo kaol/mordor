@@ -34,7 +34,7 @@ from amalg_sat import Enc
 from tight_probe import lattices
 from rstages import stages, a_of
 LANDMODES = ('lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall', 'btstep', 'btstepP', 'btstepT')
-FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad', 'dgood', 'xT', 'xQ', 'xP', 'xD'}
+FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad', 'dgood', 'xT', 'xQ', 'xP', 'xD', 'xC', 'cov', 'pre'}
 MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart', 'botup', 'botupL', 'cellup', 'botupM1', 'botupM2', 'lamz1', 'btz', 'btall', 'btstep', 'btstepP', 'btstepT'}
 MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in FLG}; args = [a for a in sys.argv[2:] if a not in FLG]
 if MODE not in MODES: raise SystemExit('unknown mode')
@@ -71,7 +71,7 @@ MEANING = {
     'btall': 'SAT = case (a): no atom q <= d with q <= F(bot, y) for every row-d descent element y with lambda(d) <= y <= z (refutes BotTrack)',
     'btstep': 'SAT = case (a): some atom q <= d and some y of height >= 3 with q <= F(bot, y) but q not <= F(bot, F(d, y)) (refutes the local BotTrack step)',
     'btstepP': 'SAT = case (a): some atom q <= d, some y of height >= 3 with F(d, y) <= y and q <= F(bot, y) but q not <= F(bot, F(d, y))',
-    'btstepT': 'SAT = case (a): z = last row-d descent element >= d, t = F(d, z), q an atom <= d ^ F(bot, z); some y of height >= 3 with y <= t, d not <= y, q <= y, q <= F(bot, y), F(d, y) <= y, but q not <= F(bot, F(d, y))',
+    'btstepT': '[flags: xC drops q <= F(bot, y); cov tests q <= F(bot, y) itself; pre tests F(bot, d v F(bot, y)) <= F(bot, y)] SAT = case (a): z = last row-d descent element >= d, t = F(d, z), q an atom <= d ^ F(bot, z); some y of height >= 3 with y <= t, d not <= y, q <= y, q <= F(bot, y), F(d, y) <= y, but q not <= F(bot, F(d, y))',
     'lamz1': 'SAT = d bad atom, row d lands at the index N of d on the bot-descent (b1), and lambda(d) not in Z (refutes LamZ1)',
 }
 C = collections.Counter(); INFO = collections.Counter(); best = None
@@ -224,7 +224,20 @@ for L in lattices(args):
                                     o = E.v('bsT', e, z, tt, q, y, y2); sel.append(o)
                                     add([-o, isd(e)]); add([-o, zdv]); add([-o, f(e, z, tt)]); add([-o, f(e, y, y2)])
                                     if 'xQ' not in FL: add([-o] + [f(bot, z, v) for v in range(n) if le[q][v]])
-                                    add([-o] + [f(bot, y, v) for v in range(n) if le[q][v]])
+                                    if 'pre' in FL:
+                                        # violation witness: F(bot, y) = w and F(bot, e v w) = w2 with w2 not <= w
+                                        vs = []
+                                        for w in range(n):
+                                            for w2 in range(n):
+                                                if le[w2][w]: continue
+                                                pv = E.v('prv', e, y, w, w2); E.iff_and(pv, [f(bot, y, w), f(bot, L.join[e][w], w2)]); vs.append(pv)
+                                        add([-o] + vs)
+                                        continue
+                                    if 'cov' in FL:
+                                        for v in range(n):
+                                            if le[q][v]: add([-o, -f(bot, y, v)])
+                                        continue
+                                    if 'xC' not in FL: add([-o] + [f(bot, y, v) for v in range(n) if le[q][v]])
                                     for v in range(n):
                                         if le[q][v]: add([-o, -f(bot, y2, v)])
             add(sel)
@@ -449,7 +462,7 @@ for L in lattices(args):
             elif MODE == 'btstepT':
                 dsd = desc(d); zz = [y for y in dsd if le[d][y]][-1]; tt = F[d][zz]
                 ok = ok and h[d] == 2 and any(le[q][d] and ('xQ' in FL or le[q][F[bot][zz]]) and h[y] >= 3 and ('xT' in FL or le[y][tt]) and ('xD' in FL or not le[d][y]) and le[q][y]
-                                              and le[q][F[bot][y]] and ('xP' in FL or le[F[d][y]][y]) and not le[q][F[bot][F[d][y]]] for q in atoms for y in range(n))
+                                              and (('pre' in FL and not le[F[bot][L.join[d][F[bot][y]]]][F[bot][y]]) or ('cov' in FL and not le[q][F[bot][y]]) or ('cov' not in FL and 'pre' not in FL and ('xC' in FL or le[q][F[bot][y]]) and ('xP' in FL or le[F[d][y]][y]) and not le[q][F[bot][F[d][y]]])) for q in atoms for y in range(n))
             elif MODE in ('btstep', 'btstepP'):
                 ok = ok and h[d] == 2 and any(le[q][d] and h[y] >= 3 and (MODE == 'btstep' or le[F[d][y]][y]) and le[q][F[bot][y]] and not le[q][F[bot][F[d][y]]] for q in atoms for y in range(n))
             elif MODE in ('btz', 'btall'):

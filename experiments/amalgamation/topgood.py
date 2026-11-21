@@ -4,6 +4,7 @@ h(⊤) > k. 'p good' = p ≤ a(p) or the row-p descent from ⊤ meets p. T_k = e
   topgood  — every p ∈ T_k is bad                                    (SAT refutes TopGood(k))
   mixedchk — some (r, p): p ∈ T_k, r ∈ R_{k−1}, h(r)=k−1, r<p, r ≤ F(r,p), DL(r,p), p bad   (SAT refutes the DL lemma)
   mixed    — no DL pair and no A-entry from below (p = a(x), x ∈ R_{k−1}, x ≤ p)            (SAT refutes MixedBase)
+  gbr      — no good element of R_{k−1} of height k−1 (GoodBase at the restart; §34.3z²⁵⁷)
   bdl      — no B-source DL pair (q = b(p) ∈ R_{k−1}, h(q)=k−1, DL(q,p)) and no A-entry from below (SAT refutes EntryCert)
 DL(r,p): ∀ y ≰ p, ¬(y ≤ F(r, p ⊔ y)).
 Flags: rkm1nt (R_{k−1} non-tight: restart world), notight (drop R_k tightness).
@@ -15,7 +16,7 @@ from tight_probe import lattices
 from rstages import stages, a_of, b_of
 FLG = {'rkm1nt', 'notight'}
 MODE = sys.argv[1]; k = int(sys.argv[2]); FL = {a for a in sys.argv[3:] if a in FLG}; args = [a for a in sys.argv[3:] if a not in FLG]
-if MODE not in {'vac', 'topgood', 'mixedchk', 'mixed', 'bdl'}: raise SystemExit('unknown mode')
+if MODE not in {'vac', 'topgood', 'mixedchk', 'mixed', 'bdl', 'gbr'}: raise SystemExit('unknown mode')
 C = collections.Counter(); INFO = collections.Counter(); best = None
 for L in lattices(args):
     n = L.n; le = L.le; h = L.rank; top = L.top; NO = L.height + 1; jn = L.join
@@ -60,6 +61,9 @@ for L in lattices(args):
     T = [p for p in range(n) if h[p] == k]
     if MODE == 'topgood':
         for p in T: add([-r(k, p), bad(p)])
+    elif MODE == 'gbr':
+        for z in range(n):
+            if h[z] == k - 1 and z != top: add([-r(k - 1, z), bad(z)])
     elif MODE == 'mixedchk':
         sel = []
         for p in T:
@@ -89,6 +93,10 @@ for L in lattices(args):
         if 'rkm1nt' in FL: ok = ok and any(h[z] > k - 1 for z in range(n) if inR(z, k - 1))
         aent = lambda p: any(le[x][p] and inR(x, k - 1) and a_of(L, F, x) == p for x in range(n))
         if MODE == 'topgood': ok = ok and not any(good(p) for p in Tk)
+        elif MODE == 'gbr':
+            ok = ok and not any(h[z] == k - 1 and inR(z, k - 1) and good(z) for z in range(n))
+            gt = [p for p in Tk if good(p)]
+            INFO['goodtop_Aentry_low' if any(aent(p) for p in gt) else ('goodtop_other' if gt else 'no_goodtop')] += 1
         elif MODE == 'mixedchk': ok = ok and any(h[rr] == k - 1 and le[rr][p] and inR(rr, k - 1) and le[rr][F[rr][p]] and dl(rr, p) and not good(p) for p in Tk for rr in range(n))
         elif MODE == 'mixed': ok = ok and not any(aent(p) or any(h[rr] == k - 1 and le[rr][p] and inR(rr, k - 1) and le[rr][F[rr][p]] and dl(rr, p) for rr in range(n)) for p in Tk)
         elif MODE == 'bdl':

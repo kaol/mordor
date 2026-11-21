@@ -121,3 +121,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁵⁴: `bq_core.py` (cores of the B-route descent claim over the uniqueness instances), `sl_feed.py` mode bgood. Output `out_bq254.txt`.
 - §34.3z²⁵⁵: `sl_feed.py` modes pureA/pureAany, `colasc.py` mode stage (both refuted shortcuts). Output `out_bq255.txt`.
 - §34.3z²⁵⁶: `topgood.py` (good tops at tight stages: modes topgood/mixedchk/mixed/bdl/vac, flags rkm1nt/notight), `colasc.py` mode hs and flag noPA. Output `out_topgood256.txt`.
+- §34.3z²⁵⁷: `backgood.py` (goodness certified by a later tight stage; modes vac/bg, flags n1/ontime/off/offset; the off and offset flags are power mutants), `topgood.py` mode gbr. Output `out_backgood257.txt`.

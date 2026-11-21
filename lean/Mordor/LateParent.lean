@@ -146,6 +146,9 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `RestartGood` (conjecture), `topGood_of_restartGood`, `tightIC_of_restartGood`, **`cutMaps_of_restartGood`**,
   **`tightIC_succ_of_goodBase`**, `singletonLower_of_restartGood`, `singletonLower_of_feedChain'` (without w ∥ m), `DL`,
   `dl_of_rowDesc`, `drop_DL`, **`good_of_DL`**.
+* §34.3z²⁵⁷: `MixedBase`, `restartGood_of_mixedBase`, `cutMaps_of_mixedBase`, `good_base_of_drop`,
+  **`base_good_of_DL`** (a DL base is good), `drop_cover`, **`good_of_coverDL`** (covering and stage-maximality suffice),
+  `BackGood1`, **`restartGood_of_backGood1`**.
 -/
 
 namespace Mordor.OrbitHeight
@@ -4854,5 +4857,146 @@ theorem good_of_DL {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (
     rcases hpz with hlt | he
     · have := hk1 _ hzR; have := height_strictMono hn hlt; omega
     · exact ⟨j, he.symm⟩
+
+/-! ### Goodness one level down; covering instead of heights (§34.3z²⁵⁷)
+
+The base of a DL pair is good too (`base_good_of_DL`), so MixedBase at a restart is GoodBase one level down, up to an
+A-entry from below. The drop lemma needs neither heights nor stage tightness: covering `r ⋖ p` and "nothing of `R_{k+1}`
+strictly above `p`" suffice, and then both ends are good (`good_of_coverDL`). Goodness one level below a tight stage, in
+the "height at least" form, gives RestartGood (`restartGood_of_backGood1`). -/
+
+/-- **MixedBase** at index `k + 1`: some top of `R_{k+1}` has a DL pair one level down, or is an A-entry from below. -/
+def MixedBase (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k, (⊤ : α) ∉ Rk F (k + 2) → (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) → ¬ (∀ z ∈ Rk F k, height H z ≤ k) →
+    ∃ p ∈ Rk F (k + 1), height H p = k + 1 ∧
+      ((∃ r ∈ Rk F k, height H r = k ∧ r ≤ p ∧ r ≤ F r p ∧ DL F r p) ∨ ∃ x ∈ Rk F k, x ≤ p ∧ p = a F x)
+
+theorem restartGood_of_mixedBase {H : ℕ} (hn : NoChain α (H + 1)) (hmb : MixedBase F H) : RestartGood F H := by
+  intro k htop hall hnt
+  obtain ⟨p, hpR, hp, hc⟩ := hmb k htop hall hnt
+  refine ⟨p, hpR, hp, ?_⟩
+  rcases hc with ⟨r, hrR, hr, hrp, hrF, hdl⟩ | ⟨x, -, hxp, hpa⟩
+  · exact good_of_DL hn hall hrR hr hp hrp hrF hdl
+  · exact Or.inl (le_a_of_interval hxp hpa.le)
+
+theorem cutMaps_of_mixedBase [WellFoundedLT α] {H : ℕ} (hn : NoChain α (H + 1)) (hmb : MixedBase F H) : CutMaps F :=
+  cutMaps_of_restartGood hn (restartGood_of_mixedBase hn hmb)
+
+/-- If `p` stays below every element of the row-`r` descent, or the descent drops below `p` at a step `y` with the drop
+property, then `r` is good. Shared by `base_good_of_DL` and `base_good_of_coverDL`. -/
+theorem good_base_of_drop {H : ℕ} (hn : NoChain α (H + 1)) {r p : α} (hrFp : r ≤ F r p)
+    (hdrop : ∀ y, r ≤ y → ¬ p ≤ y → F r (p ⊔ y) ≤ y → y = r) : IsGood F r := by
+  by_cases hall : ∀ i, p ≤ (F r)^[i] (⊤ : α)
+  · obtain ⟨M, hM⟩ := exists_iter_fix_mono hn (F r).mono H (height_le (⊤ : α)) le_top
+    have hpa : p ≤ a F r := (hall M).trans (le_a hM.symm.le)
+    exact Or.inl (hrFp.trans (((F r).mono hpa).trans (row_a r).le))
+  · push_neg at hall
+    classical
+    have hi : ¬ p ≤ (F r)^[Nat.find hall] (⊤ : α) := Nat.find_spec hall
+    have hpos : Nat.find hall ≠ 0 := by intro e; rw [e] at hi; exact hi le_top
+    obtain ⟨i, hi'⟩ : ∃ i, Nat.find hall = i + 1 := ⟨Nat.find hall - 1, by omega⟩
+    have hpv : p ≤ (F r)^[i] (⊤ : α) := by
+      by_contra h; exact Nat.find_min hall (show i < Nat.find hall by omega) h
+    have hnext : (F r)^[i + 1] (⊤ : α) = F r ((F r)^[i] (⊤ : α)) := Function.iterate_succ_apply' _ _ _
+    have hyv : (F r)^[i + 1] (⊤ : α) ≤ (F r)^[i] (⊤ : α) := rowIter_succ_le (F := F) (x := r) (s := ⊤) le_top i
+    have hry : r ≤ (F r)^[i + 1] (⊤ : α) := by rw [hnext]; exact hrFp.trans ((F r).mono hpv)
+    have hpy : ¬ p ≤ (F r)^[i + 1] (⊤ : α) := by rw [← hi']; exact hi
+    have hF : F r (p ⊔ (F r)^[i + 1] (⊤ : α)) ≤ (F r)^[i + 1] (⊤ : α) := by
+      rw [hnext]; exact (F r).mono (sup_le hpv (hnext ▸ hyv))
+    exact Or.inr ⟨i + 1, hdrop _ hry hpy hF⟩
+
+/-- **BaseGood (§34.3z²⁵⁷).** Under the hypotheses of `good_of_DL` the base `r` is good as well (neither `r ≤ p` nor
+`p ∈ R_{k+1}` is needed). -/
+theorem base_good_of_DL {H k : ℕ} (hn : NoChain α (H + 1)) (hk1 : ∀ z ∈ Rk F (k + 1), height H z ≤ k + 1)
+    {r p : α} (hrR : r ∈ Rk F k) (hr : height H r = k) (hp : height H p = k + 1) (hrFp : r ≤ F r p)
+    (hdl : DL F r p) : IsGood F r :=
+  good_base_of_drop hn hrFp fun y hry hpy hF =>
+    drop_DL hn hk1 hrR hr hp hrFp hdl H y (height_le y) hry hpy hF
+
+/-- **The drop lemma by covering and stage-maximality (CoverDL)**: no heights, no tightness. -/
+theorem drop_cover {H k : ℕ} (hn : NoChain α (H + 1)) {r p : α} (hrR : r ∈ Rk F k) (hcov : r ⋖ p)
+    (hrFp : r ≤ F r p) (hdl : DL F r p) (hmax : ∀ z ∈ Rk F (k + 1), p ≤ z → z = p) :
+    ∀ (n : ℕ) (y : α), height H y ≤ n → r ≤ y → ¬ p ≤ y → F r (p ⊔ y) ≤ y → y = r := by
+  have small : ∀ y : α, r ≤ y → y ≤ p → ¬ p ≤ y → y = r := by
+    intro y hry hyp hpy
+    by_contra hne
+    exact hcov.2 (lt_of_le_of_ne hry (Ne.symm hne)) (lt_of_le_of_ne hyp (fun e => hpy (le_of_eq e.symm)))
+  intro n
+  induction n with
+  | zero =>
+    intro y hy hry hpy hF
+    have h0 : height H y = 0 := by omega
+    have hyb : y = ⊥ := by
+      by_contra hne
+      have := height_strictMono hn (bot_lt_iff_ne_bot.2 hne); rw [height_bot_eq_zero] at this; omega
+    exact le_antisymm (hyb ▸ bot_le) hry
+  | succ n ih =>
+    intro y hy hry hpy hF
+    have hry' : r ≤ F r (p ⊔ y) := hrFp.trans ((F r).mono le_sup_left)
+    by_cases he : F r (p ⊔ y) = y
+    · exact small y hry (hdl y he.symm.le) hpy
+    · have hlt : F r (p ⊔ y) < y := lt_of_le_of_ne hF he
+      have hpy' : ¬ p ≤ F r (p ⊔ y) := fun h => hpy (h.trans hF)
+      have hF' : F r (p ⊔ F r (p ⊔ y)) ≤ F r (p ⊔ y) := (F r).mono (sup_le_sup_left hF p)
+      have h0 := ih (F r (p ⊔ y)) (by have := height_strictMono hn hlt; omega) hry' hpy' hF'
+      have hR : p ⊔ y ∈ Rk F (k + 1) :=
+        mem_succ_of_cell (k := k) (m := r) (x := r) hrR le_rfl (Or.inl h0.le)
+      have hyp : y ≤ p := by have := hmax _ hR le_sup_left; rw [← this]; exact le_sup_right
+      exact small y hry hyp hpy
+
+/-- **CoverDL: both ends good.** With `r ∈ R_k`, `r ⋖ p`, `r ≤ F r p`, `DL r p` and nothing of `R_{k+1}` strictly above
+`p`, both `p` and `r` are good. No heights, no stage tightness. -/
+theorem good_of_coverDL {H k : ℕ} (hn : NoChain α (H + 1)) {r p : α} (hrR : r ∈ Rk F k) (hcov : r ⋖ p)
+    (hrFp : r ≤ F r p) (hdl : DL F r p) (hmax : ∀ z ∈ Rk F (k + 1), p ≤ z → z = p) :
+    IsGood F p ∧ IsGood F r := by
+  have hdrop := drop_cover hn hrR hcov hrFp hdl hmax
+  refine ⟨?_, good_base_of_drop hn hrFp fun y hry hpy hF => hdrop H y (height_le y) hry hpy hF⟩
+  have hrp : r ≤ p := hcov.1.le
+  by_cases hpa : p < a F p
+  · exact Or.inl hpa.le
+  right
+  have hs : F p (⊤ : α) ≤ ⊤ := le_top
+  obtain ⟨M, hM⟩ := exists_iter_fix_mono hn (F p).mono H (height_le (⊤ : α)) hs
+  by_cases hall : ∀ i ≤ M, p ≤ (F p)^[i] (⊤ : α)
+  · have hcu : p ≤ (F p)^[M] (⊤ : α) := hall M le_rfl
+    have hua : (F p)^[M] (⊤ : α) ≤ a F p := le_a hM.symm.le
+    have hac : a F p = p := by
+      by_contra hne; exact hpa (lt_of_le_of_ne (hcu.trans hua) (Ne.symm hne))
+    exact ⟨M, le_antisymm (hua.trans hac.le) hcu⟩
+  · push_neg at hall
+    classical
+    have hk0 : Nat.find hall ≤ M ∧ ¬ p ≤ (F p)^[Nat.find hall] (⊤ : α) := Nat.find_spec hall
+    have hk0pos : Nat.find hall ≠ 0 := by
+      intro e; rw [e] at hk0; exact hk0.2 le_top
+    obtain ⟨j, hj⟩ : ∃ j, Nat.find hall = j + 1 := ⟨Nat.find hall - 1, by omega⟩
+    have hcz : p ≤ (F p)^[j] (⊤ : α) := by
+      by_contra hcz
+      exact Nat.find_min hall (show j < Nat.find hall by omega) ⟨by omega, hcz⟩
+    have hnext : (F p)^[j + 1] (⊤ : α) = F p ((F p)^[j] (⊤ : α)) := Function.iterate_succ_apply' _ _ _
+    have hdrop' : ¬ p ≤ F p ((F p)^[j] (⊤ : α)) := by rw [← hnext, ← hj]; exact hk0.2
+    have hyF : F r ((F p)^[j] (⊤ : α)) ≤ F p ((F p)^[j] (⊤ : α)) := (F.mono hrp) _
+    have hFz : F p ((F p)^[j] (⊤ : α)) ≤ (F p)^[j] (⊤ : α) := by rw [← hnext]; exact rowIter_succ_le hs j
+    have hcy : ¬ p ≤ F r ((F p)^[j] (⊤ : α)) := fun h => hdrop' (h.trans hyF)
+    have hpy : r ≤ F r ((F p)^[j] (⊤ : α)) := hrFp.trans ((F r).mono hcz)
+    have hsup : p ⊔ F r ((F p)^[j] (⊤ : α)) ≤ (F p)^[j] (⊤ : α) := sup_le hcz (hyF.trans hFz)
+    have hy0 := hdrop H (F r ((F p)^[j] (⊤ : α))) (height_le _) hpy hcy ((F r).mono hsup)
+    have hzR : (F p)^[j] (⊤ : α) ∈ Rk F (k + 1) :=
+      mem_succ_of_cell (k := k) (m := r) (x := r) hrR le_rfl (Or.inl hy0.le)
+    exact ⟨j, hmax _ hzR hcz⟩
+
+/-- **BackGood at distance one** (≥ form): if `R_{k+1}` is tight and `⊤ ∉ R_{k+1}`, then `R_k` has a good element of
+height at least `k` other than `⊤`. -/
+def BackGood1 (F : α →o α →o α) (H : ℕ) : Prop :=
+  ∀ k, (⊤ : α) ∉ Rk F (k + 1) → (∀ z ∈ Rk F (k + 1), height H z ≤ k + 1) →
+    ∃ g ∈ Rk F k, k ≤ height H g ∧ g ≠ ⊤ ∧ IsGood F g
+
+/-- **BackGood at distance one gives RestartGood** (ahead elements are never good, so the good element is on time). -/
+theorem restartGood_of_backGood1 {H : ℕ} (hn : NoChain α (H + 1)) (hb : BackGood1 F H) : RestartGood F H := by
+  intro k htop hall _
+  obtain ⟨g, hgR, hgk, hgt, hg⟩ := hb k (fun h => htop (Rk_mono (Nat.le_succ _) h)) hall
+  have hgk' : height H g = k := by
+    by_contra hne
+    exact not_good_of_ahead hn hall hgR (by omega) hgt hg
+  exact topGood_succ hn hall hgR hgk' hgt hg
 
 end Mordor.OrbitHeight

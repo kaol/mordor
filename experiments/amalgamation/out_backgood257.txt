@@ -1,0 +1,17 @@
+== §34.3z²⁵⁷ (exact; models replayed in Python; UNSAT = the claim holds). One instance per lattice.
+-- backgood.py (j, m): ⊤ ∉ R_{j+m}, R_{j+m} tight; flag n1 = R_{j+1} non-tight. bg = no good g ∈ R_j (g ≠ ⊤, h(g) ≥ j; ontime h(g) = j).
+   Mutant `off` (drop R_{j+m} tightness) on the SAME corpus measures power: a corpus whose mutant is UNSAT cannot fail.
+   corpus              (j,m)  vac n1 (models, patterns)          bg n1   bg n1 ontime   mutant off (power)
+   closure 5 10 1 40   (1,2)  39 (nnT 37, TnT 2)                 UNSAT 40  UNSAT 40     SAT 30 (nnn), min 11
+   closure 5 10 2 40   (1,2)  34 (nnT 28, TnT 6)                 UNSAT 40  UNSAT 40     SAT 27, min 11
+   closure 5 10 3 40   (1,2)  39 (nnT 33, TnT 6)                 UNSAT 40  UNSAT 40     SAT 25, min 13
+   closure 5 11 5 40   (1,2)  37 (nnT 30, TnT 7)                 UNSAT 40  UNSAT 40     SAT 36, min 12
+   closure 5 11 4 30   (1,2)  27 (nnT 25, TnT 2)                 UNSAT 30  UNSAT 30     SAT 23, min 10
+   closure 5 10 2 40   (1,3)  —                                  UNSAT 40  —            UNSAT 40  (no power)
+   closure 5 11 5 40   (1,3)  —                                  UNSAT 40  —            UNSAT 40  (no power)
+   closure 5 11 4 30   (2,2)  —                                  UNSAT 30  —            UNSAT 30  (no power)
+   closure 6 12 9 8    (2,2)  —                                  UNSAT 8   —            SAT 4, min 18
+-- topgood.py gbr (restart world rkm1nt: no good element of R_{k−1} of height k−1):
+   k=2 closure 5 10 1 40: 'UNSAT' 40; k=3 closure 5 11 4 30: 'UNSAT' 30 (21 models); k=3 closure 6 12 9 8: 'UNSAT' 8 (8 models)
+-- Stage lift 1 ⊕ L replayed on all 359 stored *min*.json models in this directory: monotone, stage shift R′_{j+1} = {⊥′} ∪ R_j,
+   heights + 1, goodness unchanged: 359 ok, 0 fail.

@@ -151,6 +151,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   `BackGood1`, **`restartGood_of_backGood1`**.
 * §34.3z²⁵⁸: **`dl_bot_of_lt_botDesc`** (atoms below a height-2 end of the ⊥-descent are DL), `GoodAtom1`,
   **`backGood1_one_of_goodAtom1`**.
+* §34.3z²⁵⁹: `iter_antitone_of_le`, **`botDesc_of_dl_max`** (a DL atom maximal in the zero fibre lies on the
+  ⊥-descent), `eq_of_botDesc_zero`, **`dl_atom_unique_of_tight`** (with R_1 tight the zero fibre has one DL atom).
 -/
 
 namespace Mordor.OrbitHeight
@@ -5040,5 +5042,85 @@ theorem backGood1_one_of_goodAtom1 {H : ℕ} (hn : NoChain α (H + 1)) (hga : Go
   · have hR : a F ⊥ ∈ Rk F 1 := mem_succ_of_a hbot0 le_rfl
     refine ⟨a F ⊥, hR, ?_, hne _ hR, Or.inl (le_a_of_interval bot_le le_rfl)⟩
     have := height_strictMono hn (bot_lt_iff_ne_bot.2 ha); rw [height_bot_eq_zero] at this; omega
+
+/-! ### DL atoms maximal in the zero fibre lie on the ⊥-descent (§34.3z²⁵⁹) -/
+
+theorem iter_antitone_of_le {φ : α → α} (hφ : Monotone φ) {s : α} (hs : φ s ≤ s) {i j : ℕ} (h : i ≤ j) :
+    φ^[j] s ≤ φ^[i] s := by
+  have step : ∀ k, φ^[k + 1] s ≤ φ^[k] s := by
+    intro k
+    induction k with
+    | zero => simpa using hs
+    | succ k ih =>
+      have := hφ ih
+      simpa only [Function.iterate_succ_apply'] using this
+  exact antitone_nat_of_succ_le (f := fun n => φ^[n] s) step h
+
+/-- **A DL atom that is maximal in the zero fibre lies on the ⊥-descent** (§34.3z²⁵⁹). If `q` is an atom with
+`F ⊥ q = ⊥`, `DL(⊥, q)`, and no element strictly above `q` has `F ⊥ z = ⊥`, then `(F ⊥)^[M] ⊤ = q` for some `M`. The
+descent of `y ↦ F ⊥ (q ⊔ y)` from `⊤` reaches `⊥` (DL); its last nonzero term is `q` (maximality); above `q` it is the
+⊥-descent. -/
+theorem botDesc_of_dl_max {H : ℕ} (hn : NoChain α (H + 1)) {q : α} (hq1 : height H q = 1) (hq0 : F ⊥ q = ⊥)
+    (hdl : DL F ⊥ q) (hmax : ∀ z, q ≤ z → F ⊥ z = ⊥ → z = q) : ∃ M, (F ⊥)^[M] (⊤ : α) = q := by
+  set φ : α → α := fun y => F ⊥ (q ⊔ y) with hφdef
+  have hφ : Monotone φ := fun x y h => (F ⊥).mono (sup_le_sup_left h q)
+  have hqb : q ≠ ⊥ := fun e => by rw [e, height_bot_eq_zero] at hq1; omega
+  obtain ⟨N, hN⟩ := exists_iter_fix_mono hn hφ H (height_le (⊤ : α)) le_top
+  have hgq : φ^[N] (⊤ : α) ≤ q := hdl _ (le_of_eq hN.symm)
+  have hg0 : φ^[N] (⊤ : α) = ⊥ := by
+    have := hN.symm; rw [show φ (φ^[N] ⊤) = F ⊥ (q ⊔ φ^[N] ⊤) from rfl, sup_eq_left.2 hgq, hq0] at this
+    exact this
+  have hex : ∃ i, φ^[i] (⊤ : α) = ⊥ := ⟨N, hg0⟩
+  classical
+  have hi0 : φ^[Nat.find hex] (⊤ : α) = ⊥ := Nat.find_spec hex
+  have htb : (⊤ : α) ≠ ⊥ := fun e => hqb (le_bot_iff.1 (e ▸ le_top))
+  have hpos : Nat.find hex ≠ 0 := by intro e; rw [e] at hi0; exact htb hi0
+  obtain ⟨M, hM⟩ : ∃ M, Nat.find hex = M + 1 := ⟨Nat.find hex - 1, by omega⟩
+  have hyM : φ^[M] (⊤ : α) ≠ ⊥ := fun e => Nat.find_min hex (show M < Nat.find hex by omega) e
+  have hstep : F ⊥ (q ⊔ φ^[M] (⊤ : α)) = ⊥ := by
+    have := hi0; rw [hM, Function.iterate_succ_apply'] at this; exact this
+  have hjoin : q ⊔ φ^[M] (⊤ : α) = q := hmax _ le_sup_left hstep
+  have hyq : φ^[M] (⊤ : α) = q := by
+    have hle : φ^[M] (⊤ : α) ≤ q := hjoin ▸ le_sup_right
+    exact eq_of_le_of_height_ge hn hle (by
+      have := height_strictMono hn (bot_lt_iff_ne_bot.2 hyM); rw [height_bot_eq_zero] at this; omega)
+  have hagree : ∀ i, i ≤ M → φ^[i] (⊤ : α) = (F ⊥)^[i] (⊤ : α) := by
+    intro i
+    induction i with
+    | zero => intro _; rfl
+    | succ i ih =>
+      intro hi
+      have hqi : q ≤ φ^[i] (⊤ : α) := hyq ▸ iter_antitone_of_le hφ le_top (show i ≤ M by omega)
+      rw [Function.iterate_succ_apply', Function.iterate_succ_apply', ← ih (by omega)]
+      show F ⊥ (q ⊔ φ^[i] ⊤) = F ⊥ (φ^[i] ⊤)
+      rw [sup_eq_right.2 hqi]
+  exact ⟨M, (hagree M le_rfl).symm.trans hyq⟩
+
+/-- Two nonzero elements of the zero fibre on the ⊥-descent coincide. -/
+theorem eq_of_botDesc_zero {q q' : α} {M M' : ℕ} (hM : (F ⊥)^[M] (⊤ : α) = q) (hM' : (F ⊥)^[M'] (⊤ : α) = q')
+    (hq0 : F ⊥ q = ⊥) (hq'0 : F ⊥ q' = ⊥) (hq : q ≠ ⊥) (hq' : q' ≠ ⊥) : q = q' := by
+  have past : ∀ {K x}, (F ⊥)^[K] (⊤ : α) = x → F ⊥ x = ⊥ → ∀ j, K < j → (F ⊥)^[j] (⊤ : α) = ⊥ := by
+    intro K x hK hx j hj
+    have : (F ⊥)^[j] (⊤ : α) ≤ (F ⊥)^[K + 1] ⊤ := botDesc_antitone (F := F) hj
+    rw [Function.iterate_succ_apply', hK, hx] at this
+    exact le_bot_iff.1 this
+  rcases lt_trichotomy M M' with h | h | h
+  · exact absurd ((past hM hq0 M' h).symm.trans hM' |>.symm) hq'
+  · subst h; exact hM.symm.trans hM'
+  · exact absurd ((past hM' hq'0 M h).symm.trans hM |>.symm) hq
+
+/-- **With `R_1` tight, the zero fibre has at most one DL atom** (the end of the ⊥-descent). -/
+theorem dl_atom_unique_of_tight {H : ℕ} (hn : NoChain α (H + 1)) (ht1 : ∀ z ∈ Rk F 1, height H z ≤ 1)
+    {q q' : α} (hq1 : height H q = 1) (hq'1 : height H q' = 1) (hq0 : F ⊥ q = ⊥) (hq'0 : F ⊥ q' = ⊥)
+    (hdl : DL F ⊥ q) (hdl' : DL F ⊥ q') : q = q' := by
+  have hbot0 : (⊥ : α) ∈ Rk F 0 := show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl
+  have hZ : ∀ z, F ⊥ z = ⊥ → height H z ≤ 1 := fun z hz =>
+    ht1 z (mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) hbot0 le_rfl (Or.inl hz.le))
+  have hmax : ∀ {p : α}, height H p = 1 → ∀ z, p ≤ z → F ⊥ z = ⊥ → z = p := fun hp z hpz hz =>
+    (eq_of_le_of_height_ge hn hpz (by have := hZ z hz; omega)).symm
+  obtain ⟨M, hM⟩ := botDesc_of_dl_max hn hq1 hq0 hdl (hmax hq1)
+  obtain ⟨M', hM'⟩ := botDesc_of_dl_max hn hq'1 hq'0 hdl' (hmax hq'1)
+  have hne : ∀ {p : α}, height H p = 1 → p ≠ ⊥ := fun hp e => by rw [e, height_bot_eq_zero] at hp; omega
+  exact eq_of_botDesc_zero hM hM' hq0 hq'0 (hne hq1) (hne hq'1)
 
 end Mordor.OrbitHeight

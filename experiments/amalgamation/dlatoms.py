@@ -11,6 +11,9 @@ d = the last nonzero element of the ⊥-descent from ⊤; dep(x) = max{i : x ≤
   dpartX   — mutant of dpart: the partner condition p ⊔ q ∈ Z flipped
   exch4    — a bad DL atom p with no DL partner q (p ⊔ q ∈ Z) that is good or deeper   (SAT refutes DepthExchange)
   exch4R   — mutant: 'deeper' reversed;  exchA — mutant: partner must be good
+  gdnotd   — a good DL atom of R_1 that is not below d (SAT refutes 'the good DL atom lies below d')
+  dlnotd   — a DL atom of R_1 that is not below d (goodness not required)
+  badbelowd — some atom below d is bad (mutant-like control for gdnotd)
 Flags: n1 (R_1 non-tight), r1t (R_1 tight), not2 (drop R_2 tightness: mutant), h3 (only h(⊤) = 3), h4 (only h(⊤) ≥ 4).
   python3 dlatoms.py MODE (sweep N MAX | closure K M SEED CNT) [flags]"""
 import sys, collections, json
@@ -19,7 +22,7 @@ from amalg_sat import Enc
 from tight_probe import lattices
 from rstages import stages, a_of
 FLG = {'n1', 'r1t', 'not2', 'h3', 'h4'}
-MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA'}
+MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd'}
 MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in FLG}; args = [a for a in sys.argv[2:] if a not in FLG]
 if MODE not in MODES: raise SystemExit('unknown mode')
 C = collections.Counter(); INFO = collections.Counter(); best = None
@@ -83,6 +86,14 @@ for L in lattices(args):
                 t = E.v('deepi', q, p, i); E.iff_and(t, [Pd(q, i), -Pd(p, i)]); ls.append(t)
             E.iff_or(o, ls)
         return o
+    if MODE in ('gdnotd', 'badbelowd', 'dlnotd'):
+        sel = []
+        for p in atoms:
+            o = E.v('s', p); sel.append(o)
+            if MODE == 'gdnotd': add([-o, r(1, p)]); add([-o, DL(p)]); add([-o, gd(p)]); add([-o, -belowd(p)])
+            elif MODE == 'dlnotd': add([-o, r(1, p)]); add([-o, DL(p)]); add([-o, -belowd(p)])
+            else: add([-o, belowd(p)]); add([-o, -gd(p)])
+        add(sel)
     if MODE == 'baddl':
         sel = []
         for p in atoms:
@@ -139,6 +150,9 @@ for L in lattices(args):
         if 'not2' not in FL: ok = ok and all(h[z] <= 2 for z in range(n) if inR(z, 2))
         if 'n1' in FL: ok = ok and any(h[z] > 1 for z in range(n) if inR(z, 1))
         if 'r1t' in FL: ok = ok and all(h[z] <= 1 for z in range(n) if inR(z, 1))
+        if MODE == 'gdnotd': ok = ok and any(dl(p) and good(p) and not (d is not None and le[p][d]) for p in R1)
+        elif MODE == 'dlnotd': ok = ok and any(dl(p) and not (d is not None and le[p][d]) for p in R1)
+        elif MODE == 'badbelowd': ok = ok and any(d is not None and le[p][d] and not good(p) for p in atoms)
         if MODE == 'baddl': ok = ok and any(dl(p) and not good(p) for p in R1)
         elif MODE == 'goodatom': ok = ok and not any(good(p) for p in R1)
         elif MODE == 'dlgood': ok = ok and not any(dl(p) and good(p) for p in R1)

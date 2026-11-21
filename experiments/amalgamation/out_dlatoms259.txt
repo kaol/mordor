@@ -1,0 +1,9 @@
+== §34.3z²⁵⁹ (exact; models replayed in Python; UNSAT = the claim holds). World W0 as in out_dlatoms258.txt.
+-- dlatoms.py:
+   gdnotd (a good DL atom of R_1 not below d):    r1t: UNSAT 160 [sweep 4 14], 40 [closure 5 10 1 40], 40 [closure 5 11 5 40]
+                                                    n1:  UNSAT 160 [sweep 4 14]; SAT 16/40 (min 15) [closure 5 10 1 40]; SAT 22/40 (min 13) [closure 5 11 5 40]
+   dlnotd (a DL atom of R_1 not below d):          r1t: UNSAT 160, 40; with not2 (no R_2 tightness): UNSAT 160, 40   (proved: dl_atom_unique_of_tight)
+   badbelowd (an atom below d is bad):             n1:  SAT 55 [sweep 4 14], 38 [closure 5 10 1 40], 40 [closure 5 11 5 40]
+-- Refuted shortcut (inline SAT, not kept): "d ≤ F(⊥, q ⊔ d) for every other atom q of the zero fibre" with R_1 tight:
+   SAT 79/177 [sweep 4 14], 37/40 [closure 5 10 1 40], 40/40 [closure 5 11 5 40], smallest |L| = 7 (the witness of ¬DL(q) is then a
+   higher descent element, e.g. d_1).

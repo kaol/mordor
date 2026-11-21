@@ -1,0 +1,19 @@
+== §34.3z²⁵³ sl_feed.py / colasc.py (exact; models replayed in Python; UNSAT = the claim holds)
+   SingletonLower configuration at k (feed252) unless flags drop parts: nouniq / notop / nofeed (F(m', m) ≤ m') / no2 / no3 / nonew (m ∉ R_k).
+   gen     (no x ≤ m' in R_{k−1}, h = k−1, with a(x) = m' or F(x, m') = x):   k=2 'UNSAT': 296; k=3 'UNSAT': 58
+   lowdesc (some such x with F(x, m') = x has m' off its descent):              k=2 'UNSAT': 296; k=3 'UNSAT': 58;
+           needs uniqueness and the feeder: nouniq 'SAT': 157 smallest 11, nofeed 'SAT': 157 smallest 11; notop / no3 'UNSAT': 296
+   bm / bmh (b(m') ∉ R_{k−1} / h(b(m')) ≠ k−1): 'SAT': 171 (all satisfiable configurations) — b(m') = m' is common
+   aout    (pure A-route, no generator below m'):  k=2 'UNSAT': 296 (also nouniq / notop / no3); k=3 'UNSAT': 58; nofeed 'SAT': 156 smallest 11
+   U       (pure A-route, no x ≤ m' of height k−1 in R_{k−1} with m' ≤ F(x, m')): 'UNSAT': 296, also with no2 no3 nouniq notop nonew;
+           without the feeder 'SAT' (156; 296 with all drops)
+   asc1 / asc2 / ascS (column-m' ascent from ⊥: b(m') = m'; enters m' from x ∈ R_{k−1} of height k−1; stays in R_{k−1} below m'):
+           'UNSAT': 296 (k=2, also with all drops), k=3 'UNSAT': 58
+   colasc.py (no m at all: c ∈ R_k, h(c) = k, F(c, c) ≤ c, b(c) ∉ R_{k−1}; no tightness):
+           vac 'SAT': 207 [closure 5 10 1 40]; asc1 / ascS / asc2 'UNSAT': 207; sweep 4 14 'UNSAT': 413; k=3 'UNSAT': 47 [closure 6 12 9 8]
+   bq      (B-route q = b(m') ∈ R_{k−1}, m' off the row-q descent): 'UNSAT': 296; needs uniqueness only (nouniq 'SAT': 157 smallest 11;
+           no2 / no3 / notop / nonew 'UNSAT': 296)
+   bqm     (m off the row-q descent): 'SAT': 171 smallest 11 [k=2], 'SAT': 15 [k=3] — the descent need not pass m
+   bqu     (with uniqueness dropped: a drop column u ∉ R_{k+1}): 'SAT': 132 smallest 11 — the drop column can lie outside R_3
+-- aout_core.py closure 5 10 1 40: R_2-tightness cores of aout: size 1: 165, size 2: 72; near-models: the excluded height-3 element is a(x)
+   (an upper cell) for an atom x ≤ m' in R_1.

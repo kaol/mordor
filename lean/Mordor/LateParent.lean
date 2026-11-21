@@ -141,6 +141,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   high top).
 * §34.3z²⁵¹: `good_of_noDrop` (no drop below `q` ⟹ `q` good).
 * §34.3z²⁵²: `FeedChain` (conjecture), **`singletonLower_of_feedChain`**.
+* §34.3z²⁵³: **`descChain_one_of_pureA`**, `feedChain_one_of_pureA` (FeedChain at level 1, A-route), `feeder_B_facts`.
 -/
 
 namespace Mordor.OrbitHeight
@@ -4589,5 +4590,79 @@ theorem singletonLower_of_feedChain [WellFoundedLT α] {H : ℕ} (hn : NoChain �
     exact upCell_of_minLevel hn ⟨p, m', v, hpc, hcR, hc1, hcv, hv, hmv, hpv, Or.inl hpre⟩
   obtain ⟨z, hzm, hz, hzR⟩ := secondEntry_of_canonical (canonical_of_upCell hn hall hup)
   exact hzm (huniq z hzR hz)
+
+/-! ### FeedChain at level 1: the A-route (§34.3z²⁵³) -/
+
+/-- **A descent chain onto a pure-A column at level 1** (with `R_2` tight). Let `c ∈ R_2` have height 2 with
+`F c c ≤ c`, and suppose it entered `R_2` only by the A-route: `b c ∉ R_1`. Then `q = F ⊥ c` is an atom of `R_1`
+with `a q = c`, so `(q, c)` is a level-1 descent chain whose top is the limit of the row-`q` descent.
+* `c ∉ R_1`, since `b c ≤ c`.
+* `q ≠ ⊥`: otherwise `b c = ⊥ ∈ R_1`.
+* `q ≠ c`: otherwise `c ≤ a ⊥ ∈ R_1`.
+* `q ≤ F q c < c` would force `F q c = q`, and then `b c ≤ q ∈ R_1`. So `F q c = c`, `c ≤ a q`, and tightness
+  gives `a q = c`. -/
+theorem descChain_one_of_pureA {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    {c : α} (hcR : c ∈ Rk F 2) (hc : height H c = 2) (hcc : F c c ≤ c) (hb : b F c ∉ Rk F 1) :
+    ∃ p, DescChain F H 1 p c := by
+  have hbot1 : (⊥ : α) ∈ Rk F 1 := Rk_mono (Nat.zero_le 1) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl)
+  have hcb : b F c ≤ c := b_le hcc
+  have hc1 : c ∉ Rk F 1 := fun h => hb (Rk_down 1 hcb h)
+  have hqc : F ⊥ c ≤ c := ((F.mono bot_le) c).trans hcc
+  have hqb : F ⊥ c ≠ ⊥ := fun e => hb (Rk_down 1 (b_le e.le) hbot1)
+  have hqne : F ⊥ c ≠ c := fun e =>
+    hc1 (mem_succ_of_a (k := 0) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) (le_a e.symm.le))
+  have hq1 : height H (F ⊥ c) = 1 := by
+    have h1 := height_strictMono hn (bot_lt_iff_ne_bot.2 hqb)
+    have h2 := height_strictMono hn (lt_of_le_of_ne hqc hqne)
+    rw [height_bot_eq_zero] at h1
+    omega
+  have hqR : F ⊥ c ∈ Rk F 1 := mem_one_of_bot_value hn hq1 hqc le_rfl
+  have hFqc : F (F ⊥ c) c = c := by
+    by_contra hne
+    have hlo : F ⊥ c ≤ F (F ⊥ c) c := (F.mono bot_le) c
+    have hup : F (F ⊥ c) c ≤ c := ((F.mono hqc) c).trans hcc
+    have hlt : F (F ⊥ c) c < c := lt_of_le_of_ne hup hne
+    have heq : F ⊥ c = F (F ⊥ c) c :=
+      eq_of_le_of_height_ge hn hlo (by have := height_strictMono hn hlt; omega)
+    exact hb (Rk_down 1 (b_le heq.symm.le) hqR)
+  have hca : c ≤ a F (F ⊥ c) := le_a hFqc.symm.le
+  have haR : a F (F ⊥ c) ∈ Rk F 2 := mem_succ_of_a hqR le_rfl
+  have hac : c = a F (F ⊥ c) := eq_of_le_of_height_ge hn hca (by have := hk2 _ haR; omega)
+  obtain ⟨M, hM⟩ := exists_iter_fix_mono hn (F (F ⊥ c)).mono H (height_le (⊤ : α)) le_top
+  have hlim : (F (F ⊥ c))^[M] (⊤ : α) = a F (F ⊥ c) := le_antisymm (le_a hM.symm.le) (a_le_iter le_top M)
+  exact ⟨F ⊥ c, hqR, hq1, hcR, hc, hqc, by rw [hFqc]; exact hqc, M, hlim.trans hac.symm⟩
+
+/-- **FeedChain at level 1 when the feeder is pure-A.** In the singleton configuration at stage 2 (only `R_2`
+tightness, `m′ < m` and `F m′ m ≤ m′` are used), if `b m′ ∉ R_1`, the feeder tops a level-1 descent chain. The remaining
+case is `b m′ ∈ R_1` (the B-route). -/
+theorem feedChain_one_of_pureA {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    {m m' : α} (hm'R : m' ∈ Rk F 2) (hm'2 : height H m' = 2) (hlt : m' < m) (hlo : F m' m ≤ m')
+    (hb : b F m' ∉ Rk F 1) : ∃ p, DescChain F H 1 p m' :=
+  descChain_one_of_pureA hn hk2 hm'R hm'2 (((F m').mono hlt.le).trans hlo) hb
+
+/-- **The B-route facts at level 1.** Let `m′ ∈ R_2` have height 2, with `m′ < m`, `F m′ m ≤ m′` and `m ∉ R_2`.
+Suppose `q = b m′ ∈ R_1` is an atom. Then `b m = m′` and `F q m = m′`. (`q ≤ b m ≤ m′`, and `b m = q` would put `m` into
+`R_2`. `q = F q m′ ≤ F q m ≤ F m′ m ≤ m′`, and `F q m = q` would give `b m ≤ q`.) So if `m` lies on the row-`q`
+descent, the descent runs `m → m′ → q`, and `F q m′ = q` (§34.3z²⁵³). -/
+theorem feeder_B_facts {H : ℕ} (hn : NoChain α (H + 1)) {m m' : α} (hm'2 : height H m' = 2) (hlt : m' < m)
+    (hlo : F m' m ≤ m') (hmR : m ∉ Rk F 2) (hqR : b F m' ∈ Rk F 1) (hq1 : height H (b F m') = 1) :
+    b F m = m' ∧ F (b F m') m = m' ∧ F (b F m') m' = b F m' := by
+  have hbm : b F m ≤ m' := b_le hlo
+  have hqbm : b F m' ≤ b F m := (b F).mono hlt.le
+  have hbmR : b F m ∉ Rk F 1 := fun h => hmR (mem_succ_of_cell (k := 1) h le_rfl (Or.inl (col_b m).le))
+  have hbm_eq : b F m = m' := by
+    by_contra hne
+    have h1 := height_strictMono hn (lt_of_le_of_ne hbm hne)
+    have h2 : b F m' = b F m := eq_of_le_of_height_ge hn hqbm (by omega)
+    exact hbmR (h2 ▸ hqR)
+  have hcol : F (b F m') m' = b F m' := col_b m'
+  have hlo2 : b F m' ≤ F (b F m') m := hcol.symm.le.trans ((F (b F m')).mono hlt.le)
+  have hup2 : F (b F m') m ≤ m' := ((F.mono (hqbm.trans hbm)) m).trans hlo
+  refine ⟨hbm_eq, ?_, hcol⟩
+  by_contra hne
+  have h1 := height_strictMono hn (lt_of_le_of_ne hup2 hne)
+  have h2 : b F m' = F (b F m') m := eq_of_le_of_height_ge hn hlo2 (by omega)
+  have : b F m ≤ b F m' := b_le h2.symm.le
+  exact hbmR (Rk_down 1 this hqR)
 
 end Mordor.OrbitHeight

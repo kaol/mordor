@@ -125,3 +125,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁵⁸: `dlatoms.py` (the good DL atoms of the zero fibre: modes vac/baddl/goodatom/dlgood/uniq/dpart/exch4 and the mutants uniqany/dpartX/exch4R/exchA; flags n1/r1t/not2/h3/h4). Output `out_dlatoms258.txt`.
 - §34.3z²⁵⁹: `dlatoms.py` modes gdnotd, dlnotd, badbelowd. Output `out_dlatoms259.txt`.
 - §34.3z²⁶⁰: `dlatoms.py` mode allbadbelowd and flags hd1/hd2/dbad. Output `out_dlatoms260.txt`.
+- §34.3z²⁶¹: `dlatoms.py` modes lg/lgP/lgB/lgPP and coP/coC/coM1/coM2 (landings). Output `out_landing261.txt`.

@@ -1,0 +1,14 @@
+== §34.3z²⁶¹ (exact; models replayed in Python; UNSAT = the claim holds). World W0 with n1. λ(e) = first element of height ≤ 2 on the
+   row-e descent from ⊤; d = end of the ⊥-descent.
+   corpus             lg (LandGood)  lgP (LandGood⁺)        lgB (λ(⊥), mutant)   lgPP (mutant)   lgP with hd1 dbad
+   sweep 4 14         UNSAT 160      UNSAT 160              UNSAT 160 (no power)  SAT 124         —
+   closure 5 10 1 40  UNSAT 40       SAT 16, min 15         SAT 16, min 15        SAT 40          SAT 16
+   closure 5 10 2 40  UNSAT 40       SAT 18, min 13         SAT 18                SAT 40          SAT 18
+   closure 5 10 3 40  UNSAT 40       SAT 21, min 13         SAT 21                SAT 40          SAT 21
+   closure 5 11 4 30  UNSAT 30       SAT 14, min 15         SAT 14                SAT 30          SAT 14
+   closure 5 11 5 40  UNSAT 40       SAT 22, min 13         SAT 22                SAT 40          SAT 22
+   LandGood⁺ fails exactly on the case-(b) lattices with d bad (compare out_dlatoms260.txt); LandGood survives with power there.
+-- CoLand (h(d) = 2): coP (no atom q ≤ d ∧ λ(d) landing at λ(d)) and coC (no good atom q ≤ d ∧ λ(d)):
+   sweep 4 14: UNSAT 160, 160; closure 5 10 1 40: UNSAT 40, 40; closure 5 11 5 40: UNSAT 40, 40.
+   mutants coM1 (an atom below d not co-landing) / coM2 (an atom p below d with F(p, λ(d)) ≱ p): SAT 55 / 55 [sweep 4 14],
+   38 / 38 [closure 5 10 1 40], 40 / 40 [closure 5 11 5 40], smallest 7.

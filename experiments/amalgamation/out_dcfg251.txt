@@ -1,0 +1,18 @@
+== §34.3z²⁵¹ dcfg.py — the D1 configuration (R_2 tight, h(⊤) ≥ 4, a(⊥) = ⊥, h(d) = 2, z the drop column of the row-d descent,
+   q an atom with q < d, q ≤ F(⊥, z)); exact; models replayed in Python; UNSAT = the claim holds
+   vac: 'SAT': 39, 'UNSAT': 1 [closure 5 10 1 40]  (configuration present in 39/40)
+   D1  q good:                                                        'UNSAT': 40 [closure 5 10 1 40]; 'UNSAT': 96 [sweep 4 14]
+   A3  every x > q on the row-q descent has q ≤ F(⊥, x):              'UNSAT': 40; 'UNSAT': 96        (⟹ D1 via good_of_noDrop)
+   B1  the row-q descent from z never drops below q (x > q):         'UNSAT': 40; 'UNSAT': 96
+   Cb  q ≤ F(⊥, F(q, z)):                                             'UNSAT': 40; 'UNSAT': 96
+   refuted:
+   A1  z lies on the row-q descent from ⊤:                           'SAT': 25, 'UNSAT': 15 smallest 11
+   A5  every x > q on the row-q descent has x ≥ z or x ≤ F(d, z):     'SAT': 25, 'UNSAT': 15 smallest 11
+   A7  every x > q on the row-q descent has x ≥ d:                    'SAT': 39, 'UNSAT': 1 smallest 11
+   A10 every x > q on it with x ≱ z has F(q, x) = q:                  'SAT': 39 smallest 11; 'SAT': 63 smallest 6 [sweep]
+   B3  F(q, z) is a lower cover of q or post-fixed in row q:          'SAT': 29, 'UNSAT': 11 smallest 11
+   Ca  every x > q on the row-q descent has x ≥ F(q, z):              'SAT': 29, 'UNSAT': 11 smallest 11
+   (An earlier A3/B1 run counted x = q itself as a drop; that version was trivially SAT and is superseded.)
+-- dcfg.py D1 core: R_2-tightness cores of sizes 1–7 (1:1, 2:9, 3:11, 4:9, 5:8, 6:1, 7:1); near-model violations mostly via lower cells
+   of q's row (F(q, w) = q), of d's row, and of other height-2 rows of R_1, and via a(h2).
+-- proved step (log): F(q, z) > q strictly (F(q, z) = q would be a lower cell putting z, of height ≥ 3, into R_2).

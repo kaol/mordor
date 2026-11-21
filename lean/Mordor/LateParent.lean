@@ -139,6 +139,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁴⁹: `minLevel_top_new` (MinLevel certificate tops are new at their stage).
 * §34.3z²⁵⁰: **`not_good_of_ahead`** (ahead-of-schedule elements are bad), **`drop_below_top`** (the drop lemma below a
   high top).
+* §34.3z²⁵¹: `good_of_noDrop` (no drop below `q` ⟹ `q` good).
 -/
 
 namespace Mordor.OrbitHeight
@@ -4534,5 +4535,25 @@ theorem drop_below_top {H : ℕ} (hn : NoChain α (H + 1)) {c : α} {N : ℕ} (h
         obtain ⟨q, hq, hqy, hqc⟩ :=
           ih (F ⊥ (c ⊔ y)) (by have := height_strictMono hn hlt; omega) hcy' hF' hb
         exact ⟨q, hq, hqy.trans hF, hqc⟩
+
+/-- **No drop below `q` means `q` is good.** If every element `x > q` of the row-`q` descent from `⊤` has `q ≤ F q x`,
+then `q ≤ a q` or the descent meets `q`. If the descent avoids `q`, induction shows every iterate is `≥ q`: an iterate
+`≥ q` and `≠ q` is `> q`, so the next one is `≥ q`. The limit is then a fixed point `≥ q`, which lies below `a q`. (It
+suffices that `q ≤ F ⊥ x` at those `x`, since `F ⊥ ≤ F q`; this is A3 of §34.3z²⁵¹.) -/
+theorem good_of_noDrop {H : ℕ} (hn : NoChain α (H + 1)) {q : α}
+    (hnd : ∀ i, q < (F q)^[i] (⊤ : α) → q ≤ F q ((F q)^[i] (⊤ : α))) :
+    q ≤ a F q ∨ ∃ i, (F q)^[i] (⊤ : α) = q := by
+  by_cases hmeet : ∃ i, (F q)^[i] (⊤ : α) = q
+  · exact Or.inr hmeet
+  push_neg at hmeet
+  have hall : ∀ i, q ≤ (F q)^[i] (⊤ : α) := by
+    intro i
+    induction i with
+    | zero => exact le_top
+    | succ i ih =>
+      rw [Function.iterate_succ_apply']
+      exact hnd i (lt_of_le_of_ne ih (Ne.symm (hmeet i)))
+  obtain ⟨M, hM⟩ := exists_iter_fix_mono hn (F q).mono H (height_le (⊤ : α)) le_top
+  exact Or.inl ((hall M).trans (le_a hM.symm.le))
 
 end Mordor.OrbitHeight

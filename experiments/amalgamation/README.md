@@ -115,3 +115,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁴⁸: `gb1.py` (GoodBase at j = 1 with R_2 tight: modes any/dtwo/datom/r1/r3/ex/exp/L1–L4/pq), `gb1_core.py` (R_2-tightness cores and near-models; flags `dtwo`, `show`). Output `out_gb248.txt`, `gb1_*_min*.json`.
 - §34.3z²⁴⁹: `sl_tight.py` (is R_J non-tight consistent with the SingletonLower configuration?), `gb1.py` modes `Q1`–`Q4` (refuted strengthenings), `one`, `one2` (inspection). Output `out_gb249.txt`.
 - §34.3z²⁵⁰: `gb1.py` modes `C12`, `hard`, `T1`, `D1`–`D3` (the case h(d) = 2: atoms below F(⊥, z) at d's drop column). Output `out_gb250.txt`.
+- §34.3z²⁵¹: `dcfg.py` (the D1 configuration; modes D1, A1/A3/A5/A7/A10, B1/B3, Ca/Cb, vac; flag `core`). Output `out_dcfg251.txt`.

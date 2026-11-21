@@ -11,5 +11,5 @@
 -- colasc.py mode hs (every ascent element e < c in R_{h(e)}; c ∈ R_k, h(c) = k, F(c,c) ≤ c, pure-A unless noPA):
    k=3: 'UNSAT' 47 [closure 6 12 9 8], 102 [closure 5 11 4 30] (also noPA); noPA 470 [closure 6 12 1 80]
    k=4 [closure 7 14 4 8]: 'SAT': 35 of 35 (vac 35), smallest 24, with and without pure-A and with tK. Refuted.
-   Shape: ascent ⊥ → e → c with h(e) = 2 and e entering only at stage 3 (R_3 non-tight).
+   Shape: ascent ⊥ → e → c with h(e) = 2 and e entering only at stage 3 (R_3 non-tight). Model: colasc_hs_k4_tK_min24.json.
    ascS at k=4 (sublemma S): 'UNSAT': 35.

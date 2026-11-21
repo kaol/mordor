@@ -37,6 +37,31 @@ FLG = {'n1', 'r1t', 'not2', 'h3', 'h4', 'hd1', 'hd2', 'dbad'}
 MODES = {'vac', 'baddl', 'goodatom', 'dlgood', 'uniq', 'uniqany', 'dpart', 'dpartX', 'exch4', 'exch4R', 'exchA', 'gdnotd', 'badbelowd', 'dlnotd', 'allbadbelowd', 'lg', 'lgP', 'lgB', 'lgPP', 'coP', 'coC', 'coM1', 'coM2', 'lgE', 'lamZ', 'lamF0', 'lgPart'}
 MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in FLG}; args = [a for a in sys.argv[2:] if a not in FLG]
 if MODE not in MODES: raise SystemExit('unknown mode')
+MEANING = {
+    'vac': 'SAT = the world has a model (hypothesis only)',
+    'baddl': 'SAT = some DL atom of R_1 is bad',
+    'goodatom': 'SAT = every atom of R_1 is bad (refutes GoodAtom1)',
+    'dlgood': 'SAT = every DL atom of R_1 is bad (refutes DLGood)',
+    'uniq': 'SAT = two DL atoms of R_1 are good (refutes ExactlyOne uniqueness)',
+    'uniqany': 'SAT = two atoms of R_1 are good (mutant: DL dropped)',
+    'dpart': 'SAT = some atom p <= d is bad and no good DL atom q != p has p v q in Z (refutes DPartner)',
+    'dpartX': 'SAT = mutant of dpart with p v q not in Z',
+    'exch4': 'SAT = some bad DL atom has no DL partner (p v q in Z) that is good or deeper (refutes DepthExchange)',
+    'exch4R': 'SAT = mutant: deeper reversed', 'exchA': 'SAT = mutant: partner must be good',
+    'gdnotd': 'SAT = some good DL atom of R_1 is not below d',
+    'badbelowd': 'SAT = SOME atom below d is bad (not: every)',
+    'allbadbelowd': 'SAT = EVERY atom below d is bad',
+    'dlnotd': 'SAT = some DL atom of R_1 is not below d',
+    'lg': 'SAT = no good atom of R_1 lies below lambda(d) (refutes LandGood)',
+    'lgP': 'SAT = no good atom of R_1 lies below F(d, lambda(d)) (refutes LandGood+)',
+    'lgB': 'SAT = no good atom below lambda(bot) (mutant)', 'lgPP': 'SAT = no good atom below F(d, F(d, lambda(d))) (mutant)',
+    'lgE': 'SAT = no good atom below F(bot, u), u the high predecessor of lambda(d) (refutes LandGoodE)',
+    'lgPart': 'SAT = no good atom q != d, q <= lambda(d), with d v q in Z (refutes PartLand)',
+    'coP': 'SAT = no atom q <= d ^ lambda(d) lands at lambda(d) (refutes CoLand)',
+    'coC': 'SAT = no good atom q <= d ^ lambda(d)',
+    'coM1': 'SAT = some atom below d does not co-land (mutant)', 'coM2': 'SAT = some atom p below d has F(p, lambda(d)) not >= p (mutant)',
+    'lamZ': 'SAT = lambda(d) is not an element of Z of height 2 above d', 'lamF0': 'SAT = F(d, lambda(d)) != bot',
+}
 C = collections.Counter(); INFO = collections.Counter(); best = None
 for L in lattices(args):
     n = L.n; le = L.le; h = L.rank; top = L.top; bot = L.bot; NO = L.height + 1; jn = L.join
@@ -310,6 +335,6 @@ for L in lattices(args):
         if best is None or n < best[0]: best = (n, dict(sets=L.S, F=F))
     else: C['UNSAT'] += 1
     E.S.delete()
-print(MODE, ' '.join(sorted(FL)), args, dict(C), 'smallest', best[0] if best else None, dict(INFO))
+print(MODE, '|', MEANING.get(MODE, '?'), '|', ' '.join(sorted(FL)), args, dict(C), 'smallest', best[0] if best else None, dict(INFO))
 if best and MODE != 'vac':
     json.dump(best[1], open(f'dlatoms_{MODE}{"".join("_" + x for x in sorted(FL))}_min{best[0]}.json', 'w'))

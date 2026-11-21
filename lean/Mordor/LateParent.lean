@@ -155,6 +155,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   ⊥-descent), `eq_of_botDesc_zero`, **`dl_atom_unique_of_tight`** (with R_1 tight the zero fibre has one DL atom).
 * §34.3z²⁶⁰: **`overshadowed_of_bad_botEnd`** (a bad end atom of the ⊥-descent has an element of R_1 above it).
 * §34.3z²⁶¹: **`good_of_desc_cover`** (one cell at a covering element of its own descent makes an atom good).
+* §34.3z²⁶³: `dl_of_le_row`, **`good_of_dominating_desc`**, `good_of_dominating_desc_bot` (INH: one cell certifies an atom below a
+  dominating row's height-2 descent element), `iter_row_mono`, **`landing_late_a`**, **`landing_late_b`** (row d lands late).
 -/
 
 namespace Mordor.OrbitHeight
@@ -5152,5 +5154,87 @@ theorem good_of_desc_cover {H : ℕ} (hn : NoChain α (H + 1)) {p u : α} {i : �
   · rcases eq_or_lt_of_le hFu with he' | hlt'
     · exact Or.inl (hpu.le.trans (le_a he'.symm.le))
     · have h1 := height_strictMono hn hlt; have h2 := height_strictMono hn hlt'; omega
+
+/-! ### Goodness inherited from a dominating row; landing time (§34.3z²⁶³, from an outside brief) -/
+
+/-- DL is antitone in the row. -/
+theorem dl_of_le_row {r r' p : α} (hrr : r' ≤ r) (hdl : DL F r p) : DL F r' p :=
+  fun y hy => hdl y (hy.trans ((F.mono hrr) _))
+
+/-- **INH (briefer run 9).** A height-2 element `p` on the descent of a row `x` above an atom `q ∈ R_1` certifies `q`
+by the single cell `q ≤ F q p` (DL is inherited from row `x`; `R_2` tight). -/
+theorem good_of_dominating_desc {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    {x p q : α} {i : ℕ} (hi : (F x)^[i] (⊤ : α) = p) (hp : height H p = 2)
+    (hqR : q ∈ Rk F 1) (hq : height H q = 1) (hqx : q ≤ x) (hcell : q ≤ F q p) : IsGood F q :=
+  base_good_of_DL (k := 1) hn hk2 hqR hq hp hcell (dl_of_le_row hqx (dl_of_rowDesc hi))
+
+/-- **BotUp's payoff.** The cell may be read on row `⊥`. -/
+theorem good_of_dominating_desc_bot {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    {x p q : α} {i : ℕ} (hi : (F x)^[i] (⊤ : α) = p) (hp : height H p = 2)
+    (hqR : q ∈ Rk F 1) (hq : height H q = 1) (hqx : q ≤ x) (hcell : q ≤ F ⊥ p) : IsGood F q :=
+  good_of_dominating_desc hn hk2 hi hp hqR hq hqx (hcell.trans ((F.mono bot_le) p))
+
+/-- Row domination of descents from `⊤`. -/
+theorem iter_row_mono {x x' : α} (h : x ≤ x') : ∀ i : ℕ, (F x)^[i] (⊤ : α) ≤ (F x')^[i] ⊤
+  | 0 => le_rfl
+  | i + 1 => by
+    rw [Function.iterate_succ_apply', Function.iterate_succ_apply']
+    exact ((F.mono h) _).trans ((F x').mono (iter_row_mono h i))
+
+/-- **LT(a) (briefer run 9).** If the ⊥-descent ends at `d` of height 2 (index `N`), the row-`d` descent is still high
+(height > 2) at every index `i ≤ N`: row `d` lands strictly after the ⊥-descent reaches `d`. -/
+theorem landing_late_a {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    {d : α} {N : ℕ} (hN : (F ⊥)^[N] (⊤ : α) = d) (hd0 : F ⊥ d = ⊥) (hd : height H d = 2)
+    (htop : 2 < height H (⊤ : α)) : ∀ i ≤ N, 2 < height H ((F d)^[i] (⊤ : α)) := by
+  have hdR : d ∈ Rk F 1 :=
+    mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl (Or.inl hd0.le)
+  intro i
+  induction i with
+  | zero => intro _; simpa using htop
+  | succ i ih =>
+    intro hi
+    have hy := ih (by omega)
+    have hdz : d ≤ (F d)^[i + 1] (⊤ : α) :=
+      (hN ▸ botDesc_antitone (F := F) hi).trans (iter_row_mono bot_le (i + 1))
+    by_contra hz
+    have heq : d = (F d)^[i + 1] (⊤ : α) := eq_of_le_of_height_ge hn hdz (by omega)
+    have hcell : F d ((F d)^[i] (⊤ : α)) ≤ d := by
+      rw [← Function.iterate_succ_apply' (F d), ← heq]
+    have := hk2 _ (mem_succ_of_cell (k := 1) (m := d) (x := d) hdR le_rfl (Or.inl hcell))
+    omega
+
+/-- **LT(b) (briefer run 9).** If the ⊥-descent ends at an atom `d` (index `N`) and `d` is bad, the row-`d` descent is
+high at every index `i < N`: row `d` lands no earlier than index `N`. -/
+theorem landing_late_b {H : ℕ} (hn : NoChain α (H + 1))
+    {d : α} {N : ℕ} (hN : (F ⊥)^[N] (⊤ : α) = d) (hd0 : F ⊥ d = ⊥) (hd : height H d = 1)
+    (hbad : ¬ IsGood F d) (htop : 2 < height H (⊤ : α)) : ∀ i < N, 2 < height H ((F d)^[i] (⊤ : α)) := by
+  have hdb : d ≠ ⊥ := fun e => by rw [e, height_bot_eq_zero] at hd; omega
+  intro i
+  induction i with
+  | zero => intro _; simpa using htop
+  | succ i ih =>
+    intro hi
+    set c := (F ⊥)^[i + 1] (⊤ : α) with hc
+    set z := (F d)^[i + 1] (⊤ : α) with hz
+    have hdc : d ≤ c := hN ▸ botDesc_antitone (F := F) (show i + 1 ≤ N by omega)
+    have hcz : c ≤ z := iter_row_mono bot_le (i + 1)
+    have hcd : c ≠ d := by
+      intro e
+      have h2 : (F ⊥)^[i + 2] (⊤ : α) = ⊥ := by
+        rw [Function.iterate_succ_apply', ← hc, e, hd0]
+      have : d ≤ (F ⊥)^[i + 2] (⊤ : α) := hN ▸ botDesc_antitone (F := F) (show i + 2 ≤ N by omega)
+      exact hdb (le_bot_iff.1 (h2 ▸ this))
+    have hdc' : d < c := lt_of_le_of_ne hdc (Ne.symm hcd)
+    have hc2 : 2 ≤ height H c := by have := height_strictMono hn hdc'; omega
+    by_contra hzl
+    have hcz' : c = z := eq_of_le_of_height_ge hn hcz (by omega)
+    have hdz : d < z := hcz' ▸ hdc'
+    have hz2 : height H c ≤ 2 := by rw [hcz']; omega
+    have hzh : height H z = height H d + 1 := by rw [← hcz']; omega
+    have hcell : d ≤ F d z := by
+      have h1 : d ≤ (F ⊥)^[i + 2] (⊤ : α) := hN ▸ botDesc_antitone (F := F) (show i + 2 ≤ N by omega)
+      rw [Function.iterate_succ_apply', ← hc, hcz'] at h1
+      exact h1.trans ((F.mono bot_le) z)
+    exact hbad (good_of_desc_cover hn (i := i + 1) rfl hdz hzh hcell)
 
 end Mordor.OrbitHeight

@@ -132,3 +132,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁶⁵: `dlatoms.py` mode btstepT with flags xT/xQ/xP/xD (StepT and its hypothesis drops). Output `out_step265.txt`.
 - §34.3z²⁶⁶: `dlatoms.py` btstepT flags cov/xC/pre/lo2 (Cov, PreDrop). Output `out_cov266.txt`.
 - §34.3z²⁶⁷: `dlatoms.py` modes btbase (BaseD), rowdrop (RowDrop), lamnz (LamNZ); flags hyp (hypothesis only: the vacuity run), dump, N2/N3, mz, xbd/xad (route probes). Output `out_rowdrop267.txt`.
+- §34.3z²⁶⁸: `rowdrop_core.py` (RowDrop with tightness facts as assumptions; cores), `abs_rowdrop.py` (two-map AbstractRowDrop), `cert1_sat.py` (Cert1 / CertAtom, independent encoding). Height-6 corpus closure 6 12 1 40. Output `out_height6_268.txt`.

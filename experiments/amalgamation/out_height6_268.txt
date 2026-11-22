@@ -1,0 +1,47 @@
+== §34.3z²⁶⁸ (exact; every SAT model replayed in Python; countermodels also re-checked from the definitions by an
+   independent checker that computes a, b and R_0..R_2 without rstages). The new corpus: closure 6 12 1 40
+   (heights: 24 lattices of height 6, 15 of height 5, 1 of height 4); also closure 6 14 2 40 (23 of height 6).
+   All corpora used in §34.3z²⁵⁸–²⁶⁷ have height <= 5.
+
+-- World W0 (a(bot) = bot, R_2 tight, top not in R_2) with n1, on closure 6 12 1 40: vac SAT 40 (smallest 15);
+   with hd2: SAT 40.
+
+-- rowdrop_core.py (independent encoding of RowDrop at N = 2: one-hot roles u1 = F(bot, top), d = F(bot, u1),
+   v1 = F(d, top), s = F(bot, v1); role-level tightness facts as assumptions; SAT = RowDrop fails under them)
+   closure 5 11 4 30:  T (full tightness): UNSAT 30;  no facts: SAT 23, min 10 (rowdrop_core_nofacts_min10.json) (= dlatoms rowdrop N2 / not2 counts)
+   minimal cores, facts S AD ZT U V (S: s not in R_2; AD: h(a(d)) <= 2; ZT: Z tight; U: u1 not in R_2; V: v1 not in R_2):
+     5 11 5 40: U 36 (none needed: 4)   5 10 1 40: U 30 (10)   5 10 2 40: U 27 (13)   5 11 4 30: U 23 (7)
+   facts Ubd (F(d, u1) not <= d), Uad (u1 not <= a(d)), Ule (u1 not <= F(d, u1)):
+     cores Ubd+Uad on 32/25/27/20 lattices, Ubd+Ule on 4/5/0/3; Ubd+Ule alone: SAT 27/21/25/16 (not enough).
+   Ubd Uad without 'top not in R_2' (noTop): UNSAT on all four corpora and sweep 4 14; anyd (d of any height): SAT 23/30;
+   noA (a(bot) = bot dropped): UNSAT 30.
+   ** T on closure 6 12 1 40: SAT 21, UNSAT 19, smallest 20 (rowdrop_core_T_min20.json): RowDrop is REFUTED. **
+      Independent check: W0 holds, h(d) = 2, F(bot, d) = bot, N = 2, s = 14 of height 3, s not <= d; height 6.
+
+-- abs_rowdrop.py (AbstractRowDrop: psi <= phi monotone, u = psi(top), d = psi(u) of height 2, psi(d) = bot, u != d,
+   phi(u) not <= d, u not <= gfp(phi)  =>  psi(phi(top)) <= d; SAT = it fails)
+   closure 5 11 4 30: UNSAT 30; mutants xad SAT 30 (min 9), xbd SAT 23 (min 10), anyd SAT 23 (min 10).
+   sweep 4 14: UNSAT 160.
+   closure 6 12 1 40: SAT 24 (all of height 6), min 16;  6 14 2 40: SAT 23, min 20;  6 16 3 30: SAT 22, min 26.
+   with zt (psi^-1(bot) of height <= 2): unchanged, SAT 24 / 23 (min 16).  => AbstractRowDrop is a height-5 artifact.
+
+-- dlatoms.py at height 6 (closure 6 12 1 40):
+   btbase n1 hd2 (BaseD):        SAT 13, min 21  -> BaseD REFUTED   (dlatoms_btbase_hd2_n1_min21.json)
+   lamnz n1 hd2 (LamNZ):         SAT 12, min 21  -> LamNZ REFUTED   (dlatoms_lamnz_hd2_n1_min21.json)
+   botup n1 hd2 (BotUp, case a): SAT 12, min 21  -> BotUp(a) REFUTED (dlatoms_botup_hd2_n1_min21.json)
+   goodatom n1 (GoodAtom1):      UNSAT 40;  mutant not2: SAT 40, min 15  -> GoodAtom1 holds with power
+   Each refuting model re-checked by the independent checker (W0, n1, h(d) = 2, and the failing statement).
+
+-- cert1_sat.py (independent encoding of Cert1, the hypothesis of goodAtom1_of_cert1; row descents as closed sets;
+   SAT = Cert1 fails in W0 with n1):
+   sweep 4 14: UNSAT 160 (xZ: UNSAT 160).  closure 5 11 5 40: UNSAT 40.
+   closure 6 12 1 40: UNSAT 40;  6 14 2 40: UNSAT 40.
+   xZ (CertAtom: x = q, the atom's own row): 6 12 1 40 UNSAT 40; 6 14 2 40 UNSAT 40.
+   mutants not2 (R_2 tightness dropped): Cert1 SAT 40, min 15; CertAtom SAT 40, min 15.
+   => Cert1 and CertAtom hold with power at height 6.
+
+-- more of the ladder at height 6 (closure 6 12 1 40):
+   lg n1 (LandGood): UNSAT 40;  mutant not2: SAT 40, min 15  -> holds with power
+   lgPart n1 hd1 dbad (PartLand, case (b)): UNSAT 40; hypothesis (vac n1 hd1 dbad): SAT 35 (23 of height 6), min 15
+     (lgPart without hd1 counts worlds with h(d) = 2: not case (b), not a refutation)
+   btstepT (StepT) and btstepT cov (Cov): pending (long runs)

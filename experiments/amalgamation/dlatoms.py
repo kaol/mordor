@@ -483,7 +483,7 @@ for L in lattices(args):
         if MODE in LANDMODES:
             lamf = lambda e: next((z for z in desc(e) if h[z] <= 2), None)   # None only without R_2 tightness (not2)
             ld = lamf(d)
-            if MODE == 'lg': reg = lambda p: le[p][ld]
+            if MODE == 'lg': reg = lambda p: ld is not None and le[p][ld]   # no landing (only without tightness): empty region
             elif MODE == 'lgP': reg = lambda p: le[p][F[d][ld]]
             elif MODE == 'lgPP': reg = lambda p: le[p][F[d][F[d][ld]]]
             elif MODE == 'lgB': reg = lambda p: le[p][lamf(bot)]

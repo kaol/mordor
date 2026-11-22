@@ -43,5 +43,6 @@
 -- more of the ladder at height 6 (closure 6 12 1 40):
    lg n1 (LandGood): UNSAT 40;  mutant not2: SAT 40, min 15  -> holds with power
    lgPart n1 hd1 dbad (PartLand, case (b)): UNSAT 40; hypothesis (vac n1 hd1 dbad): SAT 35 (23 of height 6), min 15
+   mutant lgPart n1 hd1 dbad not2: SAT 40, min 15  -> PartLand (case b) holds with power
      (lgPart without hd1 counts worlds with h(d) = 2: not case (b), not a refutation)
    btstepT (StepT) and btstepT cov (Cov): pending (long runs)

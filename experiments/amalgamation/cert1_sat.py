@@ -4,13 +4,13 @@ SAT = Cert1 fails: for every x in Z = {F(bot, x) = bot}, every atom q <= x and e
 descent from top, q is not <= F(bot, z).
 Row descents are encoded as closed sets on(x, .): top is on, and on(x, z) with F(x, z) = w puts w on. Extra elements only
 add constraints, so SAT models witness a real failure; each is replayed in Python.
-  python3 cert1_sat.py (sweep N MAX | closure K M SEED CNT) [xZ] [not2]   xZ: x ranges over atoms' rows only (x = q; CertAtom); not2 (mutant): R_2 tightness dropped"""
+  python3 cert1_sat.py (sweep N MAX | closure K M SEED CNT) [xZ] [not2] [adj]   adj: only rows x in Z with x meet d != bot (AdjCert); xZ: x ranges over atoms' rows only (x = q; CertAtom); not2 (mutant): R_2 tightness dropped"""
 import sys, collections
 sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import lattices
 from rstages import stages, a_of
-FL = {a for a in sys.argv[1:] if a in ('xZ', 'not2')}; args = [a for a in sys.argv[1:] if a not in FL]
+FL = {a for a in sys.argv[1:] if a in ('xZ', 'not2', 'adj')}; args = [a for a in sys.argv[1:] if a not in FL]
 print('cert1_sat | SAT = Cert1 fails in W0 with R_1 non-tight | flags', sorted(FL))
 C = collections.Counter(); HH = collections.Counter(); best = None
 for L in lattices(args):
@@ -23,6 +23,18 @@ for L in lattices(args):
             if h[z] > 2: add([-r(2, z)])
     add([r(1, z) for z in range(n) if h[z] > 1])
     rows = [x for x in range(n) if (h[x] <= 2 or 'not2' in FL) and x != bot and (h[x] == 1 or 'xZ' not in FL)]
+    if 'adj' in FL:                                       # d = last nonzero element of the bot-descent (exact iterates)
+        NO = L.height + 1; ib = lambda j, z: E.v('ib', j, z)
+        for z in range(n): add([ib(0, z)] if z == top else [-ib(0, z)])
+        for j in range(NO):
+            for z in range(n):
+                for w in range(n): add([-ib(j, z), -f(bot, z, w), ib(j + 1, w)])
+            for w in range(n):
+                for w2 in range(w + 1, n): add([-ib(j + 1, w), -ib(j + 1, w2)])
+        D = lambda e: E.v('isD', e)
+        for e in range(n):
+            if e == bot: add([-D(e)]); continue
+            onb = E.v('onb', e); E.iff_or(onb, [ib(j, e) for j in range(NO + 1)]); E.iff_and(D(e), [onb, f(bot, e, bot)])
     for x in rows:
         on = lambda z: E.v('on', x, z)
         add([on(top)])
@@ -33,7 +45,11 @@ for L in lattices(args):
             for q in range(n):
                 if h[q] != 1 or not le[q][x]: continue
                 for w in range(n):
-                    if le[q][w]: add([-f(bot, x, bot), -on(z), -f(bot, z, w)])
+                    if not le[q][w]: continue
+                    if 'adj' in FL:                       # only rows x touching d (x meet d != bot) are forbidden to certify
+                        for e in range(n):
+                            if e != bot and L.meet[x][e] != bot: add([-D(e), -f(bot, x, bot), -on(z), -f(bot, z, w)])
+                    else: add([-f(bot, x, bot), -on(z), -f(bot, z, w)])
     if E.S.solve():
         F = E.decode(); st = stages(L, F); inR = lambda x, i: st[x] is not None and st[x] <= i
         def desc(p):
@@ -41,7 +57,9 @@ for L in lattices(args):
             while v not in s: s.append(v); v = F[p][v]
             return s
         ok = a_of(L, F, bot) == bot and not inR(top, 2) and ('not2' in FL or all(h[z] <= 2 for z in range(n) if inR(z, 2))) and any(h[z] > 1 for z in range(n) if inR(z, 1))
-        ok = ok and not any(F[bot][x] == bot and le[q][x] and h[q] == 1 and h[z] == 2 and le[q][F[bot][z]]
+        bd = desc(bot); dd = [z for z in bd if z != bot and F[bot][z] == bot][0]
+        touch = (lambda x: L.meet[x][dd] != bot) if 'adj' in FL else (lambda x: True)
+        ok = ok and not any(F[bot][x] == bot and touch(x) and le[q][x] and h[q] == 1 and h[z] == 2 and le[q][F[bot][z]]
                             for x in rows for z in desc(x) for q in range(n))
         assert ok, 'SAT/Python mismatch'
         C['SAT'] += 1; HH[f'h{L.height}'] += 1

@@ -1,0 +1,52 @@
+== §34.3z²⁶⁹ paired run (adjoint-math-research v0.8 §8 + seed-template-metatheory v0.1), pinned da32dbf.
+   Arms: control = frontier-only brief (fresh briefer); meta = metatheory brief (fresh briefer, phase 1 selection, then a blind
+   builder, then phase 2 brief). Worker = this session: audit, independent re-encodings, verdicts, Lean.
+   All exact; every SAT model replayed in Python. Height-6 corpora: closure 6 12 1 40 (24 of height 6), 6 14 2 40 (23).
+
+-- Cost (subagent tokens as reported by the harness)
+   control briefer                  263k   5 exact runs (+1 crashed attempt re-run)
+   meta briefer, phase 1 (selection) 110k   0 runs
+   meta briefer, phase 1+2 total    241k   5 exact runs
+   blind builder (Go x sheaf)       237k   exhaustive checks on Go boards up to 3x4 (counts to 4x4)
+   meta arm total                   478k
+
+-- Build (seed-template-metatheory): Go strategic doctrine x sheaf on a site (seed and template chosen by the meta briefer by
+   stance inversion of the failure signature; builder told only the bare four-slot request).
+   12 axioms (4 sections, 4 restrictions, 4 covers), 5 forced / 7 contingent; 48 laws + 2 carrier checks;
+   242 predictions, 236 matched; 3 real surprises (shared-eye life S4b; colour-swap quotient never separated; on 1x4 the
+   sheafification of legality over adjacent pairs is the liberty sheaf); 1 code artifact fixed.
+   EMPTY slots: ko, seki, miai, shicho, sente/gote, thickness/moyo -- including miai and shicho (ladder / ladder-breaker),
+   the two concepts the seed was SELECTED for.
+
+-- Worker re-encodings (independent of the briefers' scripts)
+   muorbit_sat.py (exact descent iterates, mu as a relation, mu-closed set O):
+     botorbit (SAT = the mu-orbit of bot never reaches a fixed point):
+       closure 6 12 1 40 UNSAT 40 (h6 24);  6 14 2 40 UNSAT 40 (h6 23);  mutant not2: 6 12 1 40 SAT 40, min 15
+       sweep 4 14 UNSAT 160
+     muloop (SAT = a nonempty mu-closed set in Z* without fixed point):
+       closure 6 12 1 40 SAT 6, UNSAT 34, smallest 31 (muorbit_muloop_min31.json) -- agrees exactly with the control's
+       lamchase.py (SAT 6, smallest 31);  sweep 4 14 UNSAT 160;  not2 sweep SAT 96
+     vac: sweep 4 14 SAT 124
+   cert1_sat.py flag adj (d by exact bot-descent iterates; row descents as closed sets):
+     AdjCert (SAT = no x in Z with x meet d != bot carries a Cert1 certificate):
+       closure 6 12 1 40 UNSAT 40; 6 14 2 40 UNSAT 40; mutant not2: 6 12 1 40 SAT 40, min 15; closure 5 11 4 30 not2 SAT 30
+       -- agrees with the meta briefer's adj_probe.py (UNSAT on both corpora; contain-mutant d <= x fails 12 / 14 in (a))
+   Stored height-6 models (dlatoms_botup/lamnz_hd2_n1_min21.json, case a): no atom below d is good, and the CoLand atom
+     d meet lambda(d) is bad -> "some atom below d is good" (§34.3z²⁶⁰, case a) and CoLand (§34.3z²⁶¹) refuted at height 6.
+
+-- Candidates, tags (meta arm: seed-derived / frontier-derived, echo), verdicts
+   control  N1-N4 normal forms (landing facts; Cert1 = exit-row form; CertAtom = mu has a fixed point; GoodAtom1 <=> OwnCell)
+                                                          -> normal form; N4 proved in Lean (goodAtom1_iff_ownCell1)
+   control  BotOrbit (mu-orbit of bot reaches a fixed point; => CertAtom)
+                                                          -> new conjecture, holds with power, two encodings
+   control  MuLoop (every mu-cycle has length 1)          -> refuted (|L| = 31, height 6), two encodings
+   control  ExitCert, ExitCoLand, ExitGood                -> refuted (|L| = 15), single encoding (briefer's)
+   meta     AdjCert (Cert1 on a Z-row sharing an atom with d)   frontier-derived, ECHOES S4b + R3a
+                                                          -> new conjecture, holds with power, two encodings
+   meta     LandAdj (good atom below lambda(d) joined in Z with an atom of d)  frontier-derived, ECHOES S4b
+                                                          -> holds with power, single encoding (not yet re-encoded)
+   meta     CertOwn (= control's N4)                       frontier-derived, no echo -> normal form (same Lean theorem)
+   meta     LamOrbit (BotUp along the lambda-orbit of d)   frontier-derived, weak echo S-C -> refuted (|L| = 21)
+   meta     NZStep (lambda-step at a general Z-row)        frontier-derived, no echo       -> refuted (|L| = 15)
+   Seed-derived candidates: 0.  Seed-echoing candidates above `collapses`: 2 (AdjCert, LandAdj), the first in this programme.
+   Convergence: both arms produced the same normal form (N4 = CertOwn) independently.

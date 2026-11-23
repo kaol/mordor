@@ -161,6 +161,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶⁶: **`cov_of_preDrop`** (Cov from PreDrop, by `drop_below_top` and uniqueness of the atom below d ∧ t).
 * §34.3z²⁶⁷: `eq_atom_of_le_meet`, **`cov_of_baseD`**, `preDrop_of_baseD` (Cov, PreDrop and the landing step from BaseD: F(⊥, t) ≤ d),
   `lastIdx_ge`, **`baseD_of_rowDrop`** (BaseD from RowDrop: F(⊥, (F d)^(N−1) ⊤) ≤ d).
+* §34.3z²⁶⁹: `a_le_rowDesc`, `rowDesc_reaches_a`, **`ownCell_of_good`**, `OwnCell1`, **`goodAtom1_iff_ownCell1`** (GoodAtom1 ⟺ one cell of
+  an atom's own row at its height-2 descent element; Cert1 is the row-⊥ reading).
 -/
 
 namespace Mordor.OrbitHeight
@@ -5340,5 +5342,77 @@ theorem lastIdx_ge {d : α} {N m : ℕ} (hN : (F ⊥)^[N + 1] (⊤ : α) = d)
 theorem baseD_of_rowDrop {d : α} {N j : ℕ} (hrow : F ⊥ ((F d)^[N] (⊤ : α)) ≤ d) (hj : N ≤ j) :
     F ⊥ ((F d)^[j] (⊤ : α)) ≤ d :=
   ((F ⊥).mono (iter_antitone_of_le (F d).monotone le_top hj)).trans hrow
+
+
+/-! ### §34.3z²⁶⁹ OwnCell: GoodAtom1 as one cell of the atom's own row (both briefs of run 11, ladder audit)
+
+A good atom `q ∈ R_1` (with `R_2` tight, `q ≠ ⊤`) has a height-2 element on its own row's descent from `⊤` carrying the
+cell `q ≤ F(q, ·)`; with `good_of_dominating_desc` (x = q) this makes GoodAtom1 equivalent to OwnCell1. Cert1 and CertAtom
+are OwnCell1 with the cell read on row `⊥`. -/
+
+/-- The gfp of row `q` lies below every element of row `q`'s descent from `⊤`. -/
+theorem a_le_rowDesc (q : α) : ∀ i : ℕ, a F q ≤ (F q)^[i] (⊤ : α)
+  | 0 => le_top
+  | i + 1 => by
+    rw [Function.iterate_succ_apply']
+    calc a F q = F q (a F q) := (row_a q).symm
+      _ ≤ F q ((F q)^[i] ⊤) := (F q).mono (a_le_rowDesc q i)
+
+/-- On a lattice of finite height, row `q`'s descent from `⊤` reaches `a(q)`. -/
+theorem rowDesc_reaches_a {H : ℕ} (hn : NoChain α (H + 1)) (q : α) : ∃ N, (F q)^[N] (⊤ : α) = a F q := by
+  obtain ⟨N, hN⟩ := exists_iter_fix_mono hn (F q).monotone H (height_le _) (le_top : F q ⊤ ≤ ⊤)
+  exact ⟨N, le_antisymm (le_a hN.ge) (a_le_rowDesc q N)⟩
+
+/-- **OwnCell from goodness.** -/
+theorem ownCell_of_good {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) {q : α}
+    (hqR : q ∈ Rk F 1) (hq : height H q = 1) (hqt : q ≠ ⊤) (hg : IsGood F q) :
+    ∃ i, height H ((F q)^[i] (⊤ : α)) = 2 ∧ q ≤ F q ((F q)^[i] (⊤ : α)) := by
+  -- the descent meets `q` at some index: certify at the element just before the first meeting
+  have meet : ∀ i, (F q)^[i] (⊤ : α) = q →
+      ∃ i, height H ((F q)^[i] (⊤ : α)) = 2 ∧ q ≤ F q ((F q)^[i] (⊤ : α)) := by
+    intro i hi
+    have hex : ∃ j, (F q)^[j] (⊤ : α) = q := ⟨i, hi⟩
+    classical
+    have hjq : (F q)^[Nat.find hex] (⊤ : α) = q := Nat.find_spec hex
+    have hmin : ∀ m < Nat.find hex, (F q)^[m] (⊤ : α) ≠ q := fun m hm => Nat.find_min hex hm
+    cases hj : Nat.find hex with
+    | zero => rw [hj] at hjq; exact absurd hjq.symm hqt
+    | succ k =>
+    rw [hj] at hjq
+    have hkq : (F q)^[k] (⊤ : α) ≠ q := hmin k (by omega)
+    have hstep : F q ((F q)^[k] (⊤ : α)) = q := by rw [← Function.iterate_succ_apply' (F q)]; exact hjq
+    have hle : q ≤ (F q)^[k] (⊤ : α) := by
+      have h := iter_antitone_of_le (F q).monotone (le_top : F q ⊤ ≤ ⊤) (Nat.le_succ k)
+      rw [hjq] at h; exact h
+    have hlt : q < (F q)^[k] (⊤ : α) := lt_of_le_of_ne hle (Ne.symm hkq)
+    have hR : (F q)^[k] (⊤ : α) ∈ Rk F 2 := mem_succ_of_cell (k := 1) hqR le_rfl (Or.inl hstep.le)
+    refine ⟨k, ?_, hstep.ge⟩
+    have h1 := hk2 _ hR; have h2 := height_strictMono hn hlt; omega
+  rcases hg with ha | ⟨i, hi⟩
+  · obtain ⟨N, hN⟩ := rowDesc_reaches_a hn (F := F) q
+    by_cases hqa : a F q = q
+    · exact meet N (hN.trans hqa)
+    · have hlt : q < a F q := lt_of_le_of_ne ha (Ne.symm hqa)
+      have hR : a F q ∈ Rk F 2 := by simpa using aIter_mem (F := F) hqR 1
+      refine ⟨N, ?_, ?_⟩
+      · rw [hN]; have h1 := hk2 _ hR; have h2 := height_strictMono hn hlt; omega
+      · rw [hN, row_a]; exact ha
+  · exact meet i hi
+
+/-- OwnCell1: in W0 ∧ n1, some atom `q ∈ R_1` has a height-2 element on its own row's descent with `q ≤ F(q, ·)`. -/
+def OwnCell1 (F : α →o α →o α) (H : ℕ) : Prop :=
+  a F ⊥ = ⊥ → (∀ z ∈ Rk F 2, height H z ≤ 2) → (⊤ : α) ∉ Rk F 2 → ¬ (∀ z ∈ Rk F 1, height H z ≤ 1) →
+    ∃ q ∈ Rk F 1, height H q = 1 ∧ ∃ i, height H ((F q)^[i] (⊤ : α)) = 2 ∧ q ≤ F q ((F q)^[i] (⊤ : α))
+
+/-- **GoodAtom1 ⟺ OwnCell1** (normal form; the forward half of the landing lemma). -/
+theorem goodAtom1_iff_ownCell1 {H : ℕ} (hn : NoChain α (H + 1)) : GoodAtom1 F H ↔ OwnCell1 F H := by
+  constructor
+  · intro hg ha hk2 htop hnt
+    obtain ⟨q, hqR, hq, hgood⟩ := hg ha hk2 htop hnt
+    have hqt : q ≠ ⊤ := fun e => htop (e ▸ Rk_mono (by omega) hqR)
+    exact ⟨q, hqR, hq, ownCell_of_good hn hk2 hqR hq hqt hgood⟩
+  · intro hc ha hk2 htop hnt
+    obtain ⟨q, hqR, hq, i, hp, hcell⟩ := hc ha hk2 htop hnt
+    exact ⟨q, hqR, hq, good_of_dominating_desc hn hk2 rfl hp hqR hq le_rfl hcell⟩
 
 end Mordor.OrbitHeight

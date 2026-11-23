@@ -1,0 +1,13 @@
+== §34.3z²⁷¹ (exact; every SAT model replayed in Python). muorbit_sat.py; world W0 + n1.
+-- Partial tightness (not2 plus subsets of Ta = no Z-row upper cell at a high column, Tb = no Z-row lower cell at a high column,
+   ZT = Z heights <= 2); closure 5 11 4 30 (height <= 5: diagnostic). SAT = the statement fails.
+   tcase 2 L1(e):  Ta Tb ZT UNSAT 30 | Tb ZT SAT 14, min 15 | Ta ZT SAT 27, min 10 | Ta Tb UNSAT 30
+   tcase 3 L2:     Ta Tb ZT UNSAT 30 | Tb ZT SAT 14, min 15 | Ta ZT SAT 30, min 9  | Ta Tb UNSAT 30
+   tcase 5 Fix1:   Ta Tb ZT UNSAT 30 | Tb ZT SAT 14, min 15 | Ta ZT SAT 27, min 10 | Ta Tb UNSAT 30
+   => each needs Ta and Tb (= (T)); none needs ZT.
+-- tcase 8 QE (d in-steps to e, e exits at p, q = F(bot, p) not below e):
+   closure 5 11 4 30 UNSAT 30 (not2 SAT 27, min 10);  closure 6 12 1 40 UNSAT 40 (h6 24), not2 SAT 40, min 15;
+   closure 6 14 2 40: pending.
+-- Follow (u, the high predecessor of lambda(e), lies on row q's descent): refuted in 4 of 280 exact models of the long-orbit
+   branch on closure 6 12 1 40 (orbit3_census.py, replayed); in all 280, q <= e and F(q, u) = lambda(e). The exact tcase 7
+   run did not finish in 25 min on closure 5 11 4 30.

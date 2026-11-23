@@ -161,6 +161,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶⁶: **`cov_of_preDrop`** (Cov from PreDrop, by `drop_below_top` and uniqueness of the atom below d ∧ t).
 * §34.3z²⁶⁷: `eq_atom_of_le_meet`, **`cov_of_baseD`**, `preDrop_of_baseD` (Cov, PreDrop and the landing step from BaseD: F(⊥, t) ≤ d),
   `lastIdx_ge`, **`baseD_of_rowDrop`** (BaseD from RowDrop: F(⊥, (F d)^(N−1) ⊤) ≤ d).
+* §34.3z²⁷¹: **`exitCell_pin`** (the exit cell F(x, u) of a row x ≤ e at λ(e)'s high predecessor is λ(e)).
 * §34.3z²⁶⁹: `a_le_rowDesc`, `rowDesc_reaches_a`, **`ownCell_of_good`**, `OwnCell1`, **`goodAtom1_iff_ownCell1`** (GoodAtom1 ⟺ one cell of
   an atom's own row at its height-2 descent element; Cert1 is the row-⊥ reading).
 -/
@@ -5414,5 +5415,21 @@ theorem goodAtom1_iff_ownCell1 {H : ℕ} (hn : NoChain α (H + 1)) : GoodAtom1 F
   · intro hc ha hk2 htop hnt
     obtain ⟨q, hqR, hq, i, hp, hcell⟩ := hc ha hk2 htop hnt
     exact ⟨q, hqR, hq, good_of_dominating_desc hn hk2 rfl hp hqR hq le_rfl hcell⟩
+
+
+/-! ### §34.3z²⁷¹ The exit cell is pinned
+
+On the ⊥-orbit's in-step branch, `e` lands at `p` (height 2) through its high predecessor `u` (`F(e, u) = p`, `p ≤ u`), and
+`q = F(⊥, p)` is an atom. For any row `x ≤ e` without a lower cell at `u` (Tb: `¬ F(x, u) ≤ q` suffices), the cell is pinned:
+`F(x, u) = p`. Used with `x = q` once `q ≤ e` (QE). -/
+
+/-- **Exit-cell pinning.** -/
+theorem exitCell_pin {H : ℕ} (hn : NoChain α (H + 1)) {e x u p q : α} (heu : F e u = p) (hpu : p ≤ u) (hxe : x ≤ e)
+    (hq0 : F ⊥ p = q) (hq : height H q = 1) (hp : height H p = 2) (hTb : ¬ F x u ≤ q) : F x u = p := by
+  have h1 : q ≤ F x u := hq0 ▸ ((F ⊥).mono hpu).trans ((F.mono bot_le) u)
+  have h2 : F x u ≤ p := heu ▸ (F.mono hxe) u
+  have hlt : q < F x u := lt_of_le_of_ne h1 (fun h => hTb (h ▸ le_rfl))
+  have h3 := height_strictMono hn hlt
+  exact eq_of_le_of_height_ge hn h2 (by omega)
 
 end Mordor.OrbitHeight

@@ -11,7 +11,8 @@ Modes:
   vac       SAT = the world has a model
   orbk K    SAT = mu^K(bot) is not a fixed point (Orbit_K fails)
   tcase 1|2|3  SAT = L1(d) fails | L1(e) fails | L2 fails (see MEAN)
-Flags: not2 (mutant: R_2 tightness dropped; then descents may not land, and such rows are excluded from O)
+Flags: not2 (mutant: R_2 tightness dropped; then descents may not land, and such rows are excluded from O);
+  with not2, partial facts: Tb (no Z-row lower cell at a high column), Ta (no Z-row upper cell at a high column), ZT (Z heights <= 2)
 Every SAT model is replayed in Python (stages, a_of, direct computation of lambda, mu and the orbit).
   python3 muorbit_sat.py MODE [K] (sweep N MAX | closure K M SEED CNT) [not2]"""
 import sys, collections
@@ -21,9 +22,9 @@ from tight_probe import lattices
 from rstages import stages, a_of
 MODE = sys.argv[1]; K = 0
 if MODE in ('orbk', 'tcase'): K = int(sys.argv[2]); sys.argv.pop(2)
-FL = {a for a in sys.argv[2:] if a in ('not2',)}; args = [a for a in sys.argv[2:] if a not in FL]
+FL = {a for a in sys.argv[2:] if a in ('not2', 'Ta', 'Tb', 'ZT')}; args = [a for a in sys.argv[2:] if a not in FL]
 MEAN = {'botorbit': 'BotOrbit fails: the mu-orbit of bot never reaches a fixed point',
-        'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)'}.get(K, '?')}
+        'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)', 8: 'QE fails: d in-steps to e, e exits at p, and q = F(bot, p) is not below e', 7: 'Follow fails: d in-steps to e, e exits at p with high predecessor u, q = F(bot, p), and u is not on row q descent'}.get(K, '?')}
 print(f'muorbit_sat {MODE} | SAT = {MEAN[MODE]} | world W0 + n1 | flags {sorted(FL)} | corpus {args}')
 C = collections.Counter(); HH = collections.Counter(); best = None
 for L in lattices(args):
@@ -35,6 +36,13 @@ for L in lattices(args):
         for z in range(n):
             if h[z] > 2: add([-r(2, z)])
     add([r(1, z) for z in range(n) if h[z] > 1])
+    for x in range(n):                                   # partial tightness facts (used with not2)
+        for y in range(n):
+            if h[y] <= 2: continue
+            for w in range(n):
+                if 'Tb' in FL and le[w][x]: add([-f(bot, x, bot), -f(x, y, w)])      # no lower cell of a Z-row at a high column
+                if 'Ta' in FL and le[y][w]: add([-f(bot, x, bot), -f(x, y, w)])      # no upper cell of a Z-row at a high column
+        if 'ZT' in FL and h[x] > 2: add([-f(bot, x, bot)])                           # Z has heights <= 2
     rows = [x for x in range(n) if h[x] <= 2 or 'not2' in FL]
     inZ = lambda x: f(bot, x, bot)
     low = [p for p in range(n) if h[p] <= 2]
@@ -100,7 +108,31 @@ for L in lattices(args):
                 for q in rows:
                     t = E.v('xb', x, p, q); E.iff_and(t, [lam[x, p], -inZ(p), f(bot, p, q), -lam[q, p]]); ls.append(t)
             return ls
-        if K in (5, 6):
+        if K == 8:
+            sel = []
+            for x in rows:
+                for y in rows:
+                    if x == bot or y == bot or y not in low: continue
+                    for p in low:
+                        o8 = E.v('t8', x, y, p); sel.append(o8)
+                        for lit in [D(x), lam[x, y], inZ(y), lam[y, p], -inZ(p)]: add([-o8, lit])
+                        for q in range(n):
+                            if le[q][y]: add([-o8, -f(bot, p, q)])
+            add(sel)
+        elif K == 7:
+            sel = []
+            for x in rows:
+                for y in rows:
+                    if x == bot or y == bot or y not in low: continue
+                    for u in range(n):
+                        if h[u] <= 2: continue
+                        for p in low:
+                            o7 = E.v('t7', x, y, u, p); sel.append(o7)
+                            for lit in [D(x), lam[x, y], inZ(y), E.v('on', y, u), f(y, u, p), lam[y, p], -inZ(p)]: add([-o7, lit])
+                            for q in range(n):                    # q = F(bot, p) must not have u on its row's descent
+                                add([-o7, -f(bot, p, q), -E.v('on', q, u)] if q in rows else [-o7, -f(bot, p, q)])
+            add(sel)
+        elif K in (5, 6):
             for x in rows:
                 if x == bot: continue
                 ls = []
@@ -130,6 +162,14 @@ for L in lattices(args):
         F = E.decode(); st = stages(L, F); inR = lambda x, i: st[x] is not None and st[x] <= i
         ok = a_of(L, F, bot) == bot and not inR(top, 2) and any(h[z] > 1 for z in range(n) if inR(z, 1))
         if 'not2' not in FL: ok = ok and all(h[z] <= 2 for z in range(n) if inR(z, 2))
+        Zs = [x for x in range(n) if F[bot][x] == bot]
+        if 'Tb' in FL: ok = ok and not any(h[y] > 2 and le[F[x][y]][x] for x in Zs for y in range(n))
+        if 'Ta' in FL: ok = ok and not any(h[y] > 2 and le[y][F[x][y]] for x in Zs for y in range(n))
+        if 'ZT' in FL: ok = ok and all(h[x] <= 2 for x in Zs)
+        def desc(x):
+            v = top; seen = []
+            while v not in seen: seen.append(v); v = F[x][v]
+            return seen
         def lamf(x):
             v = top; seen = []
             while v not in seen:
@@ -158,6 +198,11 @@ for L in lattices(args):
             dd = muf(bot); lamd = lamf(dd)
             if K == 1: ok = ok and F[bot][lamd] != bot and lamf(F[bot][lamd]) != lamd
             elif K in (5, 6): ok = ok and F[bot][lamd] != bot and (K == 6 or muf(F[bot][lamd]) != F[bot][lamd])
+            if K == 8:
+                e = lamd; ok = ok and F[bot][e] == bot and F[bot][lamf(e)] != bot and not le[F[bot][lamf(e)]][e]
+            if K == 7:
+                e = lamd; de = desc(e); p_ = lamf(e); u_ = de[de.index(p_) - 1]; q_ = F[bot][p_]
+                ok = ok and F[bot][e] == bot and F[bot][p_] != bot and h[u_] > 2 and u_ not in desc(q_)
             if K in (2, 3, 4):
                 e = lamd; ok = ok and F[bot][e] == bot and e != bot
                 if K == 2: ok = ok and F[bot][lamf(e)] != bot and lamf(F[bot][lamf(e)]) != lamf(e)

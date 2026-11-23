@@ -1,0 +1,24 @@
+== §34.3z²⁷⁰ (exact; every SAT model replayed in Python). muorbit_sat.py, world W0 + n1; mu(x) = lambda(x) if lambda(x) in Z,
+   else F(bot, lambda(x)); mu(bot) = d. Exact orbit positions o(k, .) (one-hot, propagated through the mu relation).
+   Height-6 corpora: closure 6 12 1 40 (24 of height 6), closure 6 14 2 40 (23 of height 6).
+
+-- orbk K  (SAT = mu^K(bot) is not a fixed point)
+   K = 2: closure 6 12 1 40 SAT 35, UNSAT 5, smallest 15 (height 5; muorbit_orbit2_min15.json) -> Orbit2 refuted
+   K = 3: closure 6 12 1 40 UNSAT 40;  6 14 2 40 UNSAT 40;  not2: SAT 40, min 15  -> Orbit3 holds with power
+   (sweep 4 14: K = 2 and K = 3 UNSAT 160; no power there)
+
+-- tcase  (branch of mu(d))
+   6  hypothesis "d exits"                       : closure 5 11 4 30 SAT 30
+   5  Fix1: d exits to q and mu(q) != q          : 6 12 1 40 UNSAT 40; not2 SAT 40, min 15;  6 14 2 40 UNSAT 40 (h6 23)
+   1  L1(d): d exits to q and lambda(q) != lambda(d): 6 12 1 40 SAT 12, min 21 (muorbit_L1d_min21.json) -> co-landing refuted
+   4  hypothesis "d in-steps to e = lambda(d) in Z": 6 12 1 40 SAT 35, min 15;  5 11 4 30 SAT 14
+   2  L1(e): e exits to q and lambda(q) != lambda(e): 6 12 1 40 UNSAT 40; not2 SAT 40, min 15   -> holds with power
+   3  L2: e in-steps                              : 6 12 1 40 UNSAT 40; not2 SAT 40, min 15     -> holds with power
+   DISCLOSURE: the first runs of tcase 2 and 3 were vacuous (a leftover line added an empty clause, so every K >= 2 run was
+   UNSAT and the mutants too). The vacuity run (tcase 4) exposed it; the line was removed and all K >= 2 runs repeated.
+
+-- L1(d) countermodel (|L| = 21, height 6): d = 2 a bad atom; lambda(d) = 9 not in Z, q = F(bot, 9) = 4 (not below d);
+   row 4 lands at lambda(4) = 10 != 9, and F(bot, 10) = 4: q is a fixed point through its own landing.
+
+-- Samples (orbit3_census.py inside the branch where Orbit2 fails; suggestive only): every long orbit is
+   bot -> d -> e (h(e) = 2, e in Z; d < e in case (b), e meets d in case (a)) -> q (atom, q <= e, lambda(q) = lambda(e)) fixed.

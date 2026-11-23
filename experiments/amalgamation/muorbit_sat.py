@@ -9,17 +9,21 @@ Modes:
             (a mu-closed O containing bot with no fixed point of mu in O)
   muloop    SAT = MuLoop fails: some nonempty mu-closed O inside Z \\ {bot} has no fixed point
   vac       SAT = the world has a model
+  orbk K    SAT = mu^K(bot) is not a fixed point (Orbit_K fails)
+  tcase 1|2|3  SAT = L1(d) fails | L1(e) fails | L2 fails (see MEAN)
 Flags: not2 (mutant: R_2 tightness dropped; then descents may not land, and such rows are excluded from O)
 Every SAT model is replayed in Python (stages, a_of, direct computation of lambda, mu and the orbit).
-  python3 muorbit_sat.py MODE (sweep N MAX | closure K M SEED CNT) [not2]"""
+  python3 muorbit_sat.py MODE [K] (sweep N MAX | closure K M SEED CNT) [not2]"""
 import sys, collections
 sys.path.insert(0, '../separation')
 from amalg_sat import Enc
 from tight_probe import lattices
 from rstages import stages, a_of
-MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in ('not2',)}; args = [a for a in sys.argv[2:] if a not in FL]
+MODE = sys.argv[1]; K = 0
+if MODE in ('orbk', 'tcase'): K = int(sys.argv[2]); sys.argv.pop(2)
+FL = {a for a in sys.argv[2:] if a in ('not2',)}; args = [a for a in sys.argv[2:] if a not in FL]
 MEAN = {'botorbit': 'BotOrbit fails: the mu-orbit of bot never reaches a fixed point',
-        'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model'}
+        'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)'}.get(K, '?')}
 print(f'muorbit_sat {MODE} | SAT = {MEAN[MODE]} | world W0 + n1 | flags {sorted(FL)} | corpus {args}')
 C = collections.Counter(); HH = collections.Counter(); best = None
 for L in lattices(args):
@@ -67,6 +71,58 @@ for L in lattices(args):
         for y in range(n):
             if y in rows: add([-O[x], -mu[x, y], O[y]])        # O is mu-closed
             else: add([-O[x], -mu[x, y]])
+    if MODE == 'orbk':                                       # exact orbit positions o(k, .), k <= K
+        add([-O[x] for x in range(n)])
+        o = lambda k, x: E.v('ob', k, x)
+        for x in range(n): add([o(0, x)] if x == bot else [-o(0, x)])
+        for k in range(K):
+            for x in rows:
+                add([-o(k, x)] + [lam[x, p] for p in low])
+                for y in range(n): add([-o(k, x), -mu[x, y], o(k + 1, y)])
+            for x in range(n):
+                if x not in rows: add([-o(k, x)])
+            for y in range(n):
+                for y2 in range(y + 1, n): add([-o(k + 1, y), -o(k + 1, y2)])
+        for x in range(n):
+            if x in rows: add([-o(K, x), -mu[x, x]])
+            else: add([-o(K, x)])
+        add([o(K, x) for x in rows])
+    if MODE == 'tcase':
+        add([-O[x] for x in range(n)])
+        D = lambda x: E.v('tD', x); Ee = lambda x: E.v('tE', x)
+        for x in range(n):
+            if x not in rows or x == bot: add([-D(x)]); add([-Ee(x)]); continue
+            add([-D(x), mu[bot, x]])                      # D = mu(bot) = d
+        add([D(x) for x in rows if x != bot])
+        def exits_badly(x):                               # x exits to q and q does not co-land
+            ls = []
+            for p in low:
+                for q in rows:
+                    t = E.v('xb', x, p, q); E.iff_and(t, [lam[x, p], -inZ(p), f(bot, p, q), -lam[q, p]]); ls.append(t)
+            return ls
+        if K in (5, 6):
+            for x in rows:
+                if x == bot: continue
+                ls = []
+                for p in low:
+                    for q in rows:
+                        t = E.v('x5', x, p, q); E.iff_and(t, [lam[x, p], -inZ(p), f(bot, p, q)] + ([-mu[q, q]] if K == 5 else [])); ls.append(t)
+                add([-D(x)] + ls)
+        elif K == 1:
+            for x in rows:
+                if x != bot: add([-D(x)] + exits_badly(x))
+        else:
+            sel = []
+            for x in rows:
+                for y in rows:
+                    if x == bot or y == bot or y not in low: continue
+                    o2 = E.v('tsel', x, y); sel.append(o2); add([-o2, D(x)]); add([-o2, lam[x, y]]); add([-o2, inZ(y)])
+                    if K == 2: add([-o2] + exits_badly(y))
+                    elif K == 4: pass
+                    else: add([-o2] + [E.v('tin', y, p2) for p2 in low])
+                    for p2 in low:
+                        if K == 3: E.iff_and(E.v('tin', y, p2), [lam[y, p2], inZ(p2)])
+            add(sel)
     if MODE == 'botorbit': add([O[bot]])
     elif MODE == 'muloop': add([-O[bot]]); add([O[x] for x in rows if x != bot])
     else: add([-O[x] for x in range(n)])
@@ -98,6 +154,18 @@ for L in lattices(args):
                 if x is not None and x != bot:
                     k = seen.index(x); cyc = cyc or len(seen) - k >= 2
             ok = ok and cyc
+        if MODE == 'tcase':
+            dd = muf(bot); lamd = lamf(dd)
+            if K == 1: ok = ok and F[bot][lamd] != bot and lamf(F[bot][lamd]) != lamd
+            elif K in (5, 6): ok = ok and F[bot][lamd] != bot and (K == 6 or muf(F[bot][lamd]) != F[bot][lamd])
+            if K in (2, 3, 4):
+                e = lamd; ok = ok and F[bot][e] == bot and e != bot
+                if K == 2: ok = ok and F[bot][lamf(e)] != bot and lamf(F[bot][lamf(e)]) != lamf(e)
+                elif K == 3: ok = ok and F[bot][lamf(e)] == bot
+        if MODE == 'orbk':
+            x = bot
+            for _ in range(K): x = None if x is None else muf(x)
+            ok = ok and x is not None and muf(x) != x
         assert ok, 'SAT/Python mismatch'
         C['SAT'] += 1; HH[f'h{L.height}'] += 1
         if best is None or n < best[0]: best = (n, dict(sets=L.S, F=F))

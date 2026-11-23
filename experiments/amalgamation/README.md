@@ -134,3 +134,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁶⁷: `dlatoms.py` modes btbase (BaseD), rowdrop (RowDrop), lamnz (LamNZ); flags hyp (hypothesis only: the vacuity run), dump, N2/N3, mz, xbd/xad (route probes). Output `out_rowdrop267.txt`.
 - §34.3z²⁶⁸: `rowdrop_core.py` (RowDrop with tightness facts as assumptions; cores), `abs_rowdrop.py` (two-map AbstractRowDrop), `cert1_sat.py` (Cert1 / CertAtom, independent encoding). Height-6 corpus closure 6 12 1 40. Output `out_height6_268.txt`.
 - §34.3z²⁶⁹: `muorbit_sat.py` (landing map μ: BotOrbit, MuLoop), `cert1_sat.py` flag adj (AdjCert). Paired-brief data and verdicts in `out_paired269.txt`.
+- §34.3z²⁷⁰: `muorbit_sat.py` modes orbk K (orbit length) and tcase 1–6 (Fix1, L1, L2 and their vacuity runs). Output `out_orbit270.txt`.

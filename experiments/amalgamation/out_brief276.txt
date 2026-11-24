@@ -2,7 +2,7 @@
 -- Worker re-encodings (muorbit_sat.py; exact; models replayed):
    tcase 16 BreakCert: closure 5 11 4 30 UNSAT 30, not2 SAT 30 (min 9); closure 6 12 1 40 UNSAT 40 (h6 24), not2 SAT 40 (min 15)
    tcase 17 TopCell:   closure 5 11 4 30 UNSAT 30, not2 SAT 30 (min 9); closure 6 12 1 40 UNSAT 40 (h6 24), not2 SAT 40 (min 15)
-   tcase 18 JoinCert:  closure 5 11 4 30 UNSAT 30, not2 SAT 30 (min 9); closure 6 12 1 40: pending
+   tcase 18 JoinCert:  closure 5 11 4 30 UNSAT 30, not2 SAT 30 (min 9); closure 6 12 1 40 UNSAT 40 (h6 24), not2 SAT 40 (min 15)
    (tcase 17 first version had a one-clause disjunction where per-value clauses were needed; the replay caught it before
     any run counted.)
 -- Briefers' leads (their encodings): A TopCell/TopCert (w0lean.py) 6 12 1 40 + 6 14 2 40; A OrbitDom 6 14 2 40 (second

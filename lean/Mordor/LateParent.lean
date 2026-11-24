@@ -161,6 +161,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶⁶: **`cov_of_preDrop`** (Cov from PreDrop, by `drop_below_top` and uniqueness of the atom below d ∧ t).
 * §34.3z²⁶⁷: `eq_atom_of_le_meet`, **`cov_of_baseD`**, `preDrop_of_baseD` (Cov, PreDrop and the landing step from BaseD: F(⊥, t) ≤ d),
   `lastIdx_ge`, **`baseD_of_rowDrop`** (BaseD from RowDrop: F(⊥, (F d)^(N−1) ⊤) ≤ d).
+* §34.3z²⁷²: `land_index_pos`, `land_not_le`, `land_bot_lt`, **`exit_atom`**, `land_unique`, `cert_of_exitFixed`,
+  **`goodAtom_of_exitFixed`** (the landing facts N1; a fixed point of the landing map is a good atom).
 * §34.3z²⁷¹: **`exitCell_pin`** (the exit cell F(x, u) of a row x ≤ e at λ(e)'s high predecessor is λ(e)).
 * §34.3z²⁶⁹: `a_le_rowDesc`, `rowDesc_reaches_a`, **`ownCell_of_good`**, `OwnCell1`, **`goodAtom1_iff_ownCell1`** (GoodAtom1 ⟺ one cell of
   an atom's own row at its height-2 descent element; Cert1 is the row-⊥ reading).
@@ -5431,5 +5433,94 @@ theorem exitCell_pin {H : ℕ} (hn : NoChain α (H + 1)) {e x u p q : α} (heu :
   have hlt : q < F x u := lt_of_le_of_ne h1 (fun h => hTb (h ▸ le_rfl))
   have h3 := height_strictMono hn hlt
   exact eq_of_le_of_height_ge hn h2 (by omega)
+
+
+/-! ### §34.3z²⁷² Landing facts (N1) and the payoff of a fixed point of the landing map
+
+`i` is the landing index of row `x`: the least index at which row `x`'s descent from `⊤` has height ≤ 2. Then (W0, x ∈ R_1):
+the landing `λ = (F x)^[i] ⊤` is not below `x`; `F(⊥, λ) < λ`; if `λ ∉ Z` it has height 2 and `F(⊥, λ)` is an atom of `Z`;
+and `λ` is the only height-2 element of the descent. A fixed point `y` of the landing map (an atom `y ∈ Z` with
+`F(⊥, λ(y)) = y`) is a Cert1 witness with `x = q = y`. -/
+
+section Landing
+variable {H : ℕ} {x : α} {i : ℕ}
+
+theorem land_index_pos (htop : 2 < height H (⊤ : α)) (hi : height H ((F x)^[i] (⊤ : α)) ≤ 2) : i ≠ 0 := by
+  rintro rfl; simp at hi; omega
+
+/-- N1(ii): the landing is not below its row. -/
+theorem land_not_le (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (hx : x ∈ Rk F 1) (htop : 2 < height H (⊤ : α))
+    (hi : height H ((F x)^[i] (⊤ : α)) ≤ 2) (hmin : ∀ j < i, 2 < height H ((F x)^[j] (⊤ : α))) :
+    ¬ (F x)^[i] (⊤ : α) ≤ x := by
+  intro hle
+  obtain ⟨k, rfl⟩ : ∃ k, i = k + 1 := ⟨i - 1, by have := land_index_pos htop hi; omega⟩
+  rw [Function.iterate_succ_apply'] at hle
+  have hR : (F x)^[k] (⊤ : α) ∈ Rk F 2 := mem_succ_of_cell (k := 1) hx le_rfl (Or.inl hle)
+  have := hk2 _ hR; have := hmin k (by omega); omega
+
+/-- N1(iii): row `⊥` strictly lowers the landing. -/
+theorem land_bot_lt (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (ha : a F ⊥ = ⊥) (hx : x ∈ Rk F 1)
+    (htop : 2 < height H (⊤ : α)) (hi : height H ((F x)^[i] (⊤ : α)) ≤ 2)
+    (hmin : ∀ j < i, 2 < height H ((F x)^[j] (⊤ : α))) :
+    F ⊥ ((F x)^[i] (⊤ : α)) < (F x)^[i] (⊤ : α) := by
+  set l := (F x)^[i] (⊤ : α) with hl
+  have hdesc : F x l ≤ l := by
+    have h := iter_antitone_of_le (F x).monotone (le_top : F x ⊤ ≤ ⊤) (Nat.le_succ i)
+    rw [Function.iterate_succ_apply'] at h; exact h
+  have hle : F ⊥ l ≤ l := ((F.mono bot_le) l).trans hdesc
+  refine lt_of_le_of_ne hle (fun e => ?_)
+  have : l ≤ a F ⊥ := le_a e.ge
+  rw [ha, le_bot_iff] at this
+  exact land_not_le hk2 hx htop hi hmin ((le_of_eq this).trans bot_le)
+
+/-- N1(iv): an exit landing has height 2 and its row-`⊥` value is an atom of `Z`. -/
+theorem exit_atom {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (ha : a F ⊥ = ⊥)
+    (hx : x ∈ Rk F 1) (htop : 2 < height H (⊤ : α)) (hi : height H ((F x)^[i] (⊤ : α)) ≤ 2)
+    (hmin : ∀ j < i, 2 < height H ((F x)^[j] (⊤ : α))) (hex : F ⊥ ((F x)^[i] (⊤ : α)) ≠ ⊥) :
+    height H ((F x)^[i] (⊤ : α)) = 2 ∧ height H (F ⊥ ((F x)^[i] (⊤ : α))) = 1 ∧
+      F ⊥ (F ⊥ ((F x)^[i] (⊤ : α))) = ⊥ := by
+  set l := (F x)^[i] (⊤ : α) with hl
+  have hlt := land_bot_lt hk2 ha hx htop hi hmin
+  rw [← hl] at hlt
+  set c := F ⊥ l with hc
+  have h0 : 0 < height H c := by
+    have := height_strictMono hn (bot_lt_iff_ne_bot.2 hex); rw [height_bot_eq_zero] at this; exact this
+  have h1 := height_strictMono hn hlt
+  have hcc : F ⊥ c ≤ c := (F ⊥).mono hlt.le
+  have hne : F ⊥ c ≠ c := fun e => by
+    have : c ≤ a F ⊥ := le_a e.ge
+    rw [ha, le_bot_iff] at this; exact hex this
+  have h2 := height_strictMono hn (lt_of_le_of_ne hcc hne)
+  refine ⟨by omega, by omega, ?_⟩
+  by_contra hb
+  have := height_strictMono hn (bot_lt_iff_ne_bot.2 hb); rw [height_bot_eq_zero] at this; omega
+
+/-- N1(v): the landing is the only height-2 element of the descent. -/
+theorem land_unique {H : ℕ} (hn : NoChain α (H + 1)) (hi : height H ((F x)^[i] (⊤ : α)) ≤ 2)
+    (hmin : ∀ j < i, 2 < height H ((F x)^[j] (⊤ : α))) {j : ℕ} (hj : height H ((F x)^[j] (⊤ : α)) = 2) :
+    (F x)^[j] (⊤ : α) = (F x)^[i] (⊤ : α) := by
+  rcases lt_or_ge j i with hji | hij
+  · have := hmin j hji; omega
+  · have hle := iter_antitone_of_le (F x).monotone (le_top : F x ⊤ ≤ ⊤) hij
+    exact eq_of_le_of_height_ge hn hle (by omega)
+
+/-- **A fixed point of the landing map certifies (CertAtom).** An element `y ∈ R_1` whose exit atom is itself
+(`F(⊥, λ(y)) = y ≠ ⊥`) is an atom with a height-2 descent element `λ(y)` and `y ≤ F(⊥, λ(y))`. -/
+theorem cert_of_exitFixed {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (ha : a F ⊥ = ⊥)
+    {y : α} (hy : y ∈ Rk F 1) (htop : 2 < height H (⊤ : α)) (hi : height H ((F y)^[i] (⊤ : α)) ≤ 2)
+    (hmin : ∀ j < i, 2 < height H ((F y)^[j] (⊤ : α))) (hfix : F ⊥ ((F y)^[i] (⊤ : α)) = y) (hy0 : y ≠ ⊥) :
+    height H y = 1 ∧ height H ((F y)^[i] (⊤ : α)) = 2 ∧ y ≤ F ⊥ ((F y)^[i] (⊤ : α)) := by
+  obtain ⟨h2, h1, -⟩ := exit_atom hn hk2 ha hy htop hi hmin (hfix.symm ▸ hy0)
+  exact ⟨hfix ▸ h1, h2, hfix.ge⟩
+
+/-- Payoff: a fixed point of the landing map in `Z` gives GoodAtom1's conclusion. -/
+theorem goodAtom_of_exitFixed {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    (ha : a F ⊥ = ⊥) {y : α} (hy : y ∈ Rk F 1) (htop : 2 < height H (⊤ : α))
+    (hi : height H ((F y)^[i] (⊤ : α)) ≤ 2) (hmin : ∀ j < i, 2 < height H ((F y)^[j] (⊤ : α)))
+    (hfix : F ⊥ ((F y)^[i] (⊤ : α)) = y) (hy0 : y ≠ ⊥) : height H y = 1 ∧ IsGood F y := by
+  obtain ⟨h1, h2, hc⟩ := cert_of_exitFixed hn hk2 ha hy htop hi hmin hfix hy0
+  exact ⟨h1, good_of_dominating_desc_bot hn hk2 rfl h2 hy h1 le_rfl hc⟩
+
+end Landing
 
 end Mordor.OrbitHeight

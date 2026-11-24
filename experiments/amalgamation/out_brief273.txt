@@ -6,6 +6,7 @@
    tcase 10 StallQ  (x exits at p, q = F(bot,p) <= x, F(q,p) != p): SAT 30, min 9 (degenerate x = q)
    tcase 11 StallX  (x exits at p, F(x,p) != p): SAT 30, min 9
    tcase 12 StallQ' (as 10, q != x): SAT 29, min 10 (row q follows row x, both drop to q at p)
--- Worker, height 6: tcase 9 DomCoLand not2 (mutant) closure 6 12 1 40: SAT 40, min 15; candidate runs: pending.
+-- Worker, height 6: tcase 9 DomCoLand closure 6 12 1 40 UNSAT 40 (h6 24); not2 (mutant) SAT 40, min 15; 6 14 2 40 pending.
+-- Worker ran the briefer's dom_probe.py adjorbit on closure 6 12 1 40: UNSAT 40 (h6 24), 2460 s; single encoding, no mutant.
 -- Samples (follow_census.py, branch StallQ' fails, closure 6 12 1 40, 536 instances): h(x) = 2 and lambda(q) = p always;
    row q's descent equals row x's down to p in 432, differs in 104.

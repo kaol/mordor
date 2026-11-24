@@ -161,6 +161,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶⁶: **`cov_of_preDrop`** (Cov from PreDrop, by `drop_below_top` and uniqueness of the atom below d ∧ t).
 * §34.3z²⁶⁷: `eq_atom_of_le_meet`, **`cov_of_baseD`**, `preDrop_of_baseD` (Cov, PreDrop and the landing step from BaseD: F(⊥, t) ≤ d),
   `lastIdx_ge`, **`baseD_of_rowDrop`** (BaseD from RowDrop: F(⊥, (F d)^(N−1) ⊤) ≤ d).
+* §34.3z²⁷³: **`goodAtom_of_inCert`** (in-step certificate: GoodAtom1 ⟸ Fix1 ∧ L2 ∧ QE), **`coland_of_stall`** (DomCoLand, stall case).
 * §34.3z²⁷²: `land_index_pos`, `land_not_le`, `land_bot_lt`, **`exit_atom`**, `land_unique`, `cert_of_exitFixed`,
   **`goodAtom_of_exitFixed`** (the landing facts N1; a fixed point of the landing map is a good atom).
 * §34.3z²⁷¹: **`exitCell_pin`** (the exit cell F(x, u) of a row x ≤ e at λ(e)'s high predecessor is λ(e)).
@@ -5520,6 +5521,31 @@ theorem goodAtom_of_exitFixed {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z �
     (hfix : F ⊥ ((F y)^[i] (⊤ : α)) = y) (hy0 : y ≠ ⊥) : height H y = 1 ∧ IsGood F y := by
   obtain ⟨h1, h2, hc⟩ := cert_of_exitFixed hn hk2 ha hy htop hi hmin hfix hy0
   exact ⟨h1, good_of_dominating_desc_bot hn hk2 rfl h2 hy h1 le_rfl hc⟩
+
+/-- **In-step certificate (run-12 brief, P0).** If `e ∈ R_1` exits (`F(⊥, λ(e)) ≠ ⊥`) and its exit atom lies below `e`,
+that atom is a good atom of `R_1`. With `goodAtom_of_exitFixed` (exit branch): GoodAtom1 ⟸ Fix1 ∧ L2 ∧ QE. -/
+theorem goodAtom_of_inCert {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (ha : a F ⊥ = ⊥)
+    {e : α} {i : ℕ} (he : e ∈ Rk F 1) (htop : 2 < height H (⊤ : α)) (hi : height H ((F e)^[i] (⊤ : α)) ≤ 2)
+    (hmin : ∀ j < i, 2 < height H ((F e)^[j] (⊤ : α))) (hex : F ⊥ ((F e)^[i] (⊤ : α)) ≠ ⊥)
+    (hqe : F ⊥ ((F e)^[i] (⊤ : α)) ≤ e) :
+    F ⊥ ((F e)^[i] (⊤ : α)) ∈ Rk F 1 ∧ height H (F ⊥ ((F e)^[i] (⊤ : α))) = 1 ∧ IsGood F (F ⊥ ((F e)^[i] (⊤ : α))) := by
+  obtain ⟨h2, h1, -⟩ := exit_atom hn hk2 ha he htop hi hmin hex
+  have hqR : F ⊥ ((F e)^[i] (⊤ : α)) ∈ Rk F 1 := Rk_down 1 hqe he
+  exact ⟨hqR, h1, good_of_dominating_desc_bot hn hk2 rfl h2 hqR h1 hqe le_rfl⟩
+
+/-- **DomCoLand, stall case.** If row `x` lands at `p = (F x)^[m] ⊤` of height 2, `q ≤ x`, and row `q` fixes `p`
+(`F(q, p) = p`), then `p` is row `q`'s landing too: it is on row `q`'s descent and every earlier element is high. -/
+theorem coland_of_stall {H : ℕ} (hn : NoChain α (H + 1)) {x q p : α} {m : ℕ} (hm : (F x)^[m] (⊤ : α) = p)
+    (hp : height H p = 2) (hqx : q ≤ x) (hst : F q p = p) :
+    ∃ k, (F q)^[k] (⊤ : α) = p ∧ ∀ j < k, 2 < height H ((F q)^[j] (⊤ : α)) := by
+  have hpa : p ≤ a F q := le_a hst.ge
+  have hge : ∀ j, p ≤ (F q)^[j] (⊤ : α) := fun j => hpa.trans (a_le_rowDesc q j)
+  have hmp : (F q)^[m] (⊤ : α) = p := le_antisymm (hm ▸ iter_row_mono hqx m) (hge m)
+  have hex : ∃ j, height H ((F q)^[j] (⊤ : α)) ≤ 2 := ⟨m, by rw [hmp, hp]⟩
+  classical
+  refine ⟨Nat.find hex, ?_, fun j hj => ?_⟩
+  · exact (eq_of_le_of_height_ge hn (hge _) (by have := Nat.find_spec hex; omega)).symm
+  · have := Nat.find_min hex hj; omega
 
 end Landing
 

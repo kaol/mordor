@@ -24,7 +24,7 @@ MODE = sys.argv[1]; K = 0
 if MODE in ('orbk', 'tcase'): K = int(sys.argv[2]); sys.argv.pop(2)
 FL = {a for a in sys.argv[2:] if a in ('not2', 'Ta', 'Tb', 'ZT')}; args = [a for a in sys.argv[2:] if a not in FL]
 MEAN = {'botorbit': 'BotOrbit fails: the mu-orbit of bot never reaches a fixed point',
-        'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)', 8: 'QE fails: d in-steps to e, e exits at p, and q = F(bot, p) is not below e', 7: 'Follow fails: d in-steps to e, e exits at p with high predecessor u, q = F(bot, p), and u is not on row q descent'}.get(K, '?')}
+        'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)', 10: 'StallQ fails: some x in Z* exits at p with q = F(bot, p) <= x and F(q, p) != p', 12: 'StallQ2 fails: some x in Z* exits at p with q = F(bot, p) <= x, q != x and F(q, p) != p', 11: 'StallX fails: some x in Z* exits at p and F(x, p) != p', 9: 'DomCoLand fails: some x in Z* exits at p with q = F(bot, p) <= x and lambda(q) != p', 8: 'QE fails: d in-steps to e, e exits at p, and q = F(bot, p) is not below e', 7: 'Follow fails: d in-steps to e, e exits at p with high predecessor u, q = F(bot, p), and u is not on row q descent'}.get(K, '?')}
 print(f'muorbit_sat {MODE} | SAT = {MEAN[MODE]} | world W0 + n1 | flags {sorted(FL)} | corpus {args}')
 C = collections.Counter(); HH = collections.Counter(); best = None
 for L in lattices(args):
@@ -108,7 +108,31 @@ for L in lattices(args):
                 for q in rows:
                     t = E.v('xb', x, p, q); E.iff_and(t, [lam[x, p], -inZ(p), f(bot, p, q), -lam[q, p]]); ls.append(t)
             return ls
-        if K == 8:
+        if K in (10, 11, 12):
+            sel = []
+            for x in rows:
+                if x == bot: continue
+                for p in low:
+                    if K == 11:
+                        o = E.v('t11', x, p); sel.append(o)
+                        for lit in [inZ(x), lam[x, p], -inZ(p), -f(x, p, p)]: add([-o, lit])
+                        continue
+                    for q in rows:
+                        if not le[q][x] or q == bot or (K == 12 and q == x): continue
+                        o = E.v('t10', x, p, q); sel.append(o)
+                        for lit in [inZ(x), lam[x, p], -inZ(p), f(bot, p, q), -f(q, p, p)]: add([-o, lit])
+            add(sel)
+        elif K == 9:
+            sel = []
+            for x in rows:
+                if x == bot: continue
+                for p in low:
+                    for q in rows:
+                        if not le[q][x] or q == bot: continue
+                        o9 = E.v('t9', x, p, q); sel.append(o9)
+                        for lit in [inZ(x), lam[x, p], -inZ(p), f(bot, p, q), -lam[q, p]]: add([-o9, lit])
+            add(sel)
+        elif K == 8:
             sel = []
             for x in rows:
                 for y in rows:
@@ -198,6 +222,18 @@ for L in lattices(args):
             dd = muf(bot); lamd = lamf(dd)
             if K == 1: ok = ok and F[bot][lamd] != bot and lamf(F[bot][lamd]) != lamd
             elif K in (5, 6): ok = ok and F[bot][lamd] != bot and (K == 6 or muf(F[bot][lamd]) != F[bot][lamd])
+            if K == 10:
+                ok = ok and any(F[bot][x] == bot and x != bot and F[bot][lamf(x)] != bot and le[F[bot][lamf(x)]][x]
+                                and F[F[bot][lamf(x)]][lamf(x)] != lamf(x) for x in range(n) if lamf(x) is not None)
+            if K == 12:
+                ok = ok and any(F[bot][x] == bot and x != bot and F[bot][lamf(x)] != bot and le[F[bot][lamf(x)]][x] and F[bot][lamf(x)] != x
+                                and F[F[bot][lamf(x)]][lamf(x)] != lamf(x) for x in range(n) if lamf(x) is not None)
+            if K == 11:
+                ok = ok and any(F[bot][x] == bot and x != bot and F[bot][lamf(x)] != bot and F[x][lamf(x)] != lamf(x)
+                                for x in range(n) if lamf(x) is not None)
+            if K == 9:
+                ok = ok and any(F[bot][x] == bot and x != bot and F[bot][lamf(x)] != bot and le[F[bot][lamf(x)]][x]
+                                and lamf(F[bot][lamf(x)]) != lamf(x) for x in range(n) if lamf(x) is not None)
             if K == 8:
                 e = lamd; ok = ok and F[bot][e] == bot and F[bot][lamf(e)] != bot and not le[F[bot][lamf(e)]][e]
             if K == 7:

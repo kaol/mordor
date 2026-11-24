@@ -136,3 +136,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁶⁹: `muorbit_sat.py` (landing map μ: BotOrbit, MuLoop), `cert1_sat.py` flag adj (AdjCert). Paired-brief data and verdicts in `out_paired269.txt`.
 - §34.3z²⁷⁰: `muorbit_sat.py` modes orbk K (orbit length) and tcase 1–6 (Fix1, L1, L2 and their vacuity runs). Output `out_orbit270.txt`.
 - §34.3z²⁷¹: `muorbit_sat.py` flags Ta/Tb/ZT (partial tightness), tcase 7 (Follow), 8 (QE). Output `out_orbit271.txt`.
+- §34.3z²⁷³: `muorbit_sat.py` tcase 9 (DomCoLand), 10–12 (StallQ, StallX, StallQ'). Output `out_brief273.txt`.

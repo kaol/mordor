@@ -1,0 +1,11 @@
+== §34.3z²⁷³ (exact; every SAT model replayed in Python). muorbit_sat.py; world W0 + n1.
+-- Brief run 12 (briefer's dom_probe.py, closure 6 12 1 40): vac per branch exit-a 40, exit-b 35, exit-g 40, in-a 12 (h6 only),
+   in-bg 35; DomOrbit SAT 12 (all h6, exit-a), min 21; DomCoLand UNSAT 40; ExitCoLand (mutant) fails on every branch at h6.
+-- Worker, closure 5 11 4 30 (diagnostic):
+   tcase 9  DomCoLand: UNSAT 30; not2 SAT 29, min 10
+   tcase 10 StallQ  (x exits at p, q = F(bot,p) <= x, F(q,p) != p): SAT 30, min 9 (degenerate x = q)
+   tcase 11 StallX  (x exits at p, F(x,p) != p): SAT 30, min 9
+   tcase 12 StallQ' (as 10, q != x): SAT 29, min 10 (row q follows row x, both drop to q at p)
+-- Worker, height 6: tcase 9 DomCoLand not2 (mutant) closure 6 12 1 40: SAT 40, min 15; candidate runs: pending.
+-- Samples (follow_census.py, branch StallQ' fails, closure 6 12 1 40, 536 instances): h(x) = 2 and lambda(q) = p always;
+   row q's descent equals row x's down to p in 432, differs in 104.

@@ -161,6 +161,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶⁶: **`cov_of_preDrop`** (Cov from PreDrop, by `drop_below_top` and uniqueness of the atom below d ∧ t).
 * §34.3z²⁶⁷: `eq_atom_of_le_meet`, **`cov_of_baseD`**, `preDrop_of_baseD` (Cov, PreDrop and the landing step from BaseD: F(⊥, t) ≤ d),
   `lastIdx_ge`, **`baseD_of_rowDrop`** (BaseD from RowDrop: F(⊥, (F d)^(N−1) ⊤) ≤ d).
+* §34.3z²⁷⁶: **`upTrap_stay`**, **`upTrap_land`** (UpLand: rows above a certified atom land with it), `break_in_Z`,
+  **`breakExists`** (the level-0 trap's breakpoint lies in Z), **`goodAtom_of_greatestZ`** (TopZ).
 * §34.3z²⁷⁴: **`trap_of_tb`**, **`domCoLand`** (a dominated row lands where its dominator does), `tb_of_tight`, **`exitFixed_of_dom`**.
 * §34.3z²⁷³: **`goodAtom_of_inCert`** (in-step certificate: GoodAtom1 ⟸ Fix1 ∧ L2 ∧ QE), **`coland_of_stall`** (DomCoLand, stall case).
 * §34.3z²⁷²: `land_index_pos`, `land_not_le`, `land_bot_lt`, **`exit_atom`**, `land_unique`, `cert_of_exitFixed`,
@@ -5633,6 +5635,100 @@ theorem exitFixed_of_dom {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk
   have hqp : q ≤ F q p := hqb ▸ (F.mono bot_le) p
   obtain ⟨k, hk, hmin⟩ := domCoLand hn hm hp hq hqx hqp (tb_of_tight hk2 hqR)
   exact ⟨k, hk, hmin, hk ▸ hqb⟩
+
+/-- **UpTrap** (run-13 brief B, P0.1). Under `trap_of_tb`'s hypotheses, every row `m ≥ q` stays in `↑p` until it meets `p`. -/
+theorem upTrap_stay {H : ℕ} (hn : NoChain α (H + 1)) {x q p m : α} {k : ℕ} (hk : (F x)^[k] (⊤ : α) = p)
+    (hp : height H p = 2) (hq : height H q = 1) (hqx : q ≤ x) (hqp : q ≤ F q p)
+    (hTb : ∀ y, 2 < height H y → ¬ F q y ≤ q) (hqm : q ≤ m) :
+    ∀ i, p ≤ (F m)^[i] (⊤ : α) ∨ ∃ j ≤ i, (F m)^[j] (⊤ : α) = p := by
+  intro i
+  induction i with
+  | zero => exact Or.inl le_top
+  | succ i ih =>
+    rcases ih with h | ⟨j, hj, hjp⟩
+    · by_cases hrp : (F m)^[i] (⊤ : α) = p
+      · exact Or.inr ⟨i, by omega, hrp⟩
+      · left
+        rw [Function.iterate_succ_apply']
+        by_contra hnp
+        set r := (F m)^[i] (⊤ : α)
+        have hdesc : F m r ≤ r := by
+          have := iter_antitone_of_le (F m).monotone (le_top : F m ⊤ ≤ ⊤) (Nat.le_succ i)
+          rwa [Function.iterate_succ_apply'] at this
+        have hqr : F q r ≤ F m r := (F.mono hqm) r
+        exact hrp (trap_of_tb hn hk hp hq hqx hqp hTb h (hqr.trans hdesc) (fun h' => hnp (h'.trans hqr)))
+    · exact Or.inr ⟨j, by omega, hjp⟩
+
+/-- **UpTrap, landing.** If moreover `a(m)` has height ≤ 2 (e.g. `m ∈ R_1` with `R_2` tight), then `p` is row `m`'s
+landing. So a fixed atom `q` (or any `q` certified through a dominating row reaching `p`) makes every such row `m ≥ q` land
+at `p`. -/
+theorem upTrap_land {H : ℕ} (hn : NoChain α (H + 1)) {x q p m : α} {k : ℕ} (hk : (F x)^[k] (⊤ : α) = p)
+    (hp : height H p = 2) (hq : height H q = 1) (hqx : q ≤ x) (hqp : q ≤ F q p)
+    (hTb : ∀ y, 2 < height H y → ¬ F q y ≤ q) (hqm : q ≤ m) (ham : height H (a F m) ≤ 2) :
+    ∃ j, (F m)^[j] (⊤ : α) = p ∧ ∀ i < j, 2 < height H ((F m)^[i] (⊤ : α)) := by
+  have claim := upTrap_stay hn hk hp hq hqx hqp hTb hqm
+  obtain ⟨N, hN⟩ := rowDesc_reaches_a hn (F := F) m
+  have hex : ∃ j, (F m)^[j] (⊤ : α) = p := by
+    rcases claim N with h | ⟨j, -, hj⟩
+    · exact ⟨N, by rw [hN] at h ⊢; exact (eq_of_le_of_height_ge hn h (by omega)).symm⟩
+    · exact ⟨j, hj⟩
+  classical
+  refine ⟨Nat.find hex, Nat.find_spec hex, fun j hj => ?_⟩
+  have hne : (F m)^[j] (⊤ : α) ≠ p := Nat.find_min hex hj
+  rcases claim j with h | ⟨j', hj', hj'p⟩
+  · have := height_strictMono hn (lt_of_le_of_ne h (Ne.symm hne)); omega
+  · exact absurd hj'p (Nat.find_min hex (by omega))
+
+/-- **Break lemma** (run-13 brief B, P0.3, one step). `d` an atom, `F(d, r) ≤ r` with `F(d, r) ≱ d`; if `r ⊓ F(⊥, t) = d`
+then the breakpoint `r ⊓ t` lies in `Z`: `F(⊥, r ⊓ t) = ⊥`. -/
+theorem break_in_Z {H : ℕ} (hn : NoChain α (H + 1)) {d r t : α} (hd : height H d = 1) (hrr : F d r ≤ r)
+    (hnd : ¬ d ≤ F d r) (hstep : r ⊓ F ⊥ t = d) : F ⊥ (r ⊓ t) = ⊥ := by
+  have h1 : F ⊥ (r ⊓ t) ≤ F d r := ((F ⊥).mono inf_le_left).trans ((F.mono bot_le) r)
+  have h2 : F ⊥ (r ⊓ t) ≤ d := hstep ▸ le_inf (h1.trans hrr) ((F ⊥).mono inf_le_right)
+  have hlt : F ⊥ (r ⊓ t) < d := lt_of_le_of_ne h2 (fun e => hnd (e ▸ h1))
+  by_contra hb
+  have := height_strictMono hn (bot_lt_iff_ne_bot.2 hb); have := height_strictMono hn hlt
+  rw [height_bot_eq_zero] at *; omega
+
+/-- **BreakExists** (P0.3). `d = (F ⊥)^[N] ⊤` an atom in `Z`, `r ≥ d`, `r ≠ d` with `F(d, r) ≤ r` and `F(d, r) ≱ d`.
+Then some element `t` of the `⊥`-descent gives a breakpoint `w = r ⊓ t` with `d < w` and `w ∈ Z` (`F(⊥, w) = ⊥`);
+with `R_2` tight, `w` has height 2. -/
+theorem breakExists {H : ℕ} (hn : NoChain α (H + 1)) {d r : α} {N : ℕ} (hN : (F ⊥)^[N] (⊤ : α) = d)
+    (hd : height H d = 1) (hdr : d ≤ r) (hrd : r ≠ d) (hrr : F d r ≤ r) (hnd : ¬ d ≤ F d r) :
+    ∃ k < N, d < r ⊓ (F ⊥)^[k] (⊤ : α) ∧ F ⊥ (r ⊓ (F ⊥)^[k] (⊤ : α)) = ⊥ := by
+  have hge : ∀ j ≤ N, d ≤ r ⊓ (F ⊥)^[j] (⊤ : α) := fun j hj =>
+    le_inf hdr (hN ▸ iter_antitone_of_le (F ⊥).monotone (le_top : F ⊥ ⊤ ≤ ⊤) hj)
+  have hex : ∃ j, r ⊓ (F ⊥)^[j] (⊤ : α) = d := ⟨N, by rw [hN]; exact inf_eq_right.2 hdr⟩
+  classical
+  set j := Nat.find hex with hjdef
+  have hjd : r ⊓ (F ⊥)^[j] (⊤ : α) = d := Nat.find_spec hex
+  have hjN : j ≤ N := Nat.find_min' hex (by rw [hN]; exact inf_eq_right.2 hdr)
+  have hj0 : j ≠ 0 := by
+    intro e; rw [e] at hjd; simp at hjd; exact hrd hjd
+  obtain ⟨k, hk⟩ : ∃ k, j = k + 1 := ⟨j - 1, by omega⟩
+  have hkne : r ⊓ (F ⊥)^[k] (⊤ : α) ≠ d := Nat.find_min hex (by omega)
+  have hstep : r ⊓ F ⊥ ((F ⊥)^[k] (⊤ : α)) = d := by
+    have h := hjd; rw [hk, Function.iterate_succ_apply'] at h; exact h
+  refine ⟨k, by omega, lt_of_le_of_ne (hge k (by omega)) (Ne.symm hkne), break_in_Z hn hd hrr hnd hstep⟩
+
+/-- **TopZ** (run-13 metatheory brief, P0b). If `Z = {y : F(⊥, y) = ⊥}` has a greatest element `m ∈ R_1`, then `m`
+exits to an atom below it, which is good: GoodAtom1's conclusion. -/
+theorem goodAtom_of_greatestZ {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    (ha : a F ⊥ = ⊥) (htop : 2 < height H (⊤ : α)) {m : α} (hm : m ∈ Rk F 1)
+    (hmax : ∀ y, F ⊥ y = ⊥ → y ≤ m) : ∃ q, q ∈ Rk F 1 ∧ height H q = 1 ∧ IsGood F q := by
+  obtain ⟨N, hN⟩ := rowDesc_reaches_a hn (F := F) m
+  have haR : a F m ∈ Rk F 2 := by simpa using aIter_mem (F := F) hm 1
+  have hex : ∃ i, height H ((F m)^[i] (⊤ : α)) ≤ 2 := ⟨N, by rw [hN]; exact hk2 _ haR⟩
+  classical
+  set i := Nat.find hex
+  have hi : height H ((F m)^[i] (⊤ : α)) ≤ 2 := Nat.find_spec hex
+  have hmin : ∀ j < i, 2 < height H ((F m)^[j] (⊤ : α)) := fun j hj => by
+    have := Nat.find_min hex hj; omega
+  have hnl := land_not_le hk2 hm htop hi hmin
+  have hexit : F ⊥ ((F m)^[i] (⊤ : α)) ≠ ⊥ := fun h => hnl (hmax _ h)
+  obtain ⟨-, -, hq0⟩ := exit_atom hn hk2 ha hm htop hi hmin hexit
+  obtain ⟨hqR, hq1, hg⟩ := goodAtom_of_inCert hn hk2 ha hm htop hi hmin hexit (hmax _ hq0)
+  exact ⟨_, hqR, hq1, hg⟩
 
 end Landing
 

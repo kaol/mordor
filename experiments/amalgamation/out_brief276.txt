@@ -1,0 +1,12 @@
+== §34.3z²⁷⁶ three-arm brief (run 13), pinned 19225c9. Briefs and scripts: scratchpad amr_run13/{ctlA,ctlB,meta}/.
+-- Worker re-encodings (muorbit_sat.py; exact; models replayed):
+   tcase 16 BreakCert: closure 5 11 4 30 UNSAT 30, not2 SAT 30 (min 9); closure 6 12 1 40 UNSAT 40 (h6 24), not2 SAT 40 (min 15)
+   tcase 17 TopCell:   closure 5 11 4 30 UNSAT 30, not2 SAT 30 (min 9); closure 6 12 1 40 UNSAT 40 (h6 24), not2 SAT 40 (min 15)
+   tcase 18 JoinCert:  closure 5 11 4 30 UNSAT 30, not2 SAT 30 (min 9); closure 6 12 1 40: pending
+   (tcase 17 first version had a one-clause disjunction where per-value clauses were needed; the replay caught it before
+    any run counted.)
+-- Briefers' leads (their encodings): A TopCell/TopCert (w0lean.py) 6 12 1 40 + 6 14 2 40; A OrbitDom 6 14 2 40 (second
+   encoding; mutant ExitDom refuted at h6); B BreakCert (lean_land.py) 6 14 2 40 + lattice #33; meta JoinCert (link_probe.py)
+   6 12 1 40 + 6 14 2 40, JoinAll 6 12 1 40.
+-- Blind echo judge (24 candidates, shuffled; key in scratchpad amr_run13/judgekey): echoes found C06 BreakExists (S4b),
+   C07 BreakCert (S4b), C19 OrbitDom<=>L2&fixed (A1c); none in the metatheory arm (0/8); controls 3/16.

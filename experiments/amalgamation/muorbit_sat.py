@@ -26,7 +26,7 @@ MODE = sys.argv[1]; K = 0
 if MODE in ('orbk', 'tcase'): K = int(sys.argv[2]); sys.argv.pop(2)
 FL = {a for a in sys.argv[2:] if a in ('not2', 'Ta', 'Tb', 'ZT', 'Rd', 'Re', 'Rq', 'Rb', 'Rj')}; args = [a for a in sys.argv[2:] if a not in FL]
 MEAN = {'botorbit': 'BotOrbit fails: the mu-orbit of bot never reaches a fixed point',
-        'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)', 15: 'OrbitDom fails: d in-steps twice (L2 fails), or the first exiting point z of the chain from d exits to q and no row x2 in Z* with q <= x2 exits to q', 14: 'ExitDom fails: some x in Z* exits to an atom q, and no row x2 in Z* with q <= x2 exits to q', 13: 'QEany fails: some x in Z* in-steps to y = lambda(x) in Z*, y exits at p, and F(bot, p) is not below y', 10: 'StallQ fails: some x in Z* exits at p with q = F(bot, p) <= x and F(q, p) != p', 12: 'StallQ2 fails: some x in Z* exits at p with q = F(bot, p) <= x, q != x and F(q, p) != p', 11: 'StallX fails: some x in Z* exits at p and F(x, p) != p', 9: 'DomCoLand fails: some x in Z* exits at p with q = F(bot, p) <= x and lambda(q) != p', 8: 'QE fails: d in-steps to e, e exits at p, and q = F(bot, p) is not below e', 7: 'Follow fails: d in-steps to e, e exits at p with high predecessor u, q = F(bot, p), and u is not on row q descent'}.get(K, '?')}
+        'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)', 18: 'JoinCert fails: L2 fails, or for the first exiting point z with exit atom q no atom r <= z has r v q in Z with the row r v q exiting to q', 17: 'TopCell fails: d is not a good atom and no height-2 row m of Z has q = m meet lambda(m) an atom with q <= F(q, lambda(m))', 16: 'BreakCert fails: d is a bad atom, and the breakpoint w = r meet t_k (r = last element of row d descent that is >= d; t_k -> t_k+1 the step of the bot-descent where r meet t first drops to d) is not a dominated exit (or not a height-2 element of Z)', 15: 'OrbitDom fails: d in-steps twice (L2 fails), or the first exiting point z of the chain from d exits to q and no row x2 in Z* with q <= x2 exits to q', 14: 'ExitDom fails: some x in Z* exits to an atom q, and no row x2 in Z* with q <= x2 exits to q', 13: 'QEany fails: some x in Z* in-steps to y = lambda(x) in Z*, y exits at p, and F(bot, p) is not below y', 10: 'StallQ fails: some x in Z* exits at p with q = F(bot, p) <= x and F(q, p) != p', 12: 'StallQ2 fails: some x in Z* exits at p with q = F(bot, p) <= x, q != x and F(q, p) != p', 11: 'StallX fails: some x in Z* exits at p and F(x, p) != p', 9: 'DomCoLand fails: some x in Z* exits at p with q = F(bot, p) <= x and lambda(q) != p', 8: 'QE fails: d in-steps to e, e exits at p, and q = F(bot, p) is not below e', 7: 'Follow fails: d in-steps to e, e exits at p with high predecessor u, q = F(bot, p), and u is not on row q descent'}.get(K, '?')}
 print(f'muorbit_sat {MODE} | SAT = {MEAN[MODE]} | world W0 + n1 | flags {sorted(FL)} | corpus {args}')
 C = collections.Counter(); HH = collections.Counter(); best = None
 for L in lattices(args):
@@ -139,7 +139,51 @@ for L in lattices(args):
                         o9 = E.v('t9', x, p, q); sel.append(o9)
                         for lit in [inZ(x), lam[x, p], -inZ(p), f(bot, p, q), -lam[q, p]]: add([-o9, lit])
             add(sel)
-        elif K in (14, 15):
+        elif K == 17:
+            sel = []
+            for e in rows:
+                if e == bot: continue
+                o = E.v('s17', e); sel.append(o); add([-o, D(e)])
+                if h[e] == 1:                                          # d an atom must be bad
+                    add([-o, -E.v('on', e, e)])
+                    for g in range(n):
+                        if le[e][g]: add([-o, -E.v('A', e, g)])
+                for m in rows:
+                    if h[m] != 2: continue
+                    for p in low:
+                        if h[p] != 2: continue
+                        q = L.meet[m][p]
+                        if h[q] != 1: continue
+                        for v in range(n):
+                            if le[q][v]: add([-o, -inZ(m), -lam[m, p], -f(q, p, v)])
+            add(sel)
+        elif K == 16:
+            sel = []
+            for e in rows:
+                if h[e] != 1: continue
+                Ab = [E.v('A', e, g) for g in range(n) if le[e][g]]          # bad: not e <= a(e), and e not on its own descent
+                for r_ in range(n):
+                    if not le[e][r_]: continue
+                    for tk in range(n):
+                        for tk1 in range(n):
+                            w = L.meet[r_][tk]
+                            if w == e or L.meet[r_][tk1] != e: continue
+                            o = E.v('s16', e, r_, tk, tk1); sel.append(o)
+                            add([-o, D(e)]); add([-o, -E.v('on', e, e)])
+                            for lit in Ab: add([-o, -lit])
+                            add([-o, E.v('on', e, r_)])
+                            for v in range(n):
+                                if le[e][v]: add([-o, -f(e, r_, v)])       # r is the last descent element >= d
+                            add([-o, E.v('on', bot, tk)]); add([-o, f(bot, tk, tk1)])
+                            if w in rows:                                   # negated claim: w not a dominated exit
+                                ls = []
+                                for p in low:
+                                    t = E.v('t16', w, p); ls.append(t)
+                                    E.iff_and(t, [lam[w, p], E.v('ndom16', w, p)])
+                                    E.iff_or(E.v('ndom16', w, p), [inZ(p)] + [f(bot, p, v) for v in range(n) if not le[v][w]])
+                                add([-o] + ls + [-inZ(w)])
+            add(sel)
+        elif K in (14, 15, 18):
             Xv = {}
             for x in rows:
                 if x == bot: continue
@@ -150,7 +194,7 @@ for L in lattices(args):
                         t = E.v('t14', x, p, q); E.iff_and(t, [inZ(x), lam[x, p], -inZ(p), f(bot, p, q)]); ls.append(t)
                     o = E.v('X14', x, q); E.iff_or(o, ls); Xv[x, q] = o
             sel = []
-            if K == 15:                                        # z = d (exits) or z = e = lambda(d) in Z (exits); or L2 fails
+            if K in (15, 18):                                  # z = d (exits) or z = e = lambda(d) in Z (exits); or L2 fails
                 for x in rows:
                     if x == bot: continue
                     for y in rows:
@@ -163,7 +207,7 @@ for L in lattices(args):
                 for q in rows:
                     if (x, q) not in Xv: continue
                     o = E.v('s14', x, q); sel.append(o); add([-o, Xv[x, q]])
-                    if K == 15:                                # x is the first exiting point of the chain from d
+                    if K in (15, 18):                          # x is the first exiting point of the chain from d
                         zo = E.v('zfirst', x); add([-o, zo])
                         ls = [D(x)] + [E.v('zin', x2, x) for x2 in rows if x2 != bot]
                         add([-zo] + ls)
@@ -171,6 +215,12 @@ for L in lattices(args):
                             if x2 == bot: continue
                             if x in low: E.iff_and(E.v('zin', x2, x), [D(x2), lam[x2, x], inZ(x)])
                             else: add([-E.v('zin', x2, x)])
+                    if K == 18:                                # no join row r v q (r an atom <= z) in Z exits to q
+                        for r_ in range(n):
+                            if h[r_] != 1 or not le[r_][x]: continue
+                            j = jn[r_][q]
+                            if (j, q) in Xv: add([-o, -Xv[j, q]])
+                        continue
                     for x2 in rows:
                         if (x2, q) in Xv and le[q][x2]: add([-o, -Xv[x2, q]])
             add(sel)
@@ -288,6 +338,28 @@ for L in lattices(args):
             if K == 9:
                 ok = ok and any(F[bot][x] == bot and x != bot and F[bot][lamf(x)] != bot and le[F[bot][lamf(x)]][x]
                                 and lamf(F[bot][lamf(x)]) != lamf(x) for x in range(n) if lamf(x) is not None)
+            if K == 17:
+                dd_ = muf(bot); good_ = lambda y: le[y][a_of(L, F, y)] or y in desc(y)
+                ok = ok and not (h[dd_] == 1 and good_(dd_))
+                ok = ok and not any(h[m] == 2 and F[bot][m] == bot and lamf(m) is not None and h[lamf(m)] == 2
+                                    and h[L.meet[m][lamf(m)]] == 1 and le[L.meet[m][lamf(m)]][F[L.meet[m][lamf(m)]][lamf(m)]]
+                                    for m in range(n))
+            if K == 16:
+                dd_ = muf(bot); tb_ = desc(bot)
+                good_ = lambda y: le[y][a_of(L, F, y)] or y in desc(y)
+                ok = ok and h[dd_] == 1 and not good_(dd_)
+                de_ = desc(dd_); r_ = [y for y in de_ if le[dd_][y]][-1]
+                k_ = max(k for k in range(len(tb_) - 1) if L.meet[r_][tb_[k]] != dd_ and L.meet[r_][tb_[k + 1]] == dd_)
+                w = L.meet[r_][tb_[k_]]
+                bad_w = F[bot][w] != bot or h[w] != 2 or lamf(w) is None or F[bot][lamf(w)] == bot or not le[F[bot][lamf(w)]][w]
+                ok = ok and bad_w
+            if K == 18:
+                dd_ = muf(bot); Zs = [x for x in range(n) if x != bot and F[bot][x] == bot and lamf(x) is not None]
+                ex = {x: F[bot][lamf(x)] for x in Zs if F[bot][lamf(x)] != bot}
+                if dd_ in ex: z = dd_
+                elif lamf(dd_) is not None and F[bot][lamf(dd_)] == bot and lamf(dd_) in ex: z = lamf(dd_)
+                else: z = None
+                ok = ok and (z is None or not any(h[r_] == 1 and le[r_][z] and ex.get(jn[r_][ex[z]]) == ex[z] for r_ in range(n)))
             if K == 15:
                 dd_ = muf(bot); Zs = [x for x in range(n) if x != bot and F[bot][x] == bot and lamf(x) is not None]
                 ex = {x: F[bot][lamf(x)] for x in Zs if F[bot][lamf(x)] != bot}

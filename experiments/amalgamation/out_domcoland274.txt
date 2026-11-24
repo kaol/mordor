@@ -1,0 +1,8 @@
+== §34.3z²⁷⁴ abs_domcoland.py (AbstractDomCoLand: beta <= psi <= phi monotone; phi lands at p; beta(p) = q an atom below x;
+   (T) at row q; SAT = psi does not land at p). Exact; every SAT model replayed in Python.
+   closure 5 11 4 30: stall UNSAT 30 (sanity: the proved case) | base UNSAT 30 | xTq SAT 29, min 10 | xTx UNSAT 30 | xA UNSAT 30
+                      | xTx xA UNSAT 30
+   closure 6 12 1 40 xTx xA: UNSAT 40 (h6 24);  6 14 2 40 xTx xA: UNSAT 40 (h6 23);  6 12 1 40 xTx xA xTq: SAT 40, min 15
+   closure 7 14 1 20 xTx xA: UNSAT 20 (h6 18, h7 2)
+   Disclosure: the first version encoded "psi does not land at p" one-sidedly (land(p) could be switched off); even the
+   stall case came out SAT, which exposed it. Fixed before any reported run. Proved in Lean: trap_of_tb, domCoLand.

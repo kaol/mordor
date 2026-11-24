@@ -161,6 +161,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶⁶: **`cov_of_preDrop`** (Cov from PreDrop, by `drop_below_top` and uniqueness of the atom below d ∧ t).
 * §34.3z²⁶⁷: `eq_atom_of_le_meet`, **`cov_of_baseD`**, `preDrop_of_baseD` (Cov, PreDrop and the landing step from BaseD: F(⊥, t) ≤ d),
   `lastIdx_ge`, **`baseD_of_rowDrop`** (BaseD from RowDrop: F(⊥, (F d)^(N−1) ⊤) ≤ d).
+* §34.3z²⁷⁴: **`trap_of_tb`**, **`domCoLand`** (a dominated row lands where its dominator does), `tb_of_tight`, **`exitFixed_of_dom`**.
 * §34.3z²⁷³: **`goodAtom_of_inCert`** (in-step certificate: GoodAtom1 ⟸ Fix1 ∧ L2 ∧ QE), **`coland_of_stall`** (DomCoLand, stall case).
 * §34.3z²⁷²: `land_index_pos`, `land_not_le`, `land_bot_lt`, **`exit_atom`**, `land_unique`, `cert_of_exitFixed`,
   **`goodAtom_of_exitFixed`** (the landing facts N1; a fixed point of the landing map is a good atom).
@@ -5546,6 +5547,92 @@ theorem coland_of_stall {H : ℕ} (hn : NoChain α (H + 1)) {x q p : α} {m : �
   refine ⟨Nat.find hex, ?_, fun j hj => ?_⟩
   · exact (eq_of_le_of_height_ge hn (hge _) (by have := Nat.find_spec hex; omega)).symm
   · have := Nat.find_min hex hj; omega
+
+/-- **Trap.** Row `x`'s descent from `⊤` reaches `p` (height 2) at index `m`; `q` is an atom with `q ≤ F(q, p)` and `q ≤ x`;
+row `q` has no lower cell at a column of height ≥ 3 (Tb). If `p ≤ r`, `F(q, r) ≤ r` and `F(q, r) ≱ p`, then `r = p`.
+(Downward induction on `j` of `r ⊓ (F x)^[j] ⊤ = p`.) -/
+theorem trap_of_tb {H : ℕ} (hn : NoChain α (H + 1)) {x q p r : α} {m : ℕ} (hm : (F x)^[m] (⊤ : α) = p)
+    (hp : height H p = 2) (hq : height H q = 1) (hqx : q ≤ x) (hqp : q ≤ F q p)
+    (hTb : ∀ y, 2 < height H y → ¬ F q y ≤ q) (hpr : p ≤ r) (hrr : F q r ≤ r) (hnp : ¬ p ≤ F q r) : r = p := by
+  have hsp : ∀ j ≤ m, p ≤ (F x)^[j] (⊤ : α) := fun j hj =>
+    hm ▸ iter_antitone_of_le (F x).monotone (le_top : F x ⊤ ≤ ⊤) hj
+  have key : ∀ t ≤ m, r ⊓ (F x)^[m - t] (⊤ : α) = p := by
+    intro t
+    induction t with
+    | zero => intro _; rw [Nat.sub_zero, hm]; exact inf_eq_right.2 hpr
+    | succ t ih =>
+      intro ht
+      have IH := ih (by omega)
+      set j := m - (t + 1) with hj
+      have hjs : m - t = j + 1 := by omega
+      rw [hjs, Function.iterate_succ_apply'] at IH
+      set sj := (F x)^[j] (⊤ : α)
+      have hpy : p ≤ r ⊓ sj := le_inf hpr (hsp j (by omega))
+      have h1 : F q (r ⊓ sj) ≤ p := by
+        rw [← IH]
+        exact le_inf (((F q).mono inf_le_left).trans hrr) (((F q).mono inf_le_right).trans ((F.mono hqx) sj))
+      have h2 : F q (r ⊓ sj) ≤ F q r := (F q).mono inf_le_left
+      have h3 : q ≤ F q (r ⊓ sj) := hqp.trans ((F q).mono hpy)
+      have hne : F q (r ⊓ sj) ≠ p := fun e => hnp (e ▸ h2)
+      have hlt : F q (r ⊓ sj) < p := lt_of_le_of_ne h1 hne
+      have h4 := height_strictMono hn hlt
+      have h5 : F q (r ⊓ sj) = q := (eq_of_le_of_height_ge hn h3 (by omega)).symm
+      have hlow : ¬ 2 < height H (r ⊓ sj) := fun hh => hTb _ hh h5.le
+      exact (eq_of_le_of_height_ge hn hpy (by omega)).symm
+  have := key m le_rfl
+  rwa [Nat.sub_self, Function.iterate_zero, id, inf_top_eq] at this
+
+/-- **DomCoLand** (run-12 brief lead, now a theorem). If row `x` reaches `p` (height 2) at index `m`, `q ≤ x` is an atom
+with `q ≤ F(q, p)`, and row `q` has no lower cell at a high column, then `p` is row `q`'s landing: it lies on row `q`'s
+descent and every earlier element has height > 2. -/
+theorem domCoLand {H : ℕ} (hn : NoChain α (H + 1)) {x q p : α} {m : ℕ} (hm : (F x)^[m] (⊤ : α) = p)
+    (hp : height H p = 2) (hq : height H q = 1) (hqx : q ≤ x) (hqp : q ≤ F q p)
+    (hTb : ∀ y, 2 < height H y → ¬ F q y ≤ q) :
+    ∃ k, (F q)^[k] (⊤ : α) = p ∧ ∀ j < k, 2 < height H ((F q)^[j] (⊤ : α)) := by
+  -- every element of row q's descent is ≥ p, or p occurred earlier
+  have claim : ∀ i, p ≤ (F q)^[i] (⊤ : α) ∨ ∃ j ≤ i, (F q)^[j] (⊤ : α) = p := by
+    intro i
+    induction i with
+    | zero => exact Or.inl le_top
+    | succ i ih =>
+      rcases ih with h | ⟨j, hj, hjp⟩
+      · by_cases hrp : (F q)^[i] (⊤ : α) = p
+        · exact Or.inr ⟨i, by omega, hrp⟩
+        · left
+          rw [Function.iterate_succ_apply']
+          by_contra hnp
+          have hrr : F q ((F q)^[i] (⊤ : α)) ≤ (F q)^[i] (⊤ : α) := by
+            have := iter_antitone_of_le (F q).monotone (le_top : F q ⊤ ≤ ⊤) (Nat.le_succ i)
+            rwa [Function.iterate_succ_apply'] at this
+          exact hrp (trap_of_tb hn hm hp hq hqx hqp hTb h hrr hnp)
+      · exact Or.inr ⟨j, by omega, hjp⟩
+  have hdom : (F q)^[m] (⊤ : α) ≤ p := hm ▸ iter_row_mono hqx m
+  have hex : ∃ j, (F q)^[j] (⊤ : α) = p := by
+    rcases claim m with h | ⟨j, -, hj⟩
+    · exact ⟨m, le_antisymm hdom h⟩
+    · exact ⟨j, hj⟩
+  classical
+  refine ⟨Nat.find hex, Nat.find_spec hex, fun j hj => ?_⟩
+  have hne : (F q)^[j] (⊤ : α) ≠ p := Nat.find_min hex hj
+  rcases claim j with h | ⟨j', hj', hj'p⟩
+  · have := height_strictMono hn (lt_of_le_of_ne h (Ne.symm hne)); omega
+  · exact absurd hj'p (Nat.find_min hex (by omega))
+
+/-- In W0, a row of `R_1` has no lower cell at a column of height ≥ 3 (half of (T)). -/
+theorem tb_of_tight {H : ℕ} (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) {q : α} (hq : q ∈ Rk F 1) :
+    ∀ y, 2 < height H y → ¬ F q y ≤ q := fun y hy hc => by
+  have := hk2 y (mem_succ_of_cell (k := 1) hq le_rfl (Or.inl hc)); omega
+
+/-- **Dominated exits are fixed points of the landing map** (DomCoLand in W0). If row `x` reaches `p` (height 2) and its
+exit atom `q = F(⊥, p)` lies in `R_1` below `x`, then `p` is row `q`'s landing and `F(⊥, λ(q)) = q`. With
+`cert_of_exitFixed`: Cert1 ⟹ CertAtom. -/
+theorem exitFixed_of_dom {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) {x q p : α} {m : ℕ}
+    (hm : (F x)^[m] (⊤ : α) = p) (hp : height H p = 2) (hq : height H q = 1) (hqR : q ∈ Rk F 1) (hqx : q ≤ x)
+    (hqb : F ⊥ p = q) :
+    ∃ k, (F q)^[k] (⊤ : α) = p ∧ (∀ j < k, 2 < height H ((F q)^[j] (⊤ : α))) ∧ F ⊥ ((F q)^[k] (⊤ : α)) = q := by
+  have hqp : q ≤ F q p := hqb ▸ (F.mono bot_le) p
+  obtain ⟨k, hk, hmin⟩ := domCoLand hn hm hp hq hqx hqp (tb_of_tight hk2 hqR)
+  exact ⟨k, hk, hmin, hk ▸ hqb⟩
 
 end Landing
 

@@ -1,0 +1,8 @@
+== §34.3z²⁷⁵ (exact; every SAT model replayed in Python). muorbit_sat.py; world W0 + n1.
+-- QE (tcase 8) with tightness replaced by partial facts (not2 + flags), closure 5 11 4 30; SAT = QE fails:
+   none SAT 27 | Rd Re Rq Rb SAT 23 | Rd Re Rq Rb Rj SAT 22 | Re Rq Rj SAT 22 | Ta SAT 27 | Tb SAT 14 | Tb Rj SAT 11 | Tb Rd Re Rq SAT 14
+   | Ta Rd Re Rq Rb SAT 22 | Ta Tb UNSAT 30.   (R* = (T) at row d / e / q / bot / d v e; Ta, Tb = halves of (T) at every Z-row)
+-- tcase 13 QEany (anchor-free QE): closure 5 11 4 30 SAT 24, min 12  -> refuted
+-- tcase 14 ExitDom (every exit atom has a dominating exit row): closure 5 11 4 30 SAT 22, min 12 -> refuted; not2 SAT 30
+-- tcase 15 OrbitDom: closure 5 11 4 30 UNSAT 30, not2 SAT 30, min 9; closure 6 12 1 40 UNSAT 40 (h6 24), not2 SAT 40, min 15;
+   closure 6 14 2 40 pending.

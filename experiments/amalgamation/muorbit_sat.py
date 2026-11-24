@@ -12,6 +12,8 @@ Modes:
   orbk K    SAT = mu^K(bot) is not a fixed point (Orbit_K fails)
   tcase 1|2|3  SAT = L1(d) fails | L1(e) fails | L2 fails (see MEAN)
 Flags: not2 (mutant: R_2 tightness dropped; then descents may not land, and such rows are excluded from O);
+  with not2, role facts (in tcase 3 and 8): Rd, Re, Rb = (T) at row d, e, bot; Rq = at row q = F(bot, lambda(e)) (tcase 8)
+  or at row lambda(e) (tcase 3);
   with not2, partial facts: Tb (no Z-row lower cell at a high column), Ta (no Z-row upper cell at a high column), ZT (Z heights <= 2)
 Every SAT model is replayed in Python (stages, a_of, direct computation of lambda, mu and the orbit).
   python3 muorbit_sat.py MODE [K] (sweep N MAX | closure K M SEED CNT) [not2]"""
@@ -22,13 +24,13 @@ from tight_probe import lattices
 from rstages import stages, a_of
 MODE = sys.argv[1]; K = 0
 if MODE in ('orbk', 'tcase'): K = int(sys.argv[2]); sys.argv.pop(2)
-FL = {a for a in sys.argv[2:] if a in ('not2', 'Ta', 'Tb', 'ZT')}; args = [a for a in sys.argv[2:] if a not in FL]
+FL = {a for a in sys.argv[2:] if a in ('not2', 'Ta', 'Tb', 'ZT', 'Rd', 'Re', 'Rq', 'Rb', 'Rj')}; args = [a for a in sys.argv[2:] if a not in FL]
 MEAN = {'botorbit': 'BotOrbit fails: the mu-orbit of bot never reaches a fixed point',
-        'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)', 10: 'StallQ fails: some x in Z* exits at p with q = F(bot, p) <= x and F(q, p) != p', 12: 'StallQ2 fails: some x in Z* exits at p with q = F(bot, p) <= x, q != x and F(q, p) != p', 11: 'StallX fails: some x in Z* exits at p and F(x, p) != p', 9: 'DomCoLand fails: some x in Z* exits at p with q = F(bot, p) <= x and lambda(q) != p', 8: 'QE fails: d in-steps to e, e exits at p, and q = F(bot, p) is not below e', 7: 'Follow fails: d in-steps to e, e exits at p with high predecessor u, q = F(bot, p), and u is not on row q descent'}.get(K, '?')}
+        'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)', 15: 'OrbitDom fails: d in-steps twice (L2 fails), or the first exiting point z of the chain from d exits to q and no row x2 in Z* with q <= x2 exits to q', 14: 'ExitDom fails: some x in Z* exits to an atom q, and no row x2 in Z* with q <= x2 exits to q', 13: 'QEany fails: some x in Z* in-steps to y = lambda(x) in Z*, y exits at p, and F(bot, p) is not below y', 10: 'StallQ fails: some x in Z* exits at p with q = F(bot, p) <= x and F(q, p) != p', 12: 'StallQ2 fails: some x in Z* exits at p with q = F(bot, p) <= x, q != x and F(q, p) != p', 11: 'StallX fails: some x in Z* exits at p and F(x, p) != p', 9: 'DomCoLand fails: some x in Z* exits at p with q = F(bot, p) <= x and lambda(q) != p', 8: 'QE fails: d in-steps to e, e exits at p, and q = F(bot, p) is not below e', 7: 'Follow fails: d in-steps to e, e exits at p with high predecessor u, q = F(bot, p), and u is not on row q descent'}.get(K, '?')}
 print(f'muorbit_sat {MODE} | SAT = {MEAN[MODE]} | world W0 + n1 | flags {sorted(FL)} | corpus {args}')
 C = collections.Counter(); HH = collections.Counter(); best = None
 for L in lattices(args):
-    n = L.n; le = L.le; h = L.rank; top = L.top; bot = L.bot; NO = L.height + 1
+    n = L.n; le = L.le; h = L.rank; top = L.top; bot = L.bot; NO = L.height + 1; jn = L.join
     if L.height < 3: continue
     E = Enc(L, 2); f = lambda a, b, u: E.v('f', a, b, u); r = lambda i, z: E.v('r', i, z); add = E.S.add_clause
     add([E.v('A', bot, bot)]); add([-r(2, top)])
@@ -45,6 +47,11 @@ for L in lattices(args):
         if 'ZT' in FL and h[x] > 2: add([-f(bot, x, bot)])                           # Z has heights <= 2
     rows = [x for x in range(n) if h[x] <= 2 or 'not2' in FL]
     inZ = lambda x: f(bot, x, bot)
+    def Trow(guard, z):                                   # role-level (T): row z has no cell at a column of height >= 3
+        for w_ in range(n):
+            if h[w_] <= 2: continue
+            for v_ in range(n):
+                if le[v_][z] or le[w_][v_]: add(guard + [-f(z, w_, v_)])
     low = [p for p in range(n) if h[p] <= 2]
     lam = {}
     for x in rows:
@@ -132,14 +139,55 @@ for L in lattices(args):
                         o9 = E.v('t9', x, p, q); sel.append(o9)
                         for lit in [inZ(x), lam[x, p], -inZ(p), f(bot, p, q), -lam[q, p]]: add([-o9, lit])
             add(sel)
-        elif K == 8:
+        elif K in (14, 15):
+            Xv = {}
+            for x in rows:
+                if x == bot: continue
+                for q in rows:
+                    if q == bot: continue
+                    ls = []
+                    for p in low:
+                        t = E.v('t14', x, p, q); E.iff_and(t, [inZ(x), lam[x, p], -inZ(p), f(bot, p, q)]); ls.append(t)
+                    o = E.v('X14', x, q); E.iff_or(o, ls); Xv[x, q] = o
+            sel = []
+            if K == 15:                                        # z = d (exits) or z = e = lambda(d) in Z (exits); or L2 fails
+                for x in rows:
+                    if x == bot: continue
+                    for y in rows:
+                        if y == bot or y not in low: continue
+                        o = E.v('l2f', x, y); sel.append(o)
+                        for lit in [D(x), lam[x, y], inZ(y)]: add([-o, lit])
+                        add([-o] + [E.v('l2in', y, p2) for p2 in low])
+                        for p2 in low: E.iff_and(E.v('l2in', y, p2), [lam[y, p2], inZ(p2)])
+            for x in rows:
+                for q in rows:
+                    if (x, q) not in Xv: continue
+                    o = E.v('s14', x, q); sel.append(o); add([-o, Xv[x, q]])
+                    if K == 15:                                # x is the first exiting point of the chain from d
+                        zo = E.v('zfirst', x); add([-o, zo])
+                        ls = [D(x)] + [E.v('zin', x2, x) for x2 in rows if x2 != bot]
+                        add([-zo] + ls)
+                        for x2 in rows:
+                            if x2 == bot: continue
+                            if x in low: E.iff_and(E.v('zin', x2, x), [D(x2), lam[x2, x], inZ(x)])
+                            else: add([-E.v('zin', x2, x)])
+                    for x2 in rows:
+                        if (x2, q) in Xv and le[q][x2]: add([-o, -Xv[x2, q]])
+            add(sel)
+        elif K in (8, 13):
             sel = []
             for x in rows:
                 for y in rows:
                     if x == bot or y == bot or y not in low: continue
                     for p in low:
                         o8 = E.v('t8', x, y, p); sel.append(o8)
-                        for lit in [D(x), lam[x, y], inZ(y), lam[y, p], -inZ(p)]: add([-o8, lit])
+                        for lit in [D(x) if K == 8 else inZ(x), lam[x, y], inZ(y), lam[y, p], -inZ(p)]: add([-o8, lit])
+                        if 'Rd' in FL: Trow([-o8], x)
+                        if 'Re' in FL: Trow([-o8], y)
+                        if 'Rb' in FL: Trow([-o8], bot)
+                        if 'Rj' in FL: Trow([-o8, -inZ(jn[x][y])], jn[x][y])
+                        if 'Rq' in FL:
+                            for q in range(n): Trow([-o8, -f(bot, p, q)], q)
                         for q in range(n):
                             if le[q][y]: add([-o8, -f(bot, p, q)])
             add(sel)
@@ -173,6 +221,12 @@ for L in lattices(args):
                 for y in rows:
                     if x == bot or y == bot or y not in low: continue
                     o2 = E.v('tsel', x, y); sel.append(o2); add([-o2, D(x)]); add([-o2, lam[x, y]]); add([-o2, inZ(y)])
+                    if 'Rd' in FL: Trow([-o2], x)
+                    if 'Re' in FL: Trow([-o2], y)
+                    if 'Rb' in FL: Trow([-o2], bot)
+                    if 'Rj' in FL: Trow([-o2, -inZ(jn[x][y])], jn[x][y])
+                    if 'Rq' in FL:
+                        for p2 in low: Trow([-o2, -lam[y, p2]], p2)
                     if K == 2: add([-o2] + exits_badly(y))
                     elif K == 4: pass
                     else: add([-o2] + [E.v('tin', y, p2) for p2 in low])
@@ -234,6 +288,21 @@ for L in lattices(args):
             if K == 9:
                 ok = ok and any(F[bot][x] == bot and x != bot and F[bot][lamf(x)] != bot and le[F[bot][lamf(x)]][x]
                                 and lamf(F[bot][lamf(x)]) != lamf(x) for x in range(n) if lamf(x) is not None)
+            if K == 15:
+                dd_ = muf(bot); Zs = [x for x in range(n) if x != bot and F[bot][x] == bot and lamf(x) is not None]
+                ex = {x: F[bot][lamf(x)] for x in Zs if F[bot][lamf(x)] != bot}
+                if dd_ in ex: z = dd_
+                elif lamf(dd_) is not None and F[bot][lamf(dd_)] == bot and lamf(dd_) in ex: z = lamf(dd_)
+                else: z = None
+                ok = ok and (z is None or not any(ex.get(x2) == ex[z] and le[ex[z]][x2] for x2 in ex))
+            if K == 14:
+                Zs = [x for x in range(n) if x != bot and F[bot][x] == bot and lamf(x) is not None]
+                ex = {x: F[bot][lamf(x)] for x in Zs if F[bot][lamf(x)] != bot}
+                ok = ok and any(not any(ex.get(x2) == q and le[q][x2] for x2 in ex) for x, q in ex.items())
+            if K == 13:
+                ok = ok and any(x != bot and F[bot][x] == bot and lamf(x) is not None and lamf(x) != bot and F[bot][lamf(x)] == bot
+                                and lamf(lamf(x)) is not None and F[bot][lamf(lamf(x))] != bot and not le[F[bot][lamf(lamf(x))]][lamf(x)]
+                                for x in range(n))
             if K == 8:
                 e = lamd; ok = ok and F[bot][e] == bot and F[bot][lamf(e)] != bot and not le[F[bot][lamf(e)]][e]
             if K == 7:

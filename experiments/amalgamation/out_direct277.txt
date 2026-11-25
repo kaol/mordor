@@ -1,0 +1,40 @@
+§34.3z²⁷⁷ direct round on BreakCert (worker). Exact runs; every SAT model replayed in Python.
+Height-7 corpus: closure 8 10 1 300 minh 7 maxn 27 (8 lattices: 7 of height 7, 1 of height 8).
+
+muorbit_sat.py new tcases (d a bad atom; r, k, w as in breakExists):
+  19 hypothesis of BreakCert (vacuity / data)      20 BreakDom fails: w exits at p and F(bot, p) not below w
+  21 BreakExit fails: w lands in Z                  22 InStepUp fails   23 InStepU fails   24 ExitBelow fails
+  flags: Rw Rl Rm Rr (role-level (T) at rows w, lambda(w), w meet lambda(w), r); mutants mBad mR mK mTop mN1; cT cR (halves)
+bd_probe.py (independent minimal encoding: F monotone + exact descents, no R-stages): QT0 QT1 QT2 QTc QTa QR QRm QRs
+  G0 G1 L2 L4 U U0 Um Ua P P0 MB; suffix v = vacuity run.
+
+1. Split. BreakCert <=> BreakExit (w exits) and BreakDom (an exit of w is dominated).
+  tcase 19 (hypothesis) | 5 11 4 30: SAT 14 | 6 12 1 40: SAT 35 (23 of height 6)
+  Every relaxed BreakCert counterexample (height 5, flags Tb or Rw Rd Rb) fails BreakExit: lambda(w) in Z.
+
+2. Height-5 role analysis (closure 5 11 4 30, not2 relaxations; BELOW ROOM TO FAIL, see 3):
+  tcase 16 not2 Tb: SAT 14 | Ta: SAT 30 | Ta Tb: UNSAT 30 | Rw Rd Rb: SAT 14
+  tcase 20 (BreakDom) not2: UNSAT 30; also with mTop mN1 mBad mR: UNSAT 30; mutant mK: SAT 28
+  tcase 21 (BreakExit) not2 Tb Rl: UNSAT 30 | not2 Rl Rw Rb Rd Rm: UNSAT 30 | without Rm: SAT 14 | mutant not2: SAT 30
+  tcase 22 (InStepUp) not2 Tb: UNSAT 30, mutant not2: SAT 30 | tcase 23 (InStepU) not2 Tb: SAT 11 (min 16)
+  bd_probe QT0, QT1, QT2, QR, QRm: UNSAT 30 (vacuity SAT 30) | QTc: SAT 30 | G0: SAT 22 | G1: SAT 16 | L2: SAT 13
+  bd_probe U0: UNSAT 30 | Um, Ua: SAT 23
+
+3. At room to fail (height 6 = closure 6 12 1 40, 24 of height 6; height 7 = corpus above):
+  InStepUp   tcase 22 not2 Tb, height 6: SAT 22 (all of height 6), min 17                 -> refuted
+  BreakDom   tcase 20 not2 ZT, height 6: SAT 12, min 21                                     -> uses more than ZT
+  QR         bd_probe (q <= r, no tightness), height 6: SAT 14, min 21                      -> BreakDom needs tightness
+  PredBelow  bd_probe U0, height 6: SAT 14, min 21 | Um: SAT 39                             -> refuted
+  LandBelow  bd_probe P / P0, height 6: SAT 14, min 21                                      -> refuted
+  ExitBelow  bd_probe QT2, height 6: UNSAT 40 (24 of height 6); QT2v SAT 40; QTc SAT 40; QTa (no a(bot) = bot) UNSAT 40
+             height 7: SAT 1 of 8, min 27 (row x = top; bot-descent heights 7 5 3 0, row-top heights 7 6 5 2); QT2v SAT 8
+                                                                                           -> refuted at height 7
+  not finished: tcase 21 not2 Rl Rw Rb Rd Rm at height 6 (killed for memory after 2 h); tcase 21 not2 Tb Rl at height 6
+  (stopped); muorbit tcase 24 at height 6 (stopped once ExitBelow was refuted).
+
+4. Located certificates at height 7 (muorbit_sat.py, full world W0 + n1; one encoding):
+  vac        SAT 8 (world has models on all 8)
+  tcase 19   SAT 5 (BreakCert hypothesis), UNSAT 3
+  tcase 16   BreakCert  UNSAT 8 | not2 mutant SAT 8 (min 18)   -> holds with power at height 7
+  tcase 17   TopCell    UNSAT 8 | not2 mutant SAT 8 (min 18)   -> holds with power at height 7
+  tcase 15   OrbitDom   UNSAT 8 | not2 mutant SAT 8 (min 18)   -> holds with power at height 7

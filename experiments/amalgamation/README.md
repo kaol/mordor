@@ -140,3 +140,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁷⁴: `abs_domcoland.py` (three-map AbstractDomCoLand; flags xTx, xTq, xA, stall, fol). Output `out_domcoland274.txt`.
 - §34.3z²⁷⁵: `muorbit_sat.py` role flags Rd/Re/Rq/Rb/Rj; tcase 13 (QEany), 14 (ExitDom), 15 (OrbitDom). Output `out_orbitdom275.txt`.
 - §34.3z²⁷⁶: `muorbit_sat.py` tcase 16 (BreakCert), 17 (TopCell), 18 (JoinCert): worker re-encodings of the run-13 leads. Output `out_brief276.txt`.
+- §34.3z²⁷⁷: `muorbit_sat.py` tcase 19–24 (BreakCert hypothesis, BreakDom, BreakExit, InStepUp, InStepU, ExitBelow), role flags Rw/Rl/Rm/Rr, mutant flags mBad/mR/mK/mTop/mN1, corpus filter `minh H maxn N`; `bd_probe.py` (independent minimal encoding of the BreakDom halves and ExitBelow variants). Height-7 corpus `closure 8 10 1 300 minh 7 maxn 27`. Output `out_direct277.txt`.

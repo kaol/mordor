@@ -164,6 +164,10 @@ def lattices(args):
         sys.path.insert(0, '../separation'); import nodesc_sweep as ns
         for fam in ns.moore_families(int(args[1])):
             if len(fam) <= int(args[2]): yield ss.Lat(fam)
+    elif args[0] == 'file':                       # §34.3z²⁸¹: the lattice(s) of stored model JSON files (key 'sets')
+        for fn in args[1:]:
+            M = json.load(open(fn)); Ms = M if isinstance(M, list) else [M]
+            for m in Ms: yield ss.Lat(m['sets'])
     elif args[0] == 'tall':                       # §34.3z²⁷⁸: a random maximal chain of subsets of k points plus m random sets,
         k, m, sd, cnt = (int(x) for x in args[1:5]); rng = random.Random(sd)   # closed under meets: height exactly k
         for _ in range(cnt):

@@ -24,11 +24,11 @@ from tight_probe import lattices
 from rstages import stages, a_of
 MODE = sys.argv[1]; K = 0
 if MODE in ('orbk', 'tcase', 'orbdep'): K = int(sys.argv[2]); sys.argv.pop(2)
-FL = {a for a in sys.argv[2:] if a in ('not2', 'Ta', 'Tb', 'ZT', 'Rd', 'Re', 'Rq', 'Rb', 'Rj', 'Rw', 'Rr', 'Rl', 'Rm', 'mBad', 'mR', 'mK', 'mTop', 'mN1', 'cT', 'cR', 'cP', 'ns', 'ex1', 'yf', 'ed', 'cd', 'N4', 'N5', 'N6')}; args = [a for a in sys.argv[2:] if a not in FL]
+FL = {a for a in sys.argv[2:] if a in ('not2', 'Ta', 'Tb', 'ZT', 'Rd', 'Re', 'Rq', 'Rb', 'Rj', 'Rw', 'Rr', 'Rl', 'Rm', 'mBad', 'mR', 'mK', 'mTop', 'mN1', 'cT', 'cR', 'cP', 'ns', 'ex1', 'yf', 'ed', 'cd', 'N4', 'N5', 'N6', 'E1', 'E2', 'E3', 'E4', 'E5', 'd1', 'cd2')}; args = [a for a in sys.argv[2:] if a not in FL]
 import os
 DUMP = [] if os.environ.get('DUMP') else None
 MEAN = {'botorbit': 'BotOrbit fails: the mu-orbit of bot never reaches a fixed point',
-        'orbdep': ('ChainDom fails: some x_k = mu^k(bot), k >= 1, exits to an atom not below x_k' if 'cd' in sys.argv else 'ExactDrop fails: some x_k = mu^k(bot), k >= 1, in-steps to a non-fixed y with dep(y) <= dep(x_k) - 2' if 'ed' in sys.argv else 'OneExit fails: some x_k = mu^k(bot), k >= 1, exits to an atom that is not a fixed point of mu' if 'ex1' in sys.argv else f'StrictDep fails: within {K} steps some non-fixed element x_k = mu^k(bot), k >= 1, has a non-fixed successor x_(k+1) with dep(x_(k+1)) >= dep(x_k), dep(x) = max j with x <= t_j' + (' [nonstrict: dep(x_(k+1)) > dep(x_k)]' if 'ns' in sys.argv else '')), 'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)', 25: 'DropProp fails: w in Z* in-steps to x in Z, x in-steps to y in Z, dep(x) < dep(w) and dep(y) >= dep(x)', 24: 'ExitBelow fails: some row x lands at p, q = F(bot, p) != bot, and q is not below some element of height >= 3 on the bot-descent', 23: 'InStepU fails: the breakpoint w lands at p in Z with predecessor u >= p, and u is not below F(p, u)', 22: 'InStepUp fails: the breakpoint w lands at p in Z (predecessor u >= p), and row p has no upper cell at any high y >= p on row w descent', 21: 'BreakExit fails: d a bad atom and the breakpoint w lands in Z (in-steps)', 20: 'BreakDom fails: d a bad atom, the breakpoint w exits at p and F(bot, p) is not below w', 19: 'hypothesis of BreakCert: d is a bad atom (vacuity / data run)', 18: 'JoinCert fails: L2 fails, or for the first exiting point z with exit atom q no atom r <= z has r v q in Z with the row r v q exiting to q', 17: 'TopCell fails: d is not a good atom and no height-2 row m of Z has q = m meet lambda(m) an atom with q <= F(q, lambda(m))', 16: 'BreakCert fails: d is a bad atom, and the breakpoint w = r meet t_k (r = last element of row d descent that is >= d; t_k -> t_k+1 the step of the bot-descent where r meet t first drops to d) is not a dominated exit (or not a height-2 element of Z)', 15: 'OrbitDom fails: d in-steps twice (L2 fails), or the first exiting point z of the chain from d exits to q and no row x2 in Z* with q <= x2 exits to q', 14: 'ExitDom fails: some x in Z* exits to an atom q, and no row x2 in Z* with q <= x2 exits to q', 13: 'QEany fails: some x in Z* in-steps to y = lambda(x) in Z*, y exits at p, and F(bot, p) is not below y', 10: 'StallQ fails: some x in Z* exits at p with q = F(bot, p) <= x and F(q, p) != p', 12: 'StallQ2 fails: some x in Z* exits at p with q = F(bot, p) <= x, q != x and F(q, p) != p', 11: 'StallX fails: some x in Z* exits at p and F(x, p) != p', 9: 'DomCoLand fails: some x in Z* exits at p with q = F(bot, p) <= x and lambda(q) != p', 8: 'QE fails: d in-steps to e, e exits at p, and q = F(bot, p) is not below e', 7: 'Follow fails: d in-steps to e, e exits at p with high predecessor u, q = F(bot, p), and u is not on row q descent'}.get(K, '?')}
+        'orbdep': ('ChainDom2 fails: some x_k = mu^k(bot), k >= 2, exits to an atom not below x_k' if 'cd2' in sys.argv else 'ChainT1 fails: some x_k = mu^k(bot), 1 <= k <= K, is not below t_1' if 'd1' in sys.argv else 'ChainDom fails: some x_k = mu^k(bot), k >= 1, exits to an atom not below x_k' if 'cd' in sys.argv else 'ExactDrop fails: some x_k = mu^k(bot), k >= 1, in-steps to a non-fixed y with dep(y) <= dep(x_k) - 2' if 'ed' in sys.argv else 'OneExit fails: some x_k = mu^k(bot), k >= 1, exits to an atom that is not a fixed point of mu' if 'ex1' in sys.argv else f'StrictDep fails: within {K} steps some non-fixed element x_k = mu^k(bot), k >= 1, has a non-fixed successor x_(k+1) with dep(x_(k+1)) >= dep(x_k), dep(x) = max j with x <= t_j' + (' [nonstrict: dep(x_(k+1)) > dep(x_k)]' if 'ns' in sys.argv else '')), 'muloop': 'MuLoop fails: a nonempty mu-closed set in Z* without fixed point', 'vac': 'the world has a model', 'orbk': f'Orbit{K} fails: mu^{K}(bot) is not a fixed point of mu', 'tcase': {1: 'L1(d) fails: d exits to q = F(bot, lambda(d)) with lambda(q) != lambda(d)', 2: 'L1(e) fails: d in-steps to e, e exits to q with lambda(q) != lambda(e)', 3: 'L2 fails: d in-steps to e and e in-steps', 4: 'hypothesis of L1(e)/L2: d in-steps to e (vacuity run)', 5: 'Fix1 fails: d exits to q = F(bot, lambda(d)) and mu(q) != q', 6: 'hypothesis of Fix1: d exits (vacuity run)', 25: 'DropProp fails: w in Z* in-steps to x in Z, x in-steps to y in Z, dep(x) < dep(w) and dep(y) >= dep(x)', 24: 'ExitBelow fails: some row x lands at p, q = F(bot, p) != bot, and q is not below some element of height >= 3 on the bot-descent', 23: 'InStepU fails: the breakpoint w lands at p in Z with predecessor u >= p, and u is not below F(p, u)', 22: 'InStepUp fails: the breakpoint w lands at p in Z (predecessor u >= p), and row p has no upper cell at any high y >= p on row w descent', 21: 'BreakExit fails: d a bad atom and the breakpoint w lands in Z (in-steps)', 20: 'BreakDom fails: d a bad atom, the breakpoint w exits at p and F(bot, p) is not below w', 19: 'hypothesis of BreakCert: d is a bad atom (vacuity / data run)', 18: 'JoinCert fails: L2 fails, or for the first exiting point z with exit atom q no atom r <= z has r v q in Z with the row r v q exiting to q', 17: 'TopCell fails: d is not a good atom and no height-2 row m of Z has q = m meet lambda(m) an atom with q <= F(q, lambda(m))', 16: 'BreakCert fails: d is a bad atom, and the breakpoint w = r meet t_k (r = last element of row d descent that is >= d; t_k -> t_k+1 the step of the bot-descent where r meet t first drops to d) is not a dominated exit (or not a height-2 element of Z)', 15: 'OrbitDom fails: d in-steps twice (L2 fails), or the first exiting point z of the chain from d exits to q and no row x2 in Z* with q <= x2 exits to q', 14: 'ExitDom fails: some x in Z* exits to an atom q, and no row x2 in Z* with q <= x2 exits to q', 13: 'QEany fails: some x in Z* in-steps to y = lambda(x) in Z*, y exits at p, and F(bot, p) is not below y', 10: 'StallQ fails: some x in Z* exits at p with q = F(bot, p) <= x and F(q, p) != p', 12: 'StallQ2 fails: some x in Z* exits at p with q = F(bot, p) <= x, q != x and F(q, p) != p', 11: 'StallX fails: some x in Z* exits at p and F(x, p) != p', 9: 'DomCoLand fails: some x in Z* exits at p with q = F(bot, p) <= x and lambda(q) != p', 8: 'QE fails: d in-steps to e, e exits at p, and q = F(bot, p) is not below e', 7: 'Follow fails: d in-steps to e, e exits at p with high predecessor u, q = F(bot, p), and u is not on row q descent'}.get(K, '?')}
 def desc_len_ok(L, F, k):
     z = L.top
     for _ in range(k): z = F[L.bot][z]
@@ -58,6 +58,8 @@ for L in lattices(args):
     rows = [x for x in range(n) if h[x] <= 2 or 'not2' in FL]
     NMIN = max([int(a[1:]) for a in FL if a in ('N4', 'N5', 'N6')] + [0])
     if NMIN and NMIN >= NO: continue                          # the bot-descent cannot be that long
+    NEX = next((int(a[1:]) for a in FL if a in ('E1', 'E2', 'E3', 'E4', 'E5')), 0)   # N exactly NEX
+    if NEX and NEX >= NO: continue
     inZ = lambda x: f(bot, x, bot)
     def Trow(guard, z):                                   # role-level (T): row z has no cell at a column of height >= 3
         for w_ in range(n):
@@ -81,6 +83,7 @@ for L in lattices(args):
             o = E.v('lam', x, p); E.iff_and(o, [on[p]] + [-on[w] for w in low if w != p and not le[w][p]]); lam[x, p] = o
             # a low descent element that is not below p cannot exist when p is the first low one (descent decreasing)
     if NMIN: add([-E.v('it', bot, NMIN, bot)])              # N >= NMIN: t_NMIN != bot (the bot-descent is long)
+    if NEX: add([-E.v('it', bot, NEX, bot)]); add([E.v('it', bot, NEX + 1, bot)])   # t_NEX != bot = t_(NEX+1)
     mu = {}
     for x in rows:
         for y in range(n):
@@ -116,15 +119,20 @@ for L in lattices(args):
             for j in range(NO + 1):
                 Dge[x, j] = E.v('dge', x, j); E.iff_or(Dge[x, j], [E.v('it', bot, j, t) for t in range(n) if le[x][t]])
         sel = []
-        if 'ex1' in FL or 'cd' in FL:                        # OneExit fails: some x_k (k >= 1) exits to an atom y with mu(y) != y
-            for k in range(1, K):                            # ChainDom (cd) fails: some x_k (k >= 1) exits to y not <= x_k
+        if 'd1' in FL:                                       # ChainT1 fails: some x_k (k >= 1) is not below t_1
+            for k in range(1, K + 1):
+                for x in rows:
+                    t = E.v('d1', k, x); sel.append(t); add([-t, o(k, x)]); add([-t, -Dge[x, 1]])
+            add(sel); sel = None
+        elif 'ex1' in FL or 'cd' in FL or 'cd2' in FL:       # OneExit fails: some x_k (k >= 1) exits to an atom y with mu(y) != y
+            for k in range(2 if 'cd2' in FL else 1, K):      # ChainDom (cd) fails: some x_k (k >= 1; cd2: k >= 2) exits to y not <= x_k
                 for x in rows:
                     if x == bot: continue
                     for p in low:
                         for y in rows:
-                            if 'cd' in FL and le[y][x]: continue
+                            if FL & {'cd', 'cd2'} and le[y][x]: continue
                             t = E.v('ox', k, x, p, y); sel.append(t)
-                            for lit in [o(k, x), lam[x, p], -inZ(p), f(bot, p, y)] + ([] if 'cd' in FL else [-mu[y, y]]): add([-t, lit])
+                            for lit in [o(k, x), lam[x, p], -inZ(p), f(bot, p, y)] + ([] if FL & {'cd', 'cd2'} else [-mu[y, y]]): add([-t, lit])
             add(sel); sel = None
         for k in (range(1, K) if sel is not None else []):
             for x in rows:
@@ -419,7 +427,7 @@ for L in lattices(args):
     else: add([-O[x] for x in range(n)])
     if E.S.solve():
         F = E.decode(); st = stages(L, F); inR = lambda x, i: st[x] is not None and st[x] <= i
-        ok = (not NMIN or desc_len_ok(L, F, NMIN)) and a_of(L, F, bot) == bot and ('mTop' in FL or not inR(top, 2)) and ('mN1' in FL or any(h[z] > 1 for z in range(n) if inR(z, 1)))
+        ok = (not NMIN or desc_len_ok(L, F, NMIN)) and (not NEX or (desc_len_ok(L, F, NEX) and not desc_len_ok(L, F, NEX + 1))) and a_of(L, F, bot) == bot and ('mTop' in FL or not inR(top, 2)) and ('mN1' in FL or any(h[z] > 1 for z in range(n) if inR(z, 1)))
         if 'not2' not in FL: ok = ok and all(h[z] <= 2 for z in range(n) if inR(z, 2))
         Zs = [x for x in range(n) if F[bot][x] == bot]
         if 'Tb' in FL: ok = ok and not any(h[y] > 2 and le[F[x][y]][x] for x in Zs for y in range(n))
@@ -547,14 +555,15 @@ for L in lattices(args):
             xs = [bot]
             for _ in range(K): xs.append(muf(xs[-1]))
             bad = False
-            if 'ex1' in FL or 'cd' in FL:
-                for k in range(1, K):
+            if 'd1' in FL: bad = any(xs[k] is not None and not le[xs[k]][tb_[1]] for k in range(1, K + 1))
+            elif 'ex1' in FL or 'cd' in FL or 'cd2' in FL:
+                for k in range(2 if 'cd2' in FL else 1, K):
                     x = xs[k]
                     if x is None or x == bot: continue
                     p_ = lamf(x)
                     if p_ is None or F[bot][p_] == bot: continue
-                    if ('cd' in FL and not le[F[bot][p_]][x]) or ('cd' not in FL and muf(F[bot][p_]) != F[bot][p_]): bad = True
-            for k in (range(1, K) if not FL & {'ex1', 'cd'} else []):
+                    if (FL & {'cd', 'cd2'} and not le[F[bot][p_]][x]) or (not FL & {'cd', 'cd2'} and muf(F[bot][p_]) != F[bot][p_]): bad = True
+            for k in (range(1, K) if not FL & {'ex1', 'cd', 'cd2', 'd1'} else []):
                 x, y = xs[k], xs[k + 1]
                 if x is None or y is None or y == x or muf(y) == y: continue
                 if 'ed' in FL: bad = bad or (y == lamf(x) and F[bot][y] == bot and dep(y) <= dep(x) - 2); continue

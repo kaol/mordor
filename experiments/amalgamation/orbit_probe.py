@@ -19,11 +19,13 @@ sys.path.insert(0, '../separation'); sys.path.insert(0, '.')
 from pysat.solvers import Cadical153
 from tight_probe import lattices
 from rstages import stages, a_of
-MODE = sys.argv[1]; K = int(sys.argv[2]); MT = 'mT' in sys.argv[3:]; args = [a for a in sys.argv[3:] if a != 'mT']
+MODE = sys.argv[1]; K = int(sys.argv[2]); MT = 'mT' in sys.argv[3:]
+NEX = next((int(a[1:]) for a in sys.argv[3:] if a in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6')), 0)   # exact N: t_N != bot = t_(N+1)
+args = [a for a in sys.argv[3:] if a != 'mT' and not (a[0] == 'E' and a[1:].isdigit())]
 SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= dep of its predecessor',
              'oneexit': 'some element of the bot-orbit exits to an atom that is not a fixed point', 'vac': 'the world has a model',
              'orbk': f'mu^{K}(bot) is not a fixed point of mu (Orbit{K} fails)'}[MODE]
-print(f'orbit_probe {MODE} K={K} | SAT = {SAT_MEANS} | world (T) {"MUTANT mT" if MT else ""} | corpus {args}')
+print(f'orbit_probe {MODE} K={K}' + (f' N={NEX}' if NEX else '') + f' | SAT = {SAT_MEANS} | world (T) {"MUTANT mT" if MT else ""} | corpus {args}')
 C = collections.Counter(); HH = collections.Counter(); best = None
 for L in lattices(args):
     n = L.n; le = L.le; h = L.rank; bot = L.bot; top = L.top
@@ -104,6 +106,9 @@ for L in lattices(args):
             o = v('dge', x, j); dge[x, j] = o; ls = [it(bot, j, t) for t in range(n) if le[x][t]]
             for l in ls: add([-l, o])
             add([-o] + ls)
+    if NEX:
+        if NEX + 1 > NO: S.delete(); continue
+        add([-it(bot, NEX, bot)]); add([it(bot, NEX + 1, bot)])
     sel = []
     if MODE == 'strictdep':
         for k in range(1, K):
@@ -141,7 +146,8 @@ for L in lattices(args):
         def muf(x):
             p = lamf(x)
             return None if p is None else (p if F[bot][p] == bot else F[bot][p])
-        tb = desc(bot); dep = lambda z: max(j for j, t in enumerate(tb) if le[z][t])
+        tb = desc(bot); ok = ok and (not NEX or (len(tb) == NEX + 2 and tb[-1] == bot))
+        dep = lambda z: max(j for j, t in enumerate(tb) if le[z][t])
         xs = [bot]
         for _ in range(K): xs.append(None if xs[-1] is None else muf(xs[-1]))
         bad = MODE == 'vac' or (MODE == 'orbk' and xs[K] is not None and muf(xs[K]) != xs[K])
@@ -153,9 +159,11 @@ for L in lattices(args):
                 p = lamf(x)
                 if p is not None and F[bot][p] != bot and muf(F[bot][p]) != F[bot][p]: bad = True
         assert ok and bad, 'SAT/Python mismatch'
+        print(f'  lattice n={n} h={L.height}: SAT', flush=True)
         C['SAT'] += 1; HH[f'h{L.height}'] += 1
         if best is None or n < best[0]: best = (n, dict(sets=L.S, F=F))
-    else: C['UNSAT'] += 1; HH[f'h{L.height}:unsat'] += 1
+    else:
+        print(f'  lattice n={n} h={L.height}: UNSAT', flush=True); C['UNSAT'] += 1; HH[f'h{L.height}:unsat'] += 1
     S.delete()
 print(MODE, K, 'mT' if MT else '', args, dict(C), dict(HH), 'smallest', best[0] if best else None)
 if best and MODE != 'vac': json.dump(best[1], open(f'orbit_probe_{MODE}{"_mT" if MT else ""}_min{best[0]}.json', 'w'))

@@ -1,0 +1,81 @@
+§34.3z²⁸¹ (worker). Exact runs; every SAT model replayed in Python. E<N>: the bot-descent has exactly N steps.
+[e1_2] muorbit_sat orbk | SAT = Orbit2 fails: mu^2(bot) is not a fixed point of mu | world W0 + n1 | flags ['E1'] | corpus ['tall', '10', '3', '1', '10']
+     orbk ['E1'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+[e1_3] muorbit_sat orbk | SAT = Orbit3 fails: mu^3(bot) is not a fixed point of mu | world W0 + n1 | flags ['E1'] | corpus ['tall', '10', '3', '1', '10']
+     orbk ['E1'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+[e2_2] muorbit_sat orbk | SAT = Orbit2 fails: mu^2(bot) is not a fixed point of mu | world W0 + n1 | flags ['E2'] | corpus ['tall', '10', '3', '1', '10']
+     orbk ['E2'] ['tall', '10', '3', '1', '10'] {'UNSAT': 3, 'SAT': 7} {'h10:unsat': 3, 'h10': 7} smallest 24
+[e2_3] muorbit_sat orbk | SAT = Orbit3 fails: mu^3(bot) is not a fixed point of mu | world W0 + n1 | flags ['E2'] | corpus ['tall', '10', '3', '1', '10']
+     orbk ['E2'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+[e3_2] muorbit_sat orbk | SAT = Orbit2 fails: mu^2(bot) is not a fixed point of mu | world W0 + n1 | flags ['E3'] | corpus ['tall', '10', '3', '1', '10']
+     orbk ['E3'] ['tall', '10', '3', '1', '10'] {'UNSAT': 4, 'SAT': 6} {'h10:unsat': 4, 'h10': 6} smallest 24
+[e3_3] muorbit_sat orbk | SAT = Orbit3 fails: mu^3(bot) is not a fixed point of mu | world W0 + n1 | flags ['E3'] | corpus ['tall', '10', '3', '1', '10']
+     orbk ['E3'] ['tall', '10', '3', '1', '10'] {'UNSAT': 9, 'SAT': 1} {'h10:unsat': 9, 'h10': 1} smallest 31
+[e4_2] muorbit_sat orbk | SAT = Orbit2 fails: mu^2(bot) is not a fixed point of mu | world W0 + n1 | flags ['E4'] | corpus ['tall', '10', '3', '1', '10']
+     orbk ['E4'] ['tall', '10', '3', '1', '10'] {'UNSAT': 6, 'SAT': 4} {'h10:unsat': 6, 'h10': 4} smallest 24
+[e4_3] muorbit_sat orbk | SAT = Orbit3 fails: mu^3(bot) is not a fixed point of mu | world W0 + n1 | flags ['E4'] | corpus ['tall', '10', '3', '1', '10']
+     orbk ['E4'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+[e5_2] muorbit_sat orbk | SAT = Orbit2 fails: mu^2(bot) is not a fixed point of mu | world W0 + n1 | flags ['E5'] | corpus ['tall', '10', '3', '1', '10']
+     orbk ['E5'] ['tall', '10', '3', '1', '10'] {'UNSAT': 6, 'SAT': 4} {'h10:unsat': 6, 'h10': 4} smallest 24
+[e5_3] muorbit_sat orbk | SAT = Orbit3 fails: mu^3(bot) is not a fixed point of mu | world W0 + n1 | flags ['E5'] | corpus ['tall', '10', '3', '1', '10']
+     orbk ['E5'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+[h_a] muorbit_sat orbk | SAT = Orbit3 fails: mu^3(bot) is not a fixed point of mu | world W0 + n1 | flags ['E4'] | corpus ['tall', '12', '2', '1', '12']
+     orbk ['E4'] ['tall', '12', '2', '1', '12'] {'UNSAT': 12} {'h12:unsat': 12} smallest None
+[h_b] muorbit_sat orbk | SAT = Orbit3 fails: mu^3(bot) is not a fixed point of mu | world W0 + n1 | flags ['E4'] | corpus ['tall', '13', '2', '1', '10']
+     orbk ['E4'] ['tall', '13', '2', '1', '10'] {'UNSAT': 10} {'h13:unsat': 10} smallest None
+[h_c] muorbit_sat orbk | SAT = Orbit3 fails: mu^3(bot) is not a fixed point of mu | world W0 + n1 | flags ['E5'] | corpus ['tall', '12', '2', '1', '12']
+     orbk ['E5'] ['tall', '12', '2', '1', '12'] {'UNSAT': 12} {'h12:unsat': 12} smallest None
+[h_d] muorbit_sat orbk | SAT = Orbit4 fails: mu^4(bot) is not a fixed point of mu | world W0 + n1 | flags ['E4'] | corpus ['tall', '13', '2', '1', '10']
+     orbk ['E4'] ['tall', '13', '2', '1', '10'] {'UNSAT': 10} {'h13:unsat': 10} smallest None
+[w_w1] muorbit_sat orbk | SAT = Orbit3 fails: mu^3(bot) is not a fixed point of mu | world W0 + n1 | flags ['E4'] | corpus ['tall', '10', '5', '1', '12']
+     orbk ['E4'] ['tall', '10', '5', '1', '12'] {'UNSAT': 10, 'SAT': 2} {'h10:unsat': 10, 'h10': 2} smallest 45
+[w_w3] muorbit_sat orbk | SAT = Orbit4 fails: mu^4(bot) is not a fixed point of mu | world W0 + n1 | flags ['E3'] | corpus ['tall', '10', '5', '1', '12']
+     orbk ['E3'] ['tall', '10', '5', '1', '12'] {'UNSAT': 12} {'h10:unsat': 12} smallest None
+[w_w4] muorbit_sat orbk | SAT = Orbit2 fails: mu^2(bot) is not a fixed point of mu | world W0 + n1 | flags ['E4'] | corpus ['tall', '10', '5', '1', '12']
+     orbk ['E4'] ['tall', '10', '5', '1', '12'] {'SAT': 9, 'UNSAT': 3} {'h10': 9, 'h10:unsat': 3} smallest 29
+[w_pw2] orbit_probe orbk K=3 N=4 | SAT = mu^3(bot) is not a fixed point of mu (Orbit3 fails) | world (T)  | corpus ['tall', '10', '4', '2', '20']
+     orbk 3  ['tall', '10', '4', '2', '20'] {'UNSAT': 18, 'SAT': 2} {'h10:unsat': 18, 'h10': 2} smallest 33
+[w_q4a] orbit_probe orbk K=4 N=4 | SAT = mu^4(bot) is not a fixed point of mu (Orbit4 fails) | world (T)  | corpus ['tall', '10', '4', '2', '20']
+     orbk 4  ['tall', '10', '4', '2', '20'] {'UNSAT': 20} {'h10:unsat': 20} smallest None
+[w_q4b] orbit_probe orbk K=4 N=4 | SAT = mu^4(bot) is not a fixed point of mu (Orbit4 fails) | world (T)  | corpus ['tall', '10', '4', '4', '30']
+     orbk 4  ['tall', '10', '4', '4', '30'] {'UNSAT': 30} {'h10:unsat': 30} smallest None
+[w_q5a] orbit_probe orbk K=5 N=4 | SAT = mu^5(bot) is not a fixed point of mu (Orbit5 fails) | world (T)  | corpus ['tall', '10', '4', '2', '20']
+     orbk 5  ['tall', '10', '4', '2', '20'] {'UNSAT': 20} {'h10:unsat': 20} smallest None
+[w_q3a] orbit_probe orbk K=4 N=3 | SAT = mu^4(bot) is not a fixed point of mu (Orbit4 fails) | world (T)  | corpus ['tall', '10', '4', '2', '20']
+     orbk 4  ['tall', '10', '4', '2', '20'] {'UNSAT': 20} {'h10:unsat': 20} smallest None
+[w_s1] orbit_probe orbk K=4 N=4 | SAT = mu^4(bot) is not a fixed point of mu (Orbit4 fails) | world (T)  | corpus ['tall', '12', '4', '1', '8']
+     orbk 4  ['tall', '12', '4', '1', '8'] {'UNSAT': 7, 'SAT': 1} {'h12:unsat': 7, 'h12': 1} smallest 59
+[w_s2] orbit_probe orbk K=4 N=4 | SAT = mu^4(bot) is not a fixed point of mu (Orbit4 fails) | world (T)  | corpus ['tall', '11', '5', '1', '8']
+     orbk 4  ['tall', '11', '5', '1', '8'] {'UNSAT': 8} {'h11:unsat': 8} smallest None
+[w_s3] orbit_probe orbk K=4 N=5 | SAT = mu^4(bot) is not a fixed point of mu (Orbit4 fails) | world (T)  | corpus ['tall', '12', '4', '1', '8']
+     orbk 4  ['tall', '12', '4', '1', '8'] {'UNSAT': 7, 'SAT': 1} {'h12:unsat': 7, 'h12': 1} smallest 59
+[w_s4] orbit_probe orbk K=4 N=5 | SAT = mu^4(bot) is not a fixed point of mu (Orbit4 fails) | world (T)  | corpus ['tall', '11', '5', '1', '8']
+     orbk 4  ['tall', '11', '5', '1', '8'] {'UNSAT': 8} {'h11:unsat': 8} smallest None
+[c5] muorbit_sat orbdep | SAT = ChainT1 fails: some x_k = mu^k(bot), 1 <= k <= K, is not below t_1 | world W0 + n1 | flags ['d1'] | corpus ['closure', '5',
+     orbdep ['d1'] ['closure', '5', '11', '4', '30'] {'UNSAT': 30} {'h5:unsat': 23, 'h4:unsat': 7} smallest None
+[c8] muorbit_sat orbdep | SAT = ChainT1 fails: some x_k = mu^k(bot), 1 <= k <= K, is not below t_1 | world W0 + n1 | flags ['d1'] | corpus ['tall', '8', '4
+     orbdep ['d1'] ['tall', '8', '4', '1', '12'] {'UNSAT': 7, 'SAT': 5} {'h8:unsat': 7, 'h8': 5} smallest 26
+[c10] muorbit_sat orbdep | SAT = ChainT1 fails: some x_k = mu^k(bot), 1 <= k <= K, is not below t_1 | world W0 + n1 | flags ['d1'] | corpus ['tall', '10', '
+     orbdep ['d1'] ['tall', '10', '3', '1', '10'] {'UNSAT': 9, 'SAT': 1} {'h10:unsat': 9, 'h10': 1} smallest 31
+[cd5] muorbit_sat orbdep | SAT = ChainDom2 fails: some x_k = mu^k(bot), k >= 2, exits to an atom not below x_k | world W0 + n1 | flags ['cd2'] | corpus ['cl
+     orbdep ['cd2'] ['closure', '5', '11', '4', '30'] {'UNSAT': 30} {'h5:unsat': 23, 'h4:unsat': 7} smallest None
+[cd8] muorbit_sat orbdep | SAT = ChainDom2 fails: some x_k = mu^k(bot), k >= 2, exits to an atom not below x_k | world W0 + n1 | flags ['cd2'] | corpus ['ta
+     orbdep ['cd2'] ['tall', '8', '4', '1', '12'] {'UNSAT': 11, 'SAT': 1} {'h8:unsat': 11, 'h8': 1} smallest 33
+[mo_bot59] muorbit_sat botorbit | SAT = BotOrbit fails: the mu-orbit of bot never reaches a fixed point | world W0 + n1 | flags [] | corpus ['file', 'cx281_botor
+     botorbit [] ['file', 'cx281_botorbit_cycle_h12_n59.json'] {'SAT': 1} {'h12': 1} smallest 59
+[op_sd59] orbit_probe strictdep K=6 | SAT = some non-fixed successor on the bot-orbit has dep >= dep of its predecessor | world (T)  | corpus ['file', 'cx281_bo
+     strictdep 6  ['file', 'cx281_botorbit_cycle_h12_n59.json'] {'SAT': 1} {'h12': 1} smallest 59
+[f_cert1] cert1_sat | SAT = Cert1 fails in W0 with R_1 non-tight | flags []
+     [] ['file', 'cx281_botorbit_cycle_h12_n59.json'] {'UNSAT': 1} {'h12:unsat': 1} smallest None
+[f_good] goodatom | SAT = every atom of R_1 is bad (refutes GoodAtom1) |  ['file', 'cx281_botorbit_cycle_h12_n59.json'] {'UNSAT': 1} smallest None {}
+     goodatom | SAT = every atom of R_1 is bad (refutes GoodAtom1) |  ['file', 'cx281_botorbit_cycle_h12_n59.json'] {'UNSAT': 1} smallest None {}
+[f_top17] muorbit_sat tcase | SAT = TopCell fails: d is not a good atom and no height-2 row m of Z has q = m meet lambda(m) an atom with q <= F(q, lambda(m)) | 
+     tcase [] ['file', 'cx281_botorbit_cycle_h12_n59.json'] {'UNSAT': 1} {'h12:unsat': 1} smallest None
+[g_cert12] cert1_sat | SAT = Cert1 fails in W0 with R_1 non-tight | flags []
+     [] ['tall', '12', '4', '1', '8'] {'UNSAT': 8} {'h12:unsat': 8} smallest None
+[g_cert11] cert1_sat | SAT = Cert1 fails in W0 with R_1 non-tight | flags []
+     [] ['tall', '11', '5', '1', '8'] {'UNSAT': 8} {'h11:unsat': 8} smallest None
+[g_m12] cert1_sat | SAT = Cert1 fails in W0 with R_1 non-tight | flags ['not2']
+     ['not2'] ['tall', '12', '4', '1', '8'] {'SAT': 8} {'h12': 8} smallest 27
+[g_t14] cert1_sat | SAT = Cert1 fails in W0 with R_1 non-tight | flags []
+     [] ['tall', '14', '4', '1', '8'] {'UNSAT': 8} {'h14:unsat': 8} smallest None

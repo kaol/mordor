@@ -1,0 +1,32 @@
+§34.3z²⁸⁰ orbit length of mu on bot (worker). Exact runs; full world W0 + n1 unless a mutant is named; every SAT model replayed.
+Encodings: muorbit_sat.py (R-stages); orbit_probe.py (world via (T)). Flags: N4/N5 force t_4/t_5 != bot; not2, mT mutants.
+SAT = mu^K(bot) is not a fixed point (OrbitK fails); vac SAT = world has a model.
+  [o11] orbk [] ['tall', '11', '3', '1', '12'] {'UNSAT': 12} {'h11:unsat': 12} smallest None
+  [o12] orbk [] ['tall', '12', '2', '1', '12'] {'UNSAT': 12} {'h12:unsat': 12} smallest None
+  [t11] orbk [] ['tall', '11', '3', '1', '12'] {'UNSAT': 11, 'SAT': 1} {'h11:unsat': 11, 'h11': 1} smallest 29
+  [p4] orbk ['N4'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+  [v5] vac ['N5'] ['tall', '10', '3', '1', '10'] {'SAT': 10} {'h10': 10} smallest 23
+  [o5] orbk ['N5'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+  [p5] orbk ['N5'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+  [s5] orbdep ['N5'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+  [q11] orbk 4  ['tall', '11', '3', '1', '12'] {'UNSAT': 12} {'h11:unsat': 12} smallest None
+  [q12] orbk 4  ['tall', '12', '2', '1', '12'] {'UNSAT': 12} {'h12:unsat': 12} smallest None
+  [m11] orbk ['not2'] ['tall', '11', '3', '1', '12'] {'SAT': 12} {'h11': 12} smallest 22
+  [q10m] orbk 4 mT ['tall', '10', '3', '1', '30'] {'SAT': 30} {'h10': 30} smallest 18
+  [q83] orbk 3  ['tall', '8', '4', '1', '12'] {'UNSAT': 11, 'SAT': 1} {'h8:unsat': 11, 'h8': 1} smallest 33
+  [q84] orbk 4  ['tall', '8', '4', '1', '40'] {'UNSAT': 40} {'h8:unsat': 40} smallest None
+  [t10n4] orbk ['N4'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+  [t11n4] orbk ['N4'] ['tall', '11', '3', '1', '12'] {'UNSAT': 12} {'h11:unsat': 12} smallest None
+  [t11n4o2] orbk ['N4'] ['tall', '11', '3', '1', '12'] {'SAT': 7, 'UNSAT': 5} {'h11': 7, 'h11:unsat': 5} smallest 25
+  [t11n4m] orbk ['N4', 'not2'] ['tall', '11', '3', '1', '12'] {'SAT': 12} {'h11': 12} smallest 22
+Harvest (DUMP): orbk 2 on tall 8 4 3 30, tall 9 4 2 20, tall 10 3 2 20, tall 8 6 4 20:
+  orbk [] ['tall', '8', '4', '3', '30'] {'SAT': 25, 'UNSAT': 5} {'h8': 25, 'h8:unsat': 5} smallest 17
+  orbk [] ['tall', '9', '4', '2', '20'] {'SAT': 16, 'UNSAT': 4} {'h9': 16, 'h9:unsat': 4} smallest 21
+  orbk [] ['tall', '10', '3', '2', '20'] {'UNSAT': 7, 'SAT': 13} {'h10:unsat': 7, 'h10': 13} smallest 18
+  orbk [] ['tall', '8', '6', '4', '20'] {'UNSAT': 6, 'SAT': 14} {'h8:unsat': 6, 'h8': 14} smallest 25
+orbk 3 on tall 8 4 5 30, tall 8 4 6 30, tall 9 4 7 25, tall 10 3 8 25:
+  orbk [] ['tall', '8', '4', '5', '30'] {'UNSAT': 29, 'SAT': 1} {'h8:unsat': 29, 'h8': 1} smallest 30
+  orbk [] ['tall', '8', '4', '6', '30'] {'UNSAT': 29, 'SAT': 1} {'h8:unsat': 29, 'h8': 1} smallest 39
+  orbk [] ['tall', '9', '4', '7', '25'] {'SAT': 4, 'UNSAT': 21} {'h9': 4, 'h9:unsat': 21} smallest 33
+  orbk [] ['tall', '10', '3', '8', '25'] {'UNSAT': 25} {'h10:unsat': 25} smallest None
+ChainDom (orbdep cd; SAT = some x_k exits to an atom not below x_k): closure 5 11 4 30 SAT 14, UNSAT 16, smallest 15

@@ -10,6 +10,7 @@ lambda(x) in Z, else F(bot, lambda(x)); orbit x_k = mu^k(bot); dep(x) = max j wi
 Modes:
   strictdep  SAT = some x_k (1 <= k < K) has a successor y = x_(k+1) != x_k that is not a fixed point and dep(y) >= dep(x_k)
   oneexit    SAT = some x_k (1 <= k < K) exits to an atom y that is not a fixed point of mu
+  orbk       SAT = mu^K(bot) is not a fixed point (OrbitK fails)
   vac        SAT = the world has a model
 Flag mT (mutant world): (T) kept only at the row bot (Tb/Ta dropped at the other rows of Z).
   python3 orbit_probe.py MODE K (sweep N MAX | closure K M SEED CNT | tall K M SEED CNT) [mT]"""
@@ -20,7 +21,8 @@ from tight_probe import lattices
 from rstages import stages, a_of
 MODE = sys.argv[1]; K = int(sys.argv[2]); MT = 'mT' in sys.argv[3:]; args = [a for a in sys.argv[3:] if a != 'mT']
 SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= dep of its predecessor',
-             'oneexit': 'some element of the bot-orbit exits to an atom that is not a fixed point', 'vac': 'the world has a model'}[MODE]
+             'oneexit': 'some element of the bot-orbit exits to an atom that is not a fixed point', 'vac': 'the world has a model',
+             'orbk': f'mu^{K}(bot) is not a fixed point of mu (Orbit{K} fails)'}[MODE]
 print(f'orbit_probe {MODE} K={K} | SAT = {SAT_MEANS} | world (T) {"MUTANT mT" if MT else ""} | corpus {args}')
 C = collections.Counter(); HH = collections.Counter(); best = None
 for L in lattices(args):
@@ -120,6 +122,9 @@ for L in lattices(args):
                     for y in low:
                         t = v('ox', k, x, p, y); sel.append(t)
                         for lit in (ob(k, x), lam[x, p], -Z(p), f(bot, p, y), -mu[y, y]): add([-t, lit])
+    elif MODE == 'orbk':
+        for x in low:
+            t = v('ok', x); sel.append(t); add([-t, ob(K, x)]); add([-t, -mu[x, x]])
     if MODE != 'vac': add(sel)
     if S.solve():
         m = set(l for l in S.get_model() if l > 0)
@@ -139,7 +144,7 @@ for L in lattices(args):
         tb = desc(bot); dep = lambda z: max(j for j, t in enumerate(tb) if le[z][t])
         xs = [bot]
         for _ in range(K): xs.append(None if xs[-1] is None else muf(xs[-1]))
-        bad = MODE == 'vac'
+        bad = MODE == 'vac' or (MODE == 'orbk' and xs[K] is not None and muf(xs[K]) != xs[K])
         for k in range(1, K):
             x, y = xs[k], xs[k + 1]
             if x is None or y is None: continue

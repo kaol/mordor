@@ -1,0 +1,44 @@
+§34.3z²⁷⁹ ranking along the mu-orbit of bot (worker). Exact runs, full world W0 + n1 unless a mutant is named; every SAT
+model replayed in Python. dep(x) = max j with x <= t_j (t = bot-descent); x_k = mu^k(bot).
+Encodings: muorbit_sat.py (R-stages world); orbit_probe.py (world through (T), no R-stages; mutant mT = (T) only at bot).
+
+Orbit length (muorbit_sat.py orbk K; SAT = mu^K(bot) is not a fixed point)
+  orbk K=2 [] ['tall', '8', '4', '1', '12'] {'SAT': 10, 'UNSAT': 2} {'h8': 10, 'h8:unsat': 2} smallest 19
+  orbk K=3 [] ['tall', '8', '4', '1', '12'] {'UNSAT': 11, 'SAT': 1} {'h8:unsat': 11, 'h8': 1} smallest 33
+  orbk K=4 [] ['tall', '8', '4', '1', '12'] {'UNSAT': 12} {'h8:unsat': 12} smallest None
+  orbk K=5 [] ['tall', '8', '4', '1', '12'] {'UNSAT': 12} {'h8:unsat': 12} smallest None
+  orbk K=3 [] ['tall', '10', '3', '1', '10'] {'UNSAT': 9, 'SAT': 1} {'h10:unsat': 9, 'h10': 1} smallest 31
+  orbk K=4 [] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+  orbk K=5 [] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+  orbk K=6 [] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+
+StrictDep (muorbit_sat.py orbdep K; SAT = a non-fixed successor x_(k+1) != x_k, k >= 1, has dep >= dep(x_k))
+  closure 5 11 4 30, K 6: UNSAT 30  (without the fixed-successor exception: SAT 27)
+  orbdep [] ['closure', '6', '12', '1', '40'] {'UNSAT': 40} {'h6:unsat': 24, 'h5:unsat': 15, 'h4:unsat': 1} smallest None
+  orbdep [] ['tall', '8', '4', '1', '12'] {'UNSAT': 12} {'h8:unsat': 12} smallest None
+  orbdep ['not2'] ['tall', '8', '4', '1', '12'] {'SAT': 12} {'h8': 12} smallest 16
+  orbdep [] ['tall', '9', '4', '1', '10'] {'UNSAT': 10} {'h9:unsat': 10} smallest None
+  orbdep [] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+  orbit_probe.py:
+  strictdep 8  ['tall', '8', '4', '1', '40'] {'UNSAT': 40} {'h8:unsat': 40} smallest None
+  strictdep 8 mT ['tall', '8', '4', '1', '40'] {'SAT': 40} {'h8': 40} smallest 15
+  strictdep 10  ['tall', '10', '3', '1', '30'] {'UNSAT': 30} {'h10:unsat': 30} smallest None
+  orbit_probe.py closure 5 11 4 30: strictdep UNSAT 30, mT SAT 30; vac SAT 30
+
+OneExit (SAT = some x_k, k >= 1, exits to an atom that is not a fixed point)
+  muorbit_sat.py closure 5 11 4 30: UNSAT 30, not2 SAT 28
+  orbdep ['ex1'] ['tall', '8', '4', '1', '12'] {'UNSAT': 12} {'h8:unsat': 12} smallest None
+  orbdep ['ex1', 'not2'] ['tall', '8', '4', '1', '12'] {'SAT': 12} {'h8': 12} smallest 16
+  orbdep ['ex1'] ['tall', '10', '3', '1', '10'] {'UNSAT': 10} {'h10:unsat': 10} smallest None
+  orbit_probe.py:
+  oneexit 8  ['tall', '8', '4', '2', '20'] {'UNSAT': 20} {'h8:unsat': 20} smallest None
+  oneexit 8 mT ['tall', '8', '4', '1', '40'] {'SAT': 40} {'h8': 40} smallest 15
+  oneexit 10  ['tall', '10', '3', '1', '30'] {'UNSAT': 30} {'h10:unsat': 30} smallest None
+  orbit_probe.py closure 5 11 4 30: oneexit UNSAT 30
+
+Refuted
+  ExactDrop (in-steps of the chain lower dep by exactly 1): closure 5 11 4 30 UNSAT 30;
+  orbdep ['ed'] ['tall', '8', '4', '1', '12'] {'UNSAT': 5, 'SAT': 7} {'h8:unsat': 5, 'h8': 7} smallest 19
+  orbdep ['ed'] ['tall', '10', '3', '1', '10'] {'UNSAT': 6, 'SAT': 4} {'h10:unsat': 6, 'h10': 4} smallest 24
+  DropProp  (tcase 25, any in-step chain w -> x -> y in Z): closure 5 11 4 30 SAT 11, smallest 16
+  DropProp' (tcase 25 yf, y not fixed):                       closure 5 11 4 30 SAT 11, smallest 16

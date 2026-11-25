@@ -1,0 +1,39 @@
+§34.3z²⁷⁸ the located certificates and the un-located statements at heights 7-10 (worker). Exact runs, full world W0 + n1
+unless a mutant is named; every SAT model replayed in Python by its tester; counterexamples also replayed by replay278.py.
+
+Corpora
+  height 7: closure 8 10 1 300, lattices with height >= 7 and |L| <= 32: indices 25,43,80,143,197,235,284,292 (|L| <= 27)
+            and 18,19,131,252,279,295 (27 < |L| <= 32): 14 lattices, 13 of height 7, 1 of height 8
+  height 8-10: new corpus `tall K M SEED CNT` (tight_probe.py): a random maximal chain of subsets of K points plus M random
+            sets, closed under meets; every lattice has height exactly K. tall 8 4 1 40 (|L| 12-45), tall 9 4 1 30,
+            tall 10 3 1 30.
+Encodings: muorbit_sat.py (worker); lean_land.py (control B), w0lean.py (control A), link_probe.py (meta), from run 13;
+  cert1_sat.py, dlatoms.py (worker).
+
+1. Height 7 (14 lattices), two encodings each
+  BreakCert  muorbit tcase 16 UNSAT 14 | lean_land breakcert: Bin/Bex hypothesis 11, cand 0, mutant 11
+  TopCell    muorbit tcase 17 UNSAT 14 | w0lean final: TopCell no failure off branch g; M:TopCellAll fails on every branch
+  OrbitDom   muorbit tcase 15 UNSAT 14 | lean_land orbitdom: cand 0 on all branches, mutant ExitDom fails
+  JoinCert   muorbit tcase 18 UNSAT 14 | link_probe joincert: cand 0 on all branches
+  mutants (not2, |L| <= 27): 16, 17, 15 SAT 8/8; world vacuity SAT 8/8
+
+2. Height 8 (tall 8 4 1 40, 40 lattices)
+  BreakCert  lean_land breakcert: Bin 36 | 1 | 30, Bex 36 | 1 | 30   -> REFUTED, lattice 5, |L| = 33
+             muorbit tcase 16 on tall 8 4 1 6: SAT 1 (lattice 5, |L| = 33)  -> second encoding agrees
+             cx278_breakcert_h8_n33.json: breakpoint w exits to c(w) = 4, c(w) not <= w (BreakDom fails)
+             cx278_orbitdom_joincert_muorbit_h8_n33.json: breakpoint w in-steps (BreakExit fails)
+  OrbitDom   lean_land orbitdom: Ain 20|0|9, Aex 40|0|28, Bin 36|1|27, Bex 40|0|27   -> REFUTED, lattice 5, |L| = 33
+             muorbit tcase 15 on tall 8 4 1 6: SAT 1 (|L| = 33)   -> second encoding agrees.  L2 fails: d in-steps twice
+  JoinCert   muorbit tcase 18 on tall 8 4 1 6: SAT 1 (|L| = 33); implies OrbitDom, so refuted by every OrbitDom model
+  TopCell    w0lean final: no failure off branch g (40 lattices); M:TopCellAll exit-a 34, exit-b 33, in-a 20, in-b 33
+             muorbit tcase 17 on tall 8 4 1 12: UNSAT 12          -> holds with power, two encodings
+  Cert1      cert1_sat: UNSAT 40 | not2 mutant SAT 40 (min 15)      -> holds with power
+  BotOrbit   muorbit botorbit on tall 8 4 1 12: UNSAT 12 | not2 SAT 12 (min 16)   -> holds with power
+  GoodAtom1  dlatoms goodatom: UNSAT 40
+  In every replayed counterexample GoodAtom1 and Cert1 hold: the atom 4 is a fixed point of mu (it exits to itself).
+
+3. Heights 9 and 10 (one encoding each)
+  Cert1      tall 9 4 1 30: UNSAT 30 | tall 10 3 1 30: UNSAT 30, not2 mutant SAT 30 (min 18)
+  BotOrbit   tall 10 3 1 10: UNSAT 10, not2 mutant SAT 10 (min 23)
+  TopCell    w0lean final, tall 10 3 1 30: no failure off branch g; M:TopCellAll exit-a 22, exit-b 15, in-a 9, in-b 15
+             tall 9 4 1 30: no failure off branch g on the 12 lattices finished

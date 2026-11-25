@@ -164,6 +164,18 @@ def lattices(args):
         sys.path.insert(0, '../separation'); import nodesc_sweep as ns
         for fam in ns.moore_families(int(args[1])):
             if len(fam) <= int(args[2]): yield ss.Lat(fam)
+    elif args[0] == 'tall':                       # §34.3z²⁷⁸: a random maximal chain of subsets of k points plus m random sets,
+        k, m, sd, cnt = (int(x) for x in args[1:5]); rng = random.Random(sd)   # closed under meets: height exactly k
+        for _ in range(cnt):
+            perm = list(range(k)); rng.shuffle(perm); fam = {0}; acc = 0
+            for i in perm: acc |= 1 << i; fam.add(acc)
+            for _ in range(m): fam.add(rng.getrandbits(k))
+            ch = True
+            while ch:
+                ch = False
+                for a, b in itertools.combinations(list(fam), 2):
+                    if a & b not in fam: fam.add(a & b); ch = True
+            yield ss.Lat(sorted(fam, key=lambda x: (bin(x).count('1'), x)))
     else:
         k, m, sd, cnt = (int(x) for x in args[1:5]); rng = random.Random(sd)
         for _ in range(cnt): yield ss.Lat(ss.closure_system(k, m, rng))

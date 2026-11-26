@@ -1,0 +1,191 @@
+[
+ {
+  "file": "s277_exitbelow_h7.json",
+  "statement": "ExitBelow (tightness-free: exit atom below every high t_j)",
+  "section": "\u00a7277",
+  "world": "relaxed: a(bot)=bot only",
+  "source": "bd_probe_QT2_min27.json"
+ },
+ {
+  "file": "s277_predbelow_h6.json",
+  "statement": "PredBelow (landing predecessor below t_m when t_(m+1) high)",
+  "section": "\u00a7277",
+  "world": "relaxed: a(bot)=bot only",
+  "source": "bd_probe_U0_min21.json"
+ },
+ {
+  "file": "s277_landbelow_h6.json",
+  "statement": "LandBelow (landing below t_m when t_(m+1) high)",
+  "section": "\u00a7277",
+  "world": "relaxed: a(bot)=bot only",
+  "source": "bd_probe_P_min21.json"
+ },
+ {
+  "file": "s277_breakdom_qr_h6.json",
+  "statement": "BreakDom half q <= r without tightness",
+  "section": "\u00a7277",
+  "world": "relaxed: a(bot)=bot only",
+  "source": "bd_probe_QR_min21.json"
+ },
+ {
+  "file": "s277_instepup_h6.json",
+  "statement": "InStepUp (Tb only)",
+  "section": "\u00a7277",
+  "world": "relaxed: Tb, no R_2 tightness",
+  "source": "muorbit_tcase_Tb_not2_min17.json"
+ },
+ {
+  "file": "s277_breakdom_zt_h6.json",
+  "statement": "BreakDom with ZT only",
+  "section": "\u00a7277",
+  "world": "relaxed: ZT, no R_2 tightness",
+  "source": "muorbit_tcase_ZT_not2_min21.json"
+ },
+ {
+  "file": "s278_breakcert_h8.json",
+  "statement": "BreakCert (BreakDom half fails)",
+  "section": "\u00a7278",
+  "world": "W0+n1",
+  "source": "cx278_breakcert_h8_n33.json"
+ },
+ {
+  "file": "s278_orbitdom_h8.json",
+  "statement": "OrbitDom (L2 fails), JoinCert",
+  "section": "\u00a7278",
+  "world": "W0+n1",
+  "source": "cx278_orbitdom_h8_n33.json"
+ },
+ {
+  "file": "s278_orbitdom_joincert_breakexit_h8.json",
+  "statement": "OrbitDom, JoinCert, BreakExit",
+  "section": "\u00a7278",
+  "world": "W0+n1",
+  "source": "cx278_orbitdom_joincert_muorbit_h8_n33.json"
+ },
+ {
+  "file": "s279_orbit3_h8.json",
+  "statement": "Orbit3",
+  "section": "\u00a7279",
+  "world": "W0+n1",
+  "source": "cx279_orbit3_h8_n33.json"
+ },
+ {
+  "file": "s279_orbit3_h10.json",
+  "statement": "Orbit3",
+  "section": "\u00a7279",
+  "world": "W0+n1",
+  "source": "cx279_orbit3_h10_n31.json"
+ },
+ {
+  "file": "s279_exactdrop_h8.json",
+  "statement": "ExactDrop",
+  "section": "\u00a7279",
+  "world": "W0+n1",
+  "source": "cx279_exactdrop_h8_n19.json"
+ },
+ {
+  "file": "s279_dropprop_h5.json",
+  "statement": "DropProp",
+  "section": "\u00a7279",
+  "world": "W0+n1",
+  "source": "cx279_dropprop_n16.json"
+ },
+ {
+  "file": "s279_dropprop2_h5.json",
+  "statement": "DropProp' (y not fixed)",
+  "section": "\u00a7279",
+  "world": "W0+n1",
+  "source": "cx279_dropprop2_n16.json"
+ },
+ {
+  "file": "s280_orbit3_six_models.json",
+  "statement": "Orbit3 (six models, N = 3)",
+  "section": "\u00a7280",
+  "world": "W0+n1",
+  "source": "cx280_orbit3_models.json"
+ },
+ {
+  "file": "s281_botorbit_cycle_h12.json",
+  "statement": "BotOrbit, StrictDep, Orbit4 (the bot-orbit cycles)",
+  "section": "\u00a7281",
+  "world": "W0+n1",
+  "source": "cx281_botorbit_cycle_h12_n59.json"
+ },
+ {
+  "file": "s282_goodfix_h12.json",
+  "statement": "GoodFix",
+  "section": "\u00a7282",
+  "world": "W0+n1",
+  "source": "m2_tall_12_4_1_8_GoodFix_exit-a_min32.json"
+ },
+ {
+  "file": "s282_onegood_h12.json",
+  "statement": "OneGood",
+  "section": "\u00a7282",
+  "world": "W0+n1",
+  "source": "m2_tall_12_4_1_8_OneGood_exit-a_min32.json"
+ },
+ {
+  "file": "s282_maxidx2_h12.json",
+  "statement": "MaxIdx2",
+  "section": "\u00a7282",
+  "world": "W0+n1",
+  "source": "m2_tall_12_4_1_8_MaxIdx2_exit-a_min27.json"
+ },
+ {
+  "file": "s282_topabsorb_h10.json",
+  "statement": "TopAbsorb",
+  "section": "\u00a7282",
+  "world": "W0+n1",
+  "source": "m_tall_10_4_2_20_TopAbsorb_exit-a_min27.json"
+ },
+ {
+  "file": "s276_breakfix.json",
+  "statement": "BreakFix",
+  "section": "\u00a7276",
+  "world": "W0+n1",
+  "source": "breakfix_Bin_cand_min21.json"
+ },
+ {
+  "file": "s276_breaktrap.json",
+  "statement": "BreakTrap",
+  "section": "\u00a7276",
+  "world": "W0+n1",
+  "source": "breaktrap_Bin_cand_min21.json"
+ },
+ {
+  "file": "s276_maxexitfix.json",
+  "statement": "MaxExitFix",
+  "section": "\u00a7276",
+  "world": "W0+n1",
+  "source": "maxexitfix_Aex_cand_min14.json"
+ },
+ {
+  "file": "s276_maxidx.json",
+  "statement": "MaxIdx (A)",
+  "section": "\u00a7276",
+  "world": "W0+n1",
+  "source": "m_lead_MaxIdx_exit-a_min15.json"
+ },
+ {
+  "file": "s276_atomorb.json",
+  "statement": "AtomOrb",
+  "section": "\u00a7276",
+  "world": "W0+n1",
+  "source": "m_p2_AtomOrb_g_min31.json"
+ },
+ {
+  "file": "s276_latecert.json",
+  "statement": "LateCert",
+  "section": "\u00a7276",
+  "world": "W0+n1",
+  "source": "latecert_cand_exit-a_closure_6_12_1_40_min15.json"
+ },
+ {
+  "file": "s276_linkfix.json",
+  "statement": "LinkFix",
+  "section": "\u00a7276",
+  "world": "W0+n1",
+  "source": "linkfix_cand_exit-a_closure_6_12_1_40_min16.json"
+ }
+]

@@ -201,5 +201,12 @@
   "section": "\u00a7285",
   "world": "relaxed: Tb in descent form at atoms and height-2 rows",
   "source": "run-15 brief m15_main_tall_10_4_2_8_a_desc12_TopExit_min22.json"
+ },
+ {
+  "file": "s286_atmost1fix_noTbatoms_h5.json",
+  "statement": "AtMost1Fix (exit-fixed) without Tb at the atom rows: two exit-fixed atoms; Tb fails on the row of d",
+  "section": "\u00a7286",
+  "world": "relaxed: Tb dropped at atom rows (Ta1)",
+  "source": "orbit_probe.py twofix Ta1 xfix closure 5 11 4 30"
  }
 ]

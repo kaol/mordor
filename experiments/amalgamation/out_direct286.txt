@@ -1,0 +1,12 @@
+§34.3z²⁸⁶ pushes (orbit_probe.py; exact; replayed). Mutants: twogood = OneGood (refuted relative of AtMost1Fix), goodnonmax = GoodNonMax (of FixMax).
+  [twofix_14] twofix 1  ['tall', '14', '4', '2', '20'] {'UNSAT': 6} {'h14:unsat': 6} smallest None
+  [twogood_14] twogood 1  ['tall', '14', '4', '2', '20'] {'SAT': 6} {'h14': 6} smallest 35
+  [fixmax_14] fixmax 1  ['tall', '14', '4', '2', '20'] {'UNSAT': 6} {'h14:unsat': 6} smallest None
+  [goodnonmax_14] goodnonmax 1  ['tall', '14', '4', '2', '20'] {'SAT': 6} {'h14': 6} smallest 35
+  [fixmax_w7] fixmax 1  ['tall', '10', '7', '1', '5'] {'UNSAT': 5} {'h10:unsat': 5} smallest None
+  [gnm_w7] goodnonmax 1  ['tall', '10', '7', '1', '5'] {'SAT': 5} {'h10': 5} smallest 42
+  [fixmax_E6] fixmax 1  ['tall', '13', '4', '1', '8'] {'UNSAT': 8} {'h13:unsat': 8} smallest None
+  [gnm_E6] goodnonmax 1  ['tall', '13', '4', '1', '8'] {'SAT': 8} {'h13': 8} smallest 33
+  AtMost1Fix width 7 and N = 6: out_brief285.txt.
+  Height-5 relaxations (closure 5 11 4 30), twofix: Ta1 SAT 14, Ta2 UNSAT 30, Tat SAT 22, Tm2 SAT 14, TaOnly SAT 14;
+    with xfix: none UNSAT 30, Ta1 SAT 4 (min 19), Ta2 UNSAT 30, Tat SAT 22, TaOnly SAT 4.

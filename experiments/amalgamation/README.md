@@ -149,3 +149,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁸³: `orbit_probe.py` model dump (env DUMP) and (T) relaxations Tat / Tm2 / TaOnly / TbOnly / Ta1 / Tb1 / Ta2 / Tb2 / land. Output `out_direct283.txt`.
 - §34.3z²⁸⁴: counterexample bank `bank/` (index.json, INDEX.md; never delete a model) and `bank.py` (coords, replay). Replay a statement on every banked model before searching.
 - §34.3z²⁸⁵: `orbit_probe.py` modes twofix / twogood (calibrated mutant OneGood) / fixmax / goodnonmax; bank predicates `bank/atmost1fix.py`, `onefix.py`, `fixmax.py`; brief run 15 in `brief285/`. Output `out_brief285.txt`.
+- §34.3z²⁸⁶: `orbit_probe.py` filter `maxn N`, relaxation flag `xfix`. Pushes of AtMost1Fix and FixMax. Output `out_direct286.txt`.

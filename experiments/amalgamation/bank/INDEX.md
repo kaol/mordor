@@ -34,3 +34,5 @@
 | s276_atomorb.json | AtomOrb | §276 | W0+n1 | 31 | 6 | 10 | 2 | g | 2 fixed | 4 |
 | s276_latecert.json | LateCert | §276 | W0+n1 | 15 | 5 | 5 | 1 | a | 3 fixed | 3 |
 | s276_linkfix.json | LinkFix | §276 | W0+n1 | 16 | 4 | 7 | 1 | a | 3 fixed | 5 |
+| s285_goodtofix_h10.json | GoodToFix (every good atom is mu-fixed or exits to a mu-fixed atom) | §285 | W0+n1 | 34 | 10 | 9 | 2 | a | 3 fixed | 5 |
+| s285_desctb12_h10.json | TopExit in the DescTb12 relaxation (Tb at atom and height-2 rows in descent form only) | §285 | relaxed: Tb in descent form at atoms and height-2 rows | 22 | 10 | 5 | 1 | a | 3 cycle | 3 |

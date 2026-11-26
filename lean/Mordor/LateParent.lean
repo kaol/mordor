@@ -164,6 +164,7 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁸²: `land_of_good_below` (a good atom below a row of R_1 pins its landing), **`good_atom_unique_below`** (Lemma U),
   **`topCell_iff_goodBelow`** (Lemma T: TopCell ⟺ a good atom below the row), **`certAt_of_fixed_below`** (Lemma D);
   §34.3z²⁸³: **`fixedBelow_of_exitDom`** (TopCert ⟹ FixBelow; with Lemma D, TopCert ⟺ a μ-fixed atom below M2).
+  §34.3z²⁸⁵: **`goodUp`** (rows above a good atom exit), **`goodCell_dichotomy`**, **`ta_iff_lands`** (Ta ⟺ landing).
 * §34.3z²⁷⁶: **`upTrap_stay`**, **`upTrap_land`** (UpLand: rows above a certified atom land with it), `break_in_Z`,
   **`breakExists`** (the level-0 trap's breakpoint lies in Z), **`goodAtom_of_greatestZ`** (TopZ).
 * §34.3z²⁷⁴: **`trap_of_tb`**, **`domCoLand`** (a dominated row lands where its dominator does), `tb_of_tight`, **`exitFixed_of_dom`**.
@@ -5832,6 +5833,72 @@ theorem fixedBelow_of_exitDom {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z �
   obtain ⟨hp, hq, -⟩ := exit_atom hn hk2 ha hm htop hj hmin hex
   have hqR : F ⊥ ((F m)^[j] (⊤ : α)) ∈ Rk F 1 := Rk_down (F := F) 1 hdom hm
   exact ⟨hq, hqR, exitFixed_of_dom hn hk2 rfl hp hq hqR hdom rfl⟩
+
+/-! ### §34.3z²⁸⁵ Run-15 ladder audit (A3, A4, A5)
+
+`goodUp` (A3): the own-cell point `p` of a good atom `q` is not in `Z`, so every row of `R_1` above `q` lands at `p` and
+exits there. `goodCell_dichotomy` (A4): on that cell `F(q, p)` is `q` (and then `q` is μ-fixed) or `p`.
+`ta_iff_lands` (A5): the upper-cell half Ta of (T) at a row is exactly the row's landing. -/
+
+/-- **A3, GoodUp.** A good atom `q ∈ R_1` below `m ∈ R_1` has a height-2 own cell `p` with `F(⊥, p) ≠ ⊥`, and `m` lands
+at `p`: every row of `R_1` above a good atom exits. -/
+theorem goodUp {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    (htop : 2 < height H (⊤ : α)) {m q : α} (hm : m ∈ Rk F 1) (hq : height H q = 1) (hqm : q ≤ m) (hg : IsGood F q) :
+    ∃ p, height H p = 2 ∧ q ≤ F q p ∧ q ≤ p ∧ F ⊥ p ≠ ⊥ ∧
+      ∃ j, (F m)^[j] (⊤ : α) = p ∧ ∀ i < j, 2 < height H ((F m)^[i] (⊤ : α)) := by
+  have hqt : q ≠ ⊤ := fun h => by rw [h] at hq; omega
+  have hqR : q ∈ Rk F 1 := Rk_down (F := F) 1 hqm hm
+  obtain ⟨i, hp, hcell⟩ := ownCell_of_good hn hk2 hqR hq hqt hg
+  have hqp : q ≤ (F q)^[i] (⊤ : α) := by
+    have := rowIter_succ_le (le_top : F q (⊤ : α) ≤ ⊤) i
+    rw [Function.iterate_succ_apply'] at this
+    exact hcell.trans this
+  have ham : height H (a F m) ≤ 2 := hk2 _ (by simpa using aIter_mem (F := F) hm 1)
+  obtain ⟨j, hj, hmin⟩ :=
+    upTrap_land hn (x := q) (k := i) rfl hp hq le_rfl hcell (tb_of_tight hk2 hqR) hqm ham
+  refine ⟨_, hp, hcell, hqp, ?_, j, hj, hmin⟩
+  intro hz
+  -- `p ∈ Z ⊆ R_1`: then row `p` would land at `p` itself, against `land_not_le`
+  have hpR : (F q)^[i] (⊤ : α) ∈ Rk F 1 :=
+    mem_succ_of_cell (k := 0) (bot_mem_Rk (F := F) 0) le_rfl (Or.inl (by rw [hz]))
+  have hap : height H (a F ((F q)^[i] (⊤ : α))) ≤ 2 := hk2 _ (by simpa using aIter_mem (F := F) hpR 1)
+  obtain ⟨j', hj', hmin'⟩ :=
+    upTrap_land hn (x := q) (k := i) rfl hp hq le_rfl hcell (tb_of_tight hk2 hqR) hqp hap
+  have hnot := land_not_le hk2 hpR htop (i := j') (by rw [hj']; omega) hmin'
+  exact hnot (le_of_eq hj')
+
+/-- **A4.** On a good atom's cell (`q ≤ F(q, p) ≤ p`, `h(p) = 2`, `F(⊥, p) ≠ ⊥`): either `F(q, p) = p`, or `F(q, p) = q`
+and then `F(⊥, p) = q` (the atom is μ-fixed when `p` is its landing). -/
+theorem goodCell_dichotomy {H : ℕ} (hn : NoChain α (H + 1)) {q p : α} (hq : height H q = 1) (hp : height H p = 2)
+    (hcell : q ≤ F q p) (hle : F q p ≤ p) (hex : F ⊥ p ≠ ⊥) :
+    F q p = p ∨ (F q p = q ∧ F ⊥ p = q) := by
+  by_cases hpq : F q p = p
+  · exact Or.inl hpq
+  · right
+    have hlt : F q p < p := lt_of_le_of_ne hle hpq
+    have h1 := height_strictMono hn hlt
+    have hfq : F q p = q := (eq_of_le_of_height_ge hn hcell (by omega)).symm
+    refine ⟨hfq, ?_⟩
+    have hb : F ⊥ p ≤ q := hfq ▸ (F.mono bot_le) p
+    have h0 : 0 < height H (F ⊥ p) := by
+      have := height_strictMono hn (bot_lt_iff_ne_bot.2 hex); rwa [height_bot_eq_zero] at this
+    exact eq_of_le_of_height_ge hn hb (by omega)
+
+/-- **A5.** The upper-cell half Ta of (T) at row `x` (no column of height ≥ 3 with `y ≤ F(x, y)`) holds iff row `x`'s
+descent from `⊤` reaches an element of height ≤ 2 (the row lands). -/
+theorem ta_iff_lands {H : ℕ} (hn : NoChain α (H + 1)) (x : α) :
+    (∀ y, 2 < height H y → ¬ y ≤ F x y) ↔ ∃ i, height H ((F x)^[i] (⊤ : α)) ≤ 2 := by
+  constructor
+  · intro hTa
+    obtain ⟨N, hN⟩ := rowDesc_reaches_a hn (F := F) x
+    refine ⟨N, ?_⟩
+    rw [hN]
+    by_contra hh
+    exact hTa _ (by omega) (le_of_eq (row_a (F := F) x).symm)
+  · rintro ⟨i, hi⟩ y hy hpost
+    have h1 : y ≤ (F x)^[i] (⊤ : α) := (le_a (F := F) hpost).trans (a_le_rowDesc (F := F) x i)
+    have := (height_strictMono hn).monotone h1
+    omega
 
 end Landing
 

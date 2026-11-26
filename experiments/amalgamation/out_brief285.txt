@@ -1,0 +1,11 @@
+§34.3z²⁸⁵ worker re-runs of brief run 15 (orbit_probe.py; exact; every SAT model replayed from the definitions).
+  [twofix_12] twofix 1  ['tall', '12', '4', '1', '8'] {'UNSAT': 8} {'h12:unsat': 8} smallest None
+  [twogood_12] twogood 1  ['tall', '12', '4', '1', '8'] {'SAT': 6, 'UNSAT': 2} {'h12': 6, 'h12:unsat': 2} smallest 32
+  [fixmax_12] fixmax 1  ['tall', '12', '4', '1', '8'] {'UNSAT': 8} {'h12:unsat': 8} smallest None
+  [goodnonmax_12] goodnonmax 1  ['tall', '12', '4', '1', '8'] {'SAT': 6, 'UNSAT': 2} {'h12': 6, 'h12:unsat': 2} smallest 32
+  [twofix_13E6] twofix 1  ['tall', '13', '4', '1', '8'] {'UNSAT': 8} {'h13:unsat': 8} smallest None
+  [twogood_13E6] twogood 1  ['tall', '13', '4', '1', '8'] {'SAT': 8} {'h13': 8} smallest 33
+  [twofix_w7] twofix 1  ['tall', '10', '7', '1', '5'] {'UNSAT': 5} {'h10:unsat': 5} smallest None
+  [twogood_w7] twogood 1  ['tall', '10', '7', '1', '5'] {'SAT': 5} {'h10': 5} smallest 42
+  [twofix_14] stopped after 1 of 6 lattices (UNSAT, |L| = 43); [fixmax_14] stopped after 1 of 6 (UNSAT).
+  bank replay: atmost1fix 27/27, onefix 27/27, fixmax 24/24 (off g).

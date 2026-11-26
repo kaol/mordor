@@ -1,0 +1,407 @@
+probe15 main | corpus ['tall', '10', '4', '2', '8'] {'B': '1', 'budget': '400000'} | per lattice (height >= 3) and branch a/b/g, over ALL F: vac = SAT iff the branch has a model; every other column = SAT iff SOME F makes the named statement FAIL (docstring); SAT models replayed
+lattice 0 n=27 h=10: start
+    a vac: SAT 0s
+    a TopExit: UNSAT 2s
+    a M:MaxIdx2: SAT 0s
+    a OneFix: UNSAT 2s
+    a AtMost1Fix: UNSAT 0s
+    a M:OneGood: SAT 0s
+    a FixMax: UNSAT 0s
+    a M:GoodNonMax: SAT 0s
+    a GoodToFix: UNSAT 1s
+    a M:GoodFix: SAT 0s
+    b vac: UNSAT 0s
+    g vac: SAT 0s
+    g OneFix: UNSAT 1s
+    g AtMost1Fix: UNSAT 0s
+    g M:OneGood: SAT 0s
+    g GoodToFix: UNSAT 0s
+    g M:GoodFix: SAT 0s
+    a full TopExit: UNSAT 0s
+    a desc2 TopExit: UNSAT 0s
+    a desc2 NOV: SAT 0s
+    a noTb2 TopExit: SAT 0s
+    a noTb2 NOV: SAT 0s
+    a desc12 TopExit: SAT 1s
+    a desc12 NOV: SAT 0s
+    a noTb1 TopExit: SAT 0s
+    a noTb1 NOV: SAT 0s
+    b full TopExit: UNSAT 0s
+    b desc2 TopExit: UNSAT 0s
+    b desc2 NOV: UNSAT 0s
+    b noTb2 TopExit: SAT 0s
+    b noTb2 NOV: SAT 0s
+    b desc12 TopExit: SAT 0s
+    b desc12 NOV: SAT 0s
+    b noTb1 TopExit: SAT 0s
+    b noTb1 NOV: SAT 0s
+lattice 0 n=27 h=10 width=7 10s | a:[vac(N=1 |A|=2 |M2|=2 fix=1) TopExit=uns M:MaxIdx2=SAT(N=1 |A|=2 |M2|=4 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=1 |A|=2 |M2|=2 fix=1) FixMax=uns M:GoodNonMax=SAT(N=3 |A|=2 |M2|=1 fix=1) GoodToFix=uns M:GoodFix=SAT(N=3 |A|=2 |M2|=4 fix=1)] b:- g:[vac(N=4 |A|=2 |M2|=2 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=2 |M2|=3 fix=1) GoodToFix=uns M:GoodFix=SAT(N=2 |A|=2 |M2|=3 fix=1)] a:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT] b:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=uns noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT]
+lattice 1 n=22 h=10: start
+    a vac: SAT 0s
+    a TopExit: UNSAT 1s
+    a M:MaxIdx2: SAT 0s
+    a OneFix: UNSAT 1s
+    a AtMost1Fix: UNSAT 0s
+    a M:OneGood: SAT 0s
+    a FixMax: UNSAT 0s
+    a M:GoodNonMax: SAT 0s
+    a GoodToFix: UNSAT 1s
+    a M:GoodFix: SAT 0s
+    b vac: UNSAT 0s
+    g vac: SAT 0s
+    g OneFix: UNSAT 0s
+    g AtMost1Fix: UNSAT 0s
+    g M:OneGood: SAT 0s
+    g GoodToFix: UNSAT 0s
+    g M:GoodFix: SAT 0s
+    a full TopExit: UNSAT 0s
+    a desc2 TopExit: UNSAT 0s
+    a desc2 NOV: SAT 0s
+    a noTb2 TopExit: SAT 0s
+    a noTb2 NOV: SAT 0s
+    a desc12 TopExit: SAT 0s
+    a desc12 NOV: SAT 0s
+    a noTb1 TopExit: SAT 0s
+    a noTb1 NOV: SAT 0s
+    b full TopExit: UNSAT 0s
+    b desc2 TopExit: UNSAT 0s
+    b desc2 NOV: UNSAT 0s
+    b noTb2 TopExit: SAT 0s
+    b noTb2 NOV: SAT 0s
+    b desc12 TopExit: SAT 0s
+    b desc12 NOV: SAT 0s
+    b noTb1 TopExit: SAT 0s
+    b noTb1 NOV: SAT 0s
+lattice 1 n=22 h=10 width=5 5s | a:[vac(N=1 |A|=3 |M2|=4 fix=1) TopExit=uns M:MaxIdx2=SAT(N=3 |A|=3 |M2|=4 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=1 |A|=3 |M2|=3 fix=1) FixMax=uns M:GoodNonMax=SAT(N=1 |A|=3 |M2|=2 fix=1) GoodToFix=uns M:GoodFix=SAT(N=1 |A|=3 |M2|=3 fix=1)] b:- g:[vac(N=3 |A|=2 |M2|=1 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=3 |A|=3 |M2|=3 fix=1) GoodToFix=uns M:GoodFix=SAT(N=2 |A|=3 |M2|=1 fix=1)] a:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT] b:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=uns noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT]
+lattice 2 n=34 h=10: start
+    a vac: SAT 0s
+    a TopExit: UNSAT 15s
+    a M:MaxIdx2: SAT 0s
+    a OneFix: UNSAT 17s
+    a AtMost1Fix: UNSAT 3s
+    a M:OneGood: SAT 0s
+    a FixMax: UNSAT 3s
+    a M:GoodNonMax: SAT 0s
+    a GoodToFix: SAT 0s
+    a M:GoodFix: SAT 0s
+    b vac: SAT 0s
+    b TopExit: UNSAT 3s
+    b M:MaxIdx2: SAT 0s
+    b OneFix: UNSAT 6s
+    b AtMost1Fix: UNSAT 1s
+    b M:OneGood: SAT 0s
+    b FixMax: UNSAT 1s
+    b M:GoodNonMax: SAT 0s
+    b GoodToFix: SAT 0s
+    b M:GoodFix: SAT 0s
+    g vac: SAT 0s
+    g OneFix: UNSAT 8s
+    g AtMost1Fix: UNSAT 1s
+    g M:OneGood: SAT 0s
+    g GoodToFix: SAT 2s
+    g M:GoodFix: SAT 0s
+    a full TopExit: UNSAT 3s
+    a desc2 TopExit: UNSAT 5s
+    a desc2 NOV: SAT 0s
+    a noTb2 TopExit: SAT 0s
+    a noTb2 NOV: SAT 0s
+    a desc12 TopExit: SAT 0s
+    a desc12 NOV: SAT 0s
+    a noTb1 TopExit: SAT 0s
+    a noTb1 NOV: SAT 0s
+    b full TopExit: UNSAT 4s
+    b desc2 TopExit: UNSAT 2s
+    b desc2 NOV: SAT 0s
+    b noTb2 TopExit: SAT 0s
+    b noTb2 NOV: SAT 0s
+    b desc12 TopExit: SAT 0s
+    b desc12 NOV: SAT 0s
+    b noTb1 TopExit: SAT 0s
+    b noTb1 NOV: SAT 0s
+lattice 2 n=34 h=10 width=9 77s | a:[vac(N=3 |A|=5 |M2|=8 fix=1) TopExit=uns M:MaxIdx2=SAT(N=2 |A|=5 |M2|=3 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=5 |M2|=3 fix=1) FixMax=uns M:GoodNonMax=SAT(N=2 |A|=5 |M2|=3 fix=1) GoodToFix=SAT(N=2 |A|=5 |M2|=5 fix=1) M:GoodFix=SAT(N=2 |A|=5 |M2|=8 fix=1)] b:[vac(N=3 |A|=5 |M2|=5 fix=1) TopExit=uns M:MaxIdx2=SAT(N=3 |A|=5 |M2|=8 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=5 |M2|=5 fix=1) FixMax=uns M:GoodNonMax=SAT(N=3 |A|=5 |M2|=3 fix=1) GoodToFix=SAT(N=3 |A|=5 |M2|=3 fix=1) M:GoodFix=SAT(N=3 |A|=5 |M2|=3 fix=1)] g:[vac(N=3 |A|=3 |M2|=3 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=5 |M2|=6 fix=1) GoodToFix=SAT(N=2 |A|=4 |M2|=3 fix=1) M:GoodFix=SAT(N=2 |A|=4 |M2|=3 fix=1)] a:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT] b:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT]
+lattice 3 n=25 h=10: start
+    a vac: SAT 0s
+    a TopExit: UNSAT 1s
+    a M:MaxIdx2: UNSAT 1s
+    a OneFix: UNSAT 0s
+    a AtMost1Fix: UNSAT 0s
+    a M:OneGood: SAT 0s
+    a FixMax: UNSAT 0s
+    a M:GoodNonMax: SAT 0s
+    a GoodToFix: UNSAT 0s
+    a M:GoodFix: SAT 0s
+    b vac: UNSAT 1s
+    g vac: SAT 0s
+    g OneFix: UNSAT 0s
+    g AtMost1Fix: UNSAT 0s
+    g M:OneGood: SAT 0s
+    g GoodToFix: UNSAT 0s
+    g M:GoodFix: SAT 0s
+    a full TopExit: UNSAT 0s
+    a desc2 TopExit: UNSAT 1s
+    a desc2 NOV: SAT 0s
+    a noTb2 TopExit: SAT 0s
+    a noTb2 NOV: SAT 0s
+    a desc12 TopExit: SAT 0s
+    a desc12 NOV: SAT 0s
+    a noTb1 TopExit: SAT 0s
+    a noTb1 NOV: SAT 0s
+    b full TopExit: UNSAT 0s
+    b desc2 TopExit: UNSAT 0s
+    b desc2 NOV: UNSAT 0s
+    b noTb2 TopExit: SAT 0s
+    b noTb2 NOV: SAT 0s
+    b desc12 TopExit: SAT 0s
+    b desc12 NOV: SAT 0s
+    b noTb1 TopExit: SAT 0s
+    b noTb1 NOV: SAT 0s
+lattice 3 n=25 h=10 width=6 5s | a:[vac(N=1 |A|=2 |M2|=3 fix=1) TopExit=uns M:MaxIdx2=uns OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=1 |A|=2 |M2|=2 fix=1) FixMax=uns M:GoodNonMax=SAT(N=1 |A|=2 |M2|=2 fix=1) GoodToFix=uns M:GoodFix=SAT(N=1 |A|=2 |M2|=1 fix=1)] b:- g:[vac(N=2 |A|=2 |M2|=2 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=1 |A|=2 |M2|=1 fix=1) GoodToFix=uns M:GoodFix=SAT(N=2 |A|=2 |M2|=3 fix=1)] a:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT] b:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=uns noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT]
+lattice 4 n=28 h=10: start
+    a vac: SAT 0s
+    a TopExit: UNSAT 1s
+    a M:MaxIdx2: UNSAT 0s
+    a OneFix: UNSAT 0s
+    a AtMost1Fix: UNSAT 0s
+    a M:OneGood: SAT 0s
+    a FixMax: UNSAT 0s
+    a M:GoodNonMax: SAT 0s
+    a GoodToFix: UNSAT 2s
+    a M:GoodFix: SAT 0s
+    b vac: UNSAT 1s
+    g vac: SAT 0s
+    g OneFix: UNSAT 0s
+    g AtMost1Fix: UNSAT 0s
+    g M:OneGood: SAT 0s
+    g GoodToFix: UNSAT 0s
+    g M:GoodFix: SAT 0s
+    a full TopExit: UNSAT 0s
+    a desc2 TopExit: UNSAT 1s
+    a desc2 NOV: SAT 0s
+    a noTb2 TopExit: SAT 0s
+    a noTb2 NOV: SAT 0s
+    a desc12 TopExit: SAT 0s
+    a desc12 NOV: SAT 0s
+    a noTb1 TopExit: SAT 0s
+    a noTb1 NOV: SAT 0s
+    b full TopExit: UNSAT 0s
+    b desc2 TopExit: UNSAT 0s
+    b desc2 NOV: UNSAT 1s
+    b noTb2 TopExit: SAT 0s
+    b noTb2 NOV: SAT 0s
+    b desc12 TopExit: SAT 0s
+    b desc12 NOV: SAT 0s
+    b noTb1 TopExit: SAT 0s
+    b noTb1 NOV: SAT 0s
+lattice 4 n=28 h=10 width=6 7s | a:[vac(N=2 |A|=1 |M2|=1 fix=1) TopExit=uns M:MaxIdx2=uns OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=2 |M2|=1 fix=1) FixMax=uns M:GoodNonMax=SAT(N=2 |A|=2 |M2|=1 fix=1) GoodToFix=uns M:GoodFix=SAT(N=1 |A|=2 |M2|=1 fix=1)] b:- g:[vac(N=2 |A|=2 |M2|=1 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=2 |M2|=1 fix=1) GoodToFix=uns M:GoodFix=SAT(N=3 |A|=2 |M2|=1 fix=1)] a:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT] b:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=uns noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT]
+lattice 5 n=35 h=10: start
+    a vac: SAT 0s
+    a TopExit: UNSAT 9s
+    a M:MaxIdx2: UNSAT 10s
+    a OneFix: UNSAT 2s
+    a AtMost1Fix: UNSAT 0s
+    a M:OneGood: SAT 0s
+    a FixMax: UNSAT 0s
+    a M:GoodNonMax: SAT 0s
+    a GoodToFix: UNSAT 2s
+    a M:GoodFix: SAT 0s
+    b vac: SAT 0s
+    b TopExit: UNSAT 2s
+    b M:MaxIdx2: UNSAT 12s
+    b OneFix: UNSAT 1s
+    b AtMost1Fix: UNSAT 0s
+    b M:OneGood: UNSAT 0s
+    b FixMax: UNSAT 0s
+    b M:GoodNonMax: UNSAT 0s
+    b GoodToFix: UNSAT 0s
+    b M:GoodFix: UNSAT 0s
+    g vac: SAT 0s
+    g OneFix: UNSAT 2s
+    g AtMost1Fix: UNSAT 0s
+    g M:OneGood: SAT 0s
+    g GoodToFix: UNSAT 2s
+    g M:GoodFix: SAT 0s
+    a full TopExit: UNSAT 3s
+    a desc2 TopExit: UNSAT 5s
+    a desc2 NOV: SAT 0s
+    a noTb2 TopExit: SAT 0s
+    a noTb2 NOV: SAT 0s
+    a desc12 TopExit: SAT 0s
+    a desc12 NOV: SAT 0s
+    a noTb1 TopExit: SAT 0s
+    a noTb1 NOV: SAT 0s
+    b full TopExit: UNSAT 2s
+    b desc2 TopExit: UNSAT 3s
+    b desc2 NOV: SAT 0s
+    b noTb2 TopExit: SAT 0s
+    b noTb2 NOV: SAT 0s
+    b desc12 TopExit: SAT 0s
+    b desc12 NOV: SAT 0s
+    b noTb1 TopExit: SAT 0s
+    b noTb1 NOV: SAT 0s
+lattice 5 n=35 h=10 width=9 55s | a:[vac(N=1 |A|=2 |M2|=3 fix=1) TopExit=uns M:MaxIdx2=uns OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=5 |A|=2 |M2|=4 fix=1) FixMax=uns M:GoodNonMax=SAT(N=5 |A|=2 |M2|=4 fix=1) GoodToFix=uns M:GoodFix=SAT(N=3 |A|=2 |M2|=2 fix=1)] b:[vac(N=5 |A|=2 |M2|=4 fix=1) TopExit=uns M:MaxIdx2=uns OneFix=uns AtMost1Fix=uns M:OneGood=uns FixMax=uns M:GoodNonMax=uns GoodToFix=uns M:GoodFix=uns] g:[vac(N=7 |A|=2 |M2|=4 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=2 |M2|=4 fix=1) GoodToFix=uns M:GoodFix=SAT(N=2 |A|=2 |M2|=4 fix=1)] a:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT] b:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT]
+lattice 6 n=44 h=10: start
+    a vac: SAT 1s
+    a TopExit: UNSAT 22s
+    a M:MaxIdx2: SAT 0s
+    a OneFix: UNSAT 68s
+    a AtMost1Fix: UNSAT 24s
+    a M:OneGood: SAT 0s
+    a FixMax: UNSAT 10s
+    a M:GoodNonMax: SAT 0s
+    a GoodToFix: SAT 1s
+    a M:GoodFix: SAT 0s
+    b vac: SAT 1s
+    b TopExit: UNSAT 6s
+    b M:MaxIdx2: SAT 0s
+    b OneFix: UNSAT 11s
+    b AtMost1Fix: UNSAT 5s
+    b M:OneGood: SAT 0s
+    b FixMax: UNSAT 2s
+    b M:GoodNonMax: SAT 0s
+    b GoodToFix: SAT 1s
+    b M:GoodFix: SAT 0s
+    g vac: SAT 0s
+    g OneFix: undec 64s
+    g AtMost1Fix: UNSAT 16s
+    g M:OneGood: SAT 1s
+    g GoodToFix: SAT 20s
+    g M:GoodFix: SAT 0s
+    a full TopExit: UNSAT 4s
+    a desc2 TopExit: UNSAT 12s
+    a desc2 NOV: SAT 0s
+    a noTb2 TopExit: SAT 0s
+    a noTb2 NOV: SAT 0s
+    a desc12 TopExit: SAT 0s
+    a desc12 NOV: SAT 0s
+    a noTb1 TopExit: SAT 0s
+    a noTb1 NOV: SAT 0s
+    b full TopExit: UNSAT 8s
+    b desc2 TopExit: UNSAT 5s
+    b desc2 NOV: SAT 0s
+    b noTb2 TopExit: SAT 0s
+    b noTb2 NOV: SAT 0s
+    b desc12 TopExit: SAT 0s
+    b desc12 NOV: SAT 0s
+    b noTb1 TopExit: SAT 0s
+    b noTb1 NOV: SAT 0s
+lattice 6 n=44 h=10 width=10 285s | a:[vac(N=3 |A|=7 |M2|=7 fix=1) TopExit=uns M:MaxIdx2=SAT(N=2 |A|=7 |M2|=7 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=7 |M2|=5 fix=1) FixMax=uns M:GoodNonMax=SAT(N=3 |A|=7 |M2|=4 fix=1) GoodToFix=SAT(N=2 |A|=6 |M2|=4 fix=1) M:GoodFix=SAT(N=2 |A|=6 |M2|=4 fix=1)] b:[vac(N=2 |A|=7 |M2|=7 fix=1) TopExit=uns M:MaxIdx2=SAT(N=3 |A|=7 |M2|=6 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=3 |A|=6 |M2|=5 fix=1) FixMax=uns M:GoodNonMax=SAT(N=2 |A|=7 |M2|=5 fix=1) GoodToFix=SAT(N=2 |A|=7 |M2|=6 fix=1) M:GoodFix=SAT(N=2 |A|=7 |M2|=6 fix=1)] g:[vac(N=2 |A|=7 |M2|=6 fix=1) OneFix=undec AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=6 |M2|=4 fix=1) GoodToFix=SAT(N=2 |A|=7 |M2|=5 fix=1) M:GoodFix=SAT(N=2 |A|=7 |M2|=5 fix=1)] a:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT] b:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT]
+lattice 7 n=22 h=10: start
+    a vac: SAT 0s
+    a TopExit: UNSAT 1s
+    a M:MaxIdx2: SAT 0s
+    a OneFix: UNSAT 1s
+    a AtMost1Fix: UNSAT 0s
+    a M:OneGood: SAT 0s
+    a FixMax: UNSAT 0s
+    a M:GoodNonMax: SAT 0s
+    a GoodToFix: UNSAT 1s
+    a M:GoodFix: SAT 0s
+    b vac: SAT 0s
+    b TopExit: UNSAT 0s
+    b M:MaxIdx2: SAT 0s
+    b OneFix: UNSAT 0s
+    b AtMost1Fix: UNSAT 0s
+    b M:OneGood: UNSAT 0s
+    b FixMax: UNSAT 0s
+    b M:GoodNonMax: UNSAT 0s
+    b GoodToFix: UNSAT 0s
+    b M:GoodFix: UNSAT 0s
+    g vac: SAT 0s
+    g OneFix: UNSAT 0s
+    g AtMost1Fix: UNSAT 0s
+    g M:OneGood: SAT 0s
+    g GoodToFix: UNSAT 0s
+    g M:GoodFix: SAT 0s
+    a full TopExit: UNSAT 0s
+    a desc2 TopExit: UNSAT 0s
+    a desc2 NOV: SAT 0s
+    a noTb2 TopExit: SAT 0s
+    a noTb2 NOV: SAT 0s
+    a desc12 TopExit: SAT 0s
+    a desc12 NOV: SAT 0s
+    a noTb1 TopExit: SAT 0s
+    a noTb1 NOV: SAT 0s
+    b full TopExit: UNSAT 0s
+    b desc2 TopExit: UNSAT 0s
+    b desc2 NOV: SAT 0s
+    b noTb2 TopExit: SAT 0s
+    b noTb2 NOV: SAT 0s
+    b desc12 TopExit: SAT 0s
+    b desc12 NOV: SAT 0s
+    b noTb1 TopExit: SAT 0s
+    b noTb1 NOV: SAT 0s
+lattice 7 n=22 h=10 width=5 5s | a:[vac(N=1 |A|=2 |M2|=3 fix=1) TopExit=uns M:MaxIdx2=SAT(N=1 |A|=2 |M2|=4 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=2 |M2|=2 fix=1) FixMax=uns M:GoodNonMax=SAT(N=4 |A|=2 |M2|=1 fix=1) GoodToFix=uns M:GoodFix=SAT(N=5 |A|=2 |M2|=3 fix=1)] b:[vac(N=4 |A|=2 |M2|=2 fix=1) TopExit=uns M:MaxIdx2=SAT(N=2 |A|=2 |M2|=3 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=uns FixMax=uns M:GoodNonMax=uns GoodToFix=uns M:GoodFix=uns] g:[vac(N=4 |A|=2 |M2|=2 fix=1) OneFix=uns AtMost1Fix=uns M:OneGood=SAT(N=2 |A|=2 |M2|=4 fix=1) GoodToFix=uns M:GoodFix=SAT(N=7 |A|=2 |M2|=2 fix=1)] a:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT] b:B[full:TopExit=uns desc2:TopExit=uns desc2:NOV=SAT noTb2:TopExit=SAT noTb2:NOV=SAT desc12:TopExit=SAT desc12:NOV=SAT noTb1:TopExit=SAT noTb1:NOV=SAT]
+== totals: lattices per (branch, column), SAT unless marked :uns (449s)
+  ('a', 'AtMost1Fix:uns') {'h10': 8}
+  ('a', 'FixMax:uns') {'h10': 8}
+  ('a', 'GoodToFix') {'h10': 2}
+  ('a', 'GoodToFix:uns') {'h10': 6}
+  ('a', 'M:GoodFix') {'h10': 8}
+  ('a', 'M:GoodNonMax') {'h10': 8}
+  ('a', 'M:MaxIdx2') {'h10': 5}
+  ('a', 'M:MaxIdx2:uns') {'h10': 3}
+  ('a', 'M:OneGood') {'h10': 8}
+  ('a', 'OneFix:uns') {'h10': 8}
+  ('a', 'TopExit:uns') {'h10': 8}
+  ('a', 'desc12', 'NOV') {'h10': 8}
+  ('a', 'desc12', 'TopExit') {'h10': 8}
+  ('a', 'desc2', 'NOV') {'h10': 8}
+  ('a', 'desc2', 'TopExit', 'uns') {'h10': 8}
+  ('a', 'full', 'TopExit', 'uns') {'h10': 8}
+  ('a', 'noTb1', 'NOV') {'h10': 8}
+  ('a', 'noTb1', 'TopExit') {'h10': 8}
+  ('a', 'noTb2', 'NOV') {'h10': 8}
+  ('a', 'noTb2', 'TopExit') {'h10': 8}
+  ('a', 'vac') {'h10': 8}
+  ('b', 'AtMost1Fix:uns') {'h10': 4}
+  ('b', 'FixMax:uns') {'h10': 4}
+  ('b', 'GoodToFix') {'h10': 2}
+  ('b', 'GoodToFix:uns') {'h10': 2}
+  ('b', 'M:GoodFix') {'h10': 2}
+  ('b', 'M:GoodFix:uns') {'h10': 2}
+  ('b', 'M:GoodNonMax') {'h10': 2}
+  ('b', 'M:GoodNonMax:uns') {'h10': 2}
+  ('b', 'M:MaxIdx2') {'h10': 3}
+  ('b', 'M:MaxIdx2:uns') {'h10': 1}
+  ('b', 'M:OneGood') {'h10': 2}
+  ('b', 'M:OneGood:uns') {'h10': 2}
+  ('b', 'OneFix:uns') {'h10': 4}
+  ('b', 'TopExit:uns') {'h10': 4}
+  ('b', 'desc12', 'NOV') {'h10': 8}
+  ('b', 'desc12', 'TopExit') {'h10': 8}
+  ('b', 'desc2', 'NOV') {'h10': 4}
+  ('b', 'desc2', 'NOV', 'uns') {'h10': 4}
+  ('b', 'desc2', 'TopExit', 'uns') {'h10': 8}
+  ('b', 'full', 'TopExit', 'uns') {'h10': 8}
+  ('b', 'noTb1', 'NOV') {'h10': 8}
+  ('b', 'noTb1', 'TopExit') {'h10': 8}
+  ('b', 'noTb2', 'NOV') {'h10': 8}
+  ('b', 'noTb2', 'TopExit') {'h10': 8}
+  ('b', 'vac') {'h10': 4}
+  ('g', 'AtMost1Fix:uns') {'h10': 8}
+  ('g', 'GoodToFix') {'h10': 2}
+  ('g', 'GoodToFix:uns') {'h10': 6}
+  ('g', 'M:GoodFix') {'h10': 8}
+  ('g', 'M:OneGood') {'h10': 8}
+  ('g', 'OneFix:undec') {'h10': 1}
+  ('g', 'OneFix:uns') {'h10': 7}
+  ('g', 'vac') {'h10': 8}
+  smallest SAT ('a', 'GoodToFix'): |L| = 34 (lattice 2)
+  smallest SAT ('a', 'M:GoodFix'): |L| = 22 (lattice 1)
+  smallest SAT ('a', 'M:GoodNonMax'): |L| = 22 (lattice 1)
+  smallest SAT ('a', 'M:MaxIdx2'): |L| = 22 (lattice 1)
+  smallest SAT ('a', 'M:OneGood'): |L| = 22 (lattice 1)
+  smallest SAT ('a', 'desc12', 'TopExit'): |L| = 22 (lattice 1)
+  smallest SAT ('a', 'noTb1', 'TopExit'): |L| = 22 (lattice 1)
+  smallest SAT ('a', 'noTb2', 'TopExit'): |L| = 22 (lattice 1)
+  smallest SAT ('b', 'GoodToFix'): |L| = 34 (lattice 2)
+  smallest SAT ('b', 'M:GoodFix'): |L| = 34 (lattice 2)
+  smallest SAT ('b', 'M:GoodNonMax'): |L| = 34 (lattice 2)
+  smallest SAT ('b', 'M:MaxIdx2'): |L| = 22 (lattice 7)
+  smallest SAT ('b', 'M:OneGood'): |L| = 34 (lattice 2)
+  smallest SAT ('b', 'desc12', 'TopExit'): |L| = 22 (lattice 1)
+  smallest SAT ('b', 'noTb1', 'TopExit'): |L| = 22 (lattice 1)
+  smallest SAT ('b', 'noTb2', 'TopExit'): |L| = 22 (lattice 1)
+  smallest SAT ('g', 'GoodToFix'): |L| = 34 (lattice 2)
+  smallest SAT ('g', 'M:GoodFix'): |L| = 22 (lattice 1)
+  smallest SAT ('g', 'M:OneGood'): |L| = 22 (lattice 1)

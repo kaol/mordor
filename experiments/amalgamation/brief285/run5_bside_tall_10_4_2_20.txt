@@ -1,0 +1,36 @@
+probe15 bside | corpus ['tall', '10', '4', '2', '20'] {} | per lattice (height >= 3) and branch a/b/g, over ALL F: vac = SAT iff the branch has a model; every other column = SAT iff SOME F makes the named statement FAIL (docstring); SAT models replayed
+lattice 0 n=27 h=10 width=7 5s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:vac=uns desc2:vac=uns noTb2:TopExit=SAT]
+lattice 1 n=22 h=10 width=5 3s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:vac=uns desc2:vac=uns noTb2:TopExit=SAT]
+lattice 2 n=34 h=10 width=9 24s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 3 n=25 h=10 width=6 3s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:vac=uns desc2:vac=uns noTb2:TopExit=SAT]
+lattice 4 n=28 h=10 width=6 3s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:vac=uns desc2:vac=uns noTb2:TopExit=SAT]
+lattice 5 n=35 h=10 width=9 17s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 6 n=44 h=10 width=10 58s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 7 n=22 h=10 width=5 2s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 8 n=33 h=10 width=6 34s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 9 n=27 h=10 width=7 4s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 10 n=50 h=10 width=12 293s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 11 n=33 h=10 width=7 8s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 12 n=35 h=10 width=7 27s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 13 n=32 h=10 width=7 4s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:vac=uns desc2:vac=uns noTb2:TopExit=SAT]
+lattice 14 n=22 h=10 width=5 1s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:vac=uns desc2:vac=uns noTb2:TopExit=SAT]
+lattice 15 n=25 h=10 width=5 2s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:vac=uns desc2:vac=uns noTb2:TopExit=SAT]
+lattice 16 n=29 h=10 width=8 4s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 17 n=32 h=10 width=8 13s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 18 n=50 h=10 width=11 198s | a:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT] b:[full:TopExit=uns desc2:TopExit=uns noTb2:TopExit=SAT]
+lattice 19 n=26 h=10 width=6 1s | a:[full:vac=uns desc2:vac=uns noTb2:TopExit=SAT] b:[full:vac=uns desc2:vac=uns noTb2:TopExit=SAT]
+== totals: lattices per (branch, column), SAT unless marked :uns (705s)
+  ('a', 'desc2', 'TopExit:uns') {'h10': 19}
+  ('a', 'desc2', 'vac') {'h10': 19}
+  ('a', 'full', 'TopExit:uns') {'h10': 19}
+  ('a', 'full', 'vac') {'h10': 19}
+  ('a', 'noTb2', 'TopExit') {'h10': 20}
+  ('a', 'noTb2', 'vac') {'h10': 20}
+  ('b', 'desc2', 'TopExit:uns') {'h10': 12}
+  ('b', 'desc2', 'vac') {'h10': 12}
+  ('b', 'full', 'TopExit:uns') {'h10': 12}
+  ('b', 'full', 'vac') {'h10': 12}
+  ('b', 'noTb2', 'TopExit') {'h10': 20}
+  ('b', 'noTb2', 'vac') {'h10': 20}
+  smallest SAT ('a', 'noTb2'): |L| = 22 (lattice 1)
+  smallest SAT ('b', 'noTb2'): |L| = 22 (lattice 1)

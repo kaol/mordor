@@ -187,5 +187,19 @@
   "section": "\u00a7276",
   "world": "W0+n1",
   "source": "linkfix_cand_exit-a_closure_6_12_1_40_min16.json"
+ },
+ {
+  "file": "s285_goodtofix_h10.json",
+  "statement": "GoodToFix (every good atom is mu-fixed or exits to a mu-fixed atom)",
+  "section": "\u00a7285",
+  "world": "W0+n1",
+  "source": "run-15 brief m15_main_tall_10_4_2_8_a_GoodToFix_min34.json"
+ },
+ {
+  "file": "s285_desctb12_h10.json",
+  "statement": "TopExit in the DescTb12 relaxation (Tb at atom and height-2 rows in descent form only)",
+  "section": "\u00a7285",
+  "world": "relaxed: Tb in descent form at atoms and height-2 rows",
+  "source": "run-15 brief m15_main_tall_10_4_2_8_a_desc12_TopExit_min22.json"
  }
 ]

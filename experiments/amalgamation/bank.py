@@ -85,7 +85,7 @@ def main():
         for e in idx:
             for k, (sets_F) in enumerate(models(e)):
                 m = M(sets_F['sets'], sets_F['F']); ol, ok = orbit(m) if m.d is not None else (None, None)
-                lines.append(f"| {e['file']}{'#' + str(k) if len(models(e)) > 1 else ''} | {e['statement']} | {e['section']} | {e['world']}{'' if m.w0 or 'relaxed' in e['world'] else ' (W0 check FAILED)'} | {m.n} | {m.L.height} | {width(m.L)} | {m.N} | {m.branch} | {ol} {ok} | {len(m.M2)} |")
+                lines.append(f"| {e['file']}{'#' + str(k) if len(models(e)) > 1 else ''} | {e['statement']} | {e['section']} | {e['world']}{' (W0 check FAILED)' if e['world'].startswith('W0') and not m.w0 else ''} | {m.n} | {m.L.height} | {width(m.L)} | {m.N} | {m.branch} | {ol} {ok} | {len(m.M2)} |")
         open(os.path.join(BANK, 'INDEX.md'), 'w').write('\n'.join(lines) + '\n'); print('\n'.join(lines))
     elif sys.argv[1] == 'replay':
         if sys.argv[2] == '--file':

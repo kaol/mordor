@@ -1,4 +1,5 @@
 import Mordor.Derived
+import Mordor.Companion
 import Mordor.Cut
 import Mordor.Dialgebra
 import Mordor.CutDuality

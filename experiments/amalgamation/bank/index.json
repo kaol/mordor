@@ -208,5 +208,33 @@
   "section": "\u00a7286",
   "world": "relaxed: Tb dropped at atom rows (Ta1)",
   "source": "orbit_probe.py twofix Ta1 xfix closure 5 11 4 30"
+ },
+ {
+  "file": "s287_compcl_3chain.json",
+  "statement": "CompCL (b below the companion of a implies m = n): fails on the 3-chain; t_a is the constant top",
+  "section": "\u00a7287",
+  "world": "thin model, no level-1 world (CL setting)",
+  "source": "companion_probe.py comp sweep 4 8"
+ },
+ {
+  "file": "s287_compcl_dual_3chain.json",
+  "statement": "dual CompCL (some monotone g <= a with b\u2218g <= g\u2218b implies m = n)",
+  "section": "\u00a7287",
+  "world": "thin model, no level-1 world (CL setting)",
+  "source": "companion_probe.py compd sweep 4 8"
+ },
+ {
+  "file": "s287_companion_weaker_than_semi_3chain.json",
+  "statement": "b below the companion of a implies semi-commutation",
+  "section": "\u00a7287",
+  "world": "thin model, no level-1 world (CL setting)",
+  "source": "companion_probe.py gap sweep 4 8"
+ },
+ {
+  "file": "s287_companion_dual_weaker_3chain.json",
+  "statement": "dual companion hypothesis implies semi-commutation",
+  "section": "\u00a7287",
+  "world": "thin model, no level-1 world (CL setting)",
+  "source": "companion_probe.py gapd sweep 4 8"
  }
 ]

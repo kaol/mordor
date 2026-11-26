@@ -37,3 +37,7 @@
 | s285_goodtofix_h10.json | GoodToFix (every good atom is mu-fixed or exits to a mu-fixed atom) | §285 | W0+n1 | 34 | 10 | 9 | 2 | a | 3 fixed | 5 |
 | s285_desctb12_h10.json | TopExit in the DescTb12 relaxation (Tb at atom and height-2 rows in descent form only) | §285 | relaxed: Tb in descent form at atoms and height-2 rows | 22 | 10 | 5 | 1 | a | 3 cycle | 3 |
 | s286_atmost1fix_noTbatoms_h5.json | AtMost1Fix (exit-fixed) without Tb at the atom rows: two exit-fixed atoms; Tb fails on the row of d | §286 | relaxed: Tb dropped at atom rows (Ta1) | 19 | 5 | 5 | 2 | g | 2 fixed | 2 |
+| s287_compcl_3chain.json | CompCL (b below the companion of a implies m = n): fails on the 3-chain; t_a is the constant top | §287 | thin model, no level-1 world (CL setting) | 3 | 2 | 1 | 1 | g | 2 fixed | 0 |
+| s287_compcl_dual_3chain.json | dual CompCL (some monotone g <= a with b∘g <= g∘b implies m = n) | §287 | thin model, no level-1 world (CL setting) | 3 | 2 | 1 | 1 | g | 2 fixed | 0 |
+| s287_companion_weaker_than_semi_3chain.json | b below the companion of a implies semi-commutation | §287 | thin model, no level-1 world (CL setting) | 3 | 2 | 1 | 1 | g | 2 fixed | 0 |
+| s287_companion_dual_weaker_3chain.json | dual companion hypothesis implies semi-commutation | §287 | thin model, no level-1 world (CL setting) | 3 | 2 | 1 | 1 | g | 2 fixed | 0 |

@@ -1,0 +1,2 @@
+toplayer | corpus ['file', '/home/user/mordor/experiments/amalgamation/cx281_botorbit_cycle_h12_n59.json'] | per lattice (height >= 3) and branch, over ALL F in W0+n1: vac = SAT iff the branch has a model; every other column = SAT iff the named statement FAILS for some F (see docstring)
+STOPPED by the briefer after ~35 min CPU on the single lattice, no lattice line printed: no result (superseded by run 4, whose corpus tall 12 4 1 8 is the source corpus of this lattice).

@@ -161,6 +161,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶⁶: **`cov_of_preDrop`** (Cov from PreDrop, by `drop_below_top` and uniqueness of the atom below d ∧ t).
 * §34.3z²⁶⁷: `eq_atom_of_le_meet`, **`cov_of_baseD`**, `preDrop_of_baseD` (Cov, PreDrop and the landing step from BaseD: F(⊥, t) ≤ d),
   `lastIdx_ge`, **`baseD_of_rowDrop`** (BaseD from RowDrop: F(⊥, (F d)^(N−1) ⊤) ≤ d).
+* §34.3z²⁸²: `land_of_good_below` (a good atom below a row of R_1 pins its landing), **`good_atom_unique_below`** (Lemma U),
+  **`topCell_iff_goodBelow`** (Lemma T: TopCell ⟺ a good atom below the row), **`certAt_of_fixed_below`** (Lemma D).
 * §34.3z²⁷⁶: **`upTrap_stay`**, **`upTrap_land`** (UpLand: rows above a certified atom land with it), `break_in_Z`,
   **`breakExists`** (the level-0 trap's breakpoint lies in Z), **`goodAtom_of_greatestZ`** (TopZ).
 * §34.3z²⁷⁴: **`trap_of_tb`**, **`domCoLand`** (a dominated row lands where its dominator does), `tb_of_tight`, **`exitFixed_of_dom`**.
@@ -5729,6 +5731,91 @@ theorem goodAtom_of_greatestZ {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z �
   obtain ⟨-, -, hq0⟩ := exit_atom hn hk2 ha hm htop hi hmin hexit
   obtain ⟨hqR, hq1, hg⟩ := goodAtom_of_inCert hn hk2 ha hm htop hi hmin hexit (hmax _ hq0)
   exact ⟨_, hqR, hq1, hg⟩
+
+/-! ### §34.3z²⁸² The top layer of `Z` (run-14 brief: Lemmas U, T, D)
+
+A good atom `q` below a row `m` of `R_1` pins `m`'s landing: it is the height-2 element `p` of `q`'s own cell
+(`land_of_good_below`, from `ownCell_of_good` and `upTrap_land`). Consequences: a row of `R_1` sees at most one good atom
+(`good_atom_unique_below`, Lemma U); TopCell at a height-2 row `m` is equivalent to "some atom below `m` is good"
+(`topCell_iff_goodBelow`, Lemma T); a μ-fixed atom below `m` makes `m` exit to it (`certAt_of_fixed_below`, Lemma D). -/
+
+theorem land_of_good_below {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    {m q : α} (hm : m ∈ Rk F 1) (hq : height H q = 1) (hqt : q ≠ ⊤) (hqm : q ≤ m) (hg : IsGood F q) :
+    ∃ p, height H p = 2 ∧ q ≤ F q p ∧ q ≤ p ∧
+      ∃ j, (F m)^[j] (⊤ : α) = p ∧ ∀ i < j, 2 < height H ((F m)^[i] (⊤ : α)) := by
+  have hqR : q ∈ Rk F 1 := Rk_down (F := F) 1 hqm hm
+  obtain ⟨i, hp, hcell⟩ := ownCell_of_good hn hk2 hqR hq hqt hg
+  have ham : height H (a F m) ≤ 2 := hk2 _ (by simpa using aIter_mem (F := F) hm 1)
+  obtain ⟨j, hj, hmin⟩ :=
+    upTrap_land hn (x := q) (k := i) rfl hp hq le_rfl hcell (tb_of_tight hk2 hqR) hqm ham
+  refine ⟨_, hp, hcell, ?_, j, hj, hmin⟩
+  have h1 : F q ((F q)^[i] (⊤ : α)) ≤ (F q)^[i] (⊤ : α) := by
+    have := rowIter_succ_le (le_top : F q (⊤ : α) ≤ ⊤) i
+    rwa [Function.iterate_succ_apply'] at this
+  exact hcell.trans h1
+
+/-- **Lemma U.** A row of `R_1` has at most one good atom below it. -/
+theorem good_atom_unique_below {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    (htop : 2 < height H (⊤ : α)) {m q q' : α} (hm : m ∈ Rk F 1) (hq : height H q = 1) (hq' : height H q' = 1)
+    (hqm : q ≤ m) (hq'm : q' ≤ m) (hg : IsGood F q) (hg' : IsGood F q') : q = q' := by
+  have hqt : q ≠ ⊤ := fun h => by rw [h] at hq; omega
+  have hq't : q' ≠ ⊤ := fun h => by rw [h] at hq'; omega
+  obtain ⟨p, hp, -, hqp, j, hj, hmin⟩ := land_of_good_below hn hk2 hm hq hqt hqm hg
+  obtain ⟨p', hp', -, hq'p', j', hj', -⟩ := land_of_good_below hn hk2 hm hq' hq't hq'm hg'
+  have hpp : p' = p := by
+    have := land_unique hn (x := m) (i := j) (by rw [hj]; omega) hmin (j := j') (by rw [hj']; exact hp')
+    rwa [hj, hj'] at this
+  subst hpp
+  have hnot : ¬ p' ≤ m := by
+    have := land_not_le hk2 hm htop (i := j) (by rw [hj]; omega) hmin
+    rwa [hj] at this
+  have hlt : m ⊓ p' < p' := lt_of_le_of_ne inf_le_right (fun h => hnot (h ▸ inf_le_left))
+  have h1 := height_strictMono hn hlt
+  by_contra hne
+  have hnle : ¬ q' ≤ q := fun h => hne (eq_of_le_of_height_ge hn h (by omega)).symm
+  have hlt2 : q < q ⊔ q' := lt_of_le_of_ne le_sup_left (fun h => hnle (h ▸ le_sup_right))
+  have h2 := height_strictMono hn hlt2
+  have h3 : height H (q ⊔ q') ≤ height H (m ⊓ p') :=
+    (height_strictMono hn).monotone (sup_le (le_inf hqm hqp) (le_inf hq'm hq'p'))
+  omega
+
+/-- **Lemma T.** For a row `m ∈ R_1` landing at `λ = (F m)^[j] ⊤`: TopCell at `m` (the meet `m ⊓ λ` is an atom carrying
+the cell `m ⊓ λ ≤ F(m ⊓ λ, λ)`) holds iff some atom below `m` is good. -/
+theorem topCell_iff_goodBelow {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    (htop : 2 < height H (⊤ : α)) {m : α} {j : ℕ} (hm : m ∈ Rk F 1) (hj : height H ((F m)^[j] (⊤ : α)) ≤ 2)
+    (hmin : ∀ i < j, 2 < height H ((F m)^[i] (⊤ : α))) :
+    (height H (m ⊓ (F m)^[j] (⊤ : α)) = 1 ∧
+        m ⊓ (F m)^[j] (⊤ : α) ≤ F (m ⊓ (F m)^[j] (⊤ : α)) ((F m)^[j] (⊤ : α))) ↔
+      ∃ q, height H q = 1 ∧ q ≤ m ∧ IsGood F q := by
+  have hnot : ¬ (F m)^[j] (⊤ : α) ≤ m := land_not_le hk2 hm htop hj hmin
+  have hlt : m ⊓ (F m)^[j] (⊤ : α) < (F m)^[j] (⊤ : α) :=
+    lt_of_le_of_ne inf_le_right (fun h => hnot (h ▸ inf_le_left))
+  have hlth := height_strictMono hn hlt
+  constructor
+  · rintro ⟨h1, hcell⟩
+    refine ⟨_, h1, inf_le_left, ?_⟩
+    exact good_of_dominating_desc hn hk2 rfl (by omega) (Rk_down (F := F) 1 inf_le_left hm) h1 inf_le_left hcell
+  · rintro ⟨q, hq, hqm, hg⟩
+    have hqt : q ≠ ⊤ := fun h => by rw [h] at hq; omega
+    obtain ⟨p, hp, hcell, hqp, j', hj', hmin'⟩ := land_of_good_below hn hk2 hm hq hqt hqm hg
+    have hpj : p = (F m)^[j] (⊤ : α) := by
+      have := land_unique hn (x := m) (i := j) hj hmin (j := j') (by rw [hj']; exact hp)
+      rwa [hj'] at this
+    subst hpj
+    have hqe : q = m ⊓ (F m)^[j] (⊤ : α) := eq_of_le_of_height_ge hn (le_inf hqm hqp) (by omega)
+    rw [← hqe]
+    exact ⟨hq, hcell⟩
+
+/-- **Lemma D.** A μ-fixed atom `q` (its row reaches `p`, of height 2, with `F(⊥, p) = q`) below a row `m ∈ R_1` makes
+`p` the landing of `m`, and `m` exits to `q ≤ m`: a Cert1 witness. -/
+theorem certAt_of_fixed_below {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    {m q p : α} {k : ℕ} (hm : m ∈ Rk F 1) (hk : (F q)^[k] (⊤ : α) = p) (hp : height H p = 2) (hq : height H q = 1)
+    (hqR : q ∈ Rk F 1) (hqb : F ⊥ p = q) (hqm : q ≤ m) :
+    ∃ j, (F m)^[j] (⊤ : α) = p ∧ (∀ i < j, 2 < height H ((F m)^[i] (⊤ : α))) ∧ F ⊥ ((F m)^[j] (⊤ : α)) ≤ m := by
+  have hqp : q ≤ F q p := hqb ▸ (F.mono bot_le) p
+  have ham : height H (a F m) ≤ 2 := hk2 _ (by simpa using aIter_mem (F := F) hm 1)
+  obtain ⟨j, hj, hmin⟩ := upTrap_land hn hk hp hq le_rfl hqp (tb_of_tight hk2 hqR) hqm ham
+  exact ⟨j, hj, hmin, by rw [hj, hqb]; exact hqm⟩
 
 end Landing
 

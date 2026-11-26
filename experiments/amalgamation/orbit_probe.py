@@ -20,11 +20,18 @@ from pysat.solvers import Cadical153
 from tight_probe import lattices
 from rstages import stages, a_of
 MODE = sys.argv[1]; K = int(sys.argv[2]); MT = 'mT' in sys.argv[3:]
+BR = 'a' if 'Ba' in sys.argv[3:] else ('b' if 'Bb' in sys.argv[3:] else '')   # branch: a = h(d) = 2, b = d an atom (bad)
 NEX = next((int(a[1:]) for a in sys.argv[3:] if a in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6')), 0)   # exact N: t_N != bot = t_(N+1)
-args = [a for a in sys.argv[3:] if a != 'mT' and not (a[0] == 'E' and a[1:].isdigit())]
+args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb') and not (a[0] == 'E' and a[1:].isdigit())]
 SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= dep of its predecessor',
              'oneexit': 'some element of the bot-orbit exits to an atom that is not a fixed point', 'vac': 'the world has a model',
-             'orbk': f'mu^{K}(bot) is not a fixed point of mu (Orbit{K} fails)'}[MODE]
+             'orbk': f'mu^{K}(bot) is not a fixed point of mu (Orbit{K} fails)',
+             'topcert': 'd is not a good atom and no m in Z of height 2 exits to an atom below m (TopCert fails)',
+             'nmgood': 'd is not a good atom and no atom below an m in Z of height 2 is good (NMGood fails)',
+             'exitm2': 'd is not a good atom and no m in Z of height 2 exits (ExitM2 fails)',
+             'Mtopcert': 'MUTANT: d is not a good atom and some m in Z of height 2 does not exit to an atom below m',
+             'Mnmgood': 'MUTANT: d is not a good atom and some m in Z of height 2 has no good atom below it',
+             'Mexitm2': 'MUTANT: d is not a good atom and some m in Z of height 2 does not exit'}[MODE]
 print(f'orbit_probe {MODE} K={K}' + (f' N={NEX}' if NEX else '') + f' | SAT = {SAT_MEANS} | world (T) {"MUTANT mT" if MT else ""} | corpus {args}')
 C = collections.Counter(); HH = collections.Counter(); best = None
 for L in lattices(args):
@@ -127,10 +134,55 @@ for L in lattices(args):
                     for y in low:
                         t = v('ox', k, x, p, y); sel.append(t)
                         for lit in (ob(k, x), lam[x, p], -Z(p), f(bot, p, y), -mu[y, y]): add([-t, lit])
+    elif MODE.lstrip('M') in ('topcert', 'nmgood', 'exitm2'):
+        # d = last nonzero element of the bot-descent; off branch g: d is not a good atom (own-cell form of IsGood)
+        dv = lambda z: v('dv', z)
+        for z in range(n):
+            if z == bot: add([-dv(z)]); continue
+            add([-dv(z)] + [v('dvj', z, j) for j in range(NO)])
+            for j in range(NO): add([-v('dvj', z, j), it(bot, j, z)]); add([-v('dvj', z, j), it(bot, j + 1, bot)])
+        add([dv(z) for z in range(n) if z != bot])
+        own = {}
+        for q in low:                                         # own(q) <= some height-2 p on row q's descent with q <= F(q, p)
+            if h[q] != 1: continue
+            o = v('own', q); own[q] = o
+            for j in range(NO + 1):
+                for p_ in low:
+                    if h[p_] != 2: continue
+                    for u in range(n):
+                        if le[q][u]: add([o, -it(q, j, p_), -f(q, p_, u)])
+        for z in own: add([-dv(z), -own[z]])                  # off g (a d of height 2 is never a good atom)
+        if BR == 'a': add([-dv(z) for z in range(n) if h[z] == 1])
+        if BR == 'b': add([-dv(z) for z in range(n) if h[z] == 2])
+        M2 = [m_ for m_ in low if h[m_] == 2]
+        ex = {}; exd = {}
+        for m_ in M2:                                         # exits(m) / exits dominated(m), forced true by their witnesses
+            ex[m_] = v('ex', m_); exd[m_] = v('exd', m_)
+            for p_ in low:
+                add([ex[m_], -lam[m_, p_], Z(p_)])
+                for q in range(n):
+                    if q != bot and le[q][m_]: add([exd[m_], -lam[m_, p_], Z(p_), -f(bot, p_, q)])
+        base = MODE.lstrip('M')
+        if MODE[0] != 'M':                                    # the statement fails: every top-layer row avoids it
+            for m_ in M2:
+                if base == 'topcert': add([-Z(m_), -exd[m_]])
+                if base == 'exitm2': add([-Z(m_), -ex[m_]])
+                if base == 'nmgood':
+                    for q in own:
+                        if le[q][m_]: add([-Z(m_), -own[q]])
+        else:                                                 # mutant: some top-layer row avoids it
+            for m_ in M2:
+                t = v('mut', m_); sel.append(t); add([-t, Z(m_)])
+                if base == 'topcert': add([-t, -exd[m_]])
+                if base == 'exitm2': add([-t, -ex[m_]])
+                if base == 'nmgood':
+                    for q in own:
+                        if le[q][m_]: add([-t, -own[q]])
+            add(sel); sel = []
     elif MODE == 'orbk':
         for x in low:
             t = v('ok', x); sel.append(t); add([-t, ob(K, x)]); add([-t, -mu[x, x]])
-    if MODE != 'vac': add(sel)
+    if MODE != 'vac' and sel: add(sel)
     if S.solve():
         m = set(l for l in S.get_model() if l > 0)
         F = [[(next(u for u in range(n) if V[('f', x, y, u)] in m) if x in low else top) for y in range(n)] for x in range(n)]
@@ -151,6 +203,17 @@ for L in lattices(args):
         xs = [bot]
         for _ in range(K): xs.append(None if xs[-1] is None else muf(xs[-1]))
         bad = MODE == 'vac' or (MODE == 'orbk' and xs[K] is not None and muf(xs[K]) != xs[K])
+        if MODE.lstrip('M') in ('topcert', 'nmgood', 'exitm2'):
+            Zs = [z for z in range(n) if F[bot][z] == bot]
+            good = lambda y: le[y][a_of(L, F, y)] or y in desc(y)          # IsGood, from the definition
+            dd = [t for t in tb if t != bot][-1]
+            offg = not (h[dd] == 1 and good(dd)) and (BR != 'a' or h[dd] == 2) and (BR != 'b' or h[dd] == 1)
+            M2s = [m_ for m_ in Zs if h[m_] == 2]
+            exits = lambda m_: lamf(m_) is not None and F[bot][lamf(m_)] != bot
+            exdom = lambda m_: exits(m_) and le[F[bot][lamf(m_)]][m_]
+            gb = lambda m_: any(h[q] == 1 and le[q][m_] and good(q) for q in range(n))
+            pr = {'topcert': exdom, 'exitm2': exits, 'nmgood': gb}[MODE.lstrip('M')]
+            bad = offg and (not any(pr(m_) for m_ in M2s) if MODE[0] != 'M' else any(not pr(m_) for m_ in M2s))
         for k in range(1, K):
             x, y = xs[k], xs[k + 1]
             if x is None or y is None: continue

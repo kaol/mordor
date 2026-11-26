@@ -1,0 +1,73 @@
+toplayer | corpus ['tall', '10', '4', '2', '20'] | per lattice (height >= 3) and branch, over ALL F in W0+n1: vac = SAT iff the branch has a model; every other column = SAT iff the named statement FAILS for some F (see docstring)
+lattice 0 n=27 h=10 9s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] in-a:- exit-b:- in-b:- g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 1 n=22 h=10 5s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] in-a:- exit-b:- in-b:- g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 2 n=34 h=10 32s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 3 n=25 h=10 3s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=uns M:TopCellAll=uns] in-a:- exit-b:- in-b:- g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 4 n=28 h=10 2s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=uns M:TopCellAll=uns] in-a:- exit-b:- in-b:- g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 5 n=35 h=10 51s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=uns M:TopCellAll=uns] in-a:- exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=uns M:TopCellAll=uns] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=uns M:TopCellAll=uns] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 6 n=44 h=10 86s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 7 n=22 h=10 4s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] in-a:- exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 8 n=33 h=10 57s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 9 n=27 h=10 10s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:- exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 10 n=50 h=10 487s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 11 n=33 h=10 30s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] in-a:- exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 12 n=35 h=10 42s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 13 n=32 h=10 5s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] in-a:- exit-b:- in-b:- g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 14 n=22 h=10 7s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] in-a:- exit-b:- in-b:- g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 15 n=25 h=10 2s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=uns M:TopCellAll=uns] in-a:- exit-b:- in-b:- g:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=uns M:TopCellAll=uns]
+lattice 16 n=29 h=10 15s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=uns M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 17 n=32 h=10 22s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 18 n=50 h=10 329s | exit-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[TopCell=uns NMGood=uns ExitM2=uns TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 19 n=26 h=10 1s | exit-a:- in-a:- exit-b:- in-b:- g:[TopCell=SAT NMGood=SAT ExitM2=SAT TopAbsorb=SAT M:ExitDom=uns M:AllDomM2=SAT M:TopCellAll=SAT]
+== totals: lattices with a SAT, by height (1200s)
+  exit-a  M:AllDomM2    {'h10': 15}
+  exit-a  M:ExitDom     {'h10': 9}
+  exit-a  M:TopCellAll  {'h10': 15}
+  exit-a  TopAbsorb     {'h10': 9}
+  exit-a  vac           {'h10': 19}
+  exit-b  M:AllDomM2    {'h10': 11}
+  exit-b  M:ExitDom     {'h10': 9}
+  exit-b  M:TopCellAll  {'h10': 11}
+  exit-b  TopAbsorb     {'h10': 9}
+  exit-b  vac           {'h10': 12}
+  g       ExitM2        {'h10': 19}
+  g       M:AllDomM2    {'h10': 19}
+  g       M:ExitDom     {'h10': 9}
+  g       M:TopCellAll  {'h10': 19}
+  g       NMGood        {'h10': 19}
+  g       TopAbsorb     {'h10': 19}
+  g       TopCell       {'h10': 19}
+  g       vac           {'h10': 20}
+  in-a    M:AllDomM2    {'h10': 8}
+  in-a    M:ExitDom     {'h10': 7}
+  in-a    M:TopCellAll  {'h10': 8}
+  in-a    TopAbsorb     {'h10': 6}
+  in-a    vac           {'h10': 8}
+  in-b    M:AllDomM2    {'h10': 11}
+  in-b    M:ExitDom     {'h10': 9}
+  in-b    M:TopCellAll  {'h10': 11}
+  in-b    TopAbsorb     {'h10': 9}
+  in-b    vac           {'h10': 12}
+  smallest SAT exit-a M:AllDomM2: |L| = 22 (lattice 1)
+  smallest SAT exit-a M:ExitDom: |L| = 27 (lattice 9)
+  smallest SAT exit-a M:TopCellAll: |L| = 22 (lattice 1)
+  smallest SAT exit-a TopAbsorb: |L| = 27 (lattice 9)
+  smallest SAT exit-b M:AllDomM2: |L| = 22 (lattice 7)
+  smallest SAT exit-b M:ExitDom: |L| = 27 (lattice 9)
+  smallest SAT exit-b M:TopCellAll: |L| = 22 (lattice 7)
+  smallest SAT exit-b TopAbsorb: |L| = 27 (lattice 9)
+  smallest SAT g ExitM2: |L| = 22 (lattice 1)
+  smallest SAT g M:AllDomM2: |L| = 22 (lattice 1)
+  smallest SAT g M:ExitDom: |L| = 27 (lattice 9)
+  smallest SAT g M:TopCellAll: |L| = 22 (lattice 1)
+  smallest SAT g NMGood: |L| = 22 (lattice 1)
+  smallest SAT g TopAbsorb: |L| = 22 (lattice 1)
+  smallest SAT g TopCell: |L| = 22 (lattice 1)
+  smallest SAT in-a M:AllDomM2: |L| = 29 (lattice 16)
+  smallest SAT in-a M:ExitDom: |L| = 32 (lattice 17)
+  smallest SAT in-a M:TopCellAll: |L| = 29 (lattice 16)
+  smallest SAT in-a TopAbsorb: |L| = 32 (lattice 17)
+  smallest SAT in-b M:AllDomM2: |L| = 22 (lattice 7)
+  smallest SAT in-b M:ExitDom: |L| = 27 (lattice 9)
+  smallest SAT in-b M:TopCellAll: |L| = 22 (lattice 7)
+  smallest SAT in-b TopAbsorb: |L| = 27 (lattice 9)

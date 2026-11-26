@@ -1,0 +1,15 @@
+§34.3z²⁸² worker re-runs of brief run 14 (orbit_probe.py; exact; every SAT model replayed from the definitions, goodness = IsGood).
+SAT meanings: topcert = d not a good atom and no m in Z of height 2 exits to an atom below m; nmgood = ... no atom below such m is good;
+exitm2 = ... no such m exits; M-prefixed = mutant: some such m fails the property.
+  [tc12] topcert 1  ['tall', '12', '4', '1', '8'] {'UNSAT': 8} {'h12:unsat': 8} smallest None
+  [mtc12] Mtopcert 1  ['tall', '12', '4', '1', '8'] {'SAT': 6, 'UNSAT': 2} {'h12': 6, 'h12:unsat': 2} smallest 27
+  [tc11] topcert 1  ['tall', '11', '5', '1', '8'] {'UNSAT': 8} {'h11:unsat': 8} smallest None
+  [mtc11] Mtopcert 1  ['tall', '11', '5', '1', '8'] {'SAT': 8} {'h11': 8} smallest 30
+  [ng12] nmgood 1  ['tall', '12', '4', '1', '8'] {'UNSAT': 8} {'h12:unsat': 8} smallest None
+  [mng12] Mnmgood 1  ['tall', '12', '4', '1', '8'] {'SAT': 6, 'UNSAT': 2} {'h12': 6, 'h12:unsat': 2} smallest 27
+  [ng11] nmgood 1  ['tall', '11', '5', '1', '8'] {'UNSAT': 8} {'h11:unsat': 8} smallest None
+  [mng11] Mnmgood 1  ['tall', '11', '5', '1', '8'] {'SAT': 8} {'h11': 8} smallest 30
+  [ex12] exitm2 1  ['tall', '12', '4', '1', '8'] {'UNSAT': 8} {'h12:unsat': 8} smallest None
+  [mex12] Mexitm2 1  ['tall', '12', '4', '1', '8'] {'SAT': 6, 'UNSAT': 2} {'h12': 6, 'h12:unsat': 2} smallest 27
+Height-5 checks (closure 5 11 4 30): topcert/nmgood/exitm2 UNSAT 30; mutants SAT 26.
+Briefer outputs (one encoding, w0lean world): brief282/run3_tall_10_4_2_20.txt, run4_tall_12_4_1_8.txt, run5_tall_11_5_1_8.txt (summarized in the log).

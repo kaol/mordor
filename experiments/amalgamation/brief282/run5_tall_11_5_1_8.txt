@@ -1,0 +1,51 @@
+toplayer3 | corpus ['tall', '11', '5', '1', '8'] | per lattice (height >= 3) and branch, over ALL F in W0+n1: vac = SAT iff the branch has a model; every other column = SAT iff the named statement FAILS for some F (see docstring)
+lattice 0 n=50 h=11 217s | exit-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[NMGood=SAT TopCert=SAT ExitM2=SAT M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 1 n=31 h=11 13s | exit-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[NMGood=SAT TopCert=SAT ExitM2=SAT M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 2 n=44 h=11 56s | exit-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[NMGood=SAT TopCert=SAT ExitM2=SAT M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 3 n=57 h=11 872s | exit-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[NMGood=SAT TopCert=SAT ExitM2=SAT M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 4 n=49 h=11 667s | exit-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[NMGood=SAT TopCert=SAT ExitM2=SAT M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 5 n=41 h=11 82s | exit-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[NMGood=SAT TopCert=SAT ExitM2=SAT M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 6 n=30 h=11 20s | exit-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[NMGood=SAT TopCert=SAT ExitM2=SAT M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+lattice 7 n=47 h=11 193s | exit-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-a:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] exit-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] in-b:[NMGood=uns TopCert=uns ExitM2=uns M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT] g:[NMGood=SAT TopCert=SAT ExitM2=SAT M:AllExitM2=SAT M:AllDomM2=SAT M:TopCellAll=SAT]
+== totals: lattices with a SAT, by height (2121s)
+  exit-a  M:AllDomM2    {'h11': 8}
+  exit-a  M:AllExitM2   {'h11': 8}
+  exit-a  M:TopCellAll  {'h11': 8}
+  exit-a  vac           {'h11': 8}
+  exit-b  M:AllDomM2    {'h11': 8}
+  exit-b  M:AllExitM2   {'h11': 8}
+  exit-b  M:TopCellAll  {'h11': 8}
+  exit-b  vac           {'h11': 8}
+  g       ExitM2        {'h11': 8}
+  g       M:AllDomM2    {'h11': 8}
+  g       M:AllExitM2   {'h11': 8}
+  g       M:TopCellAll  {'h11': 8}
+  g       NMGood        {'h11': 8}
+  g       TopCert       {'h11': 8}
+  g       vac           {'h11': 8}
+  in-a    M:AllDomM2    {'h11': 8}
+  in-a    M:AllExitM2   {'h11': 8}
+  in-a    M:TopCellAll  {'h11': 8}
+  in-a    vac           {'h11': 8}
+  in-b    M:AllDomM2    {'h11': 8}
+  in-b    M:AllExitM2   {'h11': 8}
+  in-b    M:TopCellAll  {'h11': 8}
+  in-b    vac           {'h11': 8}
+  smallest SAT exit-a M:AllDomM2: |L| = 30 (lattice 6)
+  smallest SAT exit-a M:AllExitM2: |L| = 30 (lattice 6)
+  smallest SAT exit-a M:TopCellAll: |L| = 30 (lattice 6)
+  smallest SAT exit-b M:AllDomM2: |L| = 30 (lattice 6)
+  smallest SAT exit-b M:AllExitM2: |L| = 30 (lattice 6)
+  smallest SAT exit-b M:TopCellAll: |L| = 30 (lattice 6)
+  smallest SAT g ExitM2: |L| = 30 (lattice 6)
+  smallest SAT g M:AllDomM2: |L| = 30 (lattice 6)
+  smallest SAT g M:AllExitM2: |L| = 30 (lattice 6)
+  smallest SAT g M:TopCellAll: |L| = 30 (lattice 6)
+  smallest SAT g NMGood: |L| = 30 (lattice 6)
+  smallest SAT g TopCert: |L| = 30 (lattice 6)
+  smallest SAT in-a M:AllDomM2: |L| = 30 (lattice 6)
+  smallest SAT in-a M:AllExitM2: |L| = 30 (lattice 6)
+  smallest SAT in-a M:TopCellAll: |L| = 30 (lattice 6)
+  smallest SAT in-b M:AllDomM2: |L| = 30 (lattice 6)
+  smallest SAT in-b M:AllExitM2: |L| = 30 (lattice 6)
+  smallest SAT in-b M:TopCellAll: |L| = 30 (lattice 6)

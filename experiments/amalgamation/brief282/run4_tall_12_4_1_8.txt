@@ -1,0 +1,91 @@
+toplayer2 | corpus ['tall', '12', '4', '1', '8'] | per lattice (height >= 3) and branch, over ALL F in W0+n1: vac = SAT iff the branch has a model; every other column = SAT iff the named statement FAILS for some F (see docstring)
+lattice 0 n=52 h=12 478s | exit-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] exit-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] g:[TopCell=SAT NMGood=SAT TopCert=SAT M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT]
+lattice 1 n=33 h=12 20s | exit-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=uns M:GoodA=SAT OneGood=uns M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] exit-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] g:[TopCell=SAT NMGood=SAT TopCert=SAT M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT]
+lattice 2 n=32 h=12 30s | exit-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=uns GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=uns M:MinIdx2=uns] in-a:- exit-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=uns GoodFix=uns M:GoodA=SAT OneGood=uns M:OneExitAtom=SAT MaxIdx2=uns M:MinIdx2=uns] in-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=uns GoodFix=uns M:GoodA=SAT OneGood=uns M:OneExitAtom=uns MaxIdx2=uns M:MinIdx2=uns] g:[TopCell=SAT NMGood=SAT TopCert=SAT M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT]
+lattice 3 n=45 h=12 190s | exit-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] exit-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] g:[TopCell=SAT NMGood=SAT TopCert=SAT M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT]
+lattice 4 n=34 h=12 27s | exit-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=uns GoodFix=uns M:GoodA=SAT OneGood=uns M:OneExitAtom=uns MaxIdx2=uns M:MinIdx2=uns] in-a:- exit-b:- in-b:- g:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=uns GoodFix=uns M:GoodA=SAT OneGood=uns M:OneExitAtom=uns MaxIdx2=uns M:MinIdx2=uns]
+lattice 5 n=59 h=12 2439s | exit-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] exit-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] g:[TopCell=SAT NMGood=SAT TopCert=SAT M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT]
+lattice 6 n=27 h=12 7s | exit-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=uns M:GoodA=SAT OneGood=uns M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-a:- exit-b:- in-b:- g:[TopCell=SAT NMGood=SAT TopCert=SAT M:TopCellAll=SAT GoodFix=uns M:GoodA=SAT OneGood=uns M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT]
+lattice 7 n=48 h=12 108s | exit-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-a:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] exit-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] in-b:[TopCell=uns NMGood=uns TopCert=uns M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT] g:[TopCell=SAT NMGood=SAT TopCert=SAT M:TopCellAll=SAT GoodFix=SAT M:GoodA=SAT OneGood=SAT M:OneExitAtom=SAT MaxIdx2=SAT M:MinIdx2=SAT]
+== totals: lattices with a SAT, by height (3299s)
+  exit-a  GoodFix       {'h12': 6}
+  exit-a  M:GoodA       {'h12': 8}
+  exit-a  M:MinIdx2     {'h12': 6}
+  exit-a  M:OneExitAtom {'h12': 7}
+  exit-a  M:TopCellAll  {'h12': 6}
+  exit-a  MaxIdx2       {'h12': 6}
+  exit-a  OneGood       {'h12': 6}
+  exit-a  vac           {'h12': 8}
+  exit-b  GoodFix       {'h12': 5}
+  exit-b  M:GoodA       {'h12': 6}
+  exit-b  M:MinIdx2     {'h12': 5}
+  exit-b  M:OneExitAtom {'h12': 6}
+  exit-b  M:TopCellAll  {'h12': 5}
+  exit-b  MaxIdx2       {'h12': 5}
+  exit-b  OneGood       {'h12': 5}
+  exit-b  vac           {'h12': 6}
+  g       GoodFix       {'h12': 6}
+  g       M:GoodA       {'h12': 8}
+  g       M:MinIdx2     {'h12': 7}
+  g       M:OneExitAtom {'h12': 7}
+  g       M:TopCellAll  {'h12': 7}
+  g       MaxIdx2       {'h12': 7}
+  g       NMGood        {'h12': 7}
+  g       OneGood       {'h12': 6}
+  g       TopCell       {'h12': 7}
+  g       TopCert       {'h12': 7}
+  g       vac           {'h12': 8}
+  in-a    GoodFix       {'h12': 4}
+  in-a    M:GoodA       {'h12': 5}
+  in-a    M:MinIdx2     {'h12': 5}
+  in-a    M:OneExitAtom {'h12': 5}
+  in-a    M:TopCellAll  {'h12': 5}
+  in-a    MaxIdx2       {'h12': 5}
+  in-a    OneGood       {'h12': 4}
+  in-a    vac           {'h12': 5}
+  in-b    GoodFix       {'h12': 5}
+  in-b    M:GoodA       {'h12': 6}
+  in-b    M:MinIdx2     {'h12': 5}
+  in-b    M:OneExitAtom {'h12': 5}
+  in-b    M:TopCellAll  {'h12': 5}
+  in-b    MaxIdx2       {'h12': 5}
+  in-b    OneGood       {'h12': 5}
+  in-b    vac           {'h12': 6}
+  smallest SAT exit-a GoodFix: |L| = 32 (lattice 2)
+  smallest SAT exit-a M:GoodA: |L| = 27 (lattice 6)
+  smallest SAT exit-a M:MinIdx2: |L| = 27 (lattice 6)
+  smallest SAT exit-a M:OneExitAtom: |L| = 27 (lattice 6)
+  smallest SAT exit-a M:TopCellAll: |L| = 27 (lattice 6)
+  smallest SAT exit-a MaxIdx2: |L| = 27 (lattice 6)
+  smallest SAT exit-a OneGood: |L| = 32 (lattice 2)
+  smallest SAT exit-b GoodFix: |L| = 33 (lattice 1)
+  smallest SAT exit-b M:GoodA: |L| = 32 (lattice 2)
+  smallest SAT exit-b M:MinIdx2: |L| = 33 (lattice 1)
+  smallest SAT exit-b M:OneExitAtom: |L| = 32 (lattice 2)
+  smallest SAT exit-b M:TopCellAll: |L| = 33 (lattice 1)
+  smallest SAT exit-b MaxIdx2: |L| = 33 (lattice 1)
+  smallest SAT exit-b OneGood: |L| = 33 (lattice 1)
+  smallest SAT g GoodFix: |L| = 32 (lattice 2)
+  smallest SAT g M:GoodA: |L| = 27 (lattice 6)
+  smallest SAT g M:MinIdx2: |L| = 27 (lattice 6)
+  smallest SAT g M:OneExitAtom: |L| = 27 (lattice 6)
+  smallest SAT g M:TopCellAll: |L| = 27 (lattice 6)
+  smallest SAT g MaxIdx2: |L| = 27 (lattice 6)
+  smallest SAT g NMGood: |L| = 27 (lattice 6)
+  smallest SAT g OneGood: |L| = 32 (lattice 2)
+  smallest SAT g TopCell: |L| = 27 (lattice 6)
+  smallest SAT g TopCert: |L| = 27 (lattice 6)
+  smallest SAT in-a GoodFix: |L| = 45 (lattice 3)
+  smallest SAT in-a M:GoodA: |L| = 33 (lattice 1)
+  smallest SAT in-a M:MinIdx2: |L| = 33 (lattice 1)
+  smallest SAT in-a M:OneExitAtom: |L| = 33 (lattice 1)
+  smallest SAT in-a M:TopCellAll: |L| = 33 (lattice 1)
+  smallest SAT in-a MaxIdx2: |L| = 33 (lattice 1)
+  smallest SAT in-a OneGood: |L| = 45 (lattice 3)
+  smallest SAT in-b GoodFix: |L| = 33 (lattice 1)
+  smallest SAT in-b M:GoodA: |L| = 32 (lattice 2)
+  smallest SAT in-b M:MinIdx2: |L| = 33 (lattice 1)
+  smallest SAT in-b M:OneExitAtom: |L| = 33 (lattice 1)
+  smallest SAT in-b M:TopCellAll: |L| = 33 (lattice 1)
+  smallest SAT in-b MaxIdx2: |L| = 33 (lattice 1)
+  smallest SAT in-b OneGood: |L| = 33 (lattice 1)

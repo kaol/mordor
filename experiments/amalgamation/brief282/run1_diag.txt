@@ -1,0 +1,138 @@
+== cx281_botorbit_cycle_h12_n59.json[0]: n=59 H=12 W0+n1=True |Z|=14 atoms=5 M2=8 maxZ=[6, 7, 8, 9, 10, 11, 12, 13] d=2 h(d)=1
+   bot-descent heights [12, 11, 6, 3, 1, 0]
+   x= 1 h1 max=False li=5 lam=11(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[6, 7, 9, 10]
+   x= 2 h1 max=False li=7 lam=5(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[6, 8, 11]
+   x= 3 h1 max=False li=5 lam=2(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[7, 8]
+   x= 4 h1 max=False li=7 lam=14(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=True fixed=True a=0(h0) above_in_M2=[10, 11, 13]
+   x= 5 h1 max=False li=6 lam=2(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[12, 13]
+   x= 6 h2 max=True li=9 lam=12(h2,Z) | meet(x,lam)=0(h0) TopCell=False
+   x= 7 h2 max=True li=8 lam=14(h2,exit) c=4 dom=False DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=0(h0) TopCell=False
+   x= 8 h2 max=True li=8 lam=13(h2,Z) | meet(x,lam)=0(h0) TopCell=False
+   x= 9 h2 max=True li=8 lam=6(h2,Z) | meet(x,lam)=1(h1) TopCell=False
+   x=10 h2 max=True li=8 lam=14(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=4(h1) TopCell=True
+   x=11 h2 max=True li=10 lam=14(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=4(h1) TopCell=True
+   x=12 h2 max=True li=8 lam=6(h2,Z) | meet(x,lam)=0(h0) TopCell=False
+   x=13 h2 max=True li=9 lam=14(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=4(h1) TopCell=True
+   good atoms [4] | non-maximal good [4] | mu-fixed [4]
+   mu-orbit of bot [0, 2, 5] -> 2
+== cx278_breakcert_h8_n33.json[0]: n=33 H=8 W0+n1=True |Z|=12 atoms=5 M2=6 maxZ=[6, 7, 8, 9, 10, 11] d=2 h(d)=1
+   bot-descent heights [8, 6, 4, 1, 0]
+   x= 1 h1 max=False li=4 lam=9(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[6, 8]
+   x= 2 h1 max=False li=5 lam=12(h2,exit) c=4 dom=False DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=False fixed=False a=0(h0) above_in_M2=[7, 11]
+   x= 3 h1 max=False li=4 lam=9(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[6, 7, 9]
+   x= 4 h1 max=False li=5 lam=12(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=True fixed=True a=0(h0) above_in_M2=[8, 9]
+   x= 5 h1 max=False li=3 lam=2(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[10, 11]
+   x= 6 h2 max=True li=4 lam=9(h2,Z) | meet(x,lam)=3(h1) TopCell=False
+   x= 7 h2 max=True li=5 lam=12(h2,exit) c=4 dom=False DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=0(h0) TopCell=False
+   x= 8 h2 max=True li=5 lam=12(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=4(h1) TopCell=True
+   x= 9 h2 max=True li=5 lam=12(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=4(h1) TopCell=True
+   x=10 h2 max=True li=4 lam=11(h2,Z) | meet(x,lam)=5(h1) TopCell=False
+   x=11 h2 max=True li=5 lam=12(h2,exit) c=4 dom=False DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=0(h0) TopCell=False
+   good atoms [4] | non-maximal good [4] | mu-fixed [4]
+   mu-orbit of bot [0, 2, 4] -> 4
+== cx279_orbit3_h10_n31.json[0]: n=31 H=10 W0+n1=True |Z|=10 atoms=4 M2=5 maxZ=[6, 7, 8, 9, 10] d=2 h(d)=1
+   bot-descent heights [10, 5, 3, 1, 0]
+   x= 1 h1 max=False li=5 lam=5(h2,exit) c=1 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=True fixed=True a=1(h1) above_in_M2=[6, 7]
+   x= 2 h1 max=False li=3 lam=8(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[6, 8, 9]
+   x= 3 h1 max=False li=5 lam=1(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[7, 8, 10]
+   x= 4 h1 max=False li=3 lam=8(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[9]
+   x= 6 h2 max=True li=7 lam=5(h2,exit) c=1 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=1(h1) TopCell=True
+   x= 7 h2 max=True li=5 lam=5(h2,exit) c=1 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=1(h1) TopCell=True
+   x= 8 h2 max=True li=5 lam=7(h2,Z) | meet(x,lam)=3(h1) TopCell=False
+   x= 9 h2 max=True li=3 lam=8(h2,Z) | meet(x,lam)=2(h1) TopCell=False
+   x=10 h2 max=True li=6 lam=7(h2,Z) | meet(x,lam)=3(h1) TopCell=False
+   good atoms [1] | non-maximal good [1] | mu-fixed [1]
+   mu-orbit of bot [0, 2, 8, 7, 1] -> 1
+== cx280_orbit3_models.json[0]: n=30 H=8 W0+n1=True |Z|=9 atoms=4 M2=4 maxZ=[5, 7, 9, 10] d=4 h(d)=1
+   bot-descent heights [8, 5, 3, 1, 0]
+   x= 1 h1 max=False li=5 lam=6(h2,exit) c=1 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=True fixed=True a=0(h0) above_in_M2=[5]
+   x= 2 h1 max=False li=5 lam=1(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[5, 7]
+   x= 3 h1 max=False li=5 lam=6(h2,exit) c=1 dom=False DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=False fixed=False a=0(h0) above_in_M2=[9]
+   x= 4 h1 max=False li=4 lam=7(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[7, 9, 10]
+   x= 5 h2 max=True li=6 lam=6(h2,exit) c=1 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=1(h1) TopCell=True
+   x= 7 h2 max=True li=6 lam=5(h2,Z) | meet(x,lam)=2(h1) TopCell=False
+   x= 9 h2 max=True li=6 lam=6(h2,exit) c=1 dom=False DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=3(h1) TopCell=False
+   x=10 h2 max=True li=5 lam=2(h1,Z) | meet(x,lam)=0(h0) TopCell=False
+   good atoms [1] | non-maximal good [1] | mu-fixed [1]
+   mu-orbit of bot [0, 4, 7, 5, 1] -> 1
+== cx280_orbit3_models.json[1]: n=39 H=8 W0+n1=True |Z|=16 atoms=6 M2=9 maxZ=[7, 8, 9, 10, 11, 12, 13, 15, 16] d=4 h(d)=1
+   bot-descent heights [8, 5, 3, 1, 0]
+   x= 1 h1 max=False li=4 lam=5(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[7, 8, 10]
+   x= 2 h1 max=False li=4 lam=5(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[7, 9, 11, 12]
+   x= 3 h1 max=False li=4 lam=4(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[8, 9, 15]
+   x= 4 h1 max=False li=4 lam=13(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[10, 11, 13]
+   x= 5 h1 max=False li=4 lam=16(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[12, 13, 16]
+   x= 6 h1 max=False li=6 lam=14(h2,exit) c=6 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=True fixed=True a=0(h0) above_in_M2=[15, 16]
+   x= 7 h2 max=True li=6 lam=16(h2,Z) | meet(x,lam)=0(h0) TopCell=False
+   x= 8 h2 max=True li=5 lam=13(h2,Z) | meet(x,lam)=0(h0) TopCell=False
+   x= 9 h2 max=True li=6 lam=16(h2,Z) | meet(x,lam)=0(h0) TopCell=False
+   x=10 h2 max=True li=6 lam=5(h1,Z) | meet(x,lam)=0(h0) TopCell=False
+   x=11 h2 max=True li=6 lam=16(h2,Z) | meet(x,lam)=0(h0) TopCell=False
+   x=12 h2 max=True li=6 lam=16(h2,Z) | meet(x,lam)=5(h1) TopCell=False
+   x=13 h2 max=True li=6 lam=16(h2,Z) | meet(x,lam)=5(h1) TopCell=False
+   x=15 h2 max=True li=6 lam=14(h2,exit) c=6 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=6(h1) TopCell=True
+   x=16 h2 max=True li=6 lam=14(h2,exit) c=6 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=6(h1) TopCell=True
+   good atoms [6] | non-maximal good [6] | mu-fixed [6]
+   mu-orbit of bot [0, 4, 13, 16, 6] -> 6
+== cx280_orbit3_models.json[2]: n=34 H=9 W0+n1=True |Z|=11 atoms=6 M2=4 maxZ=[2, 10, 11, 12, 13] d=3 h(d)=1
+   bot-descent heights [9, 5, 3, 1, 0]
+   x= 1 h1 max=False li=6 lam=9(h2,exit) c=1 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=True fixed=True a=9(h2) above_in_M2=[10, 13]
+   x= 2 h1 max=True li=6 lam=9(h2,exit) c=1 dom=False DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=False fixed=False a=9(h2) above_in_M2=[]
+   x= 3 h1 max=False li=4 lam=11(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[11]
+   x= 4 h1 max=False li=3 lam=11(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[12]
+   x= 5 h1 max=False li=4 lam=10(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[10, 11, 12]
+   x= 6 h1 max=False li=3 lam=11(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[13]
+   x=10 h2 max=True li=7 lam=9(h2,exit) c=1 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=1(h1) TopCell=True
+   x=11 h2 max=True li=5 lam=10(h2,Z) | meet(x,lam)=5(h1) TopCell=False
+   x=12 h2 max=True li=6 lam=10(h2,Z) | meet(x,lam)=5(h1) TopCell=False
+   x=13 h2 max=True li=7 lam=9(h2,exit) c=1 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=1(h1) TopCell=True
+   good atoms [1] | non-maximal good [1] | mu-fixed [1]
+   mu-orbit of bot [0, 3, 11, 10, 1] -> 1
+== cx280_orbit3_models.json[3]: n=46 H=9 W0+n1=True |Z|=15 atoms=6 M2=8 maxZ=[7, 9, 10, 11, 14, 15, 16, 17] d=2 h(d)=1
+   bot-descent heights [9, 5, 3, 1, 0]
+   x= 1 h1 max=False li=7 lam=13(h2,exit) c=4 dom=False DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=False fixed=False a=13(h2) above_in_M2=[10]
+   x= 2 h1 max=False li=4 lam=6(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[7, 9, 11, 14]
+   x= 3 h1 max=False li=3 lam=14(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[9, 15]
+   x= 4 h1 max=False li=5 lam=13(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=True fixed=True a=0(h0) above_in_M2=[10, 11, 16]
+   x= 5 h1 max=False li=4 lam=16(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[17]
+   x= 6 h1 max=False li=4 lam=16(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[14, 15, 16, 17]
+   x= 7 h2 max=True li=5 lam=16(h2,Z) | meet(x,lam)=0(h0) TopCell=False
+   x= 9 h2 max=True li=5 lam=14(h2,Z) | meet(x,lam)=2(h1) TopCell=False
+   x=10 h2 max=True li=7 lam=13(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=4(h1) TopCell=True
+   x=11 h2 max=True li=5 lam=13(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=4(h1) TopCell=True
+   x=14 h2 max=True li=7 lam=4(h1,Z) | meet(x,lam)=0(h0) TopCell=False
+   x=15 h2 max=True li=5 lam=16(h2,Z) | meet(x,lam)=6(h1) TopCell=False
+   x=16 h2 max=True li=6 lam=13(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=4(h1) TopCell=True
+   x=17 h2 max=True li=5 lam=4(h1,Z) | meet(x,lam)=0(h0) TopCell=False
+   good atoms [4] | non-maximal good [4] | mu-fixed [4]
+   mu-orbit of bot [0, 2, 6, 16, 4] -> 4
+== cx280_orbit3_models.json[4]: n=38 H=9 W0+n1=True |Z|=14 atoms=5 M2=8 maxZ=[6, 7, 8, 10, 11, 12, 13, 14] d=5 h(d)=1
+   bot-descent heights [9, 6, 3, 1, 0]
+   x= 1 h1 max=False li=3 lam=13(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[6, 12]
+   x= 2 h1 max=False li=4 lam=10(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[6, 7, 8, 10, 13, 14]
+   x= 3 h1 max=False li=4 lam=10(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[8]
+   x= 4 h1 max=False li=5 lam=9(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=True fixed=True a=0(h0) above_in_M2=[10, 11]
+   x= 5 h1 max=False li=4 lam=2(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[12, 13]
+   x= 6 h2 max=True li=5 lam=4(h1,Z) | meet(x,lam)=0(h0) TopCell=False
+   x= 7 h2 max=True li=4 lam=10(h2,Z) | meet(x,lam)=2(h1) TopCell=False
+   x= 8 h2 max=True li=4 lam=10(h2,Z) | meet(x,lam)=2(h1) TopCell=False
+   x=10 h2 max=True li=5 lam=9(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=4(h1) TopCell=True
+   x=11 h2 max=True li=5 lam=9(h2,exit) c=4 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=4(h1) TopCell=True
+   x=12 h2 max=True li=5 lam=13(h2,Z) | meet(x,lam)=5(h1) TopCell=False
+   x=13 h2 max=True li=4 lam=10(h2,Z) | meet(x,lam)=2(h1) TopCell=False
+   x=14 h2 max=True li=4 lam=10(h2,Z) | meet(x,lam)=2(h1) TopCell=False
+   good atoms [4] | non-maximal good [4] | mu-fixed [4]
+   mu-orbit of bot [0, 5, 2, 10, 4] -> 4
+== cx280_orbit3_models.json[5]: n=33 H=9 W0+n1=True |Z|=10 atoms=4 M2=5 maxZ=[5, 6, 8, 9, 10] d=4 h(d)=1
+   bot-descent heights [9, 5, 3, 1, 0]
+   x= 1 h1 max=False li=4 lam=6(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[5, 6, 8]
+   x= 2 h1 max=False li=7 lam=3(h1,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[5, 9]
+   x= 3 h1 max=False li=5 lam=7(h2,exit) c=3 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | GOOD=True fixed=True a=0(h0) above_in_M2=[6, 10]
+   x= 4 h1 max=False li=5 lam=8(h2,Z) | GOOD=False fixed=False a=0(h0) above_in_M2=[8, 9, 10]
+   x= 5 h2 max=True li=7 lam=6(h2,Z) | meet(x,lam)=1(h1) TopCell=False
+   x= 6 h2 max=True li=7 lam=7(h2,exit) c=3 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=3(h1) TopCell=True
+   x= 8 h2 max=True li=6 lam=6(h2,Z) | meet(x,lam)=1(h1) TopCell=False
+   x= 9 h2 max=True li=7 lam=6(h2,Z) | meet(x,lam)=0(h0) TopCell=False
+   x=10 h2 max=True li=7 lam=7(h2,exit) c=3 dom=True DL(c,lam)=True cell c<=F(c,lam)=True | meet(x,lam)=3(h1) TopCell=True
+   good atoms [3] | non-maximal good [3] | mu-fixed [3]
+   mu-orbit of bot [0, 4, 8, 6, 3] -> 3

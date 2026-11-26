@@ -1,0 +1,22 @@
+s278_breakcert_h8.json#0 br=b x=2(h1) p=12 p>=x:False c=4 lam(c)=12 c-exits:True orbit(c)=[4] ends-fixed:True
+s278_breakcert_h8.json#0 br=b x=7(h2) p=12 p>=x:False c=4 lam(c)=12 c-exits:True orbit(c)=[4] ends-fixed:True
+s278_breakcert_h8.json#0 br=b x=11(h2) p=12 p>=x:False c=4 lam(c)=12 c-exits:True orbit(c)=[4] ends-fixed:True
+s278_orbitdom_h8.json#0 br=b x=6(h2) p=12 p>=x:False c=4 lam(c)=12 c-exits:True orbit(c)=[4] ends-fixed:True
+s278_orbitdom_h8.json#0 br=b x=7(h2) p=12 p>=x:False c=4 lam(c)=12 c-exits:True orbit(c)=[4] ends-fixed:True
+s279_exactdrop_h8.json#0 br=b x=0(h0) p=6 p>=x:True c=3 lam(c)=7 c-exits:False orbit(c)=[3, 7, 2] ends-fixed:True
+s280_orbit3_six_models.json#0 br=b x=3(h1) p=6 p>=x:True c=1 lam(c)=6 c-exits:True orbit(c)=[1] ends-fixed:True
+s280_orbit3_six_models.json#0 br=b x=9(h2) p=6 p>=x:False c=1 lam(c)=6 c-exits:True orbit(c)=[1] ends-fixed:True
+s280_orbit3_six_models.json#2 br=b x=2(h1) p=9 p>=x:False c=1 lam(c)=9 c-exits:True orbit(c)=[1] ends-fixed:True
+s280_orbit3_six_models.json#3 br=b x=1(h1) p=13 p>=x:False c=4 lam(c)=13 c-exits:True orbit(c)=[4] ends-fixed:True
+s281_botorbit_cycle_h12.json#0 br=b x=7(h2) p=14 p>=x:False c=4 lam(c)=14 c-exits:True orbit(c)=[4] ends-fixed:True
+s282_goodfix_h12.json#0 br=a x=1(h1) p=4 p>=x:True c=2 lam(c)=4 c-exits:True orbit(c)=[2] ends-fixed:True
+s282_onegood_h12.json#0 br=a x=1(h1) p=4 p>=x:True c=2 lam(c)=4 c-exits:True orbit(c)=[2] ends-fixed:True
+s282_maxidx2_h12.json#0 br=a x=4(h2) p=3 p>=x:False c=1 lam(c)=3 c-exits:True orbit(c)=[1] ends-fixed:True
+s282_topabsorb_h10.json#0 br=a x=11(h2) p=6 p>=x:False c=1 lam(c)=5 c-exits:False orbit(c)=[1, 5, 2] ends-fixed:True
+s276_maxexitfix.json#0 br=a x=3(h1) p=4 p>=x:False c=1 lam(c)=2 c-exits:False orbit(c)=[1, 2] ends-fixed:True
+s276_linkfix.json#0 br=a x=12(h2) p=5 p>=x:False c=1 lam(c)=4 c-exits:False orbit(c)=[1, 4] ends-fixed:True
+s285_goodtofix_h10.json#0 br=a x=2(h1) p=8 p>=x:True c=4 lam(c)=11 c-exits:False orbit(c)=[4, 11, 5] ends-fixed:True
+s288_fixbelowd_h10.json#0 br=a x=6(h1) p=14 p>=x:False c=1 lam(c)=14 c-exits:True orbit(c)=[1] ends-fixed:True
+s288_fixbelowd_h10.json#0 br=a x=10(h2) p=14 p>=x:False c=1 lam(c)=14 c-exits:True orbit(c)=[1] ends-fixed:True
+s288_fixbelowd_h10.json#0 br=a x=13(h2) p=14 p>=x:False c=1 lam(c)=14 c-exits:True orbit(c)=[1] ends-fixed:True
+non-certifying exits 21 whose exit atom orbit reaches a fixed atom 21

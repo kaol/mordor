@@ -1,0 +1,10 @@
+  mutZ FAIL on certrole2_nofix_onlyD2_min9.json#0 (n=9, H=4, branch b)
+  mutZ FAIL on certrole2_nogood_noTb2_min9.json#0 (n=9, H=4, branch a)
+  mutZ FAIL on certrole2_nogood_noTbD_min9.json#0 (n=9, H=4, branch a)
+  mutZ FAIL on certrole2_nogood_onlyD2_min9.json#0 (n=9, H=4, branch b)
+  mutZ FAIL on certrole2_nogood_onlyD_min9.json#0 (n=9, H=4, branch b)
+  mutZ FAIL on certrole3_exitnofix_noTb2_min10.json#0 (n=10, H=5, branch b)
+  mutZ FAIL on lead_lead_noTb2_min12.json#0 (n=12, H=5, branch a)
+replay | world W0b | [hypothesis NoFix false (pass), NoFix and conclusion holds, FAIL]
+  lead [30, 15, 0]
+  mutZ [30, 8, 7]

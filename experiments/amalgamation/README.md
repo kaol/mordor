@@ -152,3 +152,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁸⁶: `orbit_probe.py` filter `maxn N`, relaxation flag `xfix`. Pushes of AtMost1Fix and FixMax. Output `out_direct286.txt`.
 - §34.3z²⁸⁷: `companion_probe.py` (semi / comp / compd / gap / gapd): the companion hypothesis b ≤ t_a fails to give CL on every lattice of `sweep 4 8`.
 - §34.3z²⁸⁸: `orbit_probe.py` relaxation `TbNotD`, modes `fixnotd` (FixBelowD) / `landnotd` (LandBelowD), branch flags Ba / Bb fixed (unit clauses). Bank `s288_*`. Counterexample mins not yet banked live in `holding/` (git-ignored, never deleted).
+- §34.3z²⁸⁹: brief run 16 archived in `brief289/` (testers `certrole*.py`, `lead_probe.py`, `lead2_probe.py`; runs 1–5). `orbit_probe.py` modes `goodtop` / `Mgoodtop` (GoodTop and its calibrated mutant OwnZCell; use with `Ta2` = W0♭). Worker output `out_worker289.txt`. Bank `s289_ownzcell_*` (relaxed world).

@@ -1,0 +1,6 @@
+bank replay CertAtom | over every banked model of W0 + n1 | FAIL = the statement is false on that model
+  CertAtom: {'pass': 30, 'FAIL': 0, 'outside hypothesis': 0, 'not W0+n1': 12}
+bank replay GoodAtom1 | over every banked model of W0 + n1 | FAIL = the statement is false on that model
+  GoodAtom1: {'pass': 30, 'FAIL': 0, 'outside hypothesis': 0, 'not W0+n1': 12}
+bank replay atmost1fix.py | over every banked model of W0 + n1 | FAIL = the statement is false on that model
+  atmost1fix.py: {'pass': 30, 'FAIL': 0, 'outside hypothesis': 0, 'not W0+n1': 12}

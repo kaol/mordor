@@ -165,6 +165,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
   **`topCell_iff_goodBelow`** (Lemma T: TopCell ⟺ a good atom below the row), **`certAt_of_fixed_below`** (Lemma D);
   §34.3z²⁸³: **`fixedBelow_of_exitDom`** (TopCert ⟹ FixBelow; with Lemma D, TopCert ⟺ a μ-fixed atom below M2).
   §34.3z²⁸⁵: **`goodUp`** (rows above a good atom exit), **`goodCell_dichotomy`**, **`ta_iff_lands`** (Ta ⟺ landing).
+  §34.3z²⁸⁹: `fixed_or_stall_of_good`, **`goodAtom1_iff_fixed_or_stall`** (N1: GoodAtom1 ⟺ CertAtom ∨ StallExit), **`selfLow`**,
+  `GoodTop` (run-16 lead, conjecture), **`certAtom_of_goodTop`** (GoodTop ⟹ CertAtom in W0).
 * §34.3z²⁷⁶: **`upTrap_stay`**, **`upTrap_land`** (UpLand: rows above a certified atom land with it), `break_in_Z`,
   **`breakExists`** (the level-0 trap's breakpoint lies in Z), **`goodAtom_of_greatestZ`** (TopZ).
 * §34.3z²⁷⁴: **`trap_of_tb`**, **`domCoLand`** (a dominated row lands where its dominator does), `tb_of_tight`, **`exitFixed_of_dom`**.
@@ -5899,6 +5901,111 @@ theorem ta_iff_lands {H : ℕ} (hn : NoChain α (H + 1)) (x : α) :
     have h1 : y ≤ (F x)^[i] (⊤ : α) := (le_a (F := F) hpost).trans (a_le_rowDesc (F := F) x i)
     have := (height_strictMono hn).monotone h1
     omega
+
+
+/-! ### §34.3z²⁸⁹ Run-16 ladder audit (N1) and the GoodTop transfer
+
+`fixed_or_stall_of_good` / `goodAtom1_iff_fixed_or_stall` (N1): a good atom of `R_1` is μ-fixed at its landing or
+stalls there (`a(q) = λ(q)`), so GoodAtom1 ⟺ CertAtom ∨ StallExit. `selfLow`: with Tb at the atom rows and ZT only (no
+tightness at the height-2 row), a row `m ∈ R_1` of height 2 that lands at or below `m` lands at `m`. `GoodTop` is the
+run-16 lead, a conjecture stated in the world W0♭ (W0 with Tb dropped at the height-2 rows); `certAtom_of_goodTop` is its
+payoff: GoodTop gives CertAtom in W0, because W0 ⊆ W0♭ and no height-2 element of `R_1` is good in W0
+(`not_good_of_ahead`). -/
+
+/-- **N1, forward.** A good atom `q ∈ R_1` lands at `p = (F q)^[j] ⊤` of height 2 with `q < p` and `F(⊥, p) ≠ ⊥`, and
+either `F(⊥, p) = q` (μ-fixed) or `a(q) = p` (the stall). -/
+theorem fixed_or_stall_of_good {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    (htop : 2 < height H (⊤ : α)) {q : α} (hqR : q ∈ Rk F 1) (hq : height H q = 1) (hg : IsGood F q) :
+    ∃ j, height H ((F q)^[j] (⊤ : α)) = 2 ∧ (∀ i < j, 2 < height H ((F q)^[i] (⊤ : α))) ∧
+      q < (F q)^[j] (⊤ : α) ∧ F ⊥ ((F q)^[j] (⊤ : α)) ≠ ⊥ ∧
+      (F ⊥ ((F q)^[j] (⊤ : α)) = q ∨ a F q = (F q)^[j] (⊤ : α)) := by
+  obtain ⟨p, hp, hcell, hqp, hex, j, hj, hmin⟩ := goodUp hn hk2 htop hqR hq le_rfl hg
+  have hle : F q p ≤ p := by
+    have := rowIter_succ_le (le_top : F q (⊤ : α) ≤ ⊤) j
+    rw [Function.iterate_succ_apply', hj] at this; exact this
+  have hqlt : q < p := lt_of_le_of_ne hqp (fun e => by rw [e] at hq; omega)
+  refine ⟨j, by rw [hj]; exact hp, hmin, by rw [hj]; exact hqlt, by rw [hj]; exact hex, ?_⟩
+  rw [hj]
+  rcases goodCell_dichotomy hn hq hp hcell hle hex with h | ⟨-, h⟩
+  · exact Or.inr (le_antisymm ((a_le_rowDesc (F := F) q j).trans (le_of_eq hj)) (le_a (F := F) h.ge))
+  · exact Or.inl h
+
+/-- **N1.** In W0 (with `h(⊤) ≥ 3`): GoodAtom1's conclusion holds iff some atom of `R_1` is μ-fixed at its landing
+(CertAtom) or stalls (`q < a(q)`, StallExit). -/
+theorem goodAtom1_iff_fixed_or_stall {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2)
+    (ha : a F ⊥ = ⊥) (htop : 2 < height H (⊤ : α)) :
+    (∃ q ∈ Rk F 1, height H q = 1 ∧ IsGood F q) ↔
+      ∃ q ∈ Rk F 1, height H q = 1 ∧ ((∃ j, height H ((F q)^[j] (⊤ : α)) ≤ 2 ∧
+        (∀ i < j, 2 < height H ((F q)^[i] (⊤ : α))) ∧ F ⊥ ((F q)^[j] (⊤ : α)) = q) ∨ q < a F q) := by
+  constructor
+  · rintro ⟨q, hqR, hq, hg⟩
+    obtain ⟨j, hp, hmin, hqlt, -, hfs⟩ := fixed_or_stall_of_good hn hk2 htop hqR hq hg
+    refine ⟨q, hqR, hq, ?_⟩
+    rcases hfs with h | h
+    · exact Or.inl ⟨j, by omega, hmin, h⟩
+    · exact Or.inr (h ▸ hqlt)
+  · rintro ⟨q, hqR, hq, h | h⟩
+    · obtain ⟨j, hj, hmin, hfix⟩ := h
+      have hq0 : q ≠ ⊥ := fun e => by rw [e, height_bot_eq_zero] at hq; omega
+      exact ⟨q, hqR, (goodAtom_of_exitFixed hn hk2 ha hqR htop hj hmin hfix hq0)⟩
+    · exact ⟨q, hqR, hq, Or.inl h.le⟩
+
+/-- **SelfLow.** With ZT and Tb at the atom rows of `R_1` (no tightness assumed at the row `m`): a row `m ∈ R_1` of
+height 2 whose landing lies below `m` lands at `m` itself. -/
+theorem selfLow {H : ℕ} (hn : NoChain α (H + 1)) (hZT : ∀ z ∈ Rk F 1, height H z ≤ 2)
+    (hTb1 : ∀ q ∈ Rk F 1, height H q = 1 → ∀ y, 2 < height H y → ¬ F q y ≤ q)
+    (htop : 2 < height H (⊤ : α)) {m : α} {i : ℕ} (hmR : m ∈ Rk F 1) (hm : height H m = 2)
+    (hi : height H ((F m)^[i] (⊤ : α)) ≤ 2) (hmin : ∀ j < i, 2 < height H ((F m)^[j] (⊤ : α)))
+    (hle : (F m)^[i] (⊤ : α) ≤ m) : (F m)^[i] (⊤ : α) = m := by
+  obtain ⟨k, rfl⟩ : ∃ k, i = k + 1 := ⟨i - 1, by have := land_index_pos htop hi; omega⟩
+  have hrh : 2 < height H ((F m)^[k] (⊤ : α)) := hmin k (by omega)
+  rw [Function.iterate_succ_apply'] at hle ⊢
+  by_contra hne
+  have h1 := height_strictMono hn (lt_of_le_of_ne hle hne)
+  by_cases hb : F m ((F m)^[k] (⊤ : α)) = ⊥
+  · have hr0 : F ⊥ ((F m)^[k] (⊤ : α)) ≤ ⊥ := by
+      exact hb ▸ ((F.mono (bot_le : ⊥ ≤ m)) ((F m)^[k] (⊤ : α)) : F ⊥ ((F m)^[k] (⊤ : α)) ≤ F m ((F m)^[k] (⊤ : α)))
+    have hrR : (F m)^[k] (⊤ : α) ∈ Rk F 1 :=
+      mem_succ_of_cell (k := 0) (m := ⊥) (x := ⊥) (show (⊥ : α) ∈ Set.Iic ⊥ from le_rfl) le_rfl (Or.inl hr0)
+    have := hZT _ hrR; omega
+  · have h0 : 0 < height H (F m ((F m)^[k] (⊤ : α))) := by
+      have := height_strictMono hn (bot_lt_iff_ne_bot.2 hb); rwa [height_bot_eq_zero] at this
+    have hqR : F m ((F m)^[k] (⊤ : α)) ∈ Rk F 1 := Rk_down (F := F) 1 hle hmR
+    exact hTb1 _ hqR (by omega) _ hrh ((F.mono hle) _)
+
+/-- **GoodTop (run-16 lead; a conjecture, not a theorem).** World W0♭: `a(⊥) = ⊥`, ZT, n1, `h(⊤) ≥ 3`, Ta at every row
+of `R_1`, Tb at the rows of `R_1` of height ≤ 1. If no atom of `R_1` is μ-fixed, some height-2 row of `R_1` lands on
+itself. -/
+def GoodTop (F : α →o α →o α) (H : ℕ) : Prop :=
+  a F ⊥ = ⊥ → (∀ z ∈ Rk F 1, height H z ≤ 2) → (∃ z ∈ Rk F 1, height H z = 2) → 2 < height H (⊤ : α) →
+    (∀ x ∈ Rk F 1, ∀ y, 2 < height H y → ¬ y ≤ F x y) →
+    (∀ q ∈ Rk F 1, height H q ≤ 1 → ∀ y, 2 < height H y → ¬ F q y ≤ q) →
+    (¬ ∃ q ∈ Rk F 1, height H q = 1 ∧ ∃ i, height H ((F q)^[i] (⊤ : α)) ≤ 2 ∧
+        (∀ j < i, 2 < height H ((F q)^[j] (⊤ : α))) ∧ F ⊥ ((F q)^[i] (⊤ : α)) = q) →
+    ∃ m ∈ Rk F 1, height H m = 2 ∧ ∃ i, (F m)^[i] (⊤ : α) = m
+
+/-- **Payoff: GoodTop ⟹ CertAtom in W0.** W0 implies every hypothesis of W0♭, and in W0 no height-2 element of `R_1`
+lies on its own descent (`not_good_of_ahead` at `j = 1`). -/
+theorem certAtom_of_goodTop {H : ℕ} (hn : NoChain α (H + 1)) (hGT : GoodTop F H) (ha : a F ⊥ = ⊥)
+    (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (htR : (⊤ : α) ∉ Rk F 2) (hnt : ¬ ∀ z ∈ Rk F 1, height H z ≤ 1) :
+    ∃ q ∈ Rk F 1, height H q = 1 ∧ ∃ i, height H ((F q)^[i] (⊤ : α)) ≤ 2 ∧
+      (∀ j < i, 2 < height H ((F q)^[j] (⊤ : α))) ∧ F ⊥ ((F q)^[i] (⊤ : α)) = q := by
+  have hR12 : Rk F 1 ⊆ Rk F 2 := Rk_mono (F := F) (by norm_num)
+  have hZT : ∀ z ∈ Rk F 1, height H z ≤ 2 := fun z hz => hk2 z (hR12 hz)
+  obtain ⟨z, hzR, hz1⟩ : ∃ z ∈ Rk F 1, 1 < height H z := by
+    by_contra hc; push_neg at hc; exact hnt hc
+  have hz2 : height H z = 2 := by have := hZT z hzR; omega
+  have htop : 2 < height H (⊤ : α) := by
+    have hzt : z ≠ ⊤ := fun e => htR (e ▸ hR12 hzR)
+    have := height_strictMono hn (lt_top_iff_ne_top.2 hzt); omega
+  have hTa : ∀ x ∈ Rk F 1, ∀ y, 2 < height H y → ¬ y ≤ F x y := fun x hx y hy hc => by
+    have := hk2 y (mem_succ_of_cell (k := 1) hx le_rfl (Or.inr hc)); omega
+  have hTb : ∀ q ∈ Rk F 1, height H q ≤ 1 → ∀ y, 2 < height H y → ¬ F q y ≤ q :=
+    fun q hq _ => tb_of_tight hk2 hq
+  by_contra hno
+  obtain ⟨m, hmR, hm2, i, hi⟩ := hGT ha hZT ⟨z, hzR, hz2⟩ htop hTa hTb hno
+  have hmt : m ≠ ⊤ := fun e => by rw [e] at hm2; omega
+  exact not_good_of_ahead (j := 1) hn hk2 hmR (by omega) hmt (Or.inr ⟨i, hi⟩)
 
 end Landing
 

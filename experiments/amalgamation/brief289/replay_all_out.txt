@@ -1,0 +1,42 @@
+s277_exitbelow_h7.json#0 w0=False n=27 H=7 br=g {'fixed': [], 'stall': [], 'good': [], 'exitrows': 0, 'Z': 17}
+s277_predbelow_h6.json#0 w0=False n=21 H=6 br=g {'fixed': [], 'stall': [], 'good': [], 'exitrows': 0, 'Z': 9}
+s277_landbelow_h6.json#0 w0=False n=21 H=6 br=g {'fixed': [3], 'stall': [1], 'good': [1, 3], 'exitrows': 3, 'Z': 5}
+s277_breakdom_qr_h6.json#0 w0=False n=21 H=6 br=b {'fixed': [], 'stall': [], 'good': [], 'exitrows': 1, 'Z': 12}
+s277_instepup_h6.json#0 w0=False n=17 H=6 br=b {'fixed': [], 'stall': [], 'good': [], 'exitrows': 0, 'Z': 9}
+s277_breakdom_zt_h6.json#0 w0=False n=21 H=6 br=b {'fixed': [], 'stall': [], 'good': [], 'exitrows': 1, 'Z': 8}
+s278_breakcert_h8.json#0 w0=True n=33 H=8 br=b {'fixed': [4], 'stall': [], 'good': [4], 'exitrows': 6, 'Z': 12}
+s278_orbitdom_h8.json#0 w0=True n=33 H=8 br=b {'fixed': [4], 'stall': [], 'good': [4], 'exitrows': 4, 'Z': 10}
+s278_orbitdom_joincert_breakexit_h8.json#0 w0=True n=33 H=8 br=b {'fixed': [4], 'stall': [], 'good': [4], 'exitrows': 3, 'Z': 12}
+s279_orbit3_h8.json#0 w0=True n=33 H=8 br=b {'fixed': [4], 'stall': [], 'good': [4], 'exitrows': 3, 'Z': 10}
+s279_orbit3_h10.json#0 w0=True n=31 H=10 br=b {'fixed': [1], 'stall': [], 'good': [1], 'exitrows': 3, 'Z': 10}
+s279_exactdrop_h8.json#0 w0=True n=19 H=8 br=b {'fixed': [2], 'stall': [], 'good': [2], 'exitrows': 3, 'Z': 5}
+s279_dropprop_h5.json#0 w0=True n=16 H=5 br=g {'fixed': [3], 'stall': [], 'good': [3], 'exitrows': 2, 'Z': 8}
+s279_dropprop2_h5.json#0 w0=True n=16 H=5 br=g {'fixed': [1], 'stall': [], 'good': [1], 'exitrows': 2, 'Z': 9}
+s280_orbit3_six_models.json#0 w0=True n=30 H=8 br=b {'fixed': [1], 'stall': [], 'good': [1], 'exitrows': 4, 'Z': 9}
+s280_orbit3_six_models.json#1 w0=True n=39 H=8 br=b {'fixed': [6], 'stall': [], 'good': [6], 'exitrows': 3, 'Z': 16}
+s280_orbit3_six_models.json#2 w0=True n=34 H=9 br=b {'fixed': [1], 'stall': [1], 'good': [1], 'exitrows': 4, 'Z': 11}
+s280_orbit3_six_models.json#3 w0=True n=46 H=9 br=b {'fixed': [4], 'stall': [], 'good': [4], 'exitrows': 5, 'Z': 15}
+s280_orbit3_six_models.json#4 w0=True n=38 H=9 br=b {'fixed': [4], 'stall': [], 'good': [4], 'exitrows': 3, 'Z': 14}
+s280_orbit3_six_models.json#5 w0=True n=33 H=9 br=b {'fixed': [3], 'stall': [], 'good': [3], 'exitrows': 3, 'Z': 10}
+s281_botorbit_cycle_h12.json#0 w0=True n=59 H=12 br=b {'fixed': [4], 'stall': [], 'good': [4], 'exitrows': 5, 'Z': 14}
+s282_goodfix_h12.json#0 w0=True n=32 H=12 br=a {'fixed': [2], 'stall': [1], 'good': [1, 2], 'exitrows': 3, 'Z': 4}
+s282_onegood_h12.json#0 w0=True n=32 H=12 br=a {'fixed': [2], 'stall': [1], 'good': [1, 2], 'exitrows': 5, 'Z': 6}
+s282_maxidx2_h12.json#0 w0=True n=27 H=12 br=a {'fixed': [1], 'stall': [], 'good': [1], 'exitrows': 3, 'Z': 5}
+s282_topabsorb_h10.json#0 w0=True n=27 H=10 br=a {'fixed': [2], 'stall': [], 'good': [2], 'exitrows': 4, 'Z': 8}
+s276_breakfix.json#0 w0=True n=21 H=6 br=b {'fixed': [4], 'stall': [], 'good': [4], 'exitrows': 3, 'Z': 6}
+s276_breaktrap.json#0 w0=True n=21 H=5 br=b {'fixed': [2], 'stall': [2], 'good': [2], 'exitrows': 3, 'Z': 10}
+s276_maxexitfix.json#0 w0=True n=14 H=5 br=a {'fixed': [2], 'stall': [], 'good': [2], 'exitrows': 3, 'Z': 5}
+s276_maxidx.json#0 w0=True n=15 H=5 br=a {'fixed': [3], 'stall': [], 'good': [3], 'exitrows': 2, 'Z': 7}
+s276_atomorb.json#0 w0=True n=31 H=6 br=g {'fixed': [6], 'stall': [], 'good': [6], 'exitrows': 3, 'Z': 11}
+s276_latecert.json#0 w0=True n=15 H=5 br=a {'fixed': [2], 'stall': [2], 'good': [2], 'exitrows': 2, 'Z': 8}
+s276_linkfix.json#0 w0=True n=16 H=4 br=a {'fixed': [4], 'stall': [], 'good': [4], 'exitrows': 5, 'Z': 11}
+s285_goodtofix_h10.json#0 w0=True n=34 H=10 br=a {'fixed': [5], 'stall': [2], 'good': [2, 5], 'exitrows': 5, 'Z': 11}
+s285_desctb12_h10.json#0 w0=False n=22 H=10 br=a {'fixed': [2], 'stall': [], 'good': [2], 'exitrows': 2, 'Z': 7}
+s286_atmost1fix_noTbatoms_h5.json#0 w0=False n=19 H=5 br=g {'fixed': [1, 2, 3], 'stall': [], 'good': [1, 2, 3], 'exitrows': 5, 'Z': 7}
+s287_compcl_3chain.json#0 w0=False n=3 H=2 br=g {'fixed': [1], 'stall': [1], 'good': [1], 'exitrows': 2, 'Z': 2}
+s287_compcl_dual_3chain.json#0 w0=False n=3 H=2 br=g {'fixed': [1], 'stall': [1], 'good': [1], 'exitrows': 2, 'Z': 2}
+s287_companion_weaker_than_semi_3chain.json#0 w0=False n=3 H=2 br=g {'fixed': [1], 'stall': [], 'good': [1], 'exitrows': 2, 'Z': 2}
+s287_companion_dual_weaker_3chain.json#0 w0=False n=3 H=2 br=g {'fixed': [1], 'stall': [], 'good': [1], 'exitrows': 2, 'Z': 2}
+s288_fixbelowd_h8.json#0 w0=True n=19 H=8 br=a {'fixed': [2], 'stall': [], 'good': [2], 'exitrows': 2, 'Z': 7}
+s288_fixbelowd_h10.json#0 w0=True n=29 H=10 br=a {'fixed': [1], 'stall': [1], 'good': [1], 'exitrows': 5, 'Z': 10}
+s288_landbelowd_h5.json#0 w0=True n=10 H=5 br=a {'fixed': [1], 'stall': [1], 'good': [1], 'exitrows': 3, 'Z': 5}

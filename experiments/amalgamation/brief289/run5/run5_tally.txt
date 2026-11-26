@@ -1,0 +1,5 @@
+closure 5 11 4 30: 30/30 lattices, |L| 9-27, heights [4, 5]: lead {'UNSAT': 30}; weak {'UNSAT(implied': 30}; mutZ {'SAT(a)': 21, 'SAT(atom)': 9}
+tall 8 4 1 12: 12/12 lattices, |L| 16-33, heights [8]: lead {'UNSAT': 12}; weak {'UNSAT(implied': 12}; mutZ {'SAT(a)': 8, 'SAT(atom)': 4}
+tall 10 4 2 20: 20/20 lattices, |L| 22-50, heights [10]: lead {'UNSAT': 20}; weak {'UNSAT(implied': 20}; mutZ {'SAT(a)': 12, 'SAT(atom)': 8}
+tall 12 4 1 8: 8/8 lattices, |L| 27-59, heights [12]: lead {'UNSAT': 8}; weak {'UNSAT(implied': 8}; mutZ {'SAT(a)': 6, 'SAT(atom)': 2}
+tall 10 6 1 8: 8/8 lattices, |L| 35-66, heights [10]: lead {'UNSAT': 8}; weak {'UNSAT(implied': 8}; mutZ {'SAT(a)': 7, 'SAT(atom)': 1}

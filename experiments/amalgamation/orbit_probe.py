@@ -38,6 +38,8 @@ SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= 
              'fixmax': 'd is not a good atom and some mu-fixed atom of Z lies below no height-2 element of Z (FixMax fails)',
              'goodnonmax': 'CALIBRATED MUTANT (GoodNonMax): d is not a good atom and some good atom of Z lies below no height-2 element of Z',
              'fixnotd': 'some mu-fixed atom of Z is not below d (FixBelowD fails; use with Ba)',
+             'goodtop': 'no atom of Z is exit-fixed (lambda(q) not in Z, F(bot, lambda(q)) = q) and no m in Z of height 2 has lambda(m) = m (GoodTop fails; use with Ta2 = W0-flat)',
+             'Mgoodtop': 'CALIBRATED MUTANT (OwnZCell, refuted): no atom of Z is exit-fixed and no atom q of Z has q <= F(q, z) at some height-2 z in Z on row q\'s descent',
              'landnotd': 'some exit-fixed atom q has landing p = lambda(q) not below t_(N-1), the bot-descent element before d (LandBelowD fails; use with Ba xfix)'}[MODE]
 print(f'orbit_probe {MODE} K={K}' + (f' RELAXED {sorted(REL)} (off g read as: d has no own-row cell)' if REL else '') + (f' N={NEX}' if NEX else '') + f' | SAT = {SAT_MEANS} | world (T) {"MUTANT mT" if MT else ""} | corpus {args}')
 import os
@@ -245,6 +247,21 @@ for L in lattices(args):
                     for q in own:
                         if le[q][m_]: add([-t, -own[q]])
             add(sel); sel = []
+    elif MODE in ('goodtop', 'Mgoodtop'):
+        for q in low:                                         # NoFix (exit form)
+            if h[q] != 1: continue
+            for p_ in low: add([-Z(q), -lam[q, p_], Z(p_), -f(bot, p_, q)])
+        if MODE == 'goodtop':
+            for m_ in low:
+                if h[m_] == 2: add([-Z(m_), -lam[m_, m_]])
+        else:
+            for q in low:
+                if h[q] != 1: continue
+                for j in range(NO + 1):
+                    for z in low:
+                        if h[z] != 2: continue
+                        for u in range(n):
+                            if le[q][u]: add([-Z(q), -Z(z), -it(q, j, z), -f(q, z, u)])
     elif MODE == 'orbk':
         for x in low:
             t = v('ok', x); sel.append(t); add([-t, ob(K, x)]); add([-t, -mu[x, x]])
@@ -292,6 +309,19 @@ for L in lattices(args):
             else:
                 pr = {'topcert': exdom, 'exitm2': exits, 'nmgood': gb}[base_]
                 bad = offg and (not any(pr(m_) for m_ in M2s) if MODE[0] != 'M' else any(not pr(m_) for m_ in M2s))
+        if MODE in ('goodtop', 'Mgoodtop'):                  # replay W0-flat and the statement from the definitions
+            Zs = [z for z in range(n) if F[bot][z] == bot]; hi = [y for y in range(n) if h[y] > 2]
+            wok = all(h[z] <= 2 for z in Zs) and any(h[z] == 2 for z in Zs)
+            for x in Zs:
+                for y in hi:
+                    if le[y][F[x][y]] and not (x != bot and h[x] == 2 and 'Tb2' in REL): wok = False          # Ta
+                    if le[F[x][y]][x] and not (x != bot and h[x] == 2 and 'Ta2' in REL): wok = False          # Tb
+            nofix = not any(h[q] == 1 and lamf(q) is not None and lamf(q) not in Zs and F[bot][lamf(q)] == q for q in Zs)
+            if MODE == 'goodtop': concl = any(h[m_] == 2 and lamf(m_) == m_ for m_ in Zs)
+            else: concl = any(h[q] == 1 and h[z] == 2 and z in Zs and z in desc(q) and le[q][F[q][z]] for q in Zs for z in Zs)
+            ok = ok and wok and REL <= {'Ta2'}; bad = nofix and not concl
+            dd_ = [t for t in tb if t != bot]; dd_ = dd_[-1] if dd_ else None
+            print(f'    model: branch {"a" if dd_ is not None and h[dd_] == 2 else "atom"}, N = {tb.index(dd_) if dd_ is not None else None}', flush=True)
         for k in range(1, K):
             x, y = xs[k], xs[k + 1]
             if x is None or y is None: continue

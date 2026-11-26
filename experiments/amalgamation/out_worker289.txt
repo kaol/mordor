@@ -1,0 +1,55 @@
+### gt_t13
+orbit_probe goodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) | SAT = no atom of Z is exit-fixed (lambda(q) not in Z, F(bot, lambda(q)) = q) and no m in Z of height 2 has lambda(m) = m (GoodTop fails; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '13', '4', '1', '8']
+goodtop 0  ['tall', '13', '4', '1', '8'] {'UNSAT': 8} {'h13:unsat': 8} smallest None
+### mgt_t13
+orbit_probe Mgoodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) | SAT = CALIBRATED MUTANT (OwnZCell, refuted): no atom of Z is exit-fixed and no atom q of Z has q <= F(q, z) at some height-2 z in Z on row q's descent | world (T)  | corpus ['tall', '13', '4', '1', '8']
+Mgoodtop 0  ['tall', '13', '4', '1', '8'] {'SAT': 8} {'h13': 8} smallest 33
+      2     model: branch a, N = 3
+      2     model: branch a, N = 5
+      1     model: branch a, N = 6
+      3     model: branch atom, N = 1
+### gt_t14
+orbit_probe goodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) | SAT = no atom of Z is exit-fixed (lambda(q) not in Z, F(bot, lambda(q)) = q) and no m in Z of height 2 has lambda(m) = m (GoodTop fails; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '14', '4', '2', '20', 'maxn', '45']
+goodtop 0  ['tall', '14', '4', '2', '20'] {'UNSAT': 6} {'h14:unsat': 6} smallest None
+### mgt_t14
+orbit_probe Mgoodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) | SAT = CALIBRATED MUTANT (OwnZCell, refuted): no atom of Z is exit-fixed and no atom q of Z has q <= F(q, z) at some height-2 z in Z on row q's descent | world (T)  | corpus ['tall', '14', '4', '2', '20', 'maxn', '45']
+Mgoodtop 0  ['tall', '14', '4', '2', '20'] {'SAT': 6} {'h14': 6} smallest 35
+      3     model: branch a, N = 5
+      1     model: branch a, N = 6
+      1     model: branch a, N = 7
+      1     model: branch atom, N = 1
+### gt_m7
+orbit_probe goodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) | SAT = no atom of Z is exit-fixed (lambda(q) not in Z, F(bot, lambda(q)) = q) and no m in Z of height 2 has lambda(m) = m (GoodTop fails; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '10', '7', '1', '5']
+goodtop 0  ['tall', '10', '7', '1', '5'] {'UNSAT': 5} {'h10:unsat': 5} smallest None
+### mgt_m7b
+orbit_probe Mgoodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) | SAT = CALIBRATED MUTANT (OwnZCell, refuted): no atom of Z is exit-fixed and no atom q of Z has q <= F(q, z) at some height-2 z in Z on row q's descent | world (T)  | corpus ['tall', '10', '7', '1', '5']
+Mgoodtop 0  ['tall', '10', '7', '1', '5'] {'SAT': 5} {'h10': 5} smallest 42
+      1     model: branch a, N = 4
+      1     model: branch a, N = 6
+      1     model: branch a, N = 8
+      1     model: branch atom, N = 1
+      1     model: branch atom, N = 6
+### gt_E4
+orbit_probe goodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) N=4 | SAT = no atom of Z is exit-fixed (lambda(q) not in Z, F(bot, lambda(q)) = q) and no m in Z of height 2 has lambda(m) = m (GoodTop fails; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8']
+goodtop 0  ['tall', '12', '4', '1', '8'] {'UNSAT': 8} {'h12:unsat': 8} smallest None
+### mgt_E4
+orbit_probe Mgoodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) N=4 | SAT = CALIBRATED MUTANT (OwnZCell, refuted): no atom of Z is exit-fixed and no atom q of Z has q <= F(q, z) at some height-2 z in Z on row q's descent | world (T)  | corpus ['tall', '12', '4', '1', '8']
+Mgoodtop 0  ['tall', '12', '4', '1', '8'] {'SAT': 8} {'h12': 8} smallest 27
+      1     model: branch a, N = 4
+      7     model: branch atom, N = 4
+### gt_E5
+orbit_probe goodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) N=5 | SAT = no atom of Z is exit-fixed (lambda(q) not in Z, F(bot, lambda(q)) = q) and no m in Z of height 2 has lambda(m) = m (GoodTop fails; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8']
+goodtop 0  ['tall', '12', '4', '1', '8'] {'UNSAT': 8} {'h12:unsat': 8} smallest None
+### mgt_E5
+orbit_probe Mgoodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) N=5 | SAT = CALIBRATED MUTANT (OwnZCell, refuted): no atom of Z is exit-fixed and no atom q of Z has q <= F(q, z) at some height-2 z in Z on row q's descent | world (T)  | corpus ['tall', '12', '4', '1', '8']
+Mgoodtop 0  ['tall', '12', '4', '1', '8'] {'SAT': 8} {'h12': 8} smallest 27
+      4     model: branch a, N = 5
+      4     model: branch atom, N = 5
+### gt_E6
+orbit_probe goodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) N=6 | SAT = no atom of Z is exit-fixed (lambda(q) not in Z, F(bot, lambda(q)) = q) and no m in Z of height 2 has lambda(m) = m (GoodTop fails; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8']
+goodtop 0  ['tall', '12', '4', '1', '8'] {'UNSAT': 8} {'h12:unsat': 8} smallest None
+### mgt_E6
+orbit_probe Mgoodtop K=0 RELAXED ['Ta2'] (off g read as: d has no own-row cell) N=6 | SAT = CALIBRATED MUTANT (OwnZCell, refuted): no atom of Z is exit-fixed and no atom q of Z has q <= F(q, z) at some height-2 z in Z on row q's descent | world (T)  | corpus ['tall', '12', '4', '1', '8']
+Mgoodtop 0  ['tall', '12', '4', '1', '8'] {'SAT': 8} {'h12': 8} smallest 27
+      2     model: branch a, N = 6
+      6     model: branch atom, N = 6

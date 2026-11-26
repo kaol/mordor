@@ -1,0 +1,15 @@
+# Run 4 (smoke-size, counted as a run): python3 ../lead_probe.py lead,mutA,mutB,vac noTb2 closure 5 11 4 3
+# Console output transcribed verbatim from the briefer's session (the run wrote only the JSON models to smoke/;
+# lead_lead_noTb2_min12.json was copied here).
+lead_probe lead | quantifier: exists F in W0_R with ... | SAT = NoFix and not OwnZCell in W0b (LEAD fails) | relaxations ['noTb2'] | corpus ['closure', '5', '11', '4', '3']
+lead_probe mutA | quantifier: exists F in W0_R with ... | SAT = NoFix and no own Z-cell at z = lambda(bot) (anchored mutant fails) | relaxations ['noTb2'] | corpus ['closure', '5', '11', '4', '3']
+lead_probe mutB | quantifier: exists F in W0_R with ... | SAT = NoFix and no own Z-stall (stall-only mutant fails) | relaxations ['noTb2'] | corpus ['closure', '5', '11', '4', '3']
+lead_probe vac | quantifier: exists F in W0_R with ... | SAT = NoFix has a model in W0b | relaxations ['noTb2'] | corpus ['closure', '5', '11', '4', '3']
+  lattice #1 n=12 h=5 [0s]: lead/noTb2:SAT(a) mutA/noTb2:SAT(a) mutB/noTb2:SAT(a) vac/noTb2:SAT(a)
+  lattice #2 n=14 h=5 [0s]: lead/noTb2:SAT(atom) mutA/noTb2:SAT(a) mutB/noTb2:SAT(a) vac/noTb2:SAT(a)
+  lattice #3 n=14 h=5 [0s]: lead/noTb2:SAT(a) mutA/noTb2:SAT(a) mutB/noTb2:SAT(a) vac/noTb2:SAT(a)
+SUMMARY ['closure', '5', '11', '4', '3']
+   ('lead', 'noTb2') {'SAT': 3, 'SAT_a': 2, 'SAT_atom': 1}
+   ('mutA', 'noTb2') {'SAT': 3, 'SAT_a': 3}
+   ('mutB', 'noTb2') {'SAT': 3, 'SAT_a': 3}
+   ('vac', 'noTb2') {'SAT': 3, 'SAT_a': 3}

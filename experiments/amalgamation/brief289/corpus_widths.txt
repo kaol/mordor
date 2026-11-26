@@ -1,0 +1,6 @@
+closure 5 11 4 30 : 30 lattices, |L| 9-27, heights [4, 5], width 3-9
+tall 8 4 1 12 : 12 lattices, |L| 16-33, heights [8], width 4-8
+tall 10 4 2 20 : 20 lattices, |L| 22-50, heights [10], width 5-12
+tall 12 4 1 8 : 8 lattices, |L| 27-59, heights [12], width 6-11
+tall 10 6 1 8 : 8 lattices, |L| 35-66, heights [10], width 8-19
+closure 6 12 1 40 : 40 lattices, |L| 15-38, heights [4, 5, 6], width 5-12

@@ -44,3 +44,5 @@
 | s288_fixbelowd_h8.json | FixBelowD (case a: every mu-fixed atom lies below d); the fixed atom lies below lambda(d) instead | §288 | W0+n1 | 19 | 8 | 4 | 2 | a | 4 fixed | 3 |
 | s288_fixbelowd_h10.json | FixBelowD (case a) | §288 | W0+n1 | 29 | 10 | 8 | 2 | a | 3 fixed | 4 |
 | s288_landbelowd_h5.json | LandBelowD (case a: the landing of a fixed atom lies below t_(N-1)) | §288 | W0+n1 | 10 | 5 | 3 | 2 | a | 3 fixed | 2 |
+| s289_ownzcell_h4.json | OwnZCell (W0-flat: no mu-fixed atom implies some atom has an own cell at a height-2 element of Z on its descent); calibrated mutant of GoodTop | §289 | W0flat+NoFix (Tb dropped at height-2 rows) | 9 | 4 | 4 | 1 | a | 2 fixed | 1 |
+| s289_ownzcell_h5.json | OwnZCell; atoms 3, 4 land at d = 7 and swap | §289 | W0flat+NoFix (Tb dropped at height-2 rows) | 12 | 5 | 4 | 2 | a | 2 fixed | 1 |

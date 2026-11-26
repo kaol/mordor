@@ -20,9 +20,10 @@ from pysat.solvers import Cadical153
 from tight_probe import lattices
 from rstages import stages, a_of
 MODE = sys.argv[1]; K = int(sys.argv[2]); MT = 'mT' in sys.argv[3:]
+REL = {a for a in sys.argv[3:] if a in ('Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land')}   # relaxations of (T) at rows of Z other than bot
 BR = 'a' if 'Ba' in sys.argv[3:] else ('b' if 'Bb' in sys.argv[3:] else '')   # branch: a = h(d) = 2, b = d an atom (bad)
 NEX = next((int(a[1:]) for a in sys.argv[3:] if a in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6')), 0)   # exact N: t_N != bot = t_(N+1)
-args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb') and not (a[0] == 'E' and a[1:].isdigit())]
+args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb', 'Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land') and not (a[0] == 'E' and a[1:].isdigit())]
 SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= dep of its predecessor',
              'oneexit': 'some element of the bot-orbit exits to an atom that is not a fixed point', 'vac': 'the world has a model',
              'orbk': f'mu^{K}(bot) is not a fixed point of mu (Orbit{K} fails)',
@@ -32,7 +33,9 @@ SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= 
              'Mtopcert': 'MUTANT: d is not a good atom and some m in Z of height 2 does not exit to an atom below m',
              'Mnmgood': 'MUTANT: d is not a good atom and some m in Z of height 2 has no good atom below it',
              'Mexitm2': 'MUTANT: d is not a good atom and some m in Z of height 2 does not exit'}[MODE]
-print(f'orbit_probe {MODE} K={K}' + (f' N={NEX}' if NEX else '') + f' | SAT = {SAT_MEANS} | world (T) {"MUTANT mT" if MT else ""} | corpus {args}')
+print(f'orbit_probe {MODE} K={K}' + (f' RELAXED {sorted(REL)} (off g read as: d has no own-row cell)' if REL else '') + (f' N={NEX}' if NEX else '') + f' | SAT = {SAT_MEANS} | world (T) {"MUTANT mT" if MT else ""} | corpus {args}')
+import os
+DUMPF = os.environ.get('DUMP'); DUMPL = []
 C = collections.Counter(); HH = collections.Counter(); best = None
 for L in lattices(args):
     n = L.n; le = L.le; h = L.rank; bot = L.bot; top = L.top
@@ -63,9 +66,17 @@ for L in lattices(args):
     add([Z(y) for y in range(n) if h[y] == 2])                # n1
     for x in low:                                             # (T) at rows of Z
         if MT and x != bot: continue
+        if x != bot and 'Tat' in REL and h[x] != 1: continue   # (T) only at atom rows (and bot)
+        if x != bot and 'Tm2' in REL and h[x] != 2: continue   # (T) only at height-2 rows (and bot)
         for y in range(n):
             if h[y] <= 2: continue
             for u in range(n):
+                if x != bot and 'TaOnly' in REL and not le[y][u]: continue      # keep only the upper-cell half
+                if x != bot and 'TbOnly' in REL and not le[u][x]: continue      # keep only the lower-cell half
+                if h[x] == 1 and 'Ta1' in REL and not le[y][u]: continue        # atoms: upper half only
+                if h[x] == 1 and 'Tb1' in REL and not le[u][x]: continue        # atoms: lower half only
+                if h[x] == 2 and 'Ta2' in REL and not le[y][u]: continue        # height-2 rows: upper half only
+                if h[x] == 2 and 'Tb2' in REL and not le[u][x]: continue        # height-2 rows: lower half only
                 if le[u][x] or le[y][u]: add([-Z(x), -f(x, y, u)])
     it = lambda x, j, z: v('it', x, j, z)
     for x in low:
@@ -86,6 +97,8 @@ for L in lattices(args):
             add([-o] + ls)
             for t in ls: add([-t, o])
             lam[x, p] = o
+    if 'land' in REL:                                         # every row of Z lands (as tightness gives)
+        for x in low: add([-Z(x)] + [lam[x, p_] for p_ in low])
     mu = {}
     for x in low:
         for y in low:
@@ -189,7 +202,7 @@ for L in lattices(args):
         st = stages(L, F); inR = lambda z, i: st[z] is not None and st[z] <= i
         ok = (a_of(L, F, bot) == bot and all(h[z] <= 2 for z in range(n) if inR(z, 2)) and not inR(top, 2)
               and any(h[z] > 1 for z in range(n) if inR(z, 1)))
-        if MT: ok = a_of(L, F, bot) == bot                     # mutant world: only the bot facts are guaranteed
+        if MT or REL: ok = a_of(L, F, bot) == bot              # relaxed world: only the bot facts are guaranteed
         def desc(x):
             z = top; s = []
             while z not in s: s.append(z); z = F[x][z]
@@ -207,7 +220,8 @@ for L in lattices(args):
             Zs = [z for z in range(n) if F[bot][z] == bot]
             good = lambda y: le[y][a_of(L, F, y)] or y in desc(y)          # IsGood, from the definition
             dd = [t for t in tb if t != bot][-1]
-            offg = not (h[dd] == 1 and good(dd)) and (BR != 'a' or h[dd] == 2) and (BR != 'b' or h[dd] == 1)
+            ownc = lambda y: any(h[p_] == 2 and le[y][F[y][p_]] for p_ in desc(y))            # own-row cell (= IsGood in W0)
+            offg = not (h[dd] == 1 and (ownc(dd) if REL else good(dd))) and (BR != 'a' or h[dd] == 2) and (BR != 'b' or h[dd] == 1)
             M2s = [m_ for m_ in Zs if h[m_] == 2]
             exits = lambda m_: lamf(m_) is not None and F[bot][lamf(m_)] != bot
             exdom = lambda m_: exits(m_) and le[F[bot][lamf(m_)]][m_]
@@ -223,10 +237,12 @@ for L in lattices(args):
                 if p is not None and F[bot][p] != bot and muf(F[bot][p]) != F[bot][p]: bad = True
         assert ok and bad, 'SAT/Python mismatch'
         print(f'  lattice n={n} h={L.height}: SAT', flush=True)
+        if DUMPF is not None: DUMPL.append(dict(sets=L.S, F=F))
         C['SAT'] += 1; HH[f'h{L.height}'] += 1
         if best is None or n < best[0]: best = (n, dict(sets=L.S, F=F))
     else:
         print(f'  lattice n={n} h={L.height}: UNSAT', flush=True); C['UNSAT'] += 1; HH[f'h{L.height}:unsat'] += 1
     S.delete()
+if DUMPF: json.dump(DUMPL, open(DUMPF, 'w'))
 print(MODE, K, 'mT' if MT else '', args, dict(C), dict(HH), 'smallest', best[0] if best else None)
 if best and MODE != 'vac': json.dump(best[1], open(f'orbit_probe_{MODE}{"_mT" if MT else ""}_min{best[0]}.json', 'w'))

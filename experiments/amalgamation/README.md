@@ -146,3 +146,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁸⁰: `muorbit_sat.py` generic model dump (env DUMP), `orbdep` flag cd (ChainDom), flags N4/N5/N6 (long ⊥-descent); `orbit_probe.py` mode `orbk K`. Output `out_orbit280.txt`.
 - §34.3z²⁸¹: `muorbit_sat.py` flags E1–E5 (exact N), orbdep d1 (ChainT1) and cd2 (ChainDom′); `orbit_probe.py` exact-N flags and per-lattice output; `tight_probe.py` corpus `file PATH`. Counterexample `cx281_botorbit_cycle_h12_n59.json` (BotOrbit fails: the ⊥-orbit cycles). Output `out_orbit281.txt`.
 - §34.3z²⁸²: `orbit_probe.py` modes topcert / nmgood / exitm2 and mutants Mtopcert / Mnmgood / Mexitm2 (goodness in own-cell form; replay from IsGood), branch flags Ba / Bb. Worker re-runs of brief run 14. Output `out_brief282.txt`.
+- §34.3z²⁸³: `orbit_probe.py` model dump (env DUMP) and (T) relaxations Tat / Tm2 / TaOnly / TbOnly / Ta1 / Tb1 / Ta2 / Tb2 / land. Output `out_direct283.txt`.

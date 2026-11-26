@@ -162,7 +162,8 @@ ChatGPT brief "Eliminate late-parent ancestry" (HEAD 19c5e82).
 * §34.3z²⁶⁷: `eq_atom_of_le_meet`, **`cov_of_baseD`**, `preDrop_of_baseD` (Cov, PreDrop and the landing step from BaseD: F(⊥, t) ≤ d),
   `lastIdx_ge`, **`baseD_of_rowDrop`** (BaseD from RowDrop: F(⊥, (F d)^(N−1) ⊤) ≤ d).
 * §34.3z²⁸²: `land_of_good_below` (a good atom below a row of R_1 pins its landing), **`good_atom_unique_below`** (Lemma U),
-  **`topCell_iff_goodBelow`** (Lemma T: TopCell ⟺ a good atom below the row), **`certAt_of_fixed_below`** (Lemma D).
+  **`topCell_iff_goodBelow`** (Lemma T: TopCell ⟺ a good atom below the row), **`certAt_of_fixed_below`** (Lemma D);
+  §34.3z²⁸³: **`fixedBelow_of_exitDom`** (TopCert ⟹ FixBelow; with Lemma D, TopCert ⟺ a μ-fixed atom below M2).
 * §34.3z²⁷⁶: **`upTrap_stay`**, **`upTrap_land`** (UpLand: rows above a certified atom land with it), `break_in_Z`,
   **`breakExists`** (the level-0 trap's breakpoint lies in Z), **`goodAtom_of_greatestZ`** (TopZ).
 * §34.3z²⁷⁴: **`trap_of_tb`**, **`domCoLand`** (a dominated row lands where its dominator does), `tb_of_tight`, **`exitFixed_of_dom`**.
@@ -5816,6 +5817,21 @@ theorem certAt_of_fixed_below {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z �
   have ham : height H (a F m) ≤ 2 := hk2 _ (by simpa using aIter_mem (F := F) hm 1)
   obtain ⟨j, hj, hmin⟩ := upTrap_land hn hk hp hq le_rfl hqp (tb_of_tight hk2 hqR) hqm ham
   exact ⟨j, hj, hmin, by rw [hj, hqb]; exact hqm⟩
+
+/-- **TopCert ⟹ FixBelow** (with `certAt_of_fixed_below`, TopCert ⟺ FixBelow). A row `m ∈ R_1` that exits to an atom below
+itself puts a μ-fixed atom below `m`: the exit atom `q = F(⊥, λ(m))` lies in `R_1`, has height 1, and row `q` lands at
+`λ(m)` with `F(⊥, λ(q)) = q`. -/
+theorem fixedBelow_of_exitDom {H : ℕ} (hn : NoChain α (H + 1)) (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (ha : a F ⊥ = ⊥)
+    (htop : 2 < height H (⊤ : α)) {m : α} {j : ℕ} (hm : m ∈ Rk F 1) (hj : height H ((F m)^[j] (⊤ : α)) ≤ 2)
+    (hmin : ∀ i < j, 2 < height H ((F m)^[i] (⊤ : α))) (hex : F ⊥ ((F m)^[j] (⊤ : α)) ≠ ⊥)
+    (hdom : F ⊥ ((F m)^[j] (⊤ : α)) ≤ m) :
+    height H (F ⊥ ((F m)^[j] (⊤ : α))) = 1 ∧ F ⊥ ((F m)^[j] (⊤ : α)) ∈ Rk F 1 ∧
+      ∃ k, (F (F ⊥ ((F m)^[j] (⊤ : α))))^[k] (⊤ : α) = (F m)^[j] (⊤ : α) ∧
+        (∀ i < k, 2 < height H ((F (F ⊥ ((F m)^[j] (⊤ : α))))^[i] (⊤ : α))) ∧
+        F ⊥ ((F (F ⊥ ((F m)^[j] (⊤ : α))))^[k] (⊤ : α)) = F ⊥ ((F m)^[j] (⊤ : α)) := by
+  obtain ⟨hp, hq, -⟩ := exit_atom hn hk2 ha hm htop hj hmin hex
+  have hqR : F ⊥ ((F m)^[j] (⊤ : α)) ∈ Rk F 1 := Rk_down (F := F) 1 hdom hm
+  exact ⟨hq, hqR, exitFixed_of_dom hn hk2 rfl hp hq hqR hdom rfl⟩
 
 end Landing
 

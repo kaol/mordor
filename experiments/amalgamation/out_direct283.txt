@@ -1,0 +1,10 @@
+§34.3z²⁸³ direct round on TopExit (orbit_probe.py; exact; every SAT model replayed). SAT(topcert) = d not a good atom and no m in Z of height 2 exits to an atom below m.
+  [tc13] topcert 1  ['tall', '13', '4', '1', '8'] {'UNSAT': 8} {'h13:unsat': 8} smallest None
+  [mtc13] Mtopcert 1  ['tall', '13', '4', '1', '8'] {'SAT': 7, 'UNSAT': 1} {'h13': 7, 'h13:unsat': 1} smallest 33
+  [tc10w6] topcert 1  ['tall', '10', '6', '1', '8'] {'UNSAT': 8} {'h10:unsat': 8} smallest None
+  [mtc10w6] Mtopcert 1  ['tall', '10', '6', '1', '5'] {'SAT': 5} {'h10': 5} smallest 35
+  [rel10_tbland] topcert 1  ['tall', '10', '4', '2', '20'] {'UNSAT': 20} {'h10:unsat': 20} smallest None
+  [rel10_ta2land] topcert 1  ['tall', '10', '4', '2', '20'] {'SAT': 20} {'h10': 20} smallest 22
+  [dump10] Mtopcert 1  ['tall', '10', '4', '2', '20'] {'SAT': 15, 'UNSAT': 5} {'h10': 15, 'h10:unsat': 5} smallest 22
+  height 5 (closure 5 11 4 30) relaxations: Tat, Tm2, TaOnly, TbOnly, Ta1, Tb1, Ta2, Tb2: SAT 30 each;
+    with land: Tat SAT 30, Tm2 SAT 30, Ta1 SAT 30, Ta2 SAT 30, Tb1 UNSAT 30, Tb2 UNSAT 30, TbOnly UNSAT 30, land alone UNSAT 30.

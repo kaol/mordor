@@ -236,5 +236,26 @@
   "section": "\u00a7287",
   "world": "thin model, no level-1 world (CL setting)",
   "source": "companion_probe.py gapd sweep 4 8"
+ },
+ {
+  "file": "s288_fixbelowd_h8.json",
+  "statement": "FixBelowD (case a: every mu-fixed atom lies below d); the fixed atom lies below lambda(d) instead",
+  "section": "\u00a7288",
+  "world": "W0+n1",
+  "source": "orbit_probe.py fixnotd tall 8 4 1 12 Ba"
+ },
+ {
+  "file": "s288_fixbelowd_h10.json",
+  "statement": "FixBelowD (case a)",
+  "section": "\u00a7288",
+  "world": "W0+n1",
+  "source": "orbit_probe.py fixnotd tall 10 4 2 20 Ba"
+ },
+ {
+  "file": "s288_landbelowd_h5.json",
+  "statement": "LandBelowD (case a: the landing of a fixed atom lies below t_(N-1))",
+  "section": "\u00a7288",
+  "world": "W0+n1",
+  "source": "orbit_probe.py landnotd closure 5 11 4 30 Ba xfix"
  }
 ]

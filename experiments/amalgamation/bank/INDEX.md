@@ -41,3 +41,6 @@
 | s287_compcl_dual_3chain.json | dual CompCL (some monotone g <= a with b∘g <= g∘b implies m = n) | §287 | thin model, no level-1 world (CL setting) | 3 | 2 | 1 | 1 | g | 2 fixed | 0 |
 | s287_companion_weaker_than_semi_3chain.json | b below the companion of a implies semi-commutation | §287 | thin model, no level-1 world (CL setting) | 3 | 2 | 1 | 1 | g | 2 fixed | 0 |
 | s287_companion_dual_weaker_3chain.json | dual companion hypothesis implies semi-commutation | §287 | thin model, no level-1 world (CL setting) | 3 | 2 | 1 | 1 | g | 2 fixed | 0 |
+| s288_fixbelowd_h8.json | FixBelowD (case a: every mu-fixed atom lies below d); the fixed atom lies below lambda(d) instead | §288 | W0+n1 | 19 | 8 | 4 | 2 | a | 4 fixed | 3 |
+| s288_fixbelowd_h10.json | FixBelowD (case a) | §288 | W0+n1 | 29 | 10 | 8 | 2 | a | 3 fixed | 4 |
+| s288_landbelowd_h5.json | LandBelowD (case a: the landing of a fixed atom lies below t_(N-1)) | §288 | W0+n1 | 10 | 5 | 3 | 2 | a | 3 fixed | 2 |

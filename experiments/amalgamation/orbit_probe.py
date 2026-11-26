@@ -20,10 +20,10 @@ from pysat.solvers import Cadical153
 from tight_probe import lattices
 from rstages import stages, a_of
 MODE = sys.argv[1]; K = int(sys.argv[2]); MT = 'mT' in sys.argv[3:]
-REL = {a for a in sys.argv[3:] if a in ('Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix')}   # relaxations of (T) at rows of Z other than bot
+REL = {a for a in sys.argv[3:] if a in ('Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD')}   # relaxations of (T) at rows of Z other than bot
 BR = 'a' if 'Ba' in sys.argv[3:] else ('b' if 'Bb' in sys.argv[3:] else '')   # branch: a = h(d) = 2, b = d an atom (bad)
 NEX = next((int(a[1:]) for a in sys.argv[3:] if a in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6')), 0)   # exact N: t_N != bot = t_(N+1)
-args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb', 'Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix') and not (a[0] == 'E' and a[1:].isdigit())]
+args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb', 'Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD') and not (a[0] == 'E' and a[1:].isdigit())]
 SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= dep of its predecessor',
              'oneexit': 'some element of the bot-orbit exits to an atom that is not a fixed point', 'vac': 'the world has a model',
              'orbk': f'mu^{K}(bot) is not a fixed point of mu (Orbit{K} fails)',
@@ -36,7 +36,9 @@ SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= 
              'twofix': 'two distinct atoms of Z are fixed points of mu (AtMost1Fix fails; all branches)',
              'twogood': 'CALIBRATED MUTANT (OneGood, refuted): two distinct atoms of Z are good (all branches)',
              'fixmax': 'd is not a good atom and some mu-fixed atom of Z lies below no height-2 element of Z (FixMax fails)',
-             'goodnonmax': 'CALIBRATED MUTANT (GoodNonMax): d is not a good atom and some good atom of Z lies below no height-2 element of Z'}[MODE]
+             'goodnonmax': 'CALIBRATED MUTANT (GoodNonMax): d is not a good atom and some good atom of Z lies below no height-2 element of Z',
+             'fixnotd': 'some mu-fixed atom of Z is not below d (FixBelowD fails; use with Ba)',
+             'landnotd': 'some exit-fixed atom q has landing p = lambda(q) not below t_(N-1), the bot-descent element before d (LandBelowD fails; use with Ba xfix)'}[MODE]
 print(f'orbit_probe {MODE} K={K}' + (f' RELAXED {sorted(REL)} (off g read as: d has no own-row cell)' if REL else '') + (f' N={NEX}' if NEX else '') + f' | SAT = {SAT_MEANS} | world (T) {"MUTANT mT" if MT else ""} | corpus {args}')
 import os
 DUMPF = os.environ.get('DUMP'); DUMPL = []
@@ -84,6 +86,8 @@ for L in lattices(args):
                 if h[x] == 1 and 'Tb1' in REL and not le[u][x]: continue        # atoms: lower half only
                 if h[x] == 2 and 'Ta2' in REL and not le[y][u]: continue        # height-2 rows: upper half only
                 if h[x] == 2 and 'Tb2' in REL and not le[u][x]: continue        # height-2 rows: lower half only
+                if 'TbNotD' in REL and x != bot and h[x] == 1 and le[u][x] and not le[y][u]:
+                    add([-Z(x), -f(x, y, u), v('dv', x)]); continue       # Tb waived at the row of d only
                 if le[u][x] or le[y][u]: add([-Z(x), -f(x, y, u)])
     it = lambda x, j, z: v('it', x, j, z)
     for x in low:
@@ -154,7 +158,7 @@ for L in lattices(args):
                     for y in low:
                         t = v('ox', k, x, p, y); sel.append(t)
                         for lit in (ob(k, x), lam[x, p], -Z(p), f(bot, p, y), -mu[y, y]): add([-t, lit])
-    elif MODE.lstrip('M') in ('topcert', 'nmgood', 'exitm2', 'twofix', 'twogood', 'fixmax', 'goodnonmax'):
+    elif MODE.lstrip('M') in ('topcert', 'nmgood', 'exitm2', 'twofix', 'twogood', 'fixmax', 'goodnonmax', 'fixnotd', 'landnotd'):
         # d = last nonzero element of the bot-descent; off branch g: d is not a good atom (own-cell form of IsGood)
         dv = lambda z: v('dv', z)
         for z in range(n):
@@ -174,11 +178,11 @@ for L in lattices(args):
                             add([o, -it(q, j, p_), -f(q, p_, u)])           # a cell forces own(q)
                             t = v('ownw', q, j, p_, u); wit.append(t); add([-t, it(q, j, p_)]); add([-t, f(q, p_, u)])
             add([-o] + wit)                                                    # own(q) forces some cell
-        allbr = MODE in ('twofix', 'twogood')
+        allbr = MODE in ('twofix', 'twogood', 'fixnotd', 'landnotd')
         if not allbr:
             for z in own: add([-dv(z), -own[z]])              # off g (a d of height 2 is never a good atom)
-        if BR == 'a': add([-dv(z) for z in range(n) if h[z] == 1])
-        if BR == 'b': add([-dv(z) for z in range(n) if h[z] == 2])
+        for z in range(n):                                    # branch a: d has height 2; branch b: d is an atom
+            if (BR == 'a' and h[z] == 1) or (BR == 'b' and h[z] == 2): add([-dv(z)])
         M2 = [m_ for m_ in low if h[m_] == 2]
         ex = {}; exd = {}
         for m_ in M2:                                         # exits(m) / exits dominated(m), forced true by their witnesses
@@ -188,7 +192,7 @@ for L in lattices(args):
                 for q in range(n):
                     if q != bot and le[q][m_]: add([exd[m_], -lam[m_, p_], Z(p_), -f(bot, p_, q)])
         base = MODE.lstrip('M')
-        if base in ('twofix', 'twogood', 'fixmax', 'goodnonmax'):
+        if base in ('twofix', 'twogood', 'fixmax', 'goodnonmax', 'fixnotd', 'landnotd'):
             AT = [q for q in own]
             if 'xfix' in REL:                                  # exit-fixed: lambda(q) = p not in Z and F(bot, p) = q
                 for q in own:
@@ -197,11 +201,27 @@ for L in lattices(args):
                         t_ = v('xf', q, p_); xs_.append(t_)
                         for lit in (lam[q, p_], -Z(p_), f(bot, p_, q)): add([-t_, lit])
                     add([-v('xfx', q)] + xs_)
-            prop = ((lambda q: v('xfx', q)) if 'xfix' in REL else (lambda q: mu[q, q])) if base in ('twofix', 'fixmax') else (lambda q: own[q])
+            prop = ((lambda q: v('xfx', q)) if 'xfix' in REL else (lambda q: mu[q, q])) if base in ('twofix', 'fixmax', 'fixnotd') else (lambda q: own[q])
             if base in ('twofix', 'twogood'):
                 for q, q2 in itertools.combinations(AT, 2):
                     t = v('pair', q, q2); sel.append(t)
                     for lit in (Z(q), Z(q2), prop(q), prop(q2)): add([-t, lit])
+            elif base == 'landnotd':
+                for q in AT:
+                    for p_ in low:
+                        for j in range(1, NO):
+                            for w in range(n):
+                                if le[p_][w]: continue
+                                for z in range(n):
+                                    if z == bot: continue
+                                    t = v('lnd', q, p_, j, w, z); sel.append(t)
+                                    for lit in (Z(q), v('xf', q, p_), v('dvj', z, j), it(bot, j - 1, w)): add([-t, lit])
+            elif base == 'fixnotd':
+                for q in AT:
+                    t = v('fnd', q); sel.append(t)
+                    for lit in (Z(q), prop(q)): add([-t, lit])
+                    for z in range(n):
+                        if le[q][z]: add([-t, -dv(z)])
             else:
                 for q in AT:
                     t = v('mx', q); sel.append(t)
@@ -249,7 +269,7 @@ for L in lattices(args):
         xs = [bot]
         for _ in range(K): xs.append(None if xs[-1] is None else muf(xs[-1]))
         bad = MODE == 'vac' or (MODE == 'orbk' and xs[K] is not None and muf(xs[K]) != xs[K])
-        if MODE.lstrip('M') in ('topcert', 'nmgood', 'exitm2', 'twofix', 'twogood', 'fixmax', 'goodnonmax'):
+        if MODE.lstrip('M') in ('topcert', 'nmgood', 'exitm2', 'twofix', 'twogood', 'fixmax', 'goodnonmax', 'fixnotd', 'landnotd'):
             Zs = [z for z in range(n) if F[bot][z] == bot]
             good = lambda y: le[y][a_of(L, F, y)] or y in desc(y)          # IsGood, from the definition
             dd = [t for t in tb if t != bot][-1]
@@ -260,10 +280,14 @@ for L in lattices(args):
             exdom = lambda m_: exits(m_) and le[F[bot][lamf(m_)]][m_]
             gb = lambda m_: any(h[q] == 1 and le[q][m_] and good(q) for q in range(n))
             base_ = MODE.lstrip('M')
-            if base_ in ('twofix', 'twogood', 'fixmax', 'goodnonmax'):
+            if base_ in ('twofix', 'twogood', 'fixmax', 'goodnonmax', 'fixnotd', 'landnotd'):
                 Ats = [q for q in Zs if h[q] == 1]
-                P = ((lambda q: lamf(q) is not None and F[bot][lamf(q)] == q) if 'xfix' in REL else (lambda q: muf(q) == q)) if base_ in ('twofix', 'fixmax') else good
-                if base_ in ('twofix', 'twogood'): bad = sum(1 for q in Ats if P(q)) >= 2
+                P = ((lambda q: lamf(q) is not None and F[bot][lamf(q)] == q) if 'xfix' in REL else (lambda q: muf(q) == q)) if base_ in ('twofix', 'fixmax', 'fixnotd') else good
+                if base_ in ('twofix', 'twogood'): bad = sum(1 for q in Ats if P(q)) >= 2 and (BR != 'a' or h[dd] == 2) and (BR != 'b' or h[dd] == 1)
+                elif base_ == 'landnotd':
+                    Nd = tb.index(dd); tprev = tb[Nd - 1]
+                    bad = any(lamf(q) is not None and F[bot][lamf(q)] == q and F[bot][lamf(q)] != bot and lamf(q) not in Zs and not le[lamf(q)][tprev] for q in Ats) and (BR != 'a' or h[dd] == 2)
+                elif base_ == 'fixnotd': bad = any(P(q) and not le[q][dd] for q in Ats) and (BR != 'a' or h[dd] == 2) and (BR != 'b' or h[dd] == 1)
                 else: bad = offg and any(P(q) and not any(le[q][m_] for m_ in M2s) for q in Ats)
             else:
                 pr = {'topcert': exdom, 'exitm2': exits, 'nmgood': gb}[base_]

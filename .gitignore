@@ -9,3 +9,4 @@ experiments/sat/cut_H*.cnf
 experiments/sat/cut_H*.ckpt*
 experiments/infcll/*.npy
 experiments/infcll/*.pkl
+experiments/amalgamation/holding/

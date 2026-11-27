@@ -210,4 +210,20 @@ theorem certAtom_of_N1_thin {H : ℕ} (hn : NoChain α (H + 1)) (ha : a F ⊥ = 
     le_bot_iff.1 (((F ⊥).mono ((F ⊥).mono le_top)).trans (le_of_eq hd0))
   exact ⟨k + 1, hi, hmin, fixed_of_uniformFibre hn ha hk2 htop hq₀R hq₀ hfib hi hmin hrZ⟩
 
+/-- **A1 reduction.** In W0 with `N = 1` (`F(⊥, F(⊥, ⊤)) = ⊥`), if the row of `d = F(⊥, ⊤)` exits (its landing lies
+outside `Z`), the exit is dominated (`F(⊥, λ(d)) ≤ F(⊥, ⊤) = d`) and its exit atom is μ-fixed. With `upTrap_land` the
+converse holds as well, so at `N = 1` CertAtom is the statement "row `d` exits". -/
+theorem certAtom_of_N1_exit {H : ℕ} (hn : NoChain α (H + 1)) (ha : a F ⊥ = ⊥)
+    (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (htop : 2 < height H (⊤ : α)) (hd0 : F ⊥ (F ⊥ (⊤ : α)) = ⊥)
+    {j : ℕ} (hj : height H ((F (F ⊥ (⊤ : α)))^[j] (⊤ : α)) ≤ 2)
+    (hmin : ∀ i < j, 2 < height H ((F (F ⊥ (⊤ : α)))^[i] (⊤ : α)))
+    (hex : F ⊥ ((F (F ⊥ (⊤ : α)))^[j] (⊤ : α)) ≠ ⊥) :
+    ∃ q ∈ Rk F 1, height H q = 1 ∧ ∃ i, height H ((F q)^[i] (⊤ : α)) ≤ 2 ∧
+      (∀ j < i, 2 < height H ((F q)^[j] (⊤ : α))) ∧ F ⊥ ((F q)^[i] (⊤ : α)) = q := by
+  have hdR : F ⊥ (⊤ : α) ∈ Rk F 1 := (mem_one_iff ha).2 hd0
+  obtain ⟨h1, hqR, k, hk, hmink, hfix⟩ :=
+    fixedBelow_of_exitDom hn hk2 ha htop hdR hj hmin hex ((F ⊥).mono le_top)
+  refine ⟨_, hqR, h1, k, ?_, hmink, hfix⟩
+  rw [hk]; exact hj
+
 end Mordor.OrbitHeight

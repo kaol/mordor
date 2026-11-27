@@ -1,0 +1,14 @@
+  lattice n=42 H=10 atoms=8: UNSAT | SAT(cols [1, 2, 6], pairjoins [14])  [218s]
+RESULT smoke Lc Gc thin ['file', '/home/user/mordor/experiments/amalgamation/bank/s299_cgall_noTb_h5.json', '/home/user/mordor/experiments/amalgamation/brief297/cex/ColourGraph_R3.json'] {'SAT': 0, 'UNSAT': 43}
+RESULT smoke Lc Gc ['file', '/home/user/mordor/experiments/amalgamation/bank/s299_cgall_noTb_h5.json', '/home/user/mordor/experiments/amalgamation/brief297/cex/ColourGraph_R3.json'] {'SAT': 43, 'UNSAT': 0}
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/amr_run25/brief/probes/rowset_probe.py", line 184, in <module>
+    fn = f'{TAG}_w{wi}_{"_".join(args)}.json'; json.dump(dumps[wi], open(fn, 'w')); print('  dumped', fn)
+                                                                    ~~~~^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'smoke_w1_file_/home/user/mordor/experiments/amalgamation/bank/s299_cgall_noTb_h5.json_/home/user/mordor/experiments/amalgamation/brief297/cex/ColourGraph_R3.json.json'
+
+real	3m38.153s
+user	3m36.501s
+sys	0m1.378s
+
+[exited with code 0]

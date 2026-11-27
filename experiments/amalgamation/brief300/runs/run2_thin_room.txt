@@ -1,0 +1,23 @@
+rowset_probe run2_thin_room | per lattice: EXISTS F | SAT = world has a model with no mu-fixed colour (statement fails) | worlds [['Lc', 'Gc', 'thin'], ['Lc', 'Gc', 'unb']] | at least 3 colours | corpus ['tall', '10', '4', '2', '20', 'maxn', '40', '+', 'tall', '14', '4', '2', '20', 'maxn', '40', '+', 'tall', '10', '7', '1', '5', 'maxn', '50', '+', 'tall', '12', '4', '1', '8', 'maxn', '45', '+', 'tall', '13', '4', '1', '8', 'maxn', '45', '+', 'tall', '10', '6', '1', '8', 'maxn', '45'] maxn None
+  lattice n=22 H=10 atoms=3: UNSAT | SAT(cols [1, 2, 3], pairjoins [4])  [1s]
+  lattice n=34 H=10 atoms=5: UNSAT | SAT(cols [1, 2, 5], pairjoins [10])  [12s]
+  lattice n=33 H=10 atoms=4: UNSAT | SAT(cols [1, 2, 4], pairjoins [5, 7, 8])  [31s]
+  lattice n=27 H=10 atoms=4: UNSAT | SAT(cols [1, 3, 4], pairjoins [6, 11])  [33s]
+  lattice n=33 H=10 atoms=4: UNSAT | SAT(cols [1, 3, 4], pairjoins [6])  [40s]
+  lattice n=35 H=10 atoms=3: UNSAT | SAT(cols [1, 2, 3], pairjoins [5, 8, 9])  [45s]
+  lattice n=22 H=10 atoms=5: UNSAT | SAT(cols [2, 3, 5], pairjoins [8])  [47s]
+  lattice n=29 H=10 atoms=7: UNSAT | SAT(cols [1, 3, 7], pairjoins [14])  [54s]
+  lattice n=32 H=10 atoms=5: UNSAT | SAT(cols [1, 3, 5], pairjoins [7, 11])  [64s]
+  lattice n=35 H=14 atoms=4: UNSAT | SAT(cols [1, 2, 4], pairjoins [7])  [75s]
+  lattice n=42 H=10 atoms=7: UNSAT | SAT(cols [5, 6, 7], pairjoins [15])  [133s]
+  lattice n=49 H=10 atoms=8: UNSAT | SAT(cols [3, 5, 6], pairjoins [11, 13])  [208s]
+  lattice n=33 H=12 atoms=4: UNSAT | SAT(cols [1, 2, 3], pairjoins [8, 9, 10])  [213s]
+  lattice n=45 H=12 atoms=4: UNSAT | SAT(cols [2, 3, 4], pairjoins [6, 7, 8])  [259s]
+  lattice n=42 H=13 atoms=8: UNSAT | SAT(cols [2, 5, 8], pairjoins [11, 15])  [317s]
+  lattice n=39 H=13 atoms=3: UNSAT | SAT(cols [1, 2, 3], pairjoins [5, 7])  [328s]
+  lattice n=44 H=13 atoms=3: UNSAT | SAT(cols [1, 2, 3], pairjoins [4, 5, 8])  [349s]
+  lattice n=35 H=10 atoms=5: UNSAT | SAT(cols [1, 2, 5], pairjoins [10, 11])  [362s]
+  lattice n=42 H=10 atoms=8: UNSAT | SAT(cols [3, 7, 8], pairjoins [18])  [392s]
+RESULT run2_thin_room Lc Gc thin ['tall', '10', '4', '2', '20', 'maxn', '40', '+', 'tall', '14', '4', '2', '20', 'maxn', '40', '+', 'tall', '10', '7', '1', '5', 'maxn', '50', '+', 'tall', '12', '4', '1', '8', 'maxn', '45', '+', 'tall', '13', '4', '1', '8', 'maxn', '45', '+', 'tall', '10', '6', '1', '8', 'maxn', '45'] {'SAT': 0, 'UNSAT': 19}
+RESULT run2_thin_room Lc Gc unb ['tall', '10', '4', '2', '20', 'maxn', '40', '+', 'tall', '14', '4', '2', '20', 'maxn', '40', '+', 'tall', '10', '7', '1', '5', 'maxn', '50', '+', 'tall', '12', '4', '1', '8', 'maxn', '45', '+', 'tall', '13', '4', '1', '8', 'maxn', '45', '+', 'tall', '10', '6', '1', '8', 'maxn', '45'] {'SAT': 19, 'UNSAT': 0}
+  dumped run2_thin_room_w1.json

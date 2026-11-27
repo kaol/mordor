@@ -1,0 +1,4 @@
+cgall_probe pairselfM | per lattice: exists F | SAT = MUTANT of pairself: pair-join rows land, lambda(m) <= m allowed | corpus ['tall', '10', '6', '1', '8'] maxn 45
+  lattice n=35 h=10: SAT (colours [1, 2, 5])
+  lattice n=42 h=10: SAT (colours [2, 6, 8])
+pairselfM ['tall', '10', '6', '1', '8'] {'SAT': 2, 'UNSAT': 0}

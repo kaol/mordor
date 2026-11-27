@@ -161,3 +161,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁹⁷: brief run 20 archived in `brief297/`. `r3_probe.py` (modes r3 / cgone / shadow: the three-row two-colour world, worker's encoding). `direct297/` (outputs, `chain.py`).
 - §34.3z²⁹⁸: `r3_probe.py` mode `break` and flags `noCG` / `noNFa` / `noNFb` (sharpness of NoBreak and ShadowLemma); `direct298/`.
 - §34.3z²⁹⁹: `cgall_probe.py` (modes all / colrows / col2 / colbot / h2; flags TbA, TbM, min3): which ColourGain and Tb instances existence uses at |𝒜| ≥ 3; `direct299/`. Bank `s299_cgall_noTb_h5`.
+- §34.3z³⁰⁰: brief run 21 archived in `brief300/` (`rowset_probe.py`, `scl_check.py`, `thin.py`, `break_anatomy.py`; runs). `cgall_probe.py` modes `pairself` / `pairselfM`; `direct300/`.

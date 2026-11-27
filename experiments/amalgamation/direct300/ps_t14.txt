@@ -1,0 +1,8 @@
+cgall_probe pairself | per lattice: exists F | SAT = colour atoms unbounded in Z, some pair-join (an element of Z above two colours) exists; colour rows land, have ColourGain and Tb; pair-join rows land with lambda(m) not <= m; other rows free; no mu-fixed atom (PairSelf fails) | corpus ['tall', '14', '4', '2', '20'] maxn 45
+  lattice n=39 h=14: UNSAT
+  lattice n=35 h=14: UNSAT
+  lattice n=43 h=14: UNSAT
+  lattice n=41 h=14: UNSAT
+  lattice n=44 h=14: UNSAT
+  lattice n=45 h=14: UNSAT
+pairself ['tall', '14', '4', '2', '20'] {'SAT': 0, 'UNSAT': 6}

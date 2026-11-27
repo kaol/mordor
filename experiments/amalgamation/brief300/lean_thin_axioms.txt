@@ -1,0 +1,5 @@
+'Mordor.OrbitHeight.land_capture' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.thinStair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.shadow_start' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.certAtom_of_thin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.colourStair' depends on axioms: [propext, Classical.choice, Quot.sound]

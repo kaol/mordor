@@ -250,6 +250,100 @@ theorem certAtom_of_topRow {H : ℕ} (hn : NoChain α (H + 1)) (ha : a F ⊥ = �
     obtain ⟨k', hk', hmink', hfix⟩ := exitFixed_of_dom hn hk2 (rfl : (F x)^[i] (⊤ : α) = p) hp2 hc1 hcR hcx rfl
     exact ⟨c, hcR, hc1, k', by rw [hk']; omega, hmink', hfix⟩
 
+theorem certAtom_of_topRow' {H : ℕ} (hn : NoChain α (H + 1)) (ha : a F ⊥ = ⊥)
+    (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (htop : 2 < height H (⊤ : α)) {x : α}
+    {i : ℕ} (hi : height H ((F x)^[i] (⊤ : α)) ≤ 2) (hmin : ∀ j < i, 2 < height H ((F x)^[j] (⊤ : α)))
+    (hA : ∀ w, height H (F ⊥ w) = 1 → F ⊥ (F ⊥ w) = ⊥ → F ⊥ w ≤ (F x)^[i] (⊤ : α) → F ⊥ w ≤ x) :
+    ∃ q ∈ Rk F 1, height H q = 1 ∧ ∃ k, height H ((F q)^[k] (⊤ : α)) ≤ 2 ∧
+      (∀ j < k, 2 < height H ((F q)^[j] (⊤ : α))) ∧ F ⊥ ((F q)^[k] (⊤ : α)) = q := by
+  have hR12 : Rk F 1 ⊆ Rk F 2 := Rk_mono (F := F) (by norm_num)
+  have hZT : ∀ z, F ⊥ z = ⊥ → height H z ≤ 2 := fun z hz => hk2 z (hR12 ((mem_one_iff ha).2 hz))
+  have hTa : ∀ x ∈ Rk F 1, ∀ y, 2 < height H y → ¬ y ≤ F x y := fun x hx y hy hc => by
+    have := hk2 y (mem_succ_of_cell (k := 1) hx le_rfl (Or.inr hc)); omega
+  have hne : ∀ B, 2 < height H B → F ⊥ B ≠ ⊥ := fun B hB h => by have := hZT B h; omega
+  have hpos : ∀ {z : α}, z ≠ ⊥ → 1 ≤ height H z := fun hz => by
+    have := height_strictMono hn (bot_lt_iff_ne_bot.2 hz); rw [height_bot_eq_zero] at this; omega
+  have hmono := (height_strictMono hn).monotone
+  set p := (F x)^[i] (⊤ : α) with hpdef
+  have hi0 : i ≠ 0 := land_index_pos htop hi
+  obtain ⟨k, hk⟩ : ∃ k, i = k + 1 := ⟨i - 1, by omega⟩
+  set r := (F x)^[k] (⊤ : α) with hrdef
+  have hrh : 2 < height H r := hmin k (by omega)
+  have hpr : p = F x r := by rw [hpdef, hk, Function.iterate_succ_apply']
+  have hrp : F ⊥ r ≤ p := hpr ▸ (F.mono bot_le) r
+  have hple : p ≤ r := by
+    rw [hpr]; have := iter_antitone_of_le (F x).monotone (le_top : F x ⊤ ≤ ⊤) (Nat.le_succ k)
+    rwa [Function.iterate_succ_apply'] at this
+  have hp0 : p ≠ ⊥ := fun e => hne r hrh (le_bot_iff.1 (e ▸ hrp))
+  -- an element `z ≠ ⊥` with `z ≤ F(⊥, z)` is impossible (`a(⊥) = ⊥`)
+  have hnofix : ∀ {z : α}, z ≤ F ⊥ z → z = ⊥ := fun h => le_bot_iff.1 (ha ▸ le_a h)
+  by_cases hpZ : F ⊥ p = ⊥
+  · exfalso
+    have hpR : p ∈ Rk F 1 := (mem_one_iff ha).2 hpZ
+    obtain ⟨i', hi', hmin'⟩ := exists_first_low ((ta_iff_lands hn _).1 (hTa _ hpR))
+    by_cases hpx : p ≤ x
+    · exact tb_of_tight hk2 hpR r hrh (hpr ▸ (F.mono hpx) r)
+    set q := x ⊓ p with hqdef
+    have hqR : q ∈ Rk F 1 := (mem_one_iff ha).2 (le_bot_iff.1 (((F ⊥).mono inf_le_right).trans (le_of_eq hpZ)))
+    have hqp : q < p := lt_of_le_of_ne inf_le_right (fun e => hpx (e ▸ inf_le_left))
+    have hq1 : height H q ≤ 1 := by have := height_strictMono hn hqp; omega
+    -- an atom value of row `⊥` below `p` is `q`
+    have hatom : ∀ w, height H (F ⊥ w) = 1 → F ⊥ w ≤ p → F ⊥ w = q := fun w h1 hle =>
+      eq_of_le_of_height_ge hn (le_inf (hA w h1 (le_bot_iff.1 (((F ⊥).mono hle).trans (le_of_eq hpZ))) hle) hle) (by omega)
+    have hp2 : height H p = 2 := by
+      rcases (show height H (F ⊥ r) = 1 ∨ 2 ≤ height H (F ⊥ r) by have := hpos (hne r hrh); omega) with h | h
+      · have e := hatom r h hrp
+        have hq0 : height H q = 1 := e ▸ h
+        have h' := height_strictMono hn hqp
+        omega
+      · have := hmono hrp; omega
+    have habs : ∀ B, 2 < height H B → F q B ≤ p → F q B = p := by
+      intro B hB hle
+      have hb : F ⊥ B ≤ p := ((F.mono bot_le) B).trans hle
+      rcases (show height H (F ⊥ B) = 1 ∨ 2 ≤ height H (F ⊥ B) by have := hpos (hne B hB); omega) with h | h
+      · have hbq := hatom B h hb
+        have hqF : q ≤ F q B := hbq ▸ (F.mono bot_le) B
+        have hlt : q < F q B := lt_of_le_of_ne hqF (fun e => tb_of_tight hk2 hqR B hB e.symm.le)
+        have hq1' : height H q = 1 := hbq ▸ h
+        have := height_strictMono hn hlt
+        exact eq_of_le_of_height_ge hn hle (by omega)
+      · have e : F ⊥ B = p := eq_of_le_of_height_ge hn hb (by omega)
+        exact le_antisymm hle (e ▸ (F.mono bot_le) B)
+    have hle := pairStair hn (inf_le_left : q ≤ x) (inf_le_right : q ≤ p) hi hmin hi' hmin' htop hp2 habs
+    have heq : p = (F p)^[i'] (⊤ : α) := eq_of_le_of_height_ge hn hle (by omega)
+    exact land_not_le hk2 hpR htop hi' hmin' (le_of_eq heq.symm)
+  · -- `p ∉ Z`: its exit atom `c = F(⊥, p)` lies below `x` and is μ-fixed
+    set c := F ⊥ p with hcdef
+    have hcp : c ≤ p := ((F ⊥).mono hple).trans hrp
+    have hcne : c ≠ p := fun e => hp0 (hnofix (le_of_eq e.symm))
+    have hc0 : 1 ≤ height H c := hpos hpZ
+    have hcp' := height_strictMono hn (lt_of_le_of_ne hcp hcne)
+    have hp2 : height H p = 2 := by omega
+    have hc1 : height H c = 1 := by omega
+    have hcc : F ⊥ c ≤ c := (F ⊥).mono hcp
+    have hc00 : F ⊥ c = ⊥ := by
+      by_contra hb
+      have h1 := hpos hb
+      have e : F ⊥ c = c := eq_of_le_of_height_ge hn hcc (by omega)
+      exact hpZ (hnofix (le_of_eq e.symm))
+    have hcR : c ∈ Rk F 1 := (mem_one_iff ha).2 hc00
+    have hcx : c ≤ x := hA p hc1 hc00 hcp
+    obtain ⟨k', hk', hmink', hfix⟩ := exitFixed_of_dom hn hk2 (rfl : (F x)^[i] (⊤ : α) = p) hp2 hc1 hcR hcx rfl
+    exact ⟨c, hcR, hc1, k', by rw [hk']; omega, hmink', hfix⟩
+
+/-- **ColourGain.** In W0 with no μ-fixed atom of `R_1`, every element `x` whose row lands at `p` has a colour atom
+below `p` and not below `x`: an atom `c = F(⊥, w)` of `Z` with `c ≤ p`, `c ≰ x`. (Contrapositive of TopRow′, which uses
+only the colour atoms below the landing.) -/
+theorem colourGain {H : ℕ} (hn : NoChain α (H + 1)) (ha : a F ⊥ = ⊥)
+    (hk2 : ∀ z ∈ Rk F 2, height H z ≤ 2) (htop : 2 < height H (⊤ : α))
+    (hno : ¬ ∃ q ∈ Rk F 1, height H q = 1 ∧ ∃ k, height H ((F q)^[k] (⊤ : α)) ≤ 2 ∧
+      (∀ j < k, 2 < height H ((F q)^[j] (⊤ : α))) ∧ F ⊥ ((F q)^[k] (⊤ : α)) = q)
+    {x : α} {i : ℕ} (hi : height H ((F x)^[i] (⊤ : α)) ≤ 2) (hmin : ∀ j < i, 2 < height H ((F x)^[j] (⊤ : α))) :
+    ∃ w, height H (F ⊥ w) = 1 ∧ F ⊥ (F ⊥ w) = ⊥ ∧ F ⊥ w ≤ (F x)^[i] (⊤ : α) ∧ ¬ F ⊥ w ≤ x := by
+  by_contra hc
+  push_neg at hc
+  exact hno (certAtom_of_topRow' hn ha hk2 htop hi hmin hc)
+
 /-- CertAtom at `N = 1` as a corollary of TopRow (`x = d = F(⊥, ⊤)`), in the form of the `CertAtom` definition. -/
 theorem certAtom_N1 {H : ℕ} (hn : NoChain α (H + 1)) (hd0 : F ⊥ (F ⊥ (⊤ : α)) = ⊥) : CertAtom F H := by
   intro ha hk2 htR hnt

@@ -1,0 +1,8 @@
+closure 5 11 4 30 | 30 lattices | |L| 9-27 | H [4, 5] | width 3-9 | k 1-4 (k>=2 on 29)
+tall 8 4 1 12 | 12 lattices | |L| 16-33 | H [8] | width 4-8 | k 2-5 (k>=2 on 12)
+tall 10 4 2 20 | 20 lattices | |L| 22-50 | H [10] | width 5-12 | k 1-5 (k>=2 on 19)
+tall 13 4 1 8 | 8 lattices | |L| 33-58 | H [13] | width 6-10 | k 3-6 (k>=2 on 8)
+tall 10 7 1 5 | 5 lattices | |L| 42-75 | H [10] | width 10-21 | k 3-7 (k>=2 on 5)
+tall 12 4 1 8 | 8 lattices | |L| 27-59 | H [12] | width 6-11 | k 2-5 (k>=2 on 8)
+tall 10 6 1 8 | 8 lattices | |L| 35-66 | H [10] | width 8-19 | k 3-5 (k>=2 on 8)
+tall 14 4 2 20 | 20 lattices | |L| 35-74 | H [14] | width 6-13 | k 3-7 (k>=2 on 20)

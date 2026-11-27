@@ -1,0 +1,44 @@
+### m2_t13
+orbit_probe nofix K=0 RELAXED ['Meet2'] (off g read as: d has no own-row cell) | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '13', '4', '1', '8', 'maxn', '40']
+nofix 0  ['tall', '13', '4', '1', '8'] {'UNSAT': 2} {'h13:unsat': 2} smallest None
+### d1_t13
+orbit_probe nofix K=0 RELAXED ['Desc1'] (off g read as: d has no own-row cell) | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '13', '4', '1', '8', 'maxn', '40']
+nofix 0  ['tall', '13', '4', '1', '8'] {'SAT': 2} {'h13': 2} smallest 33
+      1     model: branch a, N = 1
+      1     model: branch atom, N = 4
+### m2_t14
+orbit_probe nofix K=0 RELAXED ['Meet2'] (off g read as: d has no own-row cell) | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '14', '4', '2', '20', 'maxn', '40']
+nofix 0  ['tall', '14', '4', '2', '20'] {'UNSAT': 2} {'h14:unsat': 2} smallest None
+### d1_t14
+orbit_probe nofix K=0 RELAXED ['Desc1'] (off g read as: d has no own-row cell) | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '14', '4', '2', '20', 'maxn', '40']
+nofix 0  ['tall', '14', '4', '2', '20'] {'SAT': 2} {'h14': 2} smallest 35
+      2     model: branch atom, N = 1
+### m2_m7
+orbit_probe nofix K=0 RELAXED ['Meet2'] (off g read as: d has no own-row cell) | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '10', '7', '1', '5', 'maxn', '50']
+nofix 0  ['tall', '10', '7', '1', '5'] {'UNSAT': 2} {'h10:unsat': 2} smallest None
+### d1_m7
+orbit_probe nofix K=0 RELAXED ['Desc1'] (off g read as: d has no own-row cell) | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '10', '7', '1', '5', 'maxn', '50']
+nofix 0  ['tall', '10', '7', '1', '5'] {'SAT': 2} {'h10': 2} smallest 42
+      2     model: branch atom, N = 1
+### m2_E4
+orbit_probe nofix K=0 RELAXED ['Meet2'] (off g read as: d has no own-row cell) N=4 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8', 'maxn', '40']
+nofix 0  ['tall', '12', '4', '1', '8'] {'UNSAT': 4} {'h12:unsat': 4} smallest None
+### d1_E4
+orbit_probe nofix K=0 RELAXED ['Desc1'] (off g read as: d has no own-row cell) N=4 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8', 'maxn', '40']
+nofix 0  ['tall', '12', '4', '1', '8'] {'SAT': 4} {'h12': 4} smallest 27
+      1     model: branch a, N = 4
+      3     model: branch atom, N = 4
+### m2_E5
+orbit_probe nofix K=0 RELAXED ['Meet2'] (off g read as: d has no own-row cell) N=5 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8', 'maxn', '40']
+nofix 0  ['tall', '12', '4', '1', '8'] {'UNSAT': 4} {'h12:unsat': 4} smallest None
+### d1_E5
+orbit_probe nofix K=0 RELAXED ['Desc1'] (off g read as: d has no own-row cell) N=5 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8', 'maxn', '40']
+nofix 0  ['tall', '12', '4', '1', '8'] {'SAT': 4} {'h12': 4} smallest 27
+      4     model: branch atom, N = 5
+### m2_E6
+orbit_probe nofix K=0 RELAXED ['Meet2'] (off g read as: d has no own-row cell) N=6 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8', 'maxn', '40']
+nofix 0  ['tall', '12', '4', '1', '8'] {'UNSAT': 4} {'h12:unsat': 4} smallest None
+### d1_E6
+orbit_probe nofix K=0 RELAXED ['Desc1'] (off g read as: d has no own-row cell) N=6 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8', 'maxn', '40']
+nofix 0  ['tall', '12', '4', '1', '8'] {'SAT': 4} {'h12': 4} smallest 27
+      4     model: branch atom, N = 6

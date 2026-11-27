@@ -1,0 +1,161 @@
+[
+ {
+  "file": "ascentrows_direct290_nf_cl.json_18.json",
+  "refutes": [
+   "AscentRows (W0-flat, NoFix: some y in Ymin has b(y) in Z and its ascent runs along rows through y)"
+  ],
+  "world": "W0-flat & NoFix",
+  "source": "direct290/nf_cl.json#18",
+  "coords": {
+   "n": 17,
+   "H": 5,
+   "width": 6,
+   "N": 2,
+   "branch": "a"
+  }
+ },
+ {
+  "file": "ascentrows_direct290_nf_cl.json_21.json",
+  "refutes": [
+   "AscentRows (W0-flat, NoFix: some y in Ymin has b(y) in Z and its ascent runs along rows through y)"
+  ],
+  "world": "W0-flat & NoFix",
+  "source": "direct290/nf_cl.json#21",
+  "coords": {
+   "n": 16,
+   "H": 5,
+   "width": 6,
+   "N": 1,
+   "branch": "atom"
+  }
+ },
+ {
+  "file": "ascentrows_direct290_nf_t12.json_4.json",
+  "refutes": [
+   "AscentRows (W0-flat, NoFix: some y in Ymin has b(y) in Z and its ascent runs along rows through y)"
+  ],
+  "world": "W0-flat & NoFix",
+  "source": "direct290/nf_t12.json#4",
+  "coords": {
+   "n": 34,
+   "H": 12,
+   "width": 7,
+   "N": 1,
+   "branch": "atom"
+  }
+ },
+ {
+  "file": "ascentrows_direct290_nf_t8.json_4.json",
+  "refutes": [
+   "AscentRows (W0-flat, NoFix: some y in Ymin has b(y) in Z and its ascent runs along rows through y)"
+  ],
+  "world": "W0-flat & NoFix",
+  "source": "direct290/nf_t8.json#4",
+  "coords": {
+   "n": 29,
+   "H": 8,
+   "width": 7,
+   "N": 1,
+   "branch": "a"
+  }
+ },
+ {
+  "file": "ascentrows_dlatoms_goodatom_n1_not2_min15.json_0.json",
+  "refutes": [
+   "AscentRows (W0-flat, NoFix: some y in Ymin has b(y) in Z and its ascent runs along rows through y)"
+  ],
+  "world": "W0-flat & NoFix",
+  "source": "dlatoms_goodatom_n1_not2_min15.json#0",
+  "coords": {
+   "n": 15,
+   "H": 5,
+   "width": 5,
+   "N": 1,
+   "branch": "a"
+  }
+ },
+ {
+  "file": "direct290_nf_cl.json_18.json",
+  "refutes": [
+   "LfpLand (W0-flat, NoFix: some minimal descent column y has b(y) in Z and y on row b(y)'s descent)"
+  ],
+  "world": "W0-flat & NoFix (Tb dropped at height-2 rows)",
+  "source": "direct290/nf_cl.json#18",
+  "coords": {
+   "n": 17,
+   "H": 5,
+   "width": 6,
+   "N": 2,
+   "branch": "a"
+  }
+ },
+ {
+  "file": "direct290_nf_t8.json_4.json",
+  "refutes": [
+   "LfpMinAll (W0-flat, NoFix: every minimal descent column y has b(y) in Z)"
+  ],
+  "world": "W0-flat & NoFix (Tb dropped at height-2 rows)",
+  "source": "direct290/nf_t8.json#4",
+  "coords": {
+   "n": 29,
+   "H": 8,
+   "width": 7,
+   "N": 1,
+   "branch": "a"
+  }
+ },
+ {
+  "file": "run1/lfp_mutA_calib_min52.json",
+  "refutes": [
+   "LfpMinAll (mutant of LfpMin), W0-flat & NoFix"
+  ],
+  "world": "W0-flat",
+  "source": "search (exact SAT, replayed)",
+  "n": 52
+ },
+ {
+  "file": "run2/lfp_mutA_base_min10.json",
+  "refutes": [
+   "LfpMinAll (mutant of LfpMin), W0-flat & NoFix"
+  ],
+  "world": "W0-flat",
+  "source": "search (exact SAT, replayed)",
+  "n": 10
+ },
+ {
+  "file": "run4/meet_desc1_base_min10.json",
+  "refutes": [
+   "CertAtom with Tb at atom rows only on their own descent (desc1; mutant of TwoRowTb)"
+  ],
+  "world": "desc1-world (see meet_probe.py docstring)",
+  "source": "search (exact SAT, replayed)",
+  "n": 10
+ },
+ {
+  "file": "smoke/lfp_mutA_smoke_min12.json",
+  "refutes": [
+   "LfpMinAll (smoke)"
+  ],
+  "world": "W0-flat",
+  "source": "search (exact SAT, replayed)",
+  "n": 12
+ },
+ {
+  "file": "smoke/lfp_mutU_smoke_min12.json",
+  "refutes": [
+   "|Low| <= 1 in W0-flat (smoke)"
+  ],
+  "world": "W0-flat",
+  "source": "search (exact SAT, replayed)",
+  "n": 12
+ },
+ {
+  "file": "smoke/meet_desc1_smoke2_min10.json",
+  "refutes": [
+   "desc1 (smoke)"
+  ],
+  "world": "desc1-world (see meet_probe.py docstring)",
+  "source": "search (exact SAT, replayed)",
+  "n": 10
+ }
+]

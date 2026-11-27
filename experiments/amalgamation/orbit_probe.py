@@ -20,10 +20,10 @@ from pysat.solvers import Cadical153
 from tight_probe import lattices
 from rstages import stages, a_of
 MODE = sys.argv[1]; K = int(sys.argv[2]); MT = 'mT' in sys.argv[3:]
-REL = {a for a in sys.argv[3:] if a in ('Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD')}   # relaxations of (T) at rows of Z other than bot
+REL = {a for a in sys.argv[3:] if a in ('Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD', 'Meet2', 'Desc1')}   # relaxations of (T) at rows of Z other than bot
 BR = 'a' if 'Ba' in sys.argv[3:] else ('b' if 'Bb' in sys.argv[3:] else '')   # branch: a = h(d) = 2, b = d an atom (bad)
 NEX = next((int(a[1:]) for a in sys.argv[3:] if a in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6')), 0)   # exact N: t_N != bot = t_(N+1)
-args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb', 'Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD') and not (a[0] == 'E' and a[1:].isdigit())]
+args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb', 'Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD', 'Meet2', 'Desc1') and not (a[0] == 'E' and a[1:].isdigit())]
 SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= dep of its predecessor',
              'oneexit': 'some element of the bot-orbit exits to an atom that is not a fixed point', 'vac': 'the world has a model',
              'orbk': f'mu^{K}(bot) is not a fixed point of mu (Orbit{K} fails)',
@@ -89,6 +89,7 @@ for L in lattices(args):
                 if h[x] == 1 and 'Tb1' in REL and not le[u][x]: continue        # atoms: lower half only
                 if h[x] == 2 and 'Ta2' in REL and not le[y][u]: continue        # height-2 rows: upper half only
                 if h[x] == 2 and 'Tb2' in REL and not le[u][x]: continue        # height-2 rows: lower half only
+                if x != bot and ('Meet2' in REL or 'Desc1' in REL) and le[u][x] and not le[y][u]: continue   # Tb replaced below
                 if 'TbNotD' in REL and x != bot and h[x] == 1 and le[u][x] and not le[y][u]:
                     add([-Z(x), -f(x, y, u), v('dv', x)]); continue       # Tb waived at the row of d only
                 if le[u][x] or le[y][u]: add([-Z(x), -f(x, y, u)])
@@ -111,6 +112,27 @@ for L in lattices(args):
             add([-o] + ls)
             for t in ls: add([-t, o])
             lam[x, p] = o
+    if 'Meet2' in REL or 'Desc1' in REL:
+        for m_ in low:                                        # height-2 rows of Z: Tb only as lambda(m) not <= m
+            if h[m_] == 2:
+                for p_ in low:
+                    if le[p_][m_]: add([-Z(m_), -lam[m_, p_]])
+        D = lambda x, w: v('D', x, w)                         # w lies on row x's descent
+        for x in low:
+            for j in range(NO + 1):
+                for w in range(n): add([-it(x, j, w), D(x, w)])
+        for q in low:
+            if h[q] != 1: continue
+            xs = [q] if 'Desc1' in REL else [x for x in low if le[q][x]]
+            for x in xs:
+                for u1 in range(n):
+                    for u2 in range(n):
+                        w = L.meet[u1][u2] if hasattr(L, 'meet') else None
+                        if w is None: w = max((t for t in range(n) if le[t][u1] and le[t][u2]), key=lambda t: h[t])
+                        if h[w] <= 2: continue
+                        if 'Desc1' in REL and u2 != top: continue
+                        for u in range(n):
+                            if le[u][q]: add([-Z(q), -Z(x), -D(q, u1), -D(x, u2), -f(q, w, u)])
     if 'land' in REL:                                         # every row of Z lands (as tightness gives)
         for x in low: add([-Z(x)] + [lam[x, p_] for p_ in low])
     mu = {}
@@ -321,7 +343,24 @@ for L in lattices(args):
             nofix = not any(h[q] == 1 and lamf(q) is not None and lamf(q) not in Zs and F[bot][lamf(q)] == q for q in Zs)
             if MODE == 'goodtop': concl = any(h[m_] == 2 and lamf(m_) == m_ for m_ in Zs)
             else: concl = any(h[q] == 1 and h[z] == 2 and z in Zs and z in desc(q) and le[q][F[q][z]] for q in Zs for z in Zs)
-            ok = ok and wok and REL <= {'Ta2'}; bad = nofix and (MODE == 'nofix' or not concl)
+            if 'Meet2' in REL or 'Desc1' in REL:              # the relaxed world, rechecked from the definitions
+                wok = all(h[z] <= 2 for z in Zs) and any(h[z] == 2 for z in Zs)
+                meet = lambda u1, u2: max((t for t in range(n) if le[t][u1] and le[t][u2]), key=lambda t: h[t])
+                for x in Zs:
+                    for y in hi:
+                        if le[y][F[x][y]]: wok = False                                  # Ta at every row of Z
+                        if x == bot and le[F[x][y]][x]: wok = False                     # Tb at bot
+                    if h[x] == 2 and le[lamf(x)][x]: wok = False                        # lambda(m) not <= m
+                    if h[x] == 1:
+                        xs_ = [x] if 'Desc1' in REL else [x2 for x2 in Zs if le[x][x2]]
+                        for x2 in xs_:
+                            for u1 in desc(x):
+                                for u2 in ([top] if 'Desc1' in REL else desc(x2)):
+                                    w = meet(u1, u2)
+                                    if h[w] > 2 and le[F[x][w]][x]: wok = False
+                ok = ok and wok and REL <= {'Meet2', 'Desc1'}
+            else: ok = ok and wok and REL <= {'Ta2'}
+            bad = nofix and (MODE == 'nofix' or not concl)
             dd_ = [t for t in tb if t != bot]; dd_ = dd_[-1] if dd_ else None
             print(f'    model: branch {"a" if dd_ is not None and h[dd_] == 2 else "atom"}, N = {tb.index(dd_) if dd_ is not None else None}', flush=True)
         for k in range(1, K):

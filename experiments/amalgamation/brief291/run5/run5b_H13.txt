@@ -1,0 +1,2 @@
+meet_probe two | quantifier: exists F in the mode world | SAT = NoFix with Tb at atoms only at two-row meet columns (TwoRowTb FAILS) | corpus ['tall', '13', '4', '1', '8']
+meet_probe desc1 | quantifier: exists F in the mode world | SAT = NoFix with Tb at atoms only on their own descent (mutant desc1 FAILS) | corpus ['tall', '13', '4', '1', '8']

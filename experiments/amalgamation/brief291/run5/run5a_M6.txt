@@ -1,0 +1,12 @@
+meet_probe two | quantifier: exists F in the mode world | SAT = NoFix with Tb at atoms only at two-row meet columns (TwoRowTb FAILS) | corpus ['tall', '10', '6', '1', '8']
+meet_probe desc1 | quantifier: exists F in the mode world | SAT = NoFix with Tb at atoms only on their own descent (mutant desc1 FAILS) | corpus ['tall', '10', '6', '1', '8']
+  lattice #1 n=54 h=10 [233s]: two:UNSAT desc1:SAT(a,N1,noexit)
+  lattice #2 n=35 h=10 [271s]: two:UNSAT desc1:SAT(b,N1,noexit)
+  lattice #3 n=49 h=10 [363s]: two:UNSAT desc1:SAT(b,N1,noexit)
+  lattice #4 n=42 h=10 [391s]: two:UNSAT desc1:SAT(a,N2,noexit)
+  lattice #5 n=54 h=10 [790s]: two:UNSAT desc1:SAT(b,N1,noexit)
+  lattice #6 n=51 h=10 [1137s]: two:UNSAT desc1:SAT(b,N1,noexit)
+SUMMARY M6 ['tall', '10', '6', '1', '8'] 1137s 6 lattices
+   two | NoFix with Tb at atoms only at two-row meet columns (TwoRowTb FAILS) | {'UNSAT': 6}
+   desc1 | NoFix with Tb at atoms only on their own descent (mutant desc1 FAILS) | {'SAT': 6, 'SAT_a': 2, 'SAT_N1': 5, 'SAT_b': 4, 'SAT_N2': 1}
+  smallest desc1 35 -> /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/amr_run17/brief/run5/meet_desc1_M6_min35.json

@@ -137,6 +137,7 @@ import Mordor.SideEntry
 import Mordor.SecondEntry
 import Mordor.ParentAncestry
 import Mordor.LateParent
+import Mordor.Normalize
 import Mordor.RiseHeight4
 import Mordor.GroundOH
 import Mordor.OHHeight4

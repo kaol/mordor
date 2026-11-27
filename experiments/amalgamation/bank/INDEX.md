@@ -47,3 +47,5 @@
 | s289_ownzcell_h4.json | OwnZCell (W0-flat: no mu-fixed atom implies some atom has an own cell at a height-2 element of Z on its descent); calibrated mutant of GoodTop | §289 | W0flat+NoFix (Tb dropped at height-2 rows) | 9 | 4 | 4 | 1 | a | 2 fixed | 1 |
 | s289_ownzcell_h5.json | OwnZCell; atoms 3, 4 land at d = 7 and swap | §289 | W0flat+NoFix (Tb dropped at height-2 rows) | 12 | 5 | 4 | 2 | a | 2 fixed | 1 |
 | s290_dwitness_h5.json | DWitness (W0-flat, branch a, NoFix: d lands on itself); here only 8 in M2 self-lands | §290 | W0flat+NoFix (Tb dropped at height-2 rows) | 14 | 5 | 5 | 1 | a | 3 fixed | 5 |
+| s291_lfpminall.json | LfpMinAll (W0-flat NoFix: every minimal high descent column y has b(y) in Z) | §291 | W0flat+NoFix (Tb dropped at height-2 rows) | 29 | 8 | 7 | 1 | a | 2 fixed | 7 |
+| s291_lfpland.json | LfpLand (W0-flat NoFix: b(y) is a witness with y on its descent) | §291 | W0flat+NoFix (Tb dropped at height-2 rows) | 17 | 5 | 6 | 2 | a | 2 fixed | 3 |

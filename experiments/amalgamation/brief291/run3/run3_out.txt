@@ -1,0 +1,14 @@
+lfp_probe lead | quantifier: exists F in W0-flat | SAT = NoFix and every y in Ymin has b(y) not in Z (LfpMin FAILS) | corpus ['tall', '13', '4', '1', '8', '+', 'tall', '10', '7', '1', '5']
+lfp_probe mutA | quantifier: exists F in W0-flat | SAT = NoFix and some y in Ymin has b(y) not in Z (mutant LfpMinAll FAILS) | corpus ['tall', '13', '4', '1', '8', '+', 'tall', '10', '7', '1', '5']
+  lattice #1 n=58 h=13 [171s]: lead:UNSAT mutA:SAT(b,N7,noexit)
+  lattice #2 n=42 h=13 [196s]: lead:UNSAT mutA:SAT(a,N1,noexit)
+  lattice #3 n=39 h=13 [215s]: lead:UNSAT mutA:SAT(b,N1,noexit)
+  lattice #4 n=44 h=13 [245s]: lead:UNSAT mutA:SAT(b,N2,noexit)
+  lattice #5 n=48 h=13 [275s]: lead:UNSAT mutA:SAT(g,N2,noexit)
+  lattice #6 n=42 h=13 [300s]: lead:UNSAT mutA:SAT(a,N1,noexit)
+  lattice #7 n=33 h=13 [312s]: lead:UNSAT mutA:SAT(g,N1,noexit)
+  lattice #8 n=46 h=13 [369s]: lead:UNSAT mutA:SAT(g,N1,noexit)
+  lattice #9 n=75 h=10 [1382s]: lead:UNSAT mutA:SAT(a,N2,noexit)
+  lattice #10 n=42 h=10 [1410s]: lead:UNSAT mutA:SAT(b,N1,noexit)
+  lattice #11 n=49 h=10 [1468s]: lead:UNSAT mutA:SAT(b,N1,noexit)
+EXIT 124

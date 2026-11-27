@@ -1,0 +1,6 @@
+  lattice #1 n=52 h=12 [178s]: lead:UNSAT mutA:SAT(b,N1,noexit) gt:UNSAT
+SUMMARY calib ['tall', '12', '4', '1', '1']  178s 1 lattices
+   lead  | NoFix and every y in Ymin has b(y) not in Z (LfpMin FAILS) | {'UNSAT': 1}
+   mutA  | NoFix and some y in Ymin has b(y) not in Z (mutant LfpMinAll FAILS) | {'SAT': 1, 'SAT_b': 1, 'SAT_N1': 1, 'SAT_noexit': 1}
+   gt  | NoFix and no m in M2 lands on itself (GoodTop FAILS) | {'UNSAT': 1}
+  smallest mutA 52 -> /tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/amr_run17/brief/smoke/lfp_mutA_calib_min52.json

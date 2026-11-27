@@ -278,5 +278,19 @@
   "section": "§290",
   "world": "W0flat+NoFix (Tb dropped at height-2 rows)",
   "source": "orbit_probe.py nofix 0 Ta2 closure 5 11 4 30 (DUMP)"
+ },
+ {
+  "file": "s291_lfpminall.json",
+  "statement": "LfpMinAll (W0-flat NoFix: every minimal high descent column y has b(y) in Z)",
+  "section": "§291",
+  "world": "W0flat+NoFix (Tb dropped at height-2 rows)",
+  "source": "run-17 briefer, cex/direct290_nf_t8.json_4.json"
+ },
+ {
+  "file": "s291_lfpland.json",
+  "statement": "LfpLand (W0-flat NoFix: b(y) is a witness with y on its descent)",
+  "section": "§291",
+  "world": "W0flat+NoFix (Tb dropped at height-2 rows)",
+  "source": "run-17 briefer, cex/direct290_nf_cl.json_18.json"
  }
 ]

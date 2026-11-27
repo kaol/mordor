@@ -1,0 +1,2 @@
+22 ('phi(r_q)=lam(q)',)
+examples ['a1c_icok_blocker_single_min8.json#0', 'bad1_ac_not_forbidden_min14.json#0', 'bad1_ac_not_forbidden_min17.json#0', 'bad1_example_min14.json#0', 'bad1_none_below_ac_min12.json#0']

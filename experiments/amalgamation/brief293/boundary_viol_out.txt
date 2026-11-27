@@ -1,0 +1,4 @@
+5 ('a', 'N1', 'boundary Tb violated', '-')
+12 ('a', 'N1', 'boundary Tb violated', 'connector')
+2 ('atom', 'N1', 'boundary Tb violated', '-')
+7 ('atom', 'N1', 'boundary Tb violated', 'connector')

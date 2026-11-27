@@ -20,10 +20,10 @@ from pysat.solvers import Cadical153
 from tight_probe import lattices
 from rstages import stages, a_of
 MODE = sys.argv[1]; K = int(sys.argv[2]); MT = 'mT' in sys.argv[3:]
-REL = {a for a in sys.argv[3:] if a in ('Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD', 'Meet2', 'Desc1', 'Row1', 'LastMeet', 'LastLast', 'LastEither')}   # relaxations of (T) at rows of Z other than bot
+REL = {a for a in sys.argv[3:] if a in ('Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD', 'Meet2', 'Desc1', 'Row1', 'LastMeet', 'LastLast', 'LastEither', 'Stair')}   # relaxations of (T) at rows of Z other than bot
 BR = 'a' if 'Ba' in sys.argv[3:] else ('b' if 'Bb' in sys.argv[3:] else '')   # branch: a = h(d) = 2, b = d an atom (bad)
 NEX = next((int(a[1:]) for a in sys.argv[3:] if a in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6')), 0)   # exact N: t_N != bot = t_(N+1)
-args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb', 'Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD', 'Meet2', 'Desc1', 'Row1', 'LastMeet', 'LastLast', 'LastEither') and not (a[0] == 'E' and a[1:].isdigit())]
+args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb', 'Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD', 'Meet2', 'Desc1', 'Row1', 'LastMeet', 'LastLast', 'LastEither', 'Stair') and not (a[0] == 'E' and a[1:].isdigit())]
 SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= dep of its predecessor',
              'oneexit': 'some element of the bot-orbit exits to an atom that is not a fixed point', 'vac': 'the world has a model',
              'orbk': f'mu^{K}(bot) is not a fixed point of mu (Orbit{K} fails)',
@@ -91,7 +91,7 @@ for L in lattices(args):
                 if h[x] == 1 and 'Tb1' in REL and not le[u][x]: continue        # atoms: lower half only
                 if h[x] == 2 and 'Ta2' in REL and not le[y][u]: continue        # height-2 rows: upper half only
                 if h[x] == 2 and 'Tb2' in REL and not le[u][x]: continue        # height-2 rows: lower half only
-                if x != bot and ('Meet2' in REL or 'Desc1' in REL or 'Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL) and le[u][x] and not le[y][u]: continue   # Tb replaced below
+                if x != bot and ('Meet2' in REL or 'Desc1' in REL or 'Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL or 'Stair' in REL) and le[u][x] and not le[y][u]: continue   # Tb replaced below
                 if 'TbNotD' in REL and x != bot and h[x] == 1 and le[u][x] and not le[y][u]:
                     add([-Z(x), -f(x, y, u), v('dv', x)]); continue       # Tb waived at the row of d only
                 if le[u][x] or le[y][u]: add([-Z(x), -f(x, y, u)])
@@ -114,7 +114,7 @@ for L in lattices(args):
             add([-o] + ls)
             for t in ls: add([-t, o])
             lam[x, p] = o
-    if 'Meet2' in REL or 'Desc1' in REL or 'Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL:
+    if 'Meet2' in REL or 'Desc1' in REL or 'Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL or 'Stair' in REL:
         for m_ in low:                                        # height-2 rows of Z: Tb only as lambda(m) not <= m
             if h[m_] == 2:
                 for p_ in low:
@@ -129,6 +129,7 @@ for L in lattices(args):
         for x in low:
             for j in range(NO + 1):
                 for w in range(n): add([-it(x, j, w), D(x, w)])
+        SU = set()
         for q in low:
             if h[q] != 1: continue
             xs = [q] if 'Desc1' in REL else [x for x in low if le[q][x]]
@@ -139,6 +140,13 @@ for L in lattices(args):
                         if w is None: w = max((t for t in range(n) if le[t][u1] and le[t][u2]), key=lambda t: h[t])
                         if h[w] <= 2: continue
                         if 'Desc1' in REL and u2 != top: continue
+                        if 'Stair' in REL:                             # boundary points only: u1 meet succ_x(u2) low
+                            for u3 in range(n):
+                                if not le[u3][u2] or u3 == u2 or h[L.meet[u1][u3]] > 2: continue
+                                SU.add((x, u2, u3))
+                                for u in range(n):
+                                    if le[u][q]: add([-Z(q), -Z(x), -D(q, u1), -v('S', x, u2, u3), -f(q, w, u)])
+                            continue
                         if ('Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL) and u1 != top and u2 != top:
                             if 'LastEither' in REL and h[x] == 2:
                                 for u in range(n):
@@ -152,6 +160,9 @@ for L in lattices(args):
                             continue      # otherwise single descent elements only
                         for u in range(n):
                             if le[u][q]: add([-Z(q), -Z(x), -D(q, u1), -D(x, u2), -f(q, w, u)])
+        for (x, u2, u3) in SU:                                # S(x, u2, u3): u3 follows u2 on row x's descent
+            for j in range(NO):
+                add([-it(x, j, u2), -it(x, j + 1, u3), v('S', x, u2, u3)])
     if 'land' in REL:                                         # every row of Z lands (as tightness gives)
         for x in low: add([-Z(x)] + [lam[x, p_] for p_ in low])
     mu = {}
@@ -372,7 +383,7 @@ for L in lattices(args):
             nofix = not any(h[q] == 1 and lamf(q) is not None and lamf(q) not in Zs and F[bot][lamf(q)] == q for q in Zs)
             if MODE == 'goodtop': concl = any(h[m_] == 2 and lamf(m_) == m_ for m_ in Zs)
             else: concl = any(h[q] == 1 and h[z] == 2 and z in Zs and z in desc(q) and le[q][F[q][z]] for q in Zs for z in Zs)
-            if 'Meet2' in REL or 'Desc1' in REL or 'Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL:   # the relaxed world, rechecked from the definitions
+            if 'Meet2' in REL or 'Desc1' in REL or 'Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL or 'Stair' in REL:   # the relaxed world, rechecked from the definitions
                 wok = all(h[z] <= 2 for z in Zs) and any(h[z] == 2 for z in Zs)
                 meet = lambda u1, u2: max((t for t in range(n) if le[t][u1] and le[t][u2]), key=lambda t: h[t])
                 for x in Zs:
@@ -386,6 +397,7 @@ for L in lattices(args):
                             for u1 in desc(x):
                                 for u2 in ([top] if 'Desc1' in REL else desc(x2)):
                                     if 'Row1' in REL and u1 != top and u2 != top: continue
+                                    if 'Stair' in REL and (F[x2][u2] == u2 or h[meet(u1, F[x2][u2])] > 2): continue
                                     if ('LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL) and u1 != top and u2 != top:
                                         rq = desc(x)[next(i_ for i_, z_ in enumerate(desc(x)) if h[z_] <= 2) - 1]
                                         rx = desc(x2)[next(i_ for i_, z_ in enumerate(desc(x2)) if h[z_] <= 2) - 1]
@@ -394,7 +406,7 @@ for L in lattices(args):
                                         elif not (h[x2] == 2 and u1 == rq and ('LastMeet' in REL or u2 == rx)): continue
                                     w = meet(u1, u2)
                                     if h[w] > 2 and le[F[x][w]][x]: wok = False
-                ok = ok and wok and REL <= {'Meet2', 'Desc1', 'Row1', 'LastMeet', 'LastLast', 'LastEither'}
+                ok = ok and wok and REL <= {'Meet2', 'Desc1', 'Row1', 'LastMeet', 'LastLast', 'LastEither', 'Stair'}
             else: ok = ok and wok and REL <= {'Ta2'}
             anyexit = any(lamf(x) is not None and lamf(x) not in Zs for x in Zs)
             bad = nofix and (MODE == 'nofix' or (MODE == 'noexit' and not anyexit) or (MODE == 'exitnofix' and anyexit) or (MODE in ('goodtop', 'Mgoodtop') and not concl))

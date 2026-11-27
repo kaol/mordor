@@ -1,0 +1,34 @@
+QUANTIFIER: for each lattice of the corpus, EXISTS F in W0^2 and EXISTS an atom q of Z and a high column w with
+            meet_{x' in Z, x' >= q} succ_{x'}(sigma_{x'}(w)) <= q          (that meet is F#(q, w)).
+SAT  = an irreparable W0^2 model exists on this lattice (Repair fails there; the lattice gives TwoRowTb room).
+UNSAT = every W0^2 model on this lattice is repaired by F# (TwoRowTb has no content beyond CertAtom there).
+Mode 'irrepnf' adds NoFix (no mu-fixed atom): SAT would refute TwoRowTb itself.
+irrep_probe irrep maxn=40 corpora=[['closure', '5', '11', '4', '30'], ['tall', '8', '4', '1', '12'], ['tall', '10', '4', '2', '20']]
+  closure 5 11 4 30 lattice n=12 h=5: UNSAT  1s
+  closure 5 11 4 30 lattice n=14 h=5: UNSAT  2s
+  closure 5 11 4 30 lattice n=14 h=5: UNSAT  2s
+  closure 5 11 4 30 lattice n=13 h=5: UNSAT  1s
+  closure 5 11 4 30 lattice n=21 h=5: UNSAT  89s
+  closure 5 11 4 30 lattice n=19 h=5: UNSAT  24s
+  closure 5 11 4 30 lattice n=17 h=5: UNSAT  9s
+  closure 5 11 4 30 lattice n=16 h=4: UNSAT  5s
+  closure 5 11 4 30 lattice n=17 h=4: UNSAT  6s
+  closure 5 11 4 30 lattice n=15 h=4: UNSAT  2s
+  closure 5 11 4 30 lattice n=16 h=5: UNSAT  7s
+  closure 5 11 4 30 lattice n=20 h=4: UNSAT  24s
+  closure 5 11 4 30 lattice n=15 h=5: UNSAT  4s
+  closure 5 11 4 30 lattice n=18 h=5: UNSAT  21s
+  closure 5 11 4 30 lattice n=12 h=4: UNSAT  1s
+  closure 5 11 4 30 lattice n=20 h=5: UNSAT  30s
+  closure 5 11 4 30 lattice n=15 h=5: UNSAT  4s
+  closure 5 11 4 30 lattice n=14 h=4: UNSAT  1s
+  closure 5 11 4 30 lattice n=17 h=5: UNSAT  9s
+  closure 5 11 4 30 lattice n=10 h=5: UNSAT  0s
+  closure 5 11 4 30 lattice n=12 h=5: UNSAT  1s
+  closure 5 11 4 30 lattice n=16 h=5: UNSAT  6s
+  closure 5 11 4 30 lattice n=19 h=5: UNSAT  32s
+  closure 5 11 4 30 lattice n=9 h=4: UNSAT  0s
+  closure 5 11 4 30 lattice n=20 h=5: UNSAT  74s
+  closure 5 11 4 30 lattice n=18 h=5: UNSAT  19s
+exit 143
+STOPPED BY BRIEFER at ~640 s (closure corpus, encoding too slow; replaced by run 4 with the 'fast' TbFibre restriction)

@@ -1,0 +1,74 @@
+=== Stair nofix E2 tall 12 4 1 8 maxn 40 (time left 1500s)
+QUANTIFIER: for each lattice, EXISTS F in Stair with NO mu-fixed atom (lambda(q) = p not in Z and F(bot, p) = q).
+SAT = StairTb fails on this lattice (the model is saved and re-checked in Python from the definitions).
+UNSAT = every Stair model on this lattice has a mu-fixed atom.
+  python3 stair_probe.py nofix [maxn N] [E1] CORPUS [+ CORPUS ...]      (E1: exact N = 1)
+stair_probe nofix exactN=2 maxn=40 corpora=[['tall', '12', '4', '1', '8']]
+  tall 12 4 1 8 lattice n=33 h=12: UNSAT  12s
+  tall 12 4 1 8 lattice n=32 h=12: UNSAT  28s
+  tall 12 4 1 8 lattice n=34 h=12: UNSAT  16s
+  tall 12 4 1 8 lattice n=27 h=12: UNSAT  5s
+nofix {'UNSAT': 4} smallest SAT None total 62s
+exit 0
+=== MUTANT LastEither E2 tall 12 4 1 8 maxn 40 (time left 1439s)
+orbit_probe nofix K=0 RELAXED ['LastEither'] (off g read as: d has no own-row cell) N=2 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8', 'maxn', '40']
+  lattice n=33 h=12: UNSAT
+    model: branch atom, N = 2
+  lattice n=32 h=12: SAT
+    model: branch atom, N = 2
+  lattice n=34 h=12: SAT
+  lattice n=27 h=12: UNSAT
+nofix 0  ['tall', '12', '4', '1', '8'] {'UNSAT': 2, 'SAT': 2} {'h12:unsat': 2, 'h12': 2} smallest 32
+exit 0
+=== Stair nofix E3 tall 12 4 1 8 maxn 40 (time left 1415s)
+QUANTIFIER: for each lattice, EXISTS F in Stair with NO mu-fixed atom (lambda(q) = p not in Z and F(bot, p) = q).
+SAT = StairTb fails on this lattice (the model is saved and re-checked in Python from the definitions).
+UNSAT = every Stair model on this lattice has a mu-fixed atom.
+  python3 stair_probe.py nofix [maxn N] [E1] CORPUS [+ CORPUS ...]      (E1: exact N = 1)
+stair_probe nofix exactN=3 maxn=40 corpora=[['tall', '12', '4', '1', '8']]
+  tall 12 4 1 8 lattice n=33 h=12: UNSAT  13s
+  tall 12 4 1 8 lattice n=32 h=12: UNSAT  25s
+  tall 12 4 1 8 lattice n=34 h=12: UNSAT  12s
+  tall 12 4 1 8 lattice n=27 h=12: UNSAT  5s
+nofix {'UNSAT': 4} smallest SAT None total 55s
+exit 0
+=== MUTANT LastEither E3 tall 12 4 1 8 maxn 40 (time left 1360s)
+orbit_probe nofix K=0 RELAXED ['LastEither'] (off g read as: d has no own-row cell) N=3 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8', 'maxn', '40']
+  lattice n=33 h=12: UNSAT
+    model: branch atom, N = 3
+  lattice n=32 h=12: SAT
+    model: branch atom, N = 3
+  lattice n=34 h=12: SAT
+  lattice n=27 h=12: UNSAT
+nofix 0  ['tall', '12', '4', '1', '8'] {'UNSAT': 2, 'SAT': 2} {'h12:unsat': 2, 'h12': 2} smallest 32
+exit 0
+=== Stair nofix E2 tall 10 6 1 8 maxn 40 (time left 1330s)
+QUANTIFIER: for each lattice, EXISTS F in Stair with NO mu-fixed atom (lambda(q) = p not in Z and F(bot, p) = q).
+SAT = StairTb fails on this lattice (the model is saved and re-checked in Python from the definitions).
+UNSAT = every Stair model on this lattice has a mu-fixed atom.
+  python3 stair_probe.py nofix [maxn N] [E1] CORPUS [+ CORPUS ...]      (E1: exact N = 1)
+stair_probe nofix exactN=2 maxn=40 corpora=[['tall', '10', '6', '1', '8']]
+  tall 10 6 1 8 lattice n=35 h=10: UNSAT  41s
+nofix {'UNSAT': 1} smallest SAT None total 41s
+exit 0
+=== MUTANT LastEither E2 tall 10 6 1 8 maxn 40 (time left 1288s)
+orbit_probe nofix K=0 RELAXED ['LastEither'] (off g read as: d has no own-row cell) N=2 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '10', '6', '1', '8', 'maxn', '40']
+    model: branch atom, N = 2
+  lattice n=35 h=10: SAT
+nofix 0  ['tall', '10', '6', '1', '8'] {'SAT': 1} {'h10': 1} smallest 35
+exit 0
+=== Stair nofix E1 tall 10 6 1 8 maxn 40 (time left 1282s)
+QUANTIFIER: for each lattice, EXISTS F in Stair with NO mu-fixed atom (lambda(q) = p not in Z and F(bot, p) = q).
+SAT = StairTb fails on this lattice (the model is saved and re-checked in Python from the definitions).
+UNSAT = every Stair model on this lattice has a mu-fixed atom.
+  python3 stair_probe.py nofix [maxn N] [E1] CORPUS [+ CORPUS ...]      (E1: exact N = 1)
+stair_probe nofix exactN=1 maxn=40 corpora=[['tall', '10', '6', '1', '8']]
+  tall 10 6 1 8 lattice n=35 h=10: UNSAT  38s
+nofix {'UNSAT': 1} smallest SAT None total 38s
+exit 0
+=== MUTANT LastEither E1 tall 10 6 1 8 maxn 40 (time left 1244s)
+orbit_probe nofix K=0 RELAXED ['LastEither'] (off g read as: d has no own-row cell) N=1 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '10', '6', '1', '8', 'maxn', '40']
+    model: branch atom, N = 1
+  lattice n=35 h=10: SAT
+nofix 0  ['tall', '10', '6', '1', '8'] {'SAT': 1} {'h10': 1} smallest 35
+exit 0

@@ -1,0 +1,20 @@
+Staircase / corner-colour analysis (free; from the definitions, no SAT).
+For an atom q of Z and a row x in Z with q <= x: G(j,k) = u_j(q) ^ u_k(x) (u = row descents from top).
+H = {(j,k) : h(G(j,k)) >= 3} is a down-set of the grid; a corner is (l,k) in H with (l+1,k), (l,k+1) not in H.
+Corner colour e = F(q, G(l,k)); case A iff phi(G(l,k)) >= q, case B otherwise.
+Claims checked (CornerColour lemma, paper proof in brief.md):
+  (C0) W0^2 at q gives F(q,G) not <= q at every corner (Tb at a two-row meet column);
+  (C1) at a case-A corner, e is a height-2 cover of q and G(l+1,k+1) = G(l+1,k) = G(l,k+1) = e;
+  (C2) consecutive corner colours lie below one common low element (G(l+1, K));
+  (C3) first corner colour <= lambda(x), last corner colour <= lambda(q);
+  (C4) all corners case A  ==>  lambda(x) = lambda(q), a height-2 cover of q.
+World membership (W0, W0^2 = Meet2, NoFix) is recomputed from the definitions.
+models analysed 201
+1254 ('W0', 'C0', True, 'C1', True, 'C2', True, 'C3', True, 'C4', True)
+548 ('W0', 'pair', 'allA', 'sameLanding')
+287 ('W0', 'pair', 'someB', 'diffLanding')
+419 ('W0', 'pair', 'someB', 'sameLanding')
+69 ('W0sq-not-W0', 'C0', True, 'C1', True, 'C2', True, 'C3', True, 'C4', True)
+21 ('W0sq-not-W0', 'pair', 'allA', 'sameLanding')
+11 ('W0sq-not-W0', 'pair', 'someB', 'diffLanding')
+37 ('W0sq-not-W0', 'pair', 'someB', 'sameLanding')

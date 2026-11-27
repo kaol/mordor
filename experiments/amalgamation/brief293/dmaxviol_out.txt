@@ -1,0 +1,48 @@
+Free analysis (no search) of stored NoFix models of relaxed worlds (Row1/LastLast/LastMeet/LastEither/Desc1/...).
+For each model: build the descent-maximal map F# (brief291 A3; same descents), list every W0 Tb violation of F#
+at an atom row q (high w with F#(q,w) <= q), and report:
+  - fibre: phi(w) = q at every violation (lemma TbFibre)
+  - k = size of the smallest set of rows x' >= q in Z whose successor values succ_{x'}(sigma_{x'}(w)) already meet <= q
+  - whether some violation column is a two-row meet u ^ v (u in desc(q), v in desc(x), x >= q) [then F# is not in W0^2]
+Prints the quantifier: FOR EACH model, FOR EACH atom q, FOR EACH high w.
+{'name': 's292_lasteither_h10.json#0', 'n': 25, 'H': 10, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (1, 1), 'viols': None}
+{'name': 's292_lastlast_h8.json#0', 'n': 19, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (2, 2), 'viols': None}
+{'name': 's292_lastmeet_h8.json#0', 'n': 29, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (6, 1), 'viols': None}
+{'name': 's292_row1_h8.json#0', 'n': 16, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 5, 'fibre_all': True, 'k': {2: 5}, 'two_row_viol': True, 'exits': False, 'd_N': (1, 1), 'viols': None}
+{'name': 's292_le_t10.json#0', 'n': 35, 'H': 10, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (2, 1), 'viols': None}
+{'name': 's292_le_t10.json#1', 'n': 44, 'H': 10, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': True, 'd_N': (12, 2), 'viols': None}
+{'name': 's292_le_t10.json#2', 'n': 33, 'H': 10, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (7, 2), 'viols': None}
+{'name': 's292_le_t10.json#3', 'n': 50, 'H': 10, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (8, 2), 'viols': None}
+{'name': 's292_le_t10.json#4', 'n': 35, 'H': 10, 'nofix': True, 'w0_sharp': False, 'nviol': 3, 'fibre_all': True, 'k': {2: 3}, 'two_row_viol': True, 'exits': True, 'd_N': (5, 1), 'viols': None}
+{'name': 's292_le_t10.json#5', 'n': 25, 'H': 10, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (1, 1), 'viols': None}
+{'name': 's292_le_t10.json#6', 'n': 50, 'H': 10, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (4, 2), 'viols': None}
+{'name': 's292_le_t8.json#0', 'n': 29, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (2, 1), 'viols': None}
+{'name': 's292_le_t8.json#1', 'n': 33, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (7, 2), 'viols': None}
+{'name': 's292_le_t8.json#2', 'n': 33, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (2, 1), 'viols': None}
+{'name': 's292_le_t8.json#3', 'n': 30, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (10, 1), 'viols': None}
+{'name': 's292_ll_t8.json#0', 'n': 23, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (8, 1), 'viols': None}
+{'name': 's292_ll_t8.json#1', 'n': 19, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (2, 2), 'viols': None}
+{'name': 's292_ll_t8.json#2', 'n': 19, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (5, 2), 'viols': None}
+{'name': 's292_ll_t8.json#3', 'n': 29, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (2, 2), 'viols': None}
+{'name': 's292_ll_t8.json#4', 'n': 33, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 2, 'fibre_all': True, 'k': {2: 2}, 'two_row_viol': True, 'exits': True, 'd_N': (2, 2), 'viols': None}
+{'name': 's292_ll_t8.json#5', 'n': 33, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (4, 2), 'viols': None}
+{'name': 's292_ll_t8.json#6', 'n': 30, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': True, 'd_N': (2, 1), 'viols': None}
+{'name': 's292_ll_t8.json#7', 'n': 27, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (1, 1), 'viols': None}
+{'name': 's292_lm_t8.json#0', 'n': 29, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (6, 1), 'viols': None}
+{'name': 's292_lm_t8.json#1', 'n': 33, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': True, 'd_N': (9, 1), 'viols': None}
+{'name': 's292_lm_t8.json#2', 'n': 33, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (3, 2), 'viols': None}
+{'name': 's292_lm_t8.json#3', 'n': 30, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (9, 2), 'viols': None}
+{'name': 's292_orbit_probe_nofix_min16.json#0', 'n': 16, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 5, 'fibre_all': True, 'k': {2: 5}, 'two_row_viol': True, 'exits': False, 'd_N': (1, 1), 'viols': None}
+{'name': 's292_orbit_probe_nofix_min19.json#0', 'n': 19, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (2, 2), 'viols': None}
+{'name': 's292_orbit_probe_nofix_min25.json#0', 'n': 25, 'H': 10, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (1, 1), 'viols': None}
+{'name': 's292_orbit_probe_nofix_min29.json#0', 'n': 29, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (2, 1), 'viols': None}
+{'name': 's292_r1_t8.json#0', 'n': 23, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (8, 2), 'viols': None}
+{'name': 's292_r1_t8.json#1', 'n': 19, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (2, 2), 'viols': None}
+{'name': 's292_r1_t8.json#2', 'n': 19, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (5, 2), 'viols': None}
+{'name': 's292_r1_t8.json#3', 'n': 29, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (2, 2), 'viols': None}
+{'name': 's292_r1_t8.json#4', 'n': 33, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 5, 'fibre_all': True, 'k': {2: 5}, 'two_row_viol': True, 'exits': False, 'd_N': (7, 1), 'viols': None}
+{'name': 's292_r1_t8.json#5', 'n': 33, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (4, 2), 'viols': None}
+{'name': 's292_r1_t8.json#6', 'n': 16, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 5, 'fibre_all': True, 'k': {2: 5}, 'two_row_viol': True, 'exits': False, 'd_N': (1, 1), 'viols': None}
+{'name': 's292_r1_t8.json#7', 'n': 30, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (1, 1), 'viols': None}
+{'name': 's292_r1_t8.json#8', 'n': 27, 'H': 8, 'nofix': True, 'w0_sharp': False, 'nviol': 1, 'fibre_all': True, 'k': {2: 1}, 'two_row_viol': True, 'exits': False, 'd_N': (1, 1), 'viols': None}
+40 ('two_row_viol', True, 'fibre_all', True, 'w0#', False, 'mink', 2)

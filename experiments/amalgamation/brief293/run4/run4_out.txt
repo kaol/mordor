@@ -1,0 +1,15 @@
+QUANTIFIER: for each lattice of the corpus, EXISTS F in W0^2 and EXISTS an atom q of Z and a high column w with
+            meet_{x' in Z, x' >= q} succ_{x'}(sigma_{x'}(w)) <= q          (that meet is F#(q, w)).
+SAT  = an irreparable W0^2 model exists on this lattice (Repair fails there; the lattice gives TwoRowTb room).
+UNSAT = every W0^2 model on this lattice is repaired by F# (TwoRowTb has no content beyond CertAtom there).
+Mode 'irrepnf' adds NoFix (no mu-fixed atom): SAT would refute TwoRowTb itself.
+irrep_probe irrep fast maxn=30 corpora=[['tall', '8', '4', '1', '12'], ['tall', '10', '4', '2', '20'], ['closure', '6', '12', '1', '40']]
+  tall 8 4 1 12 lattice n=23 h=8: UNSAT  42s
+  tall 8 4 1 12 lattice n=19 h=8: UNSAT  16s
+  tall 8 4 1 12 lattice n=19 h=8: UNSAT  24s
+  tall 8 4 1 12 lattice n=26 h=8: UNSAT  119s
+  tall 8 4 1 12 lattice n=29 h=8: UNSAT  835s
+  tall 8 4 1 12 lattice n=26 h=8: UNSAT  139s
+  tall 8 4 1 12 lattice n=29 h=8: UNSAT  186s
+  tall 8 4 1 12 lattice n=16 h=8: UNSAT  1s
+exit 124

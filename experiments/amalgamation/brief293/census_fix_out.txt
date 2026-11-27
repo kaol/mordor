@@ -1,0 +1,6 @@
+70 ('a', 'N1', 'fixed<=d', 1)
+4 ('a', 'N>=2', 'fixed elsewhere', 1)
+5 ('a', 'N>=2', 'fixed<=d', 1)
+26 ('atom', 'N1', 'fixed=d', 1)
+43 ('atom', 'N>=2', 'fixed elsewhere', 1)
+43 ('atom', 'N>=2', 'fixed=d', 1)

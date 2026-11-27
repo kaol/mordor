@@ -1,0 +1,6 @@
+140 ('fixed', 'clean', 'maxpre')
+29 ('fixed', 'clean', 'notmax')
+19 ('fixed', 'unclean', 'maxpre')
+3 ('fixed', 'unclean', 'notmax')
+61 ('notfixed', 'unclean', 'maxpre')
+316 ('notfixed', 'unclean', 'notmax')

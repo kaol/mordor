@@ -1,0 +1,11 @@
+bad1_ac_forbidden_t_ne_join_min17.json#0 n 17 H 5 N 2 branch atom nofix False F# in W0: True
+bad1_ac_forbidden_t_ne_join_min18.json#0 n 18 H 6 N 1 branch atom nofix False F# in W0: True
+bad1_ac_forbidden_t_ne_join_min21.json#0 n 21 H 5 N 2 branch atom nofix False F# in W0: True
+bad1_union_misses_min25.json#0 n 25 H 5 N 2 branch atom nofix False F# in W0: True
+colasc_hs_k4_tK_min24.json#0 n 24 H 5 N 2 branch atom nofix False F# in W0: True
+seeded_deadend_min32.json#0 n 32 H 6 N 2 branch atom nofix False F# in W0: True
+single_claim_a_feeder_le_ahead_min7.json#0 n 7 H 4 N 1 branch atom nofix False F# in W0: True
+single_claim_bm_eq_feeder_ahead_min7.json#0 n 7 H 4 N 2 branch atom nofix False F# in W0: True
+single_claim_gfp_ahead_min7.json#0 n 7 H 4 N 2 branch atom nofix False F# in W0: True
+single_claim_noic_fi_ahead_min7.json#0 n 7 H 4 N 1 branch a nofix False F# in W0: True
+{True: 10}

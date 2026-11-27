@@ -156,3 +156,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁹⁰: `orbit_probe.py` mode `nofix` (W0♭ ∧ NoFix models via DUMP); `direct290/` (samples and analysis scripts). Bank `s290_dwitness_h5`.
 - §34.3z²⁹¹: brief run 17 archived in `brief291/` (testers `meet_probe.py`, `lfp_probe.py`, `world.py`; runs 1–5; refuting models in `cex/`). `orbit_probe.py` relaxations `Meet2` (TwoRowTb world W0²) and `Desc1` (its calibrated mutant). Worker output `out_worker291.txt`. Bank `s291_lfpminall`, `s291_lfpland`.
 - §34.3z²⁹²: `orbit_probe.py` relaxations `Row1`, `LastLast`, `LastMeet`, `LastEither` (sub-worlds of W0²) and modes `noexit`, `exitnofix`; `direct292/` (outputs, `viol.py`). Bank `s292_*`.
+- §34.3z²⁹³: brief run 18 archived in `brief293/` (testers `stair_probe.py`, `irrep_probe.py`; free analyses; runs 1–5; `cex/`). `orbit_probe.py` relaxation `Stair` (StairTb's world). Worker output `out_worker293.txt`.

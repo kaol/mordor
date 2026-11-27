@@ -292,5 +292,33 @@
   "section": "§291",
   "world": "W0flat+NoFix (Tb dropped at height-2 rows)",
   "source": "run-17 briefer, cex/direct290_nf_cl.json_18.json"
+ },
+ {
+  "file": "s292_row1_h8.json",
+  "statement": "CertAtom in world Row1 (Tb at atom rows only at single descent elements of rows of Z above the atom)",
+  "section": "§292",
+  "world": "relaxed: Tb at atom rows restricted (sub-world of W0-squared)",
+  "source": "orbit_probe.py nofix 0 Row1 tall 8 4 1 12"
+ },
+ {
+  "file": "s292_lastlast_h8.json",
+  "statement": "CertAtom in world LastLast (Row1 + meets r_q ∧ r_x, x in M2 above q)",
+  "section": "§292",
+  "world": "relaxed: Tb at atom rows restricted (sub-world of W0-squared)",
+  "source": "orbit_probe.py nofix 0 LastLast tall 8 4 1 12"
+ },
+ {
+  "file": "s292_lastmeet_h8.json",
+  "statement": "CertAtom in world LastMeet (Row1 + meets r_q ∧ v, v on the descent of x in M2 above q)",
+  "section": "§292",
+  "world": "relaxed: Tb at atom rows restricted (sub-world of W0-squared)",
+  "source": "orbit_probe.py nofix 0 LastMeet tall 8 4 1 12"
+ },
+ {
+  "file": "s292_lasteither_h10.json",
+  "statement": "CertAtom in world LastEither (Row1 + meets u ∧ v with u = r_q or v = r_x)",
+  "section": "§292",
+  "world": "relaxed: Tb at atom rows restricted (sub-world of W0-squared)",
+  "source": "orbit_probe.py nofix 0 LastEither tall 10 4 2 20"
  }
 ]

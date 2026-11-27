@@ -49,3 +49,7 @@
 | s290_dwitness_h5.json | DWitness (W0-flat, branch a, NoFix: d lands on itself); here only 8 in M2 self-lands | §290 | W0flat+NoFix (Tb dropped at height-2 rows) | 14 | 5 | 5 | 1 | a | 3 fixed | 5 |
 | s291_lfpminall.json | LfpMinAll (W0-flat NoFix: every minimal high descent column y has b(y) in Z) | §291 | W0flat+NoFix (Tb dropped at height-2 rows) | 29 | 8 | 7 | 1 | a | 2 fixed | 7 |
 | s291_lfpland.json | LfpLand (W0-flat NoFix: b(y) is a witness with y on its descent) | §291 | W0flat+NoFix (Tb dropped at height-2 rows) | 17 | 5 | 6 | 2 | a | 2 fixed | 3 |
+| s292_row1_h8.json | CertAtom in world Row1 (Tb at atom rows only at single descent elements of rows of Z above the atom) | §292 | relaxed: Tb at atom rows restricted (sub-world of W0-squared) | 16 | 8 | 4 | 1 | b | 4 cycle | 2 |
+| s292_lastlast_h8.json | CertAtom in world LastLast (Row1 + meets r_q ∧ r_x, x in M2 above q) | §292 | relaxed: Tb at atom rows restricted (sub-world of W0-squared) | 19 | 8 | 5 | 2 | b | 4 cycle | 4 |
+| s292_lastmeet_h8.json | CertAtom in world LastMeet (Row1 + meets r_q ∧ v, v on the descent of x in M2 above q) | §292 | relaxed: Tb at atom rows restricted (sub-world of W0-squared) | 29 | 8 | 7 | 1 | a | 3 cycle | 6 |
+| s292_lasteither_h10.json | CertAtom in world LastEither (Row1 + meets u ∧ v with u = r_q or v = r_x) | §292 | relaxed: Tb at atom rows restricted (sub-world of W0-squared) | 25 | 10 | 5 | 1 | b | 4 cycle | 2 |

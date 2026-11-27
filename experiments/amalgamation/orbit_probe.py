@@ -20,10 +20,10 @@ from pysat.solvers import Cadical153
 from tight_probe import lattices
 from rstages import stages, a_of
 MODE = sys.argv[1]; K = int(sys.argv[2]); MT = 'mT' in sys.argv[3:]
-REL = {a for a in sys.argv[3:] if a in ('Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD', 'Meet2', 'Desc1')}   # relaxations of (T) at rows of Z other than bot
+REL = {a for a in sys.argv[3:] if a in ('Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD', 'Meet2', 'Desc1', 'Row1', 'LastMeet', 'LastLast', 'LastEither')}   # relaxations of (T) at rows of Z other than bot
 BR = 'a' if 'Ba' in sys.argv[3:] else ('b' if 'Bb' in sys.argv[3:] else '')   # branch: a = h(d) = 2, b = d an atom (bad)
 NEX = next((int(a[1:]) for a in sys.argv[3:] if a in ('E1', 'E2', 'E3', 'E4', 'E5', 'E6')), 0)   # exact N: t_N != bot = t_(N+1)
-args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb', 'Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD', 'Meet2', 'Desc1') and not (a[0] == 'E' and a[1:].isdigit())]
+args = [a for a in sys.argv[3:] if a not in ('mT', 'Ba', 'Bb', 'Tat', 'Tm2', 'TaOnly', 'TbOnly', 'Ta1', 'Tb1', 'Ta2', 'Tb2', 'land', 'xfix', 'TbNotD', 'Meet2', 'Desc1', 'Row1', 'LastMeet', 'LastLast', 'LastEither') and not (a[0] == 'E' and a[1:].isdigit())]
 SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= dep of its predecessor',
              'oneexit': 'some element of the bot-orbit exits to an atom that is not a fixed point', 'vac': 'the world has a model',
              'orbk': f'mu^{K}(bot) is not a fixed point of mu (Orbit{K} fails)',
@@ -38,6 +38,8 @@ SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= 
              'fixmax': 'd is not a good atom and some mu-fixed atom of Z lies below no height-2 element of Z (FixMax fails)',
              'goodnonmax': 'CALIBRATED MUTANT (GoodNonMax): d is not a good atom and some good atom of Z lies below no height-2 element of Z',
              'fixnotd': 'some mu-fixed atom of Z is not below d (FixBelowD fails; use with Ba)',
+             'noexit': 'no row of Z exits (ExitZ fails; with a relaxation flag)',
+             'exitnofix': 'some row of Z exits and no atom of Z is exit-fixed (ExitToFix fails; with a relaxation flag)',
              'nofix': 'no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat)',
              'goodtop': 'no atom of Z is exit-fixed (lambda(q) not in Z, F(bot, lambda(q)) = q) and no m in Z of height 2 has lambda(m) = m (GoodTop fails; use with Ta2 = W0-flat)',
              'Mgoodtop': 'CALIBRATED MUTANT (OwnZCell, refuted): no atom of Z is exit-fixed and no atom q of Z has q <= F(q, z) at some height-2 z in Z on row q\'s descent',
@@ -89,7 +91,7 @@ for L in lattices(args):
                 if h[x] == 1 and 'Tb1' in REL and not le[u][x]: continue        # atoms: lower half only
                 if h[x] == 2 and 'Ta2' in REL and not le[y][u]: continue        # height-2 rows: upper half only
                 if h[x] == 2 and 'Tb2' in REL and not le[u][x]: continue        # height-2 rows: lower half only
-                if x != bot and ('Meet2' in REL or 'Desc1' in REL) and le[u][x] and not le[y][u]: continue   # Tb replaced below
+                if x != bot and ('Meet2' in REL or 'Desc1' in REL or 'Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL) and le[u][x] and not le[y][u]: continue   # Tb replaced below
                 if 'TbNotD' in REL and x != bot and h[x] == 1 and le[u][x] and not le[y][u]:
                     add([-Z(x), -f(x, y, u), v('dv', x)]); continue       # Tb waived at the row of d only
                 if le[u][x] or le[y][u]: add([-Z(x), -f(x, y, u)])
@@ -112,12 +114,18 @@ for L in lattices(args):
             add([-o] + ls)
             for t in ls: add([-t, o])
             lam[x, p] = o
-    if 'Meet2' in REL or 'Desc1' in REL:
+    if 'Meet2' in REL or 'Desc1' in REL or 'Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL:
         for m_ in low:                                        # height-2 rows of Z: Tb only as lambda(m) not <= m
             if h[m_] == 2:
                 for p_ in low:
                     if le[p_][m_]: add([-Z(m_), -lam[m_, p_]])
         D = lambda x, w: v('D', x, w)                         # w lies on row x's descent
+        RL = lambda x, w: v('RL', x, w)                       # w is the last high element of row x's descent
+        for x in low:
+            for j in range(NO):
+                for w in range(n):
+                    if h[w] <= 2: continue
+                    for p_ in low: add([-it(x, j, w), -v('lamj', x, p_, j + 1), RL(x, w)])
         for x in low:
             for j in range(NO + 1):
                 for w in range(n): add([-it(x, j, w), D(x, w)])
@@ -131,6 +139,17 @@ for L in lattices(args):
                         if w is None: w = max((t for t in range(n) if le[t][u1] and le[t][u2]), key=lambda t: h[t])
                         if h[w] <= 2: continue
                         if 'Desc1' in REL and u2 != top: continue
+                        if ('Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL) and u1 != top and u2 != top:
+                            if 'LastEither' in REL and h[x] == 2:
+                                for u in range(n):
+                                    if le[u][q]:
+                                        add([-Z(q), -Z(x), -RL(q, u1), -D(x, u2), -f(q, w, u)])
+                                        add([-Z(q), -Z(x), -D(q, u1), -RL(x, u2), -f(q, w, u)])
+                            if 'LastMeet' in REL or 'LastLast' in REL:     # extra: r_q meet (a descent element / r_x) of x in M2
+                                if h[x] == 2:
+                                    for u in range(n):
+                                        if le[u][q]: add([-Z(q), -Z(x), -RL(q, u1), (-RL(x, u2) if 'LastLast' in REL else -D(x, u2)), -f(q, w, u)])
+                            continue      # otherwise single descent elements only
                         for u in range(n):
                             if le[u][q]: add([-Z(q), -Z(x), -D(q, u1), -D(x, u2), -f(q, w, u)])
     if 'land' in REL:                                         # every row of Z lands (as tightness gives)
@@ -270,11 +289,21 @@ for L in lattices(args):
                     for q in own:
                         if le[q][m_]: add([-t, -own[q]])
             add(sel); sel = []
-    elif MODE in ('goodtop', 'Mgoodtop', 'nofix'):
+    elif MODE in ('goodtop', 'Mgoodtop', 'nofix', 'noexit', 'exitnofix'):
+        if MODE == 'noexit':
+            for x in low:
+                for p_ in low: add([-Z(x), -lam[x, p_], Z(p_)])
+        if MODE == 'exitnofix':
+            ts = []
+            for x in low:
+                for p_ in low:
+                    t = v('exw', x, p_); ts.append(t)
+                    for lit in (Z(x), lam[x, p_], -Z(p_)): add([-t, lit])
+            add(ts)
         for q in low:                                         # NoFix (exit form)
             if h[q] != 1: continue
             for p_ in low: add([-Z(q), -lam[q, p_], Z(p_), -f(bot, p_, q)])
-        if MODE == 'nofix': pass
+        if MODE in ('nofix', 'noexit', 'exitnofix'): pass
         elif MODE == 'goodtop':
             for m_ in low:
                 if h[m_] == 2: add([-Z(m_), -lam[m_, m_]])
@@ -333,7 +362,7 @@ for L in lattices(args):
             else:
                 pr = {'topcert': exdom, 'exitm2': exits, 'nmgood': gb}[base_]
                 bad = offg and (not any(pr(m_) for m_ in M2s) if MODE[0] != 'M' else any(not pr(m_) for m_ in M2s))
-        if MODE in ('goodtop', 'Mgoodtop', 'nofix'):         # replay W0-flat and the statement from the definitions
+        if MODE in ('goodtop', 'Mgoodtop', 'nofix', 'noexit', 'exitnofix'):   # replay W0-flat and the statement from the definitions
             Zs = [z for z in range(n) if F[bot][z] == bot]; hi = [y for y in range(n) if h[y] > 2]
             wok = all(h[z] <= 2 for z in Zs) and any(h[z] == 2 for z in Zs)
             for x in Zs:
@@ -343,7 +372,7 @@ for L in lattices(args):
             nofix = not any(h[q] == 1 and lamf(q) is not None and lamf(q) not in Zs and F[bot][lamf(q)] == q for q in Zs)
             if MODE == 'goodtop': concl = any(h[m_] == 2 and lamf(m_) == m_ for m_ in Zs)
             else: concl = any(h[q] == 1 and h[z] == 2 and z in Zs and z in desc(q) and le[q][F[q][z]] for q in Zs for z in Zs)
-            if 'Meet2' in REL or 'Desc1' in REL:              # the relaxed world, rechecked from the definitions
+            if 'Meet2' in REL or 'Desc1' in REL or 'Row1' in REL or 'LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL:   # the relaxed world, rechecked from the definitions
                 wok = all(h[z] <= 2 for z in Zs) and any(h[z] == 2 for z in Zs)
                 meet = lambda u1, u2: max((t for t in range(n) if le[t][u1] and le[t][u2]), key=lambda t: h[t])
                 for x in Zs:
@@ -356,11 +385,19 @@ for L in lattices(args):
                         for x2 in xs_:
                             for u1 in desc(x):
                                 for u2 in ([top] if 'Desc1' in REL else desc(x2)):
+                                    if 'Row1' in REL and u1 != top and u2 != top: continue
+                                    if ('LastMeet' in REL or 'LastLast' in REL or 'LastEither' in REL) and u1 != top and u2 != top:
+                                        rq = desc(x)[next(i_ for i_, z_ in enumerate(desc(x)) if h[z_] <= 2) - 1]
+                                        rx = desc(x2)[next(i_ for i_, z_ in enumerate(desc(x2)) if h[z_] <= 2) - 1]
+                                        if 'LastEither' in REL:
+                                            if not (h[x2] == 2 and (u1 == rq or u2 == rx)): continue
+                                        elif not (h[x2] == 2 and u1 == rq and ('LastMeet' in REL or u2 == rx)): continue
                                     w = meet(u1, u2)
                                     if h[w] > 2 and le[F[x][w]][x]: wok = False
-                ok = ok and wok and REL <= {'Meet2', 'Desc1'}
+                ok = ok and wok and REL <= {'Meet2', 'Desc1', 'Row1', 'LastMeet', 'LastLast', 'LastEither'}
             else: ok = ok and wok and REL <= {'Ta2'}
-            bad = nofix and (MODE == 'nofix' or not concl)
+            anyexit = any(lamf(x) is not None and lamf(x) not in Zs for x in Zs)
+            bad = nofix and (MODE == 'nofix' or (MODE == 'noexit' and not anyexit) or (MODE == 'exitnofix' and anyexit) or (MODE in ('goodtop', 'Mgoodtop') and not concl))
             dd_ = [t for t in tb if t != bot]; dd_ = dd_[-1] if dd_ else None
             print(f'    model: branch {"a" if dd_ is not None and h[dd_] == 2 else "atom"}, N = {tb.index(dd_) if dd_ is not None else None}', flush=True)
         for k in range(1, K):

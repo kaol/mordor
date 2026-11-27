@@ -1,0 +1,19 @@
+Free census (no SAT): TRall = some x in L (x in Z with its own row, or x not in Z with any legit row g >= G_x)
+satisfies TopRow''s hypothesis: its row lands at p and every colour atom c <= p has c <= x  (=> CertAtom, Lean
+certAtom_of_topRow' + w0_of_T).  Quantifier: per stored W0+n1 model, exists x.  FAIL = no such x: on that model the
+fixed atom is not produced by TopRow' from any single (real or virtual) row.  Failing models are saved to cex_trall.json.
+71 ('bdd', '|A|=1', 'N1', 'holds(Z-row)')
+47 ('bdd', '|A|=1', 'N>=2', 'holds(Z-row)')
+25 ('bdd', '|A|=2', 'N1', 'holds(Z-row)')
+51 ('bdd', '|A|=2', 'N>=2', 'holds(Z-row)')
+18 ('unb', '|A|=2', 'N>=2', 'FAIL')
+48 ('unb', '|A|=2', 'N>=2', 'holds(Z-row)')
+15 ('unb', '|A|=2', 'N>=2', 'holds(virtual only)')
+10 ('unb', '|A|=3', 'N>=2', 'FAIL')
+51 ('unb', '|A|=3', 'N>=2', 'holds(Z-row)')
+15 ('unb', '|A|=3', 'N>=2', 'holds(virtual only)')
+3 ('unb', '|A|=4', 'N>=2', 'FAIL')
+5 ('unb', '|A|=4', 'N>=2', 'holds(Z-row)')
+1 ('unb', '|A|=4', 'N>=2', 'holds(virtual only)')
+1 ('unb', '|A|=5', 'N>=2', 'holds(virtual only)')
+FAIL models 31 smallest [('brief295/run3/m2_closure_5_11_4_30.json#18', 10, 5, 2, [1, 2]), ('brief295/run3/m2_closure_5_11_4_30.json#13', 12, 4, 2, [2, 3, 6]), ('brief295/run3/cand_closure_5_11_4_30.json#5', 15, 5, 2, [1, 2, 4]), ('brief295/run3/m2_closure_5_11_4_30.json#8', 15, 4, 2, [1, 2, 3]), ('brief295/run3/cand_closure_5_11_4_30.json#4', 16, 5, 2, [1, 3])]

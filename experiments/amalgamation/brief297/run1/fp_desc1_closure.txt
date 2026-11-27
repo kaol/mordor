@@ -1,0 +1,123 @@
+Free footprint analysis (no SAT) of relaxed-world NoFix models with two colours a, b unbounded in Z.
+For every violated W0 instance it prints where it sits. Classes for a Tb violation at an atom q, column B (high,
+F(q, B) <= q; by TbFibre F(q,B) = q = phi(B)):
+  OWN       B on row q's descent
+  DESC(x)   B on the descent of a row x of Z above q
+  PAIR(x,y) B = v ^ w with v on desc(x), w on desc(y), x, y in Z (x, y >= q), B a boundary point of the
+            (x, y)-staircase (v ^ succ_y(w) low or v_succ ^ w ... as in pairStair: B = v_l ^ w_(kappa(l)-1))
+  STUCK     B <= Y where Y = gfp of G_P (P = a v b) ... reported as a flag
+Also reported: Ta violations, land_not_le violations (lambda(m) <= m), and per model the colour data
+(lambda(a), lambda(b), exits).
+== run1/Desc1_closure_5_11_4_30.json 0
+  model n=14 H=5 N=2 a=1 b=3 P=7 h(P)=2 Y=0 h(Y)=0  lam(a)=7 exit->3  lam(b)=8 inZ
+      ('Tb', 3, 11, 'DESC(8) BND(3,8) BND(8,3) not<=Y')
+== run1/Desc1_closure_5_11_4_30.json 1
+  model n=21 H=5 N=2 a=2 b=4 P=8 h(P)=2 Y=0 h(Y)=0  lam(a)=6 inZ  lam(b)=2 inZ
+      ('Tb', 2, 12, 'not<=Y')
+      ('Tb', 2, 14, 'not<=Y')
+      ('Tb', 2, 15, 'DESC(6) BND(2,6) BND(6,2) not<=Y')
+      ('Tb', 2, 16, 'not<=Y')
+      ('Tb', 4, 13, 'not<=Y')
+      ('Tb', 6, 12, 'h(row)=2')
+      ('Tb', 9, 13, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 2
+  model n=19 H=5 N=2 a=1 b=4 P=13 h(P)=3 Y=17 h(Y)=4  lam(a)=6 inZ  lam(b)=1 inZ
+      ('Tb', 1, 12, 'DESC(6) BND(1,6) BND(6,1) <=Y')
+      ('Tb', 1, 13, '<=Y')
+      ('Tb', 6, 11, 'h(row)=2')
+      ('Tb', 6, 14, 'h(row)=2')
+      ('Tb', 6, 16, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 3
+  model n=17 H=5 N=2 a=2 b=3 P=8 h(P)=2 Y=0 h(Y)=0  lam(a)=3 inZ  lam(b)=6 inZ
+      ('Tb', 3, 9, 'DESC(6) BND(3,6) BND(6,3) BND(6,7) BND(7,6) not<=Y')
+      ('Tb', 3, 12, 'not<=Y')
+      ('Tb', 6, 11, 'h(row)=2')
+      ('Tb', 6, 12, 'h(row)=2')
+      ('Tb', 7, 12, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 4
+  model n=16 H=5 N=2 a=1 b=4 P=7 h(P)=2 Y=15 h(Y)=5  lam(a)=5 inZ  lam(b)=7 exit->1
+      ('Tb', 1, 12, 'DESC(5) BND(1,5) BND(5,1) <=Y')
+== run1/Desc1_closure_5_11_4_30.json 5
+  model n=15 H=5 N=2 a=2 b=4 P=8 h(P)=2 Y=13 h(Y)=4  lam(a)=5 inZ  lam(b)=7 exit->2
+      ('Tb', 2, 11, 'DESC(5) DESC(6) BND(2,5) BND(2,6) BND(5,2) BND(5,6) BND(6,2) BND(6,5) <=Y')
+== run1/Desc1_closure_5_11_4_30.json 6
+  model n=18 H=5 N=2 a=3 b=4 P=9 h(P)=2 Y=16 h(Y)=4  lam(a)=6 inZ  lam(b)=3 inZ
+      ('Tb', 3, 12, 'DESC(5) DESC(6) DESC(10) BND(3,5) BND(3,6) BND(3,10) BND(5,3) BND(5,6) BND(5,10) BND(6,3) BND(6,5) BND(6,10) BND(10,3) BND(10,5) BND(10,6) <=Y')
+      ('Tb', 6, 13, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 7
+  model n=20 H=5 N=2 a=3 b=5 P=11 h(P)=2 Y=0 h(Y)=0  lam(a)=10 inZ  lam(b)=10 inZ
+      ('Tb', 5, 16, 'DESC(10) DESC(12) BND(5,10) BND(5,12) BND(10,5) BND(10,12) BND(12,5) BND(12,10) not<=Y')
+      ('Tb', 10, 15, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 8
+  model n=15 H=5 N=2 a=3 b=4 P=8 h(P)=2 Y=13 h(Y)=4  lam(a)=6 inZ  lam(b)=3 inZ
+      ('Tb', 3, 10, 'DESC(6) BND(3,6) BND(6,3) <=Y')
+      ('Tb', 3, 12, '<=Y')
+      ('Tb', 6, 12, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 9
+  model n=17 H=5 N=2 a=4 b=5 P=15 h(P)=4 Y=13 h(Y)=3  lam(a)=10 inZ  lam(b)=10 inZ
+      ('Tb', 4, 13, 'DESC(10) BND(4,10) BND(8,10) BND(10,4) BND(10,8) <=Y')
+      ('Tb', 8, 13, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 10
+  model n=16 H=5 N=2 a=2 b=3 P=8 h(P)=2 Y=0 h(Y)=0  lam(a)=6 inZ  lam(b)=2 inZ
+      ('Tb', 2, 11, 'DESC(6) BND(2,6) BND(5,6) BND(6,2) BND(6,5) not<=Y')
+      ('Tb', 2, 12, 'not<=Y')
+      ('Tb', 5, 12, 'h(row)=2')
+      ('Tb', 6, 12, 'h(row)=2')
+      ('Tb', 6, 13, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 11
+  model n=19 H=5 N=2 a=2 b=3 P=7 h(P)=2 Y=0 h(Y)=0  lam(a)=6 inZ  lam(b)=6 inZ
+      ('Tb', 2, 15, 'not<=Y')
+      ('Tb', 3, 13, 'DESC(6) BND(3,6) BND(6,3) BND(6,9) BND(6,10) BND(9,6) BND(10,6) not<=Y')
+      ('Tb', 3, 14, 'not<=Y')
+      ('Tb', 3, 16, 'not<=Y')
+      ('Tb', 6, 12, 'h(row)=2')
+      ('Tb', 6, 14, 'h(row)=2')
+      ('Tb', 8, 15, 'h(row)=2')
+      ('Tb', 9, 16, 'h(row)=2')
+      ('Tb', 10, 13, 'h(row)=2')
+      ('Tb', 10, 14, 'h(row)=2')
+      ('Tb', 10, 16, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 12
+  model n=20 H=5 N=2 a=3 b=4 P=10 h(P)=2 Y=0 h(Y)=0  lam(a)=7 inZ  lam(b)=10 exit->3
+      ('Tb', 3, 14, 'DESC(7) BND(3,7) BND(7,3) not<=Y')
+      ('Tb', 3, 15, 'not<=Y')
+      ('Tb', 3, 16, 'not<=Y')
+      ('Tb', 4, 13, 'not<=Y')
+      ('Tb', 8, 13, 'h(row)=2')
+      ('Tb', 9, 13, 'h(row)=2')
+      ('Tb', 12, 13, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 13
+  model n=18 H=5 N=2 a=4 b=5 P=10 h(P)=2 Y=0 h(Y)=0  lam(a)=9 inZ  lam(b)=9 inZ
+      ('Tb', 5, 11, 'DESC(9) BND(5,9) BND(9,5) not<=Y')
+      ('Tb', 5, 13, 'not<=Y')
+      ('Tb', 9, 14, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 14
+  model n=27 H=5 N=2 a=2 b=4 P=16 h(P)=3 Y=0 h(Y)=0  lam(a)=14 inZ  lam(b)=14 inZ
+      ('Tb', 4, 20, 'DESC(9) DESC(10) DESC(14) BND(4,9) BND(4,10) BND(4,14) BND(9,4) BND(9,10) BND(9,14) BND(10,4) BND(10,9) BND(10,14) BND(14,4) BND(14,9) BND(14,10) not<=Y')
+== run1/Desc1_closure_5_11_4_30.json 15
+  model n=21 H=5 N=2 a=2 b=3 P=8 h(P)=2 Y=0 h(Y)=0  lam(a)=3 inZ  lam(b)=6 inZ
+      ('Tb', 2, 15, 'not<=Y')
+      ('Tb', 3, 12, 'DESC(6) DESC(7) DESC(11) BND(3,6) BND(3,7) BND(3,11) BND(6,3) BND(6,7) BND(6,11) BND(7,3) BND(7,6) BND(7,11) BND(11,3) BND(11,6) BND(11,7) not<=Y')
+      ('Tb', 3, 13, 'not<=Y')
+      ('Tb', 5, 15, 'h(row)=2')
+      ('Tb', 7, 13, 'h(row)=2')
+      ('Tb', 7, 14, 'h(row)=2')
+      ('Tb', 7, 16, 'h(row)=2')
+      ('Tb', 7, 19, 'h(row)=2')
+      ('Tb', 11, 13, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 16
+  model n=19 H=5 N=2 a=1 b=4 P=8 h(P)=2 Y=13 h(Y)=3  lam(a)=6 inZ  lam(b)=1 inZ
+      ('Tb', 1, 14, 'DESC(6) BND(1,6) BND(6,1) BND(6,10) BND(10,6) not<=Y')
+      ('Tb', 6, 13, 'h(row)=2')
+== run1/Desc1_closure_5_11_4_30.json 17
+  model n=20 H=5 N=2 a=3 b=4 P=9 h(P)=2 Y=9 h(Y)=2  lam(a)=9 exit->4  lam(b)=8 inZ
+      ('Tb', 3, 14, 'not<=Y')
+      ('Tb', 4, 12, 'not<=Y')
+      ('Tb', 4, 13, 'DESC(8) BND(4,8) BND(8,4) not<=Y')
+      ('Tb', 4, 15, 'not<=Y')
+      ('Tb', 6, 14, 'h(row)=2')
+      ('Tb', 7, 14, 'h(row)=2')
+      ('Tb', 8, 12, 'h(row)=2')
+      ('Tb', 8, 15, 'h(row)=2')
+      ('Tb', 11, 14, 'h(row)=2')
+{'models': 18, 'some atom-Tb violation at a BND point': 18, 'some atom-Tb violation': 18, 'some height-2 Tb violation': 14, 'some land_not_le violation': 0}

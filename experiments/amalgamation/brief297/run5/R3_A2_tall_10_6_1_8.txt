@@ -1,0 +1,4 @@
+orbit_probe nofix K=0 R3: Ta, land_not_le, no-dominated-exit only at bot and the colour rows ColourGain only at colour rows CGW (Tb dropped at rows of Z but bot; kept: Ta, land_not_le, ColourGain, no dominated exit at every real row) COLOURS UNBOUNDED |A| = 2 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '10', '6', '1', '8', 'maxn', '45']
+  lattice n=35 h=10: UNSAT
+  lattice n=42 h=10: UNSAT
+nofix 0  ['tall', '10', '6', '1', '8'] {'UNSAT': 2} {'h10:unsat': 2} smallest None

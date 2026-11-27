@@ -1,0 +1,36 @@
+orbit_probe nofix K=0 R3: Ta, land_not_le, no-dominated-exit only at bot and the colour rows ColourGain only at colour rows MUTANT: ColourGain dropped CGW (Tb dropped at rows of Z but bot; kept: Ta, land_not_le, ColourGain, no dominated exit at every real row) COLOURS UNBOUNDED |A| = 2 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '8', '4', '1', '12']
+    model: branch atom, N = 3
+    colours [4, 5]
+  lattice n=23 h=8: SAT
+    model: branch atom, N = 2
+    colours [1, 3]
+  lattice n=19 h=8: SAT
+    model: branch atom, N = 5
+    colours [2, 3]
+  lattice n=19 h=8: SAT
+    model: branch a, N = 2
+    colours [1, 2]
+  lattice n=26 h=8: SAT
+    model: branch a, N = 4
+    colours [2, 3]
+  lattice n=29 h=8: SAT
+    model: branch a, N = 6
+    colours [3, 4]
+  lattice n=33 h=8: SAT
+    model: branch atom, N = 3
+    colours [1, 4]
+  lattice n=26 h=8: SAT
+    model: branch a, N = 2
+    colours [1, 2]
+  lattice n=29 h=8: SAT
+    model: branch a, N = 4
+    colours [1, 3]
+  lattice n=33 h=8: SAT
+  lattice n=16 h=8: UNSAT
+    model: branch atom, N = 3
+    colours [2, 3]
+  lattice n=30 h=8: SAT
+    model: branch atom, N = 3
+    colours [1, 2]
+  lattice n=27 h=8: SAT
+nofix 0  ['tall', '8', '4', '1', '12'] {'SAT': 11, 'UNSAT': 1} {'h8': 11, 'h8:unsat': 1} smallest 19

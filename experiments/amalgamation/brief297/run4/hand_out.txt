@@ -1,0 +1,18 @@
+== CGcol
+  lattice n=9 h=5: UNSAT
+  lattice n=18 h=6: UNSAT
+nofix 0  ['file', 'hand_lattices.json'] {'UNSAT': 2} {'h5:unsat': 1, 'h6:unsat': 1} smallest None
+== R3
+  lattice n=9 h=5: UNSAT
+  lattice n=18 h=6: UNSAT
+nofix 0  ['file', 'hand_lattices.json'] {'UNSAT': 2} {'h5:unsat': 1, 'h6:unsat': 1} smallest None
+== CGW
+  lattice n=9 h=5: UNSAT
+  lattice n=18 h=6: UNSAT
+nofix 0  ['file', 'hand_lattices.json'] {'UNSAT': 2} {'h5:unsat': 1, 'h6:unsat': 1} smallest None
+== CGWnoCG
+  lattice n=9 h=5: UNSAT
+    model: branch atom, N = 2
+    colours [1, 2]
+  lattice n=18 h=6: SAT
+nofix 0  ['file', 'hand_lattices.json'] {'UNSAT': 1, 'SAT': 1} {'h5:unsat': 1, 'h6': 1} smallest 18

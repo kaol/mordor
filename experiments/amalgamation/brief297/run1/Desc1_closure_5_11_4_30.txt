@@ -1,0 +1,68 @@
+orbit_probe nofix K=0 RELAXED ['Desc1'] (off g read as: d has no own-row cell) COLOURS UNBOUNDED |A| = 2 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['closure', '5', '11', '4', '30']
+  lattice n=12 h=5: UNSAT
+    model: branch atom, N = 2
+    colours [1, 3]
+  lattice n=14 h=5: SAT
+  lattice n=14 h=5: UNSAT
+  lattice n=13 h=5: UNSAT
+    model: branch atom, N = 2
+    colours [2, 4]
+  lattice n=21 h=5: SAT
+    model: branch atom, N = 2
+    colours [1, 4]
+  lattice n=19 h=5: SAT
+    model: branch atom, N = 2
+    colours [2, 3]
+  lattice n=17 h=5: SAT
+  lattice n=16 h=4: UNSAT
+  lattice n=17 h=4: UNSAT
+  lattice n=15 h=4: UNSAT
+    model: branch atom, N = 2
+    colours [1, 4]
+  lattice n=16 h=5: SAT
+  lattice n=20 h=4: UNSAT
+    model: branch atom, N = 2
+    colours [2, 4]
+  lattice n=15 h=5: SAT
+    model: branch atom, N = 2
+    colours [3, 4]
+  lattice n=18 h=5: SAT
+  lattice n=12 h=4: UNSAT
+    model: branch atom, N = 2
+    colours [3, 5]
+  lattice n=20 h=5: SAT
+    model: branch atom, N = 2
+    colours [3, 4]
+  lattice n=15 h=5: SAT
+  lattice n=14 h=4: UNSAT
+    model: branch a, N = 2
+    colours [4, 5]
+  lattice n=17 h=5: SAT
+  lattice n=10 h=5: UNSAT
+  lattice n=12 h=5: UNSAT
+    model: branch atom, N = 2
+    colours [2, 3]
+  lattice n=16 h=5: SAT
+    model: branch a, N = 2
+    colours [2, 3]
+  lattice n=19 h=5: SAT
+  lattice n=9 h=4: UNSAT
+    model: branch atom, N = 2
+    colours [3, 4]
+  lattice n=20 h=5: SAT
+    model: branch a, N = 2
+    colours [4, 5]
+  lattice n=18 h=5: SAT
+    model: branch a, N = 2
+    colours [2, 4]
+  lattice n=27 h=5: SAT
+    model: branch atom, N = 2
+    colours [2, 3]
+  lattice n=21 h=5: SAT
+    model: branch atom, N = 2
+    colours [1, 4]
+  lattice n=19 h=5: SAT
+    model: branch atom, N = 2
+    colours [3, 4]
+  lattice n=20 h=5: SAT
+nofix 0  ['closure', '5', '11', '4', '30'] {'UNSAT': 12, 'SAT': 18} {'h5:unsat': 5, 'h5': 18, 'h4:unsat': 7} smallest 14

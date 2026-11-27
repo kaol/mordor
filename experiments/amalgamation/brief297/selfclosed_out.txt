@@ -1,0 +1,49 @@
+Free census (no SAT), every stored W0+n1 model.
+SELF-CLOSED: T in L with F(z, T) <= T for every z in Z with z <= T (the minimal virtual row G_T of T maps T below T).
+Then down(T) with the rows of Z cap down(T) is again a W0-type world with top T (if h(T) >= 3).
+T-relative landing lam_T(x): first element of height <= 2 on x's descent from T; T-fixed atom: atom q of Z, q <= T,
+lam_T(q) not in Z, phi(lam_T(q)) = q.
+Statements (quantifier: every model, every high self-closed T):
+  LiftFix   every T-fixed atom is mu-fixed in L.            FAIL = a T-fixed atom that is not L-fixed.
+  FixT      some T-fixed atom exists (CertAtom of the restricted world; holds if CertAtom is a theorem). FAIL = none.
+Also: for minimal high self-closed T whether G_T(T) is low (one-step landing, TopRow applies) or = T.
+15 ('bdd', '|A|=1', '#highSC=1')
+103 ('bdd', '|A|=1', '#highSC=>1')
+404 ('bdd', '|A|=1', 'FixT', 'holds')
+404 ('bdd', '|A|=1', 'LiftFix', 'holds')
+128 ('bdd', '|A|=1', 'minT', 'G_T(T) low', 'T<top')
+15 ('bdd', '|A|=1', 'minT', 'G_T(T) low', 'T=top')
+7 ('bdd', '|A|=1', 'minT', 'G_T(T)=T', 'T<top')
+76 ('bdd', '|A|=2', '#highSC=>1')
+258 ('bdd', '|A|=2', 'FixT', 'holds')
+2 ('bdd', '|A|=2', 'LiftFix', 'FAIL')
+256 ('bdd', '|A|=2', 'LiftFix', 'holds')
+77 ('bdd', '|A|=2', 'minT', 'G_T(T) low', 'T<top')
+15 ('bdd', '|A|=2', 'minT', 'G_T(T)=T', 'T<top')
+2 ('unb', '|A|=2', '#highSC=1')
+79 ('unb', '|A|=2', '#highSC=>1')
+417 ('unb', '|A|=2', 'FixT', 'holds')
+13 ('unb', '|A|=2', 'LiftFix', 'FAIL')
+404 ('unb', '|A|=2', 'LiftFix', 'holds')
+100 ('unb', '|A|=2', 'minT', 'G_T(T) low', 'T<top')
+1 ('unb', '|A|=2', 'minT', 'G_T(T) low', 'T=top')
+23 ('unb', '|A|=2', 'minT', 'G_T(T)=T', 'T<top')
+1 ('unb', '|A|=2', 'minT', 'G_T(T)=T', 'T=top')
+1 ('unb', '|A|=3', '#highSC=1')
+75 ('unb', '|A|=3', '#highSC=>1')
+348 ('unb', '|A|=3', 'FixT', 'holds')
+5 ('unb', '|A|=3', 'LiftFix', 'FAIL')
+343 ('unb', '|A|=3', 'LiftFix', 'holds')
+66 ('unb', '|A|=3', 'minT', 'G_T(T) low', 'T<top')
+25 ('unb', '|A|=3', 'minT', 'G_T(T)=T', 'T<top')
+1 ('unb', '|A|=3', 'minT', 'G_T(T)=T', 'T=top')
+9 ('unb', '|A|=4', '#highSC=>1')
+50 ('unb', '|A|=4', 'FixT', 'holds')
+50 ('unb', '|A|=4', 'LiftFix', 'holds')
+7 ('unb', '|A|=4', 'minT', 'G_T(T) low', 'T<top')
+4 ('unb', '|A|=4', 'minT', 'G_T(T)=T', 'T<top')
+1 ('unb', '|A|=5', '#highSC=>1')
+6 ('unb', '|A|=5', 'FixT', 'holds')
+6 ('unb', '|A|=5', 'LiftFix', 'holds')
+1 ('unb', '|A|=5', 'minT', 'G_T(T) low', 'T<top')
+LiftFix failures (first 10): [('bad1_ac_not_forbidden_min14.json#0', 9, [1], [2]), ('bad1_ac_not_forbidden_min17.json#0', 13, [4], [3]), ('bad1_none_below_ac_min12.json#0', 10, [1], [2]), ('bad1_union_misses_min20.json#0', 16, [5], [1]), ('bank/s280_orbit3_six_models.json#2', 14, [3], [1]), ('bank/s280_orbit3_six_models.json#2', 21, [3], [1]), ('brief293/cex/CleanExists.json#12', 13, [1], [2]), ('brief293/cex/CleanExists.json#13', 18, [2], [4]), ('brief293/cex/CleanExists.json#15', 8, [1], [2]), ('brief293/cex/CleanExists.json#16', 10, [2], [3])]

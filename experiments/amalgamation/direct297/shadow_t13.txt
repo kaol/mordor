@@ -1,0 +1,7 @@
+r3_probe shadow | per lattice: exists F and colour pair | SAT = two unbounded colours, ColourGain at row b only, no mu-fixed colour, a not <= phi(r_a) (ShadowLemma fails) | corpus ['tall', '13', '4', '1', '8'] maxn 45
+  lattice n=42 h=13: UNSAT (56 pairs)
+  lattice n=39 h=13: UNSAT (6 pairs)
+  lattice n=44 h=13: UNSAT (6 pairs)
+  lattice n=42 h=13: UNSAT (2 pairs)
+  lattice n=33 h=13: UNSAT (2 pairs)
+shadow ['tall', '13', '4', '1', '8'] {'SAT': 0, 'UNSAT': 5}

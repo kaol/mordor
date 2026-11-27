@@ -1,0 +1,53 @@
+orbit_probe nofix K=0 R3: Ta, land_not_le, no-dominated-exit only at bot and the colour rows ColourGain only at colour rows MUTANT: ColourGain dropped CGW (Tb dropped at rows of Z but bot; kept: Ta, land_not_le, ColourGain, no dominated exit at every real row) COLOURS UNBOUNDED |A| = 2 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '10', '4', '2', '20', 'maxn', '40']
+    model: branch atom, N = 7
+    colours [1, 2]
+  lattice n=27 h=10: SAT
+    model: branch atom, N = 2
+    colours [1, 2]
+  lattice n=22 h=10: SAT
+    model: branch atom, N = 2
+    colours [1, 4]
+  lattice n=34 h=10: SAT
+    model: branch atom, N = 2
+    colours [1, 2]
+  lattice n=25 h=10: SAT
+    model: branch atom, N = 4
+    colours [1, 2]
+  lattice n=28 h=10: SAT
+    model: branch a, N = 5
+    colours [1, 2]
+  lattice n=35 h=10: SAT
+    model: branch atom, N = 2
+    colours [1, 2]
+  lattice n=22 h=10: SAT
+    model: branch a, N = 3
+    colours [2, 3]
+  lattice n=33 h=10: SAT
+    model: branch atom, N = 7
+    colours [2, 4]
+  lattice n=27 h=10: SAT
+    model: branch atom, N = 2
+    colours [1, 2]
+  lattice n=33 h=10: SAT
+    model: branch atom, N = 5
+    colours [2, 3]
+  lattice n=35 h=10: SAT
+    model: branch atom, N = 2
+    colours [1, 2]
+  lattice n=32 h=10: SAT
+    model: branch atom, N = 5
+    colours [1, 5]
+  lattice n=22 h=10: SAT
+    model: branch atom, N = 2
+    colours [1, 2]
+  lattice n=25 h=10: SAT
+    model: branch atom, N = 3
+    colours [1, 5]
+  lattice n=29 h=10: SAT
+    model: branch atom, N = 6
+    colours [1, 4]
+  lattice n=32 h=10: SAT
+    model: branch a, N = 3
+    colours [1, 2]
+  lattice n=26 h=10: SAT
+nofix 0  ['tall', '10', '4', '2', '20'] {'SAT': 17} {'h10': 17} smallest 22

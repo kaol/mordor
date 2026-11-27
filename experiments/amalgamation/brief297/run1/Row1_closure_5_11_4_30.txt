@@ -1,0 +1,32 @@
+orbit_probe nofix K=0 RELAXED ['Row1'] (off g read as: d has no own-row cell) COLOURS UNBOUNDED |A| = 2 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['closure', '5', '11', '4', '30']
+  lattice n=12 h=5: UNSAT
+  lattice n=14 h=5: UNSAT
+  lattice n=14 h=5: UNSAT
+  lattice n=13 h=5: UNSAT
+  lattice n=21 h=5: UNSAT
+  lattice n=19 h=5: UNSAT
+  lattice n=17 h=5: UNSAT
+  lattice n=16 h=4: UNSAT
+  lattice n=17 h=4: UNSAT
+  lattice n=15 h=4: UNSAT
+  lattice n=16 h=5: UNSAT
+  lattice n=20 h=4: UNSAT
+  lattice n=15 h=5: UNSAT
+  lattice n=18 h=5: UNSAT
+  lattice n=12 h=4: UNSAT
+  lattice n=20 h=5: UNSAT
+  lattice n=15 h=5: UNSAT
+  lattice n=14 h=4: UNSAT
+  lattice n=17 h=5: UNSAT
+  lattice n=10 h=5: UNSAT
+  lattice n=12 h=5: UNSAT
+  lattice n=16 h=5: UNSAT
+  lattice n=19 h=5: UNSAT
+  lattice n=9 h=4: UNSAT
+  lattice n=20 h=5: UNSAT
+  lattice n=18 h=5: UNSAT
+  lattice n=27 h=5: UNSAT
+  lattice n=21 h=5: UNSAT
+  lattice n=19 h=5: UNSAT
+  lattice n=20 h=5: UNSAT
+nofix 0  ['closure', '5', '11', '4', '30'] {'UNSAT': 30} {'h5:unsat': 23, 'h4:unsat': 7} smallest None

@@ -1,0 +1,15 @@
+orbit_probe nofix K=0 N=5 MUTANT CGone: ColourGain at one colour row only R3: Ta, land_not_le, no-dominated-exit only at bot and the colour rows ColourGain only at colour rows CGW (Tb dropped at rows of Z but bot; kept: Ta, land_not_le, ColourGain, no dominated exit at every real row) COLOURS UNBOUNDED |A| = 2 | SAT = no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat) | world (T)  | corpus ['tall', '12', '4', '1', '8', 'maxn', '45']
+    model: branch a, N = 5
+    colours [2, 4]
+  lattice n=33 h=12: SAT
+    model: branch atom, N = 5
+    colours [1, 2]
+  lattice n=32 h=12: SAT
+    model: branch atom, N = 5
+    colours [1, 3]
+  lattice n=45 h=12: SAT
+  lattice n=34 h=12: UNSAT
+    model: branch a, N = 5
+    colours [1, 2]
+  lattice n=27 h=12: SAT
+nofix 0  ['tall', '12', '4', '1', '8'] {'SAT': 4, 'UNSAT': 1} {'h12': 4, 'h12:unsat': 1} smallest 27

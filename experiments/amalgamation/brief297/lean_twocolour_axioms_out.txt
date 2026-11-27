@@ -1,0 +1,6 @@
+'Mordor.OrbitHeight.desc_ge_of_postfixed' depends on axioms: [propext, Quot.sound]
+'Mordor.OrbitHeight.desc_ge_of_phi_last' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.twoColour_gain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.twoColour_shadow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.twoColour_not_above' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.twoColour_noTrap' depends on axioms: [propext, Classical.choice, Quot.sound]

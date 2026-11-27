@@ -1,0 +1,8 @@
+r3_probe cgone | per lattice: exists F and colour pair | SAT = two unbounded colours, ColourGain at row b only, no mu-fixed colour (mutant CGone) | corpus ['tall', '12', '4', '1', '8'] maxn 50
+  lattice n=33 h=12: SAT (colours 1, 2)
+  lattice n=32 h=12: SAT (colours 1, 2)
+  lattice n=45 h=12: SAT (colours 1, 2)
+  lattice n=34 h=12: UNSAT (0 pairs)
+  lattice n=27 h=12: SAT (colours 1, 2)
+  lattice n=48 h=12: SAT (colours 1, 2)
+cgone ['tall', '12', '4', '1', '8'] {'SAT': 5, 'UNSAT': 1}

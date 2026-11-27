@@ -1,0 +1,8 @@
+r3_probe r3 | per lattice: exists F and colour pair | SAT = two unbounded colours a, b, ColourGain at both colour rows, no mu-fixed colour (TwoColourCG fails) | corpus ['tall', '12', '4', '1', '8'] maxn 50
+  lattice n=33 h=12: UNSAT (6 pairs)
+  lattice n=32 h=12: UNSAT (1 pairs)
+  lattice n=45 h=12: UNSAT (6 pairs)
+  lattice n=34 h=12: UNSAT (0 pairs)
+  lattice n=27 h=12: UNSAT (1 pairs)
+  lattice n=48 h=12: UNSAT (15 pairs)
+r3 ['tall', '12', '4', '1', '8'] {'SAT': 0, 'UNSAT': 6}

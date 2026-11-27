@@ -158,3 +158,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁹²: `orbit_probe.py` relaxations `Row1`, `LastLast`, `LastMeet`, `LastEither` (sub-worlds of W0²) and modes `noexit`, `exitnofix`; `direct292/` (outputs, `viol.py`). Bank `s292_*`.
 - §34.3z²⁹³: brief run 18 archived in `brief293/` (testers `stair_probe.py`, `irrep_probe.py`; free analyses; runs 1–5; `cex/`). `orbit_probe.py` relaxation `Stair` (StairTb's world). Worker output `out_worker293.txt`.
 - §34.3z²⁹⁵: brief run 19 archived in `brief295/` (`topland_probe.py`, `pairtrap.py`, censuses; runs 1–4; `cex/`). Bank `s295_toplands_h5`.
+- §34.3z²⁹⁷: brief run 20 archived in `brief297/`. `r3_probe.py` (modes r3 / cgone / shadow: the three-row two-colour world, worker's encoding). `direct297/` (outputs, `chain.py`).

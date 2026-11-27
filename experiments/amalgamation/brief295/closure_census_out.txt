@@ -1,0 +1,27 @@
+Free check on stored models (no SAT; from the definitions via brief291/world.py).
+
+ClosureLand (candidate, brief run 20 P2).  calA = atoms of Z of the form phi(w).  For a set S of rows of Z put
+g_S(y) = join_{z in S} F(z, y) (a virtual row) and p(S) = first element of height <= 2 of the g_S-iteration from top.
+S is CLOSED when p = p(S) exists and
+   (p not in Z and phi(p) in S)  or  (p in Z and calA ^ down(p) <= S and (|calA ^ down(p)| >= 2 ==> p in S)).
+TopRow' (paper, brief §4.3): a closed S gives CertAtom, with phi(p) mu-fixed (the p-in-Z branch is contradictory).
+Iteration: S_0 = {bot}; while S not closed: if p(S) undefined -> STUCK; else add the missing rows (phi(p), or
+calA ^ down(p) and p).  Sets only grow (S_k within {bot} u calA u {q v q' in Z}), so it ends: CLOSED or STUCK.
+Quantifier: for every stored W0 model.  FAIL = STUCK.  PROOF-FAIL = closed S whose p is in Z or phi(p) not fixed.
+Also reported: the number of rounds, and whether the plain mu-orbit of bot (refuted BotOrbit) reaches a fixed atom.
+STUCK bank/s278_orbitdom_joincert_breakexit_h8.json#0 n 33 H 8 N 3 atom S [0, 2, 3, 4, 9]
+STUCK bank/s279_orbit3_h10.json#0 n 31 H 10 N 3 atom S [0, 1, 2, 3, 7, 8]
+STUCK bank/s279_orbit3_h8.json#0 n 33 H 8 N 3 atom S [0, 2, 3, 4, 7, 9]
+STUCK bank/s280_orbit3_six_models.json#0 n 30 H 8 N 3 atom S [0, 1, 2, 4, 5, 7]
+STUCK bank/s280_orbit3_six_models.json#1 n 39 H 8 N 3 atom S [0, 4, 5, 6, 13, 16]
+STUCK bank/s280_orbit3_six_models.json#2 n 34 H 9 N 3 atom S [0, 1, 3, 5, 10, 11]
+STUCK bank/s280_orbit3_six_models.json#5 n 33 H 9 N 3 atom S [0, 1, 3, 4, 6, 8]
+70 ('a', 'N1', 'CLOSED', 'rounds 2', 'botorbit fixed')
+5 ('a', 'N>=2', 'CLOSED', 'rounds 2', 'botorbit fixed')
+4 ('a', 'N>=2', 'CLOSED', 'rounds 3', 'botorbit fixed')
+26 ('atom', 'N1', 'CLOSED', 'rounds 2', 'botorbit fixed')
+43 ('atom', 'N>=2', 'CLOSED', 'rounds 2', 'botorbit fixed')
+32 ('atom', 'N>=2', 'CLOSED', 'rounds 3', 'botorbit fixed')
+1 ('atom', 'N>=2', 'CLOSED', 'rounds 4', 'botorbit NOT fixed')
+3 ('atom', 'N>=2', 'CLOSED', 'rounds 4', 'botorbit fixed')
+7 ('atom', 'N>=2', 'STUCK')

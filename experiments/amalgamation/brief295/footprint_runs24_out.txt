@@ -1,0 +1,6 @@
+Footprint replay (free) on the mutant NoFix models of runs 2 (LastEither E1) and 4 (Row1 E1): which hypothesis of
+the N = 1 proof (Lean certAtom_N1) each violates. "NO VIOLATION" would mean the proof is wrong.
+2 ('run2', 'branch a', 'Tb at q0=m^d fails at a')
+5 ('run2', 'branch atom', 'Tb at q0=m^d fails at a')
+5 ('run4', 'branch a', 'Tb at q0=m^d fails at a')
+4 ('run4', 'branch atom', 'Tb at q0=m^d fails at a')

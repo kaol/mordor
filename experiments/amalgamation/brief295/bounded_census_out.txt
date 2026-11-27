@@ -1,0 +1,13 @@
+Free census (samples only): stored W0 + n1 models by whether calA (atoms of Z that are values of row bot) has an
+upper bound in Z (then CertAtom by certAtom_of_boundedAtoms, Lean in PairTrap.lean), per branch / N / |calA|.
+45 ('a', 'N1', '|calA|=1', 'bounded in Z')
+25 ('a', 'N1', '|calA|=2', 'bounded in Z')
+2 ('a', 'N>=2', '|calA|=1', 'bounded in Z')
+6 ('a', 'N>=2', '|calA|=2', 'bounded in Z')
+1 ('a', 'N>=2', '|calA|=3', 'UNBOUNDED')
+26 ('atom', 'N1', '|calA|=1', 'bounded in Z')
+18 ('atom', 'N>=2', '|calA|=1', 'bounded in Z')
+20 ('atom', 'N>=2', '|calA|=2', 'UNBOUNDED')
+30 ('atom', 'N>=2', '|calA|=2', 'bounded in Z')
+17 ('atom', 'N>=2', '|calA|=3', 'UNBOUNDED')
+1 ('atom', 'N>=2', '|calA|=4', 'UNBOUNDED')

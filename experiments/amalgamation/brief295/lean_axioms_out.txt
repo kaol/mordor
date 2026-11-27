@@ -1,0 +1,5 @@
+'Mordor.OrbitHeight.pairStair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.certAtom_of_N1_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.certAtom_of_topRow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.certAtom_N1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.certAtom_of_boundedAtoms' depends on axioms: [propext, Classical.choice, Quot.sound]

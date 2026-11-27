@@ -1,0 +1,21 @@
+Free check (no SAT): the restriction transfer for N >= 2.  For a stored W0 model with N >= 2 and an element s of the
+bot-descent t_1 .. t_{N-1} that is high, put L' = down(s) (a sublattice, top s) and F'(x, y) = F(x, y) ^ s on L'.
+Then phi' = phi on L', Z' = Z ^ down(s), and the bot-descent of F' is s, phi(s), ... (so N' = N - j for s = t_j).
+Reported per model and s: whether F' lies in W0 (definitions recomputed on L'), and whether CertAtom(F') and CertAtom(F)
+share a fixed atom (TRANSFER: every mu'-fixed atom is mu-fixed).  Samples only.
+7 ('N2', 's=t1', "F' in W0", 'TRANSFER holds')
+37 ('N2', 's=t1', "F' not in W0", 'Tb fails')
+6 ('N2', 's=t1', "F' not in W0", 'base fails')
+30 ('N2', 's=t1', 'low, skipped')
+12 ('N3', 's=t1', "F' not in W0", 'Tb fails')
+2 ('N3', 's=t1', "F' not in W0", 'base fails')
+11 ('N3', 's=t2', "F' not in W0", 'Tb fails')
+3 ('N3', 's=t2', 'low, skipped')
+1 ('N4', 's=t1', "F' in W0", 'TRANSFER holds')
+1 ('N4', 's=t2', "F' not in W0", 'Tb fails')
+1 ('N4', 's=t3', "F' not in W0", 'Tb fails')
+AbsorbExists: 14 refuting stored W0 models; smallest |L| 9 H 4 width 3 N 2 branch atom |calA| 2 (brief293/cex/CleanExists.json#9)
+TopLand_X: 17 refuting stored W0 models; smallest |L| 15 H 5 width 5 N 2 branch atom |calA| 3 (brief293/cex/GateRank_dep.json#80)
+TopLand_S: 16 refuting stored W0 models; smallest |L| 15 H 5 width 5 N 2 branch atom |calA| 3 (brief293/cex/GateRank_dep.json#80)
+Restrict: 58 refuting stored W0 models; smallest |L| 7 H 4 width 2 N 3 branch atom |calA| 1 (brief293/cex/CleanExists.json#14)
+ClosureLand: 7 refuting stored W0 models; smallest |L| 30 H 8 width 7 N 3 branch atom |calA| 3 (bank/s280_orbit3_six_models.json#0)

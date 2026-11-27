@@ -1,0 +1,45 @@
+Free census on stored models (no SAT; recomputed from the definitions via brief291/world.py).
+
+  calA      = atoms of Z that are values phi(w) of some w outside Z (phi = F(bot, .)); contains every connector value
+              phi(B), every exit atom c(x) = phi(lambda(x)), and phi(r_x) when lambda(x) is an atom.
+  Absorb(x) (x in Z, x lands): every atom of calA below lambda(x) lies below x.
+  AbsorbExists: some x in Z has Absorb(x).             FAIL = a W0 model with no absorbing row.
+  AbsorbFix  (paper, brief run 20 §4.3): Absorb(x) ==> x exits with dominated exit atom c(x) <= x (hence c(x) is mu-fixed).
+              FAIL = an absorbing row that does not exit, or exits undominated (would refute the paper proof).
+  GainAll   (paper consequence of NoFix): every x in Z has an atom of calA below lambda(x) and not below x.
+Tallies per branch (a / atom) and N (1 / >= 2). Samples only: stored models are not a corpus.
+45 ('a', 'N1', 'AbsorbExists', 'holds', '|calA|=1')
+25 ('a', 'N1', 'AbsorbExists', 'holds', '|calA|=2')
+152 ('a', 'N1', 'AbsorbFix', 'holds')
+70 ('a', 'N1', 'fixed atom absorbs', True)
+2 ('a', 'N>=2', 'AbsorbExists', 'holds', '|calA|=1')
+6 ('a', 'N>=2', 'AbsorbExists', 'holds', '|calA|=2')
+1 ('a', 'N>=2', 'AbsorbExists', 'holds', '|calA|=3')
+21 ('a', 'N>=2', 'AbsorbFix', 'holds')
+9 ('a', 'N>=2', 'fixed atom absorbs', True)
+26 ('atom', 'N1', 'AbsorbExists', 'holds', '|calA|=1')
+46 ('atom', 'N1', 'AbsorbFix', 'holds')
+26 ('atom', 'N1', 'fixed atom absorbs', True)
+14 ('atom', 'N>=2', 'AbsorbExists', 'FAIL', '|calA|=2')
+18 ('atom', 'N>=2', 'AbsorbExists', 'holds', '|calA|=1')
+36 ('atom', 'N>=2', 'AbsorbExists', 'holds', '|calA|=2')
+17 ('atom', 'N>=2', 'AbsorbExists', 'holds', '|calA|=3')
+1 ('atom', 'N>=2', 'AbsorbExists', 'holds', '|calA|=4')
+167 ('atom', 'N>=2', 'AbsorbFix', 'holds')
+14 ('atom', 'N>=2', 'fixed atom absorbs', False)
+72 ('atom', 'N>=2', 'fixed atom absorbs', True)
+models without an absorbing row (name, |L|, H, N, branch, |calA|):
+  ('brief293/cex/CleanExists.json#9', 9, 4, 2, 'atom', 2)
+  ('brief293/cex/CleanExists.json#15', 10, 4, 2, 'atom', 2)
+  ('brief293/cex/CleanExists.json#11', 11, 4, 2, 'atom', 2)
+  ('brief293/cex/CleanExists.json#18', 11, 5, 2, 'atom', 2)
+  ('bad1_none_below_ac_min12.json#0', 12, 4, 2, 'atom', 2)
+  ('fam_nosamesource_min13.json#0', 13, 5, 2, 'atom', 2)
+  ('bad1_ac_not_forbidden_min14.json#0', 14, 5, 2, 'atom', 2)
+  ('bad1_example_min14.json#0', 14, 5, 2, 'atom', 2)
+  ('brief293/cex/CleanExists.json#16', 14, 5, 2, 'atom', 2)
+  ('brief293/cex/GateRank_fib.json#54', 14, 5, 2, 'atom', 2)
+  ('a1g_other_cert_min15.json#0', 15, 4, 2, 'atom', 2)
+  ('bad1_ac_not_forbidden_min17.json#0', 17, 5, 2, 'atom', 2)
+  ('brief293/cex/CleanExists.json#12', 17, 5, 3, 'atom', 2)
+  ('brief293/cex/CleanExists.json#13', 31, 6, 2, 'atom', 2)

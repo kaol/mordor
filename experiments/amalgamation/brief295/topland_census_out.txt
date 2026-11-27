@@ -1,0 +1,67 @@
+TopLand FAIL bad1_union_misses_min20.json#0 n 20 H 5 N 2 atom |calA| 2 X in Z False
+TopLand FAIL bank/s278_orbitdom_joincert_breakexit_h8.json#0 n 33 H 8 N 3 atom |calA| 3 X in Z False
+TopLand FAIL bank/s279_orbit3_h10.json#0 n 31 H 10 N 3 atom |calA| 3 X in Z False
+TopLand FAIL bank/s279_orbit3_h8.json#0 n 33 H 8 N 3 atom |calA| 3 X in Z False
+TopLand FAIL bank/s280_orbit3_six_models.json#0 n 30 H 8 N 3 atom |calA| 3 X in Z False
+TopLand FAIL bank/s280_orbit3_six_models.json#1 n 39 H 8 N 3 atom |calA| 4 X in Z False
+TopLand FAIL bank/s280_orbit3_six_models.json#2 n 34 H 9 N 3 atom |calA| 3 X in Z False
+TopLand FAIL bank/s280_orbit3_six_models.json#5 n 33 H 9 N 3 atom |calA| 3 X in Z False
+TopLand FAIL bank/s281_botorbit_cycle_h12.json#0 n 59 H 12 N 4 atom |calA| 3 X in Z False
+TopLand FAIL brief293/cex/GateRank_dep.json#80 n 15 H 5 N 2 atom |calA| 3 X in Z False
+TopLand FAIL brief293/cex/GateRank_dep.json#93 n 31 H 6 N 2 atom |calA| 3 X in Z False
+TopLand FAIL brief293/cex/GateRank_dep.json#97 n 29 H 6 N 2 atom |calA| 3 X in Z False
+TopLand FAIL brief293/cex/GateRank_dep.json#98 n 17 H 5 N 2 atom |calA| 3 X in Z False
+TopLand FAIL brief293/cex/GateRank_idx.json#71 n 25 H 5 N 2 atom |calA| 2 X in Z False
+TopLand FAIL shadow_claim1_min24.json#0 n 24 H 5 N 2 atom |calA| 2 X in Z False
+TopLand FAIL single_claim_a1gen_notop_multi_notightK1_nofeeder_rowtypes_selfnocell_abovepnocell_min16.json#0 n 16 H 4 N 2 atom |calA| 2 X in Z False
+TopLand FAIL wd_no_xw_min18.json#0 n 18 H 5 N 2 atom |calA| 2 X in Z False
+Free check on stored models (no SAT; from the definitions via brief291/world.py). Samples only, except that a
+single failing W0 model refutes a universal statement.
+
+  calA  = atoms of Z of the form phi(w) (phi = F(bot, .)); all lie below t1 = phi(top).
+  X     = join of calA (in L);  G_X(y) = join of F(z, y) over z in Z with z <= X  (the least row an element X can carry
+          once the rows outside Z are normalized; CertAtom only sees the rows of Z).
+  TopLand(X): the iteration of G_X from top reaches an element of height <= 2.          FAIL = W0 model where it does not.
+  TopRow (paper + Lean, brief run 20 §4): TopLand ==> CertAtom, and more precisely the first low element p of the G_X
+          iteration lies outside Z and c = phi(p) is a mu-fixed atom.   PROOF-FAIL = p in Z, or c not mu-fixed.
+  Same for X = t1 (the larger row G_t1).
+  Also: is X in Z (then TopLand holds by Ta at the row X).
+70 ('a', 'N1', 'X=join calA', 'TopLand holds', 'c fixed', 'X in Z')
+70 ('a', 'N1', 'X=t1', 'TopLand holds', 'c fixed', 'X in Z')
+8 ('a', 'N>=2', 'X=join calA', 'TopLand holds', 'c fixed', 'X in Z')
+1 ('a', 'N>=2', 'X=join calA', 'TopLand holds', 'c fixed', 'X not in Z')
+4 ('a', 'N>=2', 'X=t1', 'TopLand FAIL')
+5 ('a', 'N>=2', 'X=t1', 'TopLand holds', 'c fixed', 'X not in Z')
+26 ('atom', 'N1', 'X=join calA', 'TopLand holds', 'c fixed', 'X in Z')
+26 ('atom', 'N1', 'X=t1', 'TopLand holds', 'c fixed', 'X in Z')
+17 ('atom', 'N>=2', 'X=join calA', 'TopLand FAIL')
+48 ('atom', 'N>=2', 'X=join calA', 'TopLand holds', 'c fixed', 'X in Z')
+21 ('atom', 'N>=2', 'X=join calA', 'TopLand holds', 'c fixed', 'X not in Z')
+30 ('atom', 'N>=2', 'X=t1', 'TopLand FAIL')
+56 ('atom', 'N>=2', 'X=t1', 'TopLand holds', 'c fixed', 'X not in Z')
+
+TopLand_S (virtual row over S = {bot} u calA u {q v q' in Z}); FAIL = W0 model whose g_S iteration never gets low;
+PROOF-FAIL = first low p of the g_S iteration lies in Z, or phi(p) is not mu-fixed.
+70 ('a', 'N1', 'TopLand_S holds', 'c fixed')
+9 ('a', 'N>=2', 'TopLand_S holds', 'c fixed')
+26 ('atom', 'N1', 'TopLand_S holds', 'c fixed')
+5 ('atom', 'N>=2', 'TopLand_S FAIL', '|calA|=2')
+10 ('atom', 'N>=2', 'TopLand_S FAIL', '|calA|=3')
+1 ('atom', 'N>=2', 'TopLand_S FAIL', '|calA|=4')
+70 ('atom', 'N>=2', 'TopLand_S holds', 'c fixed')
+  TopLand_S fails: (15, 5, 2, 'atom', 3, 'brief293/cex/GateRank_dep.json#80')
+  TopLand_S fails: (16, 4, 2, 'atom', 2, 'single_claim_a1gen_notop_multi_notightK1_nofeeder_rowtypes_selfnocell_abovepnocell_min16.json#0')
+  TopLand_S fails: (17, 5, 2, 'atom', 3, 'brief293/cex/GateRank_dep.json#98')
+  TopLand_S fails: (18, 5, 2, 'atom', 2, 'wd_no_xw_min18.json#0')
+  TopLand_S fails: (20, 5, 2, 'atom', 2, 'bad1_union_misses_min20.json#0')
+  TopLand_S fails: (24, 5, 2, 'atom', 2, 'shadow_claim1_min24.json#0')
+  TopLand_S fails: (25, 5, 2, 'atom', 2, 'brief293/cex/GateRank_idx.json#71')
+  TopLand_S fails: (29, 6, 2, 'atom', 3, 'brief293/cex/GateRank_dep.json#97')
+  TopLand_S fails: (30, 8, 3, 'atom', 3, 'bank/s280_orbit3_six_models.json#0')
+  TopLand_S fails: (31, 6, 2, 'atom', 3, 'brief293/cex/GateRank_dep.json#93')
+  TopLand_S fails: (31, 10, 3, 'atom', 3, 'bank/s279_orbit3_h10.json#0')
+  TopLand_S fails: (33, 8, 3, 'atom', 3, 'bank/s278_orbitdom_joincert_breakexit_h8.json#0')
+  TopLand_S fails: (33, 8, 3, 'atom', 3, 'bank/s279_orbit3_h8.json#0')
+  TopLand_S fails: (33, 9, 3, 'atom', 3, 'bank/s280_orbit3_six_models.json#5')
+  TopLand_S fails: (34, 9, 3, 'atom', 3, 'bank/s280_orbit3_six_models.json#2')
+  TopLand_S fails: (39, 8, 3, 'atom', 4, 'bank/s280_orbit3_six_models.json#1')

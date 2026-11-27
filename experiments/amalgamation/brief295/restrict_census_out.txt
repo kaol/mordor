@@ -1,0 +1,16 @@
+Free check (no SAT): the restriction transfer for N >= 2.  For a stored W0 model with N >= 2 and an element s of the
+bot-descent t_1 .. t_{N-1} that is high, put L' = down(s) (a sublattice, top s) and F'(x, y) = F(x, y) ^ s on L'.
+Then phi' = phi on L', Z' = Z ^ down(s), and the bot-descent of F' is s, phi(s), ... (so N' = N - j for s = t_j).
+Reported per model and s: whether F' lies in W0 (definitions recomputed on L'), and whether CertAtom(F') and CertAtom(F)
+share a fixed atom (TRANSFER: every mu'-fixed atom is mu-fixed).  Samples only.
+7 ('N2', 's=t1', "F' in W0", 'TRANSFER holds')
+37 ('N2', 's=t1', "F' not in W0", 'Tb fails')
+6 ('N2', 's=t1', "F' not in W0", 'base fails')
+30 ('N2', 's=t1', 'low, skipped')
+12 ('N3', 's=t1', "F' not in W0", 'Tb fails')
+2 ('N3', 's=t1', "F' not in W0", 'base fails')
+11 ('N3', 's=t2', "F' not in W0", 'Tb fails')
+3 ('N3', 's=t2', 'low, skipped')
+1 ('N4', 's=t1', "F' in W0", 'TRANSFER holds')
+1 ('N4', 's=t2', "F' not in W0", 'Tb fails')
+1 ('N4', 's=t3', "F' not in W0", 'Tb fails')

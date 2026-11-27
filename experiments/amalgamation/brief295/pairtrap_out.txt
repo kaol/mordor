@@ -1,0 +1,43 @@
+Free analysis (no SAT; every quantity recomputed from the definitions via brief291/world.py).
+
+PAIR STAIRCASE of two rows x, y of Z (both landing): v_j = (F x)^j T, w_k = (F y)^k T; for l < i(x):
+  kappa(l) = least k with h(v_l ^ w_k) <= 2;  boundary point B_l = v_l ^ w_{kappa(l)-1} (high);
+  value row q = x ^ y (must lie in Z), boundary value e_l = F(q, B_l)  (<= v_{l+1} ^ w_{kappa(l)}).
+
+Statements checked (quantifier: for every stored model in the stated world, for every row x in Z):
+  PairTrap   (paper, brief run 20 §4.1): if y = lambda(x) lies in Z and h(y) = 2, then some boundary point B_l of the
+             (x, y)-staircase has F(q, B_l) an atom q' <= y with q' not <= x (and then q' = phi(B_l)).
+             FAIL = a row x of Z with lambda(x) in M2 and no such boundary point (the paper proof would be wrong).
+  AboveD     (paper corollary at N = 1): every row x of Z with x >= d exits, and its exit atom c(x) <= x.
+             FAIL = a row above d that does not exit, or exits undominated.
+  N1Cert     CertAtom at N = 1 (the theorem the two give): FAIL = N = 1 model with no mu-fixed atom.
+Also, for models in relaxed worlds with N = 1 and NoFix (contradiction mode): which hypothesis of the A1 proof
+is violated — Tb at q0 = m ^ d at a boundary point of the (d, m)-staircase (m = lambda(d)), lambda(m) <= m, lambda(d)
+<= d, ZT, or none (then the proof is wrong).
+W0 models analysed 191
+70 ('W0', 'N1', 'a', 'AboveD', 'holds')
+70 ('W0', 'N1', 'a', 'N1Cert', 'holds')
+46 ('W0', 'N1', 'atom', 'AboveD', 'holds')
+26 ('W0', 'N1', 'atom', 'N1Cert', 'holds')
+9 ('W0', 'N>=2', 'a', 'models')
+86 ('W0', 'N>=2', 'atom', 'models')
+326 ('W0', 'PairTrap', 'holds')
+5 ('relaxed N1 NoFix', 'a', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 1 of 2 points)')
+6 ('relaxed N1 NoFix', 'a', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 1 of 3 points)')
+3 ('relaxed N1 NoFix', 'a', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 1 of 4 points)')
+1 ('relaxed N1 NoFix', 'a', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 1 of 5 points)')
+2 ('relaxed N1 NoFix', 'a', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 1 of 6 points)')
+2 ('relaxed N1 NoFix', 'a', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 2 of 3 points)')
+3 ('relaxed N1 NoFix', 'a', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 2 of 4 points)')
+2 ('relaxed N1 NoFix', 'a', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 3 of 3 points)')
+1 ('relaxed N1 NoFix', 'a', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 3 of 6 points)')
+5 ('relaxed N1 NoFix', 'a', 'd exits (dominated exit; fixedBelow_of_exitDom hypotheses violated?)')
+9 ('relaxed N1 NoFix', 'a', 'lambda(d) <= d (land_not_le at d violated)')
+2 ('relaxed N1 NoFix', 'a', 'lambda(m) <= m (land_not_le at m violated)')
+8 ('relaxed N1 NoFix', 'atom', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 1 of 1 points)')
+12 ('relaxed N1 NoFix', 'atom', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 1 of 2 points)')
+6 ('relaxed N1 NoFix', 'atom', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 1 of 3 points)')
+1 ('relaxed N1 NoFix', 'atom', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 1 of 4 points)')
+2 ('relaxed N1 NoFix', 'atom', 'Tb at q0=m^d fails at a (d,m) boundary point (h(q0)=1, 2 of 2 points)')
+4 ('relaxed N1 NoFix', 'atom', 'lambda(d) <= d (land_not_le at d violated)')
+19 ('relaxed N1 NoFix', 'atom', 'lambda(m) <= m (land_not_le at m violated)')

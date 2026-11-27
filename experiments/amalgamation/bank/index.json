@@ -320,5 +320,12 @@
   "section": "§292",
   "world": "relaxed: Tb at atom rows restricted (sub-world of W0-squared)",
   "source": "orbit_probe.py nofix 0 LastEither tall 10 4 2 20"
+ },
+ {
+  "file": "s295_toplands_h5.json",
+  "statement": "TopLand_S (the joint colour row g_S, S = {bot} + colour atoms + height-2 rows above two of them, lands)",
+  "section": "§295",
+  "world": "W0+n1",
+  "source": "run-19 briefer topland_probe.py Ba Nge2 closure 5 11 4 30"
  }
 ]

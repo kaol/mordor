@@ -1,0 +1,5 @@
+Free check (samples): in stuck-world W0 models (TopLand_S fails), Y = gfp of g_S (S = bot + calA + height-2 joins in Z).
+Shadow of JointStuck: some mu-fixed atom q* has F(q*, Y) <= Y.  FAIL = no fixed atom with F(q*, Y) <= Y.
+16 ('cex/stored', 'shadow holds', 'fixed atom in calA')
+48 ('run3/cand', 'shadow holds', 'fixed atom in calA')
+59 ('run3/m2', 'shadow holds', 'fixed atom in calA')

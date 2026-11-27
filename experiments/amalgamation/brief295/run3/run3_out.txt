@@ -1,0 +1,386 @@
+=== c0_models.json Bb Nge2 maxn 34 file ../cex/TopLand_S.json (time left 1500s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe candidate S branch=atom exactN=None Nge2=True maxn=34 corpus=['file', '../cex/TopLand_S.json']
+  lattice n=15 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [2])  0s
+  lattice n=16 h=4: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [3])  0s
+  lattice n=17 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [7])  0s
+  lattice n=18 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 4, fixed atoms [3])  0s
+  lattice n=20 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=24 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=25 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=29 h=6: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [1])  0s
+  lattice n=30 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 5, |calA| 4, fixed atoms [4])  0s
+  lattice n=31 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=31 h=6: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [5])  0s
+  lattice n=33 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [3])  0s
+  lattice n=33 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [3])  0s
+  lattice n=33 h=9: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 2, fixed atoms [4])  0s
+  lattice n=34 h=9: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [1])  0s
+topland {'SAT': 15, 'SAT atom N2': 10, 'SAT atom N3': 4, 'SAT atom N5': 1} smallest SAT 15 total 3s
+exit 0
+=== cand_closure_5_11_4_30.json Ba Nge2 maxn 40 closure 5 11 4 30 (time left 1497s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe candidate S branch=a exactN=None Nge2=True maxn=40 corpus=['closure', '5', '11', '4', '30']
+  lattice n=12 h=5: UNSAT  0s
+  lattice n=14 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [3])  0s
+  lattice n=14 h=5: UNSAT  0s
+  lattice n=13 h=5: UNSAT  0s
+  lattice n=21 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=19 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [1])  0s
+  lattice n=17 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [3])  0s
+  lattice n=16 h=4: UNSAT  0s
+  lattice n=17 h=4: UNSAT  0s
+  lattice n=15 h=4: UNSAT  0s
+  lattice n=16 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=20 h=4: UNSAT  0s
+  lattice n=15 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [2])  0s
+  lattice n=18 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [3])  0s
+  lattice n=12 h=4: UNSAT  0s
+  lattice n=20 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [5])  0s
+  lattice n=15 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [3])  0s
+  lattice n=14 h=4: UNSAT  0s
+  lattice n=17 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=10 h=5: UNSAT  0s
+  lattice n=12 h=5: UNSAT  0s
+  lattice n=16 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [2])  0s
+  lattice n=19 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [3])  0s
+  lattice n=9 h=4: UNSAT  0s
+  lattice n=20 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=18 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [5])  0s
+  lattice n=27 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=21 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [3])  0s
+  lattice n=19 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [1])  0s
+  lattice n=20 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [3])  0s
+topland {'UNSAT': 12, 'SAT': 18, 'SAT a N2': 18} smallest SAT 14 total 2s
+exit 0
+=== m1_closure_5_11_4_30.json T1 Ba Nge2 maxn 40 closure 5 11 4 30 (time left 1495s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe MUTANT T1 (S = Z ^ down t1) branch=a exactN=None Nge2=True maxn=40 corpus=['closure', '5', '11', '4', '30']
+  lattice n=12 h=5: UNSAT  0s
+  lattice n=14 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=14 h=5: UNSAT  0s
+  lattice n=13 h=5: UNSAT  0s
+  lattice n=21 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=19 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [2])  0s
+  lattice n=17 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [3])  0s
+  lattice n=16 h=4: UNSAT  0s
+  lattice n=17 h=4: UNSAT  0s
+  lattice n=15 h=4: UNSAT  0s
+  lattice n=16 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [4])  0s
+  lattice n=20 h=4: UNSAT  0s
+  lattice n=15 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [2])  0s
+  lattice n=18 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=12 h=4: UNSAT  0s
+  lattice n=20 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [5])  0s
+  lattice n=15 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [3])  0s
+  lattice n=14 h=4: UNSAT  0s
+  lattice n=17 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [4])  0s
+  lattice n=10 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [1])  0s
+  lattice n=12 h=5: UNSAT  0s
+  lattice n=16 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=19 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [4])  0s
+  lattice n=9 h=4: UNSAT  0s
+  lattice n=20 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [4])  0s
+  lattice n=18 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [5])  0s
+  lattice n=27 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [3])  0s
+  lattice n=21 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=19 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [3])  0s
+  lattice n=20 h=5: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [3])  0s
+topland {'UNSAT': 11, 'SAT': 19, 'SAT a N2': 19} smallest SAT 10 total 2s
+exit 0
+=== m2_closure_5_11_4_30.json Bb Nge2 maxn 40 closure 5 11 4 30 (time left 1494s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe candidate S branch=atom exactN=None Nge2=True maxn=40 corpus=['closure', '5', '11', '4', '30']
+  lattice n=12 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=14 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=14 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [4])  0s
+  lattice n=13 h=5: UNSAT  0s
+  lattice n=21 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [4])  0s
+  lattice n=19 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [2])  0s
+  lattice n=17 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [3])  0s
+  lattice n=16 h=4: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=17 h=4: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=15 h=4: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [3])  0s
+  lattice n=16 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [4])  0s
+  lattice n=20 h=4: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 4, fixed atoms [1])  0s
+  lattice n=15 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=18 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [3])  0s
+  lattice n=12 h=4: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [2])  0s
+  lattice n=20 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [4])  0s
+  lattice n=15 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [2])  0s
+  lattice n=14 h=4: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [4])  0s
+  lattice n=17 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=10 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=12 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=16 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [2])  0s
+  lattice n=19 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=9 h=4: UNSAT  0s
+  lattice n=20 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=18 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=27 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [3])  0s
+  lattice n=21 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=19 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=20 h=5: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [3])  0s
+topland {'SAT': 28, 'SAT atom N2': 21, 'SAT atom N3': 7, 'UNSAT': 2} smallest SAT 10 total 1s
+exit 0
+=== cand_tall_8_4_1_12.json Ba Nge2 maxn 40 tall 8 4 1 12 (time left 1492s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe candidate S branch=a exactN=None Nge2=True maxn=40 corpus=['tall', '8', '4', '1', '12']
+  lattice n=23 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 3, |calA| 3, fixed atoms [4])  0s
+  lattice n=19 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 5, |calA| 2, fixed atoms [2])  0s
+  lattice n=19 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [3])  0s
+  lattice n=26 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [4])  0s
+  lattice n=29 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 5, |calA| 3, fixed atoms [2])  0s
+  lattice n=33 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 4, fixed atoms [2])  0s
+  lattice n=26 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [6])  0s
+  lattice n=29 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [2])  0s
+  lattice n=33 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [3])  0s
+  lattice n=16 h=8: UNSAT  0s
+  lattice n=30 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=27 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 4, |calA| 4, fixed atoms [1])  0s
+topland {'SAT': 11, 'SAT a N3': 1, 'SAT a N5': 2, 'SAT a N2': 7, 'UNSAT': 1, 'SAT a N4': 1} smallest SAT 19 total 2s
+exit 0
+=== m1_tall_8_4_1_12.json T1 Ba Nge2 maxn 40 tall 8 4 1 12 (time left 1491s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe MUTANT T1 (S = Z ^ down t1) branch=a exactN=None Nge2=True maxn=40 corpus=['tall', '8', '4', '1', '12']
+  lattice n=23 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [4])  0s
+  lattice n=19 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 4, |calA| 1, fixed atoms [2])  0s
+  lattice n=19 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [2])  0s
+  lattice n=26 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 4, |calA| 1, fixed atoms [2])  0s
+  lattice n=29 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=33 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [2])  0s
+  lattice n=26 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 3, |calA| 1, fixed atoms [3])  0s
+  lattice n=29 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [6])  0s
+  lattice n=33 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [4])  0s
+  lattice n=16 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [1])  0s
+  lattice n=30 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [3])  0s
+  lattice n=27 h=8: SAT  (W0 model, TopLand_S fails; branch a, N 3, |calA| 2, fixed atoms [1])  0s
+topland {'SAT': 12, 'SAT a N2': 8, 'SAT a N4': 2, 'SAT a N3': 2} smallest SAT 16 total 2s
+exit 0
+=== m2_tall_8_4_1_12.json Bb Nge2 maxn 40 tall 8 4 1 12 (time left 1489s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe candidate S branch=atom exactN=None Nge2=True maxn=40 corpus=['tall', '8', '4', '1', '12']
+  lattice n=23 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [4])  0s
+  lattice n=19 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 6, |calA| 2, fixed atoms [2])  0s
+  lattice n=19 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 6, |calA| 3, fixed atoms [3])  0s
+  lattice n=26 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 6, |calA| 3, fixed atoms [2])  0s
+  lattice n=29 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 6, |calA| 3, fixed atoms [2])  0s
+  lattice n=33 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [3])  0s
+  lattice n=26 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [4])  0s
+  lattice n=29 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [2])  0s
+  lattice n=33 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 3, fixed atoms [2])  0s
+  lattice n=16 h=8: UNSAT  0s
+  lattice n=30 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 6, |calA| 3, fixed atoms [3])  0s
+  lattice n=27 h=8: SAT  (W0 model, TopLand_S fails; branch atom, N 6, |calA| 5, fixed atoms [1])  0s
+topland {'SAT': 11, 'SAT atom N3': 4, 'SAT atom N6': 6, 'SAT atom N2': 1, 'UNSAT': 1} smallest SAT 19 total 2s
+exit 0
+=== cand_tall_10_4_2_20.json Ba Nge2 maxn 40 tall 10 4 2 20 (time left 1487s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe candidate S branch=a exactN=None Nge2=True maxn=40 corpus=['tall', '10', '4', '2', '20']
+  lattice n=27 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=22 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 7, |calA| 3, fixed atoms [2])  0s
+  lattice n=34 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 4, |calA| 3, fixed atoms [2])  0s
+  lattice n=25 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 3, |calA| 2, fixed atoms [2])  0s
+  lattice n=28 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=35 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 4, |calA| 2, fixed atoms [2])  0s
+  lattice n=22 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=33 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 7, |calA| 4, fixed atoms [4])  0s
+  lattice n=27 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [2])  0s
+  lattice n=33 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 7, |calA| 2, fixed atoms [2])  0s
+  lattice n=35 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 7, |calA| 3, fixed atoms [2])  0s
+  lattice n=32 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=22 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 6, |calA| 2, fixed atoms [5])  0s
+  lattice n=25 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 7, |calA| 2, fixed atoms [1])  0s
+  lattice n=29 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [5])  0s
+  lattice n=32 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [3])  0s
+  lattice n=26 h=10: UNSAT  0s
+topland {'SAT': 16, 'SAT a N2': 7, 'SAT a N7': 5, 'SAT a N4': 2, 'SAT a N3': 1, 'SAT a N6': 1, 'UNSAT': 1} smallest SAT 22 total 4s
+exit 0
+=== m1_tall_10_4_2_20.json T1 Ba Nge2 maxn 40 tall 10 4 2 20 (time left 1483s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe MUTANT T1 (S = Z ^ down t1) branch=a exactN=None Nge2=True maxn=40 corpus=['tall', '10', '4', '2', '20']
+  lattice n=27 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [1])  0s
+  lattice n=22 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 7, |calA| 2, fixed atoms [2])  0s
+  lattice n=34 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [1])  0s
+  lattice n=25 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 4, |calA| 2, fixed atoms [2])  0s
+  lattice n=28 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [2])  0s
+  lattice n=35 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [2])  0s
+  lattice n=22 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=33 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 3, |calA| 1, fixed atoms [4])  0s
+  lattice n=27 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 3, fixed atoms [2])  0s
+  lattice n=33 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [2])  0s
+  lattice n=35 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 5, |calA| 2, fixed atoms [2])  0s
+  lattice n=32 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [1])  0s
+  lattice n=22 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 4, |calA| 1, fixed atoms [5])  0s
+  lattice n=25 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 3, |calA| 1, fixed atoms [1])  0s
+  lattice n=29 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [5])  0s
+  lattice n=32 h=10: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [1])  0s
+  lattice n=26 h=10: UNSAT  0s
+topland {'SAT': 16, 'SAT a N2': 10, 'SAT a N7': 1, 'SAT a N4': 2, 'SAT a N3': 2, 'SAT a N5': 1, 'UNSAT': 1} smallest SAT 22 total 3s
+exit 0
+=== m2_tall_10_4_2_20.json Bb Nge2 maxn 40 tall 10 4 2 20 (time left 1480s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe candidate S branch=atom exactN=None Nge2=True maxn=40 corpus=['tall', '10', '4', '2', '20']
+  lattice n=27 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=22 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 8, |calA| 3, fixed atoms [2])  0s
+  lattice n=34 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [5])  0s
+  lattice n=25 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 2, fixed atoms [2])  0s
+  lattice n=28 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 5, |calA| 2, fixed atoms [2])  0s
+  lattice n=35 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [2])  0s
+  lattice n=22 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=33 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 8, |calA| 4, fixed atoms [4])  0s
+  lattice n=27 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 2, fixed atoms [4])  0s
+  lattice n=33 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 3, |calA| 2, fixed atoms [2])  0s
+  lattice n=35 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 8, |calA| 3, fixed atoms [2])  0s
+  lattice n=32 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 8, |calA| 2, fixed atoms [2])  0s
+  lattice n=22 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 5, |calA| 2, fixed atoms [2])  0s
+  lattice n=25 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 8, |calA| 2, fixed atoms [1])  0s
+  lattice n=29 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 5, |calA| 3, fixed atoms [1])  0s
+  lattice n=32 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 5, |calA| 4, fixed atoms [1])  0s
+  lattice n=26 h=10: SAT  (W0 model, TopLand_S fails; branch atom, N 8, |calA| 2, fixed atoms [2])  0s
+topland {'SAT': 17, 'SAT atom N2': 4, 'SAT atom N8': 6, 'SAT atom N3': 3, 'SAT atom N5': 4} smallest SAT 22 total 3s
+exit 0
+=== cand_tall_12_4_1_8.json Ba Nge2 maxn 40 tall 12 4 1 8 (time left 1477s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe candidate S branch=a exactN=None Nge2=True maxn=40 corpus=['tall', '12', '4', '1', '8']
+  lattice n=33 h=12: SAT  (W0 model, TopLand_S fails; branch a, N 5, |calA| 3, fixed atoms [1])  1s
+  lattice n=32 h=12: SAT  (W0 model, TopLand_S fails; branch a, N 3, |calA| 2, fixed atoms [2])  0s
+  lattice n=34 h=12: UNSAT  0s
+  lattice n=27 h=12: SAT  (W0 model, TopLand_S fails; branch a, N 9, |calA| 2, fixed atoms [1])  0s
+topland {'SAT': 3, 'SAT a N5': 1, 'SAT a N3': 1, 'UNSAT': 1, 'SAT a N9': 1} smallest SAT 27 total 1s
+exit 0
+=== m1_tall_12_4_1_8.json T1 Ba Nge2 maxn 40 tall 12 4 1 8 (time left 1476s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe MUTANT T1 (S = Z ^ down t1) branch=a exactN=None Nge2=True maxn=40 corpus=['tall', '12', '4', '1', '8']
+  lattice n=33 h=12: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=32 h=12: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [2])  0s
+  lattice n=34 h=12: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [1])  0s
+  lattice n=27 h=12: SAT  (W0 model, TopLand_S fails; branch a, N 2, |calA| 1, fixed atoms [1])  0s
+topland {'SAT': 4, 'SAT a N2': 4} smallest SAT 27 total 1s
+exit 0
+=== m2_tall_12_4_1_8.json Bb Nge2 maxn 40 tall 12 4 1 8 (time left 1475s)
+Brief run 20, P2 probe "TopLand_S".  World W0 + n1 through (T) (same scheme as stair_probe.py / orbit_probe.py:
+one-hot rows F(x, .) for low x, monotone; a(bot) = bot; ZT; n1; h(top) >= 3; Ta and Tb at every row of Z).
+calA = atoms q of Z with q = F(bot, w) for some w;  S = {bot} u calA u {z in Z of height 2 above two atoms of calA};
+g_S(y) = join_{z in S} F(z, y)  (a virtual row; TopRow, brief §5: if the g_S-iteration from top gets low, CertAtom).
+TopLand_S fails  <=>  some high Y has Y <= g_S(Y)  (then gfp g_S is high and the iteration from top never gets low).
+QUANTIFIER: for each lattice, EXISTS F in W0 (with the branch / exact-N flags) such that TopLand_S FAILS.
+SAT = TopLand_S fails on this lattice (model replayed from the definitions and saved).  UNSAT = TopLand_S holds there.
+Flags: Ba (branch a: h(d) = 2) | Bb (branch atom: d an atom) ; E2..E6 exact N ; Nge2 (N >= 2) ; maxn K.
+MUTANT flag T1: S replaced by Z ^ down(t1), t1 = F(bot, top) (TopLand_t1: refuted on stored W0 models, branch a
+included: 4 of 9 stored branch-a N >= 2 models; topland_census.py).
+topland_probe candidate S branch=atom exactN=None Nge2=True maxn=40 corpus=['tall', '12', '4', '1', '8']
+  lattice n=33 h=12: SAT  (W0 model, TopLand_S fails; branch atom, N 9, |calA| 3, fixed atoms [1])  0s
+  lattice n=32 h=12: SAT  (W0 model, TopLand_S fails; branch atom, N 2, |calA| 2, fixed atoms [1])  0s
+  lattice n=34 h=12: UNSAT  0s
+  lattice n=27 h=12: SAT  (W0 model, TopLand_S fails; branch atom, N 10, |calA| 2, fixed atoms [1])  0s
+topland {'SAT': 3, 'SAT atom N9': 1, 'SAT atom N2': 1, 'UNSAT': 1, 'SAT atom N10': 1} smallest SAT 27 total 1s
+exit 0

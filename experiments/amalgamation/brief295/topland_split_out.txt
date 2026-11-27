@@ -1,0 +1,8 @@
+TopLand_S split by the bot-row case: (I) lambda(bot) = d (t_1..t_{N-1} high) vs (II) lambda(bot) = t_{N-1} (low, exits to d). Samples only.
+70 ('a', 'N1', 'I lam(bot)=d', 'TopLand_S holds')
+9 ('a', 'N>=2', 'I lam(bot)=d', 'TopLand_S holds')
+26 ('atom', 'N1', 'I lam(bot)=d', 'TopLand_S holds')
+12 ('atom', 'N>=2', 'I lam(bot)=d', 'TopLand_S FAILS')
+41 ('atom', 'N>=2', 'I lam(bot)=d', 'TopLand_S holds')
+4 ('atom', 'N>=2', 'II lam(bot)=t_(N-1)', 'TopLand_S FAILS')
+29 ('atom', 'N>=2', 'II lam(bot)=t_(N-1)', 'TopLand_S holds')

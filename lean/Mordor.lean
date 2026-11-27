@@ -139,6 +139,7 @@ import Mordor.ParentAncestry
 import Mordor.LateParent
 import Mordor.Normalize
 import Mordor.StairB1
+import Mordor.PairTrap
 import Mordor.RiseHeight4
 import Mordor.GroundOH
 import Mordor.OHHeight4

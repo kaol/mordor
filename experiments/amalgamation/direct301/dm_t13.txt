@@ -1,0 +1,7 @@
+cgall_probe d2pM | per lattice: exists F | SAT = MUTANT of d2p: universality of c0 dropped (lambda(c0) = m a pair-join, lambda(m) != m) | corpus ['tall', '13', '4', '1', '8'] maxn 45
+  lattice n=42 h=13: SAT (colours [2, 5, 6, 8])
+  lattice n=39 h=13: SAT (colours [1, 2, 3])
+  lattice n=44 h=13: SAT (colours [1, 2, 3])
+  lattice n=42 h=13: UNSAT
+  lattice n=33 h=13: UNSAT
+d2pM ['tall', '13', '4', '1', '8'] {'SAT': 3, 'UNSAT': 2}

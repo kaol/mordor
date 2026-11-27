@@ -24,6 +24,8 @@ MEAN = {'all': 'colour atoms unbounded in Z, ColourGain at every row of Z, no mu
         'col2': 'colour atoms unbounded in Z, ColourGain at the colour rows and the height-2 rows of Z, no mu-fixed atom',
         'pairself': 'colour atoms unbounded in Z, some pair-join (an element of Z above two colours) exists; colour rows land, have ColourGain and Tb; pair-join rows land with lambda(m) not <= m; other rows free; no mu-fixed atom (PairSelf fails)',
         'pairselfM': 'MUTANT of pairself: pair-join rows land, lambda(m) <= m allowed',
+        'd2p': 'pairselfM world + a colour c0 below the landing of every colour and pair-join row, lambda(c0) = m a pair-join, and lambda(m) != m (D2-prime SelfPair fails)',
+        'd2pM': 'MUTANT of d2p: universality of c0 dropped (lambda(c0) = m a pair-join, lambda(m) != m)',
         'h2': 'colour atoms unbounded in Z, ColourGain at the height-2 rows of Z only, no mu-fixed atom',
         'colbot': 'colour atoms unbounded in Z, ColourGain at the colour rows and row bot, no mu-fixed atom'}[MODE]
 print(f'cgall_probe {MODE} | per lattice: exists F | SAT = {MEAN}{" | at least 3 colours" if MIN3 else ""}{" | + Tb at atom rows" if "TbA" in FL else ""}{" | + Tb at height-2 rows" if "TbM" in FL else ""} | corpus {args} maxn {MAXN}', flush=True)
@@ -84,10 +86,10 @@ for L in lattices(args):
             cands = [col[c] for c in atoms if le[c][p] and not le[c][x]]
             if MODE == 'all': add([-Z(x), -lam[x, p]] + cands)
             elif h[x] == 1 and MODE != 'h2': add([-col[x], -lam[x, p]] + cands)
-            if MODE in ('pairself', 'pairselfM') and h[x] == 2 and MODE == 'pairself' and le[p][x]: add([-v('pj', x), -lam[x, p]])
+            if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM') and h[x] == 2 and MODE == 'pairself' and le[p][x]: add([-v('pj', x), -lam[x, p]])
             if MODE in ('col2', 'h2') and h[x] == 2: add([-Z(x), -lam[x, p]] + cands)
             if MODE == 'colbot' and x == bot: add([-lam[x, p]] + cands)
-    if MODE in ('pairself', 'pairselfM'):
+    if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM'):
         for x in low:
             if h[x] == 1: add([-col[x]] + [lam[x, p] for p in low])          # colour rows land
             if h[x] == 2:                                                    # pj(x) <-> Z(x) and two colours below x
@@ -103,6 +105,19 @@ for L in lattices(args):
                         for u in range(n):
                             if le[u][x]: add([-col[x], -f(x, y, u)])
         add([v('pj', x) for x in low if h[x] == 2])                         # non-thin
+        if MODE in ('d2p', 'd2pM'):
+            sels = []
+            for c0 in atoms:
+                for m_ in low:
+                    if h[m_] != 2 or not le[c0][m_]: continue
+                    t = v('d2', c0, m_); sels.append(t)
+                    add([-t, col[c0]]); add([-t, v('pj', m_)]); add([-t, lam[c0, m_]]); add([-t, -lam[m_, m_]])
+                    if MODE == 'd2p':
+                        for z in low:
+                            ups = [lam[z, p] for p in low if le[c0][p]]
+                            if h[z] == 1: add([-t, -col[z]] + ups)
+                            if h[z] == 2: add([-t, -v('pj', z)] + ups)
+            add(sels)
     for x in low:                                         # optional Tb: no lower cell at a high column
         if x == bot or not ((h[x] == 1 and 'TbA' in FL) or (h[x] == 2 and 'TbM' in FL)): continue
         for y in range(n):
@@ -123,11 +138,13 @@ for L in lattices(args):
         cols = sorted({phi[w] for w in range(n) if h[phi[w]] == 1 and phi[w] in Zs})
         ok = a_of(L, F, bot) == bot and all(h[z] <= 2 for z in Zs) and any(h[z] == 2 for z in Zs)
         PJ = [z for z in Zs if h[z] == 2 and sum(1 for c in cols if le[c][z]) >= 2]
-        landrows = (cols + PJ) if MODE in ('pairself', 'pairselfM') else Zs
+        landrows = (cols + PJ) if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM') else Zs
         ok = ok and all(lamf(x) is not None for x in landrows) and not any(all(le[c][z] for c in cols) for z in Zs)
-        if MODE in ('pairself', 'pairselfM'):
+        if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM'):
             ok = ok and len(PJ) > 0 and all(not le[F[c][y]][c] for c in cols for y in range(n) if h[y] > 2)
             if MODE == 'pairself': ok = ok and all(not le[lamf(m)][m] for m in PJ)
+            if MODE in ('d2p', 'd2pM'):
+                ok = ok and any(lamf(c0) in PJ and lamf(lamf(c0)) != lamf(c0) and (MODE == 'd2pM' or all(le[c0][lamf(z)] for z in cols + PJ)) for c0 in cols)
         ok = ok and not any(h[q] == 1 and lamf(q) is not None and lamf(q) not in Zs and phi[lamf(q)] == q for q in Zs)
         rows = Zs if MODE == 'all' else ([] if MODE == 'h2' else cols) + ([z for z in Zs if h[z] == 2] if MODE in ('col2', 'h2') else []) + ([bot] if MODE == 'colbot' else [])
         ok = ok and all(any(le[c][lamf(x)] and not le[c][x] for c in cols) for x in rows)

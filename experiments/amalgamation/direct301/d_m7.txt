@@ -1,0 +1,4 @@
+cgall_probe d2p | per lattice: exists F | SAT = pairselfM world + a colour c0 below the landing of every colour and pair-join row, lambda(c0) = m a pair-join, and lambda(m) != m (D2-prime SelfPair fails) | corpus ['tall', '10', '7', '1', '5'] maxn 50
+  lattice n=42 h=10: UNSAT
+  lattice n=49 h=10: UNSAT
+d2p ['tall', '10', '7', '1', '5'] {'SAT': 0, 'UNSAT': 2}

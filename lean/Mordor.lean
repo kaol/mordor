@@ -141,6 +141,7 @@ import Mordor.Normalize
 import Mordor.StairB1
 import Mordor.PairTrap
 import Mordor.TwoColour
+import Mordor.TwoColourShadow
 import Mordor.RiseHeight4
 import Mordor.GroundOH
 import Mordor.OHHeight4

@@ -1,0 +1,5 @@
+r3_probe break | per lattice: exists F and colour pair | SAT = two unbounded colours, ColourGain at row b only, no mu-fixed colour, and the (a, b) staircase has a corner J = a v b outside Z with phi(J) = b whose boundary point above has phi = b (NoBreak fails) [NoFix at b DROPPED] | corpus ['tall', '10', '6', '1', '8'] maxn 50
+  lattice n=35 h=10: SAT (colours 1, 2)
+  lattice n=49 h=10: SAT (colours 1, 4)
+  lattice n=42 h=10: SAT (colours 1, 6)
+break ['tall', '10', '6', '1', '8'] {'SAT': 3, 'UNSAT': 0}

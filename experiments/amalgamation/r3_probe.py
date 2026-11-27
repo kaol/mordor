@@ -18,12 +18,14 @@ sys.path.insert(0, '../separation'); sys.path.insert(0, '.')
 from pysat.solvers import Cadical153
 from tight_probe import lattices
 from rstages import a_of
-MODE = sys.argv[1]; args = sys.argv[2:]
+MODE = sys.argv[1]; args = [x for x in sys.argv[2:] if x not in ('noNFa', 'noNFb', 'noCG')]; NONFA = 'noNFa' in sys.argv[2:]
+NONFB = 'noNFb' in sys.argv[2:]; NOCG = 'noCG' in sys.argv[2:]
 MAXN = None
 if 'maxn' in args: k = args.index('maxn'); MAXN = int(args[k + 1]); args = args[:k] + args[k + 2:]
 MEAN = {'r3': 'two unbounded colours a, b, ColourGain at both colour rows, no mu-fixed colour (TwoColourCG fails)',
         'cgone': 'two unbounded colours, ColourGain at row b only, no mu-fixed colour (mutant CGone)',
-        'shadow': 'two unbounded colours, ColourGain at row b only, no mu-fixed colour, a not <= phi(r_a) (ShadowLemma fails)'}[MODE]
+        'shadow': 'two unbounded colours, ColourGain at row b only, no mu-fixed colour, a not <= phi(r_a) (ShadowLemma fails)',
+        'break': 'two unbounded colours, ColourGain at row b only, no mu-fixed colour, and the (a, b) staircase has a corner J = a v b outside Z with phi(J) = b whose boundary point above has phi = b (NoBreak fails)'}[MODE] + (' [NoFix at a DROPPED]' if NONFA else '') + (' [NoFix at b DROPPED]' if NONFB else '') + (' [ColourGain DROPPED]' if NOCG else '')
 print(f'r3_probe {MODE} | per lattice: exists F and colour pair | SAT = {MEAN} | corpus {args} maxn {MAXN}', flush=True)
 tot = {'SAT': 0, 'UNSAT': 0}; dump = []
 for L in lattices(args):
@@ -87,10 +89,10 @@ for L in lattices(args):
                 add([-lam[p]] + ts)
             add([lam[p] for p in lam])                      # the row lands
             other = B if x == A else A
-            cg = (MODE == 'r3') or (x == B)
+            cg = ((MODE == 'r3') or (x == B)) and not NOCG
             for p in lam:
                 if cg and not le[other][p]: add([-lam[p]])  # ColourGain at this colour row
-                add([-lam[p], Z(p), -f(bot, p, x)])        # NoFix at this colour
+                if not (NONFA and x == A) and not (NONFB and x == B): add([-lam[p], Z(p), -f(bot, p, x)])        # NoFix at this colour
             if MODE == 'shadow' and x == A:                # not a <= phi(r_a)
                 for j in range(1, NO + 1):
                     for p in lam:
@@ -98,6 +100,20 @@ for L in lattices(args):
                             if h[z] <= 2: continue
                             for u in range(n):
                                 if le[A][u]: add([-v('t', x, j, p), -it(x, j - 1, z), -f(bot, z, u)])
+        if MODE == 'break':
+            Jn = L.join[A][B]
+            if h[Jn] != 2: S.delete(); continue
+            add([-Z(Jn)]); add([f(bot, Jn, B)])
+            sel = []
+            trip = [(x, y, y2) for x in range(n) if le[Jn][x] for y in range(n) if le[Jn][y] and L.meet[x][y] == Jn
+                    for y2 in range(n) if le[y][y2] and y2 != y and h[L.meet[x][y2]] > 2]
+            for j in range(NO + 1):
+                for k in range(1, NO + 1):
+                    for (x, y, y2) in trip:
+                        t = v('brk', j, k, x, y, y2); sel.append(t)
+                        for lit in (it(A, j, x), it(B, k, y), it(B, k - 1, y2), f(bot, L.meet[x][y2], B)): add([-t, lit])
+            if not sel: S.delete(); continue
+            add(sel)
         if S.solve():
             m = set(l for l in S.get_model() if l > 0)
             F = [[(next(u for u in range(n) if V[('f', x, y, u)] in m) if x in rows else top) for y in range(n)] for x in range(n)]
@@ -111,8 +127,12 @@ for L in lattices(args):
             ok = (a_of(L, F, bot) == bot and all(h[z] <= 2 for z in Zs) and any(h[z] == 2 for z in Zs) and cols == sorted([A, B])
                   and not any(le[A][z] and le[B][z] for z in Zs) and lamf(A) is not None and lamf(B) is not None
                   and all(x == bot or all(le[F[bot][y]][F[x][y]] for y in range(n)) for x in rows))
-            ok = ok and not any(lamf(c) not in Zs and phi[lamf(c)] == c for c in (A, B))
-            ok = ok and le[A][lamf(B)] and (MODE != 'r3' or le[B][lamf(A)])
+            ok = ok and not any(lamf(c) not in Zs and phi[lamf(c)] == c for c in [c_ for c_ in (A, B) if not (NONFA and c_ == A) and not (NONFB and c_ == B)])
+            ok = ok and (NOCG or (le[A][lamf(B)] and (MODE != 'r3' or le[B][lamf(A)])))
+            if MODE == 'break':
+                da, db = desc(A), desc(B); Jn = L.join[A][B]
+                ok = ok and Jn not in Zs and phi[Jn] == B and any(L.meet[x][db[k]] == Jn and h[L.meet[x][db[k - 1]]] > 2 and phi[L.meet[x][db[k - 1]]] == B
+                                                                  for x in da for k in range(1, len(db)))
             if MODE == 'shadow':
                 d = desc(A); i = d.index(lamf(A)); ok = ok and not le[A][phi[d[i - 1]]]
             assert ok, 'SAT/replay mismatch'

@@ -38,6 +38,7 @@ SAT_MEANS = {'strictdep': 'some non-fixed successor on the bot-orbit has dep >= 
              'fixmax': 'd is not a good atom and some mu-fixed atom of Z lies below no height-2 element of Z (FixMax fails)',
              'goodnonmax': 'CALIBRATED MUTANT (GoodNonMax): d is not a good atom and some good atom of Z lies below no height-2 element of Z',
              'fixnotd': 'some mu-fixed atom of Z is not below d (FixBelowD fails; use with Ba)',
+             'nofix': 'no atom of Z is exit-fixed (the hypothesis world of GoodTop; use with Ta2 = W0-flat)',
              'goodtop': 'no atom of Z is exit-fixed (lambda(q) not in Z, F(bot, lambda(q)) = q) and no m in Z of height 2 has lambda(m) = m (GoodTop fails; use with Ta2 = W0-flat)',
              'Mgoodtop': 'CALIBRATED MUTANT (OwnZCell, refuted): no atom of Z is exit-fixed and no atom q of Z has q <= F(q, z) at some height-2 z in Z on row q\'s descent',
              'landnotd': 'some exit-fixed atom q has landing p = lambda(q) not below t_(N-1), the bot-descent element before d (LandBelowD fails; use with Ba xfix)'}[MODE]
@@ -247,11 +248,12 @@ for L in lattices(args):
                     for q in own:
                         if le[q][m_]: add([-t, -own[q]])
             add(sel); sel = []
-    elif MODE in ('goodtop', 'Mgoodtop'):
+    elif MODE in ('goodtop', 'Mgoodtop', 'nofix'):
         for q in low:                                         # NoFix (exit form)
             if h[q] != 1: continue
             for p_ in low: add([-Z(q), -lam[q, p_], Z(p_), -f(bot, p_, q)])
-        if MODE == 'goodtop':
+        if MODE == 'nofix': pass
+        elif MODE == 'goodtop':
             for m_ in low:
                 if h[m_] == 2: add([-Z(m_), -lam[m_, m_]])
         else:
@@ -309,7 +311,7 @@ for L in lattices(args):
             else:
                 pr = {'topcert': exdom, 'exitm2': exits, 'nmgood': gb}[base_]
                 bad = offg and (not any(pr(m_) for m_ in M2s) if MODE[0] != 'M' else any(not pr(m_) for m_ in M2s))
-        if MODE in ('goodtop', 'Mgoodtop'):                  # replay W0-flat and the statement from the definitions
+        if MODE in ('goodtop', 'Mgoodtop', 'nofix'):         # replay W0-flat and the statement from the definitions
             Zs = [z for z in range(n) if F[bot][z] == bot]; hi = [y for y in range(n) if h[y] > 2]
             wok = all(h[z] <= 2 for z in Zs) and any(h[z] == 2 for z in Zs)
             for x in Zs:
@@ -319,7 +321,7 @@ for L in lattices(args):
             nofix = not any(h[q] == 1 and lamf(q) is not None and lamf(q) not in Zs and F[bot][lamf(q)] == q for q in Zs)
             if MODE == 'goodtop': concl = any(h[m_] == 2 and lamf(m_) == m_ for m_ in Zs)
             else: concl = any(h[q] == 1 and h[z] == 2 and z in Zs and z in desc(q) and le[q][F[q][z]] for q in Zs for z in Zs)
-            ok = ok and wok and REL <= {'Ta2'}; bad = nofix and not concl
+            ok = ok and wok and REL <= {'Ta2'}; bad = nofix and (MODE == 'nofix' or not concl)
             dd_ = [t for t in tb if t != bot]; dd_ = dd_[-1] if dd_ else None
             print(f'    model: branch {"a" if dd_ is not None and h[dd_] == 2 else "atom"}, N = {tb.index(dd_) if dd_ is not None else None}', flush=True)
         for k in range(1, K):

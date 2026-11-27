@@ -46,3 +46,4 @@
 | s288_landbelowd_h5.json | LandBelowD (case a: the landing of a fixed atom lies below t_(N-1)) | §288 | W0+n1 | 10 | 5 | 3 | 2 | a | 3 fixed | 2 |
 | s289_ownzcell_h4.json | OwnZCell (W0-flat: no mu-fixed atom implies some atom has an own cell at a height-2 element of Z on its descent); calibrated mutant of GoodTop | §289 | W0flat+NoFix (Tb dropped at height-2 rows) | 9 | 4 | 4 | 1 | a | 2 fixed | 1 |
 | s289_ownzcell_h5.json | OwnZCell; atoms 3, 4 land at d = 7 and swap | §289 | W0flat+NoFix (Tb dropped at height-2 rows) | 12 | 5 | 4 | 2 | a | 2 fixed | 1 |
+| s290_dwitness_h5.json | DWitness (W0-flat, branch a, NoFix: d lands on itself); here only 8 in M2 self-lands | §290 | W0flat+NoFix (Tb dropped at height-2 rows) | 14 | 5 | 5 | 1 | a | 3 fixed | 5 |

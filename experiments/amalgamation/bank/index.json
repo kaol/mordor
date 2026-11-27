@@ -271,5 +271,12 @@
   "section": "§289",
   "world": "W0flat+NoFix (Tb dropped at height-2 rows)",
   "source": "run-16 briefer lead_probe.py lead noTb2 closure 5 11 4 3"
+ },
+ {
+  "file": "s290_dwitness_h5.json",
+  "statement": "DWitness (W0-flat, branch a, NoFix: d lands on itself); here only 8 in M2 self-lands",
+  "section": "§290",
+  "world": "W0flat+NoFix (Tb dropped at height-2 rows)",
+  "source": "orbit_probe.py nofix 0 Ta2 closure 5 11 4 30 (DUMP)"
  }
 ]

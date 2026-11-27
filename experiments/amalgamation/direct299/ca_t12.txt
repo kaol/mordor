@@ -1,0 +1,6 @@
+cgall_probe all | per lattice: exists F | SAT = colour atoms unbounded in Z, ColourGain at every row of Z, no mu-fixed atom (CGall fails) | + Tb at atom rows | corpus ['tall', '12', '4', '1', '8'] maxn 40
+  lattice n=33 h=12: UNSAT
+  lattice n=32 h=12: UNSAT
+  lattice n=34 h=12: UNSAT
+  lattice n=27 h=12: UNSAT
+all ['tall', '12', '4', '1', '8'] {'SAT': 0, 'UNSAT': 4}

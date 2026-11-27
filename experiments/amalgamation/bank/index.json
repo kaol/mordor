@@ -327,5 +327,12 @@
   "section": "§295",
   "world": "W0+n1",
   "source": "run-19 briefer topland_probe.py Ba Nge2 closure 5 11 4 30"
+ },
+ {
+  "file": "s299_cgall_noTb_h5.json",
+  "statement": "CGall without Tb (landing + ColourGain at every Z-row + NoFix + unbounded colours, Tb only at bot): has a NoFix model",
+  "section": "§299",
+  "world": "relaxed: no Tb at Z-rows other than bot",
+  "source": "cgall_probe.py all closure 6 12 1 40"
  }
 ]

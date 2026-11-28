@@ -1,0 +1,71 @@
+plocal_probe | per lattice: EXISTS F in W = PairSelf world without D_p | quantifier: exists F | modes plocal: SAT = PairLocal fails (lambda(c0)=m pj >= c0, c0 <= lambda(c1) for another colour c1 <= m, lambda(m) != m) ; plocalM: SAT = MUTANT d2pM (lambda(c0)=m pj >= c0, lambda(m) != m; no condition on c1) | corpus ['tall', '10', '4', '2', '20'] maxn 40 exactN 3 min colours 0
+  lattice 1 n=27 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 2 n=22 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 3 n=34 h=10: plocal: UNSAT | plocalM: SAT (colours [1, 3, 5], pjs [10, 11], N 3, d atom)
+  lattice 4 n=25 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 5 n=28 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 6 n=35 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 7 n=22 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 8 n=33 h=10: plocal: UNSAT | plocalM: SAT (colours [1, 3, 4], pjs [7, 9], N 3, d atom)
+  lattice 9 n=27 h=10: plocal: UNSAT | plocalM: SAT (colours [2, 3, 4], pjs [7, 11], N 3, d atom)
+  lattice 10 n=33 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 11 n=35 h=10: plocal: UNSAT | plocalM: SAT (colours [1, 2, 3], pjs [5, 8, 9], N 3, d a)
+  lattice 12 n=32 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 13 n=22 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 14 n=25 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 15 n=29 h=10: plocal: UNSAT | plocalM: SAT (colours [3, 5, 6], pjs [11, 13], N 3, d atom)
+  lattice 16 n=32 h=10: plocal: UNSAT | plocalM: SAT (colours [2, 3, 4, 5], pjs [9, 10, 11, 12], N 3, d atom)
+  lattice 17 n=26 h=10: plocal: UNSAT | plocalM: UNSAT
+TOTAL ['plocal', 'plocalM'] ['tall', '10', '4', '2', '20'] exactN 3 {'plocal': {'SAT': 0, 'UNSAT': 17}, 'plocalM': {'SAT': 6, 'UNSAT': 11}}
+plocal_probe | per lattice: EXISTS F in W = PairSelf world without D_p | quantifier: exists F | modes plocal: SAT = PairLocal fails (lambda(c0)=m pj >= c0, c0 <= lambda(c1) for another colour c1 <= m, lambda(m) != m) ; plocalM: SAT = MUTANT d2pM (lambda(c0)=m pj >= c0, lambda(m) != m; no condition on c1) | corpus ['tall', '10', '4', '2', '20'] maxn 40 exactN 4 min colours 0
+  lattice 1 n=27 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 2 n=22 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 3 n=34 h=10: plocal: UNSAT | plocalM: SAT (colours [1, 2, 3, 4], pjs [7, 9], N 4, d atom)
+  lattice 4 n=25 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 5 n=28 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 6 n=35 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 7 n=22 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 8 n=33 h=10: plocal: UNSAT | plocalM: SAT (colours [1, 2, 4], pjs [5, 7, 8], N 4, d atom)
+  lattice 9 n=27 h=10: plocal: UNSAT | plocalM: SAT (colours [2, 3, 4], pjs [7, 11], N 4, d atom)
+  lattice 10 n=33 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 11 n=35 h=10: plocal: UNSAT | plocalM: SAT (colours [1, 2, 3], pjs [5, 8, 9], N 4, d a)
+  lattice 12 n=32 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 13 n=22 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 14 n=25 h=10: plocal: UNSAT | plocalM: UNSAT
+  lattice 15 n=29 h=10: plocal: UNSAT | plocalM: SAT (colours [1, 3, 5, 6, 7], pjs [11, 12, 13, 14], N 4, d atom)
+  lattice 16 n=32 h=10: plocal: UNSAT | plocalM: SAT (colours [2, 3, 4], pjs [9, 10], N 4, d atom)
+  lattice 17 n=26 h=10: plocal: UNSAT | plocalM: UNSAT
+TOTAL ['plocal', 'plocalM'] ['tall', '10', '4', '2', '20'] exactN 4 {'plocal': {'SAT': 0, 'UNSAT': 17}, 'plocalM': {'SAT': 6, 'UNSAT': 11}}
+plocal_probe | per lattice: EXISTS F in W = PairSelf world without D_p | quantifier: exists F | modes plocal: SAT = PairLocal fails (lambda(c0)=m pj >= c0, c0 <= lambda(c1) for another colour c1 <= m, lambda(m) != m) ; plocalM: SAT = MUTANT d2pM (lambda(c0)=m pj >= c0, lambda(m) != m; no condition on c1) | corpus ['closure', '6', '12', '1', '40'] maxn None exactN None min colours 4
+  lattice 1 n=22 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 2, 4, 5], pjs [7, 8, 9, 10, 11], N 2, d a)
+  lattice 2 n=29 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 4, 5, 6], pjs [9, 10, 16], N 2, d a)
+  lattice 3 n=22 h=5: plocal: UNSAT | plocalM: SAT (colours [1, 2, 4, 5], pjs [8, 9, 10, 12], N 2, d atom)
+  lattice 4 n=15 h=5: plocal: UNSAT | plocalM: SAT (colours [1, 2, 3, 4], pjs [6, 8], N 2, d a)
+  lattice 5 n=27 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 2, 3, 4], pjs [6, 7, 8], N 2, d a)
+  lattice 6 n=27 h=5: plocal: UNSAT | plocalM: SAT (colours [1, 3, 4, 5], pjs [10, 12, 13], N 2, d a)
+  lattice 7 n=31 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 3, 5, 6], pjs [12, 16], N 2, d atom)
+  lattice 8 n=37 h=6: plocal: UNSAT | plocalM: SAT (colours [2, 4, 5, 6], pjs [11, 14, 15], N 2, d atom)
+  lattice 9 n=36 h=6: plocal: UNSAT | plocalM: SAT (colours [2, 3, 4, 5], pjs [8, 9, 11, 12, 13], N 2, d atom)
+  lattice 10 n=33 h=6: plocal: UNSAT | plocalM: SAT (colours [2, 3, 5, 6], pjs [9, 13, 16, 17], N 2, d a)
+  lattice 11 n=30 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 2, 3, 4, 6], pjs [7, 10, 14, 16], N 2, d a)
+  lattice 12 n=25 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 3, 5, 6], pjs [9, 10, 12], N 2, d a)
+  lattice 13 n=26 h=6: plocal: UNSAT | plocalM: UNSAT
+  lattice 14 n=25 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 2, 5, 6], pjs [13, 14], N 3, d a)
+  lattice 15 n=29 h=5: plocal: UNSAT | plocalM: SAT (colours [1, 3, 4, 5], pjs [8, 10, 11], N 2, d a)
+Traceback (most recent call last):
+  File "/tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/amr_run27/brief/runs/r5/../../probes/plocal_probe.py", line 209, in <module>
+    r = solve(L, md)
+  File "/tmp/claude-0/-home-user/3b6fdd2c-c95c-5c07-b47c-6ae28c687a4c/scratchpad/amr_run27/brief/runs/r5/../../probes/plocal_probe.py", line 161, in solve
+    for cl in CardEnc.atleast([col[c] for c in atoms], bound=MINK, top_id=len(V)).clauses: add(cl)
+              ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/site-packages/pysat/card.py", line 351, in atleast
+    raise ValueError('Wrong bound: {0}'.format(bound))
+ValueError: Wrong bound: 4
+plocal_probe | per lattice: EXISTS F in W = PairSelf world without D_p | quantifier: exists F | modes plocal: SAT = PairLocal fails (lambda(c0)=m pj >= c0, c0 <= lambda(c1) for another colour c1 <= m, lambda(m) != m) ; plocalM: SAT = MUTANT d2pM (lambda(c0)=m pj >= c0, lambda(m) != m; no condition on c1) | corpus ['tall', '12', '4', '1', '8'] maxn 45 exactN 5 min colours 0
+  lattice 1 n=33 h=12: plocal: UNSAT | plocalM: SAT (colours [1, 2, 4], pjs [8, 11], N 5, d atom)
+  lattice 2 n=32 h=12: plocal: UNSAT | plocalM: UNSAT
+  lattice 3 n=45 h=12: plocal: UNSAT | plocalM: SAT (colours [1, 2, 3], pjs [5, 6], N 5, d atom)
+  lattice 4 n=34 h=12: plocal: UNSAT | plocalM: UNSAT
+  lattice 5 n=27 h=12: plocal: UNSAT | plocalM: UNSAT
+TOTAL ['plocal', 'plocalM'] ['tall', '12', '4', '1', '8'] exactN 5 {'plocal': {'SAT': 0, 'UNSAT': 5}, 'plocalM': {'SAT': 2, 'UNSAT': 3}}
+EXIT 0

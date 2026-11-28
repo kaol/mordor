@@ -1,0 +1,7 @@
+'Mordor.OrbitHeight.selfLand' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.selfPair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.certAtom_of_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.crossAtom' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.twoSelf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.twoSelf_absurd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.certAtom_of_caseB' depends on axioms: [propext, Classical.choice, Quot.sound]

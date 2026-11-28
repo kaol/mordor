@@ -1,0 +1,128 @@
+⚠ [837/1161] Replayed Mordor.Sperner
+warning: Mordor/Sperner.lean:381:58: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: Mordor/Sperner.lean:403:104: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:404:104: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:440:51: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:443:52: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:470:31: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:475:49: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:483:58: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:484:56: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:475:45: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: Mordor/Sperner.lean:475:69: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: Mordor/Sperner.lean:483:54: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: Mordor/Sperner.lean:483:78: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: Mordor/Sperner.lean:498:33: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:509:94: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:511:93: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:509:90: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: Mordor/Sperner.lean:509:114: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+warning: Mordor/Sperner.lean:531:32: unused variable `ht`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: Mordor/Sperner.lean:671:53: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:680:69: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:694:55: '(try contradiction)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+warning: Mordor/Sperner.lean:820:76: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+⚠ [1185/1288] Replayed Mordor.RelativeCut
+warning: Mordor/RelativeCut.lean:237:10: This simp argument is unused:
+  List.length_eraseIdx
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵e̵r̵a̵s̵e̵I̵d̵x̵,̵ ̵l̵a̵b̵w̵_̵l̵e̵n̵g̵t̵h̵]̵[̲l̲a̲b̲w̲_̲l̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: Mordor/RelativeCut.lean:241:15: This simp argument is unused:
+  List.getElem_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp only [L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵o̵f̵F̵n̵,̵ ̵cl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+warning: Mordor/RelativeCut.lean:259:15: This simp argument is unused:
+  List.getElem_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp only [L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵o̵f̵F̵n̵,̵ ̵cl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+⚠ [1193/1288] Replayed Mordor.Feedback
+warning: Mordor/Feedback.lean:568:4: unused variable `i`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: Mordor/Feedback.lean:569:4: unused variable `i`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: Mordor/Feedback.lean:671:12: unused variable `x`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: Mordor/Feedback.lean:671:15: unused variable `y`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [1218/1288] Replayed Mordor.ReciprocalOrbits
+warning: Mordor/ReciprocalOrbits.lean:126:75: unused variable `ha`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [1281/1288] Replayed Mordor.LateParent
+warning: Mordor/LateParent.lean:3720:65: unused variable `hk1`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: Mordor/LateParent.lean:4491:41: unused variable `hcy`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [1286/1288] Replayed Mordor.TwoColourShadow
+warning: Mordor/TwoColourShadow.lean:33:42: unused variable `hca0`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+warning: Mordor/TwoColourShadow.lean:37:13: unused variable `hi`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+⚠ [1288/1288] Built Mordor.SelfLand (2.9s)
+warning: Mordor/SelfLand.lean:163:25: unused variable `hq`
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Build completed successfully (1288 jobs).

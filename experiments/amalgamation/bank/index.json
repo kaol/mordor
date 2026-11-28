@@ -334,5 +334,12 @@
   "section": "§299",
   "world": "relaxed: no Tb at Z-rows other than bot",
   "source": "cgall_probe.py all closure 6 12 1 40"
+ },
+ {
+  "file": "s302_pairlocal_h5.json",
+  "statement": "PairLocal (lambda(c0) = m = c0 v c1 pair-join, c0 <= lambda(c1) => lambda(m) = m), in world W = PairSelf without D_p; here m carries three colours",
+  "section": "§302",
+  "world": "relaxed W (pairselfM)",
+  "source": "cgall_probe.py plocal closure 6 12 1 40"
  }
 ]

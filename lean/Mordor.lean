@@ -143,6 +143,7 @@ import Mordor.PairTrap
 import Mordor.TwoColour
 import Mordor.TwoColourShadow
 import Mordor.ThinColour
+import Mordor.SelfLand
 import Mordor.RiseHeight4
 import Mordor.GroundOH
 import Mordor.OHHeight4

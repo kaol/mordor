@@ -1,0 +1,7 @@
+cgall_probe plocal | per lattice: exists F | SAT = pairselfM world + colours c0 != c1 with lambda(c0) = m = c0 v c1 a pair-join, c0 <= lambda(c1), and lambda(m) != m (PairLocal fails) | corpus ['tall', '12', '4', '1', '8'] maxn 45
+  lattice n=33 h=12: UNSAT
+  lattice n=32 h=12: UNSAT
+  lattice n=45 h=12: UNSAT
+  lattice n=34 h=12: UNSAT
+  lattice n=27 h=12: UNSAT
+plocal ['tall', '12', '4', '1', '8'] {'SAT': 0, 'UNSAT': 5}

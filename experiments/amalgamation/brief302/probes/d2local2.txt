@@ -1,0 +1,8 @@
+  404 ("c' type", "c0<=lam(c')", "lamc' in Z", "lam(c')=m", 'lam(m)=m')
+  223 ("c' type", "c0<=lam(c')", "lamc' in Z", '-', 'lam(m)=m')
+  1 ("c' type", "c0<=lam(c')", 'exit to c0', '-', 'lam(m)=m')
+  84 ("c' type", 'c0 not<=', "lamc' in Z", '-', 'lam(m)!=m')
+  84 ('inst', 'lam(m)!=m', '|C(m)|=2', 'some other c0 not<=lam')
+  626 ('inst', 'lam(m)=m', '|C(m)|=2', 'all others c0<=lam')
+  1 ('inst', 'lam(m)=m', '|C(m)|=3', 'all others c0<=lam')
+PairLocal counterexamples: []

@@ -1,0 +1,11 @@
+plocal_probe | per lattice: EXISTS F in W = PairSelf world without D_p | quantifier: exists F | modes plocal: SAT = PairLocal fails (lambda(c0)=m pj >= c0, c0 <= lambda(c1) for another colour c1 <= m, lambda(m) != m) ; plocalM: SAT = MUTANT d2pM (lambda(c0)=m pj >= c0, lambda(m) != m; no condition on c1) ; plne: SAT = PairLocal fails with lambda(c1) != m (open half) | corpus ['closure', '6', '12', '1', '40'] maxn None exactN None min colours 0
+  lattice 1 n=22 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 2, 4], pjs [7, 8, 9], N 2, d a) | plne: UNSAT
+  lattice 2 n=29 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 4, 5], pjs [9, 10, 12], N 2, d atom) | plne: UNSAT
+  lattice 3 n=22 h=5: plocal: UNSAT | plocalM: SAT (colours [1, 2, 4, 5], pjs [9, 12], N 2, d atom) | plne: UNSAT
+  lattice 4 n=15 h=5: plocal: UNSAT | plocalM: SAT (colours [2, 3, 4], pjs [6, 8], N 2, d a) | plne: UNSAT
+  lattice 5 n=27 h=6: plocal: UNSAT | plocalM: SAT (colours [2, 3, 4], pjs [8, 10], N 2, d atom) | plne: UNSAT
+  lattice 6 n=27 h=5: plocal: UNSAT | plocalM: SAT (colours [2, 4, 5], pjs [9, 11, 13], N 2, d a) | plne: UNSAT
+  lattice 7 n=31 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 2, 4], pjs [7, 9, 10], N 2, d atom) | plne: UNSAT
+  lattice 8 n=37 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 3, 4, 6], pjs [8, 10, 15], N 2, d atom) | plne: UNSAT
+  lattice 9 n=36 h=6: plocal: UNSAT | plocalM: SAT (colours [1, 3, 4, 5], pjs [7, 9, 10, 12, 13], N 2, d atom) | plne: UNSAT
+STOPPED BY BRIEFER at 00:15:52 (PairLocal subsumed by CrossPair; partial run)

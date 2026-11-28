@@ -1,0 +1,7 @@
+models 222 patterns ['holding/cgall_d2pM_*.json', 'holding/cgall_pairselfM_*.json', 'holding/cgall_colrows_*TbA.json']
+  1 ("c0<=lam(c')", 'exit to c0', '', 'lam(m)=m')
+  200 ("c0<=lam(c')", 'in Z', "lam(c')=m", 'lam(m)=m')
+  119 ("c0<=lam(c')", 'in Z', '', 'lam(m)=m')
+  83 ('inst', 'lam(m)!=m', 'some other has c0 not<=lam', 'nofix')
+  320 ('inst', 'lam(m)=m', 'all others have c0<=lam', 'nofix')
+PairLocal counterexamples (NoFix): []

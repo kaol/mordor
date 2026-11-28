@@ -163,3 +163,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z²⁹⁹: `cgall_probe.py` (modes all / colrows / col2 / colbot / h2; flags TbA, TbM, min3): which ColourGain and Tb instances existence uses at |𝒜| ≥ 3; `direct299/`. Bank `s299_cgall_noTb_h5`.
 - §34.3z³⁰⁰: brief run 21 archived in `brief300/` (`rowset_probe.py`, `scl_check.py`, `thin.py`, `break_anatomy.py`; runs). `cgall_probe.py` modes `pairself` / `pairselfM`; `direct300/`.
 - §34.3z³⁰¹: `cgall_probe.py` modes `d2p` / `d2pM` (exact probe of D2′ SelfPair); `direct301/`.
+- §34.3z³⁰²: brief run 22 archived in `brief302/`. `cgall_probe.py` mode `plocal` (flag `two`: exactly two colours below m); `direct302/`. Bank `s302_pairlocal_h5`.

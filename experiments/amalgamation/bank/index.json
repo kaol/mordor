@@ -341,5 +341,12 @@
   "section": "§302",
   "world": "relaxed W (pairselfM)",
   "source": "cgall_probe.py plocal closure 6 12 1 40"
+ },
+ {
+  "file": "s303_nsl_h6.json",
+  "statement": "NSL in world W (every non-self atom t != c0 of C'(m) with c0 <= lambda(t) has t <= lambda(t)); lambda(t) = c0, lambda(m) a self-landing pair-join",
+  "section": "§303",
+  "world": "relaxed W (pairselfM)",
+  "source": "run-23 briefer plu_probe.py ns"
  }
 ]

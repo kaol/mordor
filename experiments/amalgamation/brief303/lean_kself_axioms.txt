@@ -1,0 +1,6 @@
+'Mordor.OrbitHeight.kSelf' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.kSelf_absurd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.pairLocalS_of_nsl' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.certAtom_of_colourUniv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.selfExit_not_exitColour' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Mordor.OrbitHeight.exitColour_univ_of_meet' depends on axioms: [propext, Classical.choice, Quot.sound]

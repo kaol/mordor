@@ -81,6 +81,7 @@ Every theorem compiles without `sorry`. `#print axioms` on the 35 headline theor
 | `Mordor/TwoColourShadow.lean` | §34.3z²⁹⁸ | **`twoColour_selfShadow`** (ShadowLemma), **`certAtom_of_twoColours`**, **`certAtom_of_le_two_colours`** (CertAtom whenever there are at most two colour atoms, any N) |
 | `Mordor/ThinColour.lean` | §34.3z³⁰⁰ | **`land_capture`** (GK0), `join_of_two_atoms`, `phi_low_colour`, `shadow_start`, **`thinStair`**, **`colourStair`**, **`certAtom_of_thin`** (CertAtom when no element of Z lies above two colours, any N) |
 | `Mordor/SelfLand.lean` | §34.3z³⁰² | **`selfLand`**, **`selfPair`** (D2′), **`certAtom_of_closed`**, `crossAtom`, **`twoSelf`**, `twoSelf_absurd`, **`certAtom_of_caseB`** |
+| `Mordor/KSelf.lean` | §34.3z³⁰³ | **`kSelf`** (k-colour twoSelf), **`kSelf_absurd`**, `pairLocalS_of_nsl`, **`certAtom_of_colourUniv`** (conditional on PLS), `selfExit_not_exitColour`, `exitColour_univ_of_meet` |
 | `Mordor/RiseHeight4.lean` | §34.3z¹⁵⁹ | boundary orbits `uSeq`/`dSeq` (strictness, endpoints, `exists_last_u`), `grid_bounds`, `top_mem_of_lastIC`, `rise_of_lastIC`, `top_mem_of_tightIC_last` |
 | `Mordor/GroundOH.lean` | §34.3z¹⁵⁹–¹⁶⁰ | `OHCx` (orbit-height counterexample) and its ground clause lemmas; `OHCxR` (rigid + lower-height `diag`/`post`) with `oh_rigA/B/D`, `oh_diag`, `oh_post` |
 | `Mordor/OHHeight4.lean` | §34.3z¹⁵⁹ | machine-generated (`experiments/sat/oh_lean.py`): `ohcore4` (407-clause drat-trim core, 40 terms, **`bv_decide`**: adds `Lean.ofReduceBool`, `Lean.trustCompiler`), **`ohAt_4'`** (⊤ ∈ R₄ at edge-height ≤ 4) |

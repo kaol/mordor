@@ -1,0 +1,99 @@
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | helly: SAT = Helly2 fails (the colour sets K(c) of all colour rows pairwise intersect, and no colour lies in every K(c)) ; hellyM: SAT = MUTANT (refuted relative UnivCol-in-W, 81 stored W-models): no colour lies in every K(c) | corpus ['closure', '6', '12', '1', '40'] maxn None exactN None |C(m)|>=0 |C'(m)|>=0
+  lattice 1 n=22 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [2], [2, 4]], 'pairwise', False)], N 3, d a)
+  lattice 2 n=29 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 5], [5], [1]], 'pairwise', False)], N 2, d atom)
+  lattice 3 n=22 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 4 n=15 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2, 4], [4], [2]], 'pairwise', False)], N 2, d a)
+  lattice 5 n=27 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [3, 4], [3]], 'pairwise', False)], N 2, d atom)
+  lattice 6 n=27 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [4], [5, 6]], 'pairwise', False)], N 2, d atom)
+  lattice 7 n=31 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[6], [2], [2, 6]], 'pairwise', False)], N 2, d a)
+  lattice 8 n=37 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [4, 6], [6], [4]], 'pairwise', False)], N 2, d a)
+  lattice 9 n=36 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [5], [4, 5]], 'pairwise', False)], N 2, d a)
+  lattice 10 n=33 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[6], [3, 6], [2], [3, 6]], 'pairwise', False)], N 2, d a)
+  lattice 11 n=30 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [2, 4], [2]], 'pairwise', False)], N 2, d a)
+  lattice 12 n=25 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [1, 5], [1]], 'pairwise', False)], N 2, d atom)
+  lattice 13 n=26 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [1], [1, 5]], 'pairwise', False)], N 2, d atom)
+  lattice 14 n=25 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2, 6], [6], [2]], 'pairwise', False)], N 2, d atom)
+  lattice 15 n=29 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3], [5], [3, 5]], 'pairwise', False)], N 2, d atom)
+  lattice 16 n=21 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2], [3], [2]], 'pairwise', False)], N 2, d a)
+  lattice 17 n=32 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 5], [5], [1]], 'pairwise', False)], N 2, d atom)
+  lattice 18 n=20 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [1], [1, 4]], 'pairwise', False)], N 2, d a)
+  lattice 19 n=22 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2], [6], [2], [2, 6]], 'pairwise', False)], N 2, d a)
+  lattice 20 n=21 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [3, 4], [3]], 'pairwise', False)], N 2, d atom)
+  lattice 21 n=20 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[6], [1], [1, 6]], 'pairwise', False)], N 2, d atom)
+  lattice 22 n=20 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2], [1], [1]], 'pairwise', False)], N 2, d atom)
+  lattice 23 n=22 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 3], [5], [3, 5]], 'pairwise', False)], N 2, d atom)
+  lattice 24 n=22 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 3], [1], [3]], 'pairwise', False)], N 2, d atom)
+  lattice 25 n=28 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [2, 5], [2]], 'pairwise', False)], N 2, d atom)
+  lattice 26 n=17 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3], [1, 3], [1]], 'pairwise', False)], N 2, d a)
+  lattice 27 n=36 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 6], [6], [1]], 'pairwise', False)], N 2, d atom)
+  lattice 28 n=27 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 4], [1], [4]], 'pairwise', False)], N 2, d a)
+  lattice 29 n=23 h=5 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[6], [3, 6], [3], [3, 6]], 'pairwise', False)], N 2, d atom)
+  lattice 30 n=22 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2, 4], [4], [2]], 'pairwise', False)], N 2, d atom)
+  lattice 31 n=25 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3, 6], [6], [3]], 'pairwise', False)], N 2, d atom)
+  lattice 32 n=23 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [2, 5], [2]], 'pairwise', False)], N 2, d atom)
+  lattice 33 n=29 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [2, 4], [2]], 'pairwise', False)], N 2, d a)
+  lattice 34 n=21 h=5 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 5], [5], [1]], 'pairwise', False)], N 2, d atom)
+  lattice 35 n=21 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 36 n=24 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [5], [1]], 'pairwise', False)], N 3, d atom)
+  lattice 37 n=16 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 38 n=21 h=5 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 39 n=38 h=6 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [6], [5, 6]], 'pairwise', False)], N 2, d atom)
+  lattice 40 n=16 h=4 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+TOTAL ['helly', 'hellyM'] ['closure', '6', '12', '1', '40'] [] {'helly': {'SAT': 0, 'UNSAT': 40}, 'hellyM': {'SAT': 35, 'UNSAT': 5}} max |C(m)| at SAT instances {'helly': 0, 'hellyM': 0}
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | helly: SAT = Helly2 fails (the colour sets K(c) of all colour rows pairwise intersect, and no colour lies in every K(c)) ; hellyM: SAT = MUTANT (refuted relative UnivCol-in-W, 81 stored W-models): no colour lies in every K(c) | corpus ['tall', '8', '4', '1', '12'] maxn None exactN None |C(m)|>=0 |C'(m)|>=0
+  lattice 1 n=23 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3], [3], [1]], 'pairwise', False)], N 2, d atom)
+  lattice 2 n=19 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 3 n=19 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2], [3], [2, 3]], 'pairwise', False)], N 2, d a)
+  lattice 4 n=26 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2], [4], [2, 4]], 'pairwise', False)], N 2, d atom)
+  lattice 5 n=29 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2], [1, 2], [1]], 'pairwise', False)], N 3, d a)
+  lattice 6 n=33 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [3, 4], [3]], 'pairwise', False)], N 2, d a)
+  lattice 7 n=26 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2, 4], [2, 4], [6], [4, 6]], 'pairwise', False)], N 2, d atom)
+  lattice 8 n=29 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [4, 6], [6], [4, 6]], 'pairwise', False)], N 2, d a)
+  lattice 9 n=33 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2], [4], [2]], 'pairwise', False)], N 2, d a)
+  lattice 10 n=16 h=8 atoms-under-a-height-2-element 1: helly: UNSAT | hellyM: UNSAT
+  lattice 11 n=30 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2], [3], [2, 3]], 'pairwise', False)], N 2, d atom)
+  lattice 12 n=27 h=8 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 5], [5], [1]], 'pairwise', False)], N 2, d a)
+TOTAL ['helly', 'hellyM'] ['tall', '8', '4', '1', '12'] [] {'helly': {'SAT': 0, 'UNSAT': 12}, 'hellyM': {'SAT': 10, 'UNSAT': 2}} max |C(m)| at SAT instances {'helly': 0, 'hellyM': 0}
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | helly: SAT = Helly2 fails (the colour sets K(c) of all colour rows pairwise intersect, and no colour lies in every K(c)) ; hellyM: SAT = MUTANT (refuted relative UnivCol-in-W, 81 stored W-models): no colour lies in every K(c) | corpus ['planted', '8', '4', '2', '15', '3'] maxn None exactN None |C(m)|>=0 |C'(m)|>=0
+  lattice 1 n=30 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 5], [5], [1]], 'pairwise', False)], N 2, d atom)
+  lattice 2 n=25 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3, 5], [5], [3]], 'pairwise', False)], N 2, d a)
+  lattice 3 n=25 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [3, 5], [3]], 'pairwise', False)], N 2, d atom)
+  lattice 4 n=28 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[4], [1], [1, 4]], 'pairwise', False)], N 4, d atom)
+  lattice 5 n=36 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: UNSAT
+  lattice 6 n=23 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2, 4], [4], [2]], 'pairwise', False)], N 2, d a)
+  lattice 7 n=20 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: UNSAT
+  lattice 8 n=24 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 2], [1], [2]], 'pairwise', False)], N 2, d a)
+  lattice 9 n=30 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2, 4], [1], [2, 4]], 'pairwise', False)], N 3, d atom)
+  lattice 10 n=18 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2], [3], [1, 2]], 'pairwise', False)], N 2, d atom)
+  lattice 11 n=20 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2], [2, 4], [4], [2, 4]], 'pairwise', False)], N 3, d a)
+  lattice 12 n=23 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3], [2, 3], [2]], 'pairwise', False)], N 2, d atom)
+  lattice 13 n=35 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [4], [4, 5], [4, 5]], 'pairwise', False)], N 2, d atom)
+  lattice 14 n=16 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: UNSAT
+  lattice 15 n=26 h=8 atoms-under-a-height-2-element 3: helly: UNSAT | hellyM: UNSAT
+TOTAL ['helly', 'hellyM'] ['planted', '8', '4', '2', '15', '3'] [] {'helly': {'SAT': 0, 'UNSAT': 15}, 'hellyM': {'SAT': 11, 'UNSAT': 4}} max |C(m)| at SAT instances {'helly': 0, 'hellyM': 0}
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | helly: SAT = Helly2 fails (the colour sets K(c) of all colour rows pairwise intersect, and no colour lies in every K(c)) ; hellyM: SAT = MUTANT (refuted relative UnivCol-in-W, 81 stored W-models): no colour lies in every K(c) | corpus ['tall', '10', '4', '2', '20'] maxn 40 exactN None |C(m)|>=0 |C'(m)|>=0
+  lattice 1 n=27 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 2 n=22 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 3 n=34 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [1], [1, 5]], 'pairwise', False)], N 2, d a)
+  lattice 4 n=25 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 5 n=28 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 6 n=35 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 7 n=22 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 8 n=33 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 4], [4], [1]], 'pairwise', False)], N 2, d a)
+  lattice 9 n=27 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3], [4], [3]], 'pairwise', False)], N 2, d a)
+  lattice 10 n=33 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3], [1], [1, 3]], 'pairwise', False)], N 2, d atom)
+  lattice 11 n=35 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3], [1], [1, 3]], 'pairwise', False)], N 2, d a)
+  lattice 12 n=32 h=10 atoms-under-a-height-2-element 1: helly: UNSAT | hellyM: UNSAT
+  lattice 13 n=22 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 14 n=25 h=10 atoms-under-a-height-2-element 1: helly: UNSAT | hellyM: UNSAT
+  lattice 15 n=29 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [3], [3, 5]], 'pairwise', False)], N 2, d a)
+  lattice 16 n=32 h=10 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2, 4], [4], [2]], 'pairwise', False)], N 2, d atom)
+  lattice 17 n=26 h=10 atoms-under-a-height-2-element 1: helly: UNSAT | hellyM: UNSAT
+TOTAL ['helly', 'hellyM'] ['tall', '10', '4', '2', '20'] [] {'helly': {'SAT': 0, 'UNSAT': 17}, 'hellyM': {'SAT': 7, 'UNSAT': 10}} max |C(m)| at SAT instances {'helly': 0, 'hellyM': 0}
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | helly: SAT = Helly2 fails (the colour sets K(c) of all colour rows pairwise intersect, and no colour lies in every K(c)) ; hellyM: SAT = MUTANT (refuted relative UnivCol-in-W, 81 stored W-models): no colour lies in every K(c) | corpus ['tall', '12', '4', '1', '8'] maxn 45 exactN None |C(m)|>=0 |C'(m)|>=0
+  lattice 1 n=33 h=12 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 2], [1], [2]], 'pairwise', False)], N 2, d a)
+  lattice 2 n=32 h=12 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: UNSAT
+  lattice 3 n=45 h=12 atoms-under-a-height-2-element 2: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3], [2, 3], [2]], 'pairwise', False)], N 3, d a)
+  lattice 4 n=34 h=12 atoms-under-a-height-2-element 1: helly: UNSAT | hellyM: UNSAT
+  lattice 5 n=27 h=12 atoms-under-a-height-2-element 1: helly: UNSAT | hellyM: UNSAT
+TOTAL ['helly', 'hellyM'] ['tall', '12', '4', '1', '8'] [] {'helly': {'SAT': 0, 'UNSAT': 5}, 'hellyM': {'SAT': 2, 'UNSAT': 3}} max |C(m)| at SAT instances {'helly': 0, 'hellyM': 0}

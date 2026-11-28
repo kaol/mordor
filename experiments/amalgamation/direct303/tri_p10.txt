@@ -1,0 +1,7 @@
+cgall_probe tri | per lattice: exists F | SAT = pairselfM world + three colour rows whose landing colour sets K pairwise meet and have no common colour (NoTriangle fails) | corpus ['planted', '10', '4', '3', '10', '3'] maxn None
+  lattice n=32 h=10: UNSAT
+  lattice n=27 h=10: UNSAT
+  lattice n=33 h=10: UNSAT
+  lattice n=30 h=10: UNSAT
+  lattice n=44 h=10: UNSAT
+  lattice n=36 h=10: UNSAT

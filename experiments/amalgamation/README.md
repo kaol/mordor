@@ -164,3 +164,4 @@ Output `out_orbit.txt` (§34.3z¹⁴⁰), `out_orbit2.txt` (§34.3z¹⁴¹). Lea
 - §34.3z³⁰⁰: brief run 21 archived in `brief300/` (`rowset_probe.py`, `scl_check.py`, `thin.py`, `break_anatomy.py`; runs). `cgall_probe.py` modes `pairself` / `pairselfM`; `direct300/`.
 - §34.3z³⁰¹: `cgall_probe.py` modes `d2p` / `d2pM` (exact probe of D2′ SelfPair); `direct301/`.
 - §34.3z³⁰²: brief run 22 archived in `brief302/`. `cgall_probe.py` mode `plocal` (flag `two`: exactly two colours below m); `direct302/`. Bank `s302_pairlocal_h5`.
+- §34.3z³⁰³: brief run 23 archived in `brief303/`. `planted_lat.py` (the briefer's `planted H M SEED CNT k` generator: a height-2 element above exactly k atoms; room in |C(m)|), now the corpus source of `cgall_probe.py`, which gains modes `tri` (NoTriangle) and `nouniv` (its mutant); `direct303/`. Bank `s303_nsl_h6`.

@@ -1,0 +1,70 @@
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | helly: SAT = Helly2 fails (the colour sets K(c) of all colour rows pairwise intersect, and no colour lies in every K(c)) ; hellyM: SAT = MUTANT (refuted relative UnivCol-in-W, 81 stored W-models): no colour lies in every K(c) ; tri: SAT = Triangle exists (three colour rows whose landing colour sets pairwise intersect with no common colour) -- room check for Helly2 | corpus ['planted', '6', '6', '21', '15', '5'] maxn None exactN None |C(m)|>=0 |C'(m)|>=0
+  lattice 1 n=16 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: UNSAT | tri: UNSAT
+  lattice 2 n=32 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[6], [3, 6], [3]], 'pairwise', False)], N 2, d atom) | tri: UNSAT
+  lattice 3 n=28 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: SAT (|A| 5, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3, 7], [1, 3, 6], [3], [3, 7], [7]], 'pairwise', False)], N 3, d a) | tri: UNSAT
+  lattice 4 n=20 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: UNSAT | tri: UNSAT
+  lattice 5 n=25 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 2, 6], [1, 2, 6], [1], [2]], 'pairwise', False)], N 2, d a) | tri: UNSAT
+  lattice 6 n=21 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: UNSAT | tri: UNSAT
+  lattice 7 n=22 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[5], [6], [5, 6]], 'pairwise', False)], N 3, d a) | tri: UNSAT
+  lattice 8 n=24 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[7], [1, 7], [1]], 'pairwise', False)], N 2, d atom) | tri: UNSAT
+  lattice 9 n=24 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[1, 6], [6], [1]], 'pairwise', False)], N 2, d a) | tri: UNSAT
+  lattice 10 n=29 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[2, 8], [8], [2]], 'pairwise', False)], N 2, d a) | tri: UNSAT
+  lattice 11 n=24 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[6], [7], [6, 7]], 'pairwise', False)], N 2, d atom) | tri: UNSAT
+  lattice 12 n=21 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: UNSAT | tri: UNSAT
+  lattice 13 n=27 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: SAT (|A| 3, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[3], [1], [1, 3]], 'pairwise', False)], N 3, d atom) | tri: UNSAT
+  lattice 14 n=16 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: UNSAT | tri: UNSAT
+  lattice 15 n=22 h=6 atoms-under-a-height-2-element 5: helly: UNSAT | hellyM: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [('K', [[6], [3], [3, 6], [3]], 'pairwise', False)], N 3, d a) | tri: UNSAT
+TOTAL ['helly', 'hellyM', 'tri'] ['planted', '6', '6', '21', '15', '5'] [] {'helly': {'SAT': 0, 'UNSAT': 15}, 'hellyM': {'SAT': 10, 'UNSAT': 5}, 'tri': {'SAT': 0, 'UNSAT': 15}} max |C(m)| at SAT instances {'helly': 0, 'hellyM': 0, 'tri': 0}
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | tri: SAT = Triangle exists (three colour rows whose landing colour sets pairwise intersect with no common colour) -- room check for Helly2 | corpus ['closure', '6', '12', '1', '40'] maxn None exactN None |C(m)|>=0 |C'(m)|>=0
+  lattice 1 n=22 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 2 n=29 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 3 n=22 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 4 n=15 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 5 n=27 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 6 n=27 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 7 n=31 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 8 n=37 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 9 n=36 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 10 n=33 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 11 n=30 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 12 n=25 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 13 n=26 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 14 n=25 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 15 n=29 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 16 n=21 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 17 n=32 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 18 n=20 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 19 n=22 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 20 n=21 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 21 n=20 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 22 n=20 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 23 n=22 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 24 n=22 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 25 n=28 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 26 n=17 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 27 n=36 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 28 n=27 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 29 n=23 h=5 atoms-under-a-height-2-element 3: tri: UNSAT
+  lattice 30 n=22 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 31 n=25 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 32 n=23 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 33 n=29 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 34 n=21 h=5 atoms-under-a-height-2-element 3: tri: UNSAT
+  lattice 35 n=21 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 36 n=24 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 37 n=16 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 38 n=21 h=5 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 39 n=38 h=6 atoms-under-a-height-2-element 2: tri: UNSAT
+  lattice 40 n=16 h=4 atoms-under-a-height-2-element 2: tri: UNSAT
+TOTAL ['tri'] ['closure', '6', '12', '1', '40'] [] {'tri': {'SAT': 0, 'UNSAT': 40}} max |C(m)| at SAT instances {'tri': 0}
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | pls: SAT = PairLocalS fails (lambda(c0)=m pj >= c0, c0 <= lambda(c) for every c in C'(m), lambda(m) not <= m) ; pl: SAT = MUTANT PairLocal fails (lambda(c0)=m pj >= c0, c0 <= lambda(c1) for ONE other colour c1 <= m, lambda(m) not <= m) | corpus ['planted', '10', '4', '31', '8', '3'] maxn None exactN 5 |C(m)|>=3 |C'(m)|>=0
+  lattice 1 n=26 h=10 atoms-under-a-height-2-element 3: pls: UNSAT | pl: UNSAT
+  lattice 2 n=39 h=10 atoms-under-a-height-2-element 3: pls: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 16, 3, 1), (3, 16, 3, 1)], N 5, d atom)
+  lattice 3 n=30 h=10 atoms-under-a-height-2-element 3: pls: UNSAT | pl: UNSAT
+  lattice 4 n=45 h=10 atoms-under-a-height-2-element 3: pls: UNSAT | pl: SAT (|A| 5, inst (c0,m,|C(m)|,|C'(m)|) [(3, 21, 3, 3), (4, 21, 3, 3)], N 5, d atom)
+  lattice 5 n=32 h=10 atoms-under-a-height-2-element 3: pls: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 10, 3, 3), (3, 10, 3, 3)], N 5, d atom)
+  lattice 6 n=25 h=10 atoms-under-a-height-2-element 3: pls: UNSAT | pl: UNSAT
+  lattice 7 n=37 h=10 atoms-under-a-height-2-element 3: pls: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(4, 20, 3, 2), (8, 20, 3, 2)], N 5, d atom)
+  lattice 8 n=44 h=10 atoms-under-a-height-2-element 3: pls: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 15, 3, 3), (4, 15, 3, 3)], N 5, d atom)
+TOTAL ['pls', 'pl'] ['planted', '10', '4', '31', '8', '3'] ['E5', 'k3'] {'pls': {'SAT': 0, 'UNSAT': 8}, 'pl': {'SAT': 5, 'UNSAT': 3}} max |C(m)| at SAT instances {'pls': 0, 'pl': 3}
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | helly: SAT = Helly2 fails (the colour sets K(c) of all colour rows pairwise intersect, and no colour lies in every K(c)) ; hellyM: SAT = MUTANT (refuted relative UnivCol-in-W, 81 stored W-models): no colour lies in every K(c) ; tri: SAT = Triangle exists (three colour rows whose landing colour sets pairwise intersect with no common colour) -- room check for Helly2 | corpus ['tall', '10', '7', '1', '5'] maxn 50 exactN None |C(m)|>=0 |C'(m)|>=0

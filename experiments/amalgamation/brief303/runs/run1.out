@@ -1,0 +1,69 @@
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | plu: SAT = PairLocalU fails (lambda(c0)=m pj >= c0, c0 <= lambda(c) for EVERY colour c <= m, lambda(m) not <= m) ; pls: SAT = PairLocalS fails (lambda(c0)=m pj >= c0, c0 <= lambda(c) for every c in C'(m), lambda(m) not <= m) ; ns: SAT = NSL fails (lambda(c0)=m pj >= c0, t in C'(m)\{c0}, c0 <= lambda(t), t not <= lambda(t), lambda(m) not <= m) ; pl: SAT = MUTANT PairLocal fails (lambda(c0)=m pj >= c0, c0 <= lambda(c1) for ONE other colour c1 <= m, lambda(m) not <= m) | corpus ['planted', '6', '5', '1', '30', '3'] maxn None exactN None |C(m)|>=3 |C'(m)|>=0
+  lattice 1 n=19 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 2 n=17 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 3 n=27 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 12, 3, 3)], N 2, d atom) | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 12, 3, 3), (4, 12, 3, 3)], N 3, d a)
+  lattice 4 n=22 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 12, 3, 3), (4, 12, 3, 3)], N 3, d atom)
+  lattice 5 n=20 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 13, 3, 3), (5, 13, 3, 3)], N 3, d a)
+  lattice 6 n=13 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 7 n=21 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(3, 13, 3, 3), (5, 13, 3, 3)], N 2, d atom)
+  lattice 8 n=16 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 9 n=16 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(3, 8, 3, 3), (4, 8, 3, 3)], N 3, d a)
+  lattice 10 n=17 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 9, 3, 3), (3, 9, 3, 3)], N 2, d atom)
+  lattice 11 n=19 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 12 n=17 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 13 n=22 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 12, 3, 3)], N 3, d atom) | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 12, 3, 3), (4, 12, 3, 3)], N 2, d a)
+  lattice 14 n=21 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 11, 3, 3)], N 2, d a) | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 11, 3, 1), (3, 11, 3, 1)], N 2, d a)
+  lattice 15 n=24 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 14, 3, 3), (5, 14, 3, 3)], N 3, d a)
+  lattice 16 n=16 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 17 n=18 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 18 n=16 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 19 n=13 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 20 n=19 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(5, 11, 3, 3)], N 2, d a) | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(3, 11, 3, 3), (5, 11, 3, 3)], N 2, d atom)
+  lattice 21 n=33 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 17, 3, 3), (2, 17, 3, 3)], N 2, d atom)
+  lattice 22 n=21 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 13, 3, 2), (5, 13, 3, 2)], N 2, d atom)
+  lattice 23 n=22 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 15, 3, 2), (4, 15, 3, 2)], N 2, d a)
+  lattice 24 n=17 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 25 n=31 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 17, 3, 3)], N 2, d atom) | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(4, 17, 3, 3), (5, 17, 3, 3)], N 2, d a)
+  lattice 26 n=18 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 27 n=19 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 13, 3, 3)], N 3, d atom) | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 13, 3, 3), (3, 13, 3, 3)], N 3, d a)
+  lattice 28 n=23 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(5, 12, 3, 3)], N 2, d atom) | pl: SAT (|A| 5, inst (c0,m,|C(m)|,|C'(m)|) [(3, 12, 3, 2), (5, 12, 3, 2)], N 3, d a)
+  lattice 29 n=17 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 10, 3, 2), (3, 10, 3, 2)], N 3, d a)
+  lattice 30 n=18 h=6 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+TOTAL ['plu', 'pls', 'ns', 'pl'] ['planted', '6', '5', '1', '30', '3'] ['k3'] {'plu': {'SAT': 0, 'UNSAT': 30}, 'pls': {'SAT': 0, 'UNSAT': 30}, 'ns': {'SAT': 7, 'UNSAT': 23}, 'pl': {'SAT': 17, 'UNSAT': 13}} max |C(m)| at SAT instances {'plu': 0, 'pls': 0, 'ns': 3, 'pl': 3}
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | plu: SAT = PairLocalU fails (lambda(c0)=m pj >= c0, c0 <= lambda(c) for EVERY colour c <= m, lambda(m) not <= m) ; pls: SAT = PairLocalS fails (lambda(c0)=m pj >= c0, c0 <= lambda(c) for every c in C'(m), lambda(m) not <= m) ; ns: SAT = NSL fails (lambda(c0)=m pj >= c0, t in C'(m)\{c0}, c0 <= lambda(t), t not <= lambda(t), lambda(m) not <= m) ; pl: SAT = MUTANT PairLocal fails (lambda(c0)=m pj >= c0, c0 <= lambda(c1) for ONE other colour c1 <= m, lambda(m) not <= m) | corpus ['planted', '8', '4', '2', '15', '3'] maxn None exactN None |C(m)|>=3 |C'(m)|>=0
+  lattice 1 n=30 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(3, 11, 3, 3), (4, 11, 3, 3)], N 2, d atom)
+  lattice 2 n=25 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 13, 3, 3)], N 3, d atom) | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(5, 13, 3, 3)], N 2, d atom)
+  lattice 3 n=25 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 15, 3, 3), (6, 15, 3, 3)], N 2, d atom)
+  lattice 4 n=28 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 10, 3, 3), (3, 10, 3, 3)], N 2, d atom)
+  lattice 5 n=36 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 6 n=23 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 7 n=20 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 8 n=24 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 9 n=30 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 13, 3, 3), (3, 13, 3, 3)], N 2, d atom)
+  lattice 10 n=18 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 11 n=20 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 9, 3, 3), (3, 9, 3, 3)], N 3, d a)
+  lattice 12 n=23 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 15, 3, 3), (4, 15, 3, 3)], N 2, d atom)
+  lattice 13 n=35 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 13, 3, 3), (3, 13, 3, 3)], N 2, d atom)
+  lattice 14 n=16 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 15 n=26 h=8 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+TOTAL ['plu', 'pls', 'ns', 'pl'] ['planted', '8', '4', '2', '15', '3'] ['k3'] {'plu': {'SAT': 0, 'UNSAT': 15}, 'pls': {'SAT': 0, 'UNSAT': 15}, 'ns': {'SAT': 1, 'UNSAT': 14}, 'pl': {'SAT': 8, 'UNSAT': 7}} max |C(m)| at SAT instances {'plu': 0, 'pls': 0, 'ns': 3, 'pl': 3}
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | plu: SAT = PairLocalU fails (lambda(c0)=m pj >= c0, c0 <= lambda(c) for EVERY colour c <= m, lambda(m) not <= m) ; pls: SAT = PairLocalS fails (lambda(c0)=m pj >= c0, c0 <= lambda(c) for every c in C'(m), lambda(m) not <= m) ; ns: SAT = NSL fails (lambda(c0)=m pj >= c0, t in C'(m)\{c0}, c0 <= lambda(t), t not <= lambda(t), lambda(m) not <= m) ; pl: SAT = MUTANT PairLocal fails (lambda(c0)=m pj >= c0, c0 <= lambda(c1) for ONE other colour c1 <= m, lambda(m) not <= m) | corpus ['planted', '10', '4', '3', '10', '3'] maxn None exactN None |C(m)|>=3 |C'(m)|>=0
+  lattice 1 n=32 h=10 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 5, inst (c0,m,|C(m)|,|C'(m)|) [(2, 12, 3, 2), (3, 12, 3, 2)], N 3, d atom)
+  lattice 2 n=27 h=10 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 3 n=33 h=10 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 14, 3, 3), (4, 14, 3, 3)], N 2, d atom)
+  lattice 4 n=30 h=10 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 5 n=44 h=10 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(4, 22, 3, 1), (6, 22, 3, 1)], N 2, d atom)
+  lattice 6 n=36 h=10 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 7 n=32 h=10 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 8 n=30 h=10 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(3, 12, 3, 3), (5, 12, 3, 3)], N 2, d atom)
+  lattice 9 n=39 h=10 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 9, 3, 3), (3, 9, 3, 3)], N 3, d atom)
+  lattice 10 n=36 h=10 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 10, 3, 3), (3, 10, 3, 3)], N 2, d a)
+TOTAL ['plu', 'pls', 'ns', 'pl'] ['planted', '10', '4', '3', '10', '3'] ['k3'] {'plu': {'SAT': 0, 'UNSAT': 10}, 'pls': {'SAT': 0, 'UNSAT': 10}, 'ns': {'SAT': 0, 'UNSAT': 10}, 'pl': {'SAT': 6, 'UNSAT': 4}} max |C(m)| at SAT instances {'plu': 0, 'pls': 0, 'ns': 0, 'pl': 3}
+plu_probe | per lattice: EXISTS F in W (PairSelf world without D_p) | plu: SAT = PairLocalU fails (lambda(c0)=m pj >= c0, c0 <= lambda(c) for EVERY colour c <= m, lambda(m) not <= m) ; pls: SAT = PairLocalS fails (lambda(c0)=m pj >= c0, c0 <= lambda(c) for every c in C'(m), lambda(m) not <= m) ; ns: SAT = NSL fails (lambda(c0)=m pj >= c0, t in C'(m)\{c0}, c0 <= lambda(t), t not <= lambda(t), lambda(m) not <= m) ; pl: SAT = MUTANT PairLocal fails (lambda(c0)=m pj >= c0, c0 <= lambda(c1) for ONE other colour c1 <= m, lambda(m) not <= m) | corpus ['planted', '12', '4', '4', '6', '3'] maxn None exactN None |C(m)|>=3 |C'(m)|>=0
+  lattice 1 n=36 h=12 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 14, 3, 3)], N 2, d atom) | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 14, 3, 3), (3, 14, 3, 3)], N 2, d atom)
+  lattice 2 n=48 h=12 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 15, 3, 3)], N 2, d atom) | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 15, 3, 1), (5, 15, 3, 1)], N 3, d a)
+  lattice 3 n=26 h=12 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: UNSAT
+  lattice 4 n=40 h=12 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 17, 3, 3), (2, 17, 3, 3)], N 2, d atom)
+  lattice 5 n=38 h=12 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(2, 16, 3, 3), (6, 16, 3, 3)], N 2, d atom)
+  lattice 6 n=38 h=12 atoms-under-a-height-2-element 3: plu: UNSAT | pls: UNSAT | ns: UNSAT | pl: SAT (|A| 4, inst (c0,m,|C(m)|,|C'(m)|) [(1, 11, 3, 3), (4, 11, 3, 3)], N 2, d a)
+TOTAL ['plu', 'pls', 'ns', 'pl'] ['planted', '12', '4', '4', '6', '3'] ['k3'] {'plu': {'SAT': 0, 'UNSAT': 6}, 'pls': {'SAT': 0, 'UNSAT': 6}, 'ns': {'SAT': 2, 'UNSAT': 4}, 'pl': {'SAT': 5, 'UNSAT': 1}} max |C(m)| at SAT instances {'plu': 0, 'pls': 0, 'ns': 3, 'pl': 3}

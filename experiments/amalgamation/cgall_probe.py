@@ -14,7 +14,7 @@ import sys, itertools, json
 sys.path.insert(0, '../separation'); sys.path.insert(0, '.')
 from pysat.solvers import Cadical153
 from pysat.card import CardEnc
-from tight_probe import lattices
+from planted_lat import lattices                       # tight_probe corpora plus `planted H M SEED CNT k`
 from rstages import a_of
 MODE = sys.argv[1]; FL = {a for a in sys.argv[2:] if a in ('min3', 'TbA', 'TbM', 'two')}; args = [a for a in sys.argv[2:] if a not in FL]; MIN3 = 'min3' in FL
 MAXN = None
@@ -26,6 +26,8 @@ MEAN = {'all': 'colour atoms unbounded in Z, ColourGain at every row of Z, no mu
         'pairselfM': 'MUTANT of pairself: pair-join rows land, lambda(m) <= m allowed',
         'd2p': 'pairselfM world + a colour c0 below the landing of every colour and pair-join row, lambda(c0) = m a pair-join, and lambda(m) != m (D2-prime SelfPair fails)',
         'plocal': 'pairselfM world + colours c0 != c1 with lambda(c0) = m = c0 v c1 a pair-join, c0 <= lambda(c1), and lambda(m) != m (PairLocal fails)',
+        'nouniv': 'MUTANT of tri: pairselfM world + no colour lies below the landing of every colour row (UnivCol-in-W fails)',
+        'tri': 'pairselfM world + three colour rows whose landing colour sets K pairwise meet and have no common colour (NoTriangle fails)',
         'd2pM': 'MUTANT of d2p: universality of c0 dropped (lambda(c0) = m a pair-join, lambda(m) != m)',
         'h2': 'colour atoms unbounded in Z, ColourGain at the height-2 rows of Z only, no mu-fixed atom',
         'colbot': 'colour atoms unbounded in Z, ColourGain at the colour rows and row bot, no mu-fixed atom'}[MODE]
@@ -87,10 +89,10 @@ for L in lattices(args):
             cands = [col[c] for c in atoms if le[c][p] and not le[c][x]]
             if MODE == 'all': add([-Z(x), -lam[x, p]] + cands)
             elif h[x] == 1 and MODE != 'h2': add([-col[x], -lam[x, p]] + cands)
-            if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM', 'plocal') and h[x] == 2 and MODE == 'pairself' and le[p][x]: add([-v('pj', x), -lam[x, p]])
+            if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM', 'plocal', 'tri', 'nouniv') and h[x] == 2 and MODE == 'pairself' and le[p][x]: add([-v('pj', x), -lam[x, p]])
             if MODE in ('col2', 'h2') and h[x] == 2: add([-Z(x), -lam[x, p]] + cands)
             if MODE == 'colbot' and x == bot: add([-lam[x, p]] + cands)
-    if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM', 'plocal'):
+    if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM', 'plocal', 'tri', 'nouniv'):
         for x in low:
             if h[x] == 1: add([-col[x]] + [lam[x, p] for p in low])          # colour rows land
             if h[x] == 2:                                                    # pj(x) <-> Z(x) and two colours below x
@@ -106,6 +108,33 @@ for L in lattices(args):
                         for u in range(n):
                             if le[u][x]: add([-col[x], -f(x, y, u)])
         add([v('pj', x) for x in low if h[x] == 2])                         # non-thin
+        if MODE in ('tri', 'nouniv'):
+            def rb(c, d):                                                    # rb(c, d) <-> d <= lambda(c)
+                key = ('rb', c, d)
+                if key not in V:
+                    r = v(*key); ls = [lam[c, p] for p in low if le[d][p]]
+                    add([-r] + ls)
+                    for l in ls: add([-l, r])
+                return V[key]
+            if MODE == 'nouniv':
+                for d_ in atoms:                                             # every colour misses some colour row's landing
+                    ws = []
+                    for c in atoms:
+                        w_ = v('nu', d_, c); ws.append(w_); add([-w_, col[c]]); add([-w_, -rb(c, d_)])
+                    add([-col[d_]] + ws)
+            sels = [] if MODE == 'tri' else [v('true_')]
+            if MODE == 'nouniv': add([v('true_')])
+            for (c1, c2, c3) in (itertools.combinations(atoms, 3) if MODE == 'tri' else []):
+                t = v('tri', c1, c2, c3); sels.append(t)
+                for c in (c1, c2, c3): add([-t, col[c]])
+                for (x1, x2) in ((c1, c2), (c1, c3), (c2, c3)):              # pairwise meeting
+                    ws = []
+                    for a_ in atoms:
+                        w_ = v('triw', c1, c2, c3, x1, x2, a_); ws.append(w_)
+                        add([-w_, col[a_]]); add([-w_, rb(x1, a_)]); add([-w_, rb(x2, a_)])
+                    add([-t] + ws)
+                for d_ in atoms: add([-t, -col[d_], -rb(c1, d_), -rb(c2, d_), -rb(c3, d_)])   # no common colour
+            add(sels)
         if MODE == 'plocal':
             sels = []
             for c0 in atoms:
@@ -153,11 +182,16 @@ for L in lattices(args):
         cols = sorted({phi[w] for w in range(n) if h[phi[w]] == 1 and phi[w] in Zs})
         ok = a_of(L, F, bot) == bot and all(h[z] <= 2 for z in Zs) and any(h[z] == 2 for z in Zs)
         PJ = [z for z in Zs if h[z] == 2 and sum(1 for c in cols if le[c][z]) >= 2]
-        landrows = (cols + PJ) if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM', 'plocal') else Zs
+        landrows = (cols + PJ) if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM', 'plocal', 'tri', 'nouniv') else Zs
         ok = ok and all(lamf(x) is not None for x in landrows) and not any(all(le[c][z] for c in cols) for z in Zs)
-        if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM', 'plocal'):
+        if MODE in ('pairself', 'pairselfM', 'd2p', 'd2pM', 'plocal', 'tri', 'nouniv'):
             ok = ok and len(PJ) > 0 and all(not le[F[c][y]][c] for c in cols for y in range(n) if h[y] > 2)
             if MODE == 'pairself': ok = ok and all(not le[lamf(m)][m] for m in PJ)
+            if MODE == 'nouniv':
+                ok = ok and not any(all(le[d][lamf(c)] for c in cols) for d in cols)
+            if MODE == 'tri':
+                K_ = {c: {d for d in cols if le[d][lamf(c)]} for c in cols}
+                ok = ok and any(K_[a] & K_[b] and K_[a] & K_[c] and K_[b] & K_[c] and not (K_[a] & K_[b] & K_[c]) for a, b, c in itertools.combinations(cols, 3))
             if MODE == 'plocal':
                 ok = ok and any(c0 != c1 and h[L.join[c0][c1]] == 2 and lamf(c0) == L.join[c0][c1] and L.join[c0][c1] in Zs and le[c0][lamf(c1)] and lamf(L.join[c0][c1]) != L.join[c0][c1] and ('two' not in FL or sum(le[c][L.join[c0][c1]] for c in cols) == 2) for c0 in cols for c1 in cols)
             if MODE in ('d2p', 'd2pM'):
